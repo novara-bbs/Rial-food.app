@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#ddff00",
+                        "background-light": "#f8f8f5",
+                        "background-dark": "#20230f",
+                    },
+                    fontFamily: {
+                        "display": ["Space Grotesk", "sans-serif"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.5rem",
+                        "lg": "1rem",
+                        "xl": "1.5rem",
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        body {
+            font-family: 'Space Grotesk', sans-serif;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 min-h-screen">
+<div class="max-w-md mx-auto bg-white dark:bg-slate-900 min-h-screen flex flex-col shadow-xl">
+<!-- Header -->
+<header class="flex items-center justify-between p-6 pb-2">
+<div class="flex items-center gap-3">
+<div class="size-12 rounded-full border-2 border-primary overflow-hidden">
+<img alt="User Profile" class="w-full h-full object-cover" data-alt="Portrait of a smiling woman with glasses" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAWF7KSUsXu32Hm4OAZMrJ7betjEbN6cNC_nY_S_mB48U_dcA9Aw4GwrmECoVuc7lja8r6Lo5g-fRjNAFX01f4uaj0F_gAyd3y7oDiKbe__OaVDLeR8OYJsF48elhXo7L2-PUJl6QiL7cd4SFg0yCmuZrdxYaJDb8K8YFpdX1pPSjak1KPOTWEKyiQkQIjMtelnKESMAzOurTkC8IaeCEalX7k8xJ5TbWast6nGMkCF_O1tnGS9U-_aEmmTxbrTrYu2N6sXpOV2SUJd"/>
+</div>
+<div>
+<p class="text-xs text-slate-500 uppercase tracking-widest font-bold">Good Morning</p>
+<h1 class="text-xl font-bold font-display">RIAL Holistic</h1>
+</div>
+</div>
+<button class="size-10 flex items-center justify-center rounded-full bg-slate-100 dark:bg-slate-800">
+<span class="material-symbols-outlined text-slate-700 dark:text-slate-200">notifications</span>
+</button>
+</header>
+<!-- Main Content -->
+<main class="flex-1 overflow-y-auto px-6 py-4 space-y-8">
+<!-- Today's Real Feel Section -->
+<section>
+<div class="flex items-end justify-between mb-4">
+<h2 class="text-2xl font-bold font-display leading-none">Today's Real Feel</h2>
+<span class="text-xs font-medium text-slate-400">Monday, Oct 24</span>
+</div>
+<div class="grid grid-cols-3 gap-3">
+<div class="bg-slate-50 dark:bg-slate-800 p-4 rounded-xl flex flex-col items-center text-center border border-slate-100 dark:border-slate-700">
+<span class="material-symbols-outlined text-primary text-3xl mb-2" style="font-variation-settings: 'FILL' 1;">psychology</span>
+<p class="text-xs text-slate-500 mb-1">Mindset</p>
+<p class="font-bold text-sm">Calm</p>
+</div>
+<div class="bg-primary p-4 rounded-xl flex flex-col items-center text-center shadow-lg shadow-primary/20">
+<span class="material-symbols-outlined text-slate-900 text-3xl mb-2" style="font-variation-settings: 'FILL' 1;">bolt</span>
+<p class="text-xs text-slate-900/60 mb-1">Energy</p>
+<p class="font-bold text-sm text-slate-900">High</p>
+</div>
+<div class="bg-slate-50 dark:bg-slate-800 p-4 rounded-xl flex flex-col items-center text-center border border-slate-100 dark:border-slate-700">
+<span class="material-symbols-outlined text-primary text-3xl mb-2" style="font-variation-settings: 'FILL' 1;">target</span>
+<p class="text-xs text-slate-500 mb-1">Focus</p>
+<p class="font-bold text-sm">Sharp</p>
+</div>
+</div>
+</section>
+<!-- Family Meal Prep Section -->
+<section>
+<div class="flex items-center justify-between mb-4">
+<h2 class="text-2xl font-bold font-display">Family Meal Prep</h2>
+<button class="text-primary font-bold text-sm bg-slate-900 px-3 py-1 rounded-full">Week 4</button>
+</div>
+<div class="relative overflow-hidden rounded-xl bg-slate-100 aspect-[16/10] group">
+<img alt="Healthy meal prep bowls" class="w-full h-full object-cover" data-alt="Assorted healthy meal prep containers with vegetables" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBQ2Tn6MVPhNEwMVBnihJC5YX9m64P0NYvuHYOPeo2iF_znnJrwlQfj28uh4wUbJdqxkQkftO2O1vY_FURZDIr6sopa9HvYCD22PcbKwLBGw9acxy5jBJC_M0iloVCvvdhzzwPXYJQpfWgOSHE35EHWJkBqaCV7M7wdyd3geiY-XwnG0jMUmmGJH7miSBTeWmlhCswyntpcoR4lFNB4CztIdcwifL1hPCLlE72nYq2QVi2CdpcrGAsK0HUPj3y7qP6vuLUAHy6KL4re"/>
+<div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent flex flex-col justify-end p-5">
+<div class="flex items-center justify-between mb-2">
+<span class="text-white text-sm font-medium">Batch Progress</span>
+<span class="text-primary text-sm font-bold">75%</span>
+</div>
+<div class="w-full bg-white/20 rounded-full h-2 overflow-hidden">
+<div class="bg-primary h-full rounded-full" style="width: 75%;"></div>
+</div>
+<p class="text-white/80 text-xs mt-3">3 of 4 meals prepped for the busy week ahead.</p>
+</div>
+</div>
+</section>
+<!-- Creator Spotlight Section -->
+<section>
+<h2 class="text-2xl font-bold font-display mb-4">Creator Spotlight</h2>
+<div class="bg-slate-900 rounded-xl overflow-hidden relative border border-slate-800">
+<div class="aspect-video relative">
+<img alt="Creator Video Thumbnail" class="w-full h-full object-cover opacity-70" data-alt="Fitness creator in a modern gym setting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuATH1ovvvakar8B-HLZPx77YHYezwUGzB54QnQ3Y4Z2MyvmGjLyhG2ui4pLQhX_nTPzCwF-toiPLnQ-t4-GI8egy7WYgU_PHTmPS0fGCYOrdCmyynWmn8jl2P_GFurqO_-3y41-E37Ed_rFgpEhHts0jq00Q8A-0NS_rgdAvJ_KZXxklxUrzVILTs1Di_w70bV__Bx5K4d1uHC_5taRsmtvLZAnY6nNxhIynp6mBwWUaEbh4KJkG0crhOUi6pSjRcdjm463zJmNiS7i"/>
+<div class="absolute inset-0 flex items-center justify-center">
+<button class="size-16 rounded-full bg-primary flex items-center justify-center shadow-2xl transition-transform hover:scale-105">
+<span class="material-symbols-outlined text-slate-900 text-4xl" style="font-variation-settings: 'FILL' 1;">play_arrow</span>
+</button>
+</div>
+<div class="absolute bottom-4 left-4 flex items-center gap-2">
+<div class="size-8 rounded-full border-2 border-primary overflow-hidden">
+<img alt="Creator Avatar" class="w-full h-full object-cover" data-alt="Portrait of a female wellness creator" src="https://lh3.googleusercontent.com/aida-public/AB6AXuB3p7XtfRx9Csnbva1B50cT7ntYqLw_EqqdoLCZt5zoP0dciV0A7D79jEvECa6dvOWPPkVQ6Esw0SW-57X2kzLh-s7UKVvH7HLio9MNdStQ0RPlZ6NyhlHv8m2bsPTbH6DfjvxV3r7OVaSO45aAOedxXpq0qlV1GiNA-NcoNTvBCo1NGqnQ5lxynwbC2GVK6XblzDK5tK_k6XcSCxt_789bIOyF2k98J_JoOGGaL0aE5-nh-U0qnl1OfuDjD9ppXrsDegOr_DI7qLNt"/>
+</div>
+<span class="text-white font-medium text-sm">Maya Jensen • Morning Flow</span>
+</div>
+</div>
+<div class="p-4 bg-slate-800/50 backdrop-blur-sm">
+<p class="text-white font-bold leading-tight">Mastering 5-Minute Mindfulness for Parents</p>
+<p class="text-slate-400 text-xs mt-1">Exclusive series for the RIAL community</p>
+</div>
+</div>
+</section>
+<div class="h-20"></div> <!-- Spacer for Nav -->
+</main>
+<!-- Bottom Navigation Bar -->
+<nav class="fixed bottom-0 left-1/2 -translate-x-1/2 w-full max-w-md bg-white/95 dark:bg-slate-900/95 backdrop-blur-md border-t border-slate-100 dark:border-slate-800 px-6 py-3 pb-6 flex justify-between items-center z-50">
+<a class="flex flex-col items-center gap-1 group" href="#">
+<span class="material-symbols-outlined text-slate-900 dark:text-white" style="font-variation-settings: 'FILL' 1;">home</span>
+<span class="text-[10px] font-bold uppercase tracking-wider text-slate-900 dark:text-white">Home</span>
+</a>
+<a class="flex flex-col items-center gap-1 group text-slate-400 hover:text-primary" href="#">
+<span class="material-symbols-outlined">analytics</span>
+<span class="text-[10px] font-bold uppercase tracking-wider">Insights</span>
+</a>
+<div class="relative -top-6">
+<button class="size-14 bg-primary rounded-full flex items-center justify-center shadow-xl shadow-primary/30 border-4 border-white dark:border-slate-900">
+<span class="material-symbols-outlined text-slate-900 font-bold text-3xl">add</span>
+</button>
+</div>
+<a class="flex flex-col items-center gap-1 group text-slate-400 hover:text-primary" href="#">
+<span class="material-symbols-outlined">group</span>
+<span class="text-[10px] font-bold uppercase tracking-wider">Community</span>
+</a>
+<a class="flex flex-col items-center gap-1 group text-slate-400 hover:text-primary" href="#">
+<span class="material-symbols-outlined">person</span>
+<span class="text-[10px] font-bold uppercase tracking-wider">Profile</span>
+</a>
+</nav>
+</div>
+</body></html>

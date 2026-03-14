@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#007dff",
+                        "background-light": "#f5f7f8",
+                        "background-dark": "#0f1923",
+                    },
+                    fontFamily: {
+                        "display": ["Space Grotesk"]
+                    },
+                    borderRadius: {"DEFAULT": "0.5rem", "lg": "1rem", "xl": "1.5rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>
+        .shimmer {
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.05), transparent);
+            background-size: 200% 100%;
+        }
+        .circular-progress {
+            background: conic-gradient(from 0deg, #007dff 65%, transparent 65%);
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark font-display text-slate-900 dark:text-slate-100 antialiased">
+<div class="relative flex h-screen w-full max-w-md mx-auto flex-col bg-background-light dark:bg-background-dark overflow-hidden border-x border-slate-200 dark:border-slate-800">
+<!-- Header -->
+<div class="flex items-center p-6 justify-between bg-background-light/80 dark:bg-background-dark/80 backdrop-blur-md sticky top-0 z-10">
+<button class="text-slate-900 dark:text-slate-100 flex size-10 items-center justify-center rounded-full hover:bg-slate-200 dark:hover:bg-slate-800 transition-colors">
+<span class="material-symbols-outlined">arrow_back</span>
+</button>
+<h2 class="text-slate-900 dark:text-slate-100 text-lg font-bold leading-tight tracking-tight flex-1 text-center pr-10">RIAL Receipt Processing</h2>
+</div>
+<div class="flex-1 overflow-y-auto custom-scrollbar">
+<!-- Central Progress Indicator -->
+<div class="flex flex-col items-center justify-center py-12 px-6">
+<div class="relative flex items-center justify-center">
+<!-- Outer Ring -->
+<div class="size-48 rounded-full border-4 border-slate-200 dark:border-slate-800 flex items-center justify-center relative">
+<!-- Animated-like stroke using conic gradient mask -->
+<div class="absolute inset-0 rounded-full circular-progress opacity-20"></div>
+<div class="absolute inset-2 rounded-full border border-primary/30"></div>
+<!-- Typography Center -->
+<div class="text-center z-10">
+<span class="text-primary text-xs font-bold tracking-[0.2em] uppercase block mb-1">Editorial</span>
+<span class="text-slate-900 dark:text-slate-100 text-xl font-light tracking-widest uppercase">Tech</span>
+</div>
+</div>
+<!-- Status Dot -->
+<div class="absolute top-0 right-8 size-3 bg-primary rounded-full shadow-[0_0_15px_rgba(0,125,255,0.5)]"></div>
+</div>
+<div class="mt-10 text-center">
+<h3 class="text-slate-900 dark:text-slate-100 text-xl font-medium mb-2">Analyzing Your Real Items...</h3>
+<p class="text-slate-500 dark:text-slate-400 text-sm font-light">Identifying high-end wellness essentials</p>
+</div>
+</div>
+<!-- List Section -->
+<div class="px-6 pb-24">
+<div class="flex items-center justify-between mb-6">
+<h4 class="text-slate-900 dark:text-slate-100 text-sm font-bold tracking-wider uppercase opacity-60">Detected Items</h4>
+<span class="text-primary text-xs font-medium bg-primary/10 px-2 py-1 rounded">65% Complete</span>
+</div>
+<div class="space-y-4">
+<!-- Detected Item 1 -->
+<div class="flex items-center gap-4 bg-white dark:bg-slate-900/50 p-4 rounded-xl border border-slate-200 dark:border-slate-800">
+<div class="size-12 rounded-lg bg-primary/10 flex items-center justify-center text-primary">
+<span class="material-symbols-outlined">eco</span>
+</div>
+<div class="flex flex-col flex-1">
+<p class="text-slate-900 dark:text-slate-100 text-base font-medium">Organic Matcha Powder</p>
+<p class="text-slate-500 dark:text-slate-400 text-xs uppercase tracking-tight">Wellness &amp; Nutrition</p>
+</div>
+<div class="text-primary">
+<span class="material-symbols-outlined text-xl">check_circle</span>
+</div>
+</div>
+<!-- Detected Item 2 -->
+<div class="flex items-center gap-4 bg-white dark:bg-slate-900/50 p-4 rounded-xl border border-slate-200 dark:border-slate-800">
+<div class="size-12 rounded-lg bg-primary/10 flex items-center justify-center text-primary">
+<span class="material-symbols-outlined">self_care</span>
+</div>
+<div class="flex flex-col flex-1">
+<p class="text-slate-900 dark:text-slate-100 text-base font-medium">Hyaluronic Acid Serum</p>
+<p class="text-slate-500 dark:text-slate-400 text-xs uppercase tracking-tight">Skincare Ritual</p>
+</div>
+<div class="text-primary">
+<span class="material-symbols-outlined text-xl">check_circle</span>
+</div>
+</div>
+<!-- Shimmer Loading Item 3 -->
+<div class="relative overflow-hidden flex items-center gap-4 bg-white dark:bg-slate-900/30 p-4 rounded-xl border border-slate-200/50 dark:border-slate-800/50">
+<div class="shimmer absolute inset-0"></div>
+<div class="size-12 rounded-lg bg-slate-200 dark:bg-slate-800/50"></div>
+<div class="flex flex-col flex-1 gap-2">
+<div class="h-4 w-3/4 bg-slate-200 dark:bg-slate-800/50 rounded"></div>
+<div class="h-3 w-1/2 bg-slate-100 dark:bg-slate-800/30 rounded"></div>
+</div>
+<div class="size-6 rounded-full bg-slate-100 dark:bg-slate-800/30"></div>
+</div>
+<!-- Shimmer Loading Item 4 -->
+<div class="relative overflow-hidden flex items-center gap-4 bg-white dark:bg-slate-900/20 p-4 rounded-xl border border-slate-200/30 dark:border-slate-800/30">
+<div class="shimmer absolute inset-0"></div>
+<div class="size-12 rounded-lg bg-slate-200 dark:bg-slate-800/40"></div>
+<div class="flex flex-col flex-1 gap-2">
+<div class="h-4 w-1/2 bg-slate-200 dark:bg-slate-800/40 rounded"></div>
+<div class="h-3 w-1/3 bg-slate-100 dark:bg-slate-800/20 rounded"></div>
+</div>
+<div class="size-6 rounded-full bg-slate-100 dark:bg-slate-800/20"></div>
+</div>
+</div>
+</div>
+</div>
+<!-- Bottom Navigation Bar -->
+<div class="flex gap-2 border-t border-slate-200 dark:border-slate-800 bg-white/80 dark:bg-slate-900/80 backdrop-blur-md px-4 pb-6 pt-3 absolute bottom-0 w-full">
+<a class="flex flex-1 flex-col items-center justify-center gap-1 text-slate-400 dark:text-slate-500 hover:text-primary transition-colors" href="#">
+<span class="material-symbols-outlined">home</span>
+</a>
+<a class="flex flex-1 flex-col items-center justify-center gap-1 text-primary" href="#">
+<div class="bg-primary/20 p-2 rounded-full">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1">qr_code_scanner</span>
+</div>
+</a>
+<a class="flex flex-1 flex-col items-center justify-center gap-1 text-slate-400 dark:text-slate-500 hover:text-primary transition-colors" href="#">
+<span class="material-symbols-outlined">history</span>
+</a>
+<a class="flex flex-1 flex-col items-center justify-center gap-1 text-slate-400 dark:text-slate-500 hover:text-primary transition-colors" href="#">
+<span class="material-symbols-outlined">person</span>
+</a>
+</div>
+</div>
+</body></html>

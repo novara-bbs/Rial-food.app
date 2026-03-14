@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>RIAL - Discover Recipes</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#ddff00",
+                        "background-light": "#f8f8f5",
+                        "background-dark": "#20230f",
+                    },
+                    fontFamily: {
+                        "display": ["Space Grotesk"]
+                    },
+                    borderRadius: {"DEFAULT": "0.5rem", "lg": "1rem", "xl": "1.5rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>
+        body {
+            font-family: 'Space Grotesk', sans-serif;
+        }
+        .hide-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .hide-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 min-h-screen">
+<div class="relative flex h-auto min-h-screen w-full max-w-md mx-auto flex-col bg-white dark:bg-background-dark shadow-2xl overflow-x-hidden">
+<header class="flex items-center bg-white dark:bg-background-dark p-4 pb-2 justify-between sticky top-0 z-10">
+<div class="text-slate-900 dark:text-slate-100 flex size-12 shrink-0 items-center justify-start">
+<span class="material-symbols-outlined text-2xl">menu</span>
+</div>
+<h2 class="text-slate-900 dark:text-slate-100 text-lg font-bold leading-tight tracking-tight flex-1 text-center font-display">Discover Recipes</h2>
+<div class="flex w-12 items-center justify-end">
+<button class="flex items-center justify-center rounded-xl h-10 w-10 bg-slate-100 dark:bg-slate-800 text-slate-900 dark:text-slate-100">
+<span class="material-symbols-outlined text-2xl">notifications</span>
+</button>
+</div>
+</header>
+<div class="px-4 py-3">
+<label class="flex flex-col min-w-40 h-14 w-full">
+<div class="flex w-full flex-1 items-stretch rounded-xl h-full border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 shadow-sm overflow-hidden">
+<div class="text-slate-400 flex items-center justify-center pl-4">
+<span class="material-symbols-outlined">search</span>
+</div>
+<input class="form-input flex w-full min-w-0 flex-1 border-none bg-transparent focus:ring-0 h-full placeholder:text-slate-400 px-4 text-base font-normal" placeholder="Search recipes or ingredients"/>
+<div class="flex items-center pr-4">
+<span class="material-symbols-outlined text-slate-400">tune</span>
+</div>
+</div>
+</label>
+</div>
+<div class="flex gap-3 px-4 py-2 overflow-x-auto hide-scrollbar">
+<button class="flex h-10 shrink-0 items-center justify-center gap-x-2 rounded-full bg-primary px-5 shadow-sm">
+<p class="text-slate-900 text-sm font-bold">Family Friendly</p>
+</button>
+<button class="flex h-10 shrink-0 items-center justify-center gap-x-2 rounded-full bg-slate-100 dark:bg-slate-800 px-5">
+<p class="text-slate-700 dark:text-slate-300 text-sm font-medium">Batch Cooking</p>
+</button>
+<button class="flex h-10 shrink-0 items-center justify-center gap-x-2 rounded-full bg-slate-100 dark:bg-slate-800 px-5">
+<p class="text-slate-700 dark:text-slate-300 text-sm font-medium">High Protein</p>
+</button>
+<button class="flex h-10 shrink-0 items-center justify-center gap-x-2 rounded-full bg-slate-100 dark:bg-slate-800 px-5">
+<p class="text-slate-700 dark:text-slate-300 text-sm font-medium">Kid-Approved</p>
+</button>
+</div>
+<div class="px-4 pt-6 pb-2 flex justify-between items-end">
+<h2 class="text-slate-900 dark:text-slate-100 text-2xl font-bold font-display">Top Matches</h2>
+<span class="text-primary font-bold text-sm">See all</span>
+</div>
+<div class="grid grid-cols-1 gap-6 p-4 pb-24">
+<div class="relative flex flex-col gap-3 rounded-xl overflow-hidden group">
+<div class="relative aspect-[16/10] w-full overflow-hidden rounded-xl shadow-lg">
+<img class="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105" data-alt="Vibrant healthy salad bowl with salmon" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDbjTPQlNs_MBBOcDcN3GzLgoXvqTMDEtMJxI2qH0TF3PLbDNECipPhjnXvLHaaA54ZoVRtzFq3itlub19xQhbv7tB32QvmM2VfQ7YYpCnuI9zgzIGx0_YEMHawNgulOH8n6PyQ5hKo7rQmUpKiptPghdjG6KTUeitkcsXMN_LA4R8fNdCc4C9Jaab10Tpf-qeNgVlZR2G8Qb_msXrm5t2PUcq5yNNhMlG8oIGSLnLfSykbMnwt7uk_lp__AXUBrNpZKuqaWCrG-kKa"/>
+<div class="absolute top-3 left-3 flex gap-2">
+<div class="bg-primary px-3 py-1 rounded-full flex items-center gap-1 shadow-md">
+<span class="material-symbols-outlined text-xs font-bold text-slate-900">bolt</span>
+<span class="text-slate-900 text-xs font-bold uppercase tracking-wider">98% Match</span>
+</div>
+<div class="bg-white/90 dark:bg-slate-900/90 px-3 py-1 rounded-full flex items-center gap-1 shadow-md">
+<span class="material-symbols-outlined text-xs text-slate-900 dark:text-slate-100">verified</span>
+<span class="text-slate-900 dark:text-slate-100 text-xs font-bold uppercase tracking-wider">Pro Creator</span>
+</div>
+</div>
+<button class="absolute bottom-3 right-3 bg-primary size-10 rounded-full flex items-center justify-center shadow-lg active:scale-95 transition-transform">
+<span class="material-symbols-outlined text-slate-900 font-bold">add</span>
+</button>
+</div>
+<div class="flex flex-col gap-1 px-1">
+<div class="flex justify-between items-start">
+<h3 class="text-lg font-bold text-slate-900 dark:text-slate-100 font-display">Grilled Salmon &amp; Avocado Bowl</h3>
+<div class="flex items-center gap-1 text-slate-500 text-sm font-medium">
+<span class="material-symbols-outlined text-base">schedule</span>
+<span>20 min</span>
+</div>
+</div>
+<p class="text-sm text-slate-500 dark:text-slate-400 line-clamp-1">High-omega superfood bowl optimized for your metabolic recovery.</p>
+</div>
+</div>
+<div class="relative flex flex-col gap-3 rounded-xl overflow-hidden group">
+<div class="relative aspect-[16/10] w-full overflow-hidden rounded-xl shadow-lg">
+<img class="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105" data-alt="Fresh mediterranean vegetable power bowl" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDaiJfY6JSpSwREpTL96EwAFrjxJTIY0oCwkyXPbvqV9e01DeX-lzzJVex95t8dje8bqa-IPRkkIYmKrEi9ymgo4d09oJTewMBn_Wj05ioeo9RnV5DsR12M7xuIgLgogGISGHBShSfL0_LHeiw0NA5DmynLNHCLptNjr5kPwDHgglkaXFygOS32VEJdTYYqBCwos9Ms_gP-XB-vzPz6wjW3TKsh9_VYkSdOg4OB4EX_jM-57Kck_YepI4-1OTJWbsX6NAMdw4hGrQXV"/>
+<div class="absolute top-3 left-3 flex gap-2">
+<div class="bg-primary px-3 py-1 rounded-full flex items-center gap-1 shadow-md">
+<span class="material-symbols-outlined text-xs font-bold text-slate-900">bolt</span>
+<span class="text-slate-900 text-xs font-bold uppercase tracking-wider">82% Match</span>
+</div>
+</div>
+<button class="absolute bottom-3 right-3 bg-primary size-10 rounded-full flex items-center justify-center shadow-lg active:scale-95 transition-transform">
+<span class="material-symbols-outlined text-slate-900 font-bold">add</span>
+</button>
+</div>
+<div class="flex flex-col gap-1 px-1">
+<div class="flex justify-between items-start">
+<h3 class="text-lg font-bold text-slate-900 dark:text-slate-100 font-display">Mediterranean Power Bowl</h3>
+<div class="flex items-center gap-1 text-slate-500 text-sm font-medium">
+<span class="material-symbols-outlined text-base">schedule</span>
+<span>15 min</span>
+</div>
+</div>
+<p class="text-sm text-slate-500 dark:text-slate-400 line-clamp-1">Rich in complex carbs and plant-based proteins for sustained energy.</p>
+</div>
+</div>
+<div class="relative flex flex-col gap-3 rounded-xl overflow-hidden group">
+<div class="relative aspect-[16/10] w-full overflow-hidden rounded-xl shadow-lg">
+<img class="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105" data-alt="Healthy chicken wrap with greens" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBrr8qDhf88eJxrFPNadSOiKtwNNyHP6UxTlS1V18we7swMHzDHsw3nRxaAgQbIALCJYTm0mndh6AAMRqxdPZSC2AxcMdpZTmeNGGASMD3Wzzv2PRmqYSKi9OvqB6CvF8HA22ucs5S4CT6sPqN9b4mFtB_uG52UJRrdvZ4ShwpmtsTRvN6NjP1-iRzsDfC7OiXSfwRLSsAqNACvzsZryqvz_pRTO8QZ5bBQ7YANw_GAXNwy40gfSenFc5YYbkahSoIfA82HYWMI0WMx"/>
+<div class="absolute top-3 left-3 flex gap-2">
+<div class="bg-primary px-3 py-1 rounded-full flex items-center gap-1 shadow-md">
+<span class="material-symbols-outlined text-xs font-bold text-slate-900">bolt</span>
+<span class="text-slate-900 text-xs font-bold uppercase tracking-wider">91% Match</span>
+</div>
+<div class="bg-white/90 dark:bg-slate-900/90 px-3 py-1 rounded-full flex items-center gap-1 shadow-md">
+<span class="material-symbols-outlined text-xs text-slate-900 dark:text-slate-100">verified</span>
+<span class="text-slate-900 dark:text-slate-100 text-xs font-bold uppercase tracking-wider">Pro Creator</span>
+</div>
+</div>
+<button class="absolute bottom-3 right-3 bg-primary size-10 rounded-full flex items-center justify-center shadow-lg active:scale-95 transition-transform">
+<span class="material-symbols-outlined text-slate-900 font-bold">add</span>
+</button>
+</div>
+<div class="flex flex-col gap-1 px-1">
+<div class="flex justify-between items-start">
+<h3 class="text-lg font-bold text-slate-900 dark:text-slate-100 font-display">Lean Pesto Chicken Wraps</h3>
+<div class="flex items-center gap-1 text-slate-500 text-sm font-medium">
+<span class="material-symbols-outlined text-base">schedule</span>
+<span>10 min</span>
+</div>
+</div>
+<p class="text-sm text-slate-500 dark:text-slate-400 line-clamp-1">Quick high-protein snack for post-workout window.</p>
+</div>
+</div>
+</div>
+<nav class="fixed bottom-0 w-full max-w-md bg-white/90 dark:bg-background-dark/90 backdrop-blur-md border-t border-slate-100 dark:border-slate-800 px-4 pb-6 pt-3 flex justify-between items-center z-20">
+<a class="flex flex-col items-center gap-1 text-primary" href="#">
+<span class="material-symbols-outlined text-2xl font-variation-fill">explore</span>
+<p class="text-[10px] font-bold uppercase tracking-widest">Discover</p>
+</a>
+<a class="flex flex-col items-center gap-1 text-slate-400 dark:text-slate-500" href="#">
+<span class="material-symbols-outlined text-2xl">calendar_today</span>
+<p class="text-[10px] font-bold uppercase tracking-widest">Plan</p>
+</a>
+<div class="relative -top-6">
+<button class="bg-primary text-slate-900 size-14 rounded-full shadow-xl flex items-center justify-center border-4 border-white dark:border-background-dark">
+<span class="material-symbols-outlined text-3xl font-bold">add</span>
+</button>
+</div>
+<a class="flex flex-col items-center gap-1 text-slate-400 dark:text-slate-500" href="#">
+<span class="material-symbols-outlined text-2xl">monitoring</span>
+<p class="text-[10px] font-bold uppercase tracking-widest">Stats</p>
+</a>
+<a class="flex flex-col items-center gap-1 text-slate-400 dark:text-slate-500" href="#">
+<span class="material-symbols-outlined text-2xl">account_circle</span>
+<p class="text-[10px] font-bold uppercase tracking-widest">Profile</p>
+</a>
+</nav>
+</div>
+</body></html>

@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Ingredient Deep Dive - Avocado</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#25aff4",
+                        "background-light": "#f5f7f8",
+                        "background-dark": "#101c22",
+                    },
+                    fontFamily: {
+                        "display": ["Inter", "sans-serif"]
+                    },
+                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark font-display text-slate-900 dark:text-slate-100 antialiased">
+<div class="relative flex h-auto min-h-screen w-full flex-col bg-white dark:bg-background-dark group/design-root overflow-x-hidden">
+<!-- Top Navigation -->
+<div class="sticky top-0 z-50 flex items-center bg-white/80 dark:bg-background-dark/80 backdrop-blur-md p-4 justify-between border-b border-slate-100 dark:border-slate-800">
+<div class="text-slate-900 dark:text-slate-100 flex size-10 shrink-0 items-center justify-center rounded-full hover:bg-slate-100 dark:hover:bg-slate-800 cursor-pointer transition-colors">
+<span class="material-symbols-outlined">arrow_back</span>
+</div>
+<h2 class="text-slate-900 dark:text-slate-100 text-base font-semibold leading-tight tracking-tight flex-1 text-center">Ingredient Intelligence</h2>
+<div class="flex w-10 items-center justify-end">
+<button class="flex items-center justify-center rounded-full size-10 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">
+<span class="material-symbols-outlined text-slate-900 dark:text-slate-100">share</span>
+</button>
+</div>
+</div>
+<main class="max-w-4xl mx-auto w-full">
+<!-- Hero Image Section -->
+<div class="@container">
+<div class="@[480px]:px-4 @[480px]:py-4">
+<div class="w-full bg-center bg-no-repeat bg-cover flex flex-col justify-end overflow-hidden bg-slate-200 dark:bg-slate-800 @[480px]:rounded-xl min-h-[400px] shadow-lg" data-alt="Close up of a ripe sliced avocado on a neutral background" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuCd29LRefLe0lDZI52TMpMAJh-01fC7TV-QxT6cRcqe5UqOdbFacIjeRvtKzgerI27yxKoeA36O5rDG-AXBu8DtCe0iP8rfi4AMp3fuMgK_HZcA8o6m_i9p0Zu67SVfe4RsEN4HdpRhZHakTo_EJpg-i4dIUqxsyVpQM79dkd0HJAQtpFlQ1bnTIdnMDt34lEQsmCxd0IcBRetvbMRaX5xTTd8AeNh-zHchMUwqHumUIU7LB7eoZzss7QvNBusBKc1YSmwLktDBh9nF");'>
+</div>
+</div>
+</div>
+<!-- Header Content -->
+<div class="px-4 pt-8 pb-4">
+<div class="flex items-center gap-2 mb-2">
+<span class="bg-primary/10 text-primary text-xs font-bold uppercase tracking-widest px-2 py-1 rounded">Superfood</span>
+<span class="bg-slate-100 dark:bg-slate-800 text-slate-500 dark:text-slate-400 text-xs font-bold uppercase tracking-widest px-2 py-1 rounded">Lipid-Dense</span>
+</div>
+<h1 class="text-slate-900 dark:text-slate-100 tracking-tight text-4xl font-extrabold leading-tight pb-2">Avocado</h1>
+<p class="italic text-slate-500 dark:text-slate-400 font-medium">Persea americana</p>
+<p class="text-slate-600 dark:text-slate-300 text-lg font-normal leading-relaxed pt-4">
+                    A unique fruit characterized by its high healthy fat content, specifically oleic acid, providing sustained energy and essential fat-soluble vitamins.
+                </p>
+</div>
+<!-- Bio-Active Benefits Section -->
+<section class="px-4 py-8 border-t border-slate-100 dark:border-slate-800">
+<div class="flex items-center gap-2 mb-6">
+<span class="material-symbols-outlined text-primary">biotech</span>
+<h2 class="text-slate-900 dark:text-slate-100 text-2xl font-bold leading-tight tracking-tight">Bio-Active Benefits</h2>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+<div class="p-5 rounded-xl border border-slate-100 dark:border-slate-800 bg-white dark:bg-slate-900/50 shadow-sm">
+<span class="material-symbols-outlined text-primary mb-3">favorite</span>
+<h3 class="font-bold text-slate-900 dark:text-slate-100 mb-1">Cardiovascular</h3>
+<p class="text-sm text-slate-500 dark:text-slate-400">Monounsaturated fats help maintain healthy cholesterol levels.</p>
+</div>
+<div class="p-5 rounded-xl border border-slate-100 dark:border-slate-800 bg-white dark:bg-slate-900/50 shadow-sm">
+<span class="material-symbols-outlined text-primary mb-3">visibility</span>
+<h3 class="font-bold text-slate-900 dark:text-slate-100 mb-1">Ocular Health</h3>
+<p class="text-sm text-slate-500 dark:text-slate-400">Rich in Lutein and Zeaxanthin, protecting eyes from oxidative stress.</p>
+</div>
+<div class="p-5 rounded-xl border border-slate-100 dark:border-slate-800 bg-white dark:bg-slate-900/50 shadow-sm">
+<span class="material-symbols-outlined text-primary mb-3">psychology</span>
+<h3 class="font-bold text-slate-900 dark:text-slate-100 mb-1">Cognitive Function</h3>
+<p class="text-sm text-slate-500 dark:text-slate-400">High levels of Vitamin K and Folate prevent brain blood clots.</p>
+</div>
+</div>
+</section>
+<!-- Nutritional Density (Data-rich Charts) -->
+<section class="px-4 py-8 bg-slate-50 dark:bg-slate-900/30">
+<div class="flex items-center gap-2 mb-6">
+<span class="material-symbols-outlined text-primary">analytics</span>
+<h2 class="text-slate-900 dark:text-slate-100 text-2xl font-bold leading-tight tracking-tight">Nutritional Density</h2>
+</div>
+<div class="bg-white dark:bg-slate-900 p-6 rounded-2xl border border-slate-100 dark:border-slate-800 shadow-sm">
+<div class="space-y-6">
+<!-- Chart Item -->
+<div>
+<div class="flex justify-between items-end mb-2">
+<div>
+<p class="text-sm font-bold text-slate-900 dark:text-slate-100">Healthy Fats</p>
+<p class="text-xs text-slate-500">15g per 100g</p>
+</div>
+<span class="text-xs font-bold text-primary">23% DV</span>
+</div>
+<div class="h-2 w-full bg-slate-100 dark:bg-slate-800 rounded-full overflow-hidden">
+<div class="h-full bg-primary rounded-full" style="width: 75%;"></div>
+</div>
+</div>
+<!-- Chart Item -->
+<div>
+<div class="flex justify-between items-end mb-2">
+<div>
+<p class="text-sm font-bold text-slate-900 dark:text-slate-100">Dietary Fiber</p>
+<p class="text-xs text-slate-500">7g per 100g</p>
+</div>
+<span class="text-xs font-bold text-primary">27% DV</span>
+</div>
+<div class="h-2 w-full bg-slate-100 dark:bg-slate-800 rounded-full overflow-hidden">
+<div class="h-full bg-primary rounded-full" style="width: 85%;"></div>
+</div>
+</div>
+<!-- Chart Item -->
+<div>
+<div class="flex justify-between items-end mb-2">
+<div>
+<p class="text-sm font-bold text-slate-900 dark:text-slate-100">Potassium</p>
+<p class="text-xs text-slate-500">485mg per 100g</p>
+</div>
+<span class="text-xs font-bold text-primary">14% DV</span>
+</div>
+<div class="h-2 w-full bg-slate-100 dark:bg-slate-800 rounded-full overflow-hidden">
+<div class="h-full bg-primary rounded-full" style="width: 45%;"></div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Common Substitutes -->
+<section class="px-4 py-8">
+<div class="flex items-center gap-2 mb-6">
+<span class="material-symbols-outlined text-primary">swap_horiz</span>
+<h2 class="text-slate-900 dark:text-slate-100 text-2xl font-bold leading-tight tracking-tight">Common Substitutes</h2>
+</div>
+<div class="flex gap-4 overflow-x-auto pb-4 no-scrollbar">
+<div class="min-w-[140px] flex flex-col items-center p-4 bg-white dark:bg-slate-900 rounded-xl border border-slate-100 dark:border-slate-800">
+<div class="size-16 rounded-full bg-slate-100 dark:bg-slate-800 flex items-center justify-center mb-3">
+<span class="material-symbols-outlined text-primary">egg</span>
+</div>
+<span class="text-sm font-bold text-slate-900 dark:text-slate-100">Hummus</span>
+<span class="text-xs text-slate-500">Texture Match</span>
+</div>
+<div class="min-w-[140px] flex flex-col items-center p-4 bg-white dark:bg-slate-900 rounded-xl border border-slate-100 dark:border-slate-800">
+<div class="size-16 rounded-full bg-slate-100 dark:bg-slate-800 flex items-center justify-center mb-3">
+<span class="material-symbols-outlined text-primary">water_drop</span>
+</div>
+<span class="text-sm font-bold text-slate-900 dark:text-slate-100">Olive Oil</span>
+<span class="text-xs text-slate-500">Lipid Match</span>
+</div>
+<div class="min-w-[140px] flex flex-col items-center p-4 bg-white dark:bg-slate-900 rounded-xl border border-slate-100 dark:border-slate-800">
+<div class="size-16 rounded-full bg-slate-100 dark:bg-slate-800 flex items-center justify-center mb-3">
+<span class="material-symbols-outlined text-primary">spa</span>
+</div>
+<span class="text-sm font-bold text-slate-900 dark:text-slate-100">Cashew Cream</span>
+<span class="text-xs text-slate-500">Fat &amp; Creaminess</span>
+</div>
+</div>
+</section>
+<!-- Top Recipes for You -->
+<section class="px-4 py-8 mb-12">
+<div class="flex items-center justify-between mb-6">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary">restaurant_menu</span>
+<h2 class="text-slate-900 dark:text-slate-100 text-2xl font-bold leading-tight tracking-tight">Top Recipes for You</h2>
+</div>
+<button class="text-primary text-sm font-bold flex items-center gap-1 hover:underline">
+                        View All
+                        <span class="material-symbols-outlined text-sm">chevron_right</span>
+</button>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+<div class="group cursor-pointer">
+<div class="relative aspect-video w-full overflow-hidden rounded-xl mb-3">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" data-alt="Gourmet avocado toast with poached egg and microgreens" src="https://lh3.googleusercontent.com/aida-public/AB6AXuA5HRMhahcfZrIg5njR96ZI3DT2T5FOSCYqAEj7kW77mcYP6y8Knve3Kq-OawxDE0ruq5lJxfxkopuyJpLvKYjl4O-UIisV9Ck3lT5npnGE-IAzDBSk8clhmiokuNV8cfJU2tMWcJXOE41Yjqdhzn3sIPpoAvlf_rfHXrBfKVsO4F-XYJvxM24tLEHaXaYNaQKK6xUeWJ8vnM1fFe0aqKXlgOKOMn4iosSi9LcKVMUW-8IL8bv_ggaqqIVwDK0oR0D5a5p_sSYTQ-Yd"/>
+<div class="absolute top-3 right-3 bg-white/90 dark:bg-slate-900/90 backdrop-blur px-2 py-1 rounded text-[10px] font-bold uppercase tracking-wider text-slate-900 dark:text-white">
+                                12 Min
+                            </div>
+</div>
+<h3 class="font-bold text-lg text-slate-900 dark:text-slate-100 group-hover:text-primary transition-colors">Artisanal Sourdough Avocado Toast</h3>
+<div class="flex items-center gap-2 text-slate-500 dark:text-slate-400 text-sm mt-1">
+<span class="flex items-center gap-1"><span class="material-symbols-outlined text-xs">local_fire_department</span> 340 kcal</span>
+<span>•</span>
+<span class="flex items-center gap-1"><span class="material-symbols-outlined text-xs">star</span> 4.9</span>
+</div>
+</div>
+<div class="group cursor-pointer">
+<div class="relative aspect-video w-full overflow-hidden rounded-xl mb-3">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" data-alt="Healthy Buddha bowl with avocado, quinoa and chickpeas" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDjlQbB2DHtquOfLPuoML1ZSr6SYKhRmms2B7xPSuzWeKb7b35YTUeai7O0yPS7PMIXc9MEEZwVelyT600aGtbBRTpHBIegWBBvB4mVHiHtvyuumq3tcl-CtML_WVj6uqqA7lCU6rFfafTNF1bVtpWppo1TnES5yo61uaO9GPXI-QAM71UbyVc1AHjEKM0ws-qmRrHpnGkPGWzoPWB2tGFRsrmC2MUDwbc-DKk_b6ErhP7Ylhxn11H6bEOyaEY8bo_Vjjmjkzx8ze_C"/>
+<div class="absolute top-3 right-3 bg-white/90 dark:bg-slate-900/90 backdrop-blur px-2 py-1 rounded text-[10px] font-bold uppercase tracking-wider text-slate-900 dark:text-white">
+                                20 Min
+                            </div>
+</div>
+<h3 class="font-bold text-lg text-slate-900 dark:text-slate-100 group-hover:text-primary transition-colors">Bio-Dynamic Buddha Bowl</h3>
+<div class="flex items-center gap-2 text-slate-500 dark:text-slate-400 text-sm mt-1">
+<span class="flex items-center gap-1"><span class="material-symbols-outlined text-xs">local_fire_department</span> 480 kcal</span>
+<span>•</span>
+<span class="flex items-center gap-1"><span class="material-symbols-outlined text-xs">star</span> 4.7</span>
+</div>
+</div>
+</div>
+</section>
+</main>
+<!-- Fixed Action Button -->
+<div class="fixed bottom-6 right-6 z-50">
+<button class="bg-primary text-white size-14 rounded-full flex items-center justify-center shadow-2xl hover:bg-primary/90 transition-all scale-100 active:scale-95">
+<span class="material-symbols-outlined">add_shopping_cart</span>
+</button>
+</div>
+</div>
+<style>
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+    </style>
+</body></html>

@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+
+<html class="h-full" lang="es"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>RIAL: Escandallo y Coste de Receta</title>
+<!-- BEGIN: Scripts and Frameworks -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            tech: {
+              black: '#0a0a0a',
+              dark: '#121212',
+              accent: '#3b82f6',
+              success: '#10b981',
+              warning: '#f59e0b',
+              surface: '#1e1e1e',
+              border: '#2e2e2e'
+            }
+          },
+          fontFamily: {
+            sans: ['Inter', 'system-ui', 'sans-serif'],
+            mono: ['JetBrains Mono', 'monospace']
+          }
+        }
+      }
+    }
+  </script>
+<!-- END: Scripts and Frameworks -->
+<style data-purpose="custom-typography">
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
+    
+    body {
+      font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .glass-effect {
+      background: rgba(30, 30, 30, 0.7);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .data-row:hover {
+      background: rgba(59, 130, 246, 0.05);
+    }
+  </style>
+</head>
+<body class="bg-tech-black text-gray-200 min-h-screen font-sans antialiased pb-20">
+<!-- BEGIN: Top Navigation Bar -->
+<header class="sticky top-0 z-50 glass-effect border-b border-tech-border px-4 py-3 flex items-center justify-between">
+<div class="flex items-center gap-3">
+<button class="p-1 text-gray-400">
+<svg class="h-6 w-6" fill="none" stroke="currentColor" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+<path d="M15 19l-7-7 7-7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+</svg>
+</button>
+<div>
+<h1 class="text-xs font-mono text-tech-accent uppercase tracking-widest leading-none">Cost Analysis</h1>
+<p class="text-sm font-bold text-white truncate max-w-[180px]">Solomillo Wellington v2.1</p>
+</div>
+</div>
+<div class="flex items-center gap-2">
+<span class="bg-tech-success/20 text-tech-success text-[10px] font-bold px-2 py-0.5 rounded border border-tech-success/30">REAL-TIME DATA</span>
+</div>
+</header>
+<!-- END: Top Navigation Bar -->
+<main class="p-4 space-y-6">
+<!-- BEGIN: Summary KPI Cards -->
+<section class="grid grid-cols-2 gap-3" data-purpose="summary-stats">
+<!-- Total Recipe Cost Card -->
+<div class="bg-tech-surface p-4 rounded-xl border border-tech-border">
+<p class="text-[10px] font-mono text-gray-500 uppercase">Coste Total</p>
+<div class="flex items-baseline gap-1 mt-1">
+<span class="text-2xl font-bold text-white">42.85</span>
+<span class="text-xs text-gray-400">€</span>
+</div>
+<div class="mt-2 flex items-center gap-1 text-[10px] text-tech-warning">
+<svg class="h-3 w-3" fill="none" stroke="currentColor" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+<path d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+</svg>
+<span>+12% vs. Prev</span>
+</div>
+</div>
+<!-- Real Cost Per Portion Card -->
+<div class="bg-tech-surface p-4 rounded-xl border border-tech-border border-l-4 border-l-tech-accent">
+<p class="text-[10px] font-mono text-tech-accent uppercase">Porción Real</p>
+<div class="flex items-baseline gap-1 mt-1">
+<span class="text-2xl font-bold text-white">10.71</span>
+<span class="text-xs text-gray-400">€</span>
+</div>
+<p class="text-[10px] text-gray-500 mt-2">Basado en 4 raciones</p>
+</div>
+</section>
+<!-- END: Summary KPI Cards -->
+<!-- BEGIN: Efficiency Overlay -->
+<section class="bg-tech-surface rounded-xl border border-tech-border overflow-hidden" data-purpose="efficiency-meter">
+<div class="px-4 py-3 border-b border-tech-border flex justify-between items-center">
+<h2 class="text-xs font-mono font-semibold uppercase tracking-wider text-gray-400">Eficiencia Coste/Nutrición</h2>
+<span class="text-xs font-mono text-tech-success">Ratio: 0.82</span>
+</div>
+<div class="p-4 space-y-4">
+<div class="relative pt-1">
+<div class="flex mb-2 items-center justify-between">
+<div>
+<span class="text-xs font-semibold inline-block py-1 px-2 uppercase rounded-full text-tech-accent bg-tech-accent/10">
+                Optimización
+              </span>
+</div>
+<div class="text-right">
+<span class="text-xs font-semibold inline-block text-tech-accent">
+                85%
+              </span>
+</div>
+</div>
+<div class="overflow-hidden h-2 mb-1 text-xs flex rounded bg-tech-border">
+<div class="shadow-none flex flex-col text-center whitespace-nowrap text-white justify-center bg-tech-accent" style="width:85%"></div>
+</div>
+<p class="text-[10px] text-gray-500 italic mt-2">La densidad proteica justifica el incremento de precio actual.</p>
+</div>
+</div>
+</section>
+<!-- END: Efficiency Overlay -->
+<!-- BEGIN: Detailed Escandallo Table -->
+<section class="bg-tech-surface rounded-xl border border-tech-border overflow-hidden" data-purpose="ingredient-data-table">
+<div class="px-4 py-3 bg-tech-border/30 border-b border-tech-border">
+<h2 class="text-xs font-mono font-semibold uppercase tracking-wider text-gray-300 italic">Technical Breakdown</h2>
+</div>
+<div class="overflow-x-auto">
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="text-[10px] font-mono text-gray-500 uppercase border-b border-tech-border bg-tech-black/20">
+<th class="px-4 py-3 font-medium">Ingrediente</th>
+<th class="px-2 py-3 font-medium text-center">Cant.</th>
+<th class="px-2 py-3 font-medium text-right">Ticket</th>
+<th class="px-4 py-3 font-medium text-right">Real €</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-tech-border/50">
+<!-- Row 1 -->
+<tr class="data-row transition-colors">
+<td class="px-4 py-4">
+<p class="text-xs font-bold text-white">Solomillo Buey</p>
+<p class="text-[9px] text-gray-500 font-mono">ID: TKT-99281</p>
+</td>
+<td class="px-2 py-4 text-center">
+<span class="text-[10px] text-gray-300">800g</span>
+</td>
+<td class="px-2 py-4 text-right">
+<span class="text-[10px] font-mono text-gray-400">32.00</span>
+</td>
+<td class="px-4 py-4 text-right">
+<span class="text-xs font-mono font-bold text-tech-accent">25.60</span>
+</td>
+</tr>
+<!-- Row 2 -->
+<tr class="data-row transition-colors">
+<td class="px-4 py-4">
+<p class="text-xs font-bold text-white">Masa Hojaldre</p>
+<p class="text-[9px] text-gray-500 font-mono">ID: TKT-44102</p>
+</td>
+<td class="px-2 py-4 text-center">
+<span class="text-[10px] text-gray-300">250g</span>
+</td>
+<td class="px-2 py-4 text-right">
+<span class="text-[10px] font-mono text-gray-400">2.45</span>
+</td>
+<td class="px-4 py-4 text-right">
+<span class="text-xs font-mono font-bold text-tech-accent">2.45</span>
+</td>
+</tr>
+<!-- Row 3 -->
+<tr class="data-row transition-colors">
+<td class="px-4 py-4">
+<p class="text-xs font-bold text-white">Champiñón París</p>
+<p class="text-[9px] text-gray-500 font-mono">ID: TKT-11029</p>
+</td>
+<td class="px-2 py-4 text-center">
+<span class="text-[10px] text-gray-300">500g</span>
+</td>
+<td class="px-2 py-4 text-right">
+<span class="text-[10px] font-mono text-gray-400">1.80</span>
+</td>
+<td class="px-4 py-4 text-right">
+<span class="text-xs font-mono font-bold text-tech-accent">1.80</span>
+</td>
+</tr>
+<!-- Row 4 -->
+<tr class="data-row transition-colors">
+<td class="px-4 py-4">
+<p class="text-xs font-bold text-white">Foie Gras Entier</p>
+<p class="text-[9px] text-gray-500 font-mono">ID: TKT-88372</p>
+</td>
+<td class="px-2 py-4 text-center">
+<span class="text-[10px] text-gray-300">100g</span>
+</td>
+<td class="px-2 py-4 text-right">
+<span class="text-[10px] font-mono text-gray-400">15.00</span>
+</td>
+<td class="px-4 py-4 text-right">
+<span class="text-xs font-mono font-bold text-tech-accent">13.00</span>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<!-- END: Detailed Escandallo Table -->
+<!-- BEGIN: Nutrition vs. Cost Visualizer -->
+<section class="bg-tech-dark p-5 rounded-xl border border-tech-accent/20 relative overflow-hidden" data-purpose="nutritional-efficiency">
+<!-- Decorative grid bg -->
+<div class="absolute inset-0 opacity-10 pointer-events-none" style="background-image: radial-gradient(#3b82f6 1px, transparent 1px); background-size: 10px 10px;"></div>
+<div class="relative z-10">
+<h3 class="text-[11px] font-mono text-tech-accent uppercase mb-4 tracking-tighter">Efficiency Matrix (Per Portion)</h3>
+<div class="flex items-end gap-3 h-32 mb-4">
+<div class="flex-1 flex flex-col items-center gap-2">
+<div class="w-full bg-tech-accent/20 rounded-t h-full relative flex items-end">
+<div class="w-full bg-tech-accent h-[75%] rounded-t"></div>
+</div>
+<span class="text-[9px] font-mono text-gray-400 uppercase">Energy</span>
+</div>
+<div class="flex-1 flex flex-col items-center gap-2">
+<div class="w-full bg-tech-success/20 rounded-t h-full relative flex items-end">
+<div class="w-full bg-tech-success h-[90%] rounded-t"></div>
+</div>
+<span class="text-[9px] font-mono text-gray-400 uppercase">Prot.</span>
+</div>
+<div class="flex-1 flex flex-col items-center gap-2">
+<div class="w-full bg-tech-warning/20 rounded-t h-full relative flex items-end">
+<div class="w-full bg-tech-warning h-[40%] rounded-t"></div>
+</div>
+<span class="text-[9px] font-mono text-gray-400 uppercase">Cost</span>
+</div>
+</div>
+<div class="bg-tech-black/50 p-3 rounded-lg border border-tech-border">
+<div class="flex justify-between items-center text-[10px]">
+<span class="text-gray-400 font-mono">Nutritional Score:</span>
+<span class="text-tech-success font-bold">A+ Excellent</span>
+</div>
+</div>
+</div>
+</section>
+<!-- END: Nutrition vs. Cost Visualizer -->
+</main>
+<!-- BEGIN: Bottom Action Bar -->
+<footer class="fixed bottom-0 left-0 right-0 glass-effect border-t border-tech-border px-6 py-4 flex items-center justify-between z-50">
+<button class="flex items-center gap-2 text-gray-400 text-xs font-medium">
+<svg class="h-4 w-4" fill="none" stroke="currentColor" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+<path d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+</svg>
+      Export PDF
+    </button>
+<button class="bg-tech-accent hover:bg-blue-600 text-white px-6 py-2 rounded-lg text-xs font-bold shadow-lg shadow-tech-accent/20 transition-all active:scale-95">
+      Update Inventory
+    </button>
+</footer>
+<!-- END: Bottom Action Bar -->
+<script data-purpose="dynamic-calc-sim">
+    // Simulation of data sync status
+    console.log("RIAL Technical View Initialized...");
+    console.log("Ticket API Connection: Active");
+    console.log("Nutrition Database: V4.1 Offline-Sync");
+  </script>
+</body></html>

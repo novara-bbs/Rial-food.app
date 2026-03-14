@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,200..800;1,6..72,200..800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#a4ec13",
+                        "background-light": "#f9f8f6", // Oat
+                        "background-dark": "#1c2210",
+                        "olive": {
+                            50: "#f4f6ef",
+                            100: "#e8eddf",
+                            200: "#d1dbbf",
+                            300: "#b9c99f",
+                            400: "#a2b77f",
+                            50: "#8ba55f",
+                            600: "#738b4a",
+                            700: "#5a6d3a",
+                            800: "#4a5d23", // Deep Olive
+                            900: "#38471a",
+                        }
+                    },
+                    fontFamily: {
+                        "display": ["Newsreader", "serif"],
+                        "sans": ["Inter", "system-ui", "sans-serif"]
+                    },
+                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        h1, h2, h3, .font-display {
+            font-family: 'Newsreader', serif;
+        }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark text-olive-900 dark:text-olive-50">
+<div class="relative flex min-h-screen w-full flex-col overflow-x-hidden">
+<div class="layout-container flex h-full grow flex-col">
+<!-- Top Navigation -->
+<header class="sticky top-0 z-50 flex items-center justify-between border-b border-olive-200 dark:border-olive-800 bg-background-light/80 dark:bg-background-dark/80 backdrop-blur-md px-6 md:px-20 py-3">
+<div class="flex items-center gap-8">
+<div class="flex items-center gap-3">
+<div class="size-8 bg-primary rounded flex items-center justify-center text-olive-900">
+<span class="material-symbols-outlined font-bold">clinical_notes</span>
+</div>
+<h2 class="text-olive-900 dark:text-olive-50 text-xl font-display font-bold leading-tight tracking-tight">RIAL V1</h2>
+</div>
+<nav class="hidden md:flex items-center gap-8">
+<a class="text-olive-800 dark:text-olive-200 text-sm font-semibold border-b-2 border-primary pb-1" href="#">Feed</a>
+<a class="text-olive-600 dark:text-olive-400 text-sm font-medium hover:text-olive-900 dark:hover:text-olive-100 transition-colors" href="#">Insights</a>
+<a class="text-olive-600 dark:text-olive-400 text-sm font-medium hover:text-olive-900 dark:hover:text-olive-100 transition-colors" href="#">Library</a>
+</nav>
+</div>
+<div class="flex flex-1 justify-end gap-4 items-center">
+<div class="hidden lg:flex w-full max-w-xs relative">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-olive-400 text-xl">search</span>
+<input class="w-full bg-olive-100 dark:bg-olive-800/50 border-none rounded-full py-2 pl-10 pr-4 text-sm focus:ring-2 focus:ring-primary/50" placeholder="Search clinical correlations..." type="text"/>
+</div>
+<button class="p-2 text-olive-700 dark:text-olive-300 hover:bg-olive-100 dark:hover:bg-olive-800 rounded-full transition-colors">
+<span class="material-symbols-outlined">notifications</span>
+</button>
+<div class="h-9 w-9 rounded-full bg-olive-200 overflow-hidden border border-olive-300 shadow-sm" data-alt="User profile avatar circle">
+<img alt="Profile" class="h-full w-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDoAElTyS2k58p4Mnt1j8VGKXhM-VMsGIIzIv2elit3LszgXEmZXbuJ6xyd-uf_QAD5PBjSbPg5_359zP7MAiU6wgtxiv1FJmpqciMs5BYQDAwe0VJWoUzR68XOZg_16WC-O8VxOiY4c0AEiJcT5p-fR_A4itE2QCFmWBKapxmde2DDUIhI9ewIoOLh0ojpYDdM7nfm2ImFdGB6seah3CKhchE9zEgHdUH6yY7rskiR_TQHOHyV9G_nWWyyNZ-lwm-qWUIxLzxA2LE"/>
+</div>
+</div>
+</header>
+<main class="mx-auto flex w-full max-w-7xl flex-1 px-4 md:px-10 py-8">
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-10 w-full">
+<!-- Left Sidebar (Navigation/Stats) -->
+<aside class="hidden lg:flex lg:col-span-3 flex-col gap-8">
+<div class="bg-white dark:bg-olive-900/40 rounded-xl p-6 border border-olive-100 dark:border-olive-800 shadow-sm">
+<h3 class="font-display text-lg font-bold mb-4">Editorial Console</h3>
+<nav class="flex flex-col gap-2">
+<a class="flex items-center gap-3 px-3 py-2 bg-primary/10 text-olive-800 dark:text-primary rounded-lg font-medium" href="#">
+<span class="material-symbols-outlined">rss_feed</span> Community Feed
+                                </a>
+<a class="flex items-center gap-3 px-3 py-2 text-olive-600 dark:text-olive-400 hover:bg-olive-50 dark:hover:bg-olive-800/50 rounded-lg transition-colors" href="#">
+<span class="material-symbols-outlined">analytics</span> My Correlations
+                                </a>
+<a class="flex items-center gap-3 px-3 py-2 text-olive-600 dark:text-olive-400 hover:bg-olive-50 dark:hover:bg-olive-800/50 rounded-lg transition-colors" href="#">
+<span class="material-symbols-outlined">bookmark</span> Saved Insights
+                                </a>
+<a class="flex items-center gap-3 px-3 py-2 text-olive-600 dark:text-olive-400 hover:bg-olive-50 dark:hover:bg-olive-800/50 rounded-lg transition-colors" href="#">
+<span class="material-symbols-outlined">group</span> Clinical Circles
+                                </a>
+</nav>
+</div>
+<div class="bg-olive-800 text-white rounded-xl p-6 shadow-lg relative overflow-hidden">
+<div class="relative z-10">
+<p class="text-primary text-xs font-bold uppercase tracking-widest mb-1">Weekly Status</p>
+<h4 class="font-display text-2xl mb-4">Clinical Alignment</h4>
+<div class="flex items-baseline gap-1">
+<span class="text-4xl font-bold">92</span>
+<span class="text-olive-300 text-lg">%</span>
+</div>
+<p class="text-olive-200 text-sm mt-2 leading-relaxed">Your Real Feel data is highly correlated with your vitality goals this week.</p>
+<button class="mt-6 w-full py-2 bg-primary text-olive-900 rounded-lg font-bold text-sm hover:brightness-105 transition-all">View Full Audit</button>
+</div>
+<div class="absolute -right-4 -bottom-4 opacity-10">
+<span class="material-symbols-outlined text-[120px]">monitoring</span>
+</div>
+</div>
+</aside>
+<!-- Main Feed -->
+<div class="lg:col-span-6 flex flex-col gap-6">
+<!-- Share CTA -->
+<div class="bg-white dark:bg-olive-900/40 rounded-xl p-4 border border-olive-200 dark:border-olive-800 shadow-sm">
+<div class="flex gap-4">
+<div class="h-12 w-12 rounded-full bg-olive-100 flex-shrink-0" data-alt="User mini profile icon">
+<img alt="User" class="rounded-full object-cover h-full w-full" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAOFOhK7NKAvNDOFtzkqhy1sTV-vVIA_GKqzg2uJxCmw3jGNyRmfuT4DWnRetOD7ANiYa4MlJvVmCEbqrXWWQHh3RQDewbtS9eqYcT2a5krfDiVg3yxcwv1P5T1hiu4ovuAaNinB_lNMe8HBcG_H44W-dC_q5IBganFq8dfx14MlYSmrIInUvrTznkfX6Y9yQVL47Fl0ZSOIbsmBRuMXPq3RwIlEvJLGWkqXjdYMEqD4YQWncq_tZkOYUo0CXW_lYGfmCYr1alB9ig"/>
+</div>
+<div class="flex-1">
+<textarea class="w-full bg-transparent border-none focus:ring-0 text-lg font-display placeholder:text-olive-300 resize-none min-h-[60px]" placeholder="Share a new clinical correlation..."></textarea>
+<div class="flex items-center justify-between mt-2 pt-3 border-t border-olive-50 dark:border-olive-800">
+<div class="flex gap-2">
+<button class="p-2 text-olive-500 hover:bg-olive-50 dark:hover:bg-olive-800 rounded-lg transition-colors">
+<span class="material-symbols-outlined text-xl">insert_chart</span>
+</button>
+<button class="p-2 text-olive-500 hover:bg-olive-50 dark:hover:bg-olive-800 rounded-lg transition-colors">
+<span class="material-symbols-outlined text-xl">photo_camera</span>
+</button>
+<button class="p-2 text-olive-500 hover:bg-olive-50 dark:hover:bg-olive-800 rounded-lg transition-colors">
+<span class="material-symbols-outlined text-xl">link</span>
+</button>
+</div>
+<button class="bg-primary text-olive-900 px-6 py-2 rounded-full font-bold text-sm hover:shadow-md transition-all">Share Insight</button>
+</div>
+</div>
+</div>
+</div>
+<!-- Section Header -->
+<div class="flex items-center justify-between px-2">
+<h2 class="font-display text-2xl font-bold italic">Clinical Feed</h2>
+<div class="flex gap-2">
+<button class="text-xs font-bold uppercase tracking-tighter text-olive-400 bg-olive-100 px-3 py-1 rounded-full">Recent</button>
+<button class="text-xs font-bold uppercase tracking-tighter text-olive-900">Trending</button>
+</div>
+</div>
+<!-- Feed Item: Vitality Alignment Card -->
+<article class="bg-white dark:bg-olive-900/40 rounded-xl border border-olive-200 dark:border-olive-800 overflow-hidden shadow-sm">
+<div class="p-6">
+<div class="flex items-center justify-between mb-6">
+<div class="flex items-center gap-3">
+<div class="h-10 w-10 rounded-full border-2 border-primary overflow-hidden" data-alt="Profile photo of Dr. Aris Thorne">
+<img alt="User" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuC_L9a_qQEMI3p99JS0Voqi9hfjREfC-6wfDYOBInhJA2LEnYgTR8iShXNl0PomteaZ1dR4fLZJVEN4r7BjDk-zOeo7iK_p_SSbdIn3rgO41NI5HX9EFUU5urOaBxHkPXlQtyoUD8RsS6D6BG3m85nd6RHZjMS8Y12bfZE522i4aVmDWvFix0PzUVGbP90AaJPWgv_KQFGtP-nEy_8YqhJDH7HgK0hp8D_ei3x8aapTsEsVk46fCC6Hf0wcdUJ_-04hkZRv97kh0j4"/>
+</div>
+<div>
+<h4 class="font-bold text-olive-900 dark:text-olive-50 leading-none">Dr. Aris Thorne</h4>
+<p class="text-xs text-olive-400 mt-1">Shared a Real Feel Insight • 2h ago</p>
+</div>
+</div>
+<button class="text-olive-400 hover:text-olive-600">
+<span class="material-symbols-outlined">more_horiz</span>
+</button>
+</div>
+<p class="font-display text-xl text-olive-800 dark:text-olive-200 leading-snug mb-6">
+                                    "Cracked the code on my afternoon fatigue. Higher protein-to-energy ratio at lunch leads to a sustained 3h focus peak."
+                                </p>
+<!-- Alignment Card -->
+<div class="bg-olive-50 dark:bg-olive-800/50 rounded-2xl p-6 border border-olive-100 dark:border-olive-700">
+<div class="flex flex-col md:flex-row gap-6 items-center">
+<div class="flex-1 w-full">
+<div class="flex items-center justify-between mb-4">
+<span class="text-[10px] font-bold tracking-widest text-olive-500 uppercase">Vitality Alignment Score</span>
+<span class="text-xs font-bold text-olive-700 bg-primary/30 px-2 py-0.5 rounded">HIGH CORRELATION</span>
+</div>
+<div class="flex items-end gap-3 mb-6">
+<span class="text-5xl font-display font-bold text-olive-900 dark:text-olive-50 leading-none">84%</span>
+<span class="text-olive-500 text-sm mb-1">Real Feel vs. Biomarkers</span>
+</div>
+<!-- Mini Correlation Chart Mockup -->
+<div class="h-24 w-full flex items-end gap-1 px-1">
+<div class="w-full bg-olive-200 dark:bg-olive-700 rounded-t h-[40%]"></div>
+<div class="w-full bg-olive-200 dark:bg-olive-700 rounded-t h-[60%]"></div>
+<div class="w-full bg-olive-300 dark:bg-olive-600 rounded-t h-[55%]"></div>
+<div class="w-full bg-primary rounded-t h-[85%] relative group">
+<div class="absolute -top-6 left-1/2 -translate-x-1/2 hidden group-hover:block bg-olive-900 text-white text-[10px] px-2 py-1 rounded">Lunch</div>
+</div>
+<div class="w-full bg-primary rounded-t h-[95%]"></div>
+<div class="w-full bg-olive-300 dark:bg-olive-600 rounded-t h-[70%]"></div>
+<div class="w-full bg-olive-200 dark:bg-olive-700 rounded-t h-[45%]"></div>
+<div class="w-full bg-olive-200 dark:bg-olive-700 rounded-t h-[30%]"></div>
+</div>
+<div class="flex justify-between mt-2 text-[9px] font-bold text-olive-400 uppercase tracking-wider">
+<span>6 AM</span>
+<span>NOON</span>
+<span>6 PM</span>
+<span>10 PM</span>
+</div>
+</div>
+<div class="w-full md:w-32 flex flex-col items-center justify-center p-4 bg-white dark:bg-olive-900 rounded-xl shadow-inner border border-olive-100 dark:border-olive-800">
+<span class="material-symbols-outlined text-primary text-4xl mb-1">bolt</span>
+<span class="text-[10px] font-bold text-olive-400 uppercase">Streak</span>
+<span class="text-2xl font-bold text-olive-900 dark:text-olive-50">12</span>
+<span class="text-[10px] text-olive-500">Clinical Days</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Engagement -->
+<div class="px-6 py-4 border-t border-olive-50 dark:border-olive-800 bg-olive-50/30 dark:bg-olive-900/20">
+<div class="flex items-center gap-6 mb-4">
+<button class="flex items-center gap-1.5 text-olive-600 dark:text-olive-400 hover:text-orange-500 transition-colors">
+<span class="material-symbols-outlined fill-1 text-orange-500">local_fire_department</span>
+<span class="text-sm font-bold">24 Kudos</span>
+</button>
+<button class="flex items-center gap-1.5 text-olive-600 dark:text-olive-400 hover:text-primary transition-colors">
+<span class="material-symbols-outlined">chat_bubble</span>
+<span class="text-sm font-bold">8 Insights</span>
+</button>
+<button class="flex items-center gap-1.5 ml-auto text-olive-400 hover:text-olive-600">
+<span class="material-symbols-outlined">share</span>
+</button>
+</div>
+<!-- Comments -->
+<div class="flex flex-col gap-3 pt-2">
+<div class="flex gap-3">
+<div class="h-8 w-8 rounded-full overflow-hidden bg-olive-200 flex-shrink-0" data-alt="Friend profile picture">
+<img alt="Friend" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAM7VRm0ycdXG1H5wUO9Ysd63XA8Yvqa7TgtWaI_tnYoawJz4TNt9TSR4R0gdel-P2rDpylmNECfYg9wkd5xM_rCUiKqQ2pOKBzoSu8zf-P1Izkw-wBUyh08nHpjBRIpRSLZAFA_HWqEG1NJotkt2pzxVbw-2i9oF3pjXBBU0rVMl0K5HrxnkBLT6Ho5UL_3IKk-Z8vYWwqhXSmVlldWyj0e38iUnt0amiJujGJi64HWZRXZyF144ZFJOEa5VnbdkN0u0-K2NRRRj8"/>
+</div>
+<div class="bg-olive-100 dark:bg-olive-800 px-3 py-2 rounded-2xl flex-1">
+<p class="text-xs font-bold text-olive-900 dark:text-olive-100">Maya Seraphine</p>
+<p class="text-sm text-olive-700 dark:text-olive-300 italic font-display">"Love that protein-to-energy insight! I noticed similar shifts with my morning workout logs."</p>
+</div>
+</div>
+<button class="text-[10px] font-bold text-primary uppercase pl-11 tracking-wider hover:underline">View all 8 insights</button>
+</div>
+</div>
+</article>
+<!-- Another Card (Simple) -->
+<article class="bg-white dark:bg-olive-900/40 rounded-xl border border-olive-200 dark:border-olive-800 p-6 shadow-sm">
+<div class="flex items-center gap-3 mb-4">
+<div class="h-10 w-10 rounded-full bg-olive-100 overflow-hidden" data-alt="User avatar for Sarah Jenkins">
+<img alt="User" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDZm3nwTNN9T3BiFOKw5ZPcqY0EHF9XlTeL-Y1h2u7y5N8BTKeKCwayRxAuNlMtkqFKCjRtLXSJM7oX1IJHAZl7gxS2ROlig3KNuHKvjxR0ggXXUWnbIw3xTcielK1UfwSGhejng3J4G_3ASbCw825rKEd_WpjfNsUjzihSzxKN7ymHB9_q0MbV_OLUan9Urmn7oalHscxBkQ96MF9umcu5diAdf8YvvHMpDtKkRsC05w1dVUHfprK-7NjTW4kwEeThso2_sz5-rvg"/>
+</div>
+<div>
+<h4 class="font-bold text-olive-900 dark:text-olive-50 leading-none">Sarah Jenkins</h4>
+<p class="text-xs text-olive-400 mt-1">Shared a Clinical Correlation • 5h ago</p>
+</div>
+</div>
+<h3 class="font-display text-xl leading-tight mb-3">Magnesium uptake and HRV synchronization.</h3>
+<p class="text-olive-600 dark:text-olive-400 text-sm mb-4 line-clamp-2 leading-relaxed">My clinical dashboard shows a 15% increase in HRV baseline following the protocol adjustment last Tuesday. The correlation between sleep quality and Real Feel is now at 91%.</p>
+<div class="flex items-center justify-between mt-4">
+<div class="flex -space-x-2">
+<div class="h-6 w-6 rounded-full border-2 border-white dark:border-olive-900 bg-olive-200 overflow-hidden" data-alt="Tiny avatar 1"></div>
+<div class="h-6 w-6 rounded-full border-2 border-white dark:border-olive-900 bg-olive-300 overflow-hidden" data-alt="Tiny avatar 2"></div>
+<div class="h-6 w-6 rounded-full border-2 border-white dark:border-olive-900 bg-primary/30 flex items-center justify-center text-[8px] font-bold">+12</div>
+</div>
+<button class="text-xs font-bold text-olive-900 dark:text-primary underline">Read Full Audit</button>
+</div>
+</article>
+</div>
+<!-- Right Sidebar (Leaderboard) -->
+<aside class="hidden lg:flex lg:col-span-3 flex-col gap-8">
+<div class="bg-white dark:bg-olive-900/40 rounded-xl border border-olive-200 dark:border-olive-800 p-6 shadow-sm">
+<div class="flex items-center justify-between mb-6">
+<h3 class="font-display text-xl font-bold">Community Vitality</h3>
+<span class="material-symbols-outlined text-olive-300">info</span>
+</div>
+<div class="space-y-6">
+<div>
+<p class="text-[10px] font-bold text-olive-400 uppercase tracking-widest mb-4">Vitality Streaks</p>
+<div class="flex flex-col gap-4">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-3">
+<span class="text-sm font-bold text-olive-300 w-4 italic">01</span>
+<div class="h-8 w-8 rounded-full bg-olive-100 overflow-hidden" data-alt="Rank 1 user">
+<img alt="User" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCMGB-m4jKmcU8KaHwRoqNltkxemUQr-A3m3v1nUfPl-t5vH1oneRh7VbHaORdHzcPo58IeTqm1A8veKZiz_BtXwK_QZMh-CbNV0RxwBep3jEBUx9Fy1-A5SF4EDBezYXU97gkHdOd4EjWRVtTd5E8VUcc-O-Zl3NWftgrx_eoUFQezqubLpJ_NogZuPqWeKmJ_cjFZQCe4Oh1cmuRtTcLaZGcvgZJvLTYQWtzNALN1UPVNetXujISJhvKIh_H6SdU5DkOnX6s50Xs"/>
+</div>
+<span class="text-sm font-medium">Liam Vance</span>
+</div>
+<div class="flex items-center gap-1">
+<span class="text-sm font-bold">42</span>
+<span class="material-symbols-outlined text-orange-500 text-sm fill-1">local_fire_department</span>
+</div>
+</div>
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-3">
+<span class="text-sm font-bold text-olive-300 w-4 italic">02</span>
+<div class="h-8 w-8 rounded-full bg-olive-100 overflow-hidden" data-alt="Rank 2 user">
+<img alt="User" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBE2xwG_3u0Ps56MCLoTXvHePH8WPqHiIeoCPA6gfiydFIaJNkzWBxbB-tVu1Cmf8cCfT_QXrmqVsQP2bPx6JmCcuS5OoRWhdPTzPAQV-EX_7E6-HjAM86gV_E9SBIJ7vn4Z3lBwefLgu5uRGfaVEAS7LekHPsN6NhVFLlOLADJX2hBn-TnQIxr-7CjFO_PyYyFkfNkvkltBpgOzjukc2GuwkiikZ9nCXiOM2q6gILHwTrNzRHbX9vA9PEj2JhCQzBnysBh6MNFSiU"/>
+</div>
+<span class="text-sm font-medium">Elena Rossi</span>
+</div>
+<div class="flex items-center gap-1">
+<span class="text-sm font-bold">38</span>
+<span class="material-symbols-outlined text-orange-500 text-sm fill-1">local_fire_department</span>
+</div>
+</div>
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-3">
+<span class="text-sm font-bold text-olive-300 w-4 italic">03</span>
+<div class="h-8 w-8 rounded-full bg-olive-100 overflow-hidden" data-alt="Rank 3 user">
+<img alt="User" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAlFljG7O6CARnhSDBAzPx3Y6285YdOj7pmld03AfXVXgZzXk72UOEXqLzYqayl8J_CVcIhA7enosfRU2cJYxtSGWc1_colszMhRI1frBWXo3B8m5wk5n0IQAQSOmjy5vIADLODAiEIvtrNsFrSYbVtguUbpM6QKpc4rIHpdneL9EdTHqP4yMQjtw5f-CcgYp3lOC5YTpumFS9m34QL24webzbu9ik6zp-g1jA8FjvBj3a3tLbNCg9hGD8vvJxDUxODwWjzFVd2Yr8"/>
+</div>
+<span class="text-sm font-medium">Marcus Chen</span>
+</div>
+<div class="flex items-center gap-1">
+<span class="text-sm font-bold">31</span>
+<span class="material-symbols-outlined text-orange-500 text-sm fill-1">local_fire_department</span>
+</div>
+</div>
+</div>
+</div>
+<hr class="border-olive-50 dark:border-olive-800"/>
+<div>
+<p class="text-[10px] font-bold text-olive-400 uppercase tracking-widest mb-4">Insight Contribution</p>
+<div class="flex flex-col gap-4">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-3">
+<div class="h-8 w-8 rounded-full bg-olive-800 text-primary flex items-center justify-center font-bold text-xs">BT</div>
+<span class="text-sm font-medium">Ben T.</span>
+</div>
+<span class="text-xs font-bold text-olive-500 bg-olive-50 px-2 py-1 rounded">114 Pts</span>
+</div>
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-3">
+<div class="h-8 w-8 rounded-full bg-primary text-olive-900 flex items-center justify-center font-bold text-xs">JO</div>
+<span class="text-sm font-medium">Jana O.</span>
+</div>
+<span class="text-xs font-bold text-olive-500 bg-olive-50 px-2 py-1 rounded">98 Pts</span>
+</div>
+</div>
+</div>
+<button class="w-full py-3 text-xs font-bold uppercase tracking-wider text-olive-700 bg-olive-100 hover:bg-olive-200 transition-colors rounded-lg">View Global Rankings</button>
+</div>
+</div>
+<!-- Mini Newsletter Card -->
+<div class="bg-primary/10 rounded-xl p-6 border border-primary/20">
+<h4 class="font-display text-lg font-bold text-olive-900 mb-2">Clinical Editorial</h4>
+<p class="text-sm text-olive-700 mb-4 italic">"The role of mitochondrial efficiency in morning Real Feel scores."</p>
+<a class="text-xs font-bold underline flex items-center gap-1" href="#">Read the latest issue <span class="material-symbols-outlined text-xs">arrow_forward</span></a>
+</div>
+</aside>
+</div>
+</main>
+</div>
+</div>
+</body></html>

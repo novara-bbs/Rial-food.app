@@ -1,0 +1,482 @@
+<!DOCTYPE html>
+<html class="dark" lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>RIAL Wellness Prototype</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet" />
+    
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#ccff00",
+                        "primary-dark": "#b3e600",
+                        "background-light": "#f8f8f5",
+                        "background-dark": "#1f230f",
+                        "sage": "#8da399",
+                        "warm-grey": "#2a2d2e",
+                    },
+                    fontFamily: {
+                        "display": ["Space Grotesk", "sans-serif"]
+                    },
+                    borderRadius: {"DEFAULT": "0.5rem", "lg": "1rem", "xl": "1.5rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+    <style>
+        body {
+            font-family: 'Space Grotesk', sans-serif;
+            min-height: max(884px, 100dvh);
+        }
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 4px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #ccff00;
+            border-radius: 10px;
+        }
+        .glass-card {
+            background: rgba(42, 45, 46, 0.4);
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+    </style>
+
+    <!-- React and ReactDOM -->
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <!-- History -->
+    <script crossorigin src="https://unpkg.com/history@5/umd/history.development.js"></script>
+    <!-- React Router -->
+    <script crossorigin src="https://unpkg.com/react-router@6.3.0/umd/react-router.development.js"></script>
+    <!-- React Router DOM -->
+    <script crossorigin src="https://unpkg.com/react-router-dom@6.3.0/umd/react-router-dom.development.js"></script>
+    <!-- Babel -->
+    <script crossorigin src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 antialiased">
+    <div id="root"></div>
+
+    <script type="text/babel">
+        const { useState, useEffect } = React;
+        const { createRoot } = ReactDOM;
+        const { MemoryRouter, Routes, Route, Link, useNavigate, useLocation } = ReactRouterDOM;
+
+        // --- Shared Components ---
+
+        const BottomNav = () => {
+            const location = useLocation();
+            
+            return (
+                <nav className="fixed bottom-0 left-0 right-0 z-50 border-t border-slate-200 dark:border-white/10 bg-white/80 dark:bg-background-dark/80 backdrop-blur-md px-6 pb-8 pt-4">
+                    <div className="flex items-center justify-between max-w-md mx-auto">
+                        <Link to="/" className={`flex flex-col items-center gap-1 ${location.pathname === '/' ? 'text-primary' : 'text-slate-400 dark:text-slate-500'}`}>
+                            <span className="material-symbols-outlined text-[28px] fill-1">book_2</span>
+                            <span className="text-[10px] font-bold uppercase tracking-widest">Journal</span>
+                        </Link>
+                        <Link to="/hub" className={`flex flex-col items-center gap-1 ${location.pathname === '/hub' ? 'text-primary' : 'text-slate-400 dark:text-slate-500'}`}>
+                            <span className="material-symbols-outlined text-[28px]">groups</span>
+                            <span className="text-[10px] font-bold uppercase tracking-widest">Hub</span>
+                        </Link>
+                        <Link to="/batch" className={`flex flex-col items-center gap-1 ${location.pathname === '/batch' ? 'text-primary' : 'text-slate-400 dark:text-slate-500'}`}>
+                            <span className="material-symbols-outlined text-[28px]">calendar_today</span>
+                            <span className="text-[10px] font-bold uppercase tracking-widest">Plan</span>
+                        </Link>
+                        <Link to="/insights" className={`flex flex-col items-center gap-1 ${location.pathname === '/insights' ? 'text-primary' : 'text-slate-400 dark:text-slate-500'}`}>
+                            <span className="material-symbols-outlined text-[28px]">analytics</span>
+                            <span className="text-[10px] font-bold uppercase tracking-widest">Insights</span>
+                        </Link>
+                        <Link to="/master" className={`flex flex-col items-center gap-1 ${location.pathname === '/master' ? 'text-primary' : 'text-slate-400 dark:text-slate-500'}`}>
+                            <span className="material-symbols-outlined text-[28px]">explore</span>
+                            <span className="text-[10px] font-bold uppercase tracking-widest">Master</span>
+                        </Link>
+                    </div>
+                </nav>
+            );
+        };
+
+        // --- Screens ---
+
+        const RealFeelJournal = () => {
+            return (
+                <div className="max-w-md mx-auto flex flex-col min-h-screen pb-24">
+                    <header className="sticky top-0 z-50 bg-background-light/80 dark:bg-background-dark/80 backdrop-blur-md border-b border-slate-200 dark:border-white/10 px-4 py-4 flex items-center justify-between">
+                        <div className="flex items-center gap-2">
+                            <span className="material-symbols-outlined text-primary text-3xl">blur_on</span>
+                            <h1 className="text-xl font-bold tracking-tight">RIAL Journal</h1>
+                        </div>
+                        <div className="flex items-center gap-4">
+                            <Link to="/insights" className="p-2 rounded-full hover:bg-slate-200 dark:hover:bg-white/10 transition-colors">
+                                <span className="material-symbols-outlined">analytics</span>
+                            </Link>
+                            <button className="p-2 rounded-full hover:bg-slate-200 dark:hover:bg-white/10 transition-colors">
+                                <span className="material-symbols-outlined">settings</span>
+                            </button>
+                        </div>
+                    </header>
+                    <main className="px-4 py-6 space-y-8">
+                        <section>
+                            <div className="flex items-center justify-between mb-4">
+                                <h2 className="text-lg font-bold">Real Feel Summary</h2>
+                                <span className="text-xs font-medium text-slate-500 dark:text-slate-400">LAST 24H</span>
+                            </div>
+                            <div className="grid grid-cols-2 gap-3">
+                                <div className="bg-white dark:bg-white/5 border border-slate-200 dark:border-white/10 rounded-xl p-4 flex flex-col justify-between aspect-square">
+                                    <div>
+                                        <span className="material-symbols-outlined text-primary mb-2">bolt</span>
+                                        <p className="text-sm text-slate-500 dark:text-slate-400">Energy</p>
+                                    </div>
+                                    <div>
+                                        <p className="text-2xl font-bold italic tracking-tight">High</p>
+                                        <p className="text-xs text-primary font-bold">+12% vs avg</p>
+                                    </div>
+                                </div>
+                                <div className="bg-white dark:bg-white/5 border border-slate-200 dark:border-white/10 rounded-xl p-4 flex flex-col justify-between aspect-square">
+                                    <div>
+                                        <span className="material-symbols-outlined text-primary mb-2">center_focus_strong</span>
+                                        <p className="text-sm text-slate-500 dark:text-slate-400">Focus</p>
+                                    </div>
+                                    <div>
+                                        <p className="text-2xl font-bold italic tracking-tight">Sharp</p>
+                                        <p className="text-xs text-primary font-bold">+5% vs avg</p>
+                                    </div>
+                                </div>
+                                <div className="bg-white dark:bg-white/5 border border-slate-200 dark:border-white/10 rounded-xl p-4 flex flex-col justify-between aspect-square">
+                                    <div>
+                                        <span className="material-symbols-outlined text-primary mb-2">air</span>
+                                        <p className="text-sm text-slate-500 dark:text-slate-400">Digestion</p>
+                                    </div>
+                                    <div>
+                                        <p className="text-2xl font-bold italic tracking-tight">Smooth</p>
+                                        <p className="text-xs text-red-400 font-bold">-2% vs avg</p>
+                                    </div>
+                                </div>
+                                <div className="bg-primary/10 border border-primary/20 rounded-xl p-4 flex flex-col justify-between aspect-square">
+                                    <div>
+                                        <span className="material-symbols-outlined text-primary mb-2">psychology</span>
+                                        <p className="text-sm text-slate-600 dark:text-slate-300">Mood</p>
+                                    </div>
+                                    <div>
+                                        <p className="text-2xl font-bold italic tracking-tight">Calm</p>
+                                        <p className="text-xs text-primary font-bold">Steady</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </section>
+                        <section>
+                            <div className="flex items-center justify-between mb-6">
+                                <h2 className="text-lg font-bold">Today's Intake</h2>
+                                <button className="text-sm font-medium text-primary underline underline-offset-4">VIEW LOGS</button>
+                            </div>
+                            <div className="space-y-10 relative">
+                                <div className="absolute left-4 top-0 bottom-0 w-[1px] bg-slate-200 dark:bg-white/10"></div>
+                                <div className="relative pl-10">
+                                    <div className="absolute left-[13px] top-1.5 size-2 rounded-full bg-primary border-4 border-background-light dark:border-background-dark"></div>
+                                    <div className="flex flex-col gap-4">
+                                        <div className="flex justify-between items-start">
+                                            <div>
+                                                <h3 className="font-bold text-lg leading-none mb-1">Morning Greens</h3>
+                                                <p className="text-sm text-slate-500 dark:text-slate-400">08:30 AM • Fasted State</p>
+                                            </div>
+                                            <span className="px-2 py-1 bg-primary/20 text-primary text-[10px] font-bold rounded uppercase tracking-widest">Anti-Inflam</span>
+                                        </div>
+                                        <div className="relative aspect-[4/3] rounded-xl overflow-hidden group">
+                                            <img className="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDoPaAx-tks04slb5qZl_BVe0kdtWK9hslFw9B6Xsq5HCsjsAg7mxmEX_O5rgU0mgZdT2D_vzMUdUz0uIaZe9YTpcfq_6p8b-b5TvXAkkONWtFjJ9YTwo9tpt7uoMxK5DZ5qyX1x_yUlJNvs___lpXLG86vxkBenvHoOOOWNZYhahGqhHzmzJsUgU8nTcVwWp_s5NDTu3GcH4aFUjzYr6q3F8Jto8O1eiQzLASdZ4UVvWAsafophEefrPzO7lRplVkcxv3wb9jfhmWR" />
+                                            <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-end p-4">
+                                                <p className="text-white text-xs">Bio-marker match: High focus expected in 2h</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div className="relative pl-10">
+                                    <div className="absolute left-[13px] top-1.5 size-2 rounded-full bg-slate-400 dark:bg-white/20 border-4 border-background-light dark:border-background-dark"></div>
+                                    <div className="flex flex-col gap-4">
+                                        <div className="flex justify-between items-start">
+                                            <div>
+                                                <h3 className="font-bold text-lg leading-none mb-1">Precision Fuel</h3>
+                                                <p className="text-sm text-slate-500 dark:text-slate-400">01:15 PM • Post-Flow State</p>
+                                            </div>
+                                            <span className="px-2 py-1 bg-slate-200 dark:bg-white/10 text-slate-600 dark:text-slate-400 text-[10px] font-bold rounded uppercase tracking-widest">Balanced</span>
+                                        </div>
+                                        <div className="relative aspect-[4/3] rounded-xl overflow-hidden group grayscale hover:grayscale-0 transition-all duration-500">
+                                            <img className="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCGoHCbvZuvcevmdcnYXEJTTeeQBone911IFHlHrJscXdCr73plwCVV8etAv7o9wseB752rlK-qjHc-Vf3PXAtTcb-BbiGL_SRjb7Cqs3KaAQiWE20bJ6jOnd-bBD6QgfUtLY29FDKvSZDo2x6EiAFqVLImArCt9jL0bI0dYHDsqeQMOB6lEp138h2cufO1tlwIgfrcRVb7t1QjZjFFIhR4SZv5nFqK-lxomhCaiu5Ub5DvbnXjt2jISg3lVChYniXoGOKpfhRFRSVF" />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </section>
+                    </main>
+                    <button className="fixed bottom-24 right-6 size-14 bg-primary text-background-dark rounded-full shadow-lg shadow-primary/20 flex items-center justify-center z-50 active:scale-95 transition-transform">
+                        <span className="material-symbols-outlined text-3xl font-bold">add</span>
+                    </button>
+                </div>
+            );
+        };
+
+        const CommunityHub = () => {
+            return (
+                <div className="max-w-md mx-auto flex flex-col min-h-screen pb-24 bg-white dark:bg-background-dark">
+                    <header className="flex items-center px-4 py-4 justify-between border-b border-slate-100 dark:border-slate-800">
+                        <div className="flex size-10 items-center justify-center rounded-full bg-primary/20 text-slate-900 dark:text-primary">
+                            <span className="material-symbols-outlined">menu</span>
+                        </div>
+                        <h1 className="font-display text-xl font-bold tracking-tight text-slate-900 dark:text-slate-100 uppercase italic">RIAL</h1>
+                        <div className="flex w-10 items-center justify-end">
+                            <button className="flex size-10 items-center justify-center rounded-full bg-slate-100 dark:bg-slate-800 text-slate-900 dark:text-slate-100">
+                                <span className="material-symbols-outlined">person</span>
+                            </button>
+                        </div>
+                    </header>
+                    <div className="flex gap-3 overflow-x-auto px-4 py-4 no-scrollbar">
+                        <button className="whitespace-nowrap rounded-full bg-primary px-4 py-2 text-sm font-bold text-slate-900 border border-primary">All Activity</button>
+                        <button className="whitespace-nowrap rounded-full bg-slate-50 dark:bg-slate-800 px-4 py-2 text-sm font-medium text-slate-600 dark:text-slate-300 border border-slate-200 dark:border-slate-700">Fitness Enthusiast</button>
+                        <button className="whitespace-nowrap rounded-full bg-slate-50 dark:bg-slate-800 px-4 py-2 text-sm font-medium text-slate-600 dark:text-slate-300 border border-slate-200 dark:border-slate-700">Biohacker</button>
+                    </div>
+                    
+                    <section className="mt-6 px-4">
+                        <div className="flex items-end justify-between mb-4">
+                            <div>
+                                <span className="inline-block bg-primary text-[10px] font-black uppercase tracking-[0.2em] px-2 py-0.5 rounded mb-2 text-slate-900">Editor's Choice</span>
+                                <h2 className="font-display text-2xl font-bold leading-none tracking-tight text-slate-900 dark:text-slate-100">Pro Creator Spotlight</h2>
+                            </div>
+                            <span className="text-sm font-bold text-slate-400 border-b border-slate-200 dark:border-slate-700">View All</span>
+                        </div>
+                        <div className="relative overflow-hidden rounded-xl bg-slate-900 aspect-[4/5] group">
+                            <div className="absolute inset-0 bg-cover bg-center opacity-80" style={{backgroundImage: "url('https://lh3.googleusercontent.com/aida-public/AB6AXuAiIRHViOTH154WInYAzaxPo2dT3UoY8Xf6J5a-7kH13KILAC4RHQQ3GUV1jGaKMkeGX8rEHgS77-TMe0qdrZlSsfVhXholOL__y3S7TSNa4A-Xg-7uJYWDHCO5OdrFPHXJZulxIzxDjXgxXu_FPhtRsdcokmQc0iSUY2mR4tspFJELshSMpfxXFMdddyxtBtrytdjAZiyX_nmwFWV26nkej5GWX951fJ2-UvUAx-S_pXfyvFCTn_-3GmvoEpYfOojQRI3btnuK2JOt')"}}></div>
+                            <div className="absolute inset-0 flex flex-col justify-between p-6 bg-gradient-to-t from-black/80 via-transparent to-black/20">
+                                <div className="flex justify-between items-start">
+                                    <div className="flex items-center gap-2">
+                                        <div className="size-8 rounded-full border border-white/50 bg-cover bg-center" style={{backgroundImage: "url('https://lh3.googleusercontent.com/aida-public/AB6AXuDjpxLymD9pQknkM4jWXeS7PNmnOuVCjZpCHGfxedYgSGSNZc6vbC9UqyQTUzLerIcpbNNTSKJdw-g1XZL67G5BPXM39YoBY1IZ7res5bQGDnD6Vw872EU69Z9VYcgSNvh3uygz--iX9_4YY7GmAZ3b00fdLxG2_CejmiLBx6Cv-DXUAecwQXCAWcwkiY_WIarhpaPBCuN45JN9VJp66f1T8cs6gB7AANoCZZpG1lIXA9UB5eEFBX6CBo7bMow4RfOadzc4pymoLb2q')"}}></div>
+                                        <div>
+                                            <p className="text-xs font-bold text-white">Elena Rossi</p>
+                                            <p className="text-[10px] text-white/70">Elite Performance Coach</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div className="flex flex-col items-center">
+                                    <button className="size-16 flex items-center justify-center rounded-full bg-primary text-slate-900 shadow-xl shadow-primary/20">
+                                        <span className="material-symbols-outlined text-4xl fill-1">play_arrow</span>
+                                    </button>
+                                </div>
+                                <div className="space-y-4">
+                                    <div className="space-y-1">
+                                        <h3 className="text-lg font-bold text-white leading-tight">Morning Mobility & Mitochondrial Health</h3>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                </div>
+            );
+        };
+
+        const BatchPlan = () => {
+            return (
+                <div className="max-w-md mx-auto flex flex-col min-h-screen pb-24">
+                    <header className="flex items-center p-4 pb-2 justify-between sticky top-0 z-10 border-b border-primary/10">
+                        <div className="flex items-center gap-3">
+                            <Link to="/" className="text-slate-900 dark:text-slate-100 flex size-10 items-center justify-center rounded-full hover:bg-primary/10">
+                                <span className="material-symbols-outlined">arrow_back</span>
+                            </Link>
+                            <h1 className="text-slate-900 dark:text-slate-100 text-xl font-bold leading-tight">Batch Cooking Plan</h1>
+                        </div>
+                        <div className="flex items-center gap-2">
+                            <button className="flex size-10 items-center justify-center rounded-full bg-primary/10 text-primary">
+                                <span className="material-symbols-outlined">settings</span>
+                            </button>
+                        </div>
+                    </header>
+                    <main className="flex-1">
+                        <section className="p-4">
+                            <div className="flex flex-col gap-4 rounded-xl border border-primary/20 bg-primary/5 p-5">
+                                <div className="flex items-start justify-between">
+                                    <div className="flex flex-col gap-1">
+                                        <h2 className="text-primary text-sm font-bold uppercase tracking-wider">Family Portion Calculator</h2>
+                                        <p className="text-slate-900 dark:text-slate-100 text-lg font-bold leading-tight">4 Person Household</p>
+                                    </div>
+                                    <button className="flex size-10 items-center justify-center rounded-full bg-primary text-background-dark">
+                                        <span className="material-symbols-outlined">edit_note</span>
+                                    </button>
+                                </div>
+                            </div>
+                        </section>
+                        <section className="px-4 py-2">
+                            <div className="flex items-center justify-between mb-4">
+                                <h2 className="text-lg font-bold">Leftover Logic™</h2>
+                                <span className="text-xs text-primary font-medium px-2 py-1 rounded bg-primary/10">3 Meals Optimized</span>
+                            </div>
+                            <div className="space-y-4">
+                                <div className="relative pl-6 border-l-2 border-primary/30 py-2">
+                                    <div className="absolute -left-[9px] top-4 size-4 rounded-full bg-primary border-4 border-background-dark"></div>
+                                    <div className="flex flex-col gap-2 rounded-xl bg-slate-100 dark:bg-slate-800/40 p-4">
+                                        <div className="flex justify-between items-start">
+                                            <div>
+                                                <h3 className="font-bold text-base">Monday Dinner</h3>
+                                                <p className="text-sm text-slate-500">Roast Herb Chicken & Root Veg</p>
+                                            </div>
+                                            <span className="text-xs bg-primary/20 text-primary px-2 py-1 rounded font-bold">COOK FRESH</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div className="relative pl-6 border-l-2 border-primary/30 py-2">
+                                    <div className="absolute -left-[9px] top-4 size-4 rounded-full bg-slate-400 border-4 border-background-dark"></div>
+                                    <div className="flex flex-col gap-2 rounded-xl bg-slate-100 dark:bg-slate-800/40 p-4 opacity-80">
+                                        <div className="flex justify-between items-start">
+                                            <div>
+                                                <h3 className="font-bold text-base">Tuesday Lunch</h3>
+                                                <p className="text-sm text-slate-500">Chicken & Pesto Pasta Salad</p>
+                                            </div>
+                                            <span className="text-xs bg-slate-500/20 text-slate-400 px-2 py-1 rounded font-bold uppercase">Leftover Use</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </section>
+                    </main>
+                </div>
+            );
+        };
+
+        const InsightsReport = () => {
+            return (
+                <div className="max-w-md mx-auto flex flex-col min-h-screen pb-24 bg-white dark:bg-background-dark">
+                    <div className="flex items-center p-4 pb-2 justify-between sticky top-0 z-10 border-b border-slate-100 dark:border-slate-800">
+                        <Link to="/" className="text-slate-900 dark:text-slate-100 flex size-12 shrink-0 items-center justify-start">
+                            <span className="material-symbols-outlined cursor-pointer">arrow_back</span>
+                        </Link>
+                        <h2 className="text-slate-900 dark:text-slate-100 text-lg font-bold leading-tight tracking-tight flex-1 text-center font-display">RIAL Insights Report</h2>
+                        <div className="flex w-12 items-center justify-end">
+                            <button className="flex cursor-pointer items-center justify-center rounded-xl h-10 w-10 bg-primary/10 text-slate-900 dark:text-slate-100">
+                                <span className="material-symbols-outlined text-[20px]">share</span>
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div className="px-4 pt-6">
+                        <h2 className="text-slate-900 dark:text-slate-100 text-2xl font-bold leading-tight font-display mb-4">Daily Summary</h2>
+                        <div className="grid grid-cols-2 gap-3">
+                            <div className="flex flex-col gap-2 rounded-xl p-5 bg-slate-50 dark:bg-slate-800/50 border border-slate-100 dark:border-slate-700">
+                                <p className="text-slate-500 dark:text-slate-400 text-sm font-medium">Real Feel</p>
+                                <p className="text-slate-900 dark:text-slate-100 text-3xl font-bold leading-tight font-display">85%</p>
+                            </div>
+                            <div className="flex flex-col gap-2 rounded-xl p-5 bg-slate-50 dark:bg-slate-800/50 border border-slate-100 dark:border-slate-700">
+                                <p className="text-slate-500 dark:text-slate-400 text-sm font-medium">Focus Score</p>
+                                <p className="text-slate-900 dark:text-slate-100 text-3xl font-bold leading-tight font-display">92%</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div className="px-4 pt-8 space-y-6">
+                        <div className="space-y-3">
+                            <div className="flex items-center gap-2">
+                                <span className="material-symbols-outlined text-emerald-500">rocket_launch</span>
+                                <h3 className="font-bold text-lg font-display">Performance Boosters</h3>
+                            </div>
+                            <div className="grid gap-3">
+                                <div className="flex items-center gap-4 p-4 rounded-xl bg-emerald-50 dark:bg-emerald-950/20 border border-emerald-100 dark:border-emerald-900/30">
+                                    <div className="size-12 rounded-lg bg-emerald-500/20 flex items-center justify-center text-emerald-600">
+                                        <span className="material-symbols-outlined">eco</span>
+                                    </div>
+                                    <div className="flex-1">
+                                        <h4 className="font-bold text-slate-900 dark:text-emerald-100">Leafy Greens</h4>
+                                        <p className="text-xs text-slate-500 dark:text-emerald-400/70">+18% Focus improvement detected</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            );
+        };
+
+        const MasterJournal = () => {
+            return (
+                 <div className="max-w-md mx-auto flex flex-col min-h-screen pb-24">
+                    <header className="sticky top-0 z-50 flex items-center bg-background-light/80 dark:bg-background-dark/80 backdrop-blur-md p-4 justify-between border-b border-slate-200 dark:border-slate-800">
+                        <div className="flex size-10 shrink-0 items-center justify-center rounded-full bg-slate-100 dark:bg-warm-grey text-slate-900 dark:text-slate-100">
+                            <span className="material-symbols-outlined">menu</span>
+                        </div>
+                        <h1 className="text-slate-900 dark:text-slate-100 text-lg font-medium tracking-tight flex-1 text-center italic">RIAL Master</h1>
+                        <div className="flex w-10 items-center justify-end">
+                            <button className="flex items-center justify-center overflow-hidden rounded-full h-10 w-10 bg-primary/10 text-primary border border-primary/20">
+                                <span className="material-symbols-outlined">account_circle</span>
+                            </button>
+                        </div>
+                    </header>
+                    <main className="flex-1">
+                        <div className="px-4 py-6">
+                            <div className="relative group overflow-hidden rounded-xl shadow-2xl transition-all duration-500">
+                                <div className="aspect-[4/5] w-full bg-cover bg-center transition-transform duration-700 group-hover:scale-105" style={{backgroundImage: 'linear-gradient(to bottom, rgba(16, 28, 34, 0) 60%, rgba(16, 28, 34, 0.9) 100%), url("https://lh3.googleusercontent.com/aida-public/AB6AXuAIQIko4hIbQOzeTf4sAPnzCBqYUJPzZfWb1UUzEZqAb6VVHmI0RWzT_26-ty0oLDKEdAOqdZ8-wfd3QbxCdRcQPDMCrGeyZquw_IwJmN7ScjYdDKGr_jVQZoP6gTtb0fU7bP05tPIOgGTMTO5_pFXu4DWcYhoLupAqIZlIy2CKcS0kCMrWbGYZbZJSsgZoSuIMvAOguQO9Pt_Uo2GakZGbwTZ5Gu8K1Vrh_cF07b3tXluy2Ds-RkjA8Efgp06i11nr-vqT_LAwT8Tx")'}}>
+                                </div>
+                                <div className="absolute bottom-0 left-0 w-full p-6 bg-gradient-to-t from-background-dark/90 to-transparent">
+                                    <p className="text-primary text-xs font-semibold uppercase tracking-[0.2em] mb-2">Daily Sanctuary</p>
+                                    <h2 className="text-white text-3xl font-light tracking-tight">Morning Reflection</h2>
+                                    <p className="text-slate-300 text-sm mt-1 font-light italic">"The quiet mind is the strongest."</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div className="px-4 py-2">
+                            <h3 className="text-slate-900 dark:text-slate-100 text-xl font-light mb-4">Vital Signatures</h3>
+                            <div className="grid grid-cols-2 gap-4">
+                                <div className="glass-card rounded-xl p-5 flex flex-col gap-3 shadow-sm">
+                                    <div className="flex items-center gap-2 text-sage">
+                                        <span className="material-symbols-outlined text-[20px]">spa</span>
+                                        <p className="text-xs font-medium uppercase tracking-wider">Real Feel</p>
+                                    </div>
+                                    <p className="text-slate-900 dark:text-slate-100 text-3xl font-light leading-none">85<span className="text-sm ml-1 opacity-50">%</span></p>
+                                </div>
+                                <div className="glass-card rounded-xl p-5 flex flex-col gap-3 shadow-sm">
+                                    <div className="flex items-center gap-2 text-sage">
+                                        <span className="material-symbols-outlined text-[20px]">self_improvement</span>
+                                        <p className="text-xs font-medium uppercase tracking-wider">Calmness</p>
+                                    </div>
+                                    <p className="text-slate-900 dark:text-slate-100 text-3xl font-light leading-none">High</p>
+                                </div>
+                            </div>
+                        </div>
+                    </main>
+                 </div>
+            );
+        };
+
+        const App = () => {
+            return (
+                <MemoryRouter>
+                    <div className="relative w-full min-h-screen">
+                        <Routes>
+                            <Route path="/" element={<RealFeelJournal />} />
+                            <Route path="/hub" element={<CommunityHub />} />
+                            <Route path="/batch" element={<BatchPlan />} />
+                            <Route path="/insights" element={<InsightsReport />} />
+                            <Route path="/master" element={<MasterJournal />} />
+                        </Routes>
+                        <BottomNav />
+                    </div>
+                </MemoryRouter>
+            );
+        };
+
+        const root = createRoot(document.getElementById('root'));
+        root.render(<App />);
+    </script>
+</body>
+</html>

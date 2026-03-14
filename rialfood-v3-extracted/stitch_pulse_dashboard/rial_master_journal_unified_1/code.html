@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#607AFB",
+                        "background-light": "#f5f6f8",
+                        "background-dark": "#0f1323",
+                    },
+                    fontFamily: {
+                        "display": ["Space Grotesk"]
+                    },
+                    borderRadius: {"DEFAULT": "0.5rem", "lg": "1rem", "xl": "1.5rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<title>RIAL Daily Journal</title>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark font-display text-slate-900 dark:text-slate-100 min-h-screen">
+<!-- Header Section -->
+<header class="sticky top-0 z-10 bg-white/80 dark:bg-background-dark/80 backdrop-blur-md border-b border-primary/10 px-4 py-4">
+<div class="max-w-md mx-auto flex items-center justify-between">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary text-3xl">calendar_today</span>
+<div>
+<h1 class="text-xl font-bold leading-tight">Today's Log</h1>
+<p class="text-xs text-slate-500 dark:text-slate-400 font-medium uppercase tracking-wider">Tuesday, Oct 24</p>
+</div>
+</div>
+<button class="bg-primary/10 text-primary p-2 rounded-full flex items-center justify-center">
+<span class="material-symbols-outlined">insights</span>
+</button>
+</div>
+</header>
+<main class="max-w-md mx-auto pb-24">
+<!-- Daily Stats Row -->
+<div class="flex gap-3 p-4 overflow-x-auto no-scrollbar">
+<div class="flex min-w-[120px] flex-1 flex-col gap-1 rounded-xl p-4 bg-white dark:bg-slate-800 shadow-sm border border-primary/5">
+<p class="text-slate-500 dark:text-slate-400 text-xs font-semibold uppercase">Meals</p>
+<p class="text-2xl font-bold text-primary">3</p>
+</div>
+<div class="flex min-w-[120px] flex-1 flex-col gap-1 rounded-xl p-4 bg-white dark:bg-slate-800 shadow-sm border border-primary/5">
+<p class="text-slate-500 dark:text-slate-400 text-xs font-semibold uppercase">Avg Energy</p>
+<div class="flex items-center gap-1">
+<span class="material-symbols-outlined text-amber-500 text-sm">bolt</span>
+<p class="text-xl font-bold">High</p>
+</div>
+</div>
+<div class="flex min-w-[120px] flex-1 flex-col gap-1 rounded-xl p-4 bg-white dark:bg-slate-800 shadow-sm border border-primary/5">
+<p class="text-slate-500 dark:text-slate-400 text-xs font-semibold uppercase">Digestion</p>
+<div class="flex items-center gap-1">
+<span class="material-symbols-outlined text-emerald-500 text-sm">sentiment_satisfied</span>
+<p class="text-xl font-bold">Good</p>
+</div>
+</div>
+</div>
+<!-- Timeline Section -->
+<div class="px-4 py-2">
+<h2 class="text-lg font-bold mb-4 flex items-center gap-2">
+<span class="material-symbols-outlined text-primary">timeline</span>
+                Real Feel Timeline
+            </h2>
+<div class="relative space-y-8 before:absolute before:inset-0 before:ml-5 before:-translate-x-px before:h-full before:w-0.5 before:bg-gradient-to-b before:from-primary/20 before:via-primary/20 before:to-transparent">
+<!-- Entry 1 -->
+<div class="relative flex items-start group">
+<div class="absolute left-0 flex items-center justify-center w-10 h-10 rounded-full bg-white dark:bg-slate-800 border-2 border-primary z-10 shadow-sm">
+<span class="material-symbols-outlined text-primary text-sm">coffee</span>
+</div>
+<div class="ml-14 flex-1">
+<div class="flex flex-col gap-3 bg-white dark:bg-slate-800 p-4 rounded-xl shadow-sm border border-primary/5">
+<div class="flex justify-between items-start">
+<div>
+<h3 class="font-bold text-base">Breakfast Bowl</h3>
+<p class="text-xs text-slate-500">8:15 AM</p>
+</div>
+<div class="flex gap-1">
+<span class="px-2 py-1 rounded-full bg-amber-100 dark:bg-amber-900/30 text-amber-600 dark:text-amber-400 text-[10px] font-bold uppercase">Energy: High</span>
+</div>
+</div>
+<div class="aspect-square w-full rounded-lg overflow-hidden border border-slate-100 dark:border-slate-700">
+<img class="w-full h-full object-cover grayscale-[20%] contrast-[1.1]" data-alt="Close up photo of oatmeal bowl with berries" src="https://lh3.googleusercontent.com/aida-public/AB6AXuC6YSjufp_TZV9ydpWghTtwfJnryox-Lg8tPTX7dcpvd81ChFAM6bFagNzHQXZPLfT-gXSddmxqHOA2zH-eKAJD_z2CG57M_xzMNJqZpHCvZEajtYkvj6MoW8JCDWyffix96iHbvtvO0WB6-aD3-SWhgidLTNQS2Dwhpzm4tyB4ambtHGrjCCDjYznsNWraeXhWMT8LXiTGGQkjXBNhrFZm0K8YIihKkvkJbAwUFmj23wrLUofuEurwGzP7qSBmMaa0rIlkhLGLnsgi"/>
+</div>
+<p class="text-sm text-slate-600 dark:text-slate-300">Feeling vibrant and ready for the day. Digestion feels light.</p>
+<div class="flex gap-2">
+<span class="material-symbols-outlined text-emerald-500 text-sm">check_circle</span>
+<span class="text-xs font-medium text-emerald-600">Digestion: Perfect</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Entry 2 -->
+<div class="relative flex items-start group">
+<div class="absolute left-0 flex items-center justify-center w-10 h-10 rounded-full bg-white dark:bg-slate-800 border-2 border-slate-200 dark:border-slate-700 z-10 shadow-sm">
+<span class="material-symbols-outlined text-slate-400 text-sm">restaurant</span>
+</div>
+<div class="ml-14 flex-1">
+<div class="flex flex-col gap-3 bg-white dark:bg-slate-800 p-4 rounded-xl shadow-sm border border-primary/5">
+<div class="flex justify-between items-start">
+<div>
+<h3 class="font-bold text-base">Salmon &amp; Greens</h3>
+<p class="text-xs text-slate-500">1:30 PM</p>
+</div>
+<div class="flex gap-1">
+<span class="px-2 py-1 rounded-full bg-primary/10 text-primary text-[10px] font-bold uppercase">Energy: Stable</span>
+</div>
+</div>
+<div class="aspect-square w-full rounded-lg overflow-hidden border border-slate-100 dark:border-slate-700">
+<img class="w-full h-full object-cover grayscale-[10%]" data-alt="Top down photo of salmon salad on a ceramic plate" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD3mDJXiQFJ0MZR5ew7z1Dep4hUqcu3fvzJDyS-8RdNQw9YUXGQ09bQYQBepzjQq4k9-euXVAVLgSiTCkAx_SdTgRR7ALD76bTCW2pVTzFE4H-H1x3gEgsVn2MSd3AIODCVzqqSj7wWomWKQ6aq8SmYJn6o_CM0m9YYn_E17EOEgqLbd3tCO6enLapdPT_jcKco-lYyGKCUaLlWp-h7OXe6M911YW7AB48KpwnknPnO8-8deH-Y0xKOPQVnClC50f5WZJFgWnl7eLOS"/>
+</div>
+<p class="text-sm text-slate-600 dark:text-slate-300">Great lunch, but felt a bit sleepy 30 mins after. Might need more complex carbs next time.</p>
+<div class="flex gap-2">
+<span class="material-symbols-outlined text-amber-500 text-sm">info</span>
+<span class="text-xs font-medium text-amber-600">Digestion: Slower</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Entry 3 -->
+<div class="relative flex items-start group">
+<div class="absolute left-0 flex items-center justify-center w-10 h-10 rounded-full bg-white dark:bg-slate-800 border-2 border-slate-200 dark:border-slate-700 z-10 shadow-sm">
+<span class="material-symbols-outlined text-slate-400 text-sm">icecream</span>
+</div>
+<div class="ml-14 flex-1">
+<div class="flex flex-col gap-3 bg-white dark:bg-slate-800 p-4 rounded-xl shadow-sm border border-primary/5">
+<div class="flex justify-between items-start">
+<div>
+<h3 class="font-bold text-base">Dark Chocolate Square</h3>
+<p class="text-xs text-slate-500">4:00 PM</p>
+</div>
+<div class="flex gap-1">
+<span class="px-2 py-1 rounded-full bg-slate-100 dark:bg-slate-700 text-slate-500 text-[10px] font-bold uppercase">Energy: Neutral</span>
+</div>
+</div>
+<p class="text-sm text-slate-600 dark:text-slate-300">Quick pick-me-up. Real feel is good, no bloating.</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+<!-- Floating Add Button -->
+<div class="fixed bottom-24 right-6 z-20">
+<button class="bg-primary hover:bg-primary/90 text-white w-14 h-14 rounded-full shadow-lg shadow-primary/30 flex items-center justify-center transition-transform active:scale-95">
+<span class="material-symbols-outlined text-3xl">add</span>
+</button>
+</div>
+<!-- Bottom Navigation -->
+<nav class="fixed bottom-0 left-0 right-0 bg-white dark:bg-slate-900 border-t border-primary/10 px-6 py-2 pb-6">
+<div class="max-w-md mx-auto flex justify-between items-center">
+<a class="flex flex-col items-center gap-1 text-primary" href="#">
+<span class="material-symbols-outlined">book_5</span>
+<p class="text-[10px] font-bold uppercase">Journal</p>
+</a>
+<a class="flex flex-col items-center gap-1 text-slate-400" href="#">
+<span class="material-symbols-outlined">analytics</span>
+<p class="text-[10px] font-bold uppercase tracking-tighter">Trends</p>
+</a>
+<a class="flex flex-col items-center gap-1 text-slate-400" href="#">
+<span class="material-symbols-outlined">menu_book</span>
+<p class="text-[10px] font-bold uppercase tracking-tighter">Recipes</p>
+</a>
+<a class="flex flex-col items-center gap-1 text-slate-400" href="#">
+<span class="material-symbols-outlined">person</span>
+<p class="text-[10px] font-bold uppercase tracking-tighter">Profile</p>
+</a>
+</div>
+</nav>
+</body></html>

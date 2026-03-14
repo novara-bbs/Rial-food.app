@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Community Feed - Holistic Culinary Hub</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,600;1,6..72,400&amp;family=Satoshi:wght@400;500;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#4A5D23",
+                        "background-light": "#F9F8F6",
+                        "background-dark": "#1c2210",
+                        "surface": "#FFFFFF",
+                        "text-main": "#2B2927",
+                        "muted": "#A39F98",
+                        "accent": "#D47A43",
+                        "border-subtle": "#E5E3DF"
+                    },
+                    fontFamily: {
+                        "display": ["Newsreader", "serif"],
+                        "body": ["Satoshi", "sans-serif"]
+                    },
+                    borderRadius: {"DEFAULT": "4px", "sm": "0px", "md": "4px", "lg": "4px", "xl": "4px", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>
+        body {
+            font-family: 'Satoshi', sans-serif;
+            color: #2B2927;
+        }
+        h1, h2, h3, h4, h5, h6, .font-display {
+            font-family: 'Newsreader', serif;
+        }
+        
+        .border-bold {
+            border-top: 2px solid #2B2927;
+        }
+        .border-bottom-bold {
+            border-bottom: 2px solid #2B2927;
+        }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark min-h-screen antialiased">
+<!-- Top Navigation -->
+<header class="sticky top-0 z-40 w-full bg-surface border-b border-border-subtle px-6 py-4 flex items-center justify-between">
+<div class="flex items-center gap-8">
+<div class="flex items-center gap-3 text-text-main">
+<span class="material-symbols-outlined text-primary text-2xl">restaurant</span>
+<h1 class="font-display text-xl font-semibold tracking-tight">Holistic Culinary Hub</h1>
+</div>
+<nav class="hidden md:flex items-center gap-6">
+<a class="text-muted hover:text-text-main text-sm font-medium transition-colors" href="#">Daily Hub</a>
+<a class="text-muted hover:text-text-main text-sm font-medium transition-colors" href="#">Diary</a>
+<a class="text-muted hover:text-text-main text-sm font-medium transition-colors" href="#">Vault</a>
+<a class="text-muted hover:text-text-main text-sm font-medium transition-colors" href="#">Planner</a>
+<a class="text-text-main font-bold border-b-2 border-text-main pb-1 text-sm transition-colors" href="#">Community</a>
+</nav>
+</div>
+<div class="flex items-center gap-6">
+<div class="relative hidden sm:block">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-muted text-xl">search</span>
+<input class="w-64 bg-background-light border border-border-subtle text-sm rounded-md pl-10 pr-4 py-2 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-all" placeholder="Search friends or recipes..." type="text"/>
+</div>
+<div class="flex items-center gap-3">
+<button class="relative text-text-main hover:text-primary transition-colors">
+<span class="material-symbols-outlined">notifications</span>
+<span class="absolute -top-1 -right-1 flex h-3 w-3">
+<span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-accent opacity-75"></span>
+<span class="relative inline-flex rounded-full h-3 w-3 bg-accent"></span>
+</span>
+</button>
+<div class="h-8 w-8 rounded-full bg-cover bg-center border border-border-subtle cursor-pointer" data-alt="User profile avatar" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCLp8K7rKP5OlF243McLwCEALORWlqLdfjVTP0d2Ku35D0-166FQY6cuCSyW-j0wJ5zf5DiqP8NFPXmKJ8Ehhqi9xZL_nMV8egKYHiMZf2oJb9j8owZvK8fIzhXWi_VyJuIa_Eb8F-sjwC1lbYaJpgpKmocb0Fj7Ui1dFl7fw9LclZAX3Y3nrVaGBx65ok0axEzn3kCaLv3XrunuuDJtKyEMX_tnCgQm69G_Kwkq9ADRPhEEzxeSsgETQJDXrN0L0EAnazpKNQJTIw');"></div>
+</div>
+</div>
+</header>
+<main class="max-w-[1200px] mx-auto px-6 py-8 flex flex-col md:flex-row gap-12 items-start justify-center">
+<!-- Left Sidebar: Leaderboard -->
+<aside class="hidden md:block w-72 shrink-0 sticky top-24">
+<div class="bg-surface border border-border-subtle rounded-md p-6">
+<div class="mb-6 border-bottom-bold pb-4">
+<h2 class="font-display text-2xl font-semibold">Leaderboard</h2>
+<p class="text-sm text-muted mt-1 uppercase tracking-widest text-[11px] font-bold">Top Chefs This Week</p>
+</div>
+<div class="space-y-5">
+<!-- Leaderboard Item 1 -->
+<div class="flex items-center justify-between group cursor-pointer">
+<div class="flex items-center gap-3">
+<div class="relative">
+<div class="h-10 w-10 rounded-full bg-cover bg-center ring-2 ring-primary ring-offset-2 ring-offset-surface" data-alt="Avatar of Elena" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCZBvG-34WV_zV70lOdtjYMSMYXr9ZyyzfclGF7w3soPQ7dlsin054KNgosmToPacp5Yfgru3QVyBarmEwTCrdys2n5D0dNBLmMPdYgSB__MW2e-Qlc1zXObMs1OLc3pooXsYMIT7eJVx-Lw0w48AKGQjThO-I26-Bq11PxHrs52BpuRcJjncDRQpLRsavCr_vQP5Enuz77ZnSfgM05R88rYcbRJRirqWJFQojInxGcJN7E27OgaqjsMkwOZkMsHjQG5Jt6tnJt7Ws');"></div>
+<div class="absolute -bottom-1 -right-1 h-5 w-5 bg-surface rounded-full flex items-center justify-center border border-border-subtle">
+<span class="text-[10px] font-bold text-text-main">1</span>
+</div>
+</div>
+<div>
+<p class="font-display font-semibold text-text-main flex items-center gap-1">
+                                    Elena R.
+                                    <span class="material-symbols-outlined text-accent text-[14px]" title="Chef Pro">workspace_premium</span>
+</p>
+<p class="text-[12px] text-muted font-medium">Lvl 42 • Sous Chef</p>
+</div>
+</div>
+<div class="text-right">
+<p class="font-bold text-primary text-sm">12.5k</p>
+<p class="text-[10px] text-muted uppercase tracking-wider">XP</p>
+</div>
+</div>
+<!-- Leaderboard Item 2 -->
+<div class="flex items-center justify-between group cursor-pointer">
+<div class="flex items-center gap-3">
+<div class="relative">
+<div class="h-10 w-10 rounded-full bg-cover bg-center" data-alt="Avatar of Marcus" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuClA1e51Iqmi2ALdtMXrZsZw6CV4gKO4H-tMURomCbgGlUL9Eg9_JaaT9kKt_Evt2g_UL_Nbt8AKaOJldYJlUfm45TJ5hyefB6xAYwgdfERyEyjgPwWtGDvLjvOEazSERCdzzf1cTltHCAZ22pPbaEaCeqQ0b5PZ5urrgZ1GOSUwB6k8mtj1iOyen7Krm1LUNgZDZVdosmeEjTD4GkQXntBg9bJoWwDEWOgj_D0hpWIKPRhAketyivj65D7m0ePY429P9o_EsVPfAE');"></div>
+<div class="absolute -bottom-1 -right-1 h-5 w-5 bg-surface rounded-full flex items-center justify-center border border-border-subtle">
+<span class="text-[10px] font-bold text-muted">2</span>
+</div>
+</div>
+<div>
+<p class="font-display font-semibold text-text-main">Marcus T.</p>
+<p class="text-[12px] text-muted font-medium">Lvl 38 • Line Cook</p>
+</div>
+</div>
+<div class="text-right">
+<p class="font-bold text-text-main text-sm group-hover:text-primary transition-colors">10.2k</p>
+<p class="text-[10px] text-muted uppercase tracking-wider">XP</p>
+</div>
+</div>
+<!-- Leaderboard Item 3 -->
+<div class="flex items-center justify-between group cursor-pointer">
+<div class="flex items-center gap-3">
+<div class="relative">
+<div class="h-10 w-10 rounded-full bg-cover bg-center grayscale opacity-80" data-alt="Your Avatar" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuAR7a9Yhztzm9Q_IuUEgrGe3pAut5KXUZmIYzA1TkAjJkWzMXcO8JG5VhXL1RK2SNzzRh8BNYF6UHTXxgotL6VD6x0M6iS0nRcpY6mJ16lxi5ehB_scDquhTuADjWf4imAJjgzkxBModad1X1fdckDXapZ5oKmKGd2FCsPqegNzFzHISslle28mlM3-bOIFSw9eI_ECB2uE0eTp1zwBETwq0WehBPchOAOhzH08c-VruuDmo2qWrSNl5djffNrtGu5KHj9WWF0evJ8');"></div>
+<div class="absolute -bottom-1 -right-1 h-5 w-5 bg-surface rounded-full flex items-center justify-center border border-border-subtle">
+<span class="text-[10px] font-bold text-muted">8</span>
+</div>
+</div>
+<div>
+<p class="font-display font-semibold text-text-main">You</p>
+<p class="text-[12px] text-muted font-medium">Lvl 24 • Prep Cook</p>
+</div>
+</div>
+<div class="text-right">
+<p class="font-bold text-text-main text-sm">4.1k</p>
+<p class="text-[10px] text-muted uppercase tracking-wider">XP</p>
+</div>
+</div>
+</div>
+<button class="w-full mt-6 py-2 border border-border-subtle text-sm font-bold text-text-main hover:bg-background-light transition-colors rounded-md">View All Rankings</button>
+</div>
+</aside>
+<!-- Central Feed -->
+<div class="w-full max-w-[600px] flex flex-col gap-10">
+<!-- Mobile Leaderboard Pill (visible only on small screens) -->
+<div class="md:hidden flex overflow-x-auto pb-2 gap-4 snap-x hide-scrollbar">
+<div class="bg-surface border border-border-subtle rounded-full px-4 py-2 flex items-center gap-2 shrink-0 snap-start">
+<span class="material-symbols-outlined text-primary text-sm">local_fire_department</span>
+<span class="text-sm font-bold">1. Elena R. (12.5k)</span>
+</div>
+<div class="bg-surface border border-border-subtle rounded-full px-4 py-2 flex items-center gap-2 shrink-0 snap-start">
+<span class="text-muted text-sm font-bold">2. Marcus T. (10.2k)</span>
+</div>
+<div class="bg-surface border border-border-subtle rounded-full px-4 py-2 flex items-center gap-2 shrink-0 snap-start">
+<span class="text-muted text-sm font-bold">8. You (4.1k)</span>
+</div>
+</div>
+<div class="flex items-center justify-between border-b border-border-subtle pb-4">
+<h2 class="font-display text-3xl font-normal italic text-text-main">The Daily Digest</h2>
+<div class="flex items-center gap-2">
+<button class="text-sm font-bold text-text-main border-b-2 border-text-main pb-1">Following</button>
+<span class="text-muted px-2">|</span>
+<button class="text-sm font-medium text-muted hover:text-text-main transition-colors pb-1">Global</button>
+</div>
+</div>
+<!-- Feed Item 1 -->
+<article class="flex flex-col gap-4">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-3">
+<div class="h-10 w-10 rounded-full bg-cover bg-center border border-border-subtle" data-alt="Avatar of Elena" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuBOxIa6-_M-__nESPvtv637_F0VILeFGFchGHnKGkzlVDiUUSR11_gMhwb2Gn7lfb5oQPzRB6QuzRX8aKtkWIV_2WvYrQA65AZKzSc5_Z3P4E8Lt48wtFHO1d8uIJK32LeQnE9X49iL3Ro0KjuZvZ2te24WBiFOUEmMz7oFQQZRDvuDcfACrJDp1UU0S-YWpYAcY1NaTThry0F9OUWdKJAwurM1xaX5sM1-YNIb6ENlQDnm46qQoD0ImpAX8HkhdQBvB3vZ_TnfDkg');"></div>
+<p class="text-base text-text-main leading-snug">
+<span class="font-display font-semibold text-lg mr-1 cursor-pointer hover:underline">Elena R.</span>
+<span class="material-symbols-outlined text-accent text-[16px] align-text-bottom mr-1" title="Chef Pro">workspace_premium</span>
+<span class="text-muted">logged a 10k run &amp; cooked</span>
+<button class="font-display font-semibold italic text-lg text-primary hover:text-primary/80 transition-colors ml-1 focus:outline-none" onclick="document.getElementById('save-modal').classList.remove('hidden')">Miso Glazed Salmon</button>
+</p>
+</div>
+<span class="text-xs text-muted font-medium uppercase tracking-widest">2h ago</span>
+</div>
+<div class="relative w-full aspect-[4/5] bg-background-light rounded-md overflow-hidden border border-border-subtle group">
+<img alt="Beautifully plated miso glazed salmon with asparagus" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" data-alt="Plated miso salmon with green vegetables" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAwFIyM2pZwbTQt9XBVcw_sHmXJGYkWypnzL0bVnBR4ty6TXup55OIX0axiOYI_zCbOWtTzZsD8NSjgamdnQ8WXAfqAFqeJhrJcfCRPaoM8VvdSzzmLNtl80RfFcsHNc9nc0sF4CcEWtcVOn41ZZX0jRpHumQMOqXIV8gz0m_cOnMjLFGlAXfgoAfz6TZNpXycXrUshYEcqS3LHsNn6oFlK9j6Wrb_pjj9gauNq7c9iXqXdmaeBkHmeYz0eWAPL_l45iAUxWg8uloM"/>
+<!-- Overlay Macros -->
+<div class="absolute bottom-4 left-4 right-4 flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+<span class="bg-surface/90 backdrop-blur-sm px-3 py-1 rounded-sm text-xs font-bold text-text-main border border-border-subtle">45g P</span>
+<span class="bg-surface/90 backdrop-blur-sm px-3 py-1 rounded-sm text-xs font-bold text-text-main border border-border-subtle">22g F</span>
+<span class="bg-surface/90 backdrop-blur-sm px-3 py-1 rounded-sm text-xs font-bold text-text-main border border-border-subtle">12g C</span>
+</div>
+</div>
+<div class="flex items-center justify-between pt-2">
+<div class="flex items-center gap-6">
+<button class="flex items-center gap-2 text-text-main hover:text-accent transition-colors group">
+<span class="material-symbols-outlined text-2xl group-hover:scale-110 transition-transform">local_fire_department</span>
+<span class="font-bold text-sm">24</span>
+</button>
+<button class="flex items-center gap-2 text-muted hover:text-text-main transition-colors group">
+<span class="material-symbols-outlined text-2xl group-hover:scale-110 transition-transform">chat_bubble_outline</span>
+<span class="font-bold text-sm">3</span>
+</button>
+</div>
+<button class="text-muted hover:text-text-main transition-colors">
+<span class="material-symbols-outlined">bookmark_border</span>
+</button>
+</div>
+<div class="text-sm text-text-main leading-relaxed">
+<span class="font-display font-semibold mr-2">Elena R.</span>
+                    Felt incredible energy today after the morning run. This salmon recipe is perfect for recovery. The miso paste adds such a deep umami flavor without feeling heavy. Highly recommend! 🏃‍♀️🍣
+                </div>
+<button class="text-xs text-muted font-bold uppercase tracking-widest text-left mt-1 hover:text-text-main transition-colors">View all 3 comments</button>
+</article>
+<hr class="border-border-subtle my-2"/>
+</div>
+</main>
+<!-- Save Modal (Hidden by default) -->
+<div class="hidden fixed inset-0 z-50 bg-text-main/20 backdrop-blur-sm flex items-center justify-center p-4" id="save-modal">
+<div class="bg-surface w-full max-w-md rounded-md border border-border-subtle shadow-xl overflow-hidden">
+<div class="p-6 border-b border-border-subtle flex justify-between items-center bg-background-light">
+<h3 class="font-display text-xl font-semibold">Save to Vault</h3>
+<button class="text-muted hover:text-text-main transition-colors" onclick="document.getElementById('save-modal').classList.add('hidden')">
+<span class="material-symbols-outlined">close</span>
+</button>
+</div>
+<div class="p-6 flex gap-4">
+<img alt="Thumbnail" class="w-20 h-20 object-cover rounded-sm border border-border-subtle" data-alt="Small thumbnail of salmon dish" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAd5jGcQZk9cx2YzzjkW_LJEExEtTaZvj7zxKeWC_ZuZwgX4Sf7uGVcX-pUzdG3pYqu2eknyXdBD0loeXhoa-EtcVeDHr1yGgpDKLzPO0FxpxYumBcVn2zYprKlGj3RIojrsVffa1Rva6lYnYnGkVeXaBE9dXgcqSYX7XEqEZEeyHg74CgU3J7h6R0X-MGj1B7crV06xSsH7CTcrM-rEdByhqQMo6fNpQknulhFF_qslrIz2j_1AgIoJyOgrUmF9omnynsKyBDMTzU"/>
+<div>
+<h4 class="font-display font-semibold text-lg text-text-main">Miso Glazed Salmon</h4>
+<p class="text-sm text-muted mt-1">From Elena R.</p>
+<div class="flex gap-2 mt-2">
+<span class="bg-background-light px-2 py-0.5 rounded-sm border border-border-subtle text-[11px] font-bold uppercase tracking-wider text-muted">High Protein</span>
+<span class="bg-background-light px-2 py-0.5 rounded-sm border border-border-subtle text-[11px] font-bold uppercase tracking-wider text-muted">Dinner</span>
+</div>
+</div>
+</div>
+<div class="p-6 bg-background-light border-t border-border-subtle flex justify-end gap-3">
+<button class="px-4 py-2 text-sm font-bold text-text-main hover:bg-border-subtle/50 transition-colors rounded-md" onclick="document.getElementById('save-modal').classList.add('hidden')">Cancel</button>
+<button class="px-6 py-2 bg-primary text-surface text-sm font-bold rounded-md hover:bg-primary/90 transition-colors" onclick="document.getElementById('save-modal').classList.add('hidden')">Save Recipe</button>
+</div>
+</div>
+</div>
+</body></html>

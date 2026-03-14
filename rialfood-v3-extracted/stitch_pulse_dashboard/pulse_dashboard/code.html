@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>NutriPulse Dashboard</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#ccff00",
+                        "background-light": "#f8f8f5",
+                        "background-dark": "#12140a",
+                        "surface-dark": "#1f230f",
+                        "accent-blue": "#00d4ff",
+                        "accent-purple": "#a855f7"
+                    },
+                    fontFamily: {
+                        "display": ["Space Grotesk"]
+                    },
+                    borderRadius: {"DEFAULT": "0.5rem", "lg": "1rem", "xl": "1.5rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>
+        .glass {
+            background: rgba(31, 35, 15, 0.6);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(204, 255, 0, 0.1);
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark font-display text-slate-900 dark:text-slate-100 min-h-screen pb-24">
+<!-- Header -->
+<header class="flex items-center justify-between p-4 sticky top-0 z-50 bg-background-light/80 dark:bg-background-dark/80 backdrop-blur-md">
+<span class="material-symbols-outlined text-slate-900 dark:text-slate-100">menu</span>
+<h1 class="text-xl font-bold tracking-tight">NutriPulse</h1>
+<div class="relative">
+<span class="material-symbols-outlined text-slate-900 dark:text-slate-100">notifications</span>
+<div class="absolute -top-1 -right-1 size-2 bg-primary rounded-full"></div>
+</div>
+</header>
+<main class="px-4 space-y-6">
+<!-- Recovery Circle Section (Whoop Style) -->
+<section class="flex flex-col items-center py-6">
+<div class="relative size-64 flex items-center justify-center">
+<!-- Outer Ring: Recovery -->
+<svg class="absolute inset-0 size-full -rotate-90">
+<circle class="text-slate-200 dark:text-slate-800" cx="128" cy="128" fill="transparent" r="110" stroke="currentColor" stroke-width="12"></circle>
+<circle class="text-primary" cx="128" cy="128" fill="transparent" r="110" stroke="currentColor" stroke-dasharray="691" stroke-dashoffset="124" stroke-linecap="round" stroke-width="12"></circle>
+</svg>
+<!-- Middle Ring: Strain -->
+<svg class="absolute inset-0 size-full -rotate-90 p-8">
+<circle class="text-slate-200 dark:text-slate-800" cx="96" cy="96" fill="transparent" r="75" stroke="currentColor" stroke-width="10"></circle>
+<circle class="text-accent-blue" cx="96" cy="96" fill="transparent" r="75" stroke="currentColor" stroke-dasharray="471" stroke-dashoffset="140" stroke-linecap="round" stroke-width="10"></circle>
+</svg>
+<!-- Center Content -->
+<div class="text-center">
+<span class="text-sm font-medium text-slate-500 dark:text-slate-400">Recovery</span>
+<div class="text-5xl font-bold text-primary">82%</div>
+</div>
+</div>
+<div class="grid grid-cols-2 gap-4 w-full mt-4">
+<div class="glass p-4 rounded-xl flex items-center gap-3">
+<div class="size-10 rounded-full bg-accent-blue/20 flex items-center justify-center">
+<span class="material-symbols-outlined text-accent-blue text-xl">bolt</span>
+</div>
+<div>
+<p class="text-xs text-slate-400">Strain</p>
+<p class="text-lg font-bold">14.2</p>
+</div>
+</div>
+<div class="glass p-4 rounded-xl flex items-center gap-3">
+<div class="size-10 rounded-full bg-accent-purple/20 flex items-center justify-center">
+<span class="material-symbols-outlined text-accent-purple text-xl">bedtime</span>
+</div>
+<div>
+<p class="text-xs text-slate-400">Sleep</p>
+<p class="text-lg font-bold">7h 20m</p>
+</div>
+</div>
+</div>
+</section>
+<!-- Nutrition Summary Card -->
+<section class="glass p-6 rounded-xl space-y-6">
+<div class="flex justify-between items-end">
+<div>
+<h2 class="text-slate-400 text-sm font-medium">Fuel Remainder</h2>
+<p class="text-4xl font-bold">1,240 <span class="text-lg font-normal text-slate-500">kcal</span></p>
+</div>
+<div class="text-right">
+<p class="text-xs text-slate-400">Goal: 2,500</p>
+<p class="text-xs text-slate-400">Food: 1,260</p>
+</div>
+</div>
+<div class="space-y-4">
+<!-- Carbs -->
+<div class="space-y-1">
+<div class="flex justify-between text-sm">
+<span class="font-medium">Carbohydrates</span>
+<span class="text-slate-400">145g / 280g</span>
+</div>
+<div class="h-2 bg-slate-200 dark:bg-slate-800 rounded-full overflow-hidden">
+<div class="h-full bg-primary w-[52%] rounded-full"></div>
+</div>
+</div>
+<!-- Protein -->
+<div class="space-y-1">
+<div class="flex justify-between text-sm">
+<span class="font-medium">Protein</span>
+<span class="text-slate-400">92g / 180g</span>
+</div>
+<div class="h-2 bg-slate-200 dark:bg-slate-800 rounded-full overflow-hidden">
+<div class="h-full bg-accent-blue w-[51%] rounded-full"></div>
+</div>
+</div>
+<!-- Fats -->
+<div class="space-y-1">
+<div class="flex justify-between text-sm">
+<span class="font-medium">Fats</span>
+<span class="text-slate-400|">48g / 85g</span>
+</div>
+<div class="h-2 bg-slate-200 dark:bg-slate-800 rounded-full overflow-hidden">
+<div class="h-full bg-accent-purple w-[56%] rounded-full"></div>
+</div>
+</div>
+</div>
+<button class="w-full bg-primary text-background-dark font-bold py-4 rounded-xl flex items-center justify-center gap-2 hover:opacity-90 transition-opacity">
+<span class="material-symbols-outlined">add_circle</span>
+                Log a Meal
+            </button>
+</section>
+<!-- Quick Stats -->
+<section class="grid grid-cols-2 gap-4">
+<div class="glass p-4 rounded-xl">
+<p class="text-xs text-slate-400 mb-1">Heart Rate</p>
+<div class="flex items-baseline gap-1">
+<span class="text-2xl font-bold">58</span>
+<span class="text-xs text-slate-500">BPM</span>
+</div>
+<div class="mt-2 h-10 w-full bg-primary/10 rounded overflow-hidden">
+<div class="h-full w-full opacity-30" data-alt="Abstract pulse wave pattern" style="background-image: repeating-linear-gradient(45deg, transparent, transparent 5px, currentColor 5px, currentColor 10px);"></div>
+</div>
+</div>
+<div class="glass p-4 rounded-xl">
+<p class="text-xs text-slate-400 mb-1">Hydration</p>
+<div class="flex items-baseline gap-1">
+<span class="text-2xl font-bold">1.8</span>
+<span class="text-xs text-slate-500">Liters</span>
+</div>
+<div class="mt-2 flex gap-1">
+<div class="h-1 flex-1 bg-primary rounded-full"></div>
+<div class="h-1 flex-1 bg-primary rounded-full"></div>
+<div class="h-1 flex-1 bg-primary rounded-full"></div>
+<div class="h-1 flex-1 bg-slate-700 rounded-full"></div>
+<div class="h-1 flex-1 bg-slate-700 rounded-full"></div>
+</div>
+</div>
+</section>
+</main>
+<!-- Bottom Navigation -->
+<nav class="fixed bottom-0 left-0 right-0 bg-background-light dark:bg-background-dark border-t border-slate-200 dark:border-slate-800 px-6 py-3 pb-8">
+<div class="flex justify-between items-center max-w-md mx-auto">
+<a class="flex flex-col items-center gap-1 text-primary" href="#">
+<span class="material-symbols-outlined">grid_view</span>
+<span class="text-[10px] font-medium">Dashboard</span>
+</a>
+<a class="flex flex-col items-center gap-1 text-slate-400 hover:text-primary transition-colors" href="#">
+<span class="material-symbols-outlined">restaurant</span>
+<span class="text-[10px] font-medium">Kitchen</span>
+</a>
+<a class="flex flex-col items-center gap-1 text-slate-400 hover:text-primary transition-colors" href="#">
+<span class="material-symbols-outlined">monitoring</span>
+<span class="text-[10px] font-medium">Bio-Stats</span>
+</a>
+<a class="flex flex-col items-center gap-1 text-slate-400 hover:text-primary transition-colors" href="#">
+<span class="material-symbols-outlined">person</span>
+<span class="text-[10px] font-medium">Profile</span>
+</a>
+</div>
+</nav>
+</body></html>

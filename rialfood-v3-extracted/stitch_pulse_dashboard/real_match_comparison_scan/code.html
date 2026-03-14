@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>RIAL - Real Match Analysis</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#ccff00",
+                        "background-light": "#f8f8f5",
+                        "background-dark": "#1f230f",
+                    },
+                    fontFamily: {
+                        "display": ["Space Grotesk"]
+                    },
+                    borderRadius: {"DEFAULT": "0.5rem", "lg": "1rem", "xl": "1.5rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark font-display text-slate-900 dark:text-slate-100 antialiased">
+<div class="relative flex h-auto min-h-screen w-full flex-col overflow-x-hidden">
+<!-- TopAppBar -->
+<header class="flex items-center bg-background-light dark:bg-background-dark p-4 pb-2 justify-between sticky top-0 z-10 border-b border-primary/10">
+<div class="text-slate-900 dark:text-slate-100 flex size-12 shrink-0 items-center justify-start cursor-pointer">
+<span class="material-symbols-outlined text-2xl">close</span>
+</div>
+<h2 class="text-slate-900 dark:text-slate-100 text-lg font-bold leading-tight tracking-[-0.015em] flex-1 text-center">RIAL</h2>
+<div class="flex w-12 items-center justify-end">
+<button class="flex max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-xl h-12 bg-transparent text-slate-900 dark:text-slate-100 gap-2 text-base font-bold leading-normal tracking-[0.015em] min-w-0 p-0">
+<span class="material-symbols-outlined text-2xl">help</span>
+</button>
+</div>
+</header>
+<!-- Main Content -->
+<main class="flex-1 flex flex-col max-w-md mx-auto w-full px-4">
+<!-- Hero Title -->
+<div class="pt-8 pb-6 text-center">
+<h1 class="text-slate-900 dark:text-slate-100 tracking-tight text-[32px] font-bold leading-tight">Step 1: Analyzing Your Real Match</h1>
+<p class="text-slate-600 dark:text-primary/70 mt-2 text-sm uppercase tracking-widest font-semibold">Human-Centric Precision</p>
+</div>
+<!-- Biometric Summary Cards -->
+<div class="flex flex-wrap gap-4 py-4">
+<div class="flex min-w-[158px] flex-1 flex-col gap-2 rounded-xl p-6 bg-slate-200/50 dark:bg-primary/10 border border-slate-300 dark:border-primary/20">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary text-sm">bolt</span>
+<p class="text-slate-700 dark:text-slate-300 text-sm font-medium leading-normal">Your Energy</p>
+</div>
+<p class="text-slate-900 dark:text-primary tracking-light text-3xl font-bold leading-tight">85%</p>
+</div>
+<div class="flex min-w-[158px] flex-1 flex-col gap-2 rounded-xl p-6 bg-slate-200/50 dark:bg-primary/10 border border-slate-300 dark:border-primary/20">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary text-sm">vital_signs</span>
+<p class="text-slate-700 dark:text-slate-300 text-sm font-medium leading-normal">Your Digestion</p>
+</div>
+<p class="text-slate-900 dark:text-primary tracking-light text-3xl font-bold leading-tight">92%</p>
+</div>
+</div>
+<!-- Visualization Section -->
+<div class="relative mt-8 mb-4 p-8 flex flex-col items-center justify-center rounded-2xl bg-slate-900/5 dark:bg-white/5 overflow-hidden">
+<!-- Decorative scanning lines -->
+<div class="absolute inset-0 opacity-10 pointer-events-none">
+<div class="h-full w-full bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-primary/30 via-transparent to-transparent"></div>
+</div>
+<!-- Matching Indicator -->
+<div class="relative z-10 flex flex-col items-center gap-4">
+<div class="relative size-32 rounded-full border-4 border-slate-300 dark:border-primary/20 flex items-center justify-center">
+<div class="absolute inset-0 rounded-full border-4 border-primary border-t-transparent animate-spin duration-[3000ms]"></div>
+<span class="material-symbols-outlined text-5xl text-primary">biotech</span>
+</div>
+<div class="text-center">
+<h4 class="text-slate-500 dark:text-primary/60 text-xs font-bold leading-normal tracking-[0.2em] uppercase">Comparing with Recipe Profile</h4>
+<p class="text-slate-900 dark:text-slate-100 text-lg font-medium mt-1 italic">"Golden Harvest Bowl"</p>
+</div>
+</div>
+</div>
+<!-- Progress & Calculation Status -->
+<div class="flex flex-col gap-4 p-4 mt-auto">
+<div class="flex gap-6 justify-between items-end">
+<div class="flex flex-col gap-1">
+<p class="text-slate-900 dark:text-slate-100 text-base font-bold leading-normal">Calculating Bio-Sync</p>
+<p class="text-slate-500 dark:text-primary/60 text-xs font-medium uppercase tracking-wider italic">Neural mapping in progress...</p>
+</div>
+<p class="text-primary text-2xl font-bold leading-normal tabular-nums">65%</p>
+</div>
+<!-- Custom Progress Bar -->
+<div class="h-3 w-full rounded-full bg-slate-200 dark:bg-primary/20 overflow-hidden">
+<div class="h-full rounded-full bg-primary shadow-[0_0_15px_rgba(204,255,0,0.5)]" style="width: 65%;"></div>
+</div>
+<div class="flex items-start gap-3 mt-2">
+<span class="material-symbols-outlined text-primary text-lg shrink-0">info</span>
+<p class="text-slate-600 dark:text-slate-400 text-sm font-normal leading-relaxed">
+                        Matching specific micro-nutrients to your current metabolic state for optimal absorption.
+                    </p>
+</div>
+</div>
+<!-- Bottom Action -->
+<div class="p-4 pt-8">
+<button class="w-full bg-primary text-background-dark py-4 rounded-xl font-bold text-lg hover:brightness-110 transition-all flex items-center justify-center gap-2 shadow-lg shadow-primary/20">
+                    Please Wait
+                    <span class="material-symbols-outlined animate-pulse">hourglass_top</span>
+</button>
+</div>
+</main>
+<!-- Decorative Footer Accent -->
+<footer class="h-10 w-full mt-4 flex items-center justify-center opacity-30">
+<div class="h-[1px] w-12 bg-primary"></div>
+<div class="size-1 rounded-full bg-primary mx-2"></div>
+<div class="h-[1px] w-12 bg-primary"></div>
+</footer>
+</div>
+</body></html>

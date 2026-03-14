@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>The Daily Hub | Clinical Editorial</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,200..800;1,6..72,200..800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#a4ec13",
+                        "background-light": "#f7f8f6",
+                        "background-dark": "#1c2210",
+                    },
+                    fontFamily: {
+                        "display": ["Newsreader", "serif"]
+                    },
+                    borderRadius: { "DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px" },
+                },
+            },
+        }
+    </script>
+<style>
+        body {
+            font-family: 'Newsreader', serif;
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 antialiased">
+<div class="relative flex min-h-screen w-full flex-col">
+<!-- Top Navigation Bar -->
+<header class="sticky top-0 z-50 w-full border-b border-primary/10 bg-background-light/80 dark:bg-background-dark/80 backdrop-blur-md px-6 md:px-12 py-4 flex items-center justify-between">
+<div class="flex items-center gap-6">
+<div class="flex items-center gap-2">
+<div class="size-8 bg-primary rounded flex items-center justify-center text-background-dark">
+<span class="material-symbols-outlined font-bold">clinical_notes</span>
+</div>
+<h2 class="text-xl font-bold tracking-tight">Clinical Editorial</h2>
+</div>
+<nav class="hidden md:flex items-center gap-6 ml-6">
+<a class="text-sm font-medium border-b-2 border-primary pb-1" href="#">Dashboard</a>
+<a class="text-sm font-medium text-slate-500 hover:text-primary transition-colors" href="#">Insights</a>
+<a class="text-sm font-medium text-slate-500 hover:text-primary transition-colors" href="#">Library</a>
+<a class="text-sm font-medium text-slate-500 hover:text-primary transition-colors" href="#">Protocols</a>
+</nav>
+</div>
+<div class="flex items-center gap-4">
+<button class="p-2 rounded-lg bg-primary/10 hover:bg-primary/20 text-slate-800 dark:text-slate-200 transition-colors">
+<span class="material-symbols-outlined">notifications</span>
+</button>
+<button class="p-2 rounded-lg bg-primary/10 hover:bg-primary/20 text-slate-800 dark:text-slate-200 transition-colors">
+<span class="material-symbols-outlined">settings</span>
+</button>
+<div class="h-10 w-10 rounded-full border-2 border-primary bg-cover bg-center" data-alt="Portrait of a medical professional" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuBN84L1I0O2-mrHi_uDtk5RNo9fZg5nn4zhooIMfcUBIuAGaUUz2eEGzh0QlSR1cg2M-uLMzjGmzcg23RKncdsH4XYvNtJYstP5L_m5B1YGbmeXNrB1MPC-H9A_Y4QDVRQ1KzMQXIuzOyL2HPA8CffJbh-tJDR_bEV9PcoVZAIHsPOccgCjmH0E73Ia4KdgrHyWimJ5mAzrUVKheEIU-slQ4ZPIF24LQ1bdh5CZI7pN043ASn4Bf3TwQe4STOgGnahX1swLK0pN_xs')"></div>
+</div>
+</header>
+<main class="flex-1 max-w-7xl mx-auto w-full px-6 md:px-12 py-10">
+<!-- Header Section -->
+<div class="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12">
+<div>
+<p class="text-primary font-bold uppercase tracking-widest text-xs mb-2">Morning Overview</p>
+<h1 class="text-5xl font-bold tracking-tight">The Daily Hub</h1>
+<p class="text-slate-500 dark:text-slate-400 mt-2 text-lg italic">Precision insights for your vitality and biological performance.</p>
+</div>
+<div class="flex items-center gap-3 text-sm font-medium bg-white dark:bg-slate-800/50 p-2 rounded-xl border border-primary/10">
+<span class="px-3 py-1 bg-primary text-background-dark rounded-lg">Today</span>
+<span class="px-3 py-1 text-slate-400">Weekly</span>
+<span class="px-3 py-1 text-slate-400">Monthly</span>
+</div>
+</div>
+<!-- Metric Grid -->
+<div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-12">
+<!-- Vitality Score -->
+<div class="col-span-1 md:col-span-2 flex flex-col justify-between p-8 rounded-xl bg-white dark:bg-slate-900 border border-primary/10 shadow-sm relative overflow-hidden group">
+<div class="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
+<span class="material-symbols-outlined text-8xl text-primary">analytics</span>
+</div>
+<div>
+<div class="flex items-center justify-between mb-4">
+<h3 class="text-lg font-bold">Vitality Score</h3>
+<span class="bg-primary/20 text-primary px-2 py-1 rounded text-xs font-bold">+4.2%</span>
+</div>
+<div class="flex items-baseline gap-2">
+<span class="text-7xl font-bold tracking-tighter">88</span>
+<span class="text-slate-400 font-medium">/100</span>
+</div>
+</div>
+<div class="mt-8">
+<p class="text-sm text-slate-500 mb-2 italic">Based on HRV, sleep quality, and glycemic stability.</p>
+<div class="w-full bg-slate-100 dark:bg-slate-800 h-1.5 rounded-full overflow-hidden">
+<div class="bg-primary h-full w-[88%] rounded-full"></div>
+</div>
+</div>
+</div>
+<!-- Real Feel Correlation -->
+<div class="col-span-1 md:col-span-2 flex flex-col justify-between p-8 rounded-xl bg-primary text-background-dark shadow-xl shadow-primary/10 relative overflow-hidden">
+<div class="absolute top-0 right-0 p-4 opacity-20">
+<span class="material-symbols-outlined text-8xl">vitals</span>
+</div>
+<div>
+<div class="flex items-center justify-between mb-4">
+<h3 class="text-lg font-bold uppercase tracking-tight">Real Feel Status</h3>
+<span class="bg-background-dark/10 px-2 py-1 rounded text-xs font-bold border border-background-dark/20 uppercase">Optimal</span>
+</div>
+<div class="flex flex-col">
+<span class="text-5xl font-bold tracking-tighter leading-none">Synergistic</span>
+<p class="text-sm font-medium mt-2 opacity-80">Subjective wellbeing matches data biomarkers.</p>
+</div>
+</div>
+<div class="mt-8 flex items-center gap-4">
+<div class="flex -space-x-2">
+<div class="size-8 rounded-full bg-background-dark/20 flex items-center justify-center border-2 border-primary"><span class="material-symbols-outlined text-xs">favorite</span></div>
+<div class="size-8 rounded-full bg-background-dark/20 flex items-center justify-center border-2 border-primary"><span class="material-symbols-outlined text-xs">bolt</span></div>
+<div class="size-8 rounded-full bg-background-dark/20 flex items-center justify-center border-2 border-primary"><span class="material-symbols-outlined text-xs">psychology</span></div>
+</div>
+<span class="text-xs font-bold uppercase tracking-widest">High Coherence</span>
+</div>
+</div>
+</div>
+<!-- Main Content Area: Grid for Visualization and Detailed Logs -->
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+<!-- Data Visualization Chart Section -->
+<div class="lg:col-span-2 space-y-8">
+<div class="p-8 rounded-xl bg-white dark:bg-slate-900 border border-primary/10 shadow-sm">
+<div class="flex flex-col md:flex-row md:items-center justify-between mb-8 gap-4">
+<div>
+<h3 class="text-xl font-bold tracking-tight">Vitality vs. Real Feel Correlation</h3>
+<p class="text-sm text-slate-500">Biological data (line) vs. Subjective input (area)</p>
+</div>
+<div class="flex gap-2">
+<div class="flex items-center gap-1.5">
+<span class="size-2 rounded-full bg-primary"></span>
+<span class="text-xs font-bold text-slate-500 uppercase">Vitality</span>
+</div>
+<div class="flex items-center gap-1.5 ml-2">
+<span class="size-2 rounded-full bg-primary/20"></span>
+<span class="text-xs font-bold text-slate-500 uppercase">Real Feel</span>
+</div>
+</div>
+</div>
+<div class="relative h-64 w-full">
+<svg class="w-full h-full" preserveaspectratio="none" viewbox="0 0 100 100">
+<!-- Shaded Area for Real Feel -->
+<path d="M0,80 Q15,40 30,60 T60,30 T100,20 L100,100 L0,100 Z" fill="url(#grad-primary)" fill-opacity="0.1"></path>
+<!-- Vitality Line -->
+<path class="text-primary" d="M0,75 C10,75 20,45 30,45 C40,45 50,65 60,65 C70,65 80,15 90,15 C95,15 100,25 100,25" fill="none" stroke="currentColor" stroke-width="2"></path>
+<!-- Data Points -->
+<circle class="fill-primary" cx="30" cy="45" r="2.5"></circle>
+<circle class="fill-primary" cx="60" cy="65" r="2.5"></circle>
+<circle class="fill-primary" cx="90" cy="15" r="2.5"></circle>
+<defs>
+<lineargradient id="grad-primary" x1="0%" x2="0%" y1="0%" y2="100%">
+<stop offset="0%" style="stop-color:var(--primary);stop-opacity:1"></stop>
+<stop offset="100%" style="stop-color:var(--primary);stop-opacity:0"></stop>
+</lineargradient>
+</defs>
+</svg>
+</div>
+<div class="flex justify-between mt-6 px-2">
+<span class="text-xs font-bold text-slate-400 uppercase tracking-widest">Mon</span>
+<span class="text-xs font-bold text-slate-400 uppercase tracking-widest">Tue</span>
+<span class="text-xs font-bold text-slate-400 uppercase tracking-widest">Wed</span>
+<span class="text-xs font-bold text-slate-400 uppercase tracking-widest">Thu</span>
+<span class="text-xs font-bold text-slate-400 uppercase tracking-widest">Fri</span>
+<span class="text-xs font-bold text-slate-400 uppercase tracking-widest">Sat</span>
+<span class="text-xs font-bold text-slate-400 uppercase tracking-widest">Sun</span>
+</div>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+<div class="p-6 rounded-xl bg-white dark:bg-slate-900 border border-primary/10 shadow-sm">
+<div class="flex items-center gap-3 mb-4">
+<span class="material-symbols-outlined text-primary">sleep</span>
+<h4 class="font-bold text-sm uppercase tracking-tight">Recovery Index</h4>
+</div>
+<div class="flex items-end gap-2">
+<span class="text-3xl font-bold">8h 12m</span>
+<span class="text-xs font-medium text-emerald-500 mb-1">+12% vs avg</span>
+</div>
+<p class="text-xs text-slate-400 mt-2">Deep sleep phase reached 112 mins.</p>
+</div>
+<div class="p-6 rounded-xl bg-white dark:bg-slate-900 border border-primary/10 shadow-sm">
+<div class="flex items-center gap-3 mb-4">
+<span class="material-symbols-outlined text-primary">nutrition</span>
+<h4 class="font-bold text-sm uppercase tracking-tight">Metabolic Efficiency</h4>
+</div>
+<div class="flex items-end gap-2">
+<span class="text-3xl font-bold">92%</span>
+<span class="text-xs font-medium text-amber-500 mb-1">-2% vs avg</span>
+</div>
+<p class="text-xs text-slate-400 mt-2">Glycemic response stable within target range.</p>
+</div>
+</div>
+</div>
+<!-- Sidebar Editorial Insights -->
+<div class="space-y-6">
+<div class="p-6 rounded-xl bg-slate-900 dark:bg-black text-white relative overflow-hidden group">
+<div class="absolute inset-0 opacity-10" data-alt="Abstract microscopic texture" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuB75ecUC7D16Rns3lXKRGsgU8qjHJXUbD6wpGUD_3HpEQyvN4WL4_cOrFl1bqzClT4JsTXSQ0YsviF3uaiEiPU8mMcG-41N7hBRcX7uN1EPZFLFRyqSDaRggbesxNGal4-_AlTdYGJPBw-L2T31EvFNqXqNcafM8iwrF81ar4Jpe6frzuUBS5UTIkd-YuGAjqt0wAHf6ghsfaLH_rvevEaIayteOnnYpjCYylycc2QpBuLpEvvslI0qZyxybyi-qSshApCqmr0HqeM'); background-size: cover;"></div>
+<div class="relative z-10">
+<span class="text-[10px] font-bold uppercase tracking-widest text-primary border border-primary/30 px-2 py-0.5 rounded">Editor's Note</span>
+<h4 class="text-xl font-bold mt-4 leading-snug">The Cortisol Connection</h4>
+<p class="text-sm text-slate-400 mt-3 italic leading-relaxed">Your data shows a slight elevation in resting heart rate coinciding with late-night blue light exposure. Recommend shifting the editorial deep-work block to 08:00 AM.</p>
+<button class="mt-6 text-xs font-bold uppercase tracking-widest flex items-center gap-2 group-hover:text-primary transition-colors">
+                            Read Full Protocol <span class="material-symbols-outlined text-sm">arrow_forward</span>
+</button>
+</div>
+</div>
+<div class="p-6 rounded-xl bg-white dark:bg-slate-900 border border-primary/10 shadow-sm">
+<h4 class="font-bold text-sm uppercase tracking-tight mb-6 flex items-center justify-between">
+                        Upcoming Protocols
+                        <span class="material-symbols-outlined text-sm text-slate-400 cursor-pointer">more_horiz</span>
+</h4>
+<div class="space-y-6">
+<div class="flex gap-4">
+<div class="size-10 rounded-lg bg-primary/10 flex-shrink-0 flex items-center justify-center">
+<span class="material-symbols-outlined text-primary">fitness_center</span>
+</div>
+<div>
+<p class="text-sm font-bold">Zone 2 Aerobic Training</p>
+<p class="text-xs text-slate-400">Scheduled for 10:30 AM</p>
+</div>
+</div>
+<div class="flex gap-4">
+<div class="size-10 rounded-lg bg-primary/10 flex-shrink-0 flex items-center justify-center">
+<span class="material-symbols-outlined text-primary">medication</span>
+</div>
+<div>
+<p class="text-sm font-bold">Morning Micronutrient Stack</p>
+<p class="text-xs text-slate-400">Completed <span class="text-emerald-500">✓</span></p>
+</div>
+</div>
+<div class="flex gap-4">
+<div class="size-10 rounded-lg bg-primary/10 flex-shrink-0 flex items-center justify-center">
+<span class="material-symbols-outlined text-primary">spa</span>
+</div>
+<div>
+<p class="text-sm font-bold">Thermal Contrast Therapy</p>
+<p class="text-xs text-slate-400">Scheduled for 18:00 PM</p>
+</div>
+</div>
+</div>
+</div>
+<div class="p-6 rounded-xl bg-primary/5 border border-primary/20">
+<div class="flex items-center gap-4 mb-4">
+<div class="size-12 rounded-full bg-cover bg-center border-2 border-primary" data-alt="Biohacking coach portrait" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuBfhmJeQNw6vIUCrJcR_tVdjBiV30yocF2UcE8bKCqVa3GA_w0aT_zIB_rpZt2tfB436inxdmoeqcU4m7Ode1SGHn30ydVddfef2yS0zUEFVxDwnscmnsjuYqKkcRa0Q5wMZfLgfICB7MUExrwg0LFmkmUwTTNSGdeTrJj074FxkJtL7FGHRn4zV1nxeZTbQyoKnYjYD_uKdI9qn68Vosq15_eUgkns7Tw16YjxQsNacdcsNZS10r4CfAPz9mUpM42Pl1OawNPz2-k')"></div>
+<div>
+<p class="text-xs font-bold uppercase tracking-widest text-slate-500">Chief Editor</p>
+<p class="text-sm font-bold">Dr. Elena Thorne</p>
+</div>
+</div>
+<p class="text-xs italic text-slate-600 dark:text-slate-400">"The numbers tell the story, but your intuition provides the context. Today's synergy is rare—leverage it."</p>
+</div>
+</div>
+</div>
+</main>
+<!-- Footer Simple -->
+<footer class="mt-auto border-t border-primary/10 py-10 px-6 md:px-12 bg-white dark:bg-slate-950">
+<div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-6">
+<div class="flex items-center gap-2">
+<div class="size-6 bg-primary rounded flex items-center justify-center text-background-dark">
+<span class="material-symbols-outlined text-xs font-bold">clinical_notes</span>
+</div>
+<span class="font-bold tracking-tight text-slate-400">Clinical Editorial © 2024</span>
+</div>
+<div class="flex gap-8 text-xs font-bold uppercase tracking-widest text-slate-500">
+<a class="hover:text-primary transition-colors" href="#">Privacy</a>
+<a class="hover:text-primary transition-colors" href="#">Methodology</a>
+<a class="hover:text-primary transition-colors" href="#">API</a>
+<a class="hover:text-primary transition-colors" href="#">Archive</a>
+</div>
+</div>
+</footer>
+</div>
+</body></html>

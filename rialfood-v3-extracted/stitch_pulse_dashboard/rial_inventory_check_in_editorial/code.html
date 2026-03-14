@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#25aff4",
+                        "background-light": "#f5f7f8",
+                        "background-dark": "#101c22",
+                    },
+                    fontFamily: {
+                        "display": ["Inter", "sans-serif"]
+                    },
+                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>
+        .editorial-border {
+            border-bottom: 1px solid rgba(37, 175, 244, 0.2);
+        }
+        .text-kern-wide {
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark font-display text-slate-900 dark:text-slate-100 min-h-screen">
+<div class="max-w-md mx-auto bg-white dark:bg-slate-900 min-h-screen flex flex-col shadow-2xl relative">
+<!-- Header: Editorial Tech Style -->
+<header class="p-6 pt-8 space-y-4">
+<div class="flex justify-between items-center">
+<span class="text-kern-wide text-[10px] font-bold text-primary tracking-widest">System / Inventory v2.4</span>
+<span class="material-symbols-outlined text-slate-400">close</span>
+</div>
+<div class="space-y-1">
+<h1 class="text-4xl font-bold tracking-tighter leading-none italic uppercase">Check-In</h1>
+<p class="text-sm text-slate-500 font-medium">Review and validate your recent acquisition.</p>
+</div>
+</header>
+<!-- Progress Indicator -->
+<div class="px-6 pb-6">
+<div class="flex justify-between items-end mb-2">
+<span class="text-[10px] font-bold uppercase tracking-wider text-slate-400">Validation Status</span>
+<span class="text-xs font-mono font-bold text-primary">85%</span>
+</div>
+<div class="h-[2px] w-full bg-slate-100 dark:bg-slate-800">
+<div class="h-full bg-primary" style="width: 85%;"></div>
+</div>
+</div>
+<!-- Inventory List -->
+<main class="flex-1 overflow-y-auto px-6 space-y-8 pb-32">
+<!-- Item 1: Salmon -->
+<div class="group">
+<div class="flex justify-between items-start mb-4">
+<div class="space-y-1">
+<span class="text-[10px] font-bold text-primary uppercase">Protein / Fresh</span>
+<h3 class="text-xl font-bold uppercase italic leading-none">Atlantic Salmon</h3>
+</div>
+<div class="bg-primary/10 p-1">
+<span class="material-symbols-outlined text-primary text-sm">check_circle</span>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<div class="w-20 h-24 bg-slate-100 dark:bg-slate-800 overflow-hidden">
+<img class="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-500" data-alt="Close up of fresh raw salmon fillet" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDOw3mIDljpYID-RBr4c9tJw7f6X2_snxjh8tHUriaTBxfNq3xMYOJMaOrxE9NHAfGAOnmo7U4lTcvD7ND_RjkVvyl9OVprPnwiRQbIG3WfxjfEnlKlpXldqWYWT5hvp6WROMdoTSZ3SWiKU_RxL5DAKmWvRyrCyCTQpszV8XUjLtCbhqlgSragOg6WhSG-jdugCGjQIlu5BaKWBXQuvqCcDLmJMC0tJALHjMLQnjK0D2iSlKmiwmDWi0CW0okNNQhIuOiMG_j6Ha5V"/>
+</div>
+<div class="flex-1 space-y-4">
+<div class="flex justify-between border-b border-slate-100 dark:border-slate-800 pb-2">
+<span class="text-xs text-slate-400 uppercase">Target</span>
+<span class="text-xs font-bold">500g</span>
+</div>
+<div class="flex justify-between items-center">
+<span class="text-xs text-slate-400 uppercase">Actual</span>
+<div class="flex items-center gap-3">
+<button class="size-6 border border-slate-200 dark:border-slate-700 flex items-center justify-center text-slate-400 hover:text-primary transition-colors">
+<span class="material-symbols-outlined text-sm">remove</span>
+</button>
+<span class="text-sm font-bold font-mono">450g</span>
+<button class="size-6 border border-slate-200 dark:border-slate-700 flex items-center justify-center text-slate-400 hover:text-primary transition-colors">
+<span class="material-symbols-outlined text-sm">add</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Item 2: Avocado -->
+<div class="group">
+<div class="flex justify-between items-start mb-4">
+<div class="space-y-1">
+<span class="text-[10px] font-bold text-primary uppercase">Produce / Organic</span>
+<h3 class="text-xl font-bold uppercase italic leading-none">Hass Avocado</h3>
+</div>
+<div class="border border-slate-200 dark:border-slate-700 p-1">
+<span class="material-symbols-outlined text-slate-300 text-sm">pending</span>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<div class="w-20 h-24 bg-slate-100 dark:bg-slate-800 overflow-hidden">
+<img class="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-500" data-alt="Two halves of a ripe avocado" src="https://lh3.googleusercontent.com/aida-public/AB6AXuB80MrafEdBoe9OCEuSQzLstVIFM_fysL66vwVQB_vGSztKqgFQvVFiAj31lXO4dcUHslVfyOx5VtfqbQLIVzaECC6bIf-rQFZo2iYVzTi3cXZJzNuekF8a8U9jDa4vt8XvR4lu9e7O_k-yGwmWIlBQpR8dX6ieJG3nuKdv6GCUOOGfiv4fXp9Z1tX17wADCMbUXHtRVlzIMAooNnRTD6Mev5YFe7prfMv8llb3nBr1dFSjshi9gewVqUr765q1r9-2de8TH3qaQaof"/>
+</div>
+<div class="flex-1 space-y-4">
+<div class="flex justify-between border-b border-slate-100 dark:border-slate-800 pb-2">
+<span class="text-xs text-slate-400 uppercase">Target</span>
+<span class="text-xs font-bold">3 Units</span>
+</div>
+<div class="flex justify-between items-center">
+<span class="text-xs text-slate-400 uppercase">Actual</span>
+<div class="flex items-center gap-3">
+<button class="size-6 border border-slate-200 dark:border-slate-700 flex items-center justify-center text-slate-400">-</button>
+<span class="text-sm font-bold font-mono">3</span>
+<button class="size-6 border border-slate-200 dark:border-slate-700 flex items-center justify-center text-slate-400">+</button>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Item 3: Greek Yogurt -->
+<div class="group">
+<div class="flex justify-between items-start mb-4">
+<div class="space-y-1">
+<span class="text-[10px] font-bold text-primary uppercase">Dairy / Fermented</span>
+<h3 class="text-xl font-bold uppercase italic leading-none">Greek Yogurt</h3>
+</div>
+<div class="bg-primary/10 p-1">
+<span class="material-symbols-outlined text-primary text-sm">check_circle</span>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<div class="w-20 h-24 bg-slate-100 dark:bg-slate-800 overflow-hidden">
+<img class="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-500" data-alt="Minimalist shot of white greek yogurt in a bowl" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD3Ahb_TkfJrwS5_WdTL2zfWsoMUlqZd8i4YSYVZYj8p8WXCwHVubhhC-pE01FKkAoTj5MV6MdC4sbO68aE6aHU1UEe0Fs96gCA8pL3LoPpm3DgMH89N3QlP4XWfke8w1qSPqoMqKvTG0gvZFjH19a0JaWTAZsF4sjiRGhm2_D5B4v8F__Q-hV9Onn2mOhkMVEz5A3CLBgrgOdGLSOM56DmkUQEeOVcDy01xRU9Fld0fSFmUL1oGwtOPy2hde3YlAloDFkbhLPFX4II"/>
+</div>
+<div class="flex-1 space-y-4">
+<div class="flex justify-between border-b border-slate-100 dark:border-slate-800 pb-2">
+<span class="text-xs text-slate-400 uppercase">Target</span>
+<span class="text-xs font-bold">1kg</span>
+</div>
+<div class="flex justify-between items-center">
+<span class="text-xs text-slate-400 uppercase">Actual</span>
+<div class="flex items-center gap-3">
+<button class="size-6 border border-slate-200 dark:border-slate-700 flex items-center justify-center text-slate-400">-</button>
+<span class="text-sm font-bold font-mono">1.0</span>
+<button class="size-6 border border-slate-200 dark:border-slate-700 flex items-center justify-center text-slate-400">+</button>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+<!-- Fixed Action Area -->
+<div class="absolute bottom-0 left-0 w-full bg-white/80 dark:bg-slate-900/80 backdrop-blur-md border-t border-slate-100 dark:border-slate-800 p-6 space-y-4">
+<button class="w-full bg-primary text-white py-4 font-bold uppercase italic tracking-widest text-sm hover:opacity-90 transition-opacity">
+                Confirm &amp; Update Pantry
+            </button>
+<!-- Bottom Navigation Bar Component (Modified to Editorial style) -->
+<div class="flex gap-2 justify-between pt-2">
+<a class="flex flex-col items-center gap-1 text-slate-400 hover:text-primary transition-colors" href="#">
+<span class="material-symbols-outlined">shopping_bag</span>
+<p class="text-[9px] font-bold uppercase tracking-tighter">Shop</p>
+</a>
+<a class="flex flex-col items-center gap-1 text-primary" href="#">
+<span class="material-symbols-outlined">warehouse</span>
+<p class="text-[9px] font-bold uppercase tracking-tighter">Pantry</p>
+</a>
+<a class="flex flex-col items-center gap-1 text-slate-400 hover:text-primary transition-colors" href="#">
+<span class="material-symbols-outlined">cooking</span>
+<p class="text-[9px] font-bold uppercase tracking-tighter">Recipes</p>
+</a>
+<a class="flex flex-col items-center gap-1 text-slate-400 hover:text-primary transition-colors" href="#">
+<span class="material-symbols-outlined">list_alt</span>
+<p class="text-[9px] font-bold uppercase tracking-tighter">List</p>
+</a>
+<a class="flex flex-col items-center gap-1 text-slate-400 hover:text-primary transition-colors" href="#">
+<span class="material-symbols-outlined">person</span>
+<p class="text-[9px] font-bold uppercase tracking-tighter">Profile</p>
+</a>
+</div>
+</div>
+</div>
+</body></html>

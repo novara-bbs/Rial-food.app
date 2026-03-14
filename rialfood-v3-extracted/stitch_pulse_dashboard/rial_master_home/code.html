@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>RIAL - Master Navigation</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#ddff00",
+                        "background-light": "#f8f8f5",
+                        "background-dark": "#20230f",
+                    },
+                    fontFamily: {
+                        "display": ["Space Grotesk"]
+                    },
+                    borderRadius: {"DEFAULT": "0.5rem", "lg": "1rem", "xl": "1.5rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>
+        body { font-family: 'Space Grotesk', sans-serif; }
+        .biometric-overlay {
+            background: linear-gradient(135deg, rgba(221, 255, 0, 0.1) 0%, rgba(221, 255, 0, 0.02) 100%);
+            backdrop-filter: blur(4px);
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 min-h-screen flex flex-col">
+<header class="sticky top-0 z-50 bg-background-light/80 dark:bg-background-dark/80 backdrop-blur-md border-b border-slate-200 dark:border-slate-800">
+<div class="flex items-center justify-between p-4 max-w-md mx-auto w-full">
+<div class="flex items-center gap-3">
+<div class="relative">
+<div class="size-10 rounded-full border-2 border-primary overflow-hidden bg-slate-200" data-alt="Close up professional headshot of a person">
+<img alt="Profile" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuC397hP-EeRf36CadVRx-i0qKMtI23NOyZmr64cHAwLz9o0QGV6o0lZ-b5qq0BS7PBCYDZ21zHUVF339cl5L7Clv75CFmqpgLO6_r46x8b1S3ipsMr2h14LbiqPsuefwAIk2ZA1qpaspW1WvvfokC0WfyGMg7oGXGJhdBKwyQp5ytmhNw0s6l3oMZxdqnGWGoasZzLvbM1LadiL9Y4dkRFuQEMVPAySjuwqK3-y8DyBb7Fc_Pu4Du9FrTrRcSYuJKePCY4dsAmvg9Yt"/>
+</div>
+<div class="absolute -bottom-1 -right-1 size-4 bg-primary rounded-full border-2 border-background-light dark:border-background-dark flex items-center justify-center">
+<span class="material-symbols-outlined text-[10px] text-slate-900 font-bold">check</span>
+</div>
+</div>
+<div>
+<h1 class="text-lg font-bold leading-none tracking-tight">RIAL</h1>
+<p class="text-xs text-slate-500 dark:text-slate-400 font-medium">Command Center</p>
+</div>
+</div>
+<div class="flex gap-2">
+<button class="size-10 flex items-center justify-center rounded-full bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300">
+<span class="material-symbols-outlined">search</span>
+</button>
+<button class="size-10 flex items-center justify-center rounded-full bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 relative">
+<span class="material-symbols-outlined">notifications</span>
+<span class="absolute top-2.5 right-2.5 size-2 bg-red-500 rounded-full border border-background-light dark:border-background-dark"></span>
+</button>
+</div>
+</div>
+</header>
+<main class="flex-1 max-w-md mx-auto w-full pb-24">
+<section class="p-4">
+<div class="relative overflow-hidden rounded-xl bg-slate-900 aspect-[16/10] group">
+<img class="absolute inset-0 w-full h-full object-cover opacity-60" data-alt="Athletic person preparing for a workout in a modern gym" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCBzQ6BFhSJkzss_qrWaquwFuzjgiP5igRQ3q_df07bJusavxp-6f4onq1UdBAJ4G3ZZzTP_K_vdNS0ttvraFlpjn-u59sdnd4XNV3suBFlRjwctFLpfl5r5xcEzb3R5ZaVTSovhEPNp7EtNqWzsFS1p3FrhAwwNiXkHiuqPkhY4MFQYbz4zs0ZNG8WL8pUsEbAGm2tfxUIxaFrRJABCOwskdz5Vi7JSmsTgZ3FIqUwCdqvevI36Hr2MpITxAZWzaeg2IgGbOA6kRdA"/>
+<div class="absolute inset-0 bg-gradient-to-t from-background-dark via-transparent to-transparent"></div>
+<div class="absolute inset-0 p-6 flex flex-col justify-end">
+<div class="flex justify-between items-end">
+<div>
+<p class="text-primary text-sm font-bold uppercase tracking-widest mb-1">Morning Prep</p>
+<h2 class="text-2xl font-bold text-white leading-tight">Good morning, Alex</h2>
+<p class="text-slate-300 text-sm">Optimal window for high-intensity focus.</p>
+</div>
+<div class="text-right">
+<p class="text-slate-400 text-xs uppercase font-bold tracking-tighter">Real Feel</p>
+<div class="text-4xl font-bold text-primary">88<span class="text-lg opacity-60">/100</span></div>
+</div>
+</div>
+</div>
+<div class="absolute top-4 right-4 biometric-overlay px-3 py-1.5 rounded-full border border-primary/20 flex items-center gap-2">
+<div class="size-2 bg-primary rounded-full animate-pulse"></div>
+<span class="text-[10px] font-bold text-primary uppercase tracking-wider">Live Biometrics</span>
+</div>
+</div>
+</section>
+<section class="px-4 py-2 grid grid-cols-3 gap-3">
+<div class="bg-white dark:bg-slate-800/50 p-4 rounded-xl border border-slate-100 dark:border-slate-800">
+<p class="text-slate-500 dark:text-slate-400 text-xs font-medium mb-1">Energy</p>
+<p class="text-xl font-bold">High</p>
+<div class="flex items-center gap-1 text-emerald-500 text-xs font-bold mt-1">
+<span class="material-symbols-outlined text-sm">trending_up</span> 5%
+                </div>
+</div>
+<div class="bg-white dark:bg-slate-800/50 p-4 rounded-xl border border-slate-100 dark:border-slate-800">
+<p class="text-slate-500 dark:text-slate-400 text-xs font-medium mb-1">Recovery</p>
+<p class="text-xl font-bold">92%</p>
+<div class="flex items-center gap-1 text-emerald-500 text-xs font-bold mt-1">
+<span class="material-symbols-outlined text-sm">check_circle</span> Peak
+                </div>
+</div>
+<div class="bg-white dark:bg-slate-800/50 p-4 rounded-xl border border-slate-100 dark:border-slate-800">
+<p class="text-slate-500 dark:text-slate-400 text-xs font-medium mb-1">Focus</p>
+<p class="text-xl font-bold">Sharp</p>
+<div class="flex items-center gap-1 text-amber-500 text-xs font-bold mt-1">
+<span class="material-symbols-outlined text-sm">remove</span> Stable
+                </div>
+</div>
+</section>
+<section class="p-4">
+<h3 class="text-slate-900 dark:text-slate-100 font-bold text-lg mb-4">Quick Actions</h3>
+<div class="grid grid-cols-1 gap-3">
+<button class="flex items-center justify-between p-4 bg-primary rounded-xl text-slate-900 font-bold group">
+<div class="flex items-center gap-4">
+<div class="size-12 bg-black/10 rounded-lg flex items-center justify-center">
+<span class="material-symbols-outlined text-3xl">bolt</span>
+</div>
+<div class="text-left">
+<p class="text-lg leading-none">Start Prep</p>
+<p class="text-sm opacity-70 font-medium">Estimated 15 mins</p>
+</div>
+</div>
+<span class="material-symbols-outlined font-bold">chevron_right</span>
+</button>
+<div class="grid grid-cols-2 gap-3">
+<button class="flex flex-col items-start p-4 bg-white dark:bg-slate-800 rounded-xl border border-slate-100 dark:border-slate-700">
+<div class="size-10 bg-primary/20 text-slate-900 dark:text-primary rounded-lg flex items-center justify-center mb-3">
+<span class="material-symbols-outlined">restaurant</span>
+</div>
+<p class="font-bold">Log Meal</p>
+<p class="text-xs text-slate-500 dark:text-slate-400">Track fuel intake</p>
+</button>
+<button class="flex flex-col items-start p-4 bg-white dark:bg-slate-800 rounded-xl border border-slate-100 dark:border-slate-700">
+<div class="size-10 bg-primary/20 text-slate-900 dark:text-primary rounded-lg flex items-center justify-center mb-3">
+<span class="material-symbols-outlined">analytics</span>
+</div>
+<p class="font-bold">View Insights</p>
+<p class="text-xs text-slate-500 dark:text-slate-400">Weekly progress</p>
+</button>
+</div>
+</div>
+</section>
+<section class="p-4">
+<div class="flex items-center justify-between mb-4">
+<h3 class="text-slate-900 dark:text-slate-100 font-bold text-lg">Daily Schedule</h3>
+<button class="text-sm font-bold text-primary">View All</button>
+</div>
+<div class="space-y-3">
+<div class="flex gap-4 items-start p-4 bg-white dark:bg-slate-800/30 rounded-xl border-l-4 border-primary">
+<div class="text-sm font-bold w-12 pt-0.5">08:00</div>
+<div>
+<p class="font-bold">Morning Supplements</p>
+<p class="text-xs text-slate-500">Magnesium &amp; Vitamin D</p>
+</div>
+<button class="ml-auto size-8 rounded-full bg-slate-100 dark:bg-slate-700 flex items-center justify-center">
+<span class="material-symbols-outlined text-sm">check</span>
+</button>
+</div>
+<div class="flex gap-4 items-start p-4 opacity-60">
+<div class="text-sm font-bold w-12 pt-0.5">12:30</div>
+<div>
+<p class="font-bold">High Protein Lunch</p>
+<p class="text-xs text-slate-500">Chicken &amp; Quinoa Bowl</p>
+</div>
+</div>
+</div>
+</section>
+</main>
+<nav class="fixed bottom-0 left-0 right-0 bg-white/90 dark:bg-background-dark/90 backdrop-blur-xl border-t border-slate-200 dark:border-slate-800 z-50">
+<div class="flex justify-around items-center h-20 max-w-md mx-auto px-6">
+<a class="flex flex-col items-center gap-1 text-primary" href="#">
+<span class="material-symbols-outlined fill-1">home</span>
+<span class="text-[10px] font-bold uppercase tracking-wider">Home</span>
+</a>
+<a class="flex flex-col items-center gap-1 text-slate-400 hover:text-slate-900 dark:hover:text-slate-100" href="#">
+<span class="material-symbols-outlined">calendar_today</span>
+<span class="text-[10px] font-bold uppercase tracking-wider">Plan</span>
+</a>
+<a class="relative -top-8 flex flex-col items-center" href="#">
+<div class="size-16 bg-primary rounded-full shadow-lg shadow-primary/40 flex items-center justify-center border-4 border-background-light dark:border-background-dark">
+<span class="material-symbols-outlined text-slate-900 text-3xl font-bold">add</span>
+</div>
+</a>
+<a class="flex flex-col items-center gap-1 text-slate-400 hover:text-slate-900 dark:hover:text-slate-100" href="#">
+<span class="material-symbols-outlined">monitoring</span>
+<span class="text-[10px] font-bold uppercase tracking-wider">Stats</span>
+</a>
+<a class="flex flex-col items-center gap-1 text-slate-400 hover:text-slate-900 dark:hover:text-slate-100" href="#">
+<span class="material-symbols-outlined">person</span>
+<span class="text-[10px] font-bold uppercase tracking-wider">Profile</span>
+</a>
+</div>
+</nav>
+</body></html>

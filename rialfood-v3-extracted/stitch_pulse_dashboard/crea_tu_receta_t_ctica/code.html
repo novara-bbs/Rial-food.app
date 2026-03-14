@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#ec5b13",
+                        "background-light": "#f8f6f6",
+                        "background-dark": "#221610",
+                    },
+                    fontFamily: {
+                        "display": ["Public Sans"]
+                    },
+                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<title>Tactical Recipe Entry</title>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark font-display text-slate-900 dark:text-slate-100 min-h-screen">
+<div class="relative flex h-auto min-h-screen w-full flex-col bg-background-light dark:bg-background-dark overflow-x-hidden">
+<!-- TopAppBar Navigation -->
+<div class="flex items-center bg-background-light dark:bg-background-dark p-4 pb-2 justify-between border-b border-primary/10">
+<div class="text-slate-900 dark:text-slate-100 flex size-12 shrink-0 items-center justify-start">
+<span class="material-symbols-outlined cursor-pointer">close</span>
+</div>
+<h2 class="text-slate-900 dark:text-slate-100 text-lg font-bold leading-tight tracking-[-0.015em] flex-1 text-center uppercase tracking-widest">Tactical Entry</h2>
+<div class="flex w-12 items-center justify-end">
+<p class="text-primary text-base font-bold leading-normal tracking-[0.015em] shrink-0 cursor-pointer">PUBLISH</p>
+</div>
+</div>
+<div class="px-4 py-2">
+<div class="flex items-center justify-between bg-primary/10 border border-primary/20 rounded-lg px-3 py-2">
+<h4 class="text-primary text-xs font-bold leading-normal tracking-[0.1em] uppercase">High Performance Mode</h4>
+<span class="material-symbols-outlined text-primary text-sm">bolt</span>
+</div>
+</div>
+<main class="max-w-2xl mx-auto w-full">
+<!-- Hero Photo Section with Technical Overlays -->
+<div class="@container">
+<div class="px-4 py-3">
+<div class="relative w-full bg-center bg-no-repeat bg-cover flex flex-col justify-end overflow-hidden bg-slate-800 rounded-xl min-h-[280px] border border-primary/30" data-alt="Gourmet high-protein power bowl with fresh ingredients" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuApG62rpZccf8a2oWXolP2P_1s5V18sfS1PQZEVSmxGljEACggle_jUqWO1qkN9IXVg_OodrwvwA6B7bp48TmEwvPIVcUPh-rjfy7T_n14GpLv5Skr7k8w3ua379hA67q1omDhiT-nrXg_6aJLPXz8ofkUKimslY_wQ8PNzU6DQjgJm7TIDFN43sdR-RY8rymKjZJvzxQ5_OPmGG61-jG12uMj-hO5zeDq_OCxT6ws5CICprDKsQHzjyaRRsGB-140c3oQ6H-DGmPaB");'>
+<!-- Technical Overlay Grids -->
+<div class="absolute inset-0 bg-gradient-to-t from-background-dark/80 via-transparent to-transparent"></div>
+<div class="absolute top-4 left-4 border-l-2 border-t-2 border-primary w-8 h-8 opacity-60"></div>
+<div class="absolute bottom-4 right-4 border-r-2 border-b-2 border-primary w-8 h-8 opacity-60"></div>
+<!-- HUD Elements -->
+<div class="absolute top-4 right-4 text-[10px] font-mono text-primary bg-background-dark/60 px-2 py-1 rounded backdrop-blur-sm">
+                            ISO 400 | F/2.8 | 1/125
+                        </div>
+<div class="relative p-4 flex flex-col gap-2">
+<div class="flex gap-2">
+<button class="flex items-center justify-center rounded-xl h-10 px-4 bg-primary text-white gap-2 text-sm font-bold shadow-lg shadow-primary/20">
+<span class="material-symbols-outlined text-[20px]">photo_camera</span>
+<span class="truncate">REPLACE</span>
+</button>
+<button class="flex items-center justify-center rounded-xl h-10 px-4 bg-background-dark/80 text-white gap-2 text-sm font-bold backdrop-blur-md border border-white/10">
+<span class="material-symbols-outlined text-[20px]">filter_center_focus</span>
+<span class="truncate">SCAN</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Fast Form Entry -->
+<div class="flex flex-col gap-6 px-4 py-4">
+<!-- Title Field -->
+<div class="flex flex-col gap-2">
+<label class="flex flex-col w-full">
+<p class="text-slate-500 dark:text-slate-400 text-xs font-bold uppercase tracking-widest pb-1">Recipe Header</p>
+<input class="form-input w-full rounded-xl text-slate-900 dark:text-slate-100 border border-slate-200 dark:border-primary/20 bg-white dark:bg-primary/5 focus:border-primary focus:ring-1 focus:ring-primary h-14 placeholder:text-slate-400 dark:placeholder:text-slate-600 p-4 text-lg font-bold" placeholder="e.g. STEAK V2.0" value="PROTEIN POWER BOWL"/>
+</label>
+</div>
+<!-- Tactical Grid for Stats -->
+<div class="grid grid-cols-3 gap-3">
+<div class="bg-white dark:bg-primary/5 border border-slate-200 dark:border-primary/20 p-3 rounded-xl">
+<p class="text-[10px] text-slate-500 dark:text-slate-400 uppercase font-bold">Prep Time</p>
+<input class="bg-transparent border-none p-0 text-primary font-bold text-lg focus:ring-0 w-full" value="12m"/>
+</div>
+<div class="bg-white dark:bg-primary/5 border border-slate-200 dark:border-primary/20 p-3 rounded-xl">
+<p class="text-[10px] text-slate-500 dark:text-slate-400 uppercase font-bold">Calories</p>
+<input class="bg-transparent border-none p-0 text-primary font-bold text-lg focus:ring-0 w-full" value="650"/>
+</div>
+<div class="bg-white dark:bg-primary/5 border border-slate-200 dark:border-primary/20 p-3 rounded-xl">
+<p class="text-[10px] text-slate-500 dark:text-slate-400 uppercase font-bold">Macros</p>
+<input class="bg-transparent border-none p-0 text-primary font-bold text-lg focus:ring-0 w-full" value="40/30/30"/>
+</div>
+</div>
+<!-- Auto-Parsing Ingredients List -->
+<div class="flex flex-col gap-2">
+<div class="flex justify-between items-end">
+<p class="text-slate-500 dark:text-slate-400 text-xs font-bold uppercase tracking-widest">Ingredients (Auto-Parse)</p>
+<span class="text-primary text-[10px] font-mono">AI ENGINE ACTIVE</span>
+</div>
+<textarea class="form-textarea w-full rounded-xl text-slate-900 dark:text-slate-100 border border-slate-200 dark:border-primary/20 bg-white dark:bg-primary/5 focus:border-primary focus:ring-1 focus:ring-primary min-h-[160px] placeholder:text-slate-400 dark:placeholder:text-slate-600 p-4 text-sm font-mono leading-relaxed" placeholder="200g Chicken Breast
+1 cup Quinoa
+50g Avocado
+Handful Spinach...">200g Chicken breast, grilled
+100g Quinoa, cooked
+1/2 Avocado, sliced
+20g Pumpkin seeds
+Lemon vinaigrette</textarea>
+</div>
+<!-- Quick Instructions -->
+<div class="flex flex-col gap-2">
+<p class="text-slate-500 dark:text-slate-400 text-xs font-bold uppercase tracking-widest">Tactical Steps</p>
+<div class="space-y-3">
+<div class="flex gap-3 items-start group">
+<div class="w-6 h-6 rounded bg-primary/20 border border-primary/40 flex items-center justify-center shrink-0 mt-1">
+<span class="text-primary text-xs font-bold">01</span>
+</div>
+<input class="form-input flex-1 border-b border-t-0 border-l-0 border-r-0 border-slate-200 dark:border-primary/10 bg-transparent focus:ring-0 focus:border-primary py-1 text-sm" value="Prep chicken with salt/pepper and grill."/>
+<span class="material-symbols-outlined text-slate-400 text-sm cursor-pointer opacity-0 group-hover:opacity-100">drag_indicator</span>
+</div>
+<div class="flex gap-3 items-start group">
+<div class="w-6 h-6 rounded bg-primary/20 border border-primary/40 flex items-center justify-center shrink-0 mt-1">
+<span class="text-primary text-xs font-bold">02</span>
+</div>
+<input class="form-input flex-1 border-b border-t-0 border-l-0 border-r-0 border-slate-200 dark:border-primary/10 bg-transparent focus:ring-0 focus:border-primary py-1 text-sm" value="Assemble base with quinoa and greens."/>
+<span class="material-symbols-outlined text-slate-400 text-sm cursor-pointer opacity-0 group-hover:opacity-100">drag_indicator</span>
+</div>
+<div class="flex gap-3 items-start group">
+<div class="w-6 h-6 rounded bg-primary/10 border border-slate-300 dark:border-primary/5 flex items-center justify-center shrink-0 mt-1">
+<span class="material-symbols-outlined text-slate-400 text-xs">add</span>
+</div>
+<input class="form-input flex-1 border-b border-t-0 border-l-0 border-r-0 border-slate-200 dark:border-primary/10 bg-transparent focus:ring-0 focus:border-primary py-1 text-sm italic text-slate-400" placeholder="Add next command..."/>
+</div>
+</div>
+</div>
+<!-- Quick Tags -->
+<div class="flex flex-wrap gap-2 pt-2">
+<span class="px-3 py-1 bg-primary/20 text-primary text-[11px] font-bold rounded-full border border-primary/30 uppercase tracking-tighter">#highprotein</span>
+<span class="px-3 py-1 bg-primary/20 text-primary text-[11px] font-bold rounded-full border border-primary/30 uppercase tracking-tighter">#keto-friendly</span>
+<span class="px-3 py-1 bg-primary/20 text-primary text-[11px] font-bold rounded-full border border-primary/30 uppercase tracking-tighter">#quickprep</span>
+<button class="px-3 py-1 bg-slate-200 dark:bg-primary/10 text-slate-500 dark:text-slate-400 text-[11px] font-bold rounded-full border border-slate-300 dark:border-primary/20 uppercase tracking-tighter">
+                        + ADD TAG
+                    </button>
+</div>
+<!-- Action Footer -->
+<div class="mt-8 mb-12 flex gap-4">
+<button class="flex-1 bg-primary hover:bg-primary/90 text-white font-bold py-4 rounded-xl shadow-lg transition-all flex items-center justify-center gap-2">
+<span class="material-symbols-outlined">save</span>
+                        SAVE COMMAND
+                    </button>
+</div>
+</div>
+</main>
+<!-- Bottom Status Bar -->
+<div class="fixed bottom-0 left-0 right-0 bg-background-light dark:bg-background-dark border-t border-primary/20 px-6 py-3 flex justify-between items-center z-50">
+<div class="flex items-center gap-2">
+<div class="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
+<span class="text-[10px] font-mono text-slate-500 dark:text-slate-400 uppercase tracking-widest">Sync Active</span>
+</div>
+<div class="text-[10px] font-mono text-slate-500 dark:text-slate-400">
+                 LAT: 34.0522 N | LON: 118.2437 W
+             </div>
+</div>
+</div>
+</body></html>

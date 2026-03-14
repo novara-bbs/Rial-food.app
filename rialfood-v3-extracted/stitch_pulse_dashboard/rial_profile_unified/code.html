@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>RIAL Profile - Human-Centric Precision</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#ddff00",
+                        "background-light": "#f8f8f5",
+                        "background-dark": "#20230f",
+                    },
+                    fontFamily: {
+                        "display": ["Space Grotesk"]
+                    },
+                    borderRadius: {"DEFAULT": "0.5rem", "lg": "1rem", "xl": "1.5rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>
+        body {
+            font-family: 'Space Grotesk', sans-serif;
+        }
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 4px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #ddff00;
+            border-radius: 10px;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 min-h-screen">
+<div class="relative flex min-h-screen w-full flex-col max-w-md mx-auto bg-white dark:bg-background-dark shadow-2xl overflow-x-hidden">
+<!-- Header -->
+<div class="flex items-center bg-white dark:bg-background-dark p-4 pb-2 justify-between sticky top-0 z-10 border-b border-slate-100 dark:border-slate-800">
+<div class="text-slate-900 dark:text-slate-100 flex size-12 shrink-0 items-center justify-center">
+<span class="material-symbols-outlined">settings</span>
+</div>
+<h2 class="text-slate-900 dark:text-slate-100 text-lg font-bold leading-tight tracking-[-0.015em] flex-1 text-center font-display">Profile</h2>
+<div class="flex w-12 items-center justify-end">
+<button class="flex items-center justify-center rounded-xl h-12 bg-transparent text-slate-900 dark:text-slate-100">
+<span class="material-symbols-outlined">share</span>
+</button>
+</div>
+</div>
+<!-- Profile Section -->
+<div class="flex p-6 @container">
+<div class="flex w-full flex-col gap-6 items-center">
+<div class="flex gap-4 flex-col items-center">
+<div class="relative">
+<div class="bg-center bg-no-repeat aspect-square bg-cover rounded-full min-h-32 w-32 border-4 border-primary shadow-lg" data-alt="Professional portrait of a male creator with glasses" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuAHv58XPp2tMUr6SVe4mb9kpcHdaHZeAau2hWRDK_Bpier8Jej5iBPVzxXkRXlvWPSe3on9snxV6_vc2RqxDm4I2tMVNdZXKg5M6zWbEBLEp5EHIFR4Q0gR3FoEtVQmWP-OeDNt87UoHL-Msh7Uo_4KiEcH0vjEonaLyvOqfTclDEj4egDs238jtQSdTV1E_EDuetCJs9rdRwSCf0BdfX9UE6DfslVd3vStDAWn810vH-oncl6VLbvpoERhRuypNW-cK7-vOQqlUT2a");'>
+</div>
+<div class="absolute bottom-1 right-1 bg-primary text-slate-900 text-[10px] font-bold px-2 py-1 rounded-full border-2 border-white dark:border-background-dark">
+                            LVL 4
+                        </div>
+</div>
+<div class="flex flex-col items-center justify-center text-center">
+<p class="text-slate-900 dark:text-slate-100 text-2xl font-bold leading-tight tracking-tight font-display">Alex Sterling</p>
+<p class="text-slate-500 dark:text-slate-400 text-sm font-medium mt-1">Bio-Active Specialist • Precision Curator</p>
+<p class="text-slate-400 dark:text-slate-500 text-xs mt-2 italic font-display">"Optimizing human potential through molecular precision."</p>
+</div>
+</div>
+<div class="flex w-full gap-3">
+<button class="flex flex-1 items-center justify-center rounded-xl h-11 bg-slate-100 dark:bg-slate-800 text-slate-900 dark:text-slate-100 text-sm font-bold font-display transition-colors hover:bg-slate-200">
+                        Edit Profile
+                    </button>
+<button class="flex flex-1 items-center justify-center rounded-xl h-11 bg-primary text-slate-900 text-sm font-bold font-display transition-transform active:scale-95 shadow-md">
+<span class="material-symbols-outlined text-lg mr-2">play_circle</span>
+                        YouTube
+                    </button>
+</div>
+</div>
+</div>
+<!-- Stats Grid -->
+<div class="px-4 py-2">
+<h3 class="text-slate-900 dark:text-slate-100 text-sm font-bold uppercase tracking-widest mb-4 px-2 font-display">Bio-Active Stats</h3>
+<div class="flex gap-4">
+<div class="flex flex-1 flex-col gap-2 rounded-2xl p-5 bg-slate-50 dark:bg-slate-800/50 border border-slate-100 dark:border-slate-800">
+<div class="flex items-center gap-2 text-slate-500 dark:text-slate-400">
+<span class="material-symbols-outlined text-sm">target</span>
+<p class="text-xs font-medium uppercase tracking-tighter">Current Goal</p>
+</div>
+<p class="text-slate-900 dark:text-slate-100 text-xl font-bold font-display">Volume</p>
+</div>
+<div class="flex flex-1 flex-col gap-2 rounded-2xl p-5 bg-slate-50 dark:bg-slate-800/50 border border-slate-100 dark:border-slate-800">
+<div class="flex items-center gap-2 text-slate-500 dark:text-slate-400">
+<span class="material-symbols-outlined text-sm">bolt</span>
+<p class="text-xs font-medium uppercase tracking-tighter">Real Feel Avg</p>
+</div>
+<p class="text-primary text-xl font-bold font-display">High</p>
+</div>
+</div>
+</div>
+<!-- Public Profile Toggle -->
+<div class="p-4">
+<div class="flex items-center justify-between gap-4 rounded-2xl border border-primary/30 bg-primary/5 p-5">
+<div class="flex flex-col gap-1">
+<div class="flex items-center gap-2">
+<p class="text-slate-900 dark:text-slate-100 text-sm font-bold font-display uppercase tracking-wide">Public Profile</p>
+<span class="text-[10px] bg-primary/20 text-slate-800 px-2 rounded-full font-bold">L4 ONLY</span>
+</div>
+<p class="text-slate-500 dark:text-slate-400 text-xs">Visible to the global RIAL community</p>
+</div>
+<label class="relative flex h-7 w-12 cursor-pointer items-center rounded-full bg-slate-200 dark:bg-slate-700 p-1 has-[:checked]:bg-primary">
+<input checked="" class="sr-only peer" type="checkbox"/>
+<div class="h-5 w-5 rounded-full bg-white shadow-sm transition-all peer-checked:translate-x-5"></div>
+</label>
+</div>
+</div>
+<!-- Recipe Collections -->
+<div class="p-4 mb-20">
+<div class="flex items-center justify-between mb-4 px-2">
+<h3 class="text-slate-900 dark:text-slate-100 text-sm font-bold uppercase tracking-widest font-display">Recipe Collections</h3>
+<button class="text-primary text-xs font-bold font-display flex items-center">
+                    Add New <span class="material-symbols-outlined text-sm ml-1">add_circle</span>
+</button>
+</div>
+<div class="space-y-3">
+<!-- Shared Collection -->
+<div class="flex items-center p-4 rounded-xl bg-white dark:bg-slate-800 border border-slate-100 dark:border-slate-700 shadow-sm">
+<div class="w-14 h-14 rounded-lg bg-primary/20 flex items-center justify-center text-slate-900">
+<span class="material-symbols-outlined">hub</span>
+</div>
+<div class="ml-4 flex-1">
+<div class="flex items-center gap-2">
+<p class="text-slate-900 dark:text-slate-100 font-bold text-sm">Molecular Stacks</p>
+<span class="material-symbols-outlined text-xs text-slate-400">public</span>
+</div>
+<p class="text-slate-400 text-xs mt-1">12 Recipes • Shared with Community</p>
+</div>
+<span class="material-symbols-outlined text-slate-300">chevron_right</span>
+</div>
+<!-- Private Collection -->
+<div class="flex items-center p-4 rounded-xl bg-white dark:bg-slate-800 border border-slate-100 dark:border-slate-700 shadow-sm">
+<div class="w-14 h-14 rounded-lg bg-slate-100 dark:bg-slate-700 flex items-center justify-center text-slate-400 dark:text-slate-500">
+<span class="material-symbols-outlined">lock</span>
+</div>
+<div class="ml-4 flex-1">
+<div class="flex items-center gap-2">
+<p class="text-slate-900 dark:text-slate-100 font-bold text-sm">Deep Focus Protocols</p>
+</div>
+<p class="text-slate-400 text-xs mt-1">4 Recipes • Private Archive</p>
+</div>
+<span class="material-symbols-outlined text-slate-300">chevron_right</span>
+</div>
+</div>
+</div>
+<!-- Bottom Nav Bar -->
+<div class="fixed bottom-0 left-1/2 -translate-x-1/2 w-full max-w-md flex gap-2 border-t border-slate-100 dark:border-slate-800 bg-white/95 dark:bg-background-dark/95 backdrop-blur-md px-4 pb-6 pt-2 z-20">
+<a class="flex flex-1 flex-col items-center justify-end gap-1 text-slate-400 dark:text-slate-500" href="#">
+<div class="flex h-8 items-center justify-center">
+<span class="material-symbols-outlined">home</span>
+</div>
+<p class="text-[10px] font-medium leading-normal tracking-wide uppercase">Home</p>
+</a>
+<a class="flex flex-1 flex-col items-center justify-end gap-1 text-slate-400 dark:text-slate-500" href="#">
+<div class="flex h-8 items-center justify-center">
+<span class="material-symbols-outlined">search</span>
+</div>
+<p class="text-[10px] font-medium leading-normal tracking-wide uppercase">Explore</p>
+</a>
+<a class="flex flex-1 flex-col items-center justify-end gap-1 text-slate-400 dark:text-slate-500" href="#">
+<div class="flex h-8 items-center justify-center bg-primary rounded-full w-10 h-10 -mt-6 shadow-lg shadow-primary/40 text-slate-900 border-4 border-white dark:border-background-dark">
+<span class="material-symbols-outlined">add</span>
+</div>
+<p class="text-[10px] font-medium leading-normal tracking-wide uppercase mt-1">Create</p>
+</a>
+<a class="flex flex-1 flex-col items-center justify-end gap-1 text-slate-400 dark:text-slate-500" href="#">
+<div class="flex h-8 items-center justify-center">
+<span class="material-symbols-outlined">bar_chart_4_bars</span>
+</div>
+<p class="text-[10px] font-medium leading-normal tracking-wide uppercase">Stats</p>
+</a>
+<a class="flex flex-1 flex-col items-center justify-end gap-1 text-primary" href="#">
+<div class="flex h-8 items-center justify-center">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1">person</span>
+</div>
+<p class="text-[10px] font-bold leading-normal tracking-wide uppercase">Profile</p>
+</a>
+</div>
+</div>
+</body></html>

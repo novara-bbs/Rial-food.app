@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>RIAL - Smart Kitchen Inventory</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#ec5b13",
+                        "background-light": "#f8f6f6",
+                        "background-dark": "#221610",
+                    },
+                    fontFamily: {
+                        "display": ["Public Sans", "sans-serif"]
+                    },
+                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>
+        body { font-family: 'Public Sans', sans-serif; }
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 font-display">
+<div class="relative flex min-h-screen w-full flex-col max-w-md mx-auto bg-background-light dark:bg-background-dark shadow-2xl overflow-x-hidden">
+<!-- Header -->
+<header class="flex items-center bg-white dark:bg-slate-900/50 p-4 sticky top-0 z-10 border-b border-slate-200 dark:border-slate-800 justify-between">
+<div class="flex items-center gap-3">
+<div class="bg-primary/10 p-2 rounded-xl text-primary">
+<span class="material-symbols-outlined block">kitchen</span>
+</div>
+<div>
+<h1 class="text-xl font-bold leading-tight tracking-tight">Kitchen Inventory</h1>
+<p class="text-xs text-slate-500 font-medium uppercase tracking-wider">RIAL Intelligence</p>
+</div>
+</div>
+<div class="flex gap-2">
+<button class="flex size-10 items-center justify-center rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300">
+<span class="material-symbols-outlined">notifications</span>
+</button>
+<button class="flex size-10 items-center justify-center rounded-xl bg-primary text-white">
+<span class="material-symbols-outlined">add</span>
+</button>
+</div>
+</header>
+<!-- Search and Filter -->
+<div class="px-4 py-4 bg-white dark:bg-slate-900/30">
+<label class="flex flex-col min-w-40 h-12 w-full">
+<div class="flex w-full flex-1 items-stretch rounded-xl h-full bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700">
+<div class="text-slate-400 flex items-center justify-center pl-4">
+<span class="material-symbols-outlined">search</span>
+</div>
+<input class="form-input flex w-full min-w-0 flex-1 border-none bg-transparent focus:ring-0 h-full placeholder:text-slate-400 px-4 text-base font-normal leading-normal" placeholder="Search items in Kitchen"/>
+</div>
+</label>
+<div class="flex gap-2 mt-4 overflow-x-auto no-scrollbar">
+<button class="px-5 py-2 rounded-full bg-primary text-white text-sm font-semibold whitespace-nowrap">Fridge (12)</button>
+<button class="px-5 py-2 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 text-sm font-semibold whitespace-nowrap border border-slate-200 dark:border-slate-700">Pantry (45)</button>
+<button class="px-5 py-2 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 text-sm font-semibold whitespace-nowrap border border-slate-200 dark:border-slate-700">Freezer (8)</button>
+</div>
+</div>
+<!-- Freshness Alerts -->
+<section class="px-4 py-6">
+<div class="flex items-center justify-between mb-4">
+<h3 class="text-lg font-bold flex items-center gap-2">
+<span class="material-symbols-outlined text-primary text-xl">warning</span>
+                    Freshness Alerts
+                </h3>
+<span class="text-xs font-bold text-primary bg-primary/10 px-2 py-1 rounded">3 ACTIONS NEEDED</span>
+</div>
+<div class="flex flex-col gap-3">
+<div class="flex items-center p-3 bg-white dark:bg-slate-900 border-l-4 border-primary rounded-xl shadow-sm">
+<div class="w-12 h-12 rounded-lg overflow-hidden bg-slate-100 flex-shrink-0">
+<img class="w-full h-full object-cover" data-alt="Fresh orange carrots in a bunch" src="https://lh3.googleusercontent.com/aida-public/AB6AXuABp3thHB5FgtvJdXxM82qXUwYcX0vlR7JiGKH8yYnjBUY3dVD9wYHiq1dSHZwIJ0-cT_2qVXvcYKFZnoNN2Meuqr3Yt_gRsT0USj0yl2bi2BY4cQ_1PYtUKG491D0SLkr0H4vCDIvanJ6QQPAl1zD1r3TumQfclME1vJyUJoqx-MAWt2f571DNDXL-H1sj3DsU5B23bgW7RCN4mubEOc7HBeSKnnqbnOjzG2hD8mYwYiA-5t6BBvuqKZDRHfWBKSLOiBGCrjtlZhbl"/>
+</div>
+<div class="ml-3 flex-1">
+<h4 class="font-bold text-sm">Organic Carrots</h4>
+<p class="text-xs text-slate-500">Expires in 2 days</p>
+</div>
+<div class="flex gap-2">
+<button class="p-2 rounded-lg bg-slate-100 dark:bg-slate-800 text-slate-600" title="Add to Meal Plan">
+<span class="material-symbols-outlined text-lg">restaurant_menu</span>
+</button>
+</div>
+</div>
+<div class="flex items-center p-3 bg-white dark:bg-slate-900 border-l-4 border-yellow-500 rounded-xl shadow-sm">
+<div class="w-12 h-12 rounded-lg overflow-hidden bg-slate-100 flex-shrink-0">
+<img class="w-full h-full object-cover" data-alt="Fresh cold milk bottle" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBAr3-K9loZIyOYsJ4Vu2jAtQHmEmdJau7o-mqbBVw6QrJBFmR4YMDR00UbTHlei6cGDC8I7GRKF6at-rAEOnywhYm7vrp54dIu3_vvzDXyhdqOPa8mssedJR85v1Lyibmh91pa99GAiKvdeO7B3bka4eZZZrY7x4Jd-FHb0Gz6JDd-yvRK6ej-AM7pXBEHIHGlqcYikrsemxv1fJQQF_KKzkDyIAGfSh32frobZ_9yTotBJxaxyip3z3GkSjfCx9Tx2w0j1vV7Co2H"/>
+</div>
+<div class="ml-3 flex-1">
+<h4 class="font-bold text-sm">Whole Milk</h4>
+<p class="text-xs text-slate-500">Low stock: 200ml left</p>
+</div>
+<button class="px-3 py-1.5 rounded-lg bg-primary/10 text-primary text-xs font-bold flex items-center gap-1">
+<span class="material-symbols-outlined text-sm">shopping_cart</span>
+                        BUY
+                    </button>
+</div>
+</div>
+</section>
+<!-- Inventory List -->
+<section class="flex-1 px-4 py-2">
+<h3 class="text-lg font-bold mb-4">Fridge Items</h3>
+<div class="grid grid-cols-1 gap-4 pb-24">
+<!-- Item 1 -->
+<div class="flex items-center justify-between p-2 bg-white dark:bg-slate-900/50 rounded-xl border border-slate-200 dark:border-slate-800">
+<div class="flex items-center gap-3">
+<div class="w-14 h-14 rounded-lg overflow-hidden bg-slate-200">
+<img class="w-full h-full object-cover" data-alt="Fresh beef burger patty" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCF78yfhZ-ueO9dc1ALUWWDZUhDYWOiId20mL8gVIc9vt_L24STLc0L1gH3LWKoUh8CpXcIW0d51pSF4o4rQ22Lscyuuh0owgffsDvnSWJF5SKodt6y-hPmSe6xkWXGG9A6m1eqA9Rzvb92AYY0wnunfA7amr2BqlcDGay6KSw5w53QZ5b_IG45drCTZtPMViiIZuv3OJM44mbHHACm7qfopQ7uRIVG7GQwf4dya49pgibQtFij9dEJtUFvQSn9mffHP2jCzJFJLbvL"/>
+</div>
+<div>
+<h4 class="font-bold text-slate-800 dark:text-slate-100">Ground Beef</h4>
+<div class="flex items-center gap-1">
+<span class="w-2 h-2 rounded-full bg-green-500"></span>
+<span class="text-xs text-slate-500">500g • Fresh</span>
+</div>
+</div>
+</div>
+<button class="p-2 text-slate-400">
+<span class="material-symbols-outlined">more_vert</span>
+</button>
+</div>
+<!-- Item 2 -->
+<div class="flex items-center justify-between p-2 bg-white dark:bg-slate-900/50 rounded-xl border border-slate-200 dark:border-slate-800">
+<div class="flex items-center gap-3">
+<div class="w-14 h-14 rounded-lg overflow-hidden bg-slate-200">
+<img class="w-full h-full object-cover" data-alt="Fresh green broccoli heads" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBNfBGp-GqZAnacgBTIc6d0igTmrdgH50AXW_7cw4t46IGcbL70lb3wyUIsgWRHmUHsd4g_Ow56MKcIPbfcqZfkuyohg5-3LTxenKAguK9EzXk8sA9he3GAVEfRqgMC0uHrnzcSYnGMZ8lpCLMuPS45Hg0UBJOf3zf4ehQnIpVCarkrcjY2lAnPblucMeW6zaFVgaQoV0PeaGyJSG7P3s2CQcZSRZoSF5oNoWNdOQk6DQOk5Kwnh3vFzlpQOYX7ppDLJc2ZmUEuBkXh"/>
+</div>
+<div>
+<h4 class="font-bold text-slate-800 dark:text-slate-100">Broccoli</h4>
+<div class="flex items-center gap-1">
+<span class="w-2 h-2 rounded-full bg-green-500"></span>
+<span class="text-xs text-slate-500">2 Units • Fresh</span>
+</div>
+</div>
+</div>
+<button class="p-2 text-slate-400">
+<span class="material-symbols-outlined">more_vert</span>
+</button>
+</div>
+<!-- Meal Plan Connection -->
+<div class="mt-4 bg-primary/5 border border-primary/20 rounded-2xl p-4">
+<div class="flex items-center justify-between mb-3">
+<span class="text-xs font-bold text-primary tracking-widest uppercase">Upcoming Meal</span>
+<span class="material-symbols-outlined text-primary">auto_awesome</span>
+</div>
+<div class="flex gap-4">
+<div class="flex-1">
+<h4 class="font-bold text-slate-800 dark:text-slate-100">Beef &amp; Broccoli Stir Fry</h4>
+<p class="text-sm text-slate-600 dark:text-slate-400 mt-1">Ready to cook. You have 100% of ingredients.</p>
+</div>
+<button class="size-10 rounded-full bg-primary text-white flex items-center justify-center shadow-lg shadow-primary/30">
+<span class="material-symbols-outlined">play_arrow</span>
+</button>
+</div>
+</div>
+</div>
+</section>
+<!-- Bottom Navigation -->
+<nav class="fixed bottom-0 left-0 right-0 max-w-md mx-auto border-t border-slate-200 dark:border-slate-800 bg-white/95 dark:bg-slate-900/95 backdrop-blur-md px-6 py-3">
+<div class="flex justify-between items-center">
+<a class="flex flex-col items-center gap-1 text-primary" href="#">
+<span class="material-symbols-outlined text-2xl font-variation-fill">kitchen</span>
+<span class="text-[10px] font-bold">Inventory</span>
+</a>
+<a class="flex flex-col items-center gap-1 text-slate-400" href="#">
+<span class="material-symbols-outlined text-2xl">restaurant_menu</span>
+<span class="text-[10px] font-bold">Meal Plan</span>
+</a>
+<a class="flex flex-col items-center gap-1 text-slate-400" href="#">
+<span class="material-symbols-outlined text-2xl">shopping_cart</span>
+<span class="text-[10px] font-bold">Shopping</span>
+</a>
+<a class="flex flex-col items-center gap-1 text-slate-400" href="#">
+<span class="material-symbols-outlined text-2xl">settings</span>
+<span class="text-[10px] font-bold">Settings</span>
+</a>
+</div>
+</nav>
+</div>
+</body></html>

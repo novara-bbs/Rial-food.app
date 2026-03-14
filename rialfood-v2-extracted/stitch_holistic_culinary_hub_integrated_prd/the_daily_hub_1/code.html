@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>The Daily Hub - Holistic Culinary Hub</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400..700;1,6..72,400..700&amp;family=Satoshi:wght@400;500;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#4A5D23",
+                        "background-light": "#F9F8F6",
+                        "background-dark": "#1c2210",
+                        "surface": "#FFFFFF",
+                        "text-main": "#2B2927",
+                        "muted": "#A39F98",
+                        "accent": "#D47A43",
+                        "border-subtle": "#E5E3DF",
+                    },
+                    fontFamily: {
+                        "display": ["Newsreader", "serif"],
+                        "body": ["Satoshi", "sans-serif"]
+                    },
+                    borderRadius: {"DEFAULT": "0px", "sm": "0px", "md": "4px", "lg": "4px", "xl": "4px", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>
+        body {
+            font-family: 'Satoshi', sans-serif;
+            color: var(--color-text-main);
+        }
+        h1, h2, h3, h4, h5, h6, .font-display {
+            font-family: 'Newsreader', serif;
+        }
+        .border-bold {
+            border: 2px solid #2B2927;
+        }
+        .border-subtle {
+            border: 1px solid #E5E3DF;
+        }
+        
+        /* Custom scrollbar for webkit */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #F9F8F6;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #E5E3DF;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #A39F98;
+        }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark text-text-main antialiased min-h-screen flex overflow-hidden">
+<!-- Left Navigation Sidebar (20%) -->
+<aside class="w-64 bg-background-light dark:bg-background-dark border-r border-border-subtle flex flex-col h-screen sticky top-0 shrink-0">
+<div class="p-6">
+<h1 class="font-display text-2xl font-semibold italic text-text-main mb-8">Culinary Hub</h1>
+<nav class="flex flex-col gap-1">
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-md bg-border-subtle/40 text-text-main font-medium" href="#">
+<span class="material-symbols-outlined text-[20px]">home</span>
+<span class="text-sm">The Daily Hub</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-md hover:bg-border-subtle/20 text-text-main/80 hover:text-text-main transition-colors" href="#">
+<span class="material-symbols-outlined text-[20px]">vital_signs</span>
+<span class="text-sm">Vitals &amp; Food Diary</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-md hover:bg-border-subtle/20 text-text-main/80 hover:text-text-main transition-colors" href="#">
+<span class="material-symbols-outlined text-[20px]">book</span>
+<span class="text-sm">Recipe Vault</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-md hover:bg-border-subtle/20 text-text-main/80 hover:text-text-main transition-colors" href="#">
+<span class="material-symbols-outlined text-[20px]">calendar_month</span>
+<span class="text-sm">Planner</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-md hover:bg-border-subtle/20 text-text-main/80 hover:text-text-main transition-colors" href="#">
+<span class="material-symbols-outlined text-[20px]">group</span>
+<span class="text-sm">Community</span>
+</a>
+</nav>
+</div>
+<div class="mt-auto p-6">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-full bg-border-subtle bg-cover bg-center overflow-hidden border border-border-subtle" data-alt="Portrait of Elena" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuBN6m-0YBXY0Kk4a5Tc5QmCdcx8R-gQOtC4MlukRhYViBbZNqH7WdUoJZgW7nLNIERbenl8KqCIWFVCT9rFJ9WHiXLpjOtWyv6LjOiDvxa2L3Bj3pMcBSfrEmvXAWV870ZAAACkom7syRIxkjNH5JhjW87sXza8lTgFhdHtRDJ9Rp8zGmheFckcfFW08yplm_1Vju1WgsrFX-KfQ0YJaV6-RygtYxH85SCLQjH_gkHW3nvfeWpT_QtWMRT6CdkLhPIHavgqjUS0cpw');"></div>
+<div class="flex flex-col">
+<span class="text-sm font-semibold">Elena Rostova</span>
+<span class="text-xs text-muted font-medium uppercase tracking-wider">Settings</span>
+</div>
+</div>
+</div>
+</aside>
+<!-- Main Content Area (80% remaining, split 60/40 internally for layout purposes) -->
+<main class="flex-1 flex flex-col h-screen overflow-y-auto">
+<div class="flex-1 flex flex-col lg:flex-row max-w-7xl mx-auto w-full">
+<!-- Center Column: Today's Meals & Vitals (Approx 60% of remaining width) -->
+<div class="flex-1 p-8 lg:p-12 lg:pr-8 border-r border-border-subtle min-h-full">
+<!-- Header Section -->
+<header class="flex justify-between items-end mb-12">
+<div>
+<p class="text-xs text-muted font-medium uppercase tracking-wider mb-2">Tuesday, October 24</p>
+<h2 class="font-display text-4xl font-semibold leading-tight">Good Morning, Elena.</h2>
+</div>
+<button class="bg-primary hover:bg-[#3A4A1C] text-surface px-6 py-2.5 rounded-md text-sm font-bold transition-colors shadow-sm flex items-center gap-2">
+<span class="material-symbols-outlined text-[18px]">add</span>
+                        Log Energy &amp; Meal
+                    </button>
+</header>
+<!-- Vitals & Readiness Overview -->
+<section class="mb-12">
+<h3 class="font-display text-xl font-semibold mb-6 border-b-2 border-text-main pb-2">Daily Readiness</h3>
+<div class="flex items-center gap-8 bg-surface p-6 rounded-md border-subtle">
+<!-- Vitality Score Ring (Simplified representation) -->
+<div class="relative w-[120px] h-[120px] flex-shrink-0 flex items-center justify-center rounded-full border-[8px] border-primary/20">
+<!-- Simulated SVG Ring Progress -->
+<svg class="absolute inset-0 w-full h-full -rotate-90" viewbox="0 0 100 100">
+<circle class="text-primary" cx="50" cy="50" fill="none" r="46" stroke="currentColor" stroke-dasharray="289" stroke-dashoffset="43" stroke-width="8"></circle> <!-- ~85% -->
+</svg>
+<div class="flex flex-col items-center">
+<span class="font-display text-3xl font-semibold">85</span>
+<span class="text-[10px] text-muted uppercase tracking-widest">Score</span>
+</div>
+</div>
+<div class="flex-1">
+<p class="text-lg font-medium mb-1">Optimal readiness today.</p>
+<p class="text-sm text-muted mb-4">Your sleep recovery is excellent. Focus on high-protein meals to support your planned strength training.</p>
+<div class="grid grid-cols-3 gap-4">
+<div class="flex flex-col">
+<span class="text-xs text-muted uppercase tracking-wider mb-1">Sleep</span>
+<span class="text-sm font-semibold">8h 12m</span>
+</div>
+<div class="flex flex-col">
+<span class="text-xs text-muted uppercase tracking-wider mb-1">Digestion</span>
+<span class="text-sm font-semibold">Smooth</span>
+</div>
+<div class="flex flex-col">
+<span class="text-xs text-muted uppercase tracking-wider mb-1">Energy</span>
+<span class="text-sm font-semibold text-primary">High</span>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Today's Itinerary -->
+<section>
+<h3 class="font-display text-xl font-semibold mb-6 border-b-2 border-text-main pb-2">Today's Itinerary</h3>
+<div class="relative pl-6 border-l border-border-subtle ml-3 space-y-8 pb-12">
+<!-- Breakfast: Logged -->
+<div class="relative group">
+<!-- Timeline dot -->
+<div class="absolute -left-[29px] top-6 w-3 h-3 rounded-full bg-primary border-2 border-background-light"></div>
+<div class="text-xs text-muted uppercase tracking-wider mb-2 font-medium">Breakfast • 8:30 AM</div>
+<div class="bg-surface border-subtle rounded-md overflow-hidden cursor-pointer hover:border-text-main/30 transition-colors">
+<div class="flex items-stretch h-24">
+<div class="w-24 bg-cover bg-center border-r border-border-subtle shrink-0" data-alt="Avocado toast with egg" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuB9k9n5ExPKfTa5s6TfY9AUhF9Ot2ehz1BWy_bcndvu_aLe7s3-GMgG2HKKiKsSAyLGuqE7Ws65ctnSsglbRJ588gojwrt1TxiFXxVNQHxBmjMrzyDObpLSrzisHQoEh4Q10xZZe8uzbCVuEFyv06B7LooeKwOfzxQy1ahWQF-me8iPyPXVmq20TnLeC2vWChl_WlOFpTMVvwQynr6Gqj-Fp1gkVzF6JLDUvbGneA3mMEHnw15Luz0ZIltKPTtIWrjIk0ZXa7RkB-w');"></div>
+<div class="p-4 flex-1 flex flex-col justify-center relative">
+<h4 class="font-display text-lg font-semibold mb-1">Avocado Toast &amp; Poached Egg</h4>
+<div class="flex gap-3 text-sm text-muted">
+<span>420 kcal</span>
+<span>•</span>
+<span>P: 18g</span>
+<span>C: 32g</span>
+<span>F: 24g</span>
+</div>
+<button class="absolute right-4 top-1/2 -translate-y-1/2 text-muted hover:text-text-main opacity-0 group-hover:opacity-100 transition-opacity">
+<span class="material-symbols-outlined">edit</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+<!-- Lunch: Planned -->
+<div class="relative group">
+<!-- Timeline dot -->
+<div class="absolute -left-[29px] top-6 w-3 h-3 rounded-full bg-surface border-2 border-border-subtle"></div>
+<div class="text-xs text-muted uppercase tracking-wider mb-2 font-medium">Lunch • 1:00 PM</div>
+<div class="bg-surface border-subtle rounded-md overflow-hidden cursor-pointer hover:border-text-main/30 transition-colors border-dashed">
+<div class="flex items-stretch h-24">
+<div class="w-24 bg-border-subtle/30 flex items-center justify-center border-r border-border-subtle shrink-0">
+<span class="material-symbols-outlined text-muted">restaurant</span>
+</div>
+<div class="p-4 flex-1 flex flex-col justify-center">
+<h4 class="font-display text-lg font-semibold text-text-main/70 mb-1">Mediterranean Quinoa Bowl</h4>
+<div class="flex gap-3 text-sm text-muted">
+<span class="bg-accent/10 text-accent px-2 py-0.5 rounded-sm text-xs font-medium">Batch Cooked</span>
+<span>Prep: 5 min</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Dinner: Empty State -->
+<div class="relative group">
+<!-- Timeline dot -->
+<div class="absolute -left-[29px] top-6 w-3 h-3 rounded-full bg-surface border-2 border-border-subtle"></div>
+<div class="text-xs text-muted uppercase tracking-wider mb-2 font-medium">Dinner • 7:30 PM</div>
+<div class="border-subtle rounded-md border-dashed p-6 flex flex-col items-center justify-center text-center hover:bg-surface/50 transition-colors cursor-pointer group">
+<span class="material-symbols-outlined text-muted mb-2 group-hover:text-primary transition-colors">add_circle</span>
+<span class="text-sm font-medium text-muted group-hover:text-text-main transition-colors">No meal planned. Tap to log or plan dinner.</span>
+</div>
+</div>
+</div>
+</section>
+</div>
+<!-- Right Column: Gamification & Stats (Approx 40% of remaining width) -->
+<aside class="w-full lg:w-[320px] p-8 lg:p-10 shrink-0 bg-surface/50 border-l border-border-subtle">
+<!-- Gamification Badge -->
+<div class="bg-surface border-subtle rounded-md p-5 mb-8 flex flex-col items-center text-center relative overflow-hidden">
+<div class="w-16 h-16 rounded-full bg-primary/10 flex items-center justify-center mb-3 text-primary">
+<span class="material-symbols-outlined text-3xl">restaurant_menu</span>
+</div>
+<span class="text-xs text-muted uppercase tracking-wider mb-1 font-semibold">Current Level</span>
+<h4 class="font-display text-xl font-bold mb-3">Lvl 12 • Sous Chef</h4>
+<div class="w-full">
+<div class="flex justify-between text-xs font-medium mb-1.5">
+<span class="text-muted">1,240 XP</span>
+<span class="text-text-main">1,500 XP to Lvl 13</span>
+</div>
+<div class="w-full h-1.5 bg-border-subtle rounded-full overflow-hidden">
+<div class="h-full bg-primary rounded-full" style="width: 82%;"></div>
+</div>
+</div>
+</div>
+<!-- Macro Targets -->
+<div class="mb-8">
+<h4 class="text-sm font-bold uppercase tracking-wider mb-4 border-b border-border-subtle pb-2">Daily Targets</h4>
+<div class="space-y-4">
+<div>
+<div class="flex justify-between text-sm mb-1 font-medium">
+<span>Protein</span>
+<span>18g / 120g</span>
+</div>
+<div class="w-full h-1 bg-border-subtle rounded-full overflow-hidden">
+<div class="h-full bg-text-main rounded-full" style="width: 15%;"></div>
+</div>
+</div>
+<div>
+<div class="flex justify-between text-sm mb-1 font-medium">
+<span>Carbs</span>
+<span>32g / 180g</span>
+</div>
+<div class="w-full h-1 bg-border-subtle rounded-full overflow-hidden">
+<div class="h-full bg-text-main rounded-full" style="width: 18%;"></div>
+</div>
+</div>
+<div>
+<div class="flex justify-between text-sm mb-1 font-medium">
+<span>Fats</span>
+<span>24g / 65g</span>
+</div>
+<div class="w-full h-1 bg-border-subtle rounded-full overflow-hidden">
+<div class="h-full bg-text-main rounded-full" style="width: 36%;"></div>
+</div>
+</div>
+</div>
+</div>
+<!-- Community Highlight -->
+<div>
+<h4 class="text-sm font-bold uppercase tracking-wider mb-4 border-b border-border-subtle pb-2">Community Pulse</h4>
+<div class="bg-surface border-subtle rounded-md p-4 flex gap-3 cursor-pointer hover:border-text-main/30 transition-colors">
+<div class="w-10 h-10 rounded-full bg-cover bg-center shrink-0 border border-border-subtle" data-alt="Portrait of Marcus" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuABAhGPrgkQmHmbLKB8-GxLYatdiA61to3J4Qf1bk5f6CUbvFGLwUSVb_f4ViF9lZJCAO-_dT8lB0ve8hXNkby42uJ88FJQZ6E83c0ZdvENixkWB67BrJB9QuLQFlTiFSECj4rZOXei-uAqf-_WLsg1zH_NWQCsA2L1KRsAavnFp9U3Lqbe7ts6eY7tJvyrCcCCMEJpAwbcDtF-2KHEknx1HUlsj8jEz8xvw3zWLFqPwcWvbziIAO9rUd6zBHpWH7Bk57UlmDyVqyY');"></div>
+<div>
+<p class="text-sm leading-tight mb-1"><span class="font-semibold">Marcus</span> logged a 10k run &amp; cooked <span class="font-display italic">Lemon Salmon</span></p>
+<span class="text-xs text-muted">2 hours ago</span>
+</div>
+</div>
+</div>
+</aside>
+</div>
+</main>
+</body></html>

@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#ec5b13",
+                        "background-light": "#f8f6f6",
+                        "background-dark": "#221610",
+                    },
+                    fontFamily: {
+                        "display": ["Public Sans", "sans-serif"]
+                    },
+                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        body {
+            font-family: 'Public Sans', sans-serif;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 min-h-screen">
+<div class="relative flex h-auto min-h-screen w-full flex-col bg-background-light dark:bg-background-dark overflow-x-hidden max-w-2xl mx-auto shadow-xl">
+<!-- Header -->
+<div class="flex items-center bg-background-light dark:bg-background-dark p-4 pb-2 justify-between sticky top-0 z-10 border-b border-slate-200 dark:border-slate-800">
+<div class="text-slate-900 dark:text-slate-100 flex size-10 shrink-0 items-center cursor-pointer">
+<span class="material-symbols-outlined">arrow_back</span>
+</div>
+<h2 class="text-slate-900 dark:text-slate-100 text-lg font-bold leading-tight tracking-tight flex-1 text-center">Ingredient Explorer</h2>
+<div class="flex w-10 items-center justify-end">
+<button class="flex cursor-pointer items-center justify-center rounded-xl h-10 bg-transparent text-primary">
+<span class="material-symbols-outlined">share</span>
+</button>
+</div>
+</div>
+<!-- Hero Section -->
+<div class="@container">
+<div class="p-4">
+<div class="w-full bg-center bg-no-repeat bg-cover flex flex-col justify-end overflow-hidden bg-slate-200 rounded-xl min-h-[320px] shadow-sm relative" data-alt="Close up of fresh creamy Greek yogurt in a bowl" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuD8wUd60EVb0eZm64PhyUfVZpJ64qFPcbQtJAqtdpybRBbHvBM0amvE5bZZ6IUNeZel2hOfF7diADSaulRbCbXBmMA1lOVbcJe4XBkN8BFcYh3pT5ruZ3OMgmuhdIcCD57Nll-Zey4bcS088_v3AIpEbFrEsVTZW7_8ErxfSv8STBygWK_dDZS_M6vUH6q-7KuwFCvAMli_x48Z5XJsy4y5BkW99FWIw7qoFoD1vX9tplGWiEkXo9oIDQHkLsuTSgslS7SryBXycQjD");'>
+<div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
+<div class="relative p-6">
+<div class="flex gap-2 mb-2">
+<span class="bg-primary text-white text-[10px] font-bold uppercase tracking-widest px-2 py-1 rounded">Editorial Choice</span>
+</div>
+<h1 class="text-white tracking-tight text-4xl font-extrabold leading-tight">Greek Yogurt</h1>
+<p class="text-slate-200 text-sm mt-1">Strained yogurt with concentrated nutrients.</p>
+</div>
+</div>
+</div>
+</div>
+<!-- Tags / Quick Stats -->
+<div class="flex gap-2 px-4 py-2 overflow-x-auto no-scrollbar">
+<div class="flex h-9 shrink-0 items-center justify-center gap-x-2 rounded-full bg-primary/10 border border-primary/20 px-4">
+<span class="material-symbols-outlined text-primary text-sm">fitness_center</span>
+<p class="text-primary text-sm font-semibold">High Protein</p>
+</div>
+<div class="flex h-9 shrink-0 items-center justify-center gap-x-2 rounded-full bg-slate-100 dark:bg-slate-800 px-4 border border-slate-200 dark:border-slate-700">
+<span class="material-symbols-outlined text-slate-600 dark:text-slate-400 text-sm">microbiology</span>
+<p class="text-slate-700 dark:text-slate-300 text-sm font-medium">Probiotics</p>
+</div>
+<div class="flex h-9 shrink-0 items-center justify-center gap-x-2 rounded-full bg-slate-100 dark:bg-slate-800 px-4 border border-slate-200 dark:border-slate-700">
+<span class="material-symbols-outlined text-slate-600 dark:text-slate-400 text-sm">texture</span>
+<p class="text-slate-700 dark:text-slate-300 text-sm font-medium">Creamy</p>
+</div>
+</div>
+<!-- Bio-Benefits Section -->
+<section class="px-4 py-6">
+<h3 class="text-slate-900 dark:text-slate-100 text-xl font-bold mb-4">Bio-Benefits</h3>
+<div class="grid grid-cols-2 gap-4">
+<div class="bg-white dark:bg-slate-900 p-4 rounded-xl border border-slate-100 dark:border-slate-800 shadow-sm">
+<div class="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center mb-3">
+<span class="material-symbols-outlined text-primary">reduce_capacity</span>
+</div>
+<h4 class="font-bold text-sm mb-1">Gut Health</h4>
+<p class="text-xs text-slate-500 dark:text-slate-400 leading-relaxed">Active cultures support a diverse microbiome and improve digestion.</p>
+</div>
+<div class="bg-white dark:bg-slate-900 p-4 rounded-xl border border-slate-100 dark:border-slate-800 shadow-sm">
+<div class="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center mb-3">
+<span class="material-symbols-outlined text-primary">skeleton</span>
+</div>
+<h4 class="font-bold text-sm mb-1">Bone Density</h4>
+<p class="text-xs text-slate-500 dark:text-slate-400 leading-relaxed">High in calcium and phosphorus for skeletal strength.</p>
+</div>
+</div>
+</section>
+<!-- Smart Substitutes -->
+<section class="px-4 py-6 bg-slate-50 dark:bg-slate-900/50">
+<div class="flex items-center justify-between mb-4">
+<h3 class="text-slate-900 dark:text-slate-100 text-xl font-bold">Smart Substitutes</h3>
+<span class="text-xs font-bold text-primary uppercase tracking-tighter">AI Powered Matches</span>
+</div>
+<div class="space-y-3">
+<!-- Sub 1 -->
+<div class="group bg-white dark:bg-slate-800 p-4 rounded-xl border border-slate-200 dark:border-slate-700 flex items-center gap-4 transition-all hover:border-primary/50">
+<div class="w-16 h-16 rounded-lg bg-slate-100 overflow-hidden shrink-0">
+<img alt="Skyr" class="w-full h-full object-cover" data-alt="Bowl of Skyr Icelandic yogurt" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCplVw5uJzJ2ntAiM2uk5Bm92ts0QR0f8hsz614xWetxM-ticwf7QWyi9sWwp4rO5fxIYhBrjm2ypCkyH5J4KbgPJzQomhku6yrxkhnOY_KtuKH7-ZzILAWeFFD7BhgFvAdR1Cnehgpq0xTrC1Mm6TVzo7C73to7ArJGZ-Z8iCMj_mf44jzg4q5DLG7nbXCraoeZZi_Wnxmg76Nc5GCgypMymdPWwOsTaGj_SXtWwRzCnJdgkuId9sJwBAf5eIWljwZUuNefuSYprXT"/>
+</div>
+<div class="flex-1">
+<div class="flex justify-between items-start">
+<div>
+<h4 class="font-bold text-slate-900 dark:text-slate-100">Skyr (Icelandic)</h4>
+<p class="text-xs text-slate-500 dark:text-slate-400">Thicker texture, higher protein</p>
+</div>
+<div class="text-right">
+<span class="text-xs font-bold text-green-600 dark:text-green-400">98% Match</span>
+</div>
+</div>
+<div class="mt-2 flex items-center gap-2">
+<span class="text-[10px] px-2 py-0.5 rounded bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-300 font-bold uppercase">Real Match</span>
+<p class="text-[10px] text-slate-400 italic">No impact on flavor profile</p>
+</div>
+</div>
+</div>
+<!-- Sub 2 -->
+<div class="group bg-white dark:bg-slate-800 p-4 rounded-xl border border-slate-200 dark:border-slate-700 flex items-center gap-4 transition-all hover:border-primary/50">
+<div class="w-16 h-16 rounded-lg bg-slate-100 overflow-hidden shrink-0">
+<img alt="Silken Tofu" class="w-full h-full object-cover" data-alt="Silken tofu in a bowl" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBqzO9dm0DQsuC7xP8xqh0zC_hnBgA7rf0HbN6db1UjPCGusG6IRXkDWW074invfbTpzsFWRo34f__RMWPZzmSkWvVLEiggJUkwgNzqsETObvDZ9B1tvnAJsklhoeI5kh3YtDyFlg4c56XG1zv16pGsj_nAgeqnvrJQyOF5QQqQlRP7oGJcIf9mfL1A8sLsP0VD2PDd73PsxBOckktLpShiUOwFFzdDSrBjS3x5c5o-rqi4eNYDkzWZXmqUeTsNpFmlX_wbuUyOWud9"/>
+</div>
+<div class="flex-1">
+<div class="flex justify-between items-start">
+<div>
+<h4 class="font-bold text-slate-900 dark:text-slate-100">Silken Tofu</h4>
+<p class="text-xs text-slate-500 dark:text-slate-400">Vegan-friendly, neutral base</p>
+</div>
+<div class="text-right">
+<span class="text-xs font-bold text-orange-500">82% Match</span>
+</div>
+</div>
+<div class="mt-2 flex items-center gap-2">
+<span class="text-[10px] px-2 py-0.5 rounded bg-orange-100 dark:bg-orange-900/30 text-orange-700 dark:text-orange-300 font-bold uppercase">Texture Shift</span>
+<p class="text-[10px] text-slate-400 italic">May require lemon for acidity</p>
+</div>
+</div>
+</div>
+<!-- Sub 3 -->
+<div class="group bg-white dark:bg-slate-800 p-4 rounded-xl border border-slate-200 dark:border-slate-700 flex items-center gap-4 transition-all hover:border-primary/50">
+<div class="w-16 h-16 rounded-lg bg-slate-100 overflow-hidden shrink-0">
+<img alt="Sour Cream" class="w-full h-full object-cover" data-alt="Bowl of sour cream" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD8GcJ-UDM9uOBK_eo2yujgPKgPvmnnE-Akr33sDXwxuwrMEQG4KfDoXOAN4j5Yzmww4UBdRvgKE3GGQcAV3BJ4kB8vxAQBudF9AXxdb8IV6W7XikSfENGHMFn6SHk7M4TykBluxRjGOWdsYZSrGVxaTnXQFNd_VOQIAJzIIrxdXue5dhBTGNlvAEL-FWHdBhCiCWS-t0d2MOTETZWdKZc1VaK_bgvURUqcnGYbHrftYhKhfqFfUfpElUL3a-5Zsk8ZZ_jex0MfEjHv"/>
+</div>
+<div class="flex-1">
+<div class="flex justify-between items-start">
+<div>
+<h4 class="font-bold text-slate-900 dark:text-slate-100">Sour Cream</h4>
+<p class="text-xs text-slate-500 dark:text-slate-400">Rich mouthfeel, higher fat</p>
+</div>
+<div class="text-right">
+<span class="text-xs font-bold text-slate-500">75% Match</span>
+</div>
+</div>
+<div class="mt-2 flex items-center gap-2">
+<span class="text-[10px] px-2 py-0.5 rounded bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-slate-300 font-bold uppercase">Calorie Alert</span>
+<p class="text-[10px] text-slate-400 italic">Significantly higher lipid content</p>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Bottom Navigation Bar -->
+<div class="sticky bottom-0 mt-auto">
+<div class="flex gap-2 border-t border-slate-200 dark:border-slate-800 bg-white/95 dark:bg-slate-900/95 backdrop-blur-md px-4 pb-6 pt-3">
+<a class="flex flex-1 flex-col items-center justify-center gap-1 text-slate-400" href="#">
+<span class="material-symbols-outlined">explore</span>
+<p class="text-[10px] font-bold uppercase tracking-wider">Explore</p>
+</a>
+<a class="flex flex-1 flex-col items-center justify-center gap-1 text-primary" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1">menu_book</span>
+<p class="text-[10px] font-bold uppercase tracking-wider">Kitchen</p>
+</a>
+<a class="flex flex-1 flex-col items-center justify-center gap-1 text-slate-400" href="#">
+<span class="material-symbols-outlined">bookmark</span>
+<p class="text-[10px] font-bold uppercase tracking-wider">Saved</p>
+</a>
+<a class="flex flex-1 flex-col items-center justify-center gap-1 text-slate-400" href="#">
+<span class="material-symbols-outlined">person</span>
+<p class="text-[10px] font-bold uppercase tracking-wider">Profile</p>
+</a>
+</div>
+</div>
+</div>
+</body></html>

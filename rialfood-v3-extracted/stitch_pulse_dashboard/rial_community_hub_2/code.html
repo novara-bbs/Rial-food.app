@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>RIAL Community Hub</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              colors: {
+                "primary": "#ddff00",
+                "background-light": "#f8f8f5",
+                "background-dark": "#20230f",
+              },
+              fontFamily: {
+                "display": ["Space Grotesk"]
+              },
+              borderRadius: {"DEFAULT": "0.5rem", "lg": "1rem", "xl": "1.5rem", "full": "9999px"},
+            },
+          },
+        }
+    </script>
+<style>
+        body {
+            font-family: 'Space Grotesk', sans-serif;
+        }
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 antialiased">
+<div class="relative flex min-h-screen w-full flex-col max-w-md mx-auto bg-white shadow-2xl overflow-x-hidden">
+<!-- Header -->
+<header class="flex items-center bg-white px-4 py-4 justify-between border-b border-slate-100">
+<div class="flex size-10 items-center justify-center rounded-full bg-primary/20 text-slate-900">
+<span class="material-symbols-outlined">menu</span>
+</div>
+<h1 class="font-display text-xl font-bold tracking-tight text-slate-900 uppercase italic">RIAL</h1>
+<div class="flex w-10 items-center justify-end">
+<button class="flex size-10 items-center justify-center rounded-full bg-slate-100 text-slate-900">
+<span class="material-symbols-outlined">person</span>
+</button>
+</div>
+</header>
+<!-- Top Navigation / Level Filtering -->
+<div class="flex gap-3 overflow-x-auto px-4 py-4 no-scrollbar">
+<button class="whitespace-nowrap rounded-full bg-primary px-4 py-2 text-sm font-bold text-slate-900 border border-primary">All Activity</button>
+<button class="whitespace-nowrap rounded-full bg-slate-50 px-4 py-2 text-sm font-medium text-slate-600 border border-slate-200">Fitness Enthusiast</button>
+<button class="whitespace-nowrap rounded-full bg-slate-50 px-4 py-2 text-sm font-medium text-slate-600 border border-slate-200">Family Manager</button>
+<button class="whitespace-nowrap rounded-full bg-slate-50 px-4 py-2 text-sm font-medium text-slate-600 border border-slate-200">Biohacker</button>
+</div>
+<!-- Creator Stories -->
+<div class="flex w-full overflow-hidden px-4 py-2">
+<div class="flex min-h-min flex-row items-start justify-start gap-4 no-scrollbar overflow-x-auto">
+<div class="flex flex-col items-center gap-2 min-w-[72px]">
+<div class="size-16 rounded-full border-2 border-primary p-1">
+<div class="h-full w-full rounded-full bg-slate-200 bg-cover bg-center" data-alt="Portrait of a professional wellness creator" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuBl3RG6IwQOWb5znP5mzZyazUzPMCDuIz7lYnpYLuj27jPEcmLKIJRFJv06Rh77tmu9tMmow6GvP7dUcUMj48AhYRt9C3DJFqv0Vj8KJlC5HcZP-lQaLcN77ZdMObeuT6ddE2KMMNx30q7KFGHEbDLS4A_jzIwI_8ugeOqGwAYF8dMlGB0mwvoAT9TkLrGm4xSsZKAJrlrvn5myQEszrabJE6NQcQhfpTc4voZG7R85sxMzjg4AXeCHPV-IwBXHnAvb03-HOIX20HoJ')"></div>
+</div>
+<p class="text-[11px] font-bold uppercase tracking-wider text-slate-500">Your Story</p>
+</div>
+<div class="flex flex-col items-center gap-2 min-w-[72px]">
+<div class="size-16 rounded-full border-2 border-slate-200 p-1">
+<div class="h-full w-full rounded-full bg-slate-200 bg-cover bg-center" data-alt="Male fitness creator profile photo" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuDdesWABCGVgq6Z6rCffeJap9jQsqQLQgocadG5DMPBAdvAuK4h5PsTF-n2xpXKOjETsLnoOH4W0dIcyP2cA-5csynzZgt0pGCKkusgX6XxpUDkjCh6K2ceywel-T_7reEJ_QSq458QV2_IepFpNVzUFhQoZMBvrSuy8y5Du-VhPP339urw6tSYy8frxGQey6Y02qx4C6nlq5CvtVtyFcqWDGhOTBicxhlKwJ28_LTn1Eelxo4nvO-NTRXf5tWeTzH4zyNFcb-Rxuex')"></div>
+</div>
+<p class="text-[11px] font-medium text-slate-500">Alex M.</p>
+</div>
+<div class="flex flex-col items-center gap-2 min-w-[72px]">
+<div class="size-16 rounded-full border-2 border-slate-200 p-1">
+<div class="h-full w-full rounded-full bg-slate-200 bg-cover bg-center" data-alt="Female nutritionist profile photo" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuARrA5_591gaIxC7YzEB-ThNmRNoFjyf5M_ltgypJ1dLvYTFC6GPYS70zLXpj2IJxt-t4R5XvEJWRBXWw99KksaGfPN9wb1kIscmOLnrA0M5Zbw-WyjCOGgUEocnDJMhzsRm5apzcApqeb0SctSJws-CE7uhGYEUMs8O192qNm5lPfZm6xUSG5Ep_TMdZbhj5UgtK6xq7Ady45gt-WN_LRm7mQiCPjUFGmgUkaZ_1b3k3Y4vJsTnAv5VGbYp3U_9uYzsOInCJkDtSQr')"></div>
+</div>
+<p class="text-[11px] font-medium text-slate-500">Sarah J.</p>
+</div>
+<div class="flex flex-col items-center gap-2 min-w-[72px]">
+<div class="size-16 rounded-full border-2 border-slate-200 p-1">
+<div class="h-full w-full rounded-full bg-slate-200 bg-cover bg-center" data-alt="Male biohacking expert profile photo" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuASXuyY16nVxn1mETsLH8jdKI6zUQuhPCnmT2YD_MDx-Gl2Lpr4wnf4h79abTRTs4u0Krakc9zMhjw9ln9I_oa4WR1lqJMHL1P4vsobN68OzkPgwVQomQ60YJWSs5nMCkbghypIreI4MJqngcPkqTl41Gt7XzB1uG28nPA7Db875dqi-0Q26CXNuPpEU0_8hL6ttS72CE14rSXZepPAlAlPGMdqLD6Q6fWd7QSyya9aGZXlSulRfiK8luaDrg9SsPIaOVvD2MngUuFe')"></div>
+</div>
+<p class="text-[11px] font-medium text-slate-500">Dr. K</p>
+</div>
+<div class="flex flex-col items-center gap-2 min-w-[72px]">
+<div class="size-16 rounded-full border-2 border-slate-200 p-1">
+<div class="h-full w-full rounded-full bg-slate-200 bg-cover bg-center" data-alt="Female yoga instructor profile photo" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuBRl7se2OAFe7eeMZttPQ9OJbRhuWjMYkPOOg4KI9zID3qx116BXspnd5wEPHUJOoGmysV7i4PKuhQWqH4FJBXRvhcFiMsr0dCiQW-PpX3DtLLE5FJjPJIZbBiR2BstedHR5f7Xct_VcMGyHZe4VAlkJbBnx7D8JKOJJ-2DrlndGp44tmKNtiCgAACNWU3LteXyTd5FHMABHjY80i1LVGGUNZi0oZcE8pEcVF6VnE7871kk8KFtzSJ-7YfXTx7jMoaIH6oI4O-I6X2H')"></div>
+</div>
+<p class="text-[11px] font-medium text-slate-500">Mina L.</p>
+</div>
+</div>
+</div>
+<!-- Pro Creator Spotlight Section -->
+<section class="mt-6 px-4">
+<div class="flex items-end justify-between mb-4">
+<div>
+<span class="inline-block bg-primary text-[10px] font-black uppercase tracking-[0.2em] px-2 py-0.5 rounded mb-2">Editor's Choice</span>
+<h2 class="font-display text-2xl font-bold leading-none tracking-tight text-slate-900">Pro Creator Spotlight</h2>
+</div>
+<span class="text-sm font-bold text-slate-400 border-b border-slate-200">View All</span>
+</div>
+<div class="relative overflow-hidden rounded-xl bg-slate-900 aspect-[4/5] group">
+<div class="absolute inset-0 bg-cover bg-center opacity-80" data-alt="High quality fitness video thumbnail" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuAiIRHViOTH154WInYAzaxPo2dT3UoY8Xf6J5a-7kH13KILAC4RHQQ3GUV1jGaKMkeGX8rEHgS77-TMe0qdrZlSsfVhXholOL__y3S7TSNa4A-Xg-7uJYWDHCO5OdrFPHXJZulxIzxDjXgxXu_FPhtRsdcokmQc0iSUY2mR4tspFJELshSMpfxXFMdddyxtBtrytdjAZiyX_nmwFWV26nkej5GWX951fJ2-UvUAx-S_pXfyvFCTn_-3GmvoEpYfOojQRI3btnuK2JOt')"></div>
+<!-- Video Controls Overlay -->
+<div class="absolute inset-0 flex flex-col justify-between p-6 bg-gradient-to-t from-black/80 via-transparent to-black/20">
+<div class="flex justify-between items-start">
+<div class="flex items-center gap-2">
+<div class="size-8 rounded-full border border-white/50 bg-cover bg-center" data-alt="Creator avatar" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuDjpxLymD9pQknkM4jWXeS7PNmnOuVCjZpCHGfxedYgSGSNZc6vbC9UqyQTUzLerIcpbNNTSKJdw-g1XZL67G5BPXM39YoBY1IZ7res5bQGDnD6Vw872EU69Z9VYcgSNvh3uygz--iX9_4YY7GmAZ3b00fdLxG2_CejmiLBx6Cv-DXUAecwQXCAWcwkiY_WIarhpaPBCuN45JN9VJp66f1T8cs6gB7AANoCZZpG1lIXA9UB5eEFBX6CBo7bMow4RfOadzc4pymoLb2q')"></div>
+<div>
+<p class="text-xs font-bold text-white">Elena Rossi</p>
+<p class="text-[10px] text-white/70">Elite Performance Coach</p>
+</div>
+</div>
+<button class="size-8 rounded-full bg-white/10 backdrop-blur-md flex items-center justify-center text-white">
+<span class="material-symbols-outlined text-sm">more_horiz</span>
+</button>
+</div>
+<div class="flex flex-col items-center">
+<button class="size-16 flex items-center justify-center rounded-full bg-primary text-slate-900 shadow-xl shadow-primary/20">
+<span class="material-symbols-outlined text-4xl fill-1">play_arrow</span>
+</button>
+</div>
+<div class="space-y-4">
+<div class="space-y-1">
+<h3 class="text-lg font-bold text-white leading-tight">Morning Mobility &amp; Mitochondrial Health</h3>
+<div class="flex gap-2">
+<span class="text-[10px] font-bold text-primary uppercase">12:40 Min</span>
+<span class="text-[10px] font-bold text-white/50 uppercase">•</span>
+<span class="text-[10px] font-bold text-white/50 uppercase">Intermediate</span>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<div class="flex flex-1 h-1 rounded-full bg-white/20 overflow-hidden">
+<div class="w-1/3 h-full bg-primary rounded-full"></div>
+</div>
+<span class="text-[10px] font-bold text-white tabular-nums">04:12 / 12:40</span>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Recipe Match Feed -->
+<section class="mt-10 px-4 pb-24">
+<div class="flex items-center justify-between mb-6">
+<h2 class="font-display text-2xl font-bold tracking-tight text-slate-900 italic">Recipe Match Feed</h2>
+<div class="flex gap-2">
+<button class="size-8 rounded-full bg-slate-100 flex items-center justify-center">
+<span class="material-symbols-outlined text-lg">tune</span>
+</button>
+</div>
+</div>
+<!-- Feed Item 1 -->
+<div class="mb-8 group">
+<div class="flex items-center gap-3 mb-3">
+<div class="size-10 rounded-full bg-slate-200 bg-cover bg-center" data-alt="User profile picture" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuA8otYzfDbwjrQTdEVY9NQNvqf8FNlhCdAu36vMHiucS2RDhS4YvETA-e0Xx8nFgkqbfZPcoe48UvexzgWr9MG2iLlvH2Q22-x_DPPvXErpG5RLuH8uJ2WG34xXUxWh4EFMHM7s9u_lDva7Cds09Nus77SXjDCTQQOczTwT4tRAjTaJ0Wn5FqC8_NJ2frN1uKXtDWExWTOXP8CneLcdMlrFs1BnJjqK2TalamG9O5SfPHdw4Y1SxSpUn40W9tf5SITm3akFcLsNqZn6')"></div>
+<div class="flex-1">
+<h4 class="text-sm font-bold text-slate-900 leading-none">Marcus Thorne</h4>
+<p class="text-[11px] text-slate-500 font-medium">shared a 98% Match for your <span class="text-primary-dark font-bold underline decoration-primary underline-offset-2">Keto Level</span></p>
+</div>
+<span class="text-[10px] font-bold text-slate-400">2H AGO</span>
+</div>
+<div class="rounded-xl overflow-hidden border border-slate-100 bg-white shadow-sm">
+<div class="aspect-video bg-slate-200 relative">
+<img alt="Gourmet healthy salad" class="w-full h-full object-cover" data-alt="Top view of a colorful healthy bowl with salmon and greens" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBLOlLEJOekpo9S1aZCtZq7VINjimraESNRPRiWbyp904D7l4xTbn7rYg4_Z_OCQdiKMSsT9Z9QaufvekNJLGo7h8jFE1weVPkUABRAba6fpv_MQiF3xZ5j5DOr-wlivlL5eDj7TdeoVnatymm0evLdLzNwHGZJ-nilFx8VqFylYVEtnt9ch8m926U9tKeOmfhPoDABPwZNXKHk8k019TfIbJZrZTdnLtsmYVurfL3gMYR_N1kke8Pvzfdcc5N9hp13CpotyzR3fXb7"/>
+<div class="absolute top-4 right-4 bg-white/90 backdrop-blur px-3 py-1 rounded-full flex items-center gap-1 shadow-sm">
+<span class="text-[10px] font-black text-slate-900">98% MATCH</span>
+</div>
+</div>
+<div class="p-4">
+<div class="flex justify-between items-start mb-2">
+<h3 class="text-lg font-bold text-slate-900 leading-tight">Wild Atlantic Salmon &amp; Micro-Greens Bowl</h3>
+<button class="text-slate-400">
+<span class="material-symbols-outlined">bookmark</span>
+</button>
+</div>
+<p class="text-sm text-slate-600 line-clamp-2 mb-4 leading-relaxed">High in Omega-3s and perfectly aligned with your current inflammation-reduction goals. Prep time under 15 mins.</p>
+<div class="flex items-center justify-between pt-4 border-t border-slate-50">
+<div class="flex gap-4">
+<div class="flex items-center gap-1.5">
+<span class="material-symbols-outlined text-lg text-slate-400">favorite</span>
+<span class="text-xs font-bold text-slate-600">1.2k</span>
+</div>
+<div class="flex items-center gap-1.5">
+<span class="material-symbols-outlined text-lg text-slate-400">chat_bubble</span>
+<span class="text-xs font-bold text-slate-600">48</span>
+</div>
+</div>
+<button class="rounded-full bg-primary/10 px-4 py-1.5 text-xs font-black uppercase text-slate-900 tracking-wider">Get Recipe</button>
+</div>
+</div>
+</div>
+</div>
+<!-- Feed Item 2 -->
+<div class="mb-8 group">
+<div class="flex items-center gap-3 mb-3">
+<div class="size-10 rounded-full bg-slate-200 bg-cover bg-center" data-alt="User profile picture" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuDr20hHyOdyqOngU4nu52pKERo2jTEvthwI38rUc7JfxO7l0sFp3u5OAs1tDkphcZ1HylhGK23mGusFANmU2aPhwQ5GW1VCDA6MHbd183EmHehZ8drEDg4k0_Vx4o-5KR9p7UKh0r7Ma6oTxmxa0Elm-_g7Iv5RfmbvGctUW7Ji7G63efTeru9B8zgfYSzG_g-TUTn3RUCz3LlJudY-JSqaKu_X40-V6Vf2rtS3cCEgehgYIxTqoApSEa7AirHyCLgRFu_nAYTTD1JE')"></div>
+<div class="flex-1">
+<h4 class="text-sm font-bold text-slate-900 leading-none">Elena Rossi</h4>
+<p class="text-[11px] text-slate-500 font-medium italic">Creator Spotlight Tip</p>
+</div>
+<span class="text-[10px] font-bold text-slate-400">5H AGO</span>
+</div>
+<div class="p-5 rounded-xl bg-primary/5 border-l-4 border-primary">
+<p class="text-slate-800 font-medium italic leading-relaxed mb-4">"Don't forget to hydrate with electrolytes before your morning mobility session. It makes a 20% difference in joint elasticity during the first 30 mins of the day."</p>
+<div class="flex items-center gap-4">
+<span class="text-[10px] font-black uppercase tracking-widest text-slate-400">#ProTip</span>
+<span class="text-[10px] font-black uppercase tracking-widest text-slate-400">#Mobility</span>
+</div>
+</div>
+</div>
+</section>
+<!-- Bottom Navigation Bar -->
+<nav class="fixed bottom-0 left-1/2 -translate-x-1/2 w-full max-w-md bg-white/90 backdrop-blur-xl border-t border-slate-100 px-6 py-3 pb-6 flex justify-between items-center z-50">
+<a class="flex flex-col items-center gap-1 text-slate-900" href="#">
+<span class="material-symbols-outlined text-2xl fill-1">home</span>
+<span class="text-[10px] font-bold uppercase tracking-tight">Home</span>
+</a>
+<a class="flex flex-col items-center gap-1 text-slate-400" href="#">
+<span class="material-symbols-outlined text-2xl">restaurant_menu</span>
+<span class="text-[10px] font-bold uppercase tracking-tight">Recipes</span>
+</a>
+<a class="flex flex-col items-center gap-1 text-slate-400 relative" href="#">
+<div class="size-12 -mt-8 rounded-full bg-primary flex items-center justify-center text-slate-900 shadow-lg shadow-primary/30 border-4 border-white">
+<span class="material-symbols-outlined text-3xl">add</span>
+</div>
+<span class="text-[10px] font-bold uppercase tracking-tight">Post</span>
+</a>
+<a class="flex flex-col items-center gap-1 text-slate-400" href="#">
+<span class="material-symbols-outlined text-2xl">groups</span>
+<span class="text-[10px] font-bold uppercase tracking-tight">Hub</span>
+</a>
+<a class="flex flex-col items-center gap-1 text-slate-400" href="#">
+<span class="material-symbols-outlined text-2xl">settings</span>
+<span class="text-[10px] font-bold uppercase tracking-tight">Me</span>
+</a>
+</nav>
+</div>
+</body></html>

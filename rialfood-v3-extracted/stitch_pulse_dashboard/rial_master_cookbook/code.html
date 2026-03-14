@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#007dff",
+                        "background-light": "#f5f7f8",
+                        "background-dark": "#0f1923",
+                    },
+                    fontFamily: {
+                        "display": ["Space Grotesk"]
+                    },
+                    borderRadius: {"DEFAULT": "0.5rem", "lg": "1rem", "xl": "1.5rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>
+        body {
+            font-family: 'Space Grotesk', sans-serif;
+        }
+        .real-match-overlay {
+            background: linear-gradient(0deg, rgba(15, 25, 35, 0.9) 0%, rgba(15, 25, 35, 0) 100%);
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 min-h-screen flex flex-col">
+<!-- Header -->
+<header class="sticky top-0 z-50 bg-background-light/80 dark:bg-background-dark/80 backdrop-blur-md border-b border-slate-200 dark:border-slate-800">
+<div class="flex items-center p-4 justify-between max-w-5xl mx-auto w-full">
+<div class="flex size-10 shrink-0 items-center justify-center rounded-full bg-primary/10 text-primary">
+<span class="material-symbols-outlined">account_circle</span>
+</div>
+<h1 class="text-slate-900 dark:text-white text-xl font-bold leading-tight tracking-tight flex-1 text-center font-display">
+                RIAL <span class="text-primary font-light">Master Cookbook</span>
+</h1>
+<div class="flex w-10 items-center justify-end">
+<button class="flex items-center justify-center rounded-full size-10 bg-slate-100 dark:bg-slate-800 text-slate-900 dark:text-white transition-colors hover:bg-primary hover:text-white">
+<span class="material-symbols-outlined">search</span>
+</button>
+</div>
+</div>
+<!-- Navigation Tabs -->
+<div class="max-w-5xl mx-auto w-full px-4">
+<div class="flex gap-8 overflow-x-auto no-scrollbar">
+<a class="flex flex-col items-center justify-center border-b-2 border-primary text-primary pb-3 pt-4 whitespace-nowrap" href="#">
+<p class="text-sm font-bold tracking-wide uppercase">My Creations</p>
+</a>
+<a class="flex flex-col items-center justify-center border-b-2 border-transparent text-slate-500 dark:text-slate-400 pb-3 pt-4 whitespace-nowrap hover:text-primary transition-colors" href="#">
+<p class="text-sm font-bold tracking-wide uppercase">Community Saves</p>
+</a>
+</div>
+</div>
+</header>
+<!-- Main Content -->
+<main class="flex-1 max-w-5xl mx-auto w-full p-4 space-y-6 pb-24">
+<!-- Smart Filters -->
+<section class="flex gap-3 overflow-x-auto no-scrollbar py-2 -mx-4 px-4">
+<button class="flex h-10 shrink-0 items-center justify-center gap-x-2 rounded-full bg-primary text-white px-5 shadow-lg shadow-primary/20">
+<p class="text-sm font-medium">All Recipes</p>
+<span class="material-symbols-outlined text-sm">expand_more</span>
+</button>
+<button class="flex h-10 shrink-0 items-center justify-center gap-x-2 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 px-5 border border-slate-200 dark:border-slate-700">
+<p class="text-sm font-medium text-primary">Batch Friendly</p>
+<span class="material-symbols-outlined text-sm">layers</span>
+</button>
+<button class="flex h-10 shrink-0 items-center justify-center gap-x-2 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 px-5 border border-slate-200 dark:border-slate-700">
+<p class="text-sm font-medium">High Protein</p>
+<span class="material-symbols-outlined text-sm">fitness_center</span>
+</button>
+<button class="flex h-10 shrink-0 items-center justify-center gap-x-2 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 px-5 border border-slate-200 dark:border-slate-700">
+<p class="text-sm font-medium">Kid Approved</p>
+<span class="material-symbols-outlined text-sm">child_care</span>
+</button>
+</section>
+<!-- Featured Section Title -->
+<div class="flex items-end justify-between">
+<div>
+<h2 class="text-slate-900 dark:text-white text-2xl font-bold tracking-tight">Recent Creations</h2>
+<p class="text-slate-500 dark:text-slate-400 text-sm">Your latest culinary experiments</p>
+</div>
+<button class="text-primary text-sm font-bold flex items-center gap-1">
+                View All <span class="material-symbols-outlined text-xs">arrow_forward</span>
+</button>
+</div>
+<!-- Recipe Grid -->
+<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+<!-- Recipe Card 1 -->
+<div class="group relative bg-white dark:bg-slate-900 rounded-xl overflow-hidden shadow-xl dark:shadow-2xl border border-slate-100 dark:border-slate-800 transition-transform hover:scale-[1.01]">
+<div class="aspect-[4/3] relative">
+<img alt="Miso Glazed Salmon" class="w-full h-full object-cover" data-alt="Gourmet miso glazed salmon with microgreens" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAbJqhpMnoeTqXNQl7YOeZmGcvsXyBiyVBM-Z683omz2iMS5o3VmoIOff_9s6WFIn5KhS_7fIxryAptHZGNbM9is5sqKadiJmtKOdpP32nQ8M_1pNCI1UVDV48NupMHq2lHFr9spWwGvhRahXQHlM8r5OVtlMM-ci_RByn1A_qT3yoxZbleEN-KgIMdXk9o4Qplx-h43QCfkrEn4zUC_FzPPxDBYL8yXQhCzna4R_EV_80S4OdnHBt7H4Do0UA1Z5Z1n2dq4uYQY0GP"/>
+<div class="absolute inset-0 real-match-overlay"></div>
+<div class="absolute top-4 right-4 bg-primary/90 text-white px-3 py-1 rounded-full text-[10px] font-bold tracking-widest uppercase">
+                        Real Match 98%
+                    </div>
+<div class="absolute bottom-4 left-4 right-4">
+<div class="flex gap-2 mb-2">
+<span class="bg-white/10 backdrop-blur-md text-white text-[10px] px-2 py-0.5 rounded border border-white/20">HIGH PROTEIN</span>
+<span class="bg-white/10 backdrop-blur-md text-white text-[10px] px-2 py-0.5 rounded border border-white/20">20 MIN</span>
+</div>
+<h3 class="text-white text-xl font-bold leading-tight">Miso Glazed Atlantic Salmon</h3>
+</div>
+</div>
+<div class="p-4 flex items-center justify-between">
+<div class="flex items-center gap-4 text-xs font-medium text-slate-500 dark:text-slate-400">
+<span class="flex items-center gap-1"><span class="material-symbols-outlined text-sm">timer</span> 450 kcal</span>
+<span class="flex items-center gap-1"><span class="material-symbols-outlined text-sm">restaurant</span> 2 Servings</span>
+</div>
+<div class="flex gap-2">
+<button class="p-2 rounded-full hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">
+<span class="material-symbols-outlined text-slate-400">favorite</span>
+</button>
+<button class="p-2 rounded-full hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">
+<span class="material-symbols-outlined text-slate-400">share</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Recipe Card 2 -->
+<div class="group relative bg-white dark:bg-slate-900 rounded-xl overflow-hidden shadow-xl dark:shadow-2xl border border-slate-100 dark:border-slate-800 transition-transform hover:scale-[1.01]">
+<div class="aspect-[4/3] relative">
+<img alt="Mediterranean Buddha Bowl" class="w-full h-full object-cover" data-alt="Healthy colorful mediterranean buddha bowl with chickpeas" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD4dQDtMeaMzA1C7NxrUfOaMFTGOavtQb6SxuGQaMkbJa466zXfItneIEv862_C5_Wsbd_mIUgTjH5zY7MDM2fWHfHJtnHf1pw0rcfZZTAU1028fNuXsAl_XZTQZbd1CV9EI1odQGeO00uRBF276sKHevylrGWdYElXmuskN4wtwTmU6BvhFW1Ac9g9k_WEtHXh3Bluw1J0Cqd4S5niKiaMOXKVXCEtQ4WdCEc68NX5X7HQcJJdjdOoyi0lsFeODakWAvV42dMc5OXy"/>
+<div class="absolute inset-0 real-match-overlay"></div>
+<div class="absolute top-4 right-4 bg-primary/90 text-white px-3 py-1 rounded-full text-[10px] font-bold tracking-widest uppercase">
+                        Real Match 94%
+                    </div>
+<div class="absolute bottom-4 left-4 right-4">
+<div class="flex gap-2 mb-2">
+<span class="bg-white/10 backdrop-blur-md text-white text-[10px] px-2 py-0.5 rounded border border-white/20">BATCH FRIENDLY</span>
+<span class="bg-white/10 backdrop-blur-md text-white text-[10px] px-2 py-0.5 rounded border border-white/20">VEGAN</span>
+</div>
+<h3 class="text-white text-xl font-bold leading-tight">Mediterranean Quinoa Bowl</h3>
+</div>
+</div>
+<div class="p-4 flex items-center justify-between">
+<div class="flex items-center gap-4 text-xs font-medium text-slate-500 dark:text-slate-400">
+<span class="flex items-center gap-1"><span class="material-symbols-outlined text-sm">timer</span> 380 kcal</span>
+<span class="flex items-center gap-1"><span class="material-symbols-outlined text-sm">restaurant</span> 4 Servings</span>
+</div>
+<div class="flex gap-2">
+<button class="p-2 rounded-full hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">
+<span class="material-symbols-outlined text-slate-400">favorite</span>
+</button>
+<button class="p-2 rounded-full hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">
+<span class="material-symbols-outlined text-slate-400">share</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Recipe Card 3 -->
+<div class="group relative bg-white dark:bg-slate-900 rounded-xl overflow-hidden shadow-xl dark:shadow-2xl border border-slate-100 dark:border-slate-800 transition-transform hover:scale-[1.01]">
+<div class="aspect-[4/3] relative">
+<img alt="Beef and Broccoli" class="w-full h-full object-cover" data-alt="Sizzling beef and broccoli stir fry" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBKYAE7rJcIqBnx-KzW8nRePAVxLMXdLGTva6sbDCSryrC-awUu4TrmI53qzLylSxyHScRaPIUzsIGIb0EXEZQYPddA_lZ2S1UzQ2XRdu3EJNKtgPPvfVyTlSEWuCMZuenySdawCz9X5b1D_TcTdNvZ46bO8m5WfMqfkn4V6irvjsjj-nmylFFeoruvegqE6-nUyGURh6p95I5R-WbxRgdz-NIhiy-aGFD8de9JZv3943K5YjRiepejWuoUAnYLICWMkjGAi-Vj5dH2"/>
+<div class="absolute inset-0 real-match-overlay"></div>
+<div class="absolute top-4 right-4 bg-primary/90 text-white px-3 py-1 rounded-full text-[10px] font-bold tracking-widest uppercase">
+                        Real Match 91%
+                    </div>
+<div class="absolute bottom-4 left-4 right-4">
+<div class="flex gap-2 mb-2">
+<span class="bg-white/10 backdrop-blur-md text-white text-[10px] px-2 py-0.5 rounded border border-white/20">KID APPROVED</span>
+<span class="bg-white/10 backdrop-blur-md text-white text-[10px] px-2 py-0.5 rounded border border-white/20">15 MIN</span>
+</div>
+<h3 class="text-white text-xl font-bold leading-tight">Ginger Beef Stir Fry</h3>
+</div>
+</div>
+<div class="p-4 flex items-center justify-between">
+<div class="flex items-center gap-4 text-xs font-medium text-slate-500 dark:text-slate-400">
+<span class="flex items-center gap-1"><span class="material-symbols-outlined text-sm">timer</span> 520 kcal</span>
+<span class="flex items-center gap-1"><span class="material-symbols-outlined text-sm">restaurant</span> 3 Servings</span>
+</div>
+<div class="flex gap-2">
+<button class="p-2 rounded-full hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">
+<span class="material-symbols-outlined text-slate-400">favorite</span>
+</button>
+<button class="p-2 rounded-full hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">
+<span class="material-symbols-outlined text-slate-400">share</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Add New Card -->
+<div class="group relative bg-primary/5 dark:bg-primary/10 rounded-xl overflow-hidden border-2 border-dashed border-primary/30 flex flex-col items-center justify-center p-8 cursor-pointer hover:bg-primary/10 dark:hover:bg-primary/20 transition-all aspect-[4/3]">
+<div class="size-16 rounded-full bg-primary/20 text-primary flex items-center justify-center mb-4">
+<span class="material-symbols-outlined text-3xl">add</span>
+</div>
+<p class="text-primary font-bold text-lg">Create New Recipe</p>
+<p class="text-slate-500 dark:text-slate-400 text-sm mt-2 text-center">AI will help you format and calculate macros</p>
+</div>
+</div>
+</main>
+<!-- Bottom Navigation -->
+<nav class="fixed bottom-0 left-0 right-0 z-50 bg-white/95 dark:bg-slate-900/95 backdrop-blur-lg border-t border-slate-200 dark:border-slate-800 px-4 pb-6 pt-3">
+<div class="max-w-xl mx-auto flex justify-between items-center">
+<a class="flex flex-1 flex-col items-center gap-1 text-primary" href="#">
+<span class="material-symbols-outlined filled text-2xl">menu_book</span>
+<p class="text-[10px] font-bold uppercase tracking-wider">Library</p>
+</a>
+<a class="flex flex-1 flex-col items-center gap-1 text-slate-400 dark:text-slate-500 hover:text-primary transition-colors" href="#">
+<span class="material-symbols-outlined text-2xl">explore</span>
+<p class="text-[10px] font-bold uppercase tracking-wider">Explore</p>
+</a>
+<div class="flex-1 flex justify-center -mt-10">
+<button class="size-14 rounded-full bg-primary text-white shadow-xl shadow-primary/30 flex items-center justify-center ring-4 ring-white dark:ring-background-dark">
+<span class="material-symbols-outlined text-3xl">add</span>
+</button>
+</div>
+<a class="flex flex-1 flex-col items-center gap-1 text-slate-400 dark:text-slate-500 hover:text-primary transition-colors" href="#">
+<span class="material-symbols-outlined text-2xl">calendar_month</span>
+<p class="text-[10px] font-bold uppercase tracking-wider">Planner</p>
+</a>
+<a class="flex flex-1 flex-col items-center gap-1 text-slate-400 dark:text-slate-500 hover:text-primary transition-colors" href="#">
+<span class="material-symbols-outlined text-2xl">person</span>
+<p class="text-[10px] font-bold uppercase tracking-wider">Profile</p>
+</a>
+</div>
+</nav>
+</body></html>

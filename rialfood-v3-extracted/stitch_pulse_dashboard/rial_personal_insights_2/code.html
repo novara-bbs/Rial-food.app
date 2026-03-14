@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>RIAL Insights Report</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#ddff00",
+                        "background-light": "#f8f8f5",
+                        "background-dark": "#20230f",
+                    },
+                    fontFamily: {
+                        "display": ["Space Grotesk", "sans-serif"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.5rem",
+                        "lg": "1rem",
+                        "xl": "1.5rem",
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
+<style>
+        body {
+            font-family: 'Space Grotesk', sans-serif;
+        }
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 4px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #ddff00;
+            border-radius: 10px;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 min-h-screen">
+<div class="relative flex min-h-screen w-full flex-col max-w-md mx-auto bg-white dark:bg-background-dark shadow-2xl">
+<!-- Header -->
+<div class="flex items-center bg-white dark:bg-background-dark p-4 pb-2 justify-between sticky top-0 z-10 border-b border-slate-100 dark:border-slate-800">
+<div class="text-slate-900 dark:text-slate-100 flex size-12 shrink-0 items-center justify-start">
+<span class="material-symbols-outlined cursor-pointer">arrow_back</span>
+</div>
+<h2 class="text-slate-900 dark:text-slate-100 text-lg font-bold leading-tight tracking-tight flex-1 text-center font-display">RIAL Insights Report</h2>
+<div class="flex w-12 items-center justify-end">
+<button class="flex cursor-pointer items-center justify-center rounded-xl h-10 w-10 bg-primary/10 text-slate-900 dark:text-slate-100">
+<span class="material-symbols-outlined text-[20px]">share</span>
+</button>
+</div>
+</div>
+<!-- Content Area -->
+<div class="flex-1 overflow-y-auto custom-scrollbar pb-24">
+<!-- Daily Summary Section -->
+<div class="px-4 pt-6">
+<h2 class="text-slate-900 dark:text-slate-100 text-2xl font-bold leading-tight font-display mb-4">Daily Summary</h2>
+<div class="grid grid-cols-2 gap-3">
+<div class="flex flex-col gap-2 rounded-xl p-5 bg-slate-50 dark:bg-slate-800/50 border border-slate-100 dark:border-slate-700">
+<p class="text-slate-500 dark:text-slate-400 text-sm font-medium">Real Feel</p>
+<p class="text-slate-900 dark:text-slate-100 text-3xl font-bold leading-tight font-display">85%</p>
+<div class="flex items-center gap-1 text-emerald-600 dark:text-emerald-400 text-sm font-bold">
+<span class="material-symbols-outlined text-sm">trending_up</span>
+<span>+12%</span>
+</div>
+</div>
+<div class="flex flex-col gap-2 rounded-xl p-5 bg-slate-50 dark:bg-slate-800/50 border border-slate-100 dark:border-slate-700">
+<p class="text-slate-500 dark:text-slate-400 text-sm font-medium">Focus Score</p>
+<p class="text-slate-900 dark:text-slate-100 text-3xl font-bold leading-tight font-display">92%</p>
+<div class="flex items-center gap-1 text-emerald-600 dark:text-emerald-400 text-sm font-bold">
+<span class="material-symbols-outlined text-sm">trending_up</span>
+<span>+5%</span>
+</div>
+</div>
+<div class="flex flex-col gap-2 rounded-xl p-5 bg-primary/10 border border-primary/20 col-span-2">
+<div class="flex justify-between items-center">
+<p class="text-slate-700 dark:text-slate-300 text-sm font-medium">Energy Peak</p>
+<span class="material-symbols-outlined text-primary text-xl">bolt</span>
+</div>
+<p class="text-slate-900 dark:text-slate-100 text-3xl font-bold leading-tight font-display">High</p>
+<p class="text-slate-500 dark:text-slate-400 text-xs italic">Optimal performance window: 10:00 AM - 2:00 PM</p>
+</div>
+</div>
+</div>
+<!-- Correlations Chart Area -->
+<div class="px-4 pt-8">
+<div class="flex items-end justify-between mb-4">
+<h2 class="text-slate-900 dark:text-slate-100 text-2xl font-bold font-display">Food &amp; Mood</h2>
+<span class="text-slate-400 text-xs font-medium">Last 7 Days</span>
+</div>
+<div class="relative h-48 w-full bg-slate-50 dark:bg-slate-800/30 rounded-xl p-4 flex items-end justify-between gap-2 overflow-hidden border border-slate-100 dark:border-slate-800">
+<!-- Simple Bar Chart Representation -->
+<div class="flex flex-col items-center gap-2 flex-1">
+<div class="w-full bg-primary/40 rounded-t-md h-24"></div>
+<span class="text-[10px] text-slate-400">Mon</span>
+</div>
+<div class="flex flex-col items-center gap-2 flex-1">
+<div class="w-full bg-primary/60 rounded-t-md h-32"></div>
+<span class="text-[10px] text-slate-400">Tue</span>
+</div>
+<div class="flex flex-col items-center gap-2 flex-1">
+<div class="w-full bg-primary/30 rounded-t-md h-16"></div>
+<span class="text-[10px] text-slate-400">Wed</span>
+</div>
+<div class="flex flex-col items-center gap-2 flex-1">
+<div class="w-full bg-primary rounded-t-md h-40"></div>
+<span class="text-[10px] font-bold text-slate-900 dark:text-white">Thu</span>
+</div>
+<div class="flex flex-col items-center gap-2 flex-1">
+<div class="w-full bg-primary/50 rounded-t-md h-28"></div>
+<span class="text-[10px] text-slate-400">Fri</span>
+</div>
+<div class="flex flex-col items-center gap-2 flex-1">
+<div class="w-full bg-primary/70 rounded-t-md h-36"></div>
+<span class="text-[10px] text-slate-400">Sat</span>
+</div>
+<div class="flex flex-col items-center gap-2 flex-1">
+<div class="w-full bg-primary/40 rounded-t-md h-20"></div>
+<span class="text-[10px] text-slate-400">Sun</span>
+</div>
+</div>
+</div>
+<!-- Insights Analysis -->
+<div class="px-4 pt-8 space-y-6">
+<!-- Performance Boosters -->
+<div class="space-y-3">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-emerald-500">rocket_launch</span>
+<h3 class="font-bold text-lg font-display">Performance Boosters</h3>
+</div>
+<div class="grid gap-3">
+<div class="flex items-center gap-4 p-4 rounded-xl bg-emerald-50 dark:bg-emerald-950/20 border border-emerald-100 dark:border-emerald-900/30">
+<div class="size-12 rounded-lg bg-emerald-500/20 flex items-center justify-center text-emerald-600">
+<span class="material-symbols-outlined">eco</span>
+</div>
+<div class="flex-1">
+<h4 class="font-bold text-slate-900 dark:text-emerald-100">Leafy Greens</h4>
+<p class="text-xs text-slate-500 dark:text-emerald-400/70">+18% Focus improvement detected</p>
+</div>
+</div>
+<div class="flex items-center gap-4 p-4 rounded-xl bg-emerald-50 dark:bg-emerald-950/20 border border-emerald-100 dark:border-emerald-900/30">
+<div class="size-12 rounded-lg bg-emerald-500/20 flex items-center justify-center text-emerald-600">
+<span class="material-symbols-outlined">water_drop</span>
+</div>
+<div class="flex-1">
+<h4 class="font-bold text-slate-900 dark:text-emerald-100">Hydration (2L+)</h4>
+<p class="text-xs text-slate-500 dark:text-emerald-400/70">Strong correlation with afternoon energy</p>
+</div>
+</div>
+</div>
+</div>
+<!-- Sensitivity Alerts -->
+<div class="space-y-3">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-amber-500">warning</span>
+<h3 class="font-bold text-lg font-display">Sensitivity Alerts</h3>
+</div>
+<div class="grid gap-3">
+<div class="flex items-center gap-4 p-4 rounded-xl bg-amber-50 dark:bg-amber-950/20 border border-amber-100 dark:border-amber-900/30">
+<div class="size-12 rounded-lg bg-amber-500/20 flex items-center justify-center text-amber-600">
+<span class="material-symbols-outlined">coffee</span>
+</div>
+<div class="flex-1">
+<h4 class="font-bold text-slate-900 dark:text-amber-100">Late Caffeine</h4>
+<p class="text-xs text-slate-500 dark:text-amber-400/70">Linked to -22% sleep quality decrease</p>
+</div>
+</div>
+<div class="flex items-center gap-4 p-4 rounded-xl bg-amber-50 dark:bg-amber-950/20 border border-amber-100 dark:border-amber-900/30">
+<div class="size-12 rounded-lg bg-amber-500/20 flex items-center justify-center text-amber-600">
+<span class="material-symbols-outlined">bakery_dining</span>
+</div>
+<div class="flex-1">
+<h4 class="font-bold text-slate-900 dark:text-amber-100">Refined Sugars</h4>
+<p class="text-xs text-slate-500 dark:text-amber-400/70">Identified trigger for energy crash (2PM)</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Visual Asset -->
+<div class="px-4 pt-8">
+<div class="relative h-40 w-full rounded-2xl overflow-hidden bg-slate-900">
+<div class="absolute inset-0 bg-gradient-to-br from-primary/40 to-transparent z-10"></div>
+<img alt="Healthy vibrant meal with colorful ingredients" class="w-full h-full object-cover opacity-60" data-alt="Close up of a vibrant healthy salad bowl with fresh vegetables" src="https://lh3.googleusercontent.com/aida-public/AB6AXuB5yFcidwLhQcwkLcl5wCsXh9nNRfAYHAmGOUIGakk9KTFKn2kohHWqNR0p0DiW2sY6BD_88S4lIuG0TMqOTjgjhe6C-U4aM-rfODs1FiEYCX-n6resQQhQgM-eKeohP9EPfWlesFc88qc9X_uzhISd3L3PpAblNr8yQ1uFyA2NQoNFSFHXiJel1uxpWwCI4J_DdX2ZSIzdhuFY8XoU9aL9qumB7nLJVCYsBFlR29vuEpo9hN7KYANRZL1IiyZyItmPnArlQy-T_XxU"/>
+<div class="absolute bottom-4 left-4 z-20">
+<p class="text-white text-sm font-medium">Next Recommended Action</p>
+<p class="text-primary text-xl font-bold font-display">Increase Magnesium Intake</p>
+</div>
+</div>
+</div>
+</div>
+<!-- Bottom Navigation -->
+<div class="fixed bottom-0 left-0 right-0 z-20 max-w-md mx-auto">
+<div class="flex gap-2 border-t border-slate-100 dark:border-slate-800 bg-white/90 dark:bg-background-dark/90 backdrop-blur-md px-4 pb-6 pt-2">
+<a class="flex flex-1 flex-col items-center justify-center gap-1 text-slate-400 dark:text-slate-500" href="#">
+<div class="flex h-8 items-center justify-center">
+<span class="material-symbols-outlined">edit_note</span>
+</div>
+<p class="text-[10px] font-medium leading-normal tracking-wide uppercase font-display">Log</p>
+</a>
+<a class="flex flex-1 flex-col items-center justify-center gap-1 text-slate-900 dark:text-white" href="#">
+<div class="flex h-10 w-10 bg-primary items-center justify-center rounded-full shadow-lg shadow-primary/20 -mt-6 border-4 border-white dark:border-background-dark">
+<span class="material-symbols-outlined text-slate-900 font-bold">analytics</span>
+</div>
+<p class="text-[10px] font-bold leading-normal tracking-wide uppercase font-display mt-1">Insights</p>
+</a>
+<a class="flex flex-1 flex-col items-center justify-center gap-1 text-slate-400 dark:text-slate-500" href="#">
+<div class="flex h-8 items-center justify-center">
+<span class="material-symbols-outlined">insights</span>
+</div>
+<p class="text-[10px] font-medium leading-normal tracking-wide uppercase font-display">Trends</p>
+</a>
+<a class="flex flex-1 flex-col items-center justify-center gap-1 text-slate-400 dark:text-slate-500" href="#">
+<div class="flex h-8 items-center justify-center">
+<span class="material-symbols-outlined">person</span>
+</div>
+<p class="text-[10px] font-medium leading-normal tracking-wide uppercase font-display">Profile</p>
+</a>
+</div>
+</div>
+</div>
+</body></html>

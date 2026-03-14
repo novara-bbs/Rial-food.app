@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>RIAL - Daily Food Log</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&amp;family=Playfair+Display:ital,wght@0,400;0,700;1,400&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#25aff4",
+                        "accent-lime": "#d9f99d",
+                        "background-light": "#fcfcfc",
+                        "background-dark": "#101c22",
+                    },
+                    fontFamily: {
+                        "display": ["Inter", "sans-serif"],
+                        "serif": ["Playfair Display", "serif"]
+                    },
+                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>
+        .progress-ring { transform: rotate(-90deg); }
+        .serif-italic { font-family: 'Playfair Display', serif; font-style: italic; }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark font-display text-slate-900 dark:text-slate-100">
+<div class="max-w-md mx-auto min-h-screen flex flex-col relative pb-20">
+<!-- Header -->
+<header class="p-6 flex justify-between items-start">
+<div>
+<p class="text-xs font-bold uppercase tracking-widest text-slate-400 mb-1">Thursday, Oct 24</p>
+<h1 class="text-3xl font-serif font-bold text-slate-900 dark:text-slate-100">Daily Journal</h1>
+</div>
+<button class="w-10 h-10 rounded-full bg-slate-100 dark:bg-slate-800 flex items-center justify-center">
+<span class="material-symbols-outlined text-slate-600 dark:text-slate-300">person</span>
+</button>
+</header>
+<!-- Summary Stats Ring Section -->
+<section class="px-6 mb-8">
+<div class="bg-white dark:bg-slate-900 rounded-3xl p-6 shadow-sm border border-slate-100 dark:border-slate-800 flex items-center gap-8">
+<div class="relative w-32 h-32 shrink-0">
+<svg class="progress-ring w-full h-full">
+<circle class="text-slate-100 dark:text-slate-800" cx="64" cy="64" fill="transparent" r="58" stroke="currentColor" stroke-width="8"></circle>
+<circle class="text-primary rounded-full" cx="64" cy="64" fill="transparent" r="58" stroke="currentColor" stroke-dasharray="364.4" stroke-dashoffset="100" stroke-width="8"></circle>
+</svg>
+<div class="absolute inset-0 flex flex-col items-center justify-center">
+<span class="text-2xl font-bold">1,642</span>
+<span class="text-[10px] uppercase font-bold text-slate-400">kcal left</span>
+</div>
+</div>
+<div class="flex flex-col gap-3 flex-1">
+<div class="space-y-1">
+<div class="flex justify-between text-xs font-bold uppercase tracking-tighter">
+<span>Protein</span>
+<span class="text-primary">82g / 120g</span>
+</div>
+<div class="h-1.5 w-full bg-slate-100 dark:bg-slate-800 rounded-full overflow-hidden">
+<div class="h-full bg-primary rounded-full" style="width: 68%"></div>
+</div>
+</div>
+<div class="space-y-1">
+<div class="flex justify-between text-xs font-bold uppercase tracking-tighter">
+<span>Carbs</span>
+<span class="text-slate-400">145g / 250g</span>
+</div>
+<div class="h-1.5 w-full bg-slate-100 dark:bg-slate-800 rounded-full overflow-hidden">
+<div class="h-full bg-accent-lime rounded-full" style="width: 58%"></div>
+</div>
+</div>
+<div class="space-y-1">
+<div class="flex justify-between text-xs font-bold uppercase tracking-tighter">
+<span>Fats</span>
+<span class="text-slate-400">52g / 70g</span>
+</div>
+<div class="h-1.5 w-full bg-slate-100 dark:bg-slate-800 rounded-full overflow-hidden">
+<div class="h-full bg-slate-300 rounded-full" style="width: 74%"></div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Meals Section -->
+<main class="px-6 space-y-10">
+<!-- Breakfast -->
+<section>
+<div class="flex justify-between items-baseline mb-4">
+<h2 class="text-xl font-serif font-bold italic text-slate-900 dark:text-slate-100">Breakfast</h2>
+<span class="text-xs font-bold uppercase text-slate-400 tracking-widest">08:30 AM</span>
+</div>
+<div class="group relative rounded-2xl overflow-hidden shadow-lg aspect-[4/3] mb-3">
+<img alt="Gourmet avocado toast with poached egg" class="absolute inset-0 w-full h-full object-cover" data-alt="Artisanal avocado toast with egg on rustic bread" src="https://lh3.googleusercontent.com/aida-public/AB6AXuB5eZd5JmxJJtOTKP25OGZ_bwgFzwFvCy-fYJmQt8mMQf6n48NK4NAPLkYDBgZnaz7BY6rRhyOvocpzlKJlDH-9OUw3kQB5BYuhjucyFRUinhZkGmAP9TcQB_SwHEHBSM0qouLZu2L9xtWuUbCxL1kbsLiZ7Z6dwGP8S6B3I3t7t4BJSeRLwyzqLsA9mkTPxfrtQe-CArusQWfzkEznYgYMG0YuPZMDHMkQGJUGdDPBXFm5lrCXjh5r31HOID_q3bKSr1G4Nh9h6fG8"/>
+<div class="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent"></div>
+<!-- Tech Overlays -->
+<div class="absolute top-4 left-4 flex gap-2">
+<span class="bg-white/90 backdrop-blur-md text-[10px] font-bold px-2 py-1 rounded-lg text-slate-900 shadow-sm border border-white/20">420 KCAL</span>
+<span class="bg-accent-lime/90 backdrop-blur-md text-[10px] font-bold px-2 py-1 rounded-lg text-slate-900 shadow-sm border border-white/20">HIGH PROTEIN</span>
+</div>
+<div class="absolute bottom-4 left-4 right-4">
+<h3 class="text-white text-lg font-bold">Poached Eggs &amp; Sourdough</h3>
+<p class="text-white/80 text-xs italic font-serif">Avocado, micro-greens, chili flakes</p>
+</div>
+<button class="absolute bottom-4 right-4 bg-primary text-white p-2 rounded-full shadow-lg">
+<span class="material-symbols-outlined text-sm">add</span>
+</button>
+</div>
+<div class="flex gap-2">
+<button class="flex-1 py-3 px-4 rounded-xl border border-slate-200 dark:border-slate-800 flex items-center justify-center gap-2 hover:bg-slate-50 transition-colors">
+<span class="material-symbols-outlined text-accent-lime fill-1">sentiment_satisfied</span>
+<span class="text-xs font-bold uppercase tracking-wider">Real Feel</span>
+</button>
+<button class="w-12 h-12 rounded-xl border border-slate-200 dark:border-slate-800 flex items-center justify-center hover:bg-slate-50">
+<span class="material-symbols-outlined text-slate-400">analytics</span>
+</button>
+</div>
+</section>
+<!-- Lunch -->
+<section>
+<div class="flex justify-between items-baseline mb-4">
+<h2 class="text-xl font-serif font-bold italic text-slate-900 dark:text-slate-100">Lunch</h2>
+<span class="text-xs font-bold uppercase text-slate-400 tracking-widest">01:15 PM</span>
+</div>
+<div class="group relative rounded-2xl overflow-hidden shadow-lg aspect-[4/3] mb-3">
+<img alt="Mediterranean Buddha bowl" class="absolute inset-0 w-full h-full object-cover" data-alt="Fresh Mediterranean salad bowl with vibrant vegetables" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDvoNB82aYHeaC5TdCEyohF70qNHWFCNx7UB6--IP3n8FZh-R1_dVZeSc-DOYJRoFwRx7-L-hin7x3CYGd0Xjwt2zYN4HKXMlIZeZp5JCZXZLawveaT3PO6YBk6MQpM9GxBmWTlyoazoozCHbGMw4YNrhRECqdc3mWp-3Ux1yhhTbq70Te0NuSbjNcN9OVYW2qLeOKlg2tScBpWT_mzJmwjydm_cmM8w2ysK2h7hFuK8ylzT0jXzbqiiQufSzHdzP8BhWHC-uh-26rJ"/>
+<div class="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent"></div>
+<div class="absolute top-4 left-4 flex gap-2">
+<span class="bg-white/90 backdrop-blur-md text-[10px] font-bold px-2 py-1 rounded-lg text-slate-900">580 KCAL</span>
+<span class="bg-primary/90 backdrop-blur-md text-[10px] font-bold px-2 py-1 rounded-lg text-white">OPTIMAL FIBER</span>
+</div>
+<div class="absolute bottom-4 left-4 right-4">
+<h3 class="text-white text-lg font-bold">Harissa Chicken Bowl</h3>
+<p class="text-white/80 text-xs italic font-serif">Quinoa, roasted chickpeas, tahini</p>
+</div>
+<button class="absolute bottom-4 right-4 bg-primary text-white p-2 rounded-full shadow-lg">
+<span class="material-symbols-outlined text-sm">add</span>
+</button>
+</div>
+<div class="flex gap-2">
+<button class="flex-1 py-3 px-4 rounded-xl border border-accent-lime bg-accent-lime/10 flex items-center justify-center gap-2 transition-colors">
+<span class="material-symbols-outlined text-slate-900 fill-1">check_circle</span>
+<span class="text-xs font-bold uppercase tracking-wider text-slate-900">Energized</span>
+</button>
+<button class="w-12 h-12 rounded-xl border border-slate-200 dark:border-slate-800 flex items-center justify-center hover:bg-slate-50">
+<span class="material-symbols-outlined text-slate-400">analytics</span>
+</button>
+</div>
+</section>
+<!-- Dinner (Empty State Concept) -->
+<section>
+<div class="flex justify-between items-baseline mb-4">
+<h2 class="text-xl font-serif font-bold italic text-slate-900 dark:text-slate-100">Dinner</h2>
+<span class="text-xs font-bold uppercase text-slate-400 tracking-widest">Scheduled 7PM</span>
+</div>
+<button class="w-full aspect-video border-2 border-dashed border-slate-200 dark:border-slate-800 rounded-2xl flex flex-col items-center justify-center gap-3 bg-white/50 dark:bg-slate-900/50 hover:border-primary/50 transition-all">
+<div class="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center">
+<span class="material-symbols-outlined text-primary">add_a_photo</span>
+</div>
+<p class="text-xs font-bold uppercase tracking-widest text-slate-400">Capture your meal</p>
+</button>
+</section>
+<!-- Snacks -->
+<section>
+<div class="flex justify-between items-baseline mb-4">
+<h2 class="text-xl font-serif font-bold italic text-slate-900 dark:text-slate-100">Snacks</h2>
+</div>
+<div class="grid grid-cols-2 gap-4">
+<div class="bg-white dark:bg-slate-900 p-4 rounded-2xl border border-slate-100 dark:border-slate-800">
+<div class="h-24 rounded-lg bg-slate-50 overflow-hidden mb-3">
+<img alt="Small bowl of mixed nuts" class="w-full h-full object-cover" data-alt="Small porcelain bowl with roasted nuts" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDXYTTXAPjxPO7zrnp2MKcu6TuLz9cNFRYrcsmILQJxsxITxfpuHy_7XjDmLyul_-xRrE0NxmOjZFSqRcGdZ77bQK_tZtjzE6BYR49wmCEDC4gDIOanQY6rZkApo7xM0_Nfjp9rJmEvv7jaZWG32I6AyeXZOo4DoYJG_YjHa80owVbd7K55JPw4RR9C37NsmHfyZgK03yqbuDczPGBfkJYfWnxJYtTu1Md9PxLh1Lz1AdBmieUZI-U8W5ML1jZ65gvkjjEExem4w0z6"/>
+</div>
+<h4 class="text-sm font-bold truncate">Mixed Raw Nuts</h4>
+<p class="text-[10px] text-slate-400 font-bold uppercase tracking-tighter">180 KCAL • 15:30</p>
+</div>
+<div class="bg-white dark:bg-slate-900 p-4 rounded-2xl border border-slate-100 dark:border-slate-800 flex flex-col items-center justify-center text-center cursor-pointer border-dashed">
+<span class="material-symbols-outlined text-primary mb-2">add_circle</span>
+<p class="text-[10px] font-bold uppercase tracking-widest text-slate-400">Add Snack</p>
+</div>
+</div>
+</section>
+</main>
+<!-- Bottom Navigation -->
+<nav class="fixed bottom-0 left-0 right-0 max-w-md mx-auto bg-white/80 dark:bg-slate-900/80 backdrop-blur-xl border-t border-slate-100 dark:border-slate-800 px-6 py-4 flex justify-between items-center z-50">
+<a class="flex flex-col items-center gap-1 text-primary" href="#">
+<span class="material-symbols-outlined fill-1">restaurant_menu</span>
+<span class="text-[10px] font-bold uppercase tracking-tighter">Journal</span>
+</a>
+<a class="flex flex-col items-center gap-1 text-slate-400" href="#">
+<span class="material-symbols-outlined">chart_data</span>
+<span class="text-[10px] font-bold uppercase tracking-tighter">Stats</span>
+</a>
+<div class="-mt-12 bg-primary w-14 h-14 rounded-full flex items-center justify-center shadow-lg shadow-primary/30 border-4 border-white dark:border-slate-900">
+<span class="material-symbols-outlined text-white text-3xl">add</span>
+</div>
+<a class="flex flex-col items-center gap-1 text-slate-400" href="#">
+<span class="material-symbols-outlined">local_library</span>
+<span class="text-[10px] font-bold uppercase tracking-tighter">Plan</span>
+</a>
+<a class="flex flex-col items-center gap-1 text-slate-400" href="#">
+<span class="material-symbols-outlined">settings</span>
+<span class="text-[10px] font-bold uppercase tracking-tighter">Setup</span>
+</a>
+</nav>
+</div>
+</body></html>

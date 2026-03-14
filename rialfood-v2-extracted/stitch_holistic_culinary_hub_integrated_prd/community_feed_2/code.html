@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Holistic Culinary Hub - Community Feed</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,200..800;1,6..72,200..800&amp;family=Satoshi:wght@300;400;500;700;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#4A5D23",
+                        "background-light": "#F9F8F6",
+                        "background-dark": "#1c2210",
+                        "surface": "#FFFFFF",
+                        "text-main": "#2B2927",
+                        "muted": "#A39F98",
+                        "accent": "#D47A43",
+                    },
+                    fontFamily: {
+                        "display": ["Newsreader", "serif"],
+                        "body": ["Satoshi", "sans-serif"],
+                    },
+                    borderRadius: {"DEFAULT": "0px", "sm": "0px", "md": "4px", "lg": "4px", "xl": "4px", "full": "9999px"},
+                    spacing: {
+                        'base': '8px',
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        body {
+            font-family: 'Satoshi', sans-serif;
+            color: #2B2927;
+            background-color: #F9F8F6;
+        }
+        h1, h2, h3, h4, h5, h6, .font-display {
+            font-family: 'Newsreader', serif;
+        }
+        .border-subtle {
+            border: 1px solid #E5E3DF;
+        }
+        .border-bold {
+            border: 2px solid #2B2927;
+        }
+        /* Custom Scrollbar for a cleaner look */
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #E5E3DF;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #A39F98;
+        }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark min-h-screen flex flex-col antialiased">
+<!-- Top Navigation (Reused & Adapted) -->
+<header class="flex items-center justify-between whitespace-nowrap border-b border-subtle bg-surface px-8 py-4 sticky top-0 z-50">
+<div class="flex items-center gap-8">
+<div class="flex items-center gap-3 text-text-main">
+<span class="material-symbols-outlined text-primary text-3xl">restaurant_menu</span>
+<h2 class="text-text-main text-xl font-display font-semibold italic tracking-tight">Culinary Hub</h2>
+</div>
+<label class="hidden md:flex flex-col min-w-64 h-10">
+<div class="flex w-full flex-1 items-stretch rounded-md border border-subtle bg-background-light overflow-hidden focus-within:border-primary transition-colors">
+<div class="text-muted flex items-center justify-center pl-3">
+<span class="material-symbols-outlined text-xl">search</span>
+</div>
+<input class="w-full min-w-0 flex-1 bg-transparent px-3 text-sm text-text-main placeholder:text-muted focus:outline-none focus:ring-0 border-none" placeholder="Search recipes, friends..." value=""/>
+</div>
+</label>
+</div>
+<div class="flex items-center gap-8">
+<nav class="hidden lg:flex items-center gap-6">
+<a class="text-text-main text-sm font-medium hover:text-primary transition-colors" href="#">Dashboard</a>
+<a class="text-text-main text-sm font-medium hover:text-primary transition-colors" href="#">Diary</a>
+<a class="text-text-main text-sm font-medium hover:text-primary transition-colors" href="#">Vault</a>
+<a class="text-text-main text-sm font-medium hover:text-primary transition-colors" href="#">Planner</a>
+<a class="text-primary text-sm font-bold border-b-2 border-primary pb-1" href="#">Community</a>
+</nav>
+<div class="flex items-center gap-4">
+<button class="text-text-main hover:text-primary transition-colors">
+<span class="material-symbols-outlined">notifications</span>
+</button>
+<div class="h-9 w-9 rounded-full bg-cover bg-center border border-subtle" data-alt="User avatar profile picture" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuC2iA2Dmbyq0pviVk6gN7N4LJax2j0W2Xx0l4piXGqpwQcsxMaPKCcF0zUeWuV-YYFWmtzGnIJ8IDACY-jQrczFCSvpZRrPwurlU2agyhMDp1VGkmYONjvlM6lIuwdKTKB4aPAsp-TxwMlBQMSdKcSWi6Tg3Sdvr58MObXcOCZIKJkSP2ODUFqMHy7LDVzptphNUOpVkx2VlamjVFWxPDjkZ5ShR9h60iMTJchhxvXojeaGTBfcP5DEKF9VIbyQ3DKn-NGQyG-F8pc");'></div>
+</div>
+</div>
+</header>
+<!-- Main Content Area -->
+<div class="flex-1 w-full max-w-[1200px] mx-auto px-4 lg:px-8 py-8 flex items-start gap-12">
+<!-- Sticky Leaderboard Sidebar (Left) -->
+<aside class="hidden md:block w-72 shrink-0 sticky top-28 h-[calc(100vh-8rem)] overflow-y-auto pr-4 pb-8">
+<div class="bg-surface border border-subtle rounded-md p-6">
+<h3 class="text-text-main text-2xl font-display font-semibold mb-6 border-b border-bold pb-2">Top Chefs This Week</h3>
+<div class="flex flex-col gap-5">
+<!-- Leaderboard Item 1 -->
+<div class="flex items-center gap-3 group cursor-pointer">
+<div class="relative">
+<div class="h-10 w-10 rounded-full bg-cover bg-center border border-subtle" data-alt="Avatar of Alex Chen" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuBLmeGiD95_EzYiPaDynVuCdoZZ6V00NMH6BUwGOsyc9UCR8CRAy6AhdkrrEvG0E3rmcvxcaatjLSYfyuJmAO0DEUp68Pqv_q3sSPWxzhTEfF3EzcDgeGxOoreLnASf8ALdF6wZjOqoZ0Yt7wSDgOhRro9bWTI8HNSK1YRPeY0A-TstKLDo3GIfXo6SRwYwhfwZau8pkMJIv45cZ2ule5aH_-hUAXl8Ph17SDA73VQvhdgI4YL1jBcPzpDdcGAMrQVmjrW5zJxttTY");'></div>
+<div class="absolute -bottom-1 -right-1 bg-surface rounded-full p-[2px]">
+<span class="material-symbols-outlined text-accent text-[14px]" title="Chef Pro">verified</span>
+</div>
+</div>
+<div class="flex-1 min-w-0">
+<p class="text-text-main text-base font-display font-semibold truncate group-hover:text-primary transition-colors">Alex Chen</p>
+<div class="w-full bg-background-light h-1.5 rounded-full mt-1 overflow-hidden">
+<div class="bg-primary h-full rounded-full w-[85%]"></div>
+</div>
+</div>
+<div class="shrink-0 text-right">
+<p class="text-text-main text-sm font-bold">1250 <span class="text-xs text-muted font-normal uppercase tracking-wider">XP</span></p>
+<p class="text-xs text-muted">Rank 1</p>
+</div>
+</div>
+<!-- Leaderboard Item 2 -->
+<div class="flex items-center gap-3 group cursor-pointer">
+<div class="h-10 w-10 rounded-full bg-cover bg-center border border-subtle" data-alt="Avatar of Elena Rodriguez" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuAdAsqHdeCyzqHFLlB2xQpioX870NwPMqauGsT8PfmXX9W4BEipK9FQgkV9LuYnuUzfxgpXOYYPn538qUrWZoeCVSX8oDc4iW60Sa8_0CVtJXjUrXOLMwTL7WFbNyKIjhfwW6xiykuO4tTVxpP-aMiGNtiITFYKR4OUh_AQUqcM32XkRBYzN748h6W5dNTd5akH9OglvcwVOlViOQnpwXIml9fPoe1UYfHJiOS7HRmcrIiPc-xRWvzikSytkr6A5v7HpLQbzLxpJeo");'></div>
+<div class="flex-1 min-w-0">
+<p class="text-text-main text-base font-display font-semibold truncate group-hover:text-primary transition-colors">Elena Rodriguez</p>
+<div class="w-full bg-background-light h-1.5 rounded-full mt-1 overflow-hidden">
+<div class="bg-primary h-full rounded-full w-[70%] opacity-80"></div>
+</div>
+</div>
+<div class="shrink-0 text-right">
+<p class="text-text-main text-sm font-bold">980 <span class="text-xs text-muted font-normal uppercase tracking-wider">XP</span></p>
+<p class="text-xs text-muted">Rank 2</p>
+</div>
+</div>
+<!-- Leaderboard Item 3 -->
+<div class="flex items-center gap-3 group cursor-pointer">
+<div class="relative">
+<div class="h-10 w-10 rounded-full bg-cover bg-center border border-subtle" data-alt="Avatar of Marcus Johnson" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuAqyTo892g7zm1keRoKrjfcUByH1x5gsw5Iu4QHb4f4VsBNLkSuM0PlZ8oeHCCmNykGZGS-onDUPvhBSO52iMRm7knxHhmgAlzgwCT9V8zkreDoxrDxpk6561sNek5X2szA1uFfLsO0Z58SHlmFnrgUsuQDWcGt9R_kn7LnVLgKOCDBjdWevfTlAviYvrKVfDHAZA1sKKHPrFzYUH5-EoM0BC1rYI9ESpAqAUt-dmWfYtsWZa-aGQNBBmSaDVmLFPX_q_ZRsvUafyY");'></div>
+</div>
+<div class="flex-1 min-w-0">
+<p class="text-text-main text-base font-display font-semibold truncate group-hover:text-primary transition-colors">Marcus Johnson</p>
+<div class="w-full bg-background-light h-1.5 rounded-full mt-1 overflow-hidden">
+<div class="bg-primary h-full rounded-full w-[50%] opacity-60"></div>
+</div>
+</div>
+<div class="shrink-0 text-right">
+<p class="text-text-main text-sm font-bold">750 <span class="text-xs text-muted font-normal uppercase tracking-wider">XP</span></p>
+<p class="text-xs text-muted">Rank 3</p>
+</div>
+</div>
+</div>
+<button class="w-full mt-6 py-2 border border-subtle text-text-main text-sm font-bold hover:bg-background-light transition-colors rounded-md">View Full Rankings</button>
+</div>
+<!-- Suggested Creators -->
+<div class="mt-8">
+<h4 class="text-xs text-muted font-bold uppercase tracking-widest mb-4">Suggested to Follow</h4>
+<div class="flex items-center justify-between mb-3">
+<div class="flex items-center gap-2">
+<div class="h-8 w-8 rounded-full bg-cover bg-center" data-alt="Avatar of Sarah Jenkins" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuCHHl3aFw-PR9nH91Zi8foApFqoej9uhpR_lrdj-tnvlTCLGRNzaL5i8FjdBmqtV3ynnhXiEFhEj8q5k-krZJt0m85a3KxQGLq7UQ2WTWXkUfftQbvRHnEF1WhWJgzE9NXpHfYPv8opYkLKPCOc0s3KkheCE17l4u-unQeumkihYB0FoULfJ_8zs0fYtgfPhxdFG7O0vzrV15Aogx6768sufdK4i9-YEcvQbBXPpW9k1Hek8w6TmwmvkpnS5_XsJ0zVBZQtilfMSjs");'></div>
+<span class="text-sm font-display font-medium">Sarah Jenkins</span>
+</div>
+<button class="text-primary text-sm font-bold hover:underline">Follow</button>
+</div>
+</div>
+</aside>
+<!-- Central Community Feed -->
+<main class="flex-1 max-w-[600px] w-full mx-auto pb-20">
+<!-- Feed Header -->
+<div class="mb-8 flex justify-between items-end border-b border-bold pb-2">
+<h1 class="text-3xl font-display font-semibold italic text-text-main">Community Feed</h1>
+<div class="flex gap-4 text-sm font-medium">
+<button class="text-text-main border-b-2 border-text-main pb-1">Following</button>
+<button class="text-muted hover:text-text-main transition-colors pb-1">Global</button>
+</div>
+</div>
+<!-- Feed Posts Container -->
+<div class="flex flex-col gap-8">
+<!-- Post 1 -->
+<article class="bg-surface border border-subtle rounded-md overflow-hidden flex flex-col">
+<!-- Post Header -->
+<div class="p-5 flex items-start justify-between">
+<div class="flex gap-3">
+<div class="h-10 w-10 rounded-full bg-cover bg-center shrink-0 border border-subtle cursor-pointer" data-alt="Avatar of Elena Rodriguez" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuB15rPFtWDIpVhAFMRMCtAw-WtR0wtw_GkRreGqWN9dhE0oywQBbaIPVVoTBSZnkWIYKj-TtiouUmD02XPuCmNJrl271DT_VYXjJM3Bkf5xnZXn_5XFZYB123xx09lLzvp4N5Dv5liWIP2opBoo9u4qtE2jDmx0-NT3tJiwpGtCOpWThpdV46vcaKNstk735uWK_IDOZd7kDdxVIj-RMwjenzcgxp7qQ1Xyjd75KsDQBoN2DBwR5DK7bc34gWLMkoVPDArLmEqaJaM");'></div>
+<div>
+<p class="text-text-main text-base leading-snug">
+<span class="font-display font-semibold text-[1.1rem] cursor-pointer hover:text-primary">Elena</span> logged a 10k run &amp; cooked 
+                                    <button class="font-display font-semibold italic text-[1.1rem] hover:text-primary underline decoration-subtle underline-offset-2 transition-colors">Lemon Herb Salmon</button>
+</p>
+<p class="text-muted text-xs mt-1 uppercase tracking-wider">2 hours ago • <span class="text-accent">+150 XP</span></p>
+</div>
+</div>
+<button class="text-muted hover:text-text-main">
+<span class="material-symbols-outlined">more_horiz</span>
+</button>
+</div>
+<!-- Post Image -->
+<div class="w-full aspect-[4/5] bg-background-light relative group">
+<img alt="Plated Lemon Herb Salmon with asparagus" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuB33x9pC24BHoPNnyWL-J8pWKQ_fAe26jzwyhdha-y0zhdnKUX6mwoljGRqsMaRyOmLx2UIHQVFgAOVulYdqIEh1tYevAyn-n87cNRDSxGpXDD13YBXNoTPL6v3zb8pBO-vTE9TpjaKMJcWtjxZ8RfaYnIWvopxsiHyLDJn1ZodQQW31zXn52Pu52xXmpVO5qrIQGNFURp-MJxr4iN51nC-6lp1ZaEik7hoZXXapD6Mq51-tzhLCjN0QOMRGb1TkzvK4lodoRszrI8"/>
+<!-- Hover Quick Save Overlay -->
+<div class="absolute inset-0 bg-text-main/20 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center backdrop-blur-[2px]">
+<button class="bg-surface text-text-main px-6 py-3 rounded-md font-bold text-sm shadow-sm hover:bg-primary hover:text-surface transition-colors flex items-center gap-2">
+<span class="material-symbols-outlined text-lg">bookmark_add</span>
+                                Save to Vault
+                            </button>
+</div>
+</div>
+<!-- Post Actions & Comments -->
+<div class="p-5">
+<div class="flex items-center gap-6 mb-4">
+<!-- Like Button (Inactive) -->
+<button class="flex items-center gap-1.5 text-text-main hover:text-accent transition-colors group">
+<span class="material-symbols-outlined text-[28px] group-hover:scale-110 transition-transform">local_fire_department</span>
+<span class="font-bold text-sm">24</span>
+</button>
+<button class="flex items-center gap-1.5 text-text-main hover:text-primary transition-colors">
+<span class="material-symbols-outlined text-[24px]">chat_bubble_outline</span>
+<span class="font-bold text-sm">5</span>
+</button>
+<button class="flex items-center gap-1.5 text-text-main hover:text-primary transition-colors ml-auto">
+<span class="material-symbols-outlined text-[24px]">ios_share</span>
+</button>
+</div>
+<div class="text-sm text-text-main leading-relaxed mb-3">
+<span class="font-display font-semibold text-base mr-1">Elena</span>
+                            Perfect post-run recovery meal. Hit my protein macros perfectly today! The lemon zest really brightens up the whole dish. 🍋🏃‍♀️
+                        </div>
+<button class="text-muted text-sm font-medium hover:text-text-main transition-colors">View all 5 comments</button>
+</div>
+</article>
+<!-- Post 2 -->
+<article class="bg-surface border border-subtle rounded-md overflow-hidden flex flex-col">
+<!-- Post Header -->
+<div class="p-5 flex items-start justify-between">
+<div class="flex gap-3">
+<div class="relative shrink-0">
+<div class="h-10 w-10 rounded-full bg-cover bg-center border border-subtle cursor-pointer" data-alt="Avatar of Alex Chen" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuCzcm1ETiQGfIUN-Q4W2Uf8Y03tkRDkwU1_xyipJ-qijooOVJ8hnV2ZDXQwnKnIOnWNmTG_GXLVuzMfIStVUMuXEX89mOq7gLFtjZldAophLyoP9Die06BAGWUF57hejiYkVmbGwD_FTE8g14UpWA9j0o_roSxHho4apLVTHjRFWDHDtN--_PVZDQ3Eypws14Kd4O6fgtH60I7n93haPffq9NndDXFSvGAauH7CGl5aeEdw9MGL2fSCHF6dquUBzFrZG8OicxYzwno");'></div>
+<div class="absolute -bottom-1 -right-1 bg-surface rounded-full p-[2px]">
+<span class="material-symbols-outlined text-accent text-[14px]">verified</span>
+</div>
+</div>
+<div>
+<p class="text-text-main text-base leading-snug">
+<span class="font-display font-semibold text-[1.1rem] cursor-pointer hover:text-primary">Alex Chen</span> added a new recipe to their vault:
+                                    <button class="font-display font-semibold italic text-[1.1rem] hover:text-primary underline decoration-subtle underline-offset-2 transition-colors">Miso Glazed Eggplant</button>
+</p>
+<p class="text-muted text-xs mt-1 uppercase tracking-wider">5 hours ago • <span class="text-accent">Batch Cook</span></p>
+</div>
+</div>
+<button class="text-muted hover:text-text-main">
+<span class="material-symbols-outlined">more_horiz</span>
+</button>
+</div>
+<!-- Post Image -->
+<div class="w-full aspect-square bg-background-light relative group border-y border-subtle">
+<img alt="Roasted miso glazed eggplant" class="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-300" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCv0tLEn0DgFBemcv1Zp5fHfKY24m3Xv8yxpxSq73jMbqqWDEtDRSkYHYvYVljwKwG_3XvyZLIEyNK7njWR86OJhfxJxyczFm0hr7bIfs1mRABD38E2qb8BeHruwwtjvHS3fzourLZPX9BgyPlYC2V9SgAgRucZUJTuL59wCctnPqVCNTx_iToJTicKpO6GNhx6hswxmBA93MGWtPyYHPbw26IU_yVYKef2sY9lkm6TssLx0sA2OxQs6zf30AXeZGU_zjuH08MApj0"/>
+</div>
+<!-- Post Actions & Comments -->
+<div class="p-5">
+<div class="flex items-center gap-6 mb-4">
+<!-- Like Button (Active state representation) -->
+<button class="flex items-center gap-1.5 text-accent transition-colors group">
+<span class="material-symbols-outlined text-[28px] filled">local_fire_department</span>
+<span class="font-bold text-sm">112</span>
+</button>
+<button class="flex items-center gap-1.5 text-text-main hover:text-primary transition-colors">
+<span class="material-symbols-outlined text-[24px]">chat_bubble_outline</span>
+<span class="font-bold text-sm">18</span>
+</button>
+</div>
+<div class="text-sm text-text-main leading-relaxed">
+<span class="font-display font-semibold text-base mr-1">Alex Chen</span>
+                            Testing out this new batch cook recipe for the week. High fiber, incredible umami flavor. Recipe link is now live in my vault for all followers!
+                        </div>
+</div>
+</article>
+</div>
+<!-- End of Feed / Loading indicator -->
+<div class="mt-12 text-center flex flex-col items-center gap-2">
+<span class="material-symbols-outlined text-muted animate-spin">sync</span>
+<p class="text-muted text-sm uppercase tracking-widest font-bold">Loading more history</p>
+</div>
+</main>
+</div>
+</body></html>

@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>NutriPulse Kitchen Lab</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#ccff00",
+                        "background-light": "#f8f8f5",
+                        "background-dark": "#1f230f",
+                    },
+                    fontFamily: {
+                        "display": ["Space Grotesk", "sans-serif"]
+                    },
+                    borderRadius: {"DEFAULT": "0.5rem", "lg": "1rem", "xl": "1.5rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>
+        body {
+            font-family: "Space Grotesk", sans-serif;
+        }
+        .hide-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .hide-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 min-h-screen">
+<!-- Top Navigation Header -->
+<header class="sticky top-0 z-50 bg-background-light/80 dark:bg-background-dark/80 backdrop-blur-md border-b border-slate-200 dark:border-white/10">
+<div class="flex items-center p-4 justify-between max-w-2xl mx-auto w-full">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-primary text-2xl">restaurant_menu</span>
+<h1 class="text-xl font-bold tracking-tight">NutriPulse <span class="text-primary font-medium">Lab</span></h1>
+</div>
+<div class="flex items-center gap-2">
+<button class="p-2 rounded-full hover:bg-slate-200 dark:hover:bg-white/10 transition-colors">
+<span class="material-symbols-outlined">notifications</span>
+</button>
+<div class="size-10 rounded-full border-2 border-primary overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="User profile portrait" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCyGcCQP2XTd7s7Zky7zkF95KIrjBE0BfIFSs1GacFCI8BvWhARqWjVOylHKvx6GVsAb-ShRI5D-gTdzvM2FUviXzAVd1-aeFH2ve8o6QWiN6d5KKXdU694men5X6-ovX6hBo5u0_Rawhyv1MUUPP4vULvWp1Mja5P8dQCnaxMJEmni06PXy7ZVUPot3BmHlCypn79K-QlHuVy6OdYGrKY0oWKY8KNx1Of8cmsBJVGLsV4DWNtHRi-jgmfi4VVebR8pj3edRwsQ5fMd"/>
+</div>
+</div>
+</div>
+</header>
+<main class="max-w-2xl mx-auto pb-24">
+<!-- Search and Filters Section -->
+<section class="px-4 py-6 space-y-4">
+<div class="relative group">
+<span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-primary transition-colors">search</span>
+<input class="w-full bg-slate-100 dark:bg-white/5 border-none rounded-xl py-3.5 pl-12 pr-4 focus:ring-2 focus:ring-primary placeholder:text-slate-400 dark:text-white transition-all" placeholder="Search functional recipes..." type="text"/>
+</div>
+<div class="flex gap-2 overflow-x-auto hide-scrollbar pb-1">
+<button class="flex shrink-0 items-center gap-2 px-5 py-2.5 rounded-xl bg-primary text-background-dark font-bold text-sm shadow-lg shadow-primary/20">
+<span class="material-symbols-outlined text-lg">bolt</span> Recovery
+                </button>
+<button class="flex shrink-0 items-center gap-2 px-5 py-2.5 rounded-xl bg-slate-100 dark:bg-white/5 border border-slate-200 dark:border-white/10 font-medium text-sm hover:border-primary/50 transition-colors">
+<span class="material-symbols-outlined text-lg">timer</span> Pre-Workout
+                </button>
+<button class="flex shrink-0 items-center gap-2 px-5 py-2.5 rounded-xl bg-slate-100 dark:bg-white/5 border border-slate-200 dark:border-white/10 font-medium text-sm hover:border-primary/50 transition-colors">
+<span class="material-symbols-outlined text-lg">egg</span> Keto
+                </button>
+<button class="flex shrink-0 items-center gap-2 px-5 py-2.5 rounded-xl bg-slate-100 dark:bg-white/5 border border-slate-200 dark:border-white/10 font-medium text-sm hover:border-primary/50 transition-colors">
+<span class="material-symbols-outlined text-lg">grass</span> Vegan
+                </button>
+</div>
+</section>
+<!-- Recommended for Recovery Header -->
+<section class="px-4 py-2">
+<div class="flex items-center justify-between mb-4">
+<div>
+<h2 class="text-2xl font-bold tracking-tight">Recommended for Recovery</h2>
+<p class="text-slate-500 dark:text-slate-400 text-sm mt-1">Based on your 8.4 strain today</p>
+</div>
+<span class="material-symbols-outlined text-primary animate-pulse">analytics</span>
+</div>
+<!-- Carousel Gallery -->
+<div class="flex gap-4 overflow-x-auto hide-scrollbar snap-x snap-mandatory">
+<!-- Card 1 -->
+<div class="min-w-[85%] snap-center group relative aspect-[4/5] rounded-3xl overflow-hidden shadow-2xl">
+<img class="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" data-alt="Anti-inflammatory salmon bowl with avocado" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBQJiLnXOYmh4JfgxYMG374hKtNAZ5fIxAd0RJa75qpL1fmpWkKZESB5YGWW0FX8bv2HgmA0KuPOoU1sOcxoKI5k9awe_PElw6uLwfZhGP53YoJK4mU0Aql-iWF7TzMGhkD4MkS307f4hXgh6t_xIXd-uj1Wkzd32RDnrH5gIu96G6CfMwTFXUsSAgaP-AE-pKYKqkqffpz8iy6-DWq-jCIimOcKi_niZlx8vpN7Rdboy73GyYzTzKt0NNHKy6Orw9lrKYMixhloVvl"/>
+<div class="absolute inset-0 bg-gradient-to-t from-background-dark via-transparent to-transparent"></div>
+<div class="absolute top-4 right-4 bg-primary px-3 py-1.5 rounded-full text-background-dark font-bold text-xs flex items-center gap-1">
+<span class="material-symbols-outlined text-sm">stars</span> 98% Match
+                    </div>
+<div class="absolute bottom-0 left-0 right-0 p-6 space-y-3">
+<h3 class="text-2xl font-bold leading-tight">Anti-Inflammatory Salmon Bowl</h3>
+<div class="flex gap-4">
+<div class="flex flex-col">
+<span class="text-[10px] uppercase tracking-wider text-slate-400">Protein</span>
+<span class="font-bold text-primary">34g</span>
+</div>
+<div class="flex flex-col">
+<span class="text-[10px] uppercase tracking-wider text-slate-400">Carbs</span>
+<span class="font-bold">12g</span>
+</div>
+<div class="flex flex-col">
+<span class="text-[10px] uppercase tracking-wider text-slate-400">Fats</span>
+<span class="font-bold">22g</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Card 2 -->
+<div class="min-w-[85%] snap-center group relative aspect-[4/5] rounded-3xl overflow-hidden shadow-2xl">
+<img class="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" data-alt="High protein quinoa and egg breakfast" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBRF1XMPheoIeTc-lJ5wVhE_iDDT2D1scK3db-LQfTvTlc37sCdEVlWk1l5NRE58S-eu1foNm8WDoWN3iEDCw4lydtkFCnaM-sd70VOZ-Ctij2iOCEvljPJoVg1lcD-8cBuPF5sb5Zk-nfvppq3qlaqOXXCiOkkkVdz8jc6ZmUaOdBnkjvAljJJARIhF4FiC6WwoJX5NxlpScr3FhpFiuC0Sv6PWLMYjgEK5PeygIEBG9rCgArLa7F0jQH2fsDicE4t0obJQ1-L50aj"/>
+<div class="absolute inset-0 bg-gradient-to-t from-background-dark via-transparent to-transparent"></div>
+<div class="absolute top-4 right-4 bg-primary px-3 py-1.5 rounded-full text-background-dark font-bold text-xs flex items-center gap-1">
+<span class="material-symbols-outlined text-sm">stars</span> 92% Match
+                    </div>
+<div class="absolute bottom-0 left-0 right-0 p-6 space-y-3">
+<h3 class="text-2xl font-bold leading-tight">High-Protein Quinoa Scramble</h3>
+<div class="flex gap-4">
+<div class="flex flex-col">
+<span class="text-[10px] uppercase tracking-wider text-slate-400">Protein</span>
+<span class="font-bold text-primary">28g</span>
+</div>
+<div class="flex flex-col">
+<span class="text-[10px] uppercase tracking-wider text-slate-400">Carbs</span>
+<span class="font-bold">45g</span>
+</div>
+<div class="flex flex-col">
+<span class="text-[10px] uppercase tracking-wider text-slate-400">Fats</span>
+<span class="font-bold">14g</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Quick Prep Section -->
+<section class="px-4 py-8">
+<h2 class="text-xl font-bold mb-4 tracking-tight">Quick Prep ( &lt; 15min )</h2>
+<div class="grid grid-cols-2 gap-4">
+<div class="bg-slate-100 dark:bg-white/5 rounded-2xl p-3 border border-slate-200 dark:border-white/10">
+<div class="aspect-square rounded-xl overflow-hidden mb-3">
+<img class="w-full h-full object-cover" data-alt="Green recovery smoothie" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCEDpvBsPp_I4tEJLj9zu3KTEvEUAe2PANAR8Btttwz6GlSIFDOBdW7rbXstCJY_5niw0JNymvktRJXuhkdS4jBSGoEvc5gdpf1PJp7t1yho3_ju-m1IcEFhLvTPqSWrmLPKW6TXethJTyxLelEeuOBdrXrjgVow5Soob3hsxGzZRJAXqEV877HE-Vs5VFVHCvqHBsqFbj3QVOdnrHeIUud1pu5ZFL43jurjNnU5IKin3H2QQa25zoFND0vjB6LX2dknoD1HMQMTUGT"/>
+</div>
+<h4 class="font-bold text-sm line-clamp-1">Muscle Mender Smoothie</h4>
+<p class="text-primary text-xs font-medium mt-1">210 kcal • 20g Protein</p>
+</div>
+<div class="bg-slate-100 dark:bg-white/5 rounded-2xl p-3 border border-slate-200 dark:border-white/10">
+<div class="aspect-square rounded-xl overflow-hidden mb-3">
+<img class="w-full h-full object-cover" data-alt="Colorful kale and beet salad" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCMG8lzc0qu7BfLVdOMYZGXfj3xRHL0T8KXCEmRv6UR0_KjzRjj6dOyGXwyi4ledb03GtQlwVBNeDoJiNJUgztJ3p60MvGfhVay0LDkbnbzAdR9Vd_I_J_vCyj9EsqK8ZOXC1coam7VqQqnOyJHOsgq-epKjewXlP6ttSjWnEl5UWikVMuJdYtZs5_BBfExERjmOV-TZ7AYNheYuoX2P43w2yWCZO1Sqgg0Ced-wqaMzEZm6gnaZkzBh4HN2WnM158Emn67STHEjCxj"/>
+</div>
+<h4 class="font-bold text-sm line-clamp-1">Magnesium Rich Salad</h4>
+<p class="text-primary text-xs font-medium mt-1">340 kcal • 12g Protein</p>
+</div>
+</div>
+</section>
+</main>
+<!-- Bottom Navigation Bar -->
+<nav class="fixed bottom-0 left-0 right-0 z-50 bg-background-light dark:bg-[#171810] border-t border-slate-200 dark:border-[#363a27] pb-6 pt-3 px-6">
+<div class="max-w-2xl mx-auto flex items-center justify-between">
+<a class="flex flex-col items-center gap-1 group" href="#">
+<span class="material-symbols-outlined text-slate-400 dark:text-[#b5bc9a] group-hover:text-primary transition-colors">home</span>
+<span class="text-[10px] font-medium text-slate-400 dark:text-[#b5bc9a]">Home</span>
+</a>
+<a class="flex flex-col items-center gap-1 group" href="#">
+<span class="material-symbols-outlined text-primary" style="font-variation-settings: 'FILL' 1">skillet</span>
+<span class="text-[10px] font-bold text-slate-900 dark:text-white">Recipes</span>
+</a>
+<a class="flex flex-col items-center gap-1 group" href="#">
+<span class="material-symbols-outlined text-slate-400 dark:text-[#b5bc9a] group-hover:text-primary transition-colors">show_chart</span>
+<span class="text-[10px] font-medium text-slate-400 dark:text-[#b5bc9a]">Activity</span>
+</a>
+<a class="flex flex-col items-center gap-1 group" href="#">
+<span class="material-symbols-outlined text-slate-400 dark:text-[#b5bc9a] group-hover:text-primary transition-colors">person</span>
+<span class="text-[10px] font-medium text-slate-400 dark:text-[#b5bc9a]">Profile</span>
+</a>
+</div>
+</nav>
+</body></html>

@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>RIAL | Human-Centric Precision</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#007dff",
+                        "background-light": "#f5f7f8",
+                        "background-dark": "#0f1923",
+                        "accent-green": "#0bda5b",
+                    },
+                    fontFamily: {
+                        "display": ["Space Grotesk"]
+                    },
+                    borderRadius: {"DEFAULT": "0.5rem", "lg": "1rem", "xl": "1.5rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>
+        body {
+            font-family: 'Space Grotesk', sans-serif;
+        }
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+        .progress-ring {
+            transition: stroke-dashoffset 0.35s;
+            transform: rotate(-90deg);
+            transform-origin: 50% 50%;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 min-h-screen">
+<div class="max-w-md mx-auto min-h-screen flex flex-col relative pb-20">
+<header class="flex items-center p-6 justify-between sticky top-0 bg-background-dark/80 backdrop-blur-md z-10">
+<div class="flex size-10 shrink-0 items-center justify-center rounded-full bg-primary/20">
+<span class="material-symbols-outlined text-primary">biotech</span>
+</div>
+<h1 class="text-slate-100 text-lg font-bold leading-tight tracking-tight flex-1 ml-3 font-display">RIAL Precision</h1>
+<div class="flex gap-2">
+<button class="p-2 rounded-full hover:bg-slate-800 transition-colors">
+<span class="material-symbols-outlined text-slate-400">notifications</span>
+</button>
+<button class="p-2 rounded-full hover:bg-slate-800 transition-colors">
+<span class="material-symbols-outlined text-slate-400">settings</span>
+</button>
+</div>
+</header>
+<main class="flex-1 px-4 space-y-6">
+<section class="flex flex-col items-center py-6 @container">
+<div class="relative flex items-center justify-center mb-6">
+<svg class="size-48">
+<circle class="text-slate-800" cx="96" cy="96" fill="transparent" r="80" stroke="currentColor" stroke-width="8"></circle>
+<circle class="text-primary" cx="96" cy="96" fill="transparent" r="80" stroke="currentColor" stroke-dasharray="502" stroke-dashoffset="120" stroke-linecap="round" stroke-width="8"></circle>
+</svg>
+<div class="absolute inset-0 flex flex-col items-center justify-center">
+<div class="size-32 rounded-full bg-cover bg-center border-4 border-background-dark shadow-2xl" data-alt="Portrait of a healthy man in his thirties" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuDUyhw9WWwxnBFy-NozAz2JxshCdZ1j2zkwgICpFtTBDFoEd-JzqpYlY3p6WOa_DAM46GxmklUsU3BJKMIwHMyigeX8_sI7hnAcf5px7_Nj9Cz86DfNKRHqgxRG5O6Yw1G_a0D7nCqyDffOdoiqb-lkkmIsm6bI9t6NQfBNQgg-TfppH4uX9ymGfcG9rKjl6NPvGD9oXc4u2csiXjRBvpNWjWusVIztWBPgx0xowomcCpLgNZ_ZsC2O_0d7TGgYJIVNZThC_rsV5ET-")'></div>
+</div>
+</div>
+<div class="text-center space-y-1">
+<h2 class="text-slate-100 text-3xl font-bold font-display">Bio-Age: 28.4</h2>
+<p class="text-slate-400 text-sm">Actual Age: 32 | <span class="text-accent-green font-medium">-3.6y longevity gain</span></p>
+</div>
+<div class="mt-6 w-full flex gap-3">
+<button class="flex-1 bg-primary hover:bg-primary/90 text-white py-3 rounded-xl font-bold text-sm transition-all shadow-lg shadow-primary/20">
+                        Analyze Bio-Markers
+                    </button>
+<button class="px-4 bg-slate-800 text-slate-100 rounded-xl font-bold text-sm">
+<span class="material-symbols-outlined align-middle">share</span>
+</button>
+</div>
+</section>
+<section class="grid grid-cols-2 gap-4">
+<div class="glass-panel rounded-xl p-5 flex flex-col gap-1">
+<div class="flex justify-between items-start">
+<p class="text-slate-400 text-xs font-medium uppercase tracking-wider">Longevity Score</p>
+<span class="material-symbols-outlined text-accent-green text-sm">trending_up</span>
+</div>
+<div class="flex items-baseline gap-1 mt-1">
+<p class="text-slate-100 text-2xl font-bold">94</p>
+<p class="text-slate-500 text-sm font-medium">/100</p>
+</div>
+<p class="text-accent-green text-xs font-medium">+2.1% vs last month</p>
+</div>
+<div class="glass-panel rounded-xl p-5 flex flex-col gap-1">
+<div class="flex justify-between items-start">
+<p class="text-slate-400 text-xs font-medium uppercase tracking-wider">Consistency</p>
+<span class="material-symbols-outlined text-primary text-sm">verified</span>
+</div>
+<div class="flex items-baseline gap-1 mt-1">
+<p class="text-slate-100 text-2xl font-bold">98%</p>
+</div>
+<p class="text-accent-green text-xs font-medium">+0.5% high streak</p>
+</div>
+</section>
+<section class="space-y-4">
+<div class="flex justify-between items-end">
+<h3 class="text-slate-100 text-xl font-bold font-display">Long-Term Goals</h3>
+<button class="text-primary text-sm font-medium">View all</button>
+</div>
+<div class="space-y-3">
+<div class="glass-panel rounded-xl p-4">
+<div class="flex justify-between items-center mb-3">
+<div class="flex items-center gap-3">
+<div class="size-10 rounded-lg bg-orange-500/20 flex items-center justify-center">
+<span class="material-symbols-outlined text-orange-500">fitness_center</span>
+</div>
+<div>
+<h4 class="text-slate-100 font-bold text-sm">Muscle Hypertrophy</h4>
+<p class="text-slate-500 text-xs">Target: 82kg lean mass</p>
+</div>
+</div>
+<p class="text-slate-100 font-bold text-sm">68%</p>
+</div>
+<div class="w-full bg-slate-800 rounded-full h-1.5 overflow-hidden">
+<div class="bg-orange-500 h-full rounded-full" style="width: 68%"></div>
+</div>
+</div>
+<div class="glass-panel rounded-xl p-4">
+<div class="flex justify-between items-center mb-3">
+<div class="flex items-center gap-3">
+<div class="size-10 rounded-lg bg-cyan-500/20 flex items-center justify-center">
+<span class="material-symbols-outlined text-cyan-500">feed</span>
+</div>
+<div>
+<h4 class="text-slate-100 font-bold text-sm">Improved Gut Health</h4>
+<p class="text-slate-500 text-xs">Target: Microbiome Index 9.0</p>
+</div>
+</div>
+<p class="text-slate-100 font-bold text-sm">42%</p>
+</div>
+<div class="w-full bg-slate-800 rounded-full h-1.5 overflow-hidden">
+<div class="bg-cyan-500 h-full rounded-full" style="width: 42%"></div>
+</div>
+</div>
+</div>
+</section>
+<section class="space-y-4">
+<h3 class="text-slate-100 text-xl font-bold font-display">Habit Consistency</h3>
+<div class="glass-panel rounded-xl p-5">
+<div class="flex items-end justify-between h-32 gap-1 px-1">
+<div class="flex-1 bg-primary/20 rounded-t-sm h-1/2"></div>
+<div class="flex-1 bg-primary/30 rounded-t-sm h-3/4"></div>
+<div class="flex-1 bg-primary/40 rounded-t-sm h-2/3"></div>
+<div class="flex-1 bg-primary/60 rounded-t-sm h-4/5"></div>
+<div class="flex-1 bg-primary/50 rounded-t-sm h-3/5"></div>
+<div class="flex-1 bg-primary/80 rounded-t-sm h-[90%]"></div>
+<div class="flex-1 bg-primary rounded-t-sm h-full"></div>
+<div class="flex-1 bg-primary/40 rounded-t-sm h-2/3"></div>
+<div class="flex-1 bg-primary/60 rounded-t-sm h-4/5"></div>
+<div class="flex-1 bg-primary/90 rounded-t-sm h-[95%]"></div>
+<div class="flex-1 bg-primary rounded-t-sm h-full"></div>
+<div class="flex-1 bg-primary/70 rounded-t-sm h-[75%]"></div>
+</div>
+<div class="flex justify-between mt-4 px-1">
+<span class="text-[10px] text-slate-500 font-medium uppercase tracking-widest">Oct 2023</span>
+<span class="text-[10px] text-slate-100 font-medium uppercase tracking-widest">Present</span>
+</div>
+</div>
+</section>
+</main>
+<nav class="fixed bottom-0 left-0 right-0 max-w-md mx-auto z-50">
+<div class="flex gap-2 border-t border-slate-800 bg-background-dark/95 backdrop-blur-lg px-4 pb-6 pt-3">
+<a class="flex flex-1 flex-col items-center justify-center gap-1 text-primary" href="#">
+<span class="material-symbols-outlined text-[24px]" style="font-variation-settings: 'FILL' 1">dashboard</span>
+<p class="text-xs font-medium leading-normal">Insights</p>
+</a>
+<a class="flex flex-1 flex-col items-center justify-center gap-1 text-slate-500 hover:text-slate-300 transition-colors" href="#">
+<span class="material-symbols-outlined text-[24px]">analytics</span>
+<p class="text-xs font-medium leading-normal">Biometrics</p>
+</a>
+<a class="flex flex-1 flex-col items-center justify-center gap-1 text-slate-500 hover:text-slate-300 transition-colors" href="#">
+<span class="material-symbols-outlined text-[24px]">history_edu</span>
+<p class="text-xs font-medium leading-normal">Protocol</p>
+</a>
+<a class="flex flex-1 flex-col items-center justify-center gap-1 text-slate-500 hover:text-slate-300 transition-colors" href="#">
+<span class="material-symbols-outlined text-[24px]">account_circle</span>
+<p class="text-xs font-medium leading-normal">Bio-ID</p>
+</a>
+</div>
+</nav>
+</div>
+</body></html>

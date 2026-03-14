@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+
+<html lang="es"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Biblioteca de Nutrientes - Diccionario Pro</title>
+<!-- Tailwind CSS v3 with Plugins -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- Google Fonts: Inter & Playfair Display for Premium Tech feel -->
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&amp;family=Playfair+Display:ital,wght@0,700;1,700&amp;display=swap" rel="stylesheet"/>
+<script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'sans-serif'],
+            serif: ['Playfair Display', 'serif'],
+          },
+          colors: {
+            tech: {
+              gold: '#C5A059',
+              dark: '#1A1A1A',
+              silver: '#F5F5F7',
+              accent: '#2D3436'
+            }
+          }
+        }
+      }
+    }
+  </script>
+<style data-purpose="custom-typography">
+    .text-balance { text-wrap: balance; }
+    .glass-effect {
+      background: rgba(255, 255, 255, 0.8);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+    }
+    .data-overlay {
+      background: linear-gradient(0deg, rgba(0,0,0,0.6) 0%, rgba(0,0,0,0) 100%);
+    }
+  </style>
+</head>
+<body class="bg-white text-tech-dark font-sans antialiased">
+<!-- BEGIN: MainHeader -->
+<header class="sticky top-0 z-50 bg-white/90 backdrop-blur-md border-b border-gray-100">
+<div class="px-6 py-4">
+<div class="flex items-center justify-between mb-6">
+<div>
+<span class="text-[10px] uppercase tracking-[0.2em] text-tech-gold font-bold">Editorial Tech</span>
+<h1 class="font-serif text-2xl italic">Biblioteca de Nutrientes</h1>
+</div>
+<button class="p-2">
+<svg class="w-6 h-6" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h16" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"></path></svg>
+</button>
+</div>
+<!-- Search and Filters -->
+<div class="space-y-4">
+<!-- Search Bar -->
+<div class="relative">
+<span class="absolute inset-y-0 left-0 flex items-center pl-3">
+<svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+</span>
+<input class="w-full pl-10 pr-4 py-3 bg-tech-silver border-none rounded-xl text-sm focus:ring-1 focus:ring-tech-gold transition-all" placeholder="Buscar ingrediente o beneficio..." type="text"/>
+</div>
+<!-- Category Filters -->
+<div class="flex gap-2 overflow-x-auto pb-2 no-scrollbar">
+<button class="px-5 py-2 bg-tech-dark text-white text-xs font-semibold rounded-full whitespace-nowrap">Todos</button>
+<button class="px-5 py-2 bg-tech-silver text-gray-600 text-xs font-semibold rounded-full whitespace-nowrap">Vitaminas</button>
+<button class="px-5 py-2 bg-tech-silver text-gray-600 text-xs font-semibold rounded-full whitespace-nowrap">Minerales</button>
+<button class="px-5 py-2 bg-tech-silver text-gray-600 text-xs font-semibold rounded-full whitespace-nowrap">Macros</button>
+<button class="px-5 py-2 bg-tech-silver text-gray-600 text-xs font-semibold rounded-full whitespace-nowrap">Antioxidantes</button>
+</div>
+</div>
+</div>
+</header>
+<!-- END: MainHeader -->
+<!-- BEGIN: MainContent -->
+<main class="px-6 py-8">
+<div class="flex items-baseline justify-between mb-8">
+<h2 class="text-xs uppercase tracking-widest font-bold text-gray-400">Diccionario Bio-Activo</h2>
+<span class="text-xs text-gray-400">124 Ingredientes</span>
+</div>
+<div class="space-y-12">
+<!-- BEGIN: BioActiveCard_Avocado -->
+<article class="group" data-purpose="bio-active-card">
+<div class="relative aspect-[4/5] rounded-3xl overflow-hidden mb-4 shadow-2xl">
+<!-- Food Photography -->
+<img alt="Avocado" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDDbRsvkJCAIa_DAE8VYZbnQzBX_N6FWmWIZSZSJ0HXVcPxATOMEz8Ap4TU4sB0i9WO4K4JxbH-GxsxkP9_rbi1KVj4VEauS-tSgXWcKvmEHuI5a7XdS9hkFeLfoBiyFu8ZDgpTTXq4fcXiVIZdKHst6Om2KvkADu7hG4ThQIZzEJbuJN2BTJcAImd8TwihqOHO3NTUyHBzK80sE4kYqNwkaROSKz3wefhcS_tkmF7nWZMNH-sYmyfCSVUWJou9LIkRX8TcLIzoz_u1"/>
+<!-- Technical Data Overlay -->
+<div class="absolute inset-0 data-overlay flex flex-col justify-end p-6">
+<div class="flex justify-between items-end">
+<div>
+<span class="text-white/70 text-[10px] uppercase tracking-tighter">Persea Americana</span>
+<h3 class="text-white text-3xl font-serif">Aguacate</h3>
+</div>
+<div class="text-right">
+<div class="text-tech-gold text-xs font-bold mb-1">DENSIDAD NUTRICIONAL</div>
+<div class="flex gap-1 justify-end">
+<div class="w-1.5 h-4 bg-tech-gold"></div>
+<div class="w-1.5 h-4 bg-tech-gold"></div>
+<div class="w-1.5 h-4 bg-tech-gold"></div>
+<div class="w-1.5 h-4 bg-white/30"></div>
+</div>
+</div>
+</div>
+</div>
+<!-- Performance Tag -->
+<div class="absolute top-6 right-6 glass-effect px-4 py-2 rounded-full border border-white/20">
+<span class="text-[10px] font-bold text-tech-dark tracking-wider">RECUPERACIÓN</span>
+</div>
+</div>
+<div class="grid grid-cols-2 gap-4">
+<div class="p-4 bg-tech-silver rounded-2xl">
+<h4 class="text-[10px] font-bold text-tech-gold uppercase mb-1">Bio-Activo Clave</h4>
+<p class="text-sm font-semibold">Potasio &amp; Grasas Mono</p>
+<p class="text-[11px] text-gray-500 mt-2 leading-relaxed">Mantiene el equilibrio electrolítico y reduce inflamación muscular.</p>
+</div>
+<div class="p-4 bg-tech-silver rounded-2xl">
+<h4 class="text-[10px] font-bold text-tech-gold uppercase mb-1">Sinergia</h4>
+<p class="text-sm font-semibold">Vitamina K + D</p>
+<p class="text-[11px] text-gray-500 mt-2 leading-relaxed">Optimiza la absorción de nutrientes liposolubles.</p>
+</div>
+</div>
+</article>
+<!-- END: BioActiveCard_Avocado -->
+<!-- BEGIN: BioActiveCard_Spinach -->
+<article class="group" data-purpose="bio-active-card">
+<div class="relative aspect-[4/5] rounded-3xl overflow-hidden mb-4 shadow-2xl">
+<!-- Food Photography -->
+<img alt="Spinach" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDCVAnSLc_OA4vj1l7SywoJuXk4aL9QJniwpCbWv_AuT9fpnCk1S5YlzmrL0CsMELfG-VhYOc0Le9GyJ_9bn-5uZ6mFzi9tlByFINv8FSJrP_3AQ3AnmCcm4swlPIgUDlWLW0JwUWtYTZz3SnA6FBocPUG_VZBZN1QHRTzWAR5j9ZFNrzgfoXUqJvF6QZuFV-kfui6OQUdM2Gh41dgsl5g1z8W2O2axFIcMUgUgS9sON3Bcf02SsY1t1GpoxZGWP1qwU_u4Zim1CHiz"/>
+<!-- Technical Data Overlay -->
+<div class="absolute inset-0 data-overlay flex flex-col justify-end p-6">
+<div class="flex justify-between items-end">
+<div>
+<span class="text-white/70 text-[10px] uppercase tracking-tighter">Spinacia Oleracea</span>
+<h3 class="text-white text-3xl font-serif">Espinaca</h3>
+</div>
+<div class="text-right">
+<div class="text-tech-gold text-xs font-bold mb-1">DENSIDAD NUTRICIONAL</div>
+<div class="flex gap-1 justify-end">
+<div class="w-1.5 h-4 bg-tech-gold"></div>
+<div class="w-1.5 h-4 bg-tech-gold"></div>
+<div class="w-1.5 h-4 bg-tech-gold"></div>
+<div class="w-1.5 h-4 bg-tech-gold"></div>
+</div>
+</div>
+</div>
+</div>
+<!-- Performance Tag -->
+<div class="absolute top-6 right-6 glass-effect px-4 py-2 rounded-full border border-white/20">
+<span class="text-[10px] font-bold text-tech-dark tracking-wider">OXIGENACIÓN</span>
+</div>
+</div>
+<div class="grid grid-cols-2 gap-4">
+<div class="p-4 bg-tech-silver rounded-2xl">
+<h4 class="text-[10px] font-bold text-tech-gold uppercase mb-1">Bio-Activo Clave</h4>
+<p class="text-sm font-semibold">Magnesio &amp; Nitratos</p>
+<p class="text-[11px] text-gray-500 mt-2 leading-relaxed">Mejora la eficiencia mitocondrial y la vasodilatación.</p>
+</div>
+<div class="p-4 bg-tech-silver rounded-2xl">
+<h4 class="text-[10px] font-bold text-tech-gold uppercase mb-1">Sinergia</h4>
+<p class="text-sm font-semibold">Hierro + Vit C</p>
+<p class="text-[11px] text-gray-500 mt-2 leading-relaxed">Crucial para el transporte de oxígeno en atletas de fondo.</p>
+</div>
+</div>
+</article>
+<!-- END: BioActiveCard_Spinach -->
+</div>
+<!-- BEGIN: FloatingNavigation -->
+<nav class="fixed bottom-8 left-1/2 -translate-x-1/2 w-[90%] max-w-sm glass-effect rounded-2xl shadow-xl border border-white/50 py-4 px-8 flex justify-between items-center z-50">
+<button class="text-tech-gold">
+<svg class="w-6 h-6" fill="currentColor" viewbox="0 0 24 24"><path d="M3 13h8V3H3v10zm0 8h8v-6H3v6zm10 0h8V11h-8v10zm0-18v6h8V3h-8z"></path></svg>
+</button>
+<button class="text-gray-400">
+<svg class="w-6 h-6" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+</button>
+<button class="text-gray-400">
+<svg class="w-6 h-6" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+</button>
+</nav>
+<!-- END: FloatingNavigation -->
+</main>
+<!-- END: MainContent -->
+<!-- BEGIN: Footer -->
+<footer class="mt-20 px-6 py-12 border-t border-gray-100 text-center bg-tech-silver/30">
+<p class="font-serif italic text-lg mb-2">Omnis Scientia Nutritio</p>
+<p class="text-[10px] uppercase tracking-widest text-gray-400">Edición Pro v2.4 • 2024 Editorial Tech</p>
+</footer>
+<!-- END: Footer -->
+</body></html>

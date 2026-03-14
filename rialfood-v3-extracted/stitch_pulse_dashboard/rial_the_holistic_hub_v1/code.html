@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>RIAL - Holistic Hub</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#ccff00",
+                        "background-light": "#f8f8f5",
+                        "background-dark": "#12140a",
+                        "card-dark": "#1f230f",
+                        "accent-muted": "#363a27"
+                    },
+                    fontFamily: {
+                        "display": ["Space Grotesk"]
+                    },
+                    borderRadius: {"DEFAULT": "0.5rem", "lg": "1rem", "xl": "1.5rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>
+        body {
+            font-family: "Space Grotesk", sans-serif;
+            -webkit-font-smoothing: antialiased;
+        }
+        .editorial-shadow {
+            box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.5);
+        }
+        .glass-overlay {
+            background: rgba(31, 35, 15, 0.7);
+            backdrop-filter: blur(8px);
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 min-h-screen pb-24">
+<!-- Header -->
+<header class="sticky top-0 z-50 flex items-center bg-background-light/80 dark:bg-background-dark/80 backdrop-blur-md p-4 justify-between border-b border-accent-muted/20">
+<div class="flex size-10 shrink-0 items-center overflow-hidden rounded-full border border-primary/30">
+<div class="bg-center bg-no-repeat aspect-square bg-cover size-full" data-alt="Close up portrait of a smiling woman" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuBNQXLNvs0GO6LusZioAuZZieAckadQS7Hkg5YAQIIZXZ-ldBgq89YcXoQjSKy5Hl1PMbReOdbvomdjKRxJeAoUS3EvZGjVi0mcVsSm51eVpOqLSZBvpZKZ39all3nwbpkaggBrLaKq60sUgo01_R4Mr9xMeP8k4jCAoyYsLKLXK5ipK3BAo4CGRKGxFjyEyGF0KdUdSt_fcLkAhs8aZAavGQmCruvCrG3kWKpnaNa6u4halq3zXpKpwwLjN8nRMIp9BRjWbRxd5bdp");'></div>
+</div>
+<h1 class="text-slate-900 dark:text-primary text-2xl font-bold leading-none tracking-tighter uppercase italic">RIAL</h1>
+<div class="flex w-10 items-center justify-end">
+<button class="flex items-center justify-center rounded-full size-10 bg-accent-muted/20 text-slate-900 dark:text-slate-100">
+<span class="material-symbols-outlined">notifications</span>
+</button>
+</div>
+</header>
+<main class="max-w-md mx-auto px-4 py-6 space-y-8">
+<!-- SECTION 1: FITNESS ENTHUSIAST (Daily Real Score) -->
+<section>
+<div class="flex justify-between items-end mb-4">
+<h2 class="text-xl font-bold tracking-tight">Daily Real Score</h2>
+<span class="text-primary text-sm font-medium">Synced 2m ago</span>
+</div>
+<div class="grid grid-cols-2 gap-3">
+<div class="col-span-2 flex flex-col gap-2 rounded-xl p-6 bg-primary dark:bg-primary text-background-dark overflow-hidden relative">
+<div class="absolute top-0 right-0 p-4 opacity-20">
+<span class="material-symbols-outlined text-6xl">bolt</span>
+</div>
+<p class="text-sm font-bold uppercase tracking-widest opacity-80">Real Score</p>
+<div class="flex items-baseline gap-2">
+<p class="text-6xl font-bold leading-none tracking-tighter">88</p>
+<span class="text-lg font-bold">+5%</span>
+</div>
+<p class="text-sm font-medium mt-2">Optimal recovery phase detected.</p>
+</div>
+<div class="flex flex-col gap-1 rounded-xl p-5 bg-card-dark border border-accent-muted/30">
+<div class="flex items-center gap-2 mb-2">
+<span class="material-symbols-outlined text-primary text-sm">favorite</span>
+<p class="text-slate-400 text-xs font-bold uppercase tracking-wider">Heart Rate</p>
+</div>
+<p class="text-2xl font-bold leading-tight">72 <span class="text-xs font-normal text-slate-400">bpm</span></p>
+</div>
+<div class="flex flex-col gap-1 rounded-xl p-5 bg-card-dark border border-accent-muted/30">
+<div class="flex items-center gap-2 mb-2">
+<span class="material-symbols-outlined text-primary text-sm">battery_very_low</span>
+<p class="text-slate-400 text-xs font-bold uppercase tracking-wider">Recovery</p>
+</div>
+<div class="flex items-baseline gap-1">
+<p class="text-2xl font-bold leading-tight">94%</p>
+<span class="text-primary text-xs font-bold">+2%</span>
+</div>
+</div>
+</div>
+</section>
+<!-- SECTION 2: FAMILY MEAL PLANNER (Home Cook/Family Manager) -->
+<section class="rounded-xl bg-card-dark border border-accent-muted/30 overflow-hidden">
+<div class="p-5 border-b border-accent-muted/20 flex justify-between items-center">
+<div>
+<h2 class="text-lg font-bold">Family Meal Planner</h2>
+<p class="text-xs text-slate-400">Week 42 • Batch Cooking Schedule</p>
+</div>
+<button class="bg-primary/10 text-primary p-2 rounded-lg">
+<span class="material-symbols-outlined">calendar_today</span>
+</button>
+</div>
+<div class="p-5 space-y-4">
+<div class="flex gap-4 items-center bg-background-dark/50 p-3 rounded-lg border border-accent-muted/20">
+<div class="size-12 rounded-lg bg-center bg-cover" data-alt="Tupperware containers with prepared vegetables" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuDTYQ8NF6G_rhVJRpL1uFda8qHeY9d8k2l3CqAZGfeN_VQXl7quAZECQMuQNvXoA76AlJHiFqqEaaGMTRXc88-kgUQF603vbThXjyfvkeoNtP8AZvQ3wI-jsfhfM8v3YMHj3JdndGz7jjcYU2nyiOW4DWv_3wYyJfl9ncfEXZ7i7VwQC94OCebk7uNaeEF_rMbzLEeB9jB5kuILgnV2yileN28CnFFT_uQpUR64GwUHBPyuCvdROc81enLEI6kiyOXYsh-kjE3a6OhX');"></div>
+<div class="flex-1">
+<p class="text-sm font-bold">Sunday Prep</p>
+<p class="text-xs text-slate-400">4 Main bases • 12 Portions</p>
+</div>
+<div class="text-right">
+<span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-primary/20 text-primary border border-primary/30 uppercase tracking-tighter">In Progress</span>
+</div>
+</div>
+<div class="grid grid-cols-2 gap-3">
+<button class="flex items-center justify-center gap-2 py-3 px-4 bg-accent-muted/30 rounded-lg hover:bg-accent-muted/50 transition-colors">
+<span class="material-symbols-outlined text-primary size-5">calculate</span>
+<span class="text-sm font-bold">Portion Calc</span>
+</button>
+<button class="flex items-center justify-center gap-2 py-3 px-4 bg-accent-muted/30 rounded-lg hover:bg-accent-muted/50 transition-colors">
+<span class="material-symbols-outlined text-primary size-5">shopping_basket</span>
+<span class="text-sm font-bold">Smart List</span>
+</button>
+</div>
+</div>
+</section>
+<!-- SECTION 3: CREATOR SPOTLIGHT (Professional Athlete) -->
+<section>
+<div class="flex items-center gap-2 mb-4">
+<span class="w-2 h-6 bg-primary rounded-full"></span>
+<h2 class="text-xl font-bold tracking-tight">Creator Spotlight</h2>
+</div>
+<div class="group relative rounded-xl overflow-hidden editorial-shadow bg-card-dark border border-accent-muted/30">
+<div class="relative aspect-video">
+<div class="absolute inset-0 bg-center bg-cover transition-transform duration-500 group-hover:scale-105" data-alt="High-end food photography of a colorful salad bowl" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCrTdXWF2eZ0eRdIaLZ-MreM_yAdtEAzt2BRnJgLmVPU0hG7L_HeBG3SksLWpb2cVq1Eh9hEdyPfdFVndqr7MtrromTTOIjyrw2dqsxQ3JytPXfYUuVcPJFOqUt60Q5WmQ1IhjEevELg0DeXwvaGTYs1vJR3b5EGaNISaOWH8nTHS_D3qBdl4BciG-RhwLC-axBjp6XuqL2P5SuOFqf5uM-_xKLqh4EJZ1fzAKCzDzXsZ9nH6sKdzzfn2sYd5MvVQvplH_shkpqKwyB');"></div>
+<div class="absolute inset-0 bg-gradient-to-t from-background-dark via-transparent to-transparent"></div>
+<!-- Play Overlay -->
+<div class="absolute inset-0 flex items-center justify-center">
+<div class="size-16 rounded-full bg-primary/90 flex items-center justify-center text-background-dark shadow-2xl scale-100 group-hover:scale-110 transition-transform">
+<span class="material-symbols-outlined text-4xl fill-[1]">play_arrow</span>
+</div>
+</div>
+<!-- Technical Overlay -->
+<div class="absolute top-4 left-4 glass-overlay px-3 py-1.5 rounded-full border border-white/10 flex items-center gap-2">
+<span class="size-2 bg-red-500 rounded-full"></span>
+<span class="text-[10px] font-bold uppercase tracking-widest text-white">Pro Series</span>
+</div>
+</div>
+<div class="p-5 flex flex-col gap-4">
+<div class="flex justify-between items-start">
+<div>
+<h3 class="text-lg font-bold leading-tight">Alex Rivera's 'Final Mile' Recovery Bowl</h3>
+<p class="text-sm text-slate-400 mt-1 flex items-center gap-1">
+<span class="material-symbols-outlined text-sm">verified</span>
+                                Professional Triathlete
+                            </p>
+</div>
+</div>
+<button class="w-full flex items-center justify-center gap-2 py-4 bg-slate-100 dark:bg-slate-100 text-background-dark rounded-xl font-bold transition-transform active:scale-95">
+<span class="material-symbols-outlined">link</span>
+                        Link to Routine
+                    </button>
+</div>
+</div>
+</section>
+</main>
+<!-- Bottom Navigation Bar -->
+<nav class="fixed bottom-0 left-0 right-0 z-50 border-t border-accent-muted/20 bg-background-light/90 dark:bg-background-dark/95 backdrop-blur-lg px-6 pb-6 pt-3">
+<div class="flex justify-between items-center max-w-md mx-auto">
+<a class="flex flex-col items-center gap-1 text-primary" href="#">
+<span class="material-symbols-outlined fill-[1]">house</span>
+<span class="text-[10px] font-bold uppercase tracking-widest">Home</span>
+</a>
+<a class="flex flex-col items-center gap-1 text-slate-400 hover:text-primary transition-colors" href="#">
+<span class="material-symbols-outlined">calendar_month</span>
+<span class="text-[10px] font-bold uppercase tracking-widest">Planner</span>
+</a>
+<a class="flex flex-col items-center gap-1 text-slate-400 hover:text-primary transition-colors" href="#">
+<span class="material-symbols-outlined">groups</span>
+<span class="text-[10px] font-bold uppercase tracking-widest">Hub</span>
+</a>
+<a class="flex flex-col items-center gap-1 text-slate-400 hover:text-primary transition-colors" href="#">
+<span class="material-symbols-outlined">person</span>
+<span class="text-[10px] font-bold uppercase tracking-widest">Profile</span>
+</a>
+</div>
+</nav>
+</body></html>

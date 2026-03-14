@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>RIAL - The Raw Edit | Brand Identity Board</title>
+<!-- Tailwind CSS v3 with plugins -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- Tailwind Configuration -->
+<script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            charcoal: '#121212',
+            paper: '#F2F2F2',
+            scanner: '#39FF14',
+          },
+          fontFamily: {
+            serif: ['Times New Roman', 'serif'],
+            mono: ['Courier New', 'monospace'],
+          },
+        },
+      },
+    }
+  </script>
+<!-- Custom Styles for Brutalist elements -->
+<style data-purpose="editorial-layouts">
+    .brutalist-border {
+      border: 3px solid #121212;
+    }
+    .raw-edge {
+      mask-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"><path d="M0 0 L10 5 L20 0 L30 8 L40 2 L50 10 L60 4 L70 12 L80 6 L90 15 L100 0 V100 H0 Z" fill="black"/></svg>');
+      mask-size: cover;
+    }
+    .polaroid-frame {
+      background: white;
+      padding: 10px 10px 40px 10px;
+      box-shadow: 5px 5px 0px rgba(0,0,0,0.1);
+      transform: rotate(-1deg);
+    }
+    .oversized-text {
+      font-size: clamp(4rem, 15vw, 10rem);
+      line-height: 0.8;
+      letter-spacing: -0.05em;
+    }
+  </style>
+</head>
+<body class="bg-paper text-charcoal font-serif selection:bg-scanner selection:text-charcoal">
+<!-- BEGIN: MainHeader -->
+<header class="p-4 border-b-4 border-charcoal sticky top-0 bg-paper z-50">
+<nav class="flex justify-between items-end">
+<h1 class="text-4xl font-bold tracking-tighter uppercase">RIAL</h1>
+<span class="font-mono text-xs uppercase bg-scanner px-2 py-1">The Raw Edit // 2024</span>
+</nav>
+</header>
+<!-- END: MainHeader -->
+<main class="w-full">
+<!-- BEGIN: HeroSection -->
+<section class="p-4 border-b-4 border-charcoal">
+<div class="relative overflow-hidden py-10">
+<!-- Giant Brutalist Typography -->
+<h2 class="oversized-text font-bold uppercase mb-4" data-purpose="brand-statement">
+          RAW<br/>IS<br/>REAL
+        </h2>
+<!-- Scanner Green Accent Block -->
+<div class="absolute top-10 right-0 w-32 h-32 bg-scanner mix-blend-multiply flex items-center justify-center -rotate-12">
+<p class="font-mono text-[10px] text-center leading-none">NO FILTERS<br/>REQUIRED</p>
+</div>
+</div>
+</section>
+<!-- END: HeroSection -->
+<!-- BEGIN: VisualAestheticGrid -->
+<section class="grid grid-cols-1 md:grid-cols-2 gap-0 border-b-4 border-charcoal" data-purpose="aesthetic-showcase">
+<!-- Left Column: The 'Imperfect' Photo Context -->
+<div class="p-6 border-r-0 md:border-r-4 border-charcoal flex flex-col justify-center bg-charcoal text-paper">
+<div class="mb-8">
+<p class="font-mono text-xs mb-4 text-scanner uppercase tracking-widest">// Vibe Check: The Messy Plate</p>
+<!-- Placeholder for User Generated Content -->
+<div class="polaroid-frame mx-auto max-w-xs transition-transform hover:rotate-2">
+<img alt="Messy Eggs" class="grayscale contrast-125 brightness-110" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAMEHiBRR90H1kl4rg51aMRz6J-KubbURuPEhozqepbX_JDFAK7eapJLQ-4F-1wNYAOIzRYakTPjCFooaMNcxNNgnTOjnf4DsrAvbxJMim70UNk1jFK9PD_w-1hkM-EvgntGt5NF2shBiAfqP7ZsgW_aCBKUpP0VA7LKlek7kT0BPC71jqZ4h6-clqLhMEVoacil9_rrqtjpbLOjgqjJckQBPHA4UbDTwy4e9omxyO2Jjquv0dh1P3C_bVvUyccMeCjiOELx2ApA-tO"/>
+</div>
+</div>
+<p class="text-3xl leading-tight">Elevating the mundane into the <span class="italic font-normal">extraordinary</span> through high-contrast framing.</p>
+</div>
+<!-- Right Column: Editorial Typography -->
+<div class="p-6 flex flex-col justify-between">
+<div class="space-y-4">
+<h3 class="text-6xl font-bold uppercase leading-none">The<br/>Scanner<br/>Green</h3>
+<div class="h-2 w-full bg-scanner"></div>
+<p class="font-mono text-sm leading-relaxed">
+            Hex: #39FF14<br/>
+            CMYK: 63, 0, 100, 0<br/>
+            Purpose: High-alert highlights, digital artifacts, and navigation cues.
+          </p>
+</div>
+<!-- Blurry Image Example -->
+<div class="mt-12 relative">
+<img alt="Blurry Motion" class="w-full h-48 object-cover brutalist-border grayscale" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD1mk78iiHDyHYxuD0YD3liFNLJ1kuRlYH5YsTiq6tVf-SLonkKCPPSm3Tp-k71WZeFUhCMerr9pbitVpOVcyjGYiTW-XSCRb9MNHDM6gBfQ33o9Nw0iC2qZfxr3tRC3wikOcT6rtLqlrCX_1yMxHrDA2aLzgTEkqRBzKpulU7N2D1FAwaJftWBB6eCihm1uyIL7uqDOVuB4Ij4PBNDYN1m3IyIjnqLQu8hk7aLMzBlNcg-QvfmLuZ2M3D4JGsR7jEU1Ias8CqN-HyT"/>
+<div class="absolute bottom-2 left-2 bg-paper text-charcoal px-2 py-1 font-mono text-[10px]">
+            IMG_7422.RAW (MOTION_BLUR)
+          </div>
+</div>
+</div>
+</section>
+<!-- END: VisualAestheticGrid -->
+<!-- BEGIN: TypographySpec -->
+<section class="p-6 bg-charcoal text-paper overflow-hidden">
+<div class="flex flex-col md:flex-row justify-between items-start gap-8">
+<div class="w-full md:w-1/2">
+<h4 class="font-mono text-scanner text-xs mb-4 uppercase">Typography Stack</h4>
+<div class="space-y-10">
+<div>
+<p class="text-8xl font-bold leading-none">Ab</p>
+<p class="font-mono text-xs mt-2">Display: Editorial Serif Bold</p>
+</div>
+<div class="border-t border-paper/20 pt-4">
+<p class="font-mono text-4xl uppercase leading-none tracking-tighter">System Mono</p>
+<p class="font-mono text-xs mt-2">Secondary: Courier New / Technical Data</p>
+</div>
+</div>
+</div>
+<!-- Raw Image Edge Example -->
+<div class="w-full md:w-1/3">
+<div class="raw-edge bg-paper p-4">
+<img alt="Raw Edge Example" class="w-full grayscale brightness-75" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDRpDGZO4H58fJmnAwxp8yC9xioAbOIg2rsZqce1tJfVBteHUnxQk7B-VWthYfjtoEVGP9jMa_Qrbv-lZa-YRqT4rr0e4xj9YViVkuOrph6qLDiDL2aF7Ll2n1alZVLq0SWEDwxPSzR7NmDkulZ04omKVOaP03SG_1MuiW1Y-78XOdbVVxr4OlZNrSLFQkRQZRcY16Q88979Xx4t1Ekl11l1DnA4SB_hhcEYMrst1YjvtUXiSSkmq9OydVFat1CF2QAzHxMVUwbPHiQ"/>
+<p class="text-charcoal font-mono text-[10px] mt-2 uppercase text-center">In-Camera Realness</p>
+</div>
+</div>
+</div>
+</section>
+<!-- END: TypographySpec -->
+<!-- BEGIN: CTA_Footer -->
+<footer class="p-8 border-t-4 border-charcoal flex flex-col items-center justify-center text-center space-y-6">
+<div class="w-full max-w-2xl">
+<h2 class="text-4xl font-bold italic uppercase">Stop overthinking. Start editing.</h2>
+<button class="mt-8 bg-charcoal text-paper px-10 py-4 font-mono uppercase tracking-widest hover:bg-scanner hover:text-charcoal transition-colors brutalist-border">
+          Join the Registry
+        </button>
+</div>
+<div class="pt-12 font-mono text-[10px] opacity-50">
+        RIAL © 2024 - ALL RIGHTS RESERVED - NO FILTERS ALLOWED
+      </div>
+</footer>
+<!-- END: CTA_Footer -->
+</main>
+</body></html>

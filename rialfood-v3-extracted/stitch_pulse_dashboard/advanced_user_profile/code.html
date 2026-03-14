@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#ec5b13",
+                        "background-light": "#f8f6f6",
+                        "background-dark": "#221610",
+                    },
+                    fontFamily: {
+                        "display": ["Public Sans"]
+                    },
+                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<title>RIAL - Advanced User Profile</title>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark font-display text-slate-900 dark:text-slate-100 min-h-screen">
+<div class="max-w-md mx-auto bg-white dark:bg-[#2d1d15] shadow-xl min-h-screen flex flex-col">
+<!-- Header -->
+<div class="flex items-center p-4 justify-between border-b border-slate-200 dark:border-slate-800">
+<div class="flex size-10 items-center justify-center rounded-full hover:bg-slate-100 dark:hover:bg-slate-800 cursor-pointer">
+<span class="material-symbols-outlined text-slate-600 dark:text-slate-400">settings</span>
+</div>
+<h2 class="text-lg font-bold leading-tight tracking-tight flex-1 text-center">Profile</h2>
+<div class="flex w-10 items-center justify-end">
+<button class="flex size-10 items-center justify-center rounded-full hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">
+<span class="material-symbols-outlined text-slate-600 dark:text-slate-400">share</span>
+</button>
+</div>
+</div>
+<!-- Profile Section -->
+<div class="flex p-6 flex-col items-center gap-4">
+<div class="relative">
+<div class="bg-center bg-no-repeat aspect-square bg-cover rounded-full ring-4 ring-primary/20 size-32 shadow-lg" data-alt="Professional headshot of a smiling man with beard" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuBrSf5Y4POFRVZT2K4G3FtPJd1wESKkML5-bBWmoCnUId-2xzb2pWYv1UT_lJmLUrTYe79JxDKNOzExV4KadboXAvWQCyYuGf9oNV47w3kCIMN3Q-T9FsGcnL12Xva7_bATT7PBJgrtM-Rx1aiuANzjSHGFiCLbN57A4fxglosfoQRwkg7-Ez4YOvPP10LpG7ehIyZeJlbEgz4saLboIuPn7N6H9THCsLfRqYZgzHXlOwrw8IW9JYsUszlfxMrUpG8XB3fqITXdNKAa");'>
+</div>
+<div class="absolute bottom-1 right-1 bg-primary text-white p-1.5 rounded-full border-4 border-white dark:border-[#2d1d15]">
+<span class="material-symbols-outlined text-[16px] block">verified</span>
+</div>
+</div>
+<div class="text-center">
+<p class="text-2xl font-bold leading-tight tracking-tight">Alex Rivera</p>
+<p class="text-primary font-medium text-sm mt-1 uppercase tracking-wider">Human-Centric Precision Enthusiast</p>
+<p class="text-slate-500 dark:text-slate-400 text-sm mt-1 italic">Member since Jan 2022</p>
+</div>
+<div class="flex w-full gap-3 mt-2">
+<button class="flex-1 flex items-center justify-center gap-2 rounded-xl h-12 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 font-bold transition-all border border-slate-200 dark:border-slate-700">
+<span class="material-symbols-outlined text-[20px]">edit</span>
+<span>Edit Profile</span>
+</button>
+<button class="flex-1 flex items-center justify-center gap-2 rounded-xl h-12 bg-primary text-white hover:opacity-90 font-bold shadow-lg shadow-primary/20 transition-all">
+<span class="material-symbols-outlined text-[20px]">ios_share</span>
+<span>Share</span>
+</button>
+</div>
+</div>
+<!-- Personal Best Stats -->
+<div class="px-4 py-2">
+<div class="flex items-center justify-between mb-4">
+<h3 class="text-lg font-bold">Personal Best Stats</h3>
+<span class="material-symbols-outlined text-primary">trending_up</span>
+</div>
+<div class="grid grid-cols-3 gap-3">
+<div class="flex flex-col gap-1 rounded-2xl bg-primary/5 dark:bg-primary/10 border border-primary/10 p-4 items-center text-center">
+<p class="text-primary text-2xl font-bold leading-tight">98%</p>
+<p class="text-slate-500 dark:text-slate-400 text-[10px] font-bold uppercase tracking-tighter">Consistency</p>
+</div>
+<div class="flex flex-col gap-1 rounded-2xl bg-primary/5 dark:bg-primary/10 border border-primary/10 p-4 items-center text-center">
+<p class="text-primary text-2xl font-bold leading-tight">842</p>
+<p class="text-slate-500 dark:text-slate-400 text-[10px] font-bold uppercase tracking-tighter">Match Score</p>
+</div>
+<div class="flex flex-col gap-1 rounded-2xl bg-primary/5 dark:bg-primary/10 border border-primary/10 p-4 items-center text-center">
+<p class="text-primary text-2xl font-bold leading-tight">15k</p>
+<p class="text-slate-500 dark:text-slate-400 text-[10px] font-bold uppercase tracking-tighter">Impact</p>
+</div>
+</div>
+</div>
+<!-- Main Content Sections -->
+<div class="flex flex-col gap-6 p-4 mt-4 mb-24">
+<!-- My Cookbook Summary -->
+<section>
+<div class="flex items-center justify-between mb-3">
+<h3 class="text-lg font-bold">My Cookbook</h3>
+<a class="text-primary text-sm font-bold flex items-center gap-1" href="#">
+                        View All <span class="material-symbols-outlined text-[16px]">chevron_right</span>
+</a>
+</div>
+<div class="flex gap-3 overflow-x-auto pb-2 no-scrollbar">
+<div class="min-w-[140px] flex flex-col gap-2 group cursor-pointer">
+<div class="aspect-square rounded-xl bg-slate-200 dark:bg-slate-800 overflow-hidden relative">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform" data-alt="Vibrant healthy salad bowl with salmon" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD8rzUTsmSPH_yRwwtxtH44mkmN7tFPC8Y71rgWyI4MTyl1kc72OXaiynTD4Jp3bYoYBeUKZK_mOwmDORRYqRepjjTqXSbVijfOVx5gWZNYtbkoLjNwyJJirNWW62eXCU2QxqIZEj-IlgyB0ubjK3iJgjRILHNqRNrDiyfAe0D5P6Vc_zg_Qg2ErMaPmngtaO7I5mZlVd_jHXGDzt5UHpPEdyL4F39lA2kd2tLEeoy-_uQgV3naybLfgx2eptKzR5AcFp-IqjqDlbZm"/>
+<div class="absolute top-2 right-2 bg-black/40 backdrop-blur-md rounded-lg p-1">
+<span class="material-symbols-outlined text-white text-[14px]">favorite</span>
+</div>
+</div>
+<p class="text-xs font-bold truncate">Omega-3 Power Bowl</p>
+</div>
+<div class="min-w-[140px] flex flex-col gap-2 group cursor-pointer">
+<div class="aspect-square rounded-xl bg-slate-200 dark:bg-slate-800 overflow-hidden relative">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform" data-alt="Detox green salad with avocados" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBTdi1NzegrnOlHg6jlEaRkkVPaw_qXSf5VmlRKN0lzgmBXMPo5YOLBH8YY8x4nOoAyLgLJVR8c8L-PWOxXFKC0Lju-DbAhIiBGtofIr3z037t5s3jpdcvndwycDEBxAvaS1MnT7xPTad9_F8b1iW_Dngo0KRgxUyLfZ2xYiK2Jdf_V8EnmIfw3x8MszvQw3YTPlEywOfiOm5BSFve0lwhHSc5dsg7mx66n19f6_R3kxNB-NfejGGJR_yxYFFKkSyLxiEMyp_J9OMTk"/>
+<div class="absolute top-2 right-2 bg-black/40 backdrop-blur-md rounded-lg p-1">
+<span class="material-symbols-outlined text-white text-[14px]">favorite</span>
+</div>
+</div>
+<p class="text-xs font-bold truncate">Precision Detox Mix</p>
+</div>
+<div class="min-w-[140px] flex flex-col gap-2 group cursor-pointer items-center justify-center border-2 border-dashed border-slate-200 dark:border-slate-700 rounded-xl">
+<span class="material-symbols-outlined text-slate-400 dark:text-slate-600">add_circle</span>
+<p class="text-xs font-bold text-slate-400">Add New</p>
+</div>
+</div>
+</section>
+<!-- Active Plans -->
+<section>
+<h3 class="text-lg font-bold mb-3">Active Plans</h3>
+<div class="space-y-3">
+<div class="flex items-center gap-4 p-4 rounded-2xl bg-white dark:bg-slate-800 border border-slate-100 dark:border-slate-700 shadow-sm">
+<div class="size-12 rounded-full bg-primary/10 flex items-center justify-center text-primary">
+<span class="material-symbols-outlined">fitness_center</span>
+</div>
+<div class="flex-1">
+<p class="font-bold text-sm">Metabolic Precision 2.0</p>
+<div class="w-full bg-slate-100 dark:bg-slate-700 h-1.5 rounded-full mt-2">
+<div class="bg-primary h-1.5 rounded-full" style="width: 65%"></div>
+</div>
+</div>
+<p class="text-xs font-bold text-slate-400">Day 14/21</p>
+</div>
+<div class="flex items-center gap-4 p-4 rounded-2xl bg-white dark:bg-slate-800 border border-slate-100 dark:border-slate-700 shadow-sm">
+<div class="size-12 rounded-full bg-blue-500/10 flex items-center justify-center text-blue-500">
+<span class="material-symbols-outlined">self_improvement</span>
+</div>
+<div class="flex-1">
+<p class="font-bold text-sm">Focus &amp; Flow Protocol</p>
+<div class="w-full bg-slate-100 dark:bg-slate-700 h-1.5 rounded-full mt-2">
+<div class="bg-blue-500 h-1.5 rounded-full" style="width: 88%"></div>
+</div>
+</div>
+<p class="text-xs font-bold text-slate-400">Day 26/30</p>
+</div>
+</div>
+</section>
+<!-- Community Impact -->
+<section>
+<h3 class="text-lg font-bold mb-3">Community Impact</h3>
+<div class="p-5 rounded-2xl bg-gradient-to-br from-primary to-orange-600 text-white shadow-xl relative overflow-hidden">
+<div class="relative z-10 flex items-start justify-between">
+<div>
+<p class="text-4xl font-black">2,842</p>
+<p class="text-white/80 font-medium text-sm mt-1 uppercase tracking-widest">Recipe Adoptions</p>
+</div>
+<span class="material-symbols-outlined text-4xl opacity-30">groups</span>
+</div>
+<p class="relative z-10 mt-4 text-xs font-medium text-white/90 bg-white/10 backdrop-blur-sm p-3 rounded-lg border border-white/10">
+                        Your precision-balanced recipes have helped 124 people reach their goals this month. Keep it up!
+                    </p>
+<!-- Abstract Background Decorative Elements -->
+<div class="absolute -right-4 -bottom-4 size-24 rounded-full bg-white/10 blur-2xl"></div>
+<div class="absolute -left-4 -top-4 size-20 rounded-full bg-black/10 blur-xl"></div>
+</div>
+</section>
+</div>
+<!-- Bottom Navigation Bar -->
+<div class="fixed bottom-0 left-1/2 -translate-x-1/2 w-full max-w-md border-t border-slate-200 dark:border-slate-800 bg-white/80 dark:bg-background-dark/80 backdrop-blur-lg px-4 pb-6 pt-2 z-50">
+<div class="flex gap-2">
+<a class="flex flex-1 flex-col items-center justify-center gap-1 text-slate-400 dark:text-slate-500" href="#">
+<span class="material-symbols-outlined">home</span>
+<p class="text-[10px] font-bold uppercase tracking-tighter">Home</p>
+</a>
+<a class="flex flex-1 flex-col items-center justify-center gap-1 text-slate-400 dark:text-slate-500" href="#">
+<span class="material-symbols-outlined">menu_book</span>
+<p class="text-[10px] font-bold uppercase tracking-tighter">Cookbook</p>
+</a>
+<a class="flex flex-1 flex-col items-center justify-center gap-1 text-slate-400 dark:text-slate-500" href="#">
+<span class="material-symbols-outlined">checklist</span>
+<p class="text-[10px] font-bold uppercase tracking-tighter">Plans</p>
+</a>
+<a class="flex flex-1 flex-col items-center justify-center gap-1 text-slate-400 dark:text-slate-500" href="#">
+<span class="material-symbols-outlined">groups</span>
+<p class="text-[10px] font-bold uppercase tracking-tighter">Community</p>
+</a>
+<a class="flex flex-1 flex-col items-center justify-center gap-1 text-primary" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">person_outline</span>
+<p class="text-[10px] font-bold uppercase tracking-tighter">Profile</p>
+</a>
+</div>
+</div>
+</div>
+<style>
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+    </style>
+</body></html>

@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@300;400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "primary": "#ec5b13",
+              "background-light": "#f8f6f6",
+              "background-dark": "#221610",
+            },
+            fontFamily: {
+              "display": ["Public Sans", "sans-serif"]
+            },
+            borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+          },
+        },
+      }
+    </script>
+<title>RIAL - Fasting Insights</title>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark font-display text-slate-900 dark:text-slate-100 min-h-screen">
+<div class="max-w-md mx-auto bg-background-light dark:bg-background-dark min-h-screen flex flex-col shadow-2xl relative border-x border-primary/10">
+<!-- Header -->
+<header class="sticky top-0 z-50 bg-background-light/80 dark:bg-background-dark/80 backdrop-blur-md border-b border-primary/10">
+<div class="flex items-center p-4 justify-between">
+<button class="size-10 flex items-center justify-center rounded-full hover:bg-primary/10 transition-colors">
+<span class="material-symbols-outlined text-slate-900 dark:text-slate-100">arrow_back</span>
+</button>
+<h2 class="text-xl font-extrabold tracking-tight uppercase italic text-primary">RIAL</h2>
+<div class="flex gap-2">
+<button class="size-10 flex items-center justify-center rounded-full hover:bg-primary/10 transition-colors">
+<span class="material-symbols-outlined text-slate-900 dark:text-slate-100">share</span>
+</button>
+</div>
+</div>
+<div class="px-4 pb-0">
+<div class="flex gap-6 overflow-x-auto no-scrollbar">
+<a class="flex flex-col items-center justify-center border-b-2 border-primary text-primary pb-3 pt-2" href="#">
+<p class="text-sm font-bold tracking-wider uppercase">Summary</p>
+</a>
+<a class="flex flex-col items-center justify-center border-b-2 border-transparent text-slate-500 dark:text-slate-400 pb-3 pt-2 hover:text-primary transition-colors" href="#">
+<p class="text-sm font-bold tracking-wider uppercase">History</p>
+</a>
+<a class="flex flex-col items-center justify-center border-b-2 border-transparent text-slate-500 dark:text-slate-400 pb-3 pt-2 hover:text-primary transition-colors" href="#">
+<p class="text-sm font-bold tracking-wider uppercase">Trends</p>
+</a>
+</div>
+</div>
+</header>
+<!-- Main Content -->
+<main class="flex-1 overflow-y-auto pb-24">
+<!-- Hero Insight Section -->
+<section class="p-6">
+<div class="mb-2">
+<span class="text-xs font-black uppercase tracking-[0.2em] text-primary">Editorial Report</span>
+<h1 class="text-4xl font-black leading-none mt-1 tracking-tighter">THE FASTING<br/>METRIC.</h1>
+</div>
+<p class="text-slate-600 dark:text-slate-400 text-sm mt-4 border-l-2 border-primary pl-4 py-1 italic">
+                    Analysis of your metabolic window and cognitive performance over the last 7 days.
+                </p>
+</section>
+<!-- Key Stats Grid -->
+<section class="grid grid-cols-2 gap-4 px-6 mb-8">
+<div class="col-span-2 flex flex-col gap-2 rounded-xl p-6 bg-white dark:bg-slate-800/50 border border-primary/10 shadow-sm relative overflow-hidden">
+<div class="absolute top-0 right-0 p-2 opacity-10">
+<span class="material-symbols-outlined text-6xl">verified</span>
+</div>
+<p class="text-slate-500 dark:text-slate-400 text-xs font-bold uppercase tracking-widest">Weekly Consistency</p>
+<div class="flex items-end gap-2">
+<p class="text-4xl font-black leading-none text-slate-900 dark:text-slate-100">92%</p>
+<span class="text-emerald-500 text-sm font-bold flex items-center mb-1">
+<span class="material-symbols-outlined text-sm">trending_up</span>+5%
+                        </span>
+</div>
+<div class="w-full bg-slate-100 dark:bg-slate-700 h-1.5 rounded-full mt-2">
+<div class="bg-primary h-1.5 rounded-full" style="width: 92%"></div>
+</div>
+</div>
+<div class="flex flex-col gap-2 rounded-xl p-5 bg-white dark:bg-slate-800/50 border border-primary/10 shadow-sm">
+<p class="text-slate-500 dark:text-slate-400 text-[10px] font-bold uppercase tracking-widest">Avg. Duration</p>
+<p class="text-2xl font-black text-slate-900 dark:text-slate-100">16.4h</p>
+<p class="text-primary text-[11px] font-bold">-0.2h vs LW</p>
+</div>
+<div class="flex flex-col gap-2 rounded-xl p-5 bg-white dark:bg-slate-800/50 border border-primary/10 shadow-sm">
+<p class="text-slate-500 dark:text-slate-400 text-[10px] font-bold uppercase tracking-widest">Real Feel</p>
+<p class="text-2xl font-black text-emerald-500">HIGH</p>
+<p class="text-emerald-500/80 text-[11px] font-bold">+12% Energy</p>
+</div>
+</section>
+<!-- Chart Visualization Placeholder -->
+<section class="px-6 mb-8">
+<div class="flex justify-between items-end mb-4">
+<h3 class="text-lg font-black uppercase italic tracking-tighter">Energy Correlation</h3>
+<span class="text-[10px] font-bold uppercase text-slate-400">Past 7 Days</span>
+</div>
+<div class="bg-primary/5 rounded-xl p-6 border border-primary/10 aspect-[4/3] flex flex-col justify-between">
+<div class="flex items-end justify-between h-32 gap-2">
+<!-- Simulated Bar Chart -->
+<div class="flex-1 flex flex-col justify-end items-center gap-2 h-full">
+<div class="w-full bg-primary/20 rounded-t-sm h-[40%]"></div>
+<span class="text-[10px] font-bold">M</span>
+</div>
+<div class="flex-1 flex flex-col justify-end items-center gap-2 h-full">
+<div class="w-full bg-primary/40 rounded-t-sm h-[60%]"></div>
+<span class="text-[10px] font-bold">T</span>
+</div>
+<div class="flex-1 flex flex-col justify-end items-center gap-2 h-full">
+<div class="w-full bg-primary/60 rounded-t-sm h-[85%]"></div>
+<span class="text-[10px] font-bold">W</span>
+</div>
+<div class="flex-1 flex flex-col justify-end items-center gap-2 h-full">
+<div class="w-full bg-primary rounded-t-sm h-[95%]"></div>
+<span class="text-[10px] font-bold">T</span>
+</div>
+<div class="flex-1 flex flex-col justify-end items-center gap-2 h-full">
+<div class="w-full bg-primary/70 rounded-t-sm h-[75%]"></div>
+<span class="text-[10px] font-bold">F</span>
+</div>
+<div class="flex-1 flex flex-col justify-end items-center gap-2 h-full">
+<div class="w-full bg-primary/30 rounded-t-sm h-[50%]"></div>
+<span class="text-[10px] font-bold">S</span>
+</div>
+<div class="flex-1 flex flex-col justify-end items-center gap-2 h-full">
+<div class="w-full bg-primary/50 rounded-t-sm h-[65%]"></div>
+<span class="text-[10px] font-bold">S</span>
+</div>
+</div>
+<div class="pt-4 border-t border-primary/10">
+<p class="text-xs text-slate-500 leading-relaxed">
+<strong class="text-primary italic uppercase tracking-tighter">Peak State:</strong> Thursday showed the highest energy correlation with a 18h fasting window.
+                        </p>
+</div>
+</div>
+</section>
+<!-- Insight Editorial Card -->
+<section class="px-6 pb-12">
+<div class="relative group cursor-pointer overflow-hidden rounded-xl border border-primary/20 bg-primary/5">
+<div class="p-6">
+<div class="flex justify-between items-start mb-4">
+<span class="material-symbols-outlined text-primary text-3xl">lightbulb</span>
+<span class="text-[10px] font-black bg-primary text-white px-2 py-0.5 rounded italic">AI ANALYSIS</span>
+</div>
+<h4 class="text-xl font-black italic tracking-tighter mb-2">METABOLIC FLEXIBILITY</h4>
+<p class="text-sm text-slate-600 dark:text-slate-400 leading-snug">
+                            Your biological rhythm is stabilizing. We've noticed your energy peaks 4 hours after your last meal. Consider shifting your window 30 minutes earlier for optimal REM sleep correlation.
+                        </p>
+<button class="mt-6 text-xs font-black uppercase tracking-widest text-primary flex items-center gap-1 group-hover:gap-2 transition-all">
+                            Full Report <span class="material-symbols-outlined text-sm">arrow_forward</span>
+</button>
+</div>
+</div>
+</section>
+</main>
+<!-- Bottom Navigation -->
+<nav class="fixed bottom-0 left-1/2 -translate-x-1/2 w-full max-w-md bg-white/80 dark:bg-background-dark/80 backdrop-blur-xl border-t border-primary/10 px-4 pb-6 pt-3 flex justify-around items-center z-50">
+<a class="flex flex-col items-center gap-1 text-slate-400 hover:text-primary transition-colors" href="#">
+<span class="material-symbols-outlined">schedule</span>
+<span class="text-[10px] font-bold uppercase tracking-tighter">Timer</span>
+</a>
+<a class="flex flex-col items-center gap-1 text-primary" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1">insights</span>
+<span class="text-[10px] font-bold uppercase tracking-tighter">Insights</span>
+</a>
+<div class="relative -top-8">
+<button class="bg-primary size-14 rounded-full flex items-center justify-center text-white shadow-lg shadow-primary/40 border-4 border-background-light dark:border-background-dark">
+<span class="material-symbols-outlined text-3xl">add</span>
+</button>
+</div>
+<a class="flex flex-col items-center gap-1 text-slate-400 hover:text-primary transition-colors" href="#">
+<span class="material-symbols-outlined">auto_stories</span>
+<span class="text-[10px] font-bold uppercase tracking-tighter">Journal</span>
+</a>
+<a class="flex flex-col items-center gap-1 text-slate-400 hover:text-primary transition-colors" href="#">
+<span class="material-symbols-outlined">person</span>
+<span class="text-[10px] font-bold uppercase tracking-tighter">Profile</span>
+</a>
+</nav>
+</div>
+</body></html>

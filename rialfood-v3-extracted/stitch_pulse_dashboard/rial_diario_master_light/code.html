@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>RIAL Master Journal - Family Wellness</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#ec5b13",
+                        "background-light": "#f8f6f6",
+                        "background-dark": "#221610",
+                    },
+                    fontFamily: {
+                        "display": ["Public Sans", "sans-serif"]
+                    },
+                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>
+        body {
+            font-family: 'Public Sans', sans-serif;
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .filled-icon {
+            font-variation-settings: 'FILL' 1;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 min-h-screen">
+<div class="max-w-md mx-auto bg-background-light dark:bg-background-dark shadow-xl min-h-screen flex flex-col">
+<!-- Header -->
+<header class="flex items-center p-4 justify-between sticky top-0 bg-background-light/80 dark:bg-background-dark/80 backdrop-blur-md z-10 border-b border-primary/10">
+<div class="flex size-10 items-center justify-center rounded-full bg-primary/10 text-primary">
+<span class="material-symbols-outlined">menu</span>
+</div>
+<div class="flex flex-col items-center">
+<h1 class="text-slate-900 dark:text-slate-100 text-lg font-bold leading-tight tracking-tight font-display">Master Journal</h1>
+<p class="text-xs text-slate-500 dark:text-slate-400 font-medium">Monday, Oct 24</p>
+</div>
+<div class="flex size-10 items-center justify-end">
+<button class="flex items-center justify-center rounded-full bg-primary/10 p-2 text-primary">
+<span class="material-symbols-outlined">account_circle</span>
+</button>
+</div>
+</header>
+<!-- Profile/Welcome Section -->
+<section class="px-4 pt-6 pb-2">
+<div class="flex items-center gap-4">
+<div class="size-14 rounded-full border-2 border-primary overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="Portrait of a smiling woman in a garden" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCatTknRUKeDTeXgeQ7k_gfLL0GUZ-IntoGzqgzK5Eb1cHPV5UKq12SPjmAss5PnAXFeVXgJaayp1l5klIVOvSKdfSLFaOmuc75lLC0E7KU6OjAU0Klr90XMrBhWxCYOA5pCZZlkQXcFghm72Qa7QBGa1Srsplx1K8JPfQu72fSuy2vQBky-ho-0ipu96WAigMV-eCPo3YpIgegqFaMjAX2TOrgwk1hpfos25BsODuZymVsEXK8OCxTAFDavFMLpm5CwSMh1BygvbM5"/>
+</div>
+<div>
+<h2 class="text-xl font-bold font-display">Hi, Sarah!</h2>
+<p class="text-sm text-slate-600 dark:text-slate-400">Ready for your family's wellness day?</p>
+</div>
+</div>
+</section>
+<!-- Category Carousel -->
+<section class="w-full overflow-hidden px-4 py-6">
+<div class="flex overflow-x-auto no-scrollbar flex-row items-start justify-start gap-5 pb-2">
+<div class="flex flex-col items-center gap-2 min-w-[70px]">
+<div class="w-16 h-16 bg-primary/20 rounded-full flex items-center justify-center text-primary group hover:bg-primary hover:text-white transition-colors cursor-pointer">
+<span class="material-symbols-outlined text-3xl">free_breakfast</span>
+</div>
+<p class="text-slate-700 dark:text-slate-300 text-xs font-semibold">Breakfast</p>
+</div>
+<div class="flex flex-col items-center gap-2 min-w-[70px]">
+<div class="w-16 h-16 bg-primary/20 rounded-full flex items-center justify-center text-primary group hover:bg-primary hover:text-white transition-colors cursor-pointer">
+<span class="material-symbols-outlined text-3xl">local_bar</span>
+</div>
+<p class="text-slate-700 dark:text-slate-300 text-xs font-semibold">Drinks</p>
+</div>
+<div class="flex flex-col items-center gap-2 min-w-[70px]">
+<div class="w-16 h-16 bg-primary/20 rounded-full flex items-center justify-center text-primary group hover:bg-primary hover:text-white transition-colors cursor-pointer">
+<span class="material-symbols-outlined text-3xl">lunch_dining</span>
+</div>
+<p class="text-slate-700 dark:text-slate-300 text-xs font-semibold">Lunch</p>
+</div>
+<div class="flex flex-col items-center gap-2 min-w-[70px]">
+<div class="w-16 h-16 bg-primary/20 rounded-full flex items-center justify-center text-primary group hover:bg-primary hover:text-white transition-colors cursor-pointer">
+<span class="material-symbols-outlined text-3xl">cookie</span>
+</div>
+<p class="text-slate-700 dark:text-slate-300 text-xs font-semibold">Snacks</p>
+</div>
+<div class="flex flex-col items-center gap-2 min-w-[70px]">
+<div class="w-16 h-16 bg-primary/20 rounded-full flex items-center justify-center text-primary group hover:bg-primary hover:text-white transition-colors cursor-pointer">
+<span class="material-symbols-outlined text-3xl">dinner_dining</span>
+</div>
+<p class="text-slate-700 dark:text-slate-300 text-xs font-semibold">Dinner</p>
+</div>
+</div>
+</section>
+<!-- Real Match Score Section -->
+<section class="px-4">
+<div class="bg-white dark:bg-slate-800 rounded-xl p-5 shadow-sm border border-slate-100 dark:border-slate-700">
+<div class="flex justify-between items-center mb-4">
+<h3 class="text-lg font-bold font-display">Today's Real Match</h3>
+<span class="text-primary material-symbols-outlined">info</span>
+</div>
+<div class="grid grid-cols-3 gap-3">
+<div class="flex flex-col gap-1 rounded-xl p-4 bg-primary/5 dark:bg-primary/10 border border-primary/10">
+<p class="text-slate-500 dark:text-slate-400 text-[10px] uppercase font-bold tracking-wider">Score</p>
+<p class="text-primary text-xl font-bold leading-tight">94%</p>
+<div class="flex items-center gap-1 text-[#0bda87] text-[10px] font-bold">
+<span class="material-symbols-outlined text-xs">trending_up</span>
+<span>+5%</span>
+</div>
+</div>
+<div class="flex flex-col gap-1 rounded-xl p-4 bg-primary/5 dark:bg-primary/10 border border-primary/10">
+<p class="text-slate-500 dark:text-slate-400 text-[10px] uppercase font-bold tracking-wider">Nutrients</p>
+<p class="text-slate-800 dark:text-slate-100 text-lg font-bold leading-tight">Optimal</p>
+<div class="flex items-center gap-1 text-primary text-[10px] font-bold">
+<span class="material-symbols-outlined text-xs">horizontal_rule</span>
+<span>Stable</span>
+</div>
+</div>
+<div class="flex flex-col gap-1 rounded-xl p-4 bg-primary/5 dark:bg-primary/10 border border-primary/10">
+<p class="text-slate-500 dark:text-slate-400 text-[10px] uppercase font-bold tracking-wider">Calories</p>
+<p class="text-slate-800 dark:text-slate-100 text-lg font-bold leading-tight">1,240</p>
+<div class="flex items-center gap-1 text-primary text-[10px] font-bold">
+<span class="material-symbols-outlined text-xs">trending_down</span>
+<span>-10%</span>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Journal Entry / Food Photography -->
+<section class="p-4 space-y-4 mb-20">
+<div class="flex items-center justify-between">
+<h3 class="text-lg font-bold font-display">Morning Entries</h3>
+<button class="text-primary text-sm font-bold">View All</button>
+</div>
+<!-- Food Card 1 -->
+<div class="group overflow-hidden rounded-xl bg-white dark:bg-slate-800 shadow-sm border border-slate-100 dark:border-slate-700">
+<div class="relative h-48 w-full">
+<img class="w-full h-full object-cover" data-alt="Vibrant healthy breakfast bowl with berries and nuts" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBAukTYgjlB-o2GXMUjHuBTroBPQGjVByuZD7nLnCNMrGwuUpYWpKAwMd_3xrY-somFiH0ARXJRFZ89lpm3z1UaRBH3OUlC2Hy03Wda5U8v8Ssshk8fC9d0ePMUNM8VE0a9yMpXIEiDPv2OFxiDEUwsqMKBLB-BLpGegiCZ-u5VP5DtAzORKEZP-rXOe738U28uXKufnhGKl95fvNMj8D4ZW3Hy6Gg35XViJdWcZov_-dC0RRXcqzinAC4tH4FdSW_yTmISnOi6GqNB"/>
+<div class="absolute top-3 left-3 bg-white/90 dark:bg-slate-900/90 backdrop-blur px-2 py-1 rounded text-[10px] font-bold text-primary uppercase">Breakfast</div>
+<button class="absolute top-3 right-3 bg-white/90 dark:bg-slate-900/90 p-1.5 rounded-full text-slate-400">
+<span class="material-symbols-outlined text-lg">more_horiz</span>
+</button>
+</div>
+<div class="p-4">
+<div class="flex justify-between items-start">
+<div>
+<h4 class="font-bold text-slate-900 dark:text-slate-100">Berry Yogurt Bowl</h4>
+<p class="text-xs text-slate-500 dark:text-slate-400">8:30 AM • Family Size</p>
+</div>
+<div class="bg-primary text-white text-xs font-bold px-2 py-1 rounded-lg">98% Match</div>
+</div>
+</div>
+</div>
+<!-- Food Card 2 -->
+<div class="group overflow-hidden rounded-xl bg-white dark:bg-slate-800 shadow-sm border border-slate-100 dark:border-slate-700">
+<div class="relative h-48 w-full">
+<img class="w-full h-full object-cover" data-alt="Freshly squeezed green vegetable juice in a glass" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBBn8yB750EtcdiuwJJIVI1RKKRoW0-O-t3IBXxd08kfSbmmplbE7_bBBW5htelDx-tES1LAOWtvf8I0QgJJapJL5V6JVtjFxCH16mVctW9OYy4EDNW1zpLZdnVwtOKFtxRd11ubK8ZCqx1JstOG5QDGIBo0WhFGbJYiPPd6i0Z4jI_sKR4A9OkG9ynQCqhdAB25hjD8gOt4BfOewtqdbe-AZEu6qJrxds9NNNhZINDSgQYluYFj_O5-vAyNjzLwq6iZWq8ejjJ3hER"/>
+<div class="absolute top-3 left-3 bg-white/90 dark:bg-slate-900/90 backdrop-blur px-2 py-1 rounded text-[10px] font-bold text-primary uppercase">Drink</div>
+</div>
+<div class="p-4">
+<div class="flex justify-between items-start">
+<div>
+<h4 class="font-bold text-slate-900 dark:text-slate-100">Green Glow Juice</h4>
+<p class="text-xs text-slate-500 dark:text-slate-400">10:15 AM • 2 Servings</p>
+</div>
+<div class="bg-primary/20 text-primary text-xs font-bold px-2 py-1 rounded-lg">82% Match</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Bottom Navigation Bar -->
+<nav class="fixed bottom-0 left-0 right-0 max-w-md mx-auto bg-white/95 dark:bg-slate-900/95 backdrop-blur-lg border-t border-slate-200 dark:border-slate-800 px-6 py-3 flex justify-between items-center z-20">
+<a class="flex flex-col items-center gap-1 text-primary" href="#">
+<span class="material-symbols-outlined filled-icon">book_2</span>
+<span class="text-[10px] font-bold uppercase tracking-wider">Journal</span>
+</a>
+<a class="flex flex-col items-center gap-1 text-slate-400 dark:text-slate-500 hover:text-primary transition-colors" href="#">
+<span class="material-symbols-outlined">restaurant_menu</span>
+<span class="text-[10px] font-bold uppercase tracking-wider">Recipes</span>
+</a>
+<div class="-mt-12 bg-primary p-4 rounded-full shadow-lg shadow-primary/30 text-white cursor-pointer hover:scale-105 transition-transform">
+<span class="material-symbols-outlined text-3xl">add</span>
+</div>
+<a class="flex flex-col items-center gap-1 text-slate-400 dark:text-slate-500 hover:text-primary transition-colors" href="#">
+<span class="material-symbols-outlined">analytics</span>
+<span class="text-[10px] font-bold uppercase tracking-wider">Insights</span>
+</a>
+<a class="flex flex-col items-center gap-1 text-slate-400 dark:text-slate-500 hover:text-primary transition-colors" href="#">
+<span class="material-symbols-outlined">settings</span>
+<span class="text-[10px] font-bold uppercase tracking-wider">Settings</span>
+</a>
+</nav>
+</div>
+</body></html>

@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#007dff",
+                        "vitality-lime": "#bfff00",
+                        "background-light": "#f5f7f8",
+                        "background-dark": "#0f1923",
+                    },
+                    fontFamily: {
+                        "display": ["Space Grotesk"]
+                    },
+                    borderRadius: {"DEFAULT": "0.5rem", "lg": "1rem", "xl": "1.5rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>
+        .scanner-line {
+            height: 2px;
+            background: linear-gradient(90deg, transparent, #bfff00, transparent);
+            box-shadow: 0 0 15px #bfff00;
+        }
+        .viewfinder-corner {
+            width: 24px;
+            height: 24px;
+            border-color: #bfff00;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark font-display text-slate-900 dark:text-slate-100 antialiased overflow-hidden h-screen">
+<!-- Main Viewport / Camera Viewfinder Container -->
+<div class="relative h-screen w-full flex flex-col bg-slate-900 overflow-hidden">
+<!-- Mock Camera Background -->
+<div class="absolute inset-0 z-0 opacity-60">
+<img alt="A grocery receipt lying on a dark wooden table" class="w-full h-full object-cover grayscale contrast-125" data-alt="A grocery receipt lying on a dark wooden table" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBnjJA6_b8qyva9oBJta2bsY7a3LF6tiF3OVX70W4gCdxLCS3nK7PE4tYFUGJ-avnJ9__YuI1oFtG1ztcXBvp00m_buD4LkpR2kfEtHa96FZmM35ZQretG57cCnJY67OheDm0q8R9Ahk-ldmL8B88TcZgBG4o3hzUh5sj-xOYZDO7VS1EYiCYXSgCs0JIbfHPwuYsyXMO6Tr650M1U_ZoWJT0RTYi_EbAW3ECxPH56e_noHe9EeP4iww_NIBOtyL4tPAm7cBFKZzI29"/>
+</div>
+<!-- Scanning Overlay Effect -->
+<div class="absolute inset-0 z-10 pointer-events-none flex flex-col justify-center items-center">
+<!-- Scanning Line -->
+<div class="scanner-line w-full absolute top-1/3"></div>
+<!-- Viewfinder Brackets -->
+<div class="relative w-72 h-[480px] border border-vitality-lime/20 rounded-lg">
+<div class="absolute top-0 left-0 viewfinder-corner border-t-2 border-l-2 rounded-tl-lg"></div>
+<div class="absolute top-0 right-0 viewfinder-corner border-t-2 border-r-2 rounded-tr-lg"></div>
+<div class="absolute bottom-0 left-0 viewfinder-corner border-b-2 border-l-2 rounded-bl-lg"></div>
+<div class="absolute bottom-0 right-0 viewfinder-corner border-b-2 border-r-2 rounded-br-lg"></div>
+<!-- Real-time Detection Boxes -->
+<div class="absolute top-20 left-4 right-4 flex flex-col gap-8">
+<div class="border border-vitality-lime bg-vitality-lime/10 px-2 py-1 rounded-sm self-start">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-[14px] text-vitality-lime">check_circle</span>
+<span class="text-[10px] font-bold text-vitality-lime uppercase tracking-widest">Organic Chicken</span>
+</div>
+</div>
+<div class="border border-vitality-lime bg-vitality-lime/10 px-2 py-1 rounded-sm self-end mt-4">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-[14px] text-vitality-lime">check_circle</span>
+<span class="text-[10px] font-bold text-vitality-lime uppercase tracking-widest">Avocados</span>
+</div>
+</div>
+<div class="border border-vitality-lime bg-vitality-lime/10 px-2 py-1 rounded-sm self-start mt-24">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-[14px] text-vitality-lime">check_circle</span>
+<span class="text-[10px] font-bold text-vitality-lime uppercase tracking-widest">Greek Yogurt</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Top AppBar -->
+<div class="relative z-20 flex items-center bg-slate-900/40 backdrop-blur-md p-4 justify-between border-b border-slate-700/30">
+<div class="text-slate-100 flex size-12 shrink-0 items-center justify-start cursor-pointer">
+<span class="material-symbols-outlined">close</span>
+</div>
+<div class="flex flex-col items-center">
+<h2 class="text-white text-base font-bold leading-tight tracking-tight uppercase">Receipt Scanner</h2>
+<span class="text-[10px] text-vitality-lime font-medium tracking-[0.2em]">ENGINE: V-47 PRO</span>
+</div>
+<div class="flex w-12 items-center justify-end">
+<button class="flex items-center justify-center rounded-xl size-10 bg-transparent text-white hover:bg-slate-700/40">
+<span class="material-symbols-outlined">flash_on</span>
+</button>
+</div>
+</div>
+<!-- Content Spacer -->
+<div class="flex-1 relative"></div>
+<!-- Bottom Controls Interface -->
+<div class="relative z-20 bg-slate-950/80 backdrop-blur-xl border-t border-slate-800 p-6 space-y-6">
+<!-- Analysis Progress -->
+<div class="flex flex-col gap-3">
+<div class="flex gap-6 justify-between items-end">
+<div class="flex flex-col">
+<p class="text-[10px] text-vitality-lime font-bold tracking-widest uppercase mb-1">Status</p>
+<p class="text-white text-base font-medium leading-none">Analyzing OCR Clusters</p>
+</div>
+<p class="text-vitality-lime text-sm font-bold leading-none">75%</p>
+</div>
+<div class="h-1.5 w-full rounded-full bg-slate-800 overflow-hidden">
+<div class="h-full rounded-full bg-vitality-lime shadow-[0_0_8px_rgba(191,255,0,0.5)]" style="width: 75%;"></div>
+</div>
+</div>
+<!-- Detection List (Selected Items) -->
+<div class="grid grid-cols-1 gap-2">
+<div class="flex items-center justify-between p-3 rounded-lg bg-slate-900/50 border border-slate-800">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-vitality-lime">check_box</span>
+<p class="text-slate-200 text-sm font-medium">Organic Chicken Breast</p>
+</div>
+<span class="text-slate-400 text-xs">$12.99</span>
+</div>
+<div class="flex items-center justify-between p-3 rounded-lg bg-slate-900/50 border border-slate-800 opacity-50">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-slate-600">check_box_outline_blank</span>
+<p class="text-slate-200 text-sm font-medium">Hass Avocados (3pk)</p>
+</div>
+<span class="text-slate-400 text-xs">$4.50</span>
+</div>
+</div>
+<!-- Action Buttons -->
+<div class="flex items-center justify-between gap-6 pt-2">
+<button class="flex shrink-0 items-center justify-center rounded-full size-12 bg-slate-800 text-slate-300 hover:text-white transition-colors border border-slate-700">
+<span class="material-symbols-outlined">image</span>
+</button>
+<button class="flex-1 flex items-center justify-center gap-3 rounded-full h-16 bg-vitality-lime text-black font-bold text-lg hover:scale-[0.98] transition-transform shadow-[0_0_30px_rgba(191,255,0,0.2)]">
+<span class="material-symbols-outlined fill-1">photo_camera</span>
+                    CAPTURE RECEIPT
+                </button>
+<button class="flex shrink-0 items-center justify-center rounded-full size-12 bg-slate-800 text-slate-300 hover:text-white transition-colors border border-slate-700">
+<span class="material-symbols-outlined">history</span>
+</button>
+</div>
+<div class="text-center">
+<p class="text-slate-500 text-[10px] font-medium tracking-tighter uppercase">Algorithm Version 4.7.2 - Secure Processing Enabled</p>
+</div>
+</div>
+</div>
+</body></html>

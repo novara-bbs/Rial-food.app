@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>RIAL - Food &amp; Feeling Journal</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#0df259",
+                        "background-light": "#f5f8f6",
+                        "background-dark": "#102216",
+                    },
+                    fontFamily: {
+                        "display": ["Space Grotesk"]
+                    },
+                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>
+        body {
+            font-family: 'Space Grotesk', sans-serif;
+            -webkit-font-smoothing: antialiased;
+        }
+        .glass-panel {
+            background: rgba(13, 242, 89, 0.05);
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(13, 242, 89, 0.1);
+        }
+        .custom-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 min-h-screen flex flex-col font-display">
+<!-- Top Navigation -->
+<header class="sticky top-0 z-50 flex items-center bg-background-light/80 dark:bg-background-dark/80 backdrop-blur-md px-4 py-4 justify-between border-b border-primary/10">
+<div class="flex items-center gap-3">
+<div class="text-primary">
+<span class="material-symbols-outlined text-3xl">restaurant_menu</span>
+</div>
+<div>
+<h1 class="text-xl font-bold tracking-tight uppercase">RIAL</h1>
+<p class="text-[10px] text-primary tracking-[0.2em] font-medium leading-none">REAL DATA • RAW FEEL</p>
+</div>
+</div>
+<div class="flex gap-3 items-center">
+<button class="size-10 rounded-full bg-primary/10 flex items-center justify-center text-primary border border-primary/20">
+<span class="material-symbols-outlined">notifications</span>
+</button>
+<div class="size-10 rounded-full bg-slate-200 dark:bg-slate-800 border-2 border-primary overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="User profile portrait" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAMLOznmEDbd7H5sB60qDsoSvrgJOToGr_kSX9wypLyzNfm7I-5kYctjCBvlXRdLG_jRp9al5u4tI1Jts8-tGzg5dgI0Hv7FU4Wx8Lsl6O0m4oNVXop_9ivUuvbdq9ScQDN4Wmcc6KkdAs5y9W3I8CyWJzkh8xIWUyG51b8tOXQg1aT_k3VNEuAJOLm01Kpa7DO1QeWZuTzPfFbnNMxwWixDeNEHRhzC-XvOFC_-_sULpcTpU7CYXZS0I7j4Zfb4PDhzmEFHMUHmo7a"/>
+</div>
+</div>
+</header>
+<main class="flex-1 overflow-y-auto custom-scrollbar pb-24">
+<!-- Daily Objective Header -->
+<section class="p-4">
+<div class="relative overflow-hidden rounded-xl bg-slate-900 p-6 min-h-[180px] flex flex-col justify-end">
+<div class="absolute inset-0 z-0 opacity-40">
+<img class="w-full h-full object-cover grayscale contrast-125" data-alt="Close up of weightlifting plates" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBEwaZMkNPbde5Z71rlCqTCwj14m2g-Q3BVLU8OEt34YEThuSkYU2uthwcngCeh2Cou64nAVWVIf4wXTm0Y6fu5oB5SZFWfosshWYaZve0hJjfxM4rjsggtArGM6vJ-ElVarPsBthtSlfUz0aQskAkgvILhC4Fl5Y_VjlaPVuxU2r7X7sVWaHOKtO9WyiTyh8ai-1Z1ZZ9iqf0Re4zEV8Fc-2KETPQ65SGf2g7s1wi9I5OvuFOBINNtg_VILVmc9r8teCR4NxDT7sYK"/>
+<div class="absolute inset-0 bg-gradient-to-t from-background-dark via-background-dark/40 to-transparent"></div>
+</div>
+<div class="relative z-10">
+<span class="text-primary text-[10px] font-bold tracking-[0.3em] uppercase mb-1 block">Active Protocol</span>
+<h2 class="text-3xl font-bold leading-tight mb-1">Bulking Phase</h2>
+<div class="flex items-center gap-2">
+<div class="h-1 flex-1 bg-white/10 rounded-full overflow-hidden">
+<div class="h-full bg-primary w-[65%]"></div>
+</div>
+<p class="text-xs font-medium text-slate-400">+500 kcal surplus</p>
+</div>
+</div>
+<button class="absolute top-4 right-4 bg-primary text-background-dark size-10 rounded-full flex items-center justify-center">
+<span class="material-symbols-outlined text-xl">edit</span>
+</button>
+</div>
+</section>
+<!-- Daily Stats Row -->
+<section class="flex gap-3 px-4 mb-6">
+<div class="flex-1 glass-panel p-3 rounded-xl border-l-2 border-l-primary">
+<p class="text-[10px] text-slate-400 uppercase tracking-wider mb-1">Energy</p>
+<div class="flex items-center gap-1 text-primary">
+<span class="material-symbols-outlined text-sm">bolt</span>
+<span class="text-lg font-bold">High</span>
+</div>
+</div>
+<div class="flex-1 glass-panel p-3 rounded-xl">
+<p class="text-[10px] text-slate-400 uppercase tracking-wider mb-1">Digestion</p>
+<div class="flex items-center gap-1 text-slate-100">
+<span class="material-symbols-outlined text-sm">rebase_edit</span>
+<span class="text-lg font-bold">Clean</span>
+</div>
+</div>
+<div class="flex-1 glass-panel p-3 rounded-xl">
+<p class="text-[10px] text-slate-400 uppercase tracking-wider mb-1">Mood</p>
+<div class="flex items-center gap-1 text-slate-100">
+<span class="material-symbols-outlined text-sm">sentiment_satisfied</span>
+<span class="text-lg font-bold">Stable</span>
+</div>
+</div>
+</section>
+<!-- Food Log -->
+<section class="px-4">
+<div class="flex items-center justify-between mb-4">
+<h3 class="text-lg font-bold">Food Log</h3>
+<span class="text-xs text-primary font-medium px-2 py-1 bg-primary/10 rounded tracking-wide uppercase">Today</span>
+</div>
+<!-- Log Entry -->
+<div class="space-y-4">
+<!-- Breakfast Card -->
+<div class="bg-slate-900/40 border border-primary/5 rounded-xl overflow-hidden">
+<div class="flex p-4 gap-4">
+<div class="size-20 rounded-lg overflow-hidden shrink-0 border border-white/5">
+<img class="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-500" data-alt="Plate of eggs and avocado" src="https://lh3.googleusercontent.com/aida-public/AB6AXuASPZUEJZf25fJtj83s86YDiex2AvTuoocjIcqc6PPoHZGQggaX8jPP3BNSEDScBmsgfGPAicT2iXXrb3QPNQuVgk6i61h5n5OFWrE8t9gm7enp0DEsy0IoRpYHNHRNNkQ_2Hrh0jgzNljciVoRmD05w0xGdkGFEFmLK_WnnNmruaM2qCFhJHGCKUTQjHRmbB9oKtyM9Sbbhg5RMIwViplzlWH_aozUrPoCyWjZa_8n32G2aIRLliyg9-acq2AP1erxw76uidUiEaQk"/>
+</div>
+<div class="flex-1">
+<div class="flex justify-between items-start mb-1">
+<h4 class="font-bold">Steel Cut Oats &amp; Eggs</h4>
+<span class="text-[10px] text-slate-500">08:30 AM</span>
+</div>
+<p class="text-xs text-slate-400 mb-2">High protein, moderate fats. Pre-workout fueling.</p>
+<div class="flex gap-2">
+<span class="text-[10px] px-2 py-0.5 bg-slate-800 rounded-full text-slate-300">750 kcal</span>
+<span class="text-[10px] px-2 py-0.5 bg-slate-800 rounded-full text-slate-300">45g Pro</span>
+</div>
+</div>
+</div>
+<!-- Subjective Data Entry -->
+<div class="bg-primary/5 p-4 border-t border-primary/10">
+<p class="text-xs font-bold text-primary mb-3 uppercase tracking-tighter italic">How did this feel?</p>
+<div class="flex items-center justify-between gap-4">
+<div class="flex-1 flex items-center gap-3">
+<span class="material-symbols-outlined text-slate-500 text-lg">sentiment_very_dissatisfied</span>
+<input class="w-full h-1.5 bg-slate-800 rounded-lg appearance-none cursor-pointer accent-primary" max="5" min="1" type="range" value="4"/>
+<span class="material-symbols-outlined text-primary text-xl">sentiment_very_satisfied</span>
+</div>
+<div class="flex gap-2">
+<button class="size-8 rounded flex items-center justify-center bg-slate-800 text-slate-400 border border-white/5">
+<span class="material-symbols-outlined text-sm">chat_bubble</span>
+</button>
+<button class="size-8 rounded flex items-center justify-center bg-primary text-background-dark">
+<span class="material-symbols-outlined text-sm">check</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+<!-- Lunch Card (Unlogged Feelings) -->
+<div class="bg-slate-900/40 border border-primary/5 rounded-xl overflow-hidden">
+<div class="flex p-4 gap-4">
+<div class="size-20 rounded-lg overflow-hidden shrink-0 border border-white/5">
+<img class="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-500" data-alt="Chicken and quinoa bowl" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAM9_K1DnwnH-02PtJyWKs1HpCKJuL9aeyexBezanYDnpYcALrP7uSKbhYEK7jH-QY7Y5wMcQhe_LfZ0xIP7rJ3ACVrg6mbpB2q47w_O2Wo2corI1hx1iIgA0z0QWJq0ysneDRMTnEQy2evD2Ywptl1Y8lw0dBz32c7dWT6sJd1xDaDKFRuDG1XPivOVnvmHc6Wuyv9L08SO2_reKSGEm9GAJlDdS-3m8enteBFOdrGGGdTFAJ4Gq09kA0xafM_36evLjdP2xz_lhpK"/>
+</div>
+<div class="flex-1">
+<div class="flex justify-between items-start mb-1">
+<h4 class="font-bold">Chicken Quinoa Bowl</h4>
+<span class="text-[10px] text-slate-500">01:15 PM</span>
+</div>
+<p class="text-xs text-slate-400 mb-2">Complex carbs focus for steady afternoon output.</p>
+<div class="flex gap-2">
+<span class="text-[10px] px-2 py-0.5 bg-slate-800 rounded-full text-slate-300">620 kcal</span>
+<span class="text-[10px] px-2 py-0.5 bg-slate-800 rounded-full text-slate-300">52g Pro</span>
+</div>
+</div>
+</div>
+<div class="p-4 border-t border-white/5 flex items-center justify-between">
+<p class="text-xs font-medium text-slate-500">Subjective data missing...</p>
+<button class="text-[10px] font-bold text-primary uppercase border border-primary/30 px-3 py-1.5 rounded-lg">Log Feeling</button>
+</div>
+</div>
+</div>
+</section>
+<!-- Daily Wins / Summary -->
+<section class="p-4 mt-4">
+<h3 class="text-lg font-bold mb-3">Daily Realities</h3>
+<div class="space-y-3">
+<div class="flex items-center gap-3 bg-white/5 p-3 rounded-lg border border-white/5">
+<div class="bg-primary/20 text-primary p-2 rounded">
+<span class="material-symbols-outlined">emoji_events</span>
+</div>
+<div>
+<p class="text-sm font-bold">Protein Target Hit</p>
+<p class="text-xs text-slate-400">180g of 175g consumed</p>
+</div>
+</div>
+<div class="flex items-center gap-3 bg-white/5 p-3 rounded-lg border border-white/5 opacity-60">
+<div class="bg-slate-800 text-slate-400 p-2 rounded">
+<span class="material-symbols-outlined">water_drop</span>
+</div>
+<div>
+<p class="text-sm font-bold">Hydration Lagging</p>
+<p class="text-xs text-slate-400">2.1L of 3.5L goal</p>
+</div>
+</div>
+</div>
+</section>
+</main>
+<!-- Bottom Navigation -->
+<nav class="fixed bottom-0 left-0 right-0 bg-background-dark/90 backdrop-blur-xl border-t border-primary/20 px-6 pb-8 pt-3 z-50">
+<div class="flex items-center justify-between max-w-md mx-auto relative">
+<a class="flex flex-col items-center gap-1 text-primary" href="#">
+<span class="material-symbols-outlined font-variation-fill-1">menu_book</span>
+<span class="text-[10px] font-bold uppercase tracking-wider">Journal</span>
+</a>
+<a class="flex flex-col items-center gap-1 text-slate-500" href="#">
+<span class="material-symbols-outlined">monitoring</span>
+<span class="text-[10px] font-bold uppercase tracking-wider">Insights</span>
+</a>
+<!-- Floating Action Button -->
+<div class="absolute left-1/2 -translate-x-1/2 -top-12">
+<button class="bg-primary text-background-dark size-14 rounded-full shadow-lg shadow-primary/20 flex items-center justify-center border-4 border-background-dark">
+<span class="material-symbols-outlined text-3xl font-bold">add</span>
+</button>
+</div>
+<a class="flex flex-col items-center gap-1 text-slate-500" href="#">
+<span class="material-symbols-outlined">track_changes</span>
+<span class="text-[10px] font-bold uppercase tracking-wider">Goals</span>
+</a>
+<a class="flex flex-col items-center gap-1 text-slate-500" href="#">
+<span class="material-symbols-outlined">person</span>
+<span class="text-[10px] font-bold uppercase tracking-wider">Profile</span>
+</a>
+</div>
+</nav>
+<!-- Custom Style Overrides for Material Icons weight/fill -->
+<style>
+        .font-variation-fill-1 {
+            font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+    </style>
+</body></html>

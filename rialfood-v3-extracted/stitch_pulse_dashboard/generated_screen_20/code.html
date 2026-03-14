@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>RIAL Explorer &amp; Community Hub</title>
+<!-- Tailwind CSS v3 with Plugins -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- Tailwind Configuration for Custom Theme Elements -->
+<script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            'rial-dark': '#0f172a',
+            'rial-accent': '#38bdf8',
+            'rial-surface': '#1e293b'
+          }
+        }
+      }
+    }
+  </script>
+<!-- BEGIN: Custom Typography Styles -->
+<style data-purpose="typography">
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap');
+    body {
+      font-family: 'Inter', sans-serif;
+      -webkit-font-smoothing: antialiased;
+    }
+    .editorial-title {
+      letter-spacing: -0.025em;
+    }
+  </style>
+<!-- END: Custom Typography Styles -->
+<!-- BEGIN: Layout Adjustments -->
+<style data-purpose="layout-tweaks">
+    .hide-scrollbar::-webkit-scrollbar {
+      display: none;
+    }
+    .hide-scrollbar {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
+    .gradient-overlay {
+      background: linear-gradient(to bottom, transparent 0%, rgba(15, 23, 42, 0.8) 100%);
+    }
+  </style>
+<!-- END: Layout Adjustments -->
+</head>
+<body class="bg-gray-50 text-rial-dark min-h-screen">
+<!-- BEGIN: Header & Search -->
+<header class="sticky top-0 z-50 bg-white/80 backdrop-blur-md border-b border-gray-200 px-4 py-4" data-purpose="navigation-search">
+<div class="max-w-md mx-auto">
+<div class="flex items-center justify-between mb-4">
+<h1 class="text-2xl font-bold tracking-tighter uppercase italic editorial-title">RIAL</h1>
+<button aria-label="User Profile" class="p-2 rounded-full bg-gray-100">
+<svg class="h-5 w-5" fill="currentColor" viewbox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+<path clip-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" fill-rule="evenodd"></path>
+</svg>
+</button>
+</div>
+<!-- Search Bar Component -->
+<div class="relative" data-purpose="recipe-search-container">
+<span class="absolute inset-y-0 left-0 flex items-center pl-3">
+<svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+<path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+</svg>
+</span>
+<input class="w-full pl-10 pr-4 py-3 bg-gray-100 border-none rounded-2xl focus:ring-2 focus:ring-rial-accent transition-all text-sm" placeholder="Search recipes, ingredients, nutrients..." type="text"/>
+</div>
+</div>
+</header>
+<!-- END: Header & Search -->
+<main class="max-w-md mx-auto pb-24">
+<!-- BEGIN: Pro-Athlete Routines Section -->
+<section class="mt-8 px-4" data-purpose="pro-routines">
+<div class="flex items-end justify-between mb-6">
+<div>
+<h2 class="text-xs font-bold text-rial-accent uppercase tracking-widest mb-1">Elite Performance</h2>
+<h3 class="text-3xl font-bold editorial-title">Pro-Athlete Routines</h3>
+</div>
+<a class="text-sm font-semibold text-gray-500 hover:text-rial-dark transition-colors" href="#">See All</a>
+</div>
+<!-- Horizontal Scrollable Athlete Cards -->
+<div class="flex space-x-4 overflow-x-auto hide-scrollbar pb-4" data-purpose="athlete-carousel">
+<!-- Athlete Card 1 -->
+<div class="min-w-[280px] bg-rial-dark rounded-3xl overflow-hidden shadow-xl" data-purpose="athlete-card">
+<div class="relative h-48">
+<!-- YouTube Thumbnail Placeholder -->
+<img alt="Marcus V. Training" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD6h5ViRKnnTSoZ81Zzz7EzU0xpQqpumAe_0r2tDrAsmvy8nOeMqLTSqpPmhoRZ5S7lMbSEFWIQmg3YI2ka-HZGFyQJZQvmRsLd8iMp0W33j4KfjXaEBoeuToPTUXu85mBr9agiczdZLW0vh0CZL37TlYSpdvMj60f9pIwBA7vo9fIMLkRksEGROvLv1kaKHvi4NBrHXtPnrnbNbrveTjW6Iy0buh5NyDhiDiL2RZzwxCSemFpxmNKpODdvGnoLEBEX_QK_B4dSrSNO"/>
+<div class="absolute inset-0 flex items-center justify-center">
+<div class="w-12 h-12 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center border border-white/30">
+<svg class="w-6 h-6 text-white fill-current" viewbox="0 0 24 24"><path d="M8 5v14l11-7z"></path></svg>
+</div>
+</div>
+<div class="absolute bottom-3 left-3 flex items-center space-x-2">
+<span class="px-2 py-1 bg-red-600 text-[10px] font-bold text-white rounded uppercase tracking-tighter">YouTube</span>
+</div>
+</div>
+<div class="p-5 text-white">
+<div class="flex items-center space-x-3 mb-3">
+<img alt="Marcus V." class="w-10 h-10 rounded-full border-2 border-rial-accent" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAB1LOIBK9Ns1xkuEN8MHwP8ldWZj3lRZQp9I2Vl7gGcODS10NA_RJM4YYytG8yTTWhkoDeyHk8QAHqUObJXWp6wHjucOWwTOySaJ3ljdxU54EkMshaamJqSQgrCwmP6TE4X8X1HhJs428ER61zxX3hFCgsLNA6XtGqdETM0sP3mBqIc25Db9ZWkiBxO_u9ZtIBVbZ6gfhnwXb9ncdF3xpbTEXQW3gOrkpNXEuGOEWRGvK3i5ZdgvzJDfZhjlrBuxwKLwA-D0Cxrh9e"/>
+<div>
+<p class="font-bold text-sm">Marcus V.</p>
+<p class="text-xs text-gray-400">Olympic Sprinter</p>
+</div>
+</div>
+<p class="text-xs text-gray-300 leading-relaxed italic">"My pre-race macros and dynamic warmup sequence for explosive power."</p>
+</div>
+</div>
+<!-- Athlete Card 2 -->
+<div class="min-w-[280px] bg-rial-dark rounded-3xl overflow-hidden shadow-xl" data-purpose="athlete-card">
+<div class="relative h-48">
+<img alt="Sarah J. Recovery" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBLSwW29coge2Xw2QPrw1DRqahJJW-jf_C1JGqkN6Az20aFj5YIXx--qVlT9ewp6LI82Ah0zgI2p8y4YsTdH0xBvaaGVOXLvi3CJF4SWSIKE_Dibuel5EA2WOsmoTrZMbxhWet9f4Y5ZpdKxe-OcckvLGyBxYlyH0T5sGCd_EPBEUR_cMtTKPP_0gKnzako1OaWO7heIjOTwdw5U0MysVYVbsSag2tN0ZYpdqFJIER87h3GYp5gnRcY3DveXTX8rpSMo3fcQuSBl7Yk"/>
+<div class="absolute inset-0 flex items-center justify-center">
+<div class="w-12 h-12 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center border border-white/30">
+<svg class="w-6 h-6 text-white fill-current" viewbox="0 0 24 24"><path d="M8 5v14l11-7z"></path></svg>
+</div>
+</div>
+<div class="absolute bottom-3 left-3 flex items-center space-x-2">
+<span class="px-2 py-1 bg-red-600 text-[10px] font-bold text-white rounded uppercase tracking-tighter">YouTube</span>
+</div>
+</div>
+<div class="p-5 text-white">
+<div class="flex items-center space-x-3 mb-3">
+<img alt="Sarah J." class="w-10 h-10 rounded-full border-2 border-yellow-400" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCWpcXTvgNV2dbPIgFOR6Pm7vXi5yP500eVpH1QXJU7piBTON0BIYgvNz58F0NEzohrRbeGHyLarsG_EDjqeMCQl0QkMVCYlvvt1FXB6O9YcP4DfZNZFMV5l--wl14vftfHjVWGvyUzzWIfwqDzjC6_ufqEUSTqNJM1nl34dbAWcmi5CGOHWVkeZ6swk8C9bwiY_5kcYugGnhvkaXZyjUcs6V49XpeVzmf4-4ArXFryNzK4lv_Si06udckjLKWbC7O8l9-XITQG2EdD"/>
+<div>
+<p class="font-bold text-sm">Sarah Jensen</p>
+<p class="text-xs text-gray-400">Pro CrossFit Athlete</p>
+</div>
+</div>
+<p class="text-xs text-gray-300 leading-relaxed italic">"Complete mobility flow and recovery shake recipes for high-volume days."</p>
+</div>
+</div>
+</div>
+</section>
+<!-- END: Pro-Athlete Routines Section -->
+<!-- BEGIN: Trending Community Section -->
+<section class="mt-12 px-4" data-purpose="community-feed">
+<div class="mb-6">
+<h2 class="text-xs font-bold text-gray-400 uppercase tracking-widest mb-1">The Collective</h2>
+<h3 class="text-3xl font-bold editorial-title">Trending in Community</h3>
+</div>
+<!-- Masonry-style Grid for Community Photos -->
+<div class="grid grid-cols-2 gap-4" data-purpose="community-grid">
+<!-- Community Post 1 -->
+<div class="flex flex-col space-y-2">
+<div class="relative rounded-2xl overflow-hidden aspect-[4/5] shadow-sm">
+<img alt="Community Meal" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD-KGTk5jKXbAI45aToa2hzvK2_xtbPn6fkq6ilAZ1ZfnM_czm4vGfh0rCyR7uZTww1naDlt6353i73XY00dfo9tP_BBWRba5dvZqGX4jul7Yy3XAjzPUFocoWCHPx-9cSBf1GvxXgTwjII1Iy4dDLTfBmlPc16JT9f9RcysSWxbU5iqvf1Gpoyo-5IP5kj21zFZcbsdA4ppLVGKxCxheTHz1MgGhHdzr_IfJrKwdmpxgeYave6D1cCOshi7Y0cEe81PgPa5pCl0AYI"/>
+<div class="absolute top-2 right-2">
+<span class="bg-white/90 backdrop-blur-sm px-2 py-1 rounded-lg text-[10px] font-bold shadow-sm">RECIPE</span>
+</div>
+</div>
+<div class="flex items-center justify-between px-1">
+<div class="flex items-center space-x-2">
+<div class="w-6 h-6 rounded-full bg-gray-200 border border-white overflow-hidden">
+<img alt="User 1" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDPiw0vexlUM_JReyg3urNE8eilCgkf5dS5SwLh7eSoo6v7KL0wGu1JIa_LhDkP6nPHgmpqXCR0wrIdMu8uKG4E6AjqyldI1ZmfhrWqaJt2qrSDDAJDYjn113ZtC8PCPQ-aAfHczlvxWNxuEutDPndPBEOF3YItcE9-5Kw3BtaLy6raQATSztACHMPyCG0gJYo7CD_uVbBICCT-z0OUE9rGTsTngGP_2PhGQlQgw0y7gk1t3s4_MhQ3MrSf4yE_oRDDdgnl-yYwgs3g"/>
+</div>
+<span class="text-[11px] font-semibold">@alex_wellness</span>
+</div>
+<div class="flex items-center text-gray-400 text-[10px]">
+<svg class="w-3 h-3 mr-1 fill-current text-red-400" viewbox="0 0 20 20"><path d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z"></path></svg>
+              1.2k
+            </div>
+</div>
+</div>
+<!-- Community Post 2 -->
+<div class="flex flex-col space-y-2 mt-6">
+<div class="relative rounded-2xl overflow-hidden aspect-square shadow-sm">
+<img alt="Community Routine" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDJcnTC38_zhUzr-LHvaPrVDrkqVgs7Js1Zzqw3d2gYgGH2Bn0zKD_wHde7oOVaAJzLZq6tyc0aFOtvhfIE3lTveVepNGJCxBUxswaYgDiBnli1kJfCupdoK3jTizIK7tUoKQext7y1iNe46jeNkHnrfq5afGPb7Kn2wLB-TzrluCafStH6fmY2kry1uLI-eJk2F_uhaEe2v3okKyvdGjDgGExjkGf62NBH4LNlqxFw7ERlpNGZez306KQEdUGew7SlIMfpZ4txPlIl"/>
+<div class="absolute top-2 right-2">
+<span class="bg-white/90 backdrop-blur-sm px-2 py-1 rounded-lg text-[10px] font-bold shadow-sm">ROUTINE</span>
+</div>
+</div>
+<div class="flex items-center justify-between px-1">
+<div class="flex items-center space-x-2">
+<div class="w-6 h-6 rounded-full bg-gray-200 border border-white overflow-hidden">
+<img alt="User 2" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBfaNzv2zAXJW9TsM73mIB1JthHGWfKhtnzuX-gfLalOuon-EqSBqxPJj9Ide1Pk6l1OZ5eyhzhQlHxVwiTPDA2OSkzs3vj-QdPHUBl_9l_L9gFeKqGYJ_BylmGm0n9gSL47fEQCnKJ2ihc-nydM2RagsgEVtXaj0VU7pxhk3VMuG01DBfwVOG9YIGQlrMKsj4SNtBPPiaJ8qKQJIxXZGgY1eYCZ96b1e_orcHK9w0aOm9AoX3oEBfvu0bNwrE1RVCyU-pWgCK_UBdK"/>
+</div>
+<span class="text-[11px] font-semibold">@yoga_flow</span>
+</div>
+<div class="flex items-center text-gray-400 text-[10px]">
+<svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M3 10h10a8 8 0 018 8v2M3 10l6 6m-6-6l6-6" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+              48
+            </div>
+</div>
+</div>
+<!-- Community Post 3 -->
+<div class="flex flex-col space-y-2 -mt-4">
+<div class="relative rounded-2xl overflow-hidden aspect-square shadow-sm">
+<img alt="Community Meal" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDwV3QFCwSzkRL8L07xBF2lV2qtn5EArvY7s94jIQ-pQSw8XUN5yjNHdIg-I32PrRnGrMN-C1G-ozpPTIwacNP8Q0X9gaefV2306N11cnS-43QIiiVp-uLYBFo-jhOj0Tz3vhNQ9Ozm5crZXyDxdR16WL3FR06BB_0075ULox73jp8cFggXicxuYWIaIXPdUKRkWWxYkLWPbHi_RBShzrAdhxKj_kxRph6hXKI28EFR0yHCxZQKq6ZySuauJmaGK_suAAkOS5MHvb02"/>
+</div>
+<div class="flex items-center justify-between px-1">
+<div class="flex items-center space-x-2">
+<div class="w-6 h-6 rounded-full bg-gray-200 border border-white overflow-hidden">
+<img alt="User 3" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD1eGl4qdApQ8WVwQNGFJOqEbKFbxPjwkFmmwSlWWf9s0BovovcKVVuVuw3iHpM2_-BwAxz2jSduZTOtWsKsYWhGllHI18duxv2HmFlljl4lNcOff3i1sAasq79YE8ZHxPFS8IrUCOSJA4AgK5x3BThSXGic_pPPa8BdGtSVUIuf_ElsTDj679QqWCAQwvijTBhPr2TP0Upudm_IMe1aDPXVwury64FIZ_uC62Qe-r8ZeymY0oY4vhhgFeDaT7zVZCYT0Hzz1MX517E"/>
+</div>
+<span class="text-[11px] font-semibold">@david_keto</span>
+</div>
+<div class="flex items-center text-gray-400 text-[10px]">
+<svg class="w-3 h-3 mr-1 fill-current text-red-400" viewbox="0 0 20 20"><path d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z"></path></svg>
+              890
+            </div>
+</div>
+</div>
+<!-- Community Post 4 -->
+<div class="flex flex-col space-y-2">
+<div class="relative rounded-2xl overflow-hidden aspect-[4/5] shadow-sm">
+<img alt="Community Motivation" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBQSPh63TnMCMuDXJ-vw2cLkAGIoqJo75mv79vT5v6qF4ZqXWdF_Zc_8qZnu17aMwTFkwz7_j5RFa1h8gbwptWLlq1A1nSw8yx16oCNqNh6BKYWWZVOyKQpWu-ApEGXzR9zvc3F5gEz8bQ83Xw_VY-auvc7ksr6Cc8RDGRrFwO0MKK_HLYq4ZfsPycvkoHsEKbJSVbuietp8-Z6WQFVaHVRBBYkCdy8u1RFq61Vj3lPcUL0VkSsThfDrrK_fdXwqLXSTQPIckG4J3oo"/>
+<div class="absolute bottom-2 left-2 right-2">
+<div class="bg-black/40 backdrop-blur-md p-2 rounded-xl border border-white/20">
+<p class="text-[9px] text-white font-medium truncate">"Hit a new PR today! Fueling is key."</p>
+</div>
+</div>
+</div>
+<div class="flex items-center justify-between px-1">
+<div class="flex items-center space-x-2">
+<div class="w-6 h-6 rounded-full bg-gray-200 border border-white overflow-hidden">
+<img alt="User 4" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDfRBptE99VfIx7jEKvlJpAIoLxgmurmnQGjgVjtHLcN20w42Vdd_NwEXcV4E145jU_mJ1zAFwuKyTDq8X41RYo4_LhDl5Tkm3vWGVqUonhmf3R6_lWHxVuXVnbLsDO6qXDj7-ZzXiMcceJOIKvC2GXfCRHlGFQmloAFJ8OgpGXcknwgJF_dKQ3RoI_lLezMH38M67yMWeQcx9N4d2GCoeIUG04hyn96IR0heMdqATSUzPLO1qTaxZu-1QGPPZsufzade0NyIZO4YIH"/>
+</div>
+<span class="text-[11px] font-semibold">@strength_lab</span>
+</div>
+<div class="flex items-center text-gray-400 text-[10px]">
+<svg class="w-3 h-3 mr-1 fill-current text-red-400" viewbox="0 0 20 20"><path d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z"></path></svg>
+              2.4k
+            </div>
+</div>
+</div>
+</div>
+</section>
+<!-- END: Trending Community Section -->
+</main>
+<!-- BEGIN: Bottom Tab Navigation -->
+<nav class="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 px-6 py-3 flex justify-between items-center z-50 max-w-md mx-auto" data-purpose="bottom-nav">
+<button class="flex flex-col items-center space-y-1 text-rial-accent" data-purpose="nav-item-active">
+<svg class="w-6 h-6" fill="currentColor" viewbox="0 0 20 20"><path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z"></path></svg>
+<span class="text-[10px] font-bold">Explore</span>
+</button>
+<button class="flex flex-col items-center space-y-1 text-gray-400">
+<svg class="w-6 h-6" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+<span class="text-[10px] font-bold">Recipes</span>
+</button>
+<div class="relative -mt-8">
+<button class="w-14 h-14 bg-rial-dark text-white rounded-full flex items-center justify-center shadow-lg border-4 border-white">
+<svg class="w-8 h-8" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M12 6v6m0 0v6m0-6h6m-6 0H6" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+</button>
+</div>
+<button class="flex flex-col items-center space-y-1 text-gray-400">
+<svg class="w-6 h-6" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+<span class="text-[10px] font-bold">Hub</span>
+</button>
+<button class="flex flex-col items-center space-y-1 text-gray-400">
+<svg class="w-6 h-6" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path><path d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+<span class="text-[10px] font-bold">Settings</span>
+</button>
+</nav>
+<!-- END: Bottom Tab Navigation -->
+</body></html>

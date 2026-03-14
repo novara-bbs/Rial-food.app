@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>RIAL Weekly Family Planner</title>
+<!-- Load Tailwind CSS v3 with plugins -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- Google Fonts: Space Grotesk -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            primary: '#607AFB',
+            vitality: '#D4F54C', // Vitality Lime accent
+            editorial: '#1A1A1A',
+            surface: '#F9FAFB',
+          },
+          fontFamily: {
+            sans: ['Space Grotesk', 'sans-serif'],
+          },
+          borderRadius: {
+            'twelve': '12px',
+          }
+        }
+      }
+    }
+  </script>
+<style data-purpose="custom-typography">
+    body {
+      font-family: 'Space Grotesk', sans-serif;
+      background-color: #FFFFFF;
+      color: #1A1A1A;
+      -webkit-font-smoothing: antialiased;
+    }
+    .editorial-border {
+      border-bottom: 1px solid #E5E7EB;
+    }
+    .accent-shadow {
+      box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.05);
+    }
+  </style>
+</head>
+<body class="bg-white min-h-screen">
+<!-- BEGIN: MainHeader -->
+<header class="p-6 editorial-border flex justify-between items-center bg-white sticky top-0 z-10">
+<div data-purpose="brand-section">
+<p class="text-[10px] uppercase tracking-widest font-bold text-primary mb-1">Editorial Tech</p>
+<h1 class="text-2xl font-bold tracking-tight">Weekly Planner</h1>
+</div>
+<div class="flex items-center gap-4" data-purpose="header-controls">
+<!-- Family Scale Toggle -->
+<div class="flex flex-col items-end">
+<span class="text-[10px] font-medium uppercase text-gray-400">Family Scale</span>
+<label class="relative inline-flex items-center cursor-pointer mt-1">
+<input checked="" class="sr-only peer" type="checkbox" value=""/>
+<div class="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-vitality"></div>
+</label>
+</div>
+</div>
+</header>
+<!-- END: MainHeader -->
+<!-- BEGIN: BatchCookedSummary -->
+<section class="p-6 bg-surface" data-purpose="batch-status">
+<div class="flex items-center justify-between mb-4">
+<h2 class="text-sm font-semibold uppercase tracking-wider">Batch Components</h2>
+<span class="text-xs font-medium text-primary px-2 py-1 bg-blue-50 rounded-full">3 Ready to Use</span>
+</div>
+<div class="flex gap-3 overflow-x-auto pb-2 scrollbar-hide">
+<!-- Component 1 -->
+<div class="flex-shrink-0 bg-white p-3 rounded-twelve border border-gray-100 accent-shadow w-40">
+<div class="w-full h-20 bg-gray-100 rounded-lg mb-2 overflow-hidden">
+<img alt="Batch Component" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBxUk8-gYMsn7bnnX53UwM3xV9X9U81ts9uadhcRmAbYD7OLAKzUKo5996f2jTjBJ7jQd0ws_6CPFa1qtnhMY6JWxDTmia58eBvMRChNXT8WB-CphXa4ezrPtjSBP-bMPDnf4sCd8Aob-RXZLiyQcDWJQPqerxaJSmMGwkcaK94glkapSTch7E8CnCt0QJ2l7oZ50Cg84EMVLGyUnXPxr2asilyaDoy_qszQyiEUI1Ons3-9IBCft3anb_5fwlWDaP_jGCikEqN-Xc0"/>
+</div>
+<p class="text-xs font-bold">Roasted Roots</p>
+<p class="text-[10px] text-gray-500">Left: 1.2kg</p>
+</div>
+<!-- Component 2 -->
+<div class="flex-shrink-0 bg-white p-3 rounded-twelve border border-gray-100 accent-shadow w-40">
+<div class="w-full h-20 bg-gray-100 rounded-lg mb-2 overflow-hidden">
+<img alt="Batch Component" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAsy5iI8TXVM6Yj_npxnOgpsbEQV4mhJ6KBZpuMC93JtY0Mim4iRYb7sNbzbiisZS6Rg38UpEk5b8Sz1M-FsaK7z_Yf2WrShJ5OTO_yNN22NrzIXS-U-CCl-tRxmRznYnVo1NckobgiZ8wwM3-menG_Nvtpi-5w48OwG32GOEoalJOBA5E5M1RjrNbESRncXGqg09wcX9FrgjQU5jFeUmnm6nyzd12LoFPt3CHQ9jPMUdlQq1pmpYfHP7Oxlwp_dA4A-B_Ev8Jm9fGK"/>
+</div>
+<p class="text-xs font-bold">Slow-Cooked Grains</p>
+<p class="text-[10px] text-gray-500">Left: 800g</p>
+</div>
+<!-- Component 3 -->
+<div class="flex-shrink-0 bg-white p-3 rounded-twelve border border-gray-100 accent-shadow w-40">
+<div class="w-full h-20 bg-gray-100 rounded-lg mb-2 overflow-hidden">
+<img alt="Batch Component" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuC9i3XBAE50ooYc5_hqJNvQrij6fTupEM36fRxCjdeCg9j3fDnaFUE8xBl3V8V6vc8DB1slFDWbxrGvMSeHaGi9m87qBIvp-PNpXipKFMuuAkapF3BlZ4x4vs8tA7M4zoJLl_vZqey8g87zvoOb5l61xv6O-yocXKGhgwMT242HRIpgEOOHUCjE9WjNl4BrO7DZauGQnB3wC3yBGtrwsdCEohc22fb8XjROXnrd-GlpivNQWOiM2mUCPpq6p8L40tiAmsw-1IFxYww7"/>
+</div>
+<p class="text-xs font-bold">Infused Herbal Oil</p>
+<p class="text-[10px] text-gray-500">Left: 250ml</p>
+</div>
+</div>
+</section>
+<!-- END: BatchCookedSummary -->
+<!-- BEGIN: CalendarView -->
+<main class="p-6">
+<div class="space-y-8">
+<!-- Monday -->
+<section class="relative pl-8 border-l-2 border-vitality" data-purpose="day-entry">
+<div class="absolute -left-[9px] top-0 w-4 h-4 rounded-full bg-vitality"></div>
+<div class="flex justify-between items-baseline mb-3">
+<h3 class="text-xl font-bold italic">Monday</h3>
+<span class="text-xs font-medium text-gray-400">Oct 23</span>
+</div>
+<div class="bg-white rounded-twelve border border-gray-100 p-4 accent-shadow">
+<div class="flex gap-4">
+<div class="w-20 h-20 rounded-lg overflow-hidden flex-shrink-0">
+<img alt="Monday Meal" class="object-cover w-full h-full" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBbs-lzMRr8Q2D7AamjJZro-H_Aa6A4mvYykxdhZWVZvi8nbuPoAsJs8Po9MWcqPgWXqBRmpL77NRTWdGm08ijVQZuHd1VqxyZdQ3tLB5kkTUa57c5LUWJiUmhp93iwsqHvZ6oiQ4SSFcvaHpC9Xb8rrX2x9VhWAPapiKvL3xiRFcnx-ke4zNxsA4F6jIdnFrHxULHwzbiLlXxFPMdtv32_8IXX7-Rt2Z5-bCt15y-PM0wMH1ngpWYmkz8scjB0h7gbIloLMmDAUUYF"/>
+</div>
+<div class="flex-1">
+<div class="flex items-center gap-2 mb-1">
+<span class="px-2 py-0.5 bg-gray-100 text-[10px] font-bold rounded uppercase">Lunch</span>
+<span class="text-[10px] font-medium text-primary uppercase">Sarah</span>
+</div>
+<h4 class="font-bold text-sm mb-1">Grain Bowl with <span class="text-primary underline">Roasted Roots</span></h4>
+<p class="text-xs text-gray-500 italic">5 min assembly • Uses batch components</p>
+</div>
+</div>
+</div>
+</section>
+<!-- Tuesday -->
+<section class="relative pl-8 border-l-2 border-gray-100" data-purpose="day-entry">
+<div class="absolute -left-[5px] top-0 w-2 h-2 rounded-full bg-gray-300"></div>
+<div class="flex justify-between items-baseline mb-3">
+<h3 class="text-xl font-bold opacity-60">Tuesday</h3>
+<span class="text-xs font-medium text-gray-400">Oct 24</span>
+</div>
+<div class="bg-white rounded-twelve border border-gray-100 p-4 accent-shadow opacity-90">
+<div class="flex gap-4">
+<div class="w-20 h-20 rounded-lg overflow-hidden flex-shrink-0">
+<img alt="Tuesday Meal" class="object-cover w-full h-full" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBGaN9Y8iLq7aXHnL6jqz1evYlqz-9xTAWw2wb1OnNSuhQuv_5K7tOzi_66RuWQW0p3kwA8ofuWijvpm4QEK2jhhyInEkm1wMo8VTOAQfdBL0R4oZBBZAZokTjKdPbM--DbnYwNNG0L3smQfW6Y9cKmvZoF-sUjVlSvM6OOM4Q-CTz4YyXhdLrQ3rQ2vUMBUZkQVIC5u7IiE64omddN-powqo1jBgXAaGCltxRFZhBNbWFV6XXgiZYGYoJYiChdoUpgAi7DwvLx5R99"/>
+</div>
+<div class="flex-1">
+<div class="flex items-center gap-2 mb-1">
+<span class="px-2 py-0.5 bg-gray-100 text-[10px] font-bold rounded uppercase">Dinner</span>
+<span class="text-[10px] font-medium text-primary uppercase">Everyone</span>
+</div>
+<h4 class="font-bold text-sm mb-1">Quick Risotto Base</h4>
+<p class="text-xs text-gray-500 italic">Fresh cook tonight</p>
+</div>
+</div>
+</div>
+</section>
+<!-- Wednesday -->
+<section class="relative pl-8 border-l-2 border-vitality" data-purpose="day-entry">
+<div class="absolute -left-[9px] top-0 w-4 h-4 rounded-full bg-vitality"></div>
+<div class="flex justify-between items-baseline mb-3">
+<h3 class="text-xl font-bold italic">Wednesday</h3>
+<span class="text-xs font-medium text-gray-400">Oct 25</span>
+</div>
+<div class="bg-white rounded-twelve border border-gray-100 p-4 accent-shadow">
+<div class="flex gap-4">
+<div class="w-20 h-20 rounded-lg overflow-hidden flex-shrink-0">
+<img alt="Wednesday Meal" class="object-cover w-full h-full" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDerTxi9aBkoF9J-KTuwNDrI2iq6UDBfQGTgQW8FaNCe2bx9Fu4YwH_1tGGe5kmJAp6aw4EcCBe9hAKW_XM6b0Gvn5-VDlXD3nMAlehLuxfp58KtFYRShc5eHbCHAE4gevXH4VfwkT_nWlEK47adDAbdlQIyLIMzmZqVPnU22vdixykYi4v1uEZGR0LirQm8FG9rFebEiCH-OldWL2MrFQLwvJkZAeUeS7UZNsbf_-RIS9pvZQdoCVIn3smU3jduwKnJENgEqiVWv5Z"/>
+</div>
+<div class="flex-1">
+<div class="flex items-center gap-2 mb-1">
+<span class="px-2 py-0.5 bg-gray-100 text-[10px] font-bold rounded uppercase">Lunch</span>
+<span class="text-[10px] font-medium text-primary uppercase">James</span>
+</div>
+<h4 class="font-bold text-sm mb-1">Herbal <span class="text-primary underline">Oil</span> Dressed Salad</h4>
+<p class="text-xs text-gray-500 italic">3 min assembly • Uses batch components</p>
+</div>
+</div>
+</div>
+</section>
+<!-- Remaining days summary -->
+<div class="pt-4 border-t border-gray-100 flex justify-center">
+<button class="text-xs font-bold uppercase tracking-widest text-gray-400 hover:text-primary transition-colors py-2 px-4">
+          View Full Week (Thu — Sun)
+        </button>
+</div>
+</div>
+</main>
+<!-- END: CalendarView -->
+<!-- BEGIN: BottomNavigation -->
+<footer class="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-100 px-8 py-4 flex justify-between items-center z-20">
+<button class="flex flex-col items-center gap-1">
+<div class="w-5 h-5 bg-primary rounded-sm opacity-20"></div>
+<span class="text-[10px] font-bold uppercase">Plan</span>
+</button>
+<button class="flex flex-col items-center gap-1 opacity-30">
+<div class="w-5 h-5 bg-black rounded-sm"></div>
+<span class="text-[10px] font-bold uppercase">Batch</span>
+</button>
+<button class="flex flex-col items-center gap-1 opacity-30">
+<div class="w-5 h-5 bg-black rounded-sm"></div>
+<span class="text-[10px] font-bold uppercase">Pantry</span>
+</button>
+<button class="flex flex-col items-center gap-1 opacity-30">
+<div class="w-5 h-5 bg-black rounded-sm"></div>
+<span class="text-[10px] font-bold uppercase">Settings</span>
+</button>
+</footer>
+<!-- END: BottomNavigation -->
+<!-- Space for fixed footer -->
+<div class="h-24"></div>
+</body></html>

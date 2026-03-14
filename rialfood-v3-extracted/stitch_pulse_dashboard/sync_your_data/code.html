@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>RIAL Bio-Sync Onboarding</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#007dff",
+                        "background-light": "#f5f7f8",
+                        "background-dark": "#0f1923",
+                    },
+                    fontFamily: {
+                        "display": ["Space Grotesk", "sans-serif"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.5rem",
+                        "lg": "1rem",
+                        "xl": "1.5rem",
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
+<style>
+        body {
+            font-family: 'Space Grotesk', sans-serif;
+        }
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 min-h-screen">
+<div class="relative flex h-auto min-h-screen w-full flex-col overflow-x-hidden max-w-md mx-auto border-x border-slate-200 dark:border-slate-800 shadow-2xl">
+<!-- TopAppBar -->
+<div class="flex items-center p-4 pb-2 justify-between sticky top-0 z-10 bg-background-light/80 dark:bg-background-dark/80 backdrop-blur-md">
+<div class="text-slate-900 dark:text-slate-100 flex size-12 shrink-0 items-center justify-center cursor-pointer">
+<span class="material-symbols-outlined">arrow_back</span>
+</div>
+<h2 class="text-slate-900 dark:text-slate-100 text-lg font-bold leading-tight tracking-tight flex-1 text-center pr-12 font-display uppercase tracking-widest">Bio-Sync</h2>
+</div>
+<!-- Hero Section -->
+<div class="@container px-4 py-3">
+<div class="w-full bg-center bg-no-repeat bg-cover flex flex-col justify-end overflow-hidden rounded-xl min-h-64 relative group shadow-2xl" data-alt="Abstract blue and purple energy waves representing data" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuDQLTQC6KqwMMD_Y8pKbGztU5I_prRnUouA95m9dGzd4bkrVCxeLsiEznLFOW-fsc3aDRPHG8VBWN7f0_r3rkuSwah9qCWPxb-HmbIJBVSG_aXkFlfnH7vbNh7Q9Anc8lf3GQ8k5QNiT_q75l5vrIr8ZLFFsK5n2_79WJphdz1CzC0nKGONcbnZyiLiCmcV_hE5ZjIB9N0KEWHV1tfwmK8WWAIWE5DGbVI8T8WoMDmGtBNH6uted5sdeJpUh2zOnSt_ePUatEZw8qNU");'>
+<div class="absolute inset-0 bg-gradient-to-t from-background-dark via-transparent to-transparent opacity-60"></div>
+<div class="relative p-6">
+<div class="flex items-center gap-2 mb-2">
+<span class="h-2 w-2 rounded-full bg-primary animate-pulse"></span>
+<span class="text-xs font-medium text-primary uppercase tracking-tighter">Human-Centric Precision</span>
+</div>
+</div>
+</div>
+</div>
+<div class="px-6">
+<h1 class="text-slate-900 dark:text-slate-100 tracking-tight text-3xl font-bold leading-tight text-center pb-3 pt-4 font-display">
+                Power Your 'Real Feel' Engine
+            </h1>
+<p class="text-slate-600 dark:text-slate-400 text-base font-normal leading-relaxed pb-6 text-center">
+                RIAL uses your biometric data to calibrate a unique digital twin. This enables predictive insights tailored precisely to your unique biology.
+            </p>
+</div>
+<!-- Sync Card -->
+<div class="p-4 space-y-4">
+<div class="flex flex-col gap-4 rounded-xl bg-slate-100 dark:bg-slate-800/50 p-6 border border-slate-200 dark:border-slate-700">
+<div class="flex items-start justify-between gap-4">
+<div class="flex flex-col gap-2">
+<div class="flex items-center gap-3">
+<div class="bg-primary/10 p-2 rounded-lg">
+<span class="material-symbols-outlined text-primary">favorite</span>
+</div>
+<p class="text-slate-900 dark:text-white text-lg font-bold leading-tight">Health Ecosystem</p>
+</div>
+<p class="text-slate-600 dark:text-slate-400 text-sm font-normal leading-snug">
+                            Sync steps, sleep cycles, and HRV for 99.9% prediction accuracy of your daily performance.
+                        </p>
+</div>
+</div>
+<div class="flex flex-col gap-3 pt-2">
+<button class="flex w-full cursor-pointer items-center justify-center rounded-xl h-12 px-4 bg-primary text-white gap-2 text-sm font-bold transition-transform active:scale-95">
+<span class="material-symbols-outlined">sync_alt</span>
+<span class="truncate">Connect Apple Health</span>
+</button>
+<button class="flex w-full cursor-pointer items-center justify-center rounded-xl h-12 px-4 border-2 border-slate-300 dark:border-slate-700 bg-transparent text-slate-700 dark:text-slate-300 gap-2 text-sm font-bold transition-transform active:scale-95">
+<span class="material-symbols-outlined">fitbit</span>
+<span class="truncate">Connect Google Fit</span>
+</button>
+</div>
+</div>
+<!-- Trust Features -->
+<div class="grid grid-cols-2 gap-3 py-4">
+<div class="flex flex-col items-center p-4 rounded-xl bg-slate-50 dark:bg-slate-800/30 border border-slate-100 dark:border-slate-800">
+<span class="material-symbols-outlined text-primary mb-2">lock</span>
+<span class="text-xs font-bold text-center">Private &amp; Encrypted</span>
+</div>
+<div class="flex flex-col items-center p-4 rounded-xl bg-slate-50 dark:bg-slate-800/30 border border-slate-100 dark:border-slate-800">
+<span class="material-symbols-outlined text-primary mb-2">analytics</span>
+<span class="text-xs font-bold text-center">Local Processing</span>
+</div>
+</div>
+</div>
+<!-- Footer Note -->
+<div class="px-6 py-6 mt-auto">
+<div class="flex items-start gap-3 p-4 rounded-lg bg-primary/5 border border-primary/20">
+<span class="material-symbols-outlined text-primary text-sm">info</span>
+<p class="text-[11px] text-slate-500 dark:text-slate-400 leading-normal">
+                    RIAL does not sell your health data. Your biometric signatures are used exclusively to calculate your personal Real Feel™ scores. You can revoke access at any time in settings.
+                </p>
+</div>
+<button class="w-full mt-8 py-3 text-slate-400 text-sm font-medium hover:text-slate-600 dark:hover:text-slate-200 transition-colors underline underline-offset-4">
+                I'll do this later
+            </button>
+</div>
+<div class="h-8"></div>
+</div>
+</body></html>

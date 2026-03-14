@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&amp;family=Playfair+Display:ital,wght@0,400;0,700;1,400&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "primary": "#0df259",
+              "sand": "#e8e2d4",
+              "terracotta": "#c66b47",
+              "forest": "#1b271f",
+              "background-light": "#f5f8f6",
+              "background-dark": "#102216",
+            },
+            fontFamily: {
+              "display": ["Space Grotesk", "sans-serif"],
+              "serif": ["Playfair Display", "serif"]
+            },
+            borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+          },
+        },
+      }
+    </script>
+<style>
+        .serif-italic { font-style: italic; }
+        .glass-card { background: rgba(27, 39, 31, 0.8); backdrop-filter: blur(12px); }
+        .shadow-soft { box-shadow: 0 20px 40px rgba(0,0,0,0.3); }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark font-display text-slate-900 dark:text-slate-100 antialiased overflow-x-hidden">
+<!-- Branding Manifesto Section -->
+<header class="relative pt-20 pb-16 px-6 text-center border-b border-primary/10">
+<div class="max-w-4xl mx-auto">
+<span class="text-primary font-medium tracking-[0.2em] uppercase text-sm mb-4 block">Editorial Artisan</span>
+<h1 class="text-6xl md:text-8xl font-serif font-bold mb-6 tracking-tight">RIAL</h1>
+<p class="text-2xl md:text-3xl font-serif italic text-slate-400 max-w-2xl mx-auto leading-relaxed">
+                "Data you can feel. <span class="text-primary">Food you can trust.</span>"
+            </p>
+<div class="mt-12 flex justify-center gap-4">
+<div class="h-[1px] w-12 bg-primary/40 self-center"></div>
+<p class="text-sm uppercase tracking-widest text-slate-500">Branding Manifesto v1.0</p>
+<div class="h-[1px] w-12 bg-primary/40 self-center"></div>
+</div>
+</div>
+</header>
+<!-- Visual Language Section -->
+<section class="py-20 px-6 bg-slate-900/20">
+<div class="max-w-6xl mx-auto">
+<div class="grid grid-cols-1 md:grid-cols-2 gap-16 items-center">
+<div>
+<h2 class="text-primary text-xs font-bold uppercase tracking-widest mb-4">Visual Language</h2>
+<h3 class="text-4xl font-serif mb-8">Earthly Tones &amp; Editorial Precision</h3>
+<p class="text-slate-400 leading-relaxed mb-8">
+                        Our palette draws from the raw elements of gastronomy: the warmth of baked clay, the grounding depth of the forest, and the clarity of sunlight on sand. We pair this with high-contrast editorial typography to elevate nutrition data into a lifestyle statement.
+                    </p>
+<!-- Color Swatches -->
+<div class="flex gap-4 mb-8">
+<div class="flex-1">
+<div class="h-24 bg-sand rounded-xl mb-2"></div>
+<span class="text-xs font-medium opacity-60">Sand</span>
+</div>
+<div class="flex-1">
+<div class="h-24 bg-terracotta rounded-xl mb-2"></div>
+<span class="text-xs font-medium opacity-60">Terracotta</span>
+</div>
+<div class="flex-1">
+<div class="h-24 bg-forest border border-white/10 rounded-xl mb-2"></div>
+<span class="text-xs font-medium opacity-60">Deep Forest</span>
+</div>
+</div>
+</div>
+<div class="grid grid-cols-1 gap-6">
+<div class="p-8 border border-white/5 rounded-2xl bg-white/5">
+<span class="text-primary block mb-2">Headline Font</span>
+<h4 class="font-serif text-5xl italic">Playfair Display</h4>
+<p class="text-slate-500 mt-2">Used for storytelling and hero headers.</p>
+</div>
+<div class="p-8 border border-white/5 rounded-2xl bg-white/5">
+<span class="text-primary block mb-2">UI Font</span>
+<h4 class="font-display text-4xl font-bold">Space Grotesk</h4>
+<p class="text-slate-500 mt-2">Used for data visualization and navigation.</p>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Interface Previews Section -->
+<section class="py-24 px-6 relative overflow-hidden">
+<div class="max-w-6xl mx-auto text-center mb-16">
+<h2 class="text-4xl font-serif mb-4 italic">Experience RIAL</h2>
+<p class="text-slate-400">Mobile ecosystem preview</p>
+</div>
+<!-- Mobile Mockups Overlay Container -->
+<div class="relative h-[700px] max-w-5xl mx-auto flex items-center justify-center">
+<!-- Mockup 1: Real Dashboard (Left) -->
+<div class="absolute z-10 -translate-x-32 rotate-[-6deg] w-[280px] h-[580px] bg-background-dark border-[8px] border-slate-800 rounded-[3rem] overflow-hidden shadow-soft hidden md:block">
+<div class="p-6 h-full flex flex-col bg-[#0a110d]">
+<div class="flex justify-between items-center mb-8">
+<span class="material-symbols-outlined text-primary">analytics</span>
+<div class="size-8 rounded-full bg-slate-700" data-alt="User profile avatar"></div>
+</div>
+<h4 class="font-serif text-2xl mb-6 italic">Daily Recovery</h4>
+<div class="relative size-48 mx-auto mb-8">
+<svg class="size-full" viewbox="0 0 100 100">
+<circle class="text-slate-800" cx="50" cy="50" fill="none" r="45" stroke="currentColor" stroke-width="8"></circle>
+<circle class="text-primary" cx="50" cy="50" fill="none" r="45" stroke="currentColor" stroke-dasharray="210" stroke-width="8"></circle>
+</svg>
+<div class="absolute inset-0 flex flex-col items-center justify-center">
+<span class="text-4xl font-bold">84%</span>
+<span class="text-[10px] uppercase tracking-widest text-primary">Optimal</span>
+</div>
+</div>
+<div class="space-y-4">
+<div class="flex justify-between items-center p-3 bg-white/5 rounded-xl">
+<span class="text-xs">Macros</span>
+<span class="text-xs font-bold text-primary">In Range</span>
+</div>
+<div class="flex justify-between items-center p-3 bg-white/5 rounded-xl">
+<span class="text-xs">Blood Glucose</span>
+<span class="text-xs font-bold">Stable</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Mockup 2: Community Cookbook (Center) -->
+<div class="absolute z-30 scale-110 w-[300px] h-[620px] bg-background-dark border-[8px] border-slate-900 rounded-[3rem] overflow-hidden shadow-2xl">
+<div class="h-full flex flex-col bg-background-dark">
+<!-- Top Bar -->
+<div class="p-6 flex justify-between items-center">
+<h5 class="font-serif text-xl italic">Cookbook</h5>
+<span class="material-symbols-outlined">search</span>
+</div>
+<!-- Feed Item -->
+<div class="px-4 space-y-4 overflow-y-auto">
+<div class="rounded-2xl overflow-hidden bg-forest/50">
+<div class="aspect-square relative">
+<img alt="Plated healthy meal" class="w-full h-full object-cover grayscale-[0.2]" data-alt="Artisanal salad with fresh greens and seeds" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD5qICgEuJCMMOwv7H86sWeLitHjYV4tFVHOeGjUEb91wPJ9pePTwZohpVR2qFAhFWTC8YSE9yubTLAVPTV7h_cXhiD7AouQoNWQ_TrdXFpMT_r7jE32y5fJZkCd9R2_5kChRhXETH6n_2lXb22Ol4_RXlTBo2XDEXwtB7YP5ezzSrkwEGOP1NTxoh8sRka66p4FLMndlpLSCW93cC3evWZRqrKZ2KszZG3oEV3YGI2_ok0z4BIf8WUFdNWFwvkox324gGrbl65lPFo"/>
+<div class="absolute bottom-3 left-3 flex gap-1">
+<span class="bg-primary text-black text-[10px] px-2 py-1 rounded-full font-bold">KETO</span>
+<span class="bg-white/20 backdrop-blur-md text-white text-[10px] px-2 py-1 rounded-full">15 MIN</span>
+</div>
+</div>
+<div class="p-4">
+<p class="font-serif italic text-lg mb-1">Morning Harvest Bowl</p>
+<div class="flex items-center gap-2">
+<div class="size-5 rounded-full bg-terracotta/40"></div>
+<span class="text-[10px] opacity-60">by Elena Rossi</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Bottom Nav Component (Modified for mockup) -->
+<div class="mt-auto flex justify-around p-4 border-t border-white/5 bg-forest">
+<span class="material-symbols-outlined text-primary">dashboard</span>
+<span class="material-symbols-outlined opacity-40">book_5</span>
+<span class="material-symbols-outlined opacity-40">calculate</span>
+<span class="material-symbols-outlined opacity-40">person</span>
+</div>
+</div>
+</div>
+<!-- Mockup 3: Smart Portion Calculator (Right) -->
+<div class="absolute z-20 translate-x-32 rotate-[6deg] w-[280px] h-[580px] bg-background-dark border-[8px] border-slate-800 rounded-[3rem] overflow-hidden shadow-soft hidden md:block">
+<div class="p-8 h-full flex flex-col bg-background-dark">
+<span class="material-symbols-outlined text-terracotta mb-4">family_restroom</span>
+<h4 class="font-serif text-2xl mb-2 italic">Portion Logic</h4>
+<p class="text-[10px] text-slate-500 mb-8 uppercase tracking-widest">Scaling for Family</p>
+<div class="space-y-6">
+<div class="p-4 border border-primary/20 rounded-2xl bg-primary/5">
+<div class="flex justify-between items-center mb-2">
+<span class="text-sm">Adults</span>
+<div class="flex gap-3 items-center">
+<span class="material-symbols-outlined text-xs">remove</span>
+<span class="font-bold">2</span>
+<span class="material-symbols-outlined text-xs">add</span>
+</div>
+</div>
+<div class="flex justify-between items-center">
+<span class="text-sm">Children</span>
+<div class="flex gap-3 items-center">
+<span class="material-symbols-outlined text-xs">remove</span>
+<span class="font-bold">3</span>
+<span class="material-symbols-outlined text-xs">add</span>
+</div>
+</div>
+</div>
+<div class="space-y-3">
+<p class="text-xs font-medium text-slate-400">Required Ingredients</p>
+<div class="flex justify-between border-b border-white/5 pb-2">
+<span class="text-xs">Organic Quinoa</span>
+<span class="text-xs font-bold">450g</span>
+</div>
+<div class="flex justify-between border-b border-white/5 pb-2">
+<span class="text-xs">Avocado</span>
+<span class="text-xs font-bold">3 units</span>
+</div>
+<div class="flex justify-between border-b border-white/5 pb-2">
+<span class="text-xs">Smoked Salmon</span>
+<span class="text-xs font-bold">600g</span>
+</div>
+</div>
+<button class="w-full bg-primary py-3 rounded-xl text-black font-bold text-sm mt-4">
+                            Update Cart
+                        </button>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Bottom Navigation Component (Site Navigation) -->
+<footer class="fixed bottom-0 left-0 right-0 z-50 md:hidden">
+<div class="flex gap-2 border-t border-forest bg-forest/90 backdrop-blur-lg px-4 pb-6 pt-2">
+<a class="flex flex-1 flex-col items-center justify-end gap-1 text-primary" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+<p class="text-xs font-medium leading-normal">Manifesto</p>
+</a>
+<a class="flex flex-1 flex-col items-center justify-end gap-1 text-slate-400" href="#">
+<span class="material-symbols-outlined">palette</span>
+<p class="text-xs font-medium leading-normal">Visuals</p>
+</a>
+<a class="flex flex-1 flex-col items-center justify-end gap-1 text-slate-400" href="#">
+<span class="material-symbols-outlined">devices</span>
+<p class="text-xs font-medium leading-normal">Interface</p>
+</a>
+<a class="flex flex-1 flex-col items-center justify-end gap-1 text-slate-400" href="#">
+<span class="material-symbols-outlined">download</span>
+<p class="text-xs font-medium leading-normal">Assets</p>
+</a>
+</div>
+</footer>
+<!-- Desktop Floating Nav -->
+<nav class="fixed top-6 left-1/2 -translate-x-1/2 z-50 hidden md:flex items-center gap-8 px-8 py-3 glass-card rounded-full border border-white/10 shadow-2xl">
+<span class="font-serif italic font-bold text-xl tracking-tighter">RIAL.</span>
+<div class="h-4 w-[1px] bg-white/20"></div>
+<a class="text-xs uppercase tracking-widest font-bold text-primary" href="#">Manifesto</a>
+<a class="text-xs uppercase tracking-widest font-bold text-slate-400 hover:text-white" href="#">System</a>
+<a class="text-xs uppercase tracking-widest font-bold text-slate-400 hover:text-white" href="#">Interface</a>
+<div class="h-4 w-[1px] bg-white/20"></div>
+<button class="bg-primary px-4 py-1.5 rounded-full text-black text-[10px] font-bold uppercase tracking-widest">Inquire</button>
+</nav>
+<!-- Aesthetic Decorative Elements -->
+<div class="fixed top-0 left-0 w-full h-full pointer-events-none z-[-1] opacity-20">
+<div class="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-primary/20 blur-[120px] rounded-full"></div>
+<div class="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] bg-terracotta/20 blur-[120px] rounded-full"></div>
+</div>
+</body></html>

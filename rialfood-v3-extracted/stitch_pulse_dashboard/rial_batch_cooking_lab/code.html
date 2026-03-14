@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Batch Cooking Lab | Unified RIAL</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#607AFB",
+                        "background-light": "#f5f6f8",
+                        "background-dark": "#0f1323",
+                    },
+                    fontFamily: {
+                        "display": ["Space Grotesk", "sans-serif"]
+                    },
+                    borderRadius: {"DEFAULT": "0.5rem", "lg": "1rem", "xl": "1.5rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>
+        body {
+            font-family: 'Space Grotesk', sans-serif;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 min-h-screen">
+<!-- Header Section -->
+<header class="bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 sticky top-0 z-50">
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+<div class="flex items-center justify-between h-16">
+<div class="flex items-center gap-3">
+<div class="bg-primary p-2 rounded-lg text-white">
+<span class="material-symbols-outlined block">cooking</span>
+</div>
+<h1 class="text-xl font-bold tracking-tight text-slate-900 dark:text-white">Batch Cooking Lab</h1>
+</div>
+<div class="flex items-center gap-4">
+<button class="p-2 text-slate-500 hover:text-primary transition-colors">
+<span class="material-symbols-outlined">notifications</span>
+</button>
+<button class="p-2 text-slate-500 hover:text-primary transition-colors">
+<span class="material-symbols-outlined">settings</span>
+</button>
+<div class="h-8 w-8 rounded-full bg-primary/20 flex items-center justify-center text-primary font-bold overflow-hidden border border-primary/30">
+<img alt="User Avatar" class="w-full h-full object-cover" data-alt="Minimalist geometric user profile avatar" src="https://lh3.googleusercontent.com/aida-public/AB6AXuC9vsqNyHhUFFxfDBgFnQroKcEcR08-YsgUNca75YDbYNK0oYFJ58Xyu4NQs87_dBenWbLOcJ8Gj1nI81caInXk-dZ-Qo-6ZpFNvNDtGI2Y8_irI0ExjOL9c-bkTJFU_fgpdlZOdJgLhsLgqgYhONyzeDkOrjl3oJhlbIgAmMhVxga4X3FgDvy7undisLKitzhFZM62VlgONckAOo5ouKs7QuItijHdjhnXxDmfmmYC6tvzSpUrmFKErg4yXM-XJ27D23-zjpSIuNYw"/>
+</div>
+</div>
+</div>
+</div>
+</header>
+<main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+<!-- Navigation Tabs -->
+<div class="flex gap-1 bg-white dark:bg-slate-900 p-1 rounded-xl border border-slate-200 dark:border-slate-800 mb-8 w-fit">
+<button class="px-6 py-2 bg-primary text-white rounded-lg font-medium text-sm">Session Dashboard</button>
+<button class="px-6 py-2 text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg font-medium text-sm">Recipe Guide</button>
+<button class="px-6 py-2 text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg font-medium text-sm">Inventory</button>
+</div>
+<!-- Quick Stats Grid -->
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+<div class="bg-white dark:bg-slate-900 p-6 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm">
+<div class="flex justify-between items-start mb-2">
+<p class="text-slate-500 text-sm font-medium">Active Recipes</p>
+<span class="material-symbols-outlined text-primary">restaurant</span>
+</div>
+<p class="text-3xl font-bold">4</p>
+<p class="text-xs text-slate-400 mt-2">Running simultaneously</p>
+</div>
+<div class="bg-white dark:bg-slate-900 p-6 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm">
+<div class="flex justify-between items-start mb-2">
+<p class="text-slate-500 text-sm font-medium">Est. Prep Time</p>
+<span class="material-symbols-outlined text-primary">timer</span>
+</div>
+<p class="text-3xl font-bold">1h 20m</p>
+<p class="text-xs text-primary mt-2 font-medium">Ahead by 5 mins</p>
+</div>
+<div class="bg-white dark:bg-slate-900 p-6 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm">
+<div class="flex justify-between items-start mb-2">
+<p class="text-slate-500 text-sm font-medium">Ingredients Prepared</p>
+<span class="material-symbols-outlined text-primary">checklist</span>
+</div>
+<p class="text-3xl font-bold">12/18</p>
+<div class="w-full bg-slate-100 dark:bg-slate-800 h-1.5 rounded-full mt-3">
+<div class="bg-primary h-full rounded-full" style="width: 66%"></div>
+</div>
+</div>
+<div class="bg-white dark:bg-slate-900 p-6 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm">
+<div class="flex justify-between items-start mb-2">
+<p class="text-slate-500 text-sm font-medium">Base Components</p>
+<span class="material-symbols-outlined text-primary">inventory_2</span>
+</div>
+<p class="text-3xl font-bold">3/5</p>
+<p class="text-xs text-slate-400 mt-2">Ready for final assembly</p>
+</div>
+</div>
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+<!-- Left Column: Timers & Active Steps -->
+<div class="lg:col-span-8 space-y-8">
+<section>
+<h2 class="text-lg font-bold mb-4 flex items-center gap-2">
+<span class="material-symbols-outlined text-primary">schedule</span>
+                        Synchronized Timers
+                    </h2>
+<div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+<!-- Timer 1 -->
+<div class="bg-white dark:bg-slate-900 p-5 rounded-xl border-l-4 border-primary border-slate-200 dark:border-slate-800 shadow-sm">
+<div class="flex justify-between items-center mb-4">
+<div>
+<h3 class="font-bold">Oven: Roasted Veggies</h3>
+<p class="text-xs text-slate-500">220°C - Top Shelf</p>
+</div>
+<span class="text-primary font-mono text-2xl font-bold">18:42</span>
+</div>
+<div class="flex gap-2">
+<button class="flex-1 bg-primary/10 text-primary py-2 rounded-lg text-sm font-bold">PAUSE</button>
+<button class="px-4 bg-slate-100 dark:bg-slate-800 rounded-lg text-sm font-bold text-slate-600">+1m</button>
+</div>
+</div>
+<!-- Timer 2 -->
+<div class="bg-white dark:bg-slate-900 p-5 rounded-xl border-l-4 border-orange-400 border-slate-200 dark:border-slate-800 shadow-sm">
+<div class="flex justify-between items-center mb-4">
+<div>
+<h3 class="font-bold">Stove: Quinoa Simmer</h3>
+<p class="text-xs text-slate-500">Medium Heat</p>
+</div>
+<span class="text-orange-500 font-mono text-2xl font-bold">04:15</span>
+</div>
+<div class="flex gap-2">
+<button class="flex-1 bg-orange-400/10 text-orange-500 py-2 rounded-lg text-sm font-bold">PAUSE</button>
+<button class="px-4 bg-slate-100 dark:bg-slate-800 rounded-lg text-sm font-bold text-slate-600">+1m</button>
+</div>
+</div>
+</div>
+</section>
+<section>
+<h2 class="text-lg font-bold mb-4 flex items-center gap-2">
+<span class="material-symbols-outlined text-primary">bolt</span>
+                        Multi-Recipe Active Steps
+                    </h2>
+<div class="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 overflow-hidden">
+<div class="divide-y divide-slate-100 dark:divide-slate-800">
+<!-- Step 1 -->
+<div class="p-6 flex gap-4 items-start bg-primary/5">
+<div class="mt-1">
+<div class="w-8 h-8 rounded-full bg-primary text-white flex items-center justify-center font-bold text-sm">1</div>
+</div>
+<div class="flex-1">
+<div class="flex justify-between items-center mb-1">
+<span class="text-[10px] font-bold uppercase tracking-wider text-primary bg-primary/10 px-2 py-0.5 rounded">All Recipes</span>
+<span class="text-xs text-slate-400 italic">5 min</span>
+</div>
+<h3 class="font-bold text-slate-900 dark:text-white mb-2">Pre-wash all produce and dry thoroughly</h3>
+<p class="text-sm text-slate-600 dark:text-slate-400 leading-relaxed mb-4">Focus on leafy greens first. Spin dry the kale for the salad and the parsley for the garnish.</p>
+<div class="flex gap-2">
+<button class="bg-primary text-white px-4 py-2 rounded-lg text-sm font-bold flex items-center gap-2">
+<span class="material-symbols-outlined text-sm">check_circle</span>
+                                            Mark Complete
+                                        </button>
+</div>
+</div>
+</div>
+<!-- Step 2 -->
+<div class="p-6 flex gap-4 items-start opacity-60">
+<div class="mt-1">
+<div class="w-8 h-8 rounded-full border-2 border-slate-300 dark:border-slate-700 text-slate-400 flex items-center justify-center font-bold text-sm">2</div>
+</div>
+<div class="flex-1">
+<div class="flex justify-between items-center mb-1">
+<span class="text-[10px] font-bold uppercase tracking-wider text-slate-500 bg-slate-100 dark:bg-slate-800 px-2 py-0.5 rounded">Recipe A &amp; B</span>
+<span class="text-xs text-slate-400 italic">15 min</span>
+</div>
+<h3 class="font-bold text-slate-900 dark:text-white mb-2">Dice onions, garlic, and bell peppers</h3>
+<p class="text-sm text-slate-600 dark:text-slate-400 leading-relaxed">Combine for both the marinara sauce and the stir-fry base to save time.</p>
+</div>
+</div>
+<!-- Step 3 -->
+<div class="p-6 flex gap-4 items-start opacity-60">
+<div class="mt-1">
+<div class="w-8 h-8 rounded-full border-2 border-slate-300 dark:border-slate-700 text-slate-400 flex items-center justify-center font-bold text-sm">3</div>
+</div>
+<div class="flex-1">
+<div class="flex justify-between items-center mb-1">
+<span class="text-[10px] font-bold uppercase tracking-wider text-slate-500 bg-slate-100 dark:bg-slate-800 px-2 py-0.5 rounded">Recipe C</span>
+<span class="text-xs text-slate-400 italic">10 min</span>
+</div>
+<h3 class="font-bold text-slate-900 dark:text-white mb-2">Massage kale with lemon dressing</h3>
+<p class="text-sm text-slate-600 dark:text-slate-400 leading-relaxed">Let it sit while preparing the final components to soften texture.</p>
+</div>
+</div>
+</div>
+</div>
+</section>
+</div>
+<!-- Right Column: Components & Assembly -->
+<div class="lg:col-span-4 space-y-8">
+<section>
+<div class="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm overflow-hidden">
+<div class="p-5 border-b border-slate-100 dark:border-slate-800 flex justify-between items-center">
+<h2 class="font-bold flex items-center gap-2">
+<span class="material-symbols-outlined text-primary">layers</span>
+                                Base Components
+                            </h2>
+<span class="text-xs text-primary font-bold">60% Done</span>
+</div>
+<div class="p-5 space-y-4">
+<label class="flex items-center gap-3 p-3 rounded-lg hover:bg-slate-50 dark:hover:bg-slate-800 cursor-pointer group">
+<input checked="" class="w-5 h-5 rounded border-slate-300 text-primary focus:ring-primary" type="checkbox"/>
+<div class="flex-1">
+<p class="text-sm font-medium line-through text-slate-400">Grains (Quinoa &amp; Rice)</p>
+<p class="text-[10px] text-slate-400">Storage: Blue containers</p>
+</div>
+</label>
+<label class="flex items-center gap-3 p-3 rounded-lg hover:bg-slate-50 dark:hover:bg-slate-800 cursor-pointer group">
+<input checked="" class="w-5 h-5 rounded border-slate-300 text-primary focus:ring-primary" type="checkbox"/>
+<div class="flex-1">
+<p class="text-sm font-medium line-through text-slate-400">Roasted Vegetables</p>
+<p class="text-[10px] text-slate-400">Storage: Large glass bowl</p>
+</div>
+</label>
+<label class="flex items-center gap-3 p-3 rounded-lg hover:bg-slate-50 dark:hover:bg-slate-800 cursor-pointer group">
+<input checked="" class="w-5 h-5 rounded border-slate-300 text-primary focus:ring-primary" type="checkbox"/>
+<div class="flex-1">
+<p class="text-sm font-medium line-through text-slate-400">Boiled Eggs</p>
+<p class="text-[10px] text-slate-400">Peel and store in water</p>
+</div>
+</label>
+<label class="flex items-center gap-3 p-3 rounded-lg hover:bg-slate-50 dark:hover:bg-slate-800 cursor-pointer group">
+<input class="w-5 h-5 rounded border-slate-300 text-primary focus:ring-primary" type="checkbox"/>
+<div class="flex-1">
+<p class="text-sm font-medium">Balsamic Vinaigrette</p>
+<p class="text-[10px] text-slate-400">Mason jar</p>
+</div>
+</label>
+<label class="flex items-center gap-3 p-3 rounded-lg hover:bg-slate-50 dark:hover:bg-slate-800 cursor-pointer group">
+<input class="w-5 h-5 rounded border-slate-300 text-primary focus:ring-primary" type="checkbox"/>
+<div class="flex-1">
+<p class="text-sm font-medium text-slate-700 dark:text-slate-300">Marinated Tofu/Chicken</p>
+<p class="text-[10px] text-slate-400">Ready to grill</p>
+</div>
+</label>
+</div>
+</div>
+</section>
+<section>
+<div class="bg-primary/10 dark:bg-primary/20 rounded-xl border border-primary/20 p-5">
+<h2 class="font-bold flex items-center gap-2 mb-4 text-primary">
+<span class="material-symbols-outlined">auto_fix_high</span>
+                            Final Assembly
+                        </h2>
+<div class="space-y-3">
+<div class="bg-white dark:bg-slate-900 p-3 rounded-lg border border-primary/10 flex items-center justify-between">
+<span class="text-sm font-bold">Veggie Power Bowl</span>
+<span class="material-symbols-outlined text-slate-300">lock</span>
+</div>
+<div class="bg-white dark:bg-slate-900 p-3 rounded-lg border border-primary/10 flex items-center justify-between">
+<span class="text-sm font-bold">Mediterranean Salad</span>
+<span class="material-symbols-outlined text-slate-300">lock</span>
+</div>
+<div class="bg-white dark:bg-slate-900 p-3 rounded-lg border border-primary/10 flex items-center justify-between">
+<span class="text-sm font-bold">Pesto Pasta Prep</span>
+<span class="material-symbols-outlined text-slate-300">lock</span>
+</div>
+</div>
+<p class="text-[11px] text-primary/70 mt-4 text-center">Complete base components to unlock assembly</p>
+</div>
+</section>
+</div>
+</div>
+</main>
+<!-- Bottom Navigation (Mobile/Standard) -->
+<footer class="fixed bottom-0 left-0 right-0 bg-white dark:bg-slate-900 border-t border-slate-200 dark:border-slate-800 z-50">
+<div class="max-w-7xl mx-auto px-4">
+<nav class="flex justify-between items-center py-2">
+<a class="flex flex-col items-center gap-1 flex-1 py-2 text-primary" href="#">
+<span class="material-symbols-outlined font-variation-fill">dashboard</span>
+<span class="text-[10px] font-bold uppercase tracking-wide">Lab</span>
+</a>
+<a class="flex flex-col items-center gap-1 flex-1 py-2 text-slate-400 hover:text-primary transition-colors" href="#">
+<span class="material-symbols-outlined">menu_book</span>
+<span class="text-[10px] font-bold uppercase tracking-wide">Recipes</span>
+</a>
+<a class="flex flex-col items-center gap-1 flex-1 py-2 text-slate-400 hover:text-primary transition-colors" href="#">
+<span class="material-symbols-outlined">calendar_month</span>
+<span class="text-[10px] font-bold uppercase tracking-wide">Schedule</span>
+</a>
+<a class="flex flex-col items-center gap-1 flex-1 py-2 text-slate-400 hover:text-primary transition-colors" href="#">
+<span class="material-symbols-outlined">person</span>
+<span class="text-[10px] font-bold uppercase tracking-wide">Profile</span>
+</a>
+</nav>
+</div>
+</footer>
+<!-- Bottom Spacing for fixed nav -->
+<div class="h-20"></div>
+</body></html>

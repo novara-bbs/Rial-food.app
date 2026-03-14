@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>RIAL Batch Cooking &amp; Plan</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#ccff00",
+                        "background-light": "#f8f8f5",
+                        "background-dark": "#1f230f",
+                    },
+                    fontFamily: {
+                        "display": ["Space Grotesk"]
+                    },
+                    borderRadius: {"DEFAULT": "0.5rem", "lg": "1rem", "xl": "1.5rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 font-display transition-colors duration-300">
+<div class="relative flex min-h-screen w-full flex-col overflow-x-hidden">
+<header class="flex items-center bg-background-light dark:bg-background-dark p-4 pb-2 justify-between sticky top-0 z-10 border-b border-primary/10">
+<div class="flex items-center gap-3">
+<button class="text-slate-900 dark:text-slate-100 flex size-10 items-center justify-center rounded-full hover:bg-primary/10">
+<span class="material-symbols-outlined">arrow_back</span>
+</button>
+<h1 class="text-slate-900 dark:text-slate-100 text-xl font-bold leading-tight">Batch Cooking Plan</h1>
+</div>
+<div class="flex items-center gap-2">
+<button class="flex size-10 items-center justify-center rounded-full bg-primary/10 text-primary">
+<span class="material-symbols-outlined">settings</span>
+</button>
+</div>
+</header>
+<main class="flex-1 pb-24">
+<section class="p-4">
+<div class="flex flex-col gap-4 rounded-xl border border-primary/20 bg-primary/5 p-5">
+<div class="flex items-start justify-between">
+<div class="flex flex-col gap-1">
+<h2 class="text-primary text-sm font-bold uppercase tracking-wider">Family Portion Calculator</h2>
+<p class="text-slate-900 dark:text-slate-100 text-lg font-bold leading-tight">4 Person Household</p>
+<p class="text-slate-600 dark:text-slate-400 text-sm font-normal">2 Adults, 2 Kids • Optimized for Protein</p>
+</div>
+<button class="flex size-10 items-center justify-center rounded-full bg-primary text-background-dark">
+<span class="material-symbols-outlined">edit_note</span>
+</button>
+</div>
+<div class="grid grid-cols-2 gap-2">
+<div class="flex flex-col gap-1 rounded-lg bg-background-dark/50 p-3 border border-primary/10">
+<span class="text-[10px] text-primary font-bold uppercase">Base Scaling</span>
+<div class="flex items-center justify-between">
+<span class="text-sm">4 People</span>
+<span class="material-symbols-outlined text-sm">groups</span>
+</div>
+</div>
+<div class="flex flex-col gap-1 rounded-lg bg-background-dark/50 p-3 border border-primary/10">
+<span class="text-[10px] text-primary font-bold uppercase">Nutrition Goal</span>
+<div class="flex items-center justify-between">
+<span class="text-sm">Muscle Gain</span>
+<span class="material-symbols-outlined text-sm">fitness_center</span>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section class="px-4 py-2">
+<div class="flex items-center justify-between mb-4">
+<h2 class="text-lg font-bold">Leftover Logic™</h2>
+<span class="text-xs text-primary font-medium px-2 py-1 rounded bg-primary/10">3 Meals Optimized</span>
+</div>
+<div class="space-y-4">
+<div class="relative pl-6 border-l-2 border-primary/30 py-2">
+<div class="absolute -left-[9px] top-4 size-4 rounded-full bg-primary border-4 border-background-dark"></div>
+<div class="flex flex-col gap-2 rounded-xl bg-slate-100 dark:bg-slate-800/40 p-4">
+<div class="flex justify-between items-start">
+<div>
+<h3 class="font-bold text-base">Monday Dinner</h3>
+<p class="text-sm text-slate-500">Roast Herb Chicken &amp; Root Veg</p>
+</div>
+<span class="text-xs bg-primary/20 text-primary px-2 py-1 rounded font-bold">COOK FRESH</span>
+</div>
+<div class="mt-2 flex items-center gap-2 text-xs text-slate-400">
+<span class="material-symbols-outlined text-sm">inventory_2</span>
+<span>Save 400g chicken for tomorrow</span>
+</div>
+</div>
+</div>
+<div class="relative pl-6 border-l-2 border-primary/30 py-2">
+<div class="absolute -left-[9px] top-4 size-4 rounded-full bg-slate-400 border-4 border-background-dark"></div>
+<div class="flex flex-col gap-2 rounded-xl bg-slate-100 dark:bg-slate-800/40 p-4 opacity-80">
+<div class="flex justify-between items-start">
+<div>
+<h3 class="font-bold text-base">Tuesday Lunch</h3>
+<p class="text-sm text-slate-500">Chicken &amp; Pesto Pasta Salad</p>
+</div>
+<span class="text-xs bg-slate-500/20 text-slate-400 px-2 py-1 rounded font-bold uppercase">Leftover Use</span>
+</div>
+<div class="mt-2 flex items-center gap-2 text-xs text-primary">
+<span class="material-symbols-outlined text-sm">bolt</span>
+<span>Zero-cook meal: 5 mins prep</span>
+</div>
+</div>
+</div>
+<div class="relative pl-6 border-l-2 border-primary/30 py-2">
+<div class="absolute -left-[9px] top-4 size-4 rounded-full bg-primary border-4 border-background-dark"></div>
+<div class="flex flex-col gap-2 rounded-xl bg-slate-100 dark:bg-slate-800/40 p-4">
+<div class="flex justify-between items-start">
+<div>
+<h3 class="font-bold text-base">Tuesday Dinner</h3>
+<p class="text-sm text-slate-500">Thai Green Curry with Tofu</p>
+</div>
+<span class="text-xs bg-primary/20 text-primary px-2 py-1 rounded font-bold">COOK FRESH</span>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section class="p-4">
+<div class="rounded-xl bg-slate-100 dark:bg-slate-800/40 p-4 border border-primary/10">
+<div class="flex items-center justify-between mb-4">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary">shopping_basket</span>
+<h2 class="font-bold">Smart Shopping List</h2>
+</div>
+<label class="relative inline-flex cursor-pointer items-center">
+<input checked="" class="peer sr-only" type="checkbox" value=""/>
+<div class="peer h-6 w-11 rounded-full bg-slate-600 after:absolute after:start-[2px] after:top-[2px] after:h-5 after:w-5 after:rounded-full after:border after:border-gray-300 after:bg-white after:transition-all after:content-[''] peer-checked:bg-primary peer-checked:after:translate-x-full peer-checked:after:border-white rtl:peer-checked:after:-translate-x-full"></div>
+</label>
+</div>
+<div class="space-y-3">
+<div class="flex items-center gap-3">
+<div class="size-5 rounded border border-primary/50 flex items-center justify-center">
+<span class="material-symbols-outlined text-xs text-primary">check</span>
+</div>
+<div class="flex-1 flex justify-between items-center">
+<span class="text-sm line-through text-slate-500">Whole Organic Chicken (1.8kg)</span>
+<span class="text-xs font-mono text-slate-500">Pantry</span>
+</div>
+</div>
+<div class="flex items-center gap-3">
+<div class="size-5 rounded border border-primary/50"></div>
+<div class="flex-1 flex justify-between items-center">
+<span class="text-sm">Thai Green Curry Paste</span>
+<span class="text-xs font-mono text-primary">Need</span>
+</div>
+</div>
+<div class="flex items-center gap-3">
+<div class="size-5 rounded border border-primary/50"></div>
+<div class="flex-1 flex justify-between items-center">
+<span class="text-sm">Coconut Milk (2x 400ml)</span>
+<span class="text-xs font-mono text-primary">Need</span>
+</div>
+</div>
+<div class="flex items-center gap-3">
+<div class="size-5 rounded border border-primary/50"></div>
+<div class="flex-1 flex justify-between items-center">
+<span class="text-sm">Fresh Tofu (500g)</span>
+<span class="text-xs font-mono text-primary">Need</span>
+</div>
+</div>
+</div>
+<button class="w-full mt-4 rounded-lg bg-primary py-3 text-background-dark font-bold flex items-center justify-center gap-2">
+<span class="material-symbols-outlined">share</span>
+                        Send to Cart
+                    </button>
+</div>
+</section>
+</main>
+<nav class="fixed bottom-0 left-0 right-0 z-20 border-t border-primary/10 bg-background-light dark:bg-background-dark px-4 pb-6 pt-2">
+<div class="flex gap-2">
+<a class="flex flex-1 flex-col items-center justify-center gap-1 text-primary" href="#">
+<span class="material-symbols-outlined">calendar_today</span>
+<p class="text-[10px] font-medium leading-normal uppercase">Plan</p>
+</a>
+<a class="flex flex-1 flex-col items-center justify-center gap-1 text-slate-500" href="#">
+<span class="material-symbols-outlined">restaurant</span>
+<p class="text-[10px] font-medium leading-normal uppercase">Kitchen</p>
+</a>
+<a class="flex flex-1 flex-col items-center justify-center gap-1 text-slate-500" href="#">
+<span class="material-symbols-outlined">shopping_cart</span>
+<p class="text-[10px] font-medium leading-normal uppercase">List</p>
+</a>
+<a class="flex flex-1 flex-col items-center justify-center gap-1 text-slate-500" href="#">
+<span class="material-symbols-outlined">person</span>
+<p class="text-[10px] font-medium leading-normal uppercase">Profile</p>
+</a>
+</div>
+</nav>
+</div>
+</body></html>

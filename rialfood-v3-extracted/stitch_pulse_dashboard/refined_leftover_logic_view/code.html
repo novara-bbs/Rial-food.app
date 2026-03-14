@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#ddff00",
+                        "background-light": "#f8f8f5",
+                        "background-dark": "#20230f",
+                    },
+                    fontFamily: {
+                        "display": ["Space Grotesk"]
+                    },
+                    borderRadius: {"DEFAULT": "0.5rem", "lg": "1rem", "xl": "1.5rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>
+        body { font-family: 'Space Grotesk', sans-serif; }
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 min-h-screen pb-24">
+<!-- Header Navigation -->
+<header class="sticky top-0 z-50 bg-background-light/80 dark:bg-background-dark/80 backdrop-blur-md border-b border-slate-200 dark:border-slate-800">
+<div class="flex items-center justify-between p-4 max-w-2xl mx-auto">
+<button class="flex items-center justify-center size-10 rounded-full hover:bg-slate-200 dark:hover:bg-slate-800 transition-colors">
+<span class="material-symbols-outlined">arrow_back</span>
+</button>
+<h1 class="text-xl font-bold tracking-tight">Meal Prep Schedule</h1>
+<button class="flex items-center justify-center size-10 rounded-full hover:bg-slate-200 dark:hover:bg-slate-800 transition-colors">
+<span class="material-symbols-outlined">calendar_add_on</span>
+</button>
+</div>
+</header>
+<main class="max-w-2xl mx-auto p-4 space-y-6">
+<!-- Batch Cooking Session Hero Card -->
+<section class="relative group overflow-hidden rounded-xl bg-slate-900 aspect-[16/10] shadow-xl">
+<div class="absolute inset-0 opacity-60 bg-cover bg-center" data-alt="Freshly prepped colorful vegetables in glass containers" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuBy8RQ6g9OC7CtpWO_RnoJZ_Ka37XFJmMQZ55-XFK-XmSpqxuUNbz7Rm0WAOdxFdUUQsCy6EFjXuZNZP-xXNBDGwB_EXYiyMhwQoQszItcIdbWsEpJ_NEmb01ldHWDOHpxNUkHlfZfBKyX44as8YG_wEztHJK6u6KObzyyYj2P4K715o5UDydLNf4rAwlRXr5UJB6hBuVyjMz_vwBFH6STBYxND_rttZap5WATgPjtDoluuQY_LtlXcjL5mGLHQVVjGi92IP0wH64NI')"></div>
+<div class="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-900/40 to-transparent"></div>
+<div class="absolute inset-0 p-6 flex flex-col justify-end gap-2">
+<div class="inline-flex items-center gap-2 bg-primary px-3 py-1 rounded-full w-fit">
+<span class="material-symbols-outlined text-slate-900 text-sm">bolt</span>
+<span class="text-slate-900 text-xs font-bold uppercase tracking-wider">Upcoming Session</span>
+</div>
+<h2 class="text-2xl font-bold text-white">Sunday Afternoon Batch</h2>
+<div class="flex flex-wrap gap-4 mt-2">
+<div class="flex items-center gap-2 text-slate-200">
+<span class="material-symbols-outlined text-primary">schedule</span>
+<span class="text-sm">2.5 hours planned</span>
+</div>
+<div class="flex items-center gap-2 text-slate-200">
+<span class="material-symbols-outlined text-primary">restaurant_menu</span>
+<span class="text-sm">12 Meals Total</span>
+</div>
+</div>
+<button class="mt-4 w-full bg-primary hover:bg-opacity-90 text-slate-900 font-bold py-3 rounded-lg flex items-center justify-center gap-2 transition-transform active:scale-[0.98]">
+<span class="material-symbols-outlined">play_circle</span>
+                    Start Prep Session
+                </button>
+</div>
+</section>
+<!-- Day Selector Tabs -->
+<section class="overflow-x-auto no-scrollbar -mx-4 px-4">
+<div class="flex gap-4 border-b border-slate-200 dark:border-slate-800 min-w-max">
+<button class="flex flex-col items-center pb-3 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 transition-colors">
+<span class="text-xs font-medium uppercase">Mon</span>
+<span class="text-lg font-bold">14</span>
+</button>
+<button class="flex flex-col items-center pb-3 text-slate-400">
+<span class="text-xs font-medium uppercase">Tue</span>
+<span class="text-lg font-bold">15</span>
+</button>
+<button class="flex flex-col items-center pb-3 text-slate-400">
+<span class="text-xs font-medium uppercase">Wed</span>
+<span class="text-lg font-bold">16</span>
+</button>
+<button class="flex flex-col items-center pb-3 text-slate-900 dark:text-primary border-b-2 border-primary">
+<span class="text-xs font-medium uppercase">Thu</span>
+<span class="text-lg font-bold">17</span>
+</button>
+<button class="flex flex-col items-center pb-3 text-slate-400">
+<span class="text-xs font-medium uppercase">Fri</span>
+<span class="text-lg font-bold">18</span>
+</button>
+<button class="flex flex-col items-center pb-3 text-slate-400">
+<span class="text-xs font-medium uppercase">Sat</span>
+<span class="text-lg font-bold">19</span>
+</button>
+<button class="flex flex-col items-center pb-3 text-slate-400">
+<span class="text-xs font-medium uppercase">Sun</span>
+<span class="text-lg font-bold">20</span>
+</button>
+</div>
+</section>
+<!-- Weekly Calendar Detail / Meal Cards -->
+<section class="space-y-4">
+<div class="flex items-center justify-between">
+<h3 class="font-bold text-lg">Thursday, Oct 17</h3>
+<span class="text-xs font-medium text-slate-500 uppercase tracking-widest">3 Meals Planned</span>
+</div>
+<!-- Breakfast -->
+<div class="bg-white dark:bg-slate-800/50 rounded-xl p-4 border border-slate-200 dark:border-slate-800 flex gap-4">
+<div class="size-20 rounded-lg bg-cover bg-center shrink-0" data-alt="Overnight oats in a glass jar" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuAuqPLdoJ5cVoUdvi-5nPAi4xQc9es3DWw68-tlFPykm7RSnlB8yMn2Fbq1RgPKuNg2kBUHb8IF-EzA1PG91to-M91FIx_htt5SZgha87GndJxPyDa511-jGWfALK5PRn5rB9Utm1UeGmB6BlNSnEMSyuMQKXahg8cJTS6OMI4oYA281jZlfMGSM6WEH5Hfw2A4tGf8Ctt83DBs1KM5r3eLROQJ6a9D6A6wYZOCQWSnbcMcc3boST7OGJdQK5_C12Y8dlXrHt5wL8Um')"></div>
+<div class="flex-1 flex flex-col justify-center">
+<span class="text-[10px] font-bold text-slate-400 uppercase tracking-tighter">Breakfast • 08:30 AM</span>
+<h4 class="font-bold text-base">Overnight Oats w/ Berries</h4>
+<div class="flex items-center gap-1 mt-1 text-primary">
+<span class="material-symbols-outlined text-sm">inventory_2</span>
+<span class="text-xs font-medium">Prepped Session A</span>
+</div>
+</div>
+</div>
+<!-- Lunch with Leftover Logic Visualization -->
+<div class="relative group">
+<!-- Evolution Path Visualization -->
+<div class="absolute -left-2 top-0 bottom-0 flex flex-col items-center">
+<div class="w-1 h-8 bg-primary/40 rounded-full"></div>
+<div class="size-4 rounded-full border-2 border-primary bg-background-light dark:bg-background-dark flex items-center justify-center my-1">
+<span class="size-1.5 rounded-full bg-primary"></span>
+</div>
+<div class="w-1 flex-1 bg-gradient-to-b from-primary/40 to-transparent rounded-full"></div>
+</div>
+<div class="bg-white dark:bg-slate-800/50 rounded-xl p-4 border border-primary/20 ml-4 flex gap-4 shadow-sm transition-all hover:border-primary/40 hover:shadow-md hover:shadow-primary/5">
+<!-- Meal Image -->
+<div class="size-20 rounded-lg bg-cover bg-center shrink-0 border border-slate-100 dark:border-slate-700" data-alt="Bowl of roasted root vegetables and greens" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuAI-8hfmguK6tJmZrAcMfgOxT-FFgTvw_CdYOyNJhz4nowZQzGKkyaGm_XA-4F5jRIwDmjWLd4eYSteOlBSlLYASvOAXNZ7EDgaXIcihhwvuDyAJfE_tZLeecV3VOqR6-SOSb-nr0-z3CXSiDWoOQ5kTLt7UaWRf3ES-ITjEF55xYqfG26i2n_cubdWRUlBCfFq63MJPwfhFRhVEEZFStYqarx8KupBLTKx2wQX7CIDZmOLjKPUVsCNTTgmThjp8IwvwKWLBmW_pcmh')"></div>
+<div class="flex-1 flex flex-col min-w-0">
+<div class="flex justify-between items-start mb-1">
+<span class="text-[10px] font-bold text-slate-400 uppercase tracking-tighter">Lunch • 12:45 PM</span>
+<div class="flex items-center gap-1 bg-primary/10 px-2 py-0.5 rounded border border-primary/20">
+<span class="material-symbols-outlined text-[10px] text-primary">rebase_edit</span>
+<span class="text-primary-dark dark:text-primary text-[10px] font-bold uppercase tracking-tight">Leftover Logic</span>
+</div>
+</div>
+<h4 class="font-bold text-base truncate">Roasted Roots Harvest Bowl</h4>
+<!-- Component Source -->
+<div class="flex items-center gap-2 mt-1">
+<span class="text-[10px] font-medium text-slate-500 dark:text-slate-400 italic flex items-center gap-1">
+<span class="material-symbols-outlined text-[12px]">subdirectory_arrow_right</span>
+                    Base: Roasted Roots (Day 1 Batch)
+                </span>
+</div>
+<!-- Usage Progress Indicator -->
+<div class="mt-3 flex flex-col gap-1.5">
+<div class="flex justify-between items-center text-[10px] font-bold uppercase tracking-widest text-slate-400">
+<span>Usage: Component 2 of 3</span>
+<span class="text-primary">33% Used</span>
+</div>
+<div class="h-1.5 w-full bg-slate-100 dark:bg-slate-700 rounded-full overflow-hidden">
+<div class="h-full bg-primary rounded-full" style="width: 33%"></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Dinner -->
+<div class="bg-white dark:bg-slate-800/50 rounded-xl p-4 border border-slate-200 dark:border-slate-800 flex gap-4">
+<div class="size-20 rounded-lg bg-cover bg-center shrink-0" data-alt="Grilled chicken with lemon and asparagus" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuBu241aFXPW8vBfqqJVHY_oYuA_OHyWaHQjVCthdgnmLgxiaPNzs5r53JUrPSDTrLG2cMrafNyzePVMxIOiH3BsQgTzNSLCM8YLZpf4BtrNPr5NQ8fK-R6SVbq-LjUDjY65ubZ2Gj2WaXyZXwF24Cj57qUWjwaDjy7B9EuY3baZvrylPc3d_w4yNKoGvmHrVH1b9XDguc-W-7TtDT2GykXHdiEQSoAQzGK9QEpV47RxHnmkJC4E2wwWNHho1IoHNHS-BHnf60I7V5nY')"></div>
+<div class="flex-1 flex flex-col justify-center">
+<span class="text-[10px] font-bold text-slate-400 uppercase tracking-tighter">Dinner • 07:15 PM</span>
+<h4 class="font-bold text-base">Lemon Asparagus Chicken</h4>
+<div class="flex items-center gap-1 mt-1 text-slate-400">
+<span class="material-symbols-outlined text-sm">skillet</span>
+<span class="text-xs font-medium uppercase">Fresh Prep (15m)</span>
+</div>
+</div>
+</div>
+</section>
+<!-- Prep Statistics Mini-Grid -->
+<section class="grid grid-cols-2 gap-4">
+<div class="bg-primary/5 dark:bg-primary/10 p-4 rounded-xl border border-primary/20">
+<span class="text-[10px] font-bold uppercase text-slate-500 block mb-1">Weekly Efficiency</span>
+<div class="flex items-end gap-2">
+<span class="text-2xl font-bold">84%</span>
+<span class="material-symbols-outlined text-primary pb-1">trending_up</span>
+</div>
+<p class="text-[10px] text-slate-400 mt-1">Prepped vs. Fresh meals</p>
+</div>
+<div class="bg-primary/5 dark:bg-primary/10 p-4 rounded-xl border border-primary/20">
+<span class="text-[10px] font-bold uppercase text-slate-500 block mb-1">Time Saved</span>
+<div class="flex items-end gap-2">
+<span class="text-2xl font-bold">4.2h</span>
+<span class="material-symbols-outlined text-primary pb-1">timer_off</span>
+</div>
+<p class="text-[10px] text-slate-400 mt-1">Estimated this week</p>
+</div>
+</section>
+</main>
+<!-- Bottom Navigation Bar -->
+<nav class="fixed bottom-0 left-0 right-0 bg-white/90 dark:bg-background-dark/90 backdrop-blur-lg border-t border-slate-200 dark:border-slate-800 pb-safe">
+<div class="max-w-2xl mx-auto flex justify-around items-center h-16 px-4">
+<a class="flex flex-col items-center gap-1 text-primary" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1">calendar_today</span>
+<span class="text-[10px] font-bold uppercase tracking-tighter">Planner</span>
+</a>
+<a class="flex flex-col items-center gap-1 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200" href="#">
+<span class="material-symbols-outlined">menu_book</span>
+<span class="text-[10px] font-bold uppercase tracking-tighter">Recipes</span>
+</a>
+<a class="flex flex-col items-center gap-1 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200" href="#">
+<span class="material-symbols-outlined">shopping_cart</span>
+<span class="text-[10px] font-bold uppercase tracking-tighter">Shopping</span>
+</a>
+<a class="flex flex-col items-center gap-1 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200" href="#">
+<span class="material-symbols-outlined">analytics</span>
+<span class="text-[10px] font-bold uppercase tracking-tighter">Stats</span>
+</a>
+</div>
+</nav>
+</body></html>

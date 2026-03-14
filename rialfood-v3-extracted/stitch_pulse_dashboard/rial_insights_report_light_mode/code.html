@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>RIAL Real Feel Insights Report</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#ddff00",
+                        "background-light": "#f8f8f5",
+                        "background-dark": "#20230f",
+                    },
+                    fontFamily: {
+                        "display": ["Space Grotesk", "sans-serif"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.5rem",
+                        "lg": "1rem",
+                        "xl": "1.5rem",
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
+<style>
+        body {
+            font-family: 'Space Grotesk', sans-serif;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 antialiased">
+<!-- Header -->
+<header class="sticky top-0 z-50 bg-background-light/80 backdrop-blur-md border-b border-slate-200 dark:border-slate-800 px-4 py-4">
+<div class="flex items-center justify-between max-w-2xl mx-auto">
+<button class="flex items-center justify-center size-10 rounded-full hover:bg-slate-100 transition-colors">
+<span class="material-symbols-outlined">arrow_back</span>
+</button>
+<h1 class="text-lg font-bold tracking-tight">Real Feel Insights</h1>
+<button class="flex items-center justify-center size-10 rounded-full hover:bg-slate-100 transition-colors">
+<span class="material-symbols-outlined">share</span>
+</button>
+</div>
+</header>
+<main class="max-w-2xl mx-auto pb-24">
+<!-- Tabs -->
+<nav class="flex border-b border-slate-200 px-4 mb-6">
+<a class="flex-1 py-4 text-center border-b-2 border-primary text-slate-900 font-bold text-sm" href="#">Overview</a>
+<a class="flex-1 py-4 text-center border-b-2 border-transparent text-slate-500 font-bold text-sm" href="#">Correlations</a>
+<a class="flex-1 py-4 text-center border-b-2 border-transparent text-slate-500 font-bold text-sm" href="#">Benchmarks</a>
+</nav>
+<!-- Vitality Score Trend -->
+<section class="px-4 mb-8">
+<h2 class="text-xl font-bold mb-4">Vitality Score Trend</h2>
+<div class="bg-white dark:bg-slate-900 p-6 rounded-xl border border-slate-100 shadow-sm">
+<div class="flex justify-between items-start mb-6">
+<div>
+<p class="text-slate-500 text-sm font-medium">Weekly Vitality Index</p>
+<div class="flex items-baseline gap-2">
+<span class="text-4xl font-bold">84</span>
+<span class="text-emerald-600 text-sm font-bold flex items-center gap-0.5">
+<span class="material-symbols-outlined text-sm">trending_up</span>
+                                12%
+                            </span>
+</div>
+</div>
+<span class="bg-primary/20 text-slate-900 px-3 py-1 rounded-full text-xs font-bold">Last 7 Days</span>
+</div>
+<!-- Chart Placeholder -->
+<div class="relative h-48 w-full">
+<svg class="w-full h-full" preserveaspectratio="none" viewbox="0 0 400 150">
+<defs>
+<lineargradient id="chartGradient" x1="0" x2="0" y1="0" y2="1">
+<stop offset="0%" stop-color="#ddff00" stop-opacity="0.3"></stop>
+<stop offset="100%" stop-color="#ddff00" stop-opacity="0"></stop>
+</lineargradient>
+</defs>
+<path d="M0,120 C50,110 80,40 120,60 C160,80 200,20 250,50 C300,80 350,10 400,30 L400,150 L0,150 Z" fill="url(#chartGradient)"></path>
+<path d="M0,120 C50,110 80,40 120,60 C160,80 200,20 250,50 C300,80 350,10 400,30" fill="none" stroke="#ddff00" stroke-linecap="round" stroke-width="4"></path>
+</svg>
+<div class="flex justify-between mt-4 text-[10px] font-bold text-slate-400 uppercase tracking-widest">
+<span>Mon</span>
+<span>Tue</span>
+<span>Wed</span>
+<span>Thu</span>
+<span>Fri</span>
+<span>Sat</span>
+<span>Sun</span>
+</div>
+</div>
+</div>
+</section>
+<!-- Food & Mood Correlations -->
+<section class="px-4 mb-8">
+<h2 class="text-xl font-bold mb-4">Food &amp; Mood Correlations</h2>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+<!-- High Performance Foods -->
+<div class="bg-primary/10 p-5 rounded-xl border border-primary/20">
+<div class="flex items-center gap-2 mb-4">
+<span class="material-symbols-outlined text-slate-900">bolt</span>
+<h3 class="font-bold text-slate-900">High Performance</h3>
+</div>
+<ul class="space-y-3">
+<li class="flex items-center justify-between">
+<span class="text-sm font-medium">Blueberries</span>
+<span class="text-xs font-bold bg-white/50 px-2 py-1 rounded">+18% Focus</span>
+</li>
+<li class="flex items-center justify-between">
+<span class="text-sm font-medium">Walnuts</span>
+<span class="text-xs font-bold bg-white/50 px-2 py-1 rounded">+12% Calm</span>
+</li>
+<li class="flex items-center justify-between">
+<span class="text-sm font-medium">Green Tea</span>
+<span class="text-xs font-bold bg-white/50 px-2 py-1 rounded">+15% Energy</span>
+</li>
+</ul>
+</div>
+<!-- Sensitivity Alerts -->
+<div class="bg-slate-100 p-5 rounded-xl border border-slate-200">
+<div class="flex items-center gap-2 mb-4">
+<span class="material-symbols-outlined text-slate-500">warning</span>
+<h3 class="font-bold text-slate-900">Sensitivity Alerts</h3>
+</div>
+<ul class="space-y-3">
+<li class="flex items-center justify-between">
+<span class="text-sm font-medium">Refined Sugar</span>
+<span class="text-xs font-bold bg-red-100 text-red-600 px-2 py-1 rounded">-22% Sleep</span>
+</li>
+<li class="flex items-center justify-between">
+<span class="text-sm font-medium">Processed Dairy</span>
+<span class="text-xs font-bold bg-red-100 text-red-600 px-2 py-1 rounded">-14% Vitality</span>
+</li>
+<li class="flex items-center justify-between">
+<span class="text-sm font-medium">Excess Caffeine</span>
+<span class="text-xs font-bold bg-red-100 text-red-600 px-2 py-1 rounded">+30% Anxiety</span>
+</li>
+</ul>
+</div>
+</div>
+</section>
+<!-- Community Benchmarks -->
+<section class="px-4 mb-8">
+<h2 class="text-xl font-bold mb-4">Community Benchmarks</h2>
+<div class="bg-white p-6 rounded-xl border border-slate-100 shadow-sm space-y-6">
+<!-- Focus Benchmark -->
+<div>
+<div class="flex justify-between items-center mb-2">
+<span class="text-sm font-bold">Mental Clarity</span>
+<span class="text-xs font-medium text-slate-500">Top 5% of Users</span>
+</div>
+<div class="h-3 w-full bg-slate-100 rounded-full overflow-hidden relative">
+<div class="h-full bg-primary rounded-full w-[92%] transition-all duration-1000"></div>
+<div class="absolute top-0 left-[75%] h-full w-0.5 bg-slate-400 opacity-50" title="Community Average"></div>
+</div>
+<div class="flex justify-between mt-1 text-[10px] text-slate-400 font-medium">
+<span>You (92)</span>
+<span>Avg (75)</span>
+</div>
+</div>
+<!-- Recovery Benchmark -->
+<div>
+<div class="flex justify-between items-center mb-2">
+<span class="text-sm font-bold">Physical Recovery</span>
+<span class="text-xs font-medium text-slate-500">Global Average</span>
+</div>
+<div class="h-3 w-full bg-slate-100 rounded-full overflow-hidden relative">
+<div class="h-full bg-primary rounded-full w-[68%] transition-all duration-1000"></div>
+<div class="absolute top-0 left-[70%] h-full w-0.5 bg-slate-400 opacity-50" title="Community Average"></div>
+</div>
+<div class="flex justify-between mt-1 text-[10px] text-slate-400 font-medium">
+<span>You (68)</span>
+<span>Avg (70)</span>
+</div>
+</div>
+</div>
+</section>
+<!-- Action Card -->
+<section class="px-4">
+<div class="bg-slate-900 text-white p-6 rounded-2xl flex items-center justify-between">
+<div>
+<h3 class="text-lg font-bold mb-1">Weekly Optimization Plan</h3>
+<p class="text-slate-400 text-sm">3 new bio-hacks ready for you</p>
+</div>
+<button class="bg-primary text-slate-900 size-12 rounded-full flex items-center justify-center font-bold">
+<span class="material-symbols-outlined">arrow_forward</span>
+</button>
+</div>
+</section>
+</main>
+<!-- Bottom Navigation -->
+<nav class="fixed bottom-0 left-0 right-0 bg-white border-t border-slate-200 px-6 py-3 pb-8 z-50">
+<div class="max-w-2xl mx-auto flex justify-between items-center">
+<a class="flex flex-col items-center gap-1 text-slate-400" href="#">
+<span class="material-symbols-outlined">home</span>
+<span class="text-[10px] font-bold uppercase tracking-wider">Home</span>
+</a>
+<a class="flex flex-col items-center gap-1 text-primary" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1">insights</span>
+<span class="text-[10px] font-bold uppercase tracking-wider">Insights</span>
+</a>
+<a class="flex flex-col items-center gap-1 text-slate-400" href="#">
+<span class="material-symbols-outlined">group</span>
+<span class="text-[10px] font-bold uppercase tracking-wider">Community</span>
+</a>
+<a class="flex flex-col items-center gap-1 text-slate-400" href="#">
+<span class="material-symbols-outlined">person</span>
+<span class="text-[10px] font-bold uppercase tracking-wider">Profile</span>
+</a>
+</div>
+</nav>
+</body></html>

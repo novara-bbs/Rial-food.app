@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,200..800;1,6..72,200..800&amp;family=Plus+Jakarta+Sans:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#a4ec13",
+                        "editorial-green": "#4A5D23",
+                        "background-light": "#f7f8f6",
+                        "background-dark": "#1c2210",
+                        "surface": "#FFFFFF",
+                        "text-main": "#2B2927"
+                    },
+                    fontFamily: {
+                        "display": ["Newsreader", "serif"],
+                        "sans": ["Plus Jakarta Sans", "sans-serif"]
+                    },
+                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            color: #2B2927;
+        }
+        .font-editorial { font-family: 'Newsreader', serif; }
+        
+        /* Custom Slider Styling */
+        input[type='range'] {
+            -webkit-appearance: none;
+            appearance: none;
+            background: transparent;
+            cursor: pointer;
+        }
+        input[type='range']::-webkit-slider-runnable-track {
+            background: #E5E7EB;
+            height: 2px;
+        }
+        input[type='range']::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            height: 16px;
+            width: 16px;
+            background: #4A5D23;
+            border-radius: 2px;
+            margin-top: -7px;
+        }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark min-h-screen">
+<div class="relative flex h-auto min-h-screen w-full flex-col group/design-root overflow-x-hidden">
+<div class="layout-container flex h-full grow flex-col">
+<!-- Header Section -->
+<header class="flex items-center justify-between whitespace-nowrap border-b border-solid border-slate-200 bg-surface px-10 py-3 dark:bg-background-dark dark:border-slate-800">
+<div class="flex items-center gap-4 text-editorial-green">
+<div class="size-6">
+<svg fill="currentColor" viewbox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+<path d="M4 4H17.3334V17.3334H30.6666V30.6666H44V44H4V4Z"></path>
+</svg>
+</div>
+<h2 class="text-text-main dark:text-slate-100 text-xl font-display italic font-bold leading-tight tracking-tight">RIAL V1</h2>
+</div>
+<div class="flex flex-1 justify-end gap-6 items-center">
+<nav class="hidden md:flex gap-6">
+<a class="text-sm font-medium text-editorial-green border-b-2 border-editorial-green" href="#">Insights</a>
+<a class="text-sm font-medium text-slate-500 hover:text-editorial-green transition" href="#">Journal</a>
+<a class="text-sm font-medium text-slate-500 hover:text-editorial-green transition" href="#">Clinical Log</a>
+</nav>
+<div class="flex gap-2">
+<button class="flex items-center justify-center rounded-full size-10 bg-slate-100 dark:bg-slate-800 text-text-main dark:text-slate-100">
+<span class="material-symbols-outlined text-[20px]">notifications</span>
+</button>
+<div class="bg-center bg-no-repeat aspect-square bg-cover rounded-full size-10 border border-slate-200" data-alt="User profile portrait of a woman" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuBYtwrm3s70p7nIBj9hnO-Bp-boX6RZsgagcfB9HDwsJTB_GTRf4IejTtFwB3CQkefsuHN-Cw-itZWJAi-IGFzKtm0VroNtrALfdYSDpQouX5OH7wXpmNuhZM6-q6_s-F0_uMYYTj-0gmUHdLCtpLXYreLxwW-q26ZAx3OG7O8-KN11SvHmcBZXJw1AMdgLleH6HDfXT-y8mAVjtI7dwgi882mosGJXTqTD21IaItDjwKFgefUgjjrlvdrANx2-_4yBk810c0_8EjA");'></div>
+</div>
+</div>
+</header>
+<main class="flex-1 max-w-7xl mx-auto w-full px-6 lg:px-10 py-8">
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+<!-- Left Column: Main Dashboard & Graph -->
+<div class="lg:col-span-8 flex flex-col gap-8">
+<!-- Page Title -->
+<div class="flex flex-col gap-1">
+<h1 class="text-4xl font-display italic font-semibold text-editorial-green">Real Feel Insights</h1>
+<p class="text-slate-500 max-w-lg">The bridge between clinical biomarkers and your subjective lived experience.</p>
+</div>
+<!-- Graph Section -->
+<div class="bg-surface dark:bg-slate-900 rounded-xl p-8 border border-slate-100 dark:border-slate-800 shadow-sm">
+<div class="flex justify-between items-end mb-8">
+<div>
+<p class="text-xs font-bold uppercase tracking-widest text-slate-400 mb-1">Weekly Correlation</p>
+<h3 class="text-2xl font-display font-medium">84% Vitality Alignment</h3>
+</div>
+<div class="flex gap-4 text-xs font-medium">
+<div class="flex items-center gap-2">
+<span class="size-2 bg-editorial-green rounded-full"></span>
+<span>Vitality Score</span>
+</div>
+<div class="flex items-center gap-2">
+<span class="size-2 bg-primary rounded-full"></span>
+<span>Subjective 'Real Feel'</span>
+</div>
+</div>
+</div>
+<!-- Graph Placeholder -->
+<div class="relative h-64 w-full">
+<svg class="w-full h-full" preserveaspectratio="none" viewbox="0 0 1000 200">
+<!-- Grid lines -->
+<line stroke="#f1f5f9" stroke-width="1" x1="0" x2="1000" y1="50" y2="50"></line>
+<line stroke="#f1f5f9" stroke-width="1" x1="0" x2="1000" y1="100" y2="100"></line>
+<line stroke="#f1f5f9" stroke-width="1" x1="0" x2="1000" y1="150" y2="150"></line>
+<!-- Vitality Line (Dark Green) -->
+<path d="M0,120 Q150,40 300,100 T600,60 T1000,80" fill="none" stroke="#4A5D23" stroke-linecap="round" stroke-width="3"></path>
+<!-- Real Feel Line (Primary Lime) -->
+<path d="M0,140 Q150,60 300,120 T600,90 T1000,110" fill="none" stroke="#a4ec13" stroke-dasharray="8 4" stroke-linecap="round" stroke-width="3"></path>
+</svg>
+<div class="flex justify-between mt-4 text-[11px] font-bold text-slate-400 px-1">
+<span>MON</span><span>TUE</span><span>WED</span><span>THU</span><span>FRI</span><span>SAT</span><span>SUN</span>
+</div>
+</div>
+</div>
+<!-- Editor's Note / Insights Engine -->
+<div class="bg-editorial-green text-white rounded-xl p-8 flex gap-6 items-start relative overflow-hidden">
+<div class="absolute top-0 right-0 p-4 opacity-10">
+<span class="material-symbols-outlined text-8xl">auto_awesome</span>
+</div>
+<div class="shrink-0 size-12 bg-white/10 rounded-full flex items-center justify-center">
+<span class="material-symbols-outlined">edit_note</span>
+</div>
+<div class="flex flex-col gap-3 relative z-10">
+<h4 class="text-sm font-bold uppercase tracking-widest text-primary/80">Chief Editor's Note</h4>
+<p class="font-display text-xl leading-relaxed italic">
+                                    "Your vitality metrics suggest a high metabolic responsiveness to early morning protein intake. We've observed a <span class="text-primary font-bold">15% increase</span> in sustained afternoon energy when breakfast exceeds 30g of protein."
+                                </p>
+</div>
+</div>
+<!-- Recent Logs Table -->
+<div class="flex flex-col gap-4">
+<div class="flex justify-between items-center">
+<h3 class="text-xl font-display font-semibold">Clinical Meal Journal</h3>
+<button class="text-sm font-semibold text-editorial-green flex items-center gap-1">
+                                    View full archive <span class="material-symbols-outlined text-sm">arrow_forward</span>
+</button>
+</div>
+<div class="overflow-hidden rounded-xl border border-slate-100 bg-surface dark:bg-slate-900 dark:border-slate-800">
+<table class="w-full text-left text-sm">
+<thead class="bg-slate-50 dark:bg-slate-800/50 text-slate-500 uppercase text-[10px] tracking-widest font-bold">
+<tr>
+<th class="px-6 py-4">Meal Entry</th>
+<th class="px-6 py-4">Time</th>
+<th class="px-6 py-4">Real Feel Tag</th>
+<th class="px-6 py-4">Glucose Load</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-slate-100 dark:divide-slate-800">
+<tr>
+<td class="px-6 py-4 font-medium italic font-display text-base">Truffle Omelette &amp; Microgreens</td>
+<td class="px-6 py-4 text-slate-500">08:45 AM</td>
+<td class="px-6 py-4"><span class="px-3 py-1 rounded-full bg-primary/10 text-editorial-green font-bold text-xs uppercase tracking-tight">Radiant</span></td>
+<td class="px-6 py-4"><span class="text-green-600 font-bold">L-02</span></td>
+</tr>
+<tr>
+<td class="px-6 py-4 font-medium italic font-display text-base">Miso-Glazed Salmon Bowl</td>
+<td class="px-6 py-4 text-slate-500">01:15 PM</td>
+<td class="px-6 py-4"><span class="px-3 py-1 rounded-full bg-blue-50 text-blue-700 font-bold text-xs uppercase tracking-tight">Sharp</span></td>
+<td class="px-6 py-4"><span class="text-green-600 font-bold">L-01</span></td>
+</tr>
+<tr>
+<td class="px-6 py-4 font-medium italic font-display text-base">Spiced Chickpea Flatbread</td>
+<td class="px-6 py-4 text-slate-500 (Yesterday)">07:30 PM</td>
+<td class="px-6 py-4"><span class="px-3 py-1 rounded-full bg-orange-50 text-orange-700 font-bold text-xs uppercase tracking-tight">Bloated</span></td>
+<td class="px-6 py-4"><span class="text-amber-600 font-bold">M-05</span></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<!-- Right Column: Daily Logging Side-panel -->
+<div class="lg:col-span-4">
+<div class="sticky top-8 flex flex-col gap-6">
+<div class="bg-surface dark:bg-slate-900 rounded-xl border border-slate-100 dark:border-slate-800 p-8 shadow-sm">
+<div class="flex flex-col gap-6">
+<div class="flex flex-col gap-1">
+<h2 class="text-2xl font-display font-semibold italic text-editorial-green">Today's Subjective Log</h2>
+<p class="text-xs text-slate-400 uppercase font-bold tracking-widest">Tuesday, Oct 24</p>
+</div>
+<!-- Granular Sliders -->
+<div class="flex flex-col gap-8 py-4">
+<div class="flex flex-col gap-3">
+<div class="flex justify-between items-center">
+<label class="text-sm font-bold uppercase tracking-wide">Energy Levels</label>
+<span class="text-xs font-mono text-slate-400">07 / 10</span>
+</div>
+<input class="w-full" max="10" min="0" type="range" value="7"/>
+<div class="flex justify-between text-[10px] text-slate-400 font-bold uppercase">
+<span>Lethargic</span>
+<span>Vital</span>
+</div>
+</div>
+<div class="flex flex-col gap-3">
+<div class="flex justify-between items-center">
+<label class="text-sm font-bold uppercase tracking-wide">Digestion Comfort</label>
+<span class="text-xs font-mono text-slate-400">09 / 10</span>
+</div>
+<input class="w-full" max="10" min="0" type="range" value="9"/>
+<div class="flex justify-between text-[10px] text-slate-400 font-bold uppercase">
+<span>Heavy</span>
+<span>Light</span>
+</div>
+</div>
+<div class="flex flex-col gap-3">
+<div class="flex justify-between items-center">
+<label class="text-sm font-bold uppercase tracking-wide">Cognitive Mood</label>
+<span class="text-xs font-mono text-slate-400">05 / 10</span>
+</div>
+<input class="w-full" max="10" min="0" type="range" value="5"/>
+<div class="flex justify-between text-[10px] text-slate-400 font-bold uppercase">
+<span>Cloudy</span>
+<span>Lucid</span>
+</div>
+</div>
+</div>
+<div class="flex flex-col gap-3">
+<label class="text-sm font-bold uppercase tracking-wide">Dominant State</label>
+<div class="grid grid-cols-2 gap-2">
+<button class="px-4 py-3 rounded border border-editorial-green bg-editorial-green text-white text-xs font-bold uppercase tracking-tighter">Radiant</button>
+<button class="px-4 py-3 rounded border border-slate-200 text-slate-400 text-xs font-bold uppercase tracking-tighter hover:bg-slate-50 transition">Steady</button>
+<button class="px-4 py-3 rounded border border-slate-200 text-slate-400 text-xs font-bold uppercase tracking-tighter hover:bg-slate-50 transition">Restless</button>
+<button class="px-4 py-3 rounded border border-slate-200 text-slate-400 text-xs font-bold uppercase tracking-tighter hover:bg-slate-50 transition">Exhausted</button>
+</div>
+</div>
+<button class="w-full py-4 bg-primary text-editorial-green font-bold uppercase tracking-widest text-sm rounded-lg hover:brightness-105 transition shadow-lg shadow-primary/20 mt-4">
+                                        Commit Log to Archive
+                                    </button>
+</div>
+</div>
+<div class="bg-background-light dark:bg-slate-800/50 border border-slate-200 dark:border-slate-800 rounded-xl p-6">
+<div class="flex gap-4 items-center">
+<div class="size-12 rounded-full bg-white dark:bg-slate-900 flex items-center justify-center text-editorial-green shrink-0 shadow-sm">
+<span class="material-symbols-outlined">biotech</span>
+</div>
+<div>
+<p class="text-[10px] font-bold uppercase text-slate-400 tracking-widest">Next Lab Review</p>
+<p class="text-sm font-display font-medium italic">Full panel metabolism analysis due in <span class="text-editorial-green font-bold">4 days</span>.</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+</div>
+</div>
+</body></html>

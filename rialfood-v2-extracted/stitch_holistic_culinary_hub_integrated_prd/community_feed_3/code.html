@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Holistic Culinary Hub - Community Feed</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400..700;1,6..72,400..700&amp;family=Satoshi:wght@400;500;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "primary": "#4A5D23",
+              "background-light": "#F9F8F6",
+              "background-dark": "#1c2210",
+              "surface": "#FFFFFF",
+              "text-main": "#2B2927",
+              "muted": "#A39F98",
+              "accent": "#D47A43"
+            },
+            fontFamily: {
+              "display": ["Newsreader", "serif"],
+              "body": ["Satoshi", "sans-serif"]
+            },
+            borderRadius: {"DEFAULT": "0px", "sm": "0px", "md": "4px", "lg": "4px", "xl": "4px", "full": "9999px"},
+          },
+        },
+      }
+    </script>
+<style>
+        body {
+            font-family: 'Satoshi', sans-serif;
+            color: var(--color-text-main);
+        }
+        h1, h2, h3, h4, h5, h6, .font-display {
+            font-family: 'Newsreader', serif;
+        }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark text-text-main min-h-screen flex flex-col antialiased">
+<!-- Top Navigation -->
+<header class="sticky top-0 z-50 flex items-center justify-between whitespace-nowrap border-b border-solid border-[#E5E3DF] bg-background-light px-10 py-4">
+<div class="flex items-center gap-4 text-text-main">
+<div class="size-6 text-primary">
+<span class="material-symbols-outlined text-3xl">restaurant</span>
+</div>
+<h2 class="text-text-main text-2xl font-bold leading-tight tracking-[-0.015em] font-display">Culinary Hub</h2>
+</div>
+<nav class="flex flex-1 justify-end gap-8">
+<div class="flex items-center gap-8">
+<a class="text-text-main text-sm font-medium leading-normal hover:text-primary transition-colors uppercase tracking-wider" href="#">Hub</a>
+<a class="text-text-main text-sm font-medium leading-normal hover:text-primary transition-colors uppercase tracking-wider" href="#">Diary</a>
+<a class="text-text-main text-sm font-medium leading-normal hover:text-primary transition-colors uppercase tracking-wider" href="#">Vault</a>
+<a class="text-text-main text-sm font-medium leading-normal hover:text-primary transition-colors uppercase tracking-wider" href="#">Planner</a>
+<a class="text-primary text-sm font-bold leading-normal border-b-2 border-primary pb-1 uppercase tracking-wider" href="#">Community</a>
+</div>
+<div class="bg-center bg-no-repeat aspect-square bg-cover rounded-full size-10 border border-[#E5E3DF]" data-alt="User profile avatar" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuCK-qrQVvgSkGaYfxGT-sbHDMEkxRWF9qB4EiGXmc4YqBUbHth50nWxyKv80OixELbo3Xizfwu7ZYH9AQlV63uSWe-0oxFHCjX6X5BiMokF8uj7pyqK5Pr6en1lNRiuij80bc7VQuPpoBXTUhndXne-8WuCv2Hbf-4LlMFwVzrfk0P1THgRCf77TaCGgHPOrdw0Js_t73fhv-sbKVAK1-vKde9x7BYQB0o-k2RtIwECaUZCT0mjTsSjqmQW6DCIKGp-HyxvzXAKBXw");'></div>
+</nav>
+</header>
+<!-- Main Content -->
+<main class="flex-1 flex justify-center w-full max-w-7xl mx-auto px-6 py-8 gap-12">
+<!-- Left Sidebar: Leaderboard -->
+<aside class="hidden lg:block w-72 shrink-0">
+<div class="sticky top-24">
+<h3 class="font-display text-2xl font-semibold mb-6 pb-2 border-b-2 border-text-main">Weekly Top Chefs</h3>
+<div class="flex flex-col gap-1">
+<!-- Leaderboard Item 1 -->
+<div class="flex items-center gap-4 p-3 hover:bg-surface transition-colors cursor-pointer rounded-md">
+<div class="relative">
+<div class="bg-center bg-no-repeat aspect-square bg-cover rounded-full h-12 w-12 border border-[#E5E3DF]" data-alt="Elena profile picture" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuCBtgKfdpDWITUxvtaqudPJslsOT8k0K8hQP2D2Y9loF02yvAZ7qY-hiWBJ6xHaS6R6EY5uwgvY1ak8pSPvY3SSPNcjca5AHlzTGi2WzD7Lg9Jb5Z2WOX5qWE3kHnE8yk-544wQqgExeudFcbAdBeEoT1fgfr-CUGopzyy2VCnYIcx5cDO4RyBbp8thwsyEViYBKT8vCi2_SlqpUMLVQLJNkJnY3v3gRO4kqIymdcYVEPo-aFmS6UTztSIRwWnGEOYZUO_BosL2Bog");'></div>
+<span class="material-symbols-outlined absolute -bottom-1 -right-1 text-accent text-sm bg-background-light rounded-full border border-background-light" title="Chef Pro">workspace_premium</span>
+</div>
+<div class="flex flex-col flex-1">
+<p class="font-display text-lg font-medium leading-snug">Elena</p>
+<div class="flex items-center gap-2">
+<p class="text-muted text-xs font-medium uppercase tracking-wider">Lvl 15</p>
+<div class="h-1 flex-1 bg-[#E5E3DF] rounded-full overflow-hidden">
+<div class="h-full bg-primary w-3/4"></div>
+</div>
+</div>
+</div>
+<div class="shrink-0 text-right">
+<p class="text-text-main text-sm font-bold">450 <span class="text-muted text-xs font-normal">XP</span></p>
+<span class="material-symbols-outlined text-[10px] text-primary">arrow_upward</span>
+</div>
+</div>
+<!-- Leaderboard Item 2 -->
+<div class="flex items-center gap-4 p-3 hover:bg-surface transition-colors cursor-pointer rounded-md">
+<div class="bg-center bg-no-repeat aspect-square bg-cover rounded-full h-12 w-12 border border-[#E5E3DF]" data-alt="Marcus profile picture" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuCIkbYW10xp-2ex-QLiZS9PiRjwylVCG0X8x03w_OtEFhmrKmSHfpBAB-REDIM-utufvW3WuCm-zSi2MjNa-bXlPBZvudLsD-83e2KsjeGdj1Il2x4NWJHi7eApLtRAnIy8vvZeouTjHNiisnBq034bJyqx0eVKXeD6cqcBtlpEGpdk64w_lYmkUwsJsVcMaqbyPYKX9aQLY9M-cxESZcAfb1OsHBFtkMiQdiPRFCNSzZhvBavFRtOp66ieZPHvH82DCUNSqsuSe3c");'></div>
+<div class="flex flex-col flex-1">
+<p class="font-display text-lg font-medium leading-snug">Marcus</p>
+<div class="flex items-center gap-2">
+<p class="text-muted text-xs font-medium uppercase tracking-wider">Lvl 12</p>
+<div class="h-1 flex-1 bg-[#E5E3DF] rounded-full overflow-hidden">
+<div class="h-full bg-primary w-1/2"></div>
+</div>
+</div>
+</div>
+<div class="shrink-0 text-right">
+<p class="text-text-main text-sm font-bold">320 <span class="text-muted text-xs font-normal">XP</span></p>
+<span class="material-symbols-outlined text-[10px] text-muted">remove</span>
+</div>
+</div>
+<!-- Leaderboard Item 3 -->
+<div class="flex items-center gap-4 p-3 hover:bg-surface transition-colors cursor-pointer rounded-md">
+<div class="bg-center bg-no-repeat aspect-square bg-cover rounded-full h-12 w-12 border border-[#E5E3DF]" data-alt="Sarah profile picture" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuBwhfe8kl7ZP1RQYU5QP_WGYf-htMIS3b-Tf14h1FqcScGZuOkwJtwNw24mk7fTQJwWMHGnJIb-VXGlSN40zalA_gEMO01zUr_foOO2EYTmAf3CEiaK_GBGPTv_Tu9a_QMhmkBBW0Kys1YHC7caeAxDGLw7t3zb4-3f9HpqOL3bFkLn-qz5JAIeFaXSmSPc81mt8ytFRpNZgMV--fVeayFxIkMgJAGR94bCv7jPcOqPCx1nGIgArZSFIaLiA982oDy5J-A_0cShpP4");'></div>
+<div class="flex flex-col flex-1">
+<p class="font-display text-lg font-medium leading-snug">Sarah</p>
+<div class="flex items-center gap-2">
+<p class="text-muted text-xs font-medium uppercase tracking-wider">Lvl 8</p>
+<div class="h-1 flex-1 bg-[#E5E3DF] rounded-full overflow-hidden">
+<div class="h-full bg-primary w-1/4"></div>
+</div>
+</div>
+</div>
+<div class="shrink-0 text-right">
+<p class="text-text-main text-sm font-bold">180 <span class="text-muted text-xs font-normal">XP</span></p>
+<span class="material-symbols-outlined text-[10px] text-accent">arrow_downward</span>
+</div>
+</div>
+</div>
+<button class="mt-6 w-full py-2 px-4 border border-[#E5E3DF] text-sm font-bold uppercase tracking-wider hover:bg-surface transition-colors">Find Friends</button>
+</div>
+</aside>
+<!-- Center Column: Social Feed -->
+<div class="flex-1 w-full max-w-[600px] flex flex-col gap-12 pb-20">
+<!-- Feed Item 1 -->
+<article class="flex flex-col gap-4">
+<!-- Header -->
+<div class="flex items-center gap-3">
+<div class="relative">
+<div class="bg-center bg-no-repeat aspect-square bg-cover rounded-full h-10 w-10 border border-[#E5E3DF]" data-alt="Elena profile picture" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuAFfwZaUP5K0jZB60qKPYBLeWL-2MVSi75WW2-zou3YdKbR6QgYDwhkqd9dNFYS_kLKq-9Ka6szeJuOynS1wiQADWo1k8GliJxK6gsDI4lOgBmNlHbzLBXEz_xkB1kR75tTA5zkCaIL6mqTf8DN4QIQK40705WFwwp3gYNDgETIVFLQu-hw-B9V1-M-zNYQJQaInZDGQLUJu1S6M4esrIgArFUjRbtsYt7LZoSocozr5Iop2irYtObxVxp3wBOimYoWjz9dLJECnf0");'></div>
+<span class="material-symbols-outlined absolute -bottom-1 -right-1 text-accent text-[12px] bg-background-light rounded-full border border-background-light" title="Chef Pro">workspace_premium</span>
+</div>
+<div class="text-base leading-snug">
+<span class="font-display font-semibold italic text-lg">Elena</span>
+<span class="text-muted">logged a 10k run &amp; cooked</span>
+<button class="font-display font-semibold italic text-lg hover:text-primary transition-colors border-b border-transparent hover:border-primary">Lemon Herb Salmon</button>
+</div>
+<span class="ml-auto text-xs text-muted font-medium uppercase tracking-wider">2h ago</span>
+</div>
+<!-- Image -->
+<div class="w-full aspect-[4/5] bg-[#E5E3DF] rounded-md overflow-hidden relative group cursor-pointer border border-[#E5E3DF]">
+<div class="absolute inset-0 bg-cover bg-center transition-transform duration-500 group-hover:scale-[1.02]" data-alt="Plated Lemon Herb Salmon" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuAVt3-8CsCJY2IVZN3SSqTc2MqCYFqI5KptLtVh_PALEX_qu-8pDMtVkPW1BwwVGEJl-PGXTXdv1VlLrVeT3cclcghk0-0DE3wDvzGfJyDGN0exks_NwzFdRnh9HZh6UhhQ91EzeibZe-clq1H7GjvGi55jg-J1p5CpKUlaK_hE7HLVuHBLNmEa4ysL3WpHpip4oyn-rVRXZT7nnVehTz9a-5UNT1VD_gWceRXfpZTzbziafJrXwcR1-AkKqNPum4kbbUFAm7Yth-4')"></div>
+<div class="absolute inset-0 bg-black/0 group-hover:bg-black/5 transition-colors duration-300"></div>
+</div>
+<!-- Actions -->
+<div class="flex items-center justify-between pt-2 border-b border-[#E5E3DF] pb-4">
+<div class="flex gap-6">
+<button class="flex items-center gap-2 group">
+<span class="material-symbols-outlined text-text-main group-hover:text-accent transition-colors">local_fire_department</span>
+<span class="text-sm font-bold">24</span>
+</button>
+<button class="flex items-center gap-2 group">
+<span class="material-symbols-outlined text-text-main group-hover:text-primary transition-colors">chat_bubble_outline</span>
+<span class="text-sm font-bold">3</span>
+</button>
+</div>
+<button class="text-muted hover:text-text-main transition-colors">
+<span class="material-symbols-outlined">ios_share</span>
+</button>
+</div>
+</article>
+<!-- Feed Item 2 -->
+<article class="flex flex-col gap-4">
+<div class="flex items-center gap-3">
+<div class="bg-center bg-no-repeat aspect-square bg-cover rounded-full h-10 w-10 border border-[#E5E3DF]" data-alt="Marcus profile picture" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuB7_HnwINTCI6o5TgLorJ05mIyCvRbL0SfOYUte4jYTPyFyTHgS3ZaAaZ5OF8aNmuHKUkRdH5tpWhpYyBnpIl0CnFIURf4lCBmNm3BKIo9o5wlq5EKLpq46c_toJnvdOSK5QKoERoz_OnbT1euyitnu4Is_Wqi_obnCMcuv77hHKAiw2wbKpgFJvTMMQe2xgsLFTQ0kg9v2fgrtM2KSgB-vF3vyOTq-1w4Zl5qdIpgEisvGxMfqzuL_JF-GgUKVqBiDEhZsuN1MYB4");'></div>
+<div class="text-base leading-snug">
+<span class="font-display font-semibold italic text-lg">Marcus</span>
+<span class="text-muted">crushed Leg Day &amp; meal prepped</span>
+<button class="font-display font-semibold italic text-lg hover:text-primary transition-colors border-b border-transparent hover:border-primary">Quinoa Power Bowls</button>
+</div>
+<span class="ml-auto text-xs text-muted font-medium uppercase tracking-wider">5h ago</span>
+</div>
+<div class="w-full aspect-[4/5] bg-[#E5E3DF] rounded-md overflow-hidden relative group cursor-pointer border border-[#E5E3DF]">
+<div class="absolute inset-0 bg-cover bg-center transition-transform duration-500 group-hover:scale-[1.02]" data-alt="Multiple Quinoa Power Bowls ready for week" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuAj7HlzhNFdaGfhUYzEk1GJIDI52G_rK1EusKeyTFQNsdVfaWJe1ZQdOzdAJwb_5ojhccWFTZ7lPvrsJ3veYIDmYaBxn7U_nxG44sV7iZqL6MG0IMrAPBISAPW2K-tGJ74ov8lWYD9B6yb4wZP80ilOLh6BU-XKVEw1LfEhy_hoEDjKF17U8CYwVgfdL9kbU08G4t-q3dOwJVXqpJ-t5Fai9SQvPK-KdudPfwgCGpgpSqSm3SPUjiAhOihGPm8BhgYhMatKrSjh_3A')"></div>
+</div>
+<div class="flex items-center justify-between pt-2 border-b border-[#E5E3DF] pb-4">
+<div class="flex gap-6">
+<button class="flex items-center gap-2 group text-accent">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">local_fire_department</span>
+<span class="text-sm font-bold">12</span>
+</button>
+<button class="flex items-center gap-2 group">
+<span class="material-symbols-outlined text-text-main group-hover:text-primary transition-colors">chat_bubble_outline</span>
+<span class="text-sm font-bold">1</span>
+</button>
+</div>
+<button class="text-muted hover:text-text-main transition-colors">
+<span class="material-symbols-outlined">ios_share</span>
+</button>
+</div>
+</article>
+</div>
+</main>
+</body></html>
