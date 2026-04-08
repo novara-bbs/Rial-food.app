@@ -1,0 +1,246 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap');
+@import "tailwindcss";
+@plugin "@tailwindcss/typography";
+
+@theme {
+  --color-background: var(--background);
+  --color-surface: var(--surface);
+  --color-surface-container-lowest: var(--surface-container-lowest);
+  --color-surface-container-low: var(--surface-container-low);
+  --color-surface-container: var(--surface-container);
+  --color-surface-container-high: var(--surface-container-high);
+  --color-surface-container-highest: var(--surface-container-highest);
+  --color-primary: var(--primary);
+  --color-primary-container: var(--primary-container);
+  --color-on-primary: var(--on-primary);
+  --color-on-primary-container: var(--on-primary-container);
+  --color-secondary: var(--secondary);
+  --color-tertiary: var(--tertiary);
+  --color-on-surface: var(--on-surface);
+  --color-on-surface-variant: var(--on-surface-variant);
+  --color-outline: var(--outline);
+  --color-outline-variant: var(--outline-variant);
+  --color-error: var(--error);
+
+  --font-headline: "Space Grotesk", sans-serif;
+  --font-body: "Inter", sans-serif;
+  --font-label: "JetBrains Mono", monospace;
+  
+  /* Improved Accessibility Font Scale */
+  --text-xs: 0.8125rem; /* 13px */
+  --text-sm: 0.9375rem; /* 15px */
+  --text-base: 1.0625rem; /* 17px */
+  --text-lg: 1.1875rem; /* 19px */
+  --text-xl: 1.3125rem; /* 21px */
+  --text-2xl: 1.625rem; /* 26px */
+  --text-3xl: 2rem; /* 32px */
+}
+
+@layer components {
+  .prose-custom {
+    --tw-prose-body: var(--on-surface-variant);
+    --tw-prose-headings: var(--tertiary);
+    --tw-prose-lead: var(--on-surface-variant);
+    --tw-prose-links: var(--primary);
+    --tw-prose-bold: var(--tertiary);
+    --tw-prose-counters: var(--on-surface-variant);
+    --tw-prose-bullets: var(--primary);
+    --tw-prose-hr: var(--outline-variant);
+    --tw-prose-quotes: var(--tertiary);
+    --tw-prose-quote-borders: var(--primary);
+    --tw-prose-captions: var(--on-surface-variant);
+    --tw-prose-code: var(--primary);
+    --tw-prose-pre-code: var(--on-surface);
+    --tw-prose-pre-bg: var(--surface-container-highest);
+    --tw-prose-th-borders: var(--outline-variant);
+    --tw-prose-td-borders: var(--outline-variant);
+  }
+}
+
+@layer base {
+  :root {
+    /* --- VOLT PRO (Dark Technical) --- */
+    /* High-performance, data-dense aesthetic for athletes and biohackers */
+    --background: #09090b; /* Zinc 950 */
+    --on-background: #fafafa;
+    --surface: #09090b;
+    --on-surface: #fafafa;
+    --surface-container-low: #18181b; /* Zinc 900 */
+    --surface-container: #27272a; /* Zinc 800 */
+    --surface-container-high: #3f3f46; /* Zinc 700 */
+    --surface-container-highest: #52525b; /* Zinc 600 */
+    --on-surface-variant: #a1a1aa; /* Zinc 400 */
+    --primary: #dcfd05; /* Volt Green */
+    --on-primary: #000000;
+    --primary-container: #1a1a1a;
+    --on-primary-container: #dcfd05;
+    --secondary: #38bdf8; /* Sky Blue */
+    --on-secondary: #000000;
+    --tertiary: #ffffff;
+    --on-tertiary: #000000;
+    --error: #ef4444;
+    --on-error: #ffffff;
+    --outline: #3f3f46;
+    --outline-variant: #27272a;
+    
+    /* Chart Colors */
+    --chart-grid: #27272a;
+    --chart-text: #71717a;
+    --chart-recovery: #10b981;
+    --chart-strain: #ef4444;
+    
+    --font-headline: 'Outfit', sans-serif;
+    --font-body: 'Inter', sans-serif;
+    --font-label: 'JetBrains Mono', monospace;
+  }
+
+  /* --- VOLT PRO (Light Technical) --- */
+  /* Clean, high-contrast, professional enterprise aesthetic */
+  .theme-light {
+    --background: #ffffff;
+    --on-background: #09090b;
+    --surface: #ffffff;
+    --on-surface: #09090b;
+    --surface-container-low: #f4f4f5; /* Zinc 100 */
+    --surface-container: #e4e4e7; /* Zinc 200 */
+    --surface-container-high: #d4d4d8; /* Zinc 300 */
+    --surface-container-highest: #a1a1aa; /* Zinc 400 */
+    --on-surface-variant: #333333; /* Darkened for better contrast */
+    --primary: #09090b; /* Professional Black */
+    --on-primary: #ffffff;
+    --primary-container: #dcfd05; /* Volt as accent container */
+    --on-primary-container: #000000;
+    --secondary: #879b03; /* Darkened Volt for better visibility on light bg */
+    --on-secondary: #ffffff;
+    --tertiary: #18181b;
+    --on-tertiary: #ffffff;
+    --outline: #e4e4e7;
+    --outline-variant: #f4f4f5;
+
+    /* Chart Colors */
+    --chart-grid: #e4e4e7;
+    --chart-text: #71717a;
+    --chart-recovery: #10b981;
+    --chart-strain: #ef4444;
+  }
+
+  /* --- OCEAN PRO (Dark Atmospheric) --- */
+  /* Sophisticated deep blue for premium biometric tracking */
+  .theme-blue-dark {
+    --background: #020617; /* Slate 950 */
+    --on-background: #f8fafc;
+    --surface: #020617;
+    --on-surface: #f8fafc;
+    --surface-container-low: #0f172a; /* Slate 900 */
+    --surface-container: #1e293b; /* Slate 800 */
+    --surface-container-high: #334155; /* Slate 700 */
+    --surface-container-highest: #475569; /* Slate 600 */
+    --on-surface-variant: #94a3b8; /* Slate 400 */
+    --primary: #38bdf8; /* Ocean Blue */
+    --on-primary: #020617;
+    --secondary: #818cf8; /* Indigo */
+    --on-secondary: #020617;
+    --tertiary: #ffffff;
+    --outline: #334155;
+    --outline-variant: #1e293b;
+
+    /* Chart Colors */
+    --chart-grid: #1e293b;
+    --chart-text: #64748b;
+    --chart-recovery: #38bdf8;
+    --chart-strain: #f43f5e;
+  }
+
+  /* --- OCEAN PRO (Light Professional) --- */
+  /* Trustworthy, clean, and calm medical-grade aesthetic */
+  .theme-blue-light {
+    --background: #f8fafc; /* Slate 50 */
+    --on-background: #0f172a;
+    --surface: #ffffff;
+    --on-surface: #0f172a;
+    --surface-container-low: #f1f5f9; /* Slate 100 */
+    --surface-container: #e2e8f0; /* Slate 200 */
+    --surface-container-high: #cbd5e0; /* Slate 300 */
+    --surface-container-highest: #94a3b8; /* Slate 400 */
+    --on-surface-variant: #1e293b; /* Darkened for better contrast (Slate 800) */
+    --primary: #0284c7; /* Professional Blue */
+    --on-primary: #ffffff;
+    --secondary: #4338ca; /* Darkened Indigo */
+    --on-secondary: #ffffff;
+    --tertiary: #0f172a;
+    --outline: #e2e8f0;
+    --outline-variant: #f1f5f9;
+
+    /* Chart Colors */
+    --chart-grid: #e2e8f0;
+    --chart-text: #64748b;
+    --chart-recovery: #0284c7;
+    --chart-strain: #e11d48;
+  }
+  
+  /* --- EMBER PRO (Dark Creative) --- */
+  /* Bold, energetic, yet grounded for high-achievers */
+  .theme-orange-dark {
+    --background: #0c0a09; /* Stone 950 */
+    --on-background: #fafaf9;
+    --surface: #0c0a09;
+    --on-surface: #fafaf9;
+    --surface-container-low: #1c1917; /* Stone 900 */
+    --surface-container: #292524; /* Stone 800 */
+    --surface-container-high: #44403c; /* Stone 700 */
+    --surface-container-highest: #57534e; /* Stone 600 */
+    --on-surface-variant: #a8a29e; /* Stone 400 */
+    --primary: #fb923c; /* Ember Orange */
+    --on-primary: #0c0a09;
+    --secondary: #fcd34d; /* Amber */
+    --on-secondary: #0c0a09;
+    --tertiary: #ffffff;
+    --outline: #44403c;
+    --outline-variant: #292524;
+
+    /* Chart Colors */
+    --chart-grid: #292524;
+    --chart-text: #78716c;
+    --chart-recovery: #fb923c;
+    --chart-strain: #ef4444;
+  }
+  
+  /* --- EMBER PRO (Light Organic) --- */
+  /* Warm, approachable, and high-end lifestyle feel */
+  .theme-orange-light {
+    --background: #fafaf9; /* Stone 50 */
+    --on-background: #1c1917;
+    --surface: #ffffff;
+    --on-surface: #1c1917;
+    --surface-container-low: #f5f5f4; /* Stone 100 */
+    --surface-container: #e7e5e4; /* Stone 200 */
+    --surface-container-high: #d6d3d1; /* Stone 300 */
+    --surface-container-highest: #a8a29e; /* Stone 400 */
+    --on-surface-variant: #292524; /* Darkened for better contrast (Stone 800) */
+    --primary: #ea580c; /* Burnt Orange */
+    --on-primary: #ffffff;
+    --secondary: #b45309; /* Darkened Amber */
+    --on-secondary: #ffffff;
+    --tertiary: #1c1917;
+    --outline: #e7e5e4;
+    --outline-variant: #f5f5f4;
+
+    /* Chart Colors */
+    --chart-grid: #e7e5e4;
+    --chart-text: #78716c;
+    --chart-recovery: #ea580c;
+    --chart-strain: #dc2626;
+  }
+
+  body {
+    @apply bg-background text-on-surface font-body transition-colors duration-300;
+  }
+}
+
+.hide-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.hide-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
