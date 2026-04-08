@@ -197,7 +197,7 @@ export default function CreateRecipe({ onBack, onCreateRecipe, dictionary = [] }
           </div>
           <div className="bg-surface-container-highest p-3 rounded-sm text-center">
             <span className="block text-[10px] font-label tracking-widest uppercase text-on-surface-variant mb-1">Carb</span>
-            <span className="font-headline font-bold text-lg text-secondary">{totals.macros.carbs}g</span>
+            <span className="font-headline font-bold text-lg text-brand-secondary">{totals.macros.carbs}g</span>
           </div>
           <div className="bg-surface-container-highest p-3 rounded-sm text-center">
             <span className="block text-[10px] font-label tracking-widest uppercase text-on-surface-variant mb-1">Gra</span>

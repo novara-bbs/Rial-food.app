@@ -133,7 +133,7 @@ export default function RealFeelInline({ onSubmit, onDismiss }: {
             </div>
             <div className="flex gap-1.5">
               {signalBtn(energy === 'high', () => setEnergy(energy === 'high' ? null : 'high'), t.realFeel.signals.energyHigh, 'bg-primary/20 text-primary')}
-              {signalBtn(energy === 'stable', () => setEnergy(energy === 'stable' ? null : 'stable'), t.realFeel.signals.energyStable, 'bg-secondary/20 text-secondary')}
+              {signalBtn(energy === 'stable', () => setEnergy(energy === 'stable' ? null : 'stable'), t.realFeel.signals.energyStable, 'bg-brand-secondary/20 text-brand-secondary')}
               {signalBtn(energy === 'low', () => setEnergy(energy === 'low' ? null : 'low'), t.realFeel.signals.energyLow, 'bg-on-surface-variant/20 text-on-surface-variant')}
             </div>
           </div>
@@ -146,7 +146,7 @@ export default function RealFeelInline({ onSubmit, onDismiss }: {
             </div>
             <div className="flex gap-1.5">
               {signalBtn(digestion === 'clean', () => setDigestion(digestion === 'clean' ? null : 'clean'), t.realFeel.signals.digestionClean, 'bg-primary/20 text-primary')}
-              {signalBtn(digestion === 'sensitive', () => setDigestion(digestion === 'sensitive' ? null : 'sensitive'), t.realFeel.signals.digestionSensitive, 'bg-secondary/20 text-secondary')}
+              {signalBtn(digestion === 'sensitive', () => setDigestion(digestion === 'sensitive' ? null : 'sensitive'), t.realFeel.signals.digestionSensitive, 'bg-brand-secondary/20 text-brand-secondary')}
               {signalBtn(digestion === 'bloated', () => setDigestion(digestion === 'bloated' ? null : 'bloated'), t.realFeel.signals.digestionBloated, 'bg-error/20 text-error')}
             </div>
           </div>
@@ -159,7 +159,7 @@ export default function RealFeelInline({ onSubmit, onDismiss }: {
             </div>
             <div className="flex gap-1.5">
               {signalBtn(mindset === 'calm', () => setMindset(mindset === 'calm' ? null : 'calm'), t.realFeel.signals.mindsetCalm, 'bg-primary/20 text-primary')}
-              {signalBtn(mindset === 'balanced', () => setMindset(mindset === 'balanced' ? null : 'balanced'), t.realFeel.signals.mindsetBalanced, 'bg-secondary/20 text-secondary')}
+              {signalBtn(mindset === 'balanced', () => setMindset(mindset === 'balanced' ? null : 'balanced'), t.realFeel.signals.mindsetBalanced, 'bg-brand-secondary/20 text-brand-secondary')}
               {signalBtn(mindset === 'stressed', () => setMindset(mindset === 'stressed' ? null : 'stressed'), t.realFeel.signals.mindsetStressed, 'bg-error/20 text-error')}
             </div>
           </div>

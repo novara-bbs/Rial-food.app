@@ -1,4 +1,4 @@
-import { BookOpen, Settings, User, Sparkles, ChevronRight, Timer, Trophy, Gem, Heart, Package, CalendarCheck } from 'lucide-react';
+import { BookOpen, Settings, User, Sparkles, ChevronRight, Timer, Trophy, Gem, Heart, Package, CalendarCheck, BadgeCheck, BarChart3 } from 'lucide-react';
 import { useI18n } from '../i18n';
 
 export default function More({ navigateTo }: { navigateTo: (screen: string) => void }) {
@@ -6,13 +6,15 @@ export default function More({ navigateTo }: { navigateTo: (screen: string) => v
 
   const menuItems = [
     { id: 'real-feel-diary', label: t.more.realFeelDiary, icon: Heart, desc: t.more.realFeelDesc, screen: 'real-feel-diary' },
-    { id: 'weekly-check-in', label: 'Reflexión Semanal', icon: CalendarCheck, desc: 'Analiza y mejora cada semana', screen: 'weekly-check-in' },
+    { id: 'weekly-check-in', label: t.more.weeklyCheckIn, icon: CalendarCheck, desc: t.more.weeklyCheckInDesc, screen: 'weekly-check-in' },
     { id: 'fasting', label: t.more.fasting, icon: Timer, desc: t.more.fastingDesc, screen: 'fasting-timer' },
-    { id: 'pantry', label: 'Mi Despensa', icon: Package, desc: 'Ingredientes que tienes en casa', screen: 'pantry' },
+    { id: 'pantry', label: t.more.pantry, icon: Package, desc: t.more.pantryDesc, screen: 'pantry' },
     { id: 'challenges', label: t.more.challenges, icon: Trophy, desc: t.more.challengesDesc, screen: 'more' },
     { id: 'ai-coach', label: t.more.aiCoach, icon: Sparkles, desc: t.more.aiCoachDesc, screen: 'ai-coach' },
     { id: 'profile', label: t.more.profile, icon: User, desc: t.more.profileDesc, screen: 'profile' },
     { id: 'settings', label: t.more.settings, icon: Settings, desc: t.more.settingsDesc, screen: 'settings' },
+    { id: 'creator-verification', label: t.more.creatorVerification, icon: BadgeCheck, desc: t.more.creatorVerificationDesc, screen: 'creator-verification' },
+    { id: 'creator-dashboard', label: t.more.creatorDashboard, icon: BarChart3, desc: t.more.creatorDashboardDesc, screen: 'creator-dashboard' },
     { id: 'rial-plus', label: t.more.rialPlus, icon: Gem, desc: t.more.rialPlusDesc, screen: 'rial-plus' },
   ];
 

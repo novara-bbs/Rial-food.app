@@ -273,7 +273,7 @@ export default function RecipeDetail({ recipe, onBack, onSaveRecipe, isSaved, on
             <span className="font-label text-[10px] tracking-widest text-on-surface-variant uppercase mt-1">Protein</span>
           </div>
           <div className="bg-surface-container-low p-4 rounded-lg border border-outline-variant/20 flex flex-col items-center justify-center text-center">
-            <Droplet className="w-6 h-6 text-secondary mb-2" />
+            <Droplet className="w-6 h-6 text-brand-secondary mb-2" />
             <span className="font-headline text-2xl font-bold text-tertiary">{Math.round(calculatedTotals.carbs * servings * scaleFactor)}g</span>
             <span className="font-label text-[10px] tracking-widest text-on-surface-variant uppercase mt-1">Carbs</span>
           </div>
@@ -414,15 +414,15 @@ export default function RecipeDetail({ recipe, onBack, onSaveRecipe, isSaved, on
               </div>
               <div className="flex-1">
                 <div className="flex items-center gap-1.5 mb-1">
-                  <Activity className="w-3 h-3 text-secondary" />
-                  <p className="text-secondary text-[10px] font-bold tracking-widest uppercase">Impulso de Objetivo</p>
+                  <Activity className="w-3 h-3 text-brand-secondary" />
+                  <p className="text-brand-secondary text-[10px] font-bold tracking-widest uppercase">Impulso de Objetivo</p>
                 </div>
                 <p className="text-tertiary font-headline font-bold text-sm leading-tight">Kale por Lechuga Iceberg</p>
                 <p className="text-on-surface-variant text-[10px] mt-1">
                   3x Vitamina K • Más Antioxidantes • Usar hoy
                 </p>
               </div>
-              <button className="bg-secondary/10 hover:bg-secondary text-secondary hover:text-on-secondary px-3 py-2 rounded-sm text-[10px] font-bold uppercase tracking-widest transition-all">
+              <button className="bg-brand-secondary/10 hover:bg-brand-secondary text-brand-secondary hover:text-on-secondary px-3 py-2 rounded-sm text-[10px] font-bold uppercase tracking-widest transition-all">
                 Sustituir
               </button>
             </div>

@@ -47,9 +47,9 @@ export default function CreatePost({ onBack, onCreatePost }: { onBack: () => voi
                 <span className="font-label text-[10px] tracking-widest text-primary uppercase">{t.community.recovery}</span>
               </div>
               <div className="flex flex-col items-center justify-center text-center p-2 border-l border-outline-variant/20">
-                <TrendingUp className="w-5 h-5 text-secondary mb-1" />
+                <TrendingUp className="w-5 h-5 text-brand-secondary mb-1" />
                 <span className="font-headline text-xl font-bold text-tertiary">{userPerformance.strain}</span>
-                <span className="font-label text-[10px] tracking-widest text-secondary uppercase">{t.community.strain}</span>
+                <span className="font-label text-[10px] tracking-widest text-brand-secondary uppercase">{t.community.strain}</span>
               </div>
             </div>
           </div>
@@ -59,7 +59,7 @@ export default function CreatePost({ onBack, onCreatePost }: { onBack: () => voi
           <button className="w-10 h-10 rounded-full bg-surface-container-low flex items-center justify-center text-on-surface-variant hover:text-primary hover:bg-primary/10 transition-colors" aria-label="Camera">
             <Camera className="w-5 h-5" />
           </button>
-          <button className="w-10 h-10 rounded-full bg-surface-container-low flex items-center justify-center text-on-surface-variant hover:text-secondary hover:bg-secondary/10 transition-colors" aria-label="Image">
+          <button className="w-10 h-10 rounded-full bg-surface-container-low flex items-center justify-center text-on-surface-variant hover:text-brand-secondary hover:bg-brand-secondary/10 transition-colors" aria-label="Image">
             <ImageIcon className="w-5 h-5" />
           </button>
           <button

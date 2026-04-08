@@ -205,15 +205,15 @@ export default function Home({
         <div className="bg-surface-container-low border border-outline-variant/20 p-5 rounded-2xl flex flex-col gap-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-4">
-              <div className="w-12 h-12 bg-secondary/10 rounded-full flex items-center justify-center shrink-0">
-                <Droplets className="w-6 h-6 text-secondary" />
+              <div className="w-12 h-12 bg-brand-secondary/10 rounded-full flex items-center justify-center shrink-0">
+                <Droplets className="w-6 h-6 text-brand-secondary" />
               </div>
               <div>
                 <div className="flex items-center gap-2">
                   <p className="font-label text-xs text-on-surface-variant uppercase tracking-widest">{t.home.water}</p>
                   <button 
                     onClick={() => setIsEditingHydration(!isEditingHydration)} 
-                    className="text-[10px] text-secondary hover:underline font-bold uppercase tracking-widest"
+                    className="text-[10px] text-brand-secondary hover:underline font-bold uppercase tracking-widest"
                   >
                     {isEditingHydration ? 'Cerrar' : 'Editar'}
                   </button>
@@ -223,7 +223,7 @@ export default function Home({
             </div>
             <button 
               onClick={handleAddWater}
-              className="w-10 h-10 bg-secondary text-on-secondary rounded-full flex items-center justify-center hover:opacity-90 transition-all active:scale-95 shadow-lg shadow-secondary/20 shrink-0"
+              className="w-10 h-10 bg-brand-secondary text-on-secondary rounded-full flex items-center justify-center hover:opacity-90 transition-all active:scale-95 shadow-lg shadow-secondary/20 shrink-0"
             >
               <Plus className="w-5 h-5" />
             </button>
@@ -233,7 +233,7 @@ export default function Home({
             <div className="pt-4 border-t border-outline-variant/10 animate-in fade-in slide-in-from-top-2">
               <div className="flex items-center justify-between mb-2">
                 <span className="font-label text-[10px] uppercase tracking-widest text-on-surface-variant">{t.home.dailyTarget} ({t.home.cups})</span>
-                <span className="font-headline font-bold text-sm text-secondary">{hydration.target}</span>
+                <span className="font-headline font-bold text-sm text-brand-secondary">{hydration.target}</span>
               </div>
               <input 
                 type="range" 
@@ -345,7 +345,7 @@ export default function Home({
             {/* Plan */}
             <div className="bg-surface-container-low border border-outline-variant/20 rounded-sm p-3 flex flex-col gap-1">
               <span className="font-label text-[9px] uppercase tracking-widest text-on-surface-variant">Plan</span>
-              <span className="font-headline font-black text-xl text-secondary">{todaysMeals.length}</span>
+              <span className="font-headline font-black text-xl text-brand-secondary">{todaysMeals.length}</span>
               <span className="text-[9px] text-on-surface-variant">hoy • {totalPlannedWeek} sem</span>
             </div>
             {/* Consistency */}
@@ -440,7 +440,7 @@ export default function Home({
             </div>
             <div className="flex justify-between items-center pt-2">
               <div className="flex items-center gap-2">
-                <Activity className="w-4 h-4 text-secondary" />
+                <Activity className="w-4 h-4 text-brand-secondary" />
                 <span className="text-xs font-bold text-tertiary">{movement.activeMinutes}m Activo</span>
               </div>
               <span className="text-xs font-bold text-on-surface-variant uppercase tracking-widest">Objetivo: {movement.activeTarget}m</span>
@@ -474,8 +474,8 @@ export default function Home({
           <div className="bg-surface-container-low border border-outline-variant/20 p-6 rounded-2xl flex flex-col gap-4">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-4">
-                <div className="w-12 h-12 bg-secondary/10 rounded-full flex items-center justify-center shrink-0">
-                  <Target className="w-6 h-6 text-secondary" />
+                <div className="w-12 h-12 bg-brand-secondary/10 rounded-full flex items-center justify-center shrink-0">
+                  <Target className="w-6 h-6 text-brand-secondary" />
                 </div>
                 <div>
                   <p className="font-label text-xs text-on-surface-variant uppercase tracking-widest">{t.home.todayFocus}</p>
@@ -484,7 +484,7 @@ export default function Home({
               </div>
               <button 
                 onClick={() => setIsEditingDailyGoal(!isEditingDailyGoal)} 
-                className="text-[10px] text-secondary hover:underline font-bold uppercase tracking-widest"
+                className="text-[10px] text-brand-secondary hover:underline font-bold uppercase tracking-widest"
               >
                 {isEditingDailyGoal ? 'Cerrar' : 'Editar'}
               </button>
@@ -498,7 +498,7 @@ export default function Home({
                   value={dailyGoal} 
                   onChange={(e) => setDailyGoal && setDailyGoal(e.target.value)}
                   placeholder="Ej. Beber 2L de agua"
-                  className="w-full bg-surface-container-highest border border-outline-variant/20 rounded-lg py-2 px-3 text-sm text-tertiary placeholder:text-on-surface-variant focus:outline-none focus:border-secondary transition-colors"
+                  className="w-full bg-surface-container-highest border border-outline-variant/20 rounded-lg py-2 px-3 text-sm text-tertiary placeholder:text-on-surface-variant focus:outline-none focus:border-brand-secondary transition-colors"
                 />
               </div>
             )}
@@ -531,7 +531,7 @@ export default function Home({
           <span className="text-on-surface-variant font-bold text-lg">+</span>
           <div className="text-center flex-1">
             <span className="block text-[10px] text-on-surface-variant uppercase tracking-widest font-bold mb-1">{t.home.exercise}</span>
-            <span className="font-headline font-bold text-secondary">320</span>
+            <span className="font-headline font-bold text-brand-secondary">320</span>
           </div>
           <span className="text-on-surface-variant font-bold text-lg">=</span>
           <div className="text-center flex-1">
@@ -544,7 +544,7 @@ export default function Home({
           <div className="bg-surface-container-low border border-outline-variant/20 p-6 rounded-2xl space-y-6">
             {[
               { label: t.home.kcal, consumed: dailyMacros.consumed.cal, target: dailyMacros.target.cal, unit: 'kcal', val: macroProgress.cal, color: 'bg-primary' },
-              { label: t.home.protein, consumed: dailyMacros.consumed.pro, target: dailyMacros.target.pro, unit: 'g', val: macroProgress.pro, color: 'bg-secondary' },
+              { label: t.home.protein, consumed: dailyMacros.consumed.pro, target: dailyMacros.target.pro, unit: 'g', val: macroProgress.pro, color: 'bg-brand-secondary' },
               { label: t.home.carbs, consumed: dailyMacros.consumed.carbs, target: dailyMacros.target.carbs, unit: 'g', val: macroProgress.carbs, color: 'bg-tertiary' },
               { label: t.home.fats, consumed: dailyMacros.consumed.fats, target: dailyMacros.target.fats, unit: 'g', val: macroProgress.fats, color: 'bg-error' },
             ].map((m) => (
@@ -566,7 +566,7 @@ export default function Home({
           <div className="bg-surface-container-low border border-outline-variant/20 p-6 rounded-2xl grid grid-cols-2 md:grid-cols-4 gap-6">
             {[
               { label: t.home.kcal, consumed: dailyMacros.consumed.cal, target: dailyMacros.target.cal, unit: 'kcal', val: macroProgress.cal, color: 'text-primary', bg: 'bg-primary/10' },
-              { label: t.home.protein, consumed: dailyMacros.consumed.pro, target: dailyMacros.target.pro, unit: 'g', val: macroProgress.pro, color: 'text-secondary', bg: 'bg-secondary/10' },
+              { label: t.home.protein, consumed: dailyMacros.consumed.pro, target: dailyMacros.target.pro, unit: 'g', val: macroProgress.pro, color: 'text-brand-secondary', bg: 'bg-brand-secondary/10' },
               { label: t.home.carbs, consumed: dailyMacros.consumed.carbs, target: dailyMacros.target.carbs, unit: 'g', val: macroProgress.carbs, color: 'text-tertiary', bg: 'bg-tertiary/10' },
               { label: t.home.fats, consumed: dailyMacros.consumed.fats, target: dailyMacros.target.fats, unit: 'g', val: macroProgress.fats, color: 'text-error', bg: 'bg-error/10' },
             ].map((m) => (

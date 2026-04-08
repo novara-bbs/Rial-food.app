@@ -241,7 +241,7 @@ export default function RealFeelDiary({ realFeelLogs = [], onBack }: { realFeelL
                       </span>
                     )}
                     {log.digestion && (
-                      <span className="text-[9px] font-bold uppercase tracking-wider bg-secondary/10 text-secondary px-2 py-0.5 rounded-full flex items-center gap-1">
+                      <span className="text-[9px] font-bold uppercase tracking-wider bg-brand-secondary/10 text-brand-secondary px-2 py-0.5 rounded-full flex items-center gap-1">
                         <Leaf className="w-2.5 h-2.5" /> {(DIGESTION_LABELS as any)[log.digestion]}
                       </span>
                     )}

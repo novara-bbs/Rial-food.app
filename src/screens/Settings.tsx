@@ -2,6 +2,7 @@ import { useTheme } from '../contexts/ThemeContext';
 import { Palette, Moon, Sun, Check, User, Target, Smartphone, Leaf, LogOut, ChevronRight, Crown, Sparkles, Users, Plus, Trash2, Globe } from 'lucide-react';
 import { useState } from 'react';
 import { useI18n, type Locale } from '../i18n';
+import { Switch } from '@/components/ui/switch';
 
 export default function Settings({ dailyMacros, setDailyMacros, isPro, setIsPro, showAIBot, setShowAIBot, userProfile, setUserProfile }: { dailyMacros?: any, setDailyMacros?: any, isPro?: boolean, setIsPro?: any, showAIBot?: boolean, setShowAIBot?: any, userProfile?: any, setUserProfile?: any }) {
   const { theme, setTheme } = useTheme();
@@ -324,15 +325,7 @@ export default function Settings({ dailyMacros, setDailyMacros, isPro, setIsPro,
                   {showAIBot ? 'Visible en todas las pantallas' : 'Oculto'}
                 </p>
               </div>
-              <button 
-                onClick={() => setShowAIBot && setShowAIBot(!showAIBot)}
-                className={`w-12 h-6 rounded-full relative cursor-pointer transition-colors focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-surface-container-low ${showAIBot ? 'bg-primary' : 'bg-surface-container'}`}
-                role="switch"
-                aria-checked={showAIBot}
-                aria-label="Alternar Botón Flotante de Coach IA"
-              >
-                <div className={`absolute top-1 w-4 h-4 rounded-full transition-all ${showAIBot ? 'right-1 bg-on-primary' : 'left-1 bg-on-surface-variant'}`}></div>
-              </button>
+              <Switch checked={!!showAIBot} onCheckedChange={(v) => setShowAIBot && setShowAIBot(v)} />
             </div>
           </div>
         </div>
@@ -354,15 +347,7 @@ export default function Settings({ dailyMacros, setDailyMacros, isPro, setIsPro,
                   </p>
                 </div>
               </div>
-              <button 
-                onClick={() => toggleDevice('whoop')}
-                className={`w-12 h-6 rounded-full relative cursor-pointer transition-colors focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-surface-container-low ${connectedDevices.whoop ? 'bg-primary' : 'bg-surface-container'}`}
-                role="switch"
-                aria-checked={connectedDevices.whoop}
-                aria-label="Alternar Conexión Whoop"
-              >
-                <div className={`absolute top-1 w-4 h-4 rounded-full transition-all ${connectedDevices.whoop ? 'right-1 bg-on-primary' : 'left-1 bg-on-surface-variant'}`}></div>
-              </button>
+              <Switch checked={connectedDevices.whoop} onCheckedChange={() => toggleDevice('whoop')} />
             </div>
             <div className="flex items-center justify-between p-4 bg-surface-container-highest rounded-sm border border-outline-variant/10">
               <div className="flex items-center gap-3">
@@ -374,15 +359,7 @@ export default function Settings({ dailyMacros, setDailyMacros, isPro, setIsPro,
                   </p>
                 </div>
               </div>
-              <button 
-                onClick={() => toggleDevice('oura')}
-                className={`w-12 h-6 rounded-full relative cursor-pointer transition-colors focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-surface-container-low ${connectedDevices.oura ? 'bg-primary' : 'bg-surface-container'}`}
-                role="switch"
-                aria-checked={connectedDevices.oura}
-                aria-label="Alternar Conexión Oura Ring"
-              >
-                <div className={`absolute top-1 w-4 h-4 rounded-full transition-all ${connectedDevices.oura ? 'right-1 bg-on-primary' : 'left-1 bg-on-surface-variant'}`}></div>
-              </button>
+              <Switch checked={connectedDevices.oura} onCheckedChange={() => toggleDevice('oura')} />
             </div>
             <div className="flex items-center justify-between p-4 bg-surface-container-highest rounded-sm border border-outline-variant/10">
               <div className="flex items-center gap-3">
@@ -394,15 +371,7 @@ export default function Settings({ dailyMacros, setDailyMacros, isPro, setIsPro,
                   </p>
                 </div>
               </div>
-              <button 
-                onClick={() => toggleDevice('garmin')}
-                className={`w-12 h-6 rounded-full relative cursor-pointer transition-colors focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-surface-container-low ${connectedDevices.garmin ? 'bg-primary' : 'bg-surface-container'}`}
-                role="switch"
-                aria-checked={connectedDevices.garmin}
-                aria-label="Alternar Conexión Garmin Connect"
-              >
-                <div className={`absolute top-1 w-4 h-4 rounded-full transition-all ${connectedDevices.garmin ? 'right-1 bg-on-primary' : 'left-1 bg-on-surface-variant'}`}></div>
-              </button>
+              <Switch checked={connectedDevices.garmin} onCheckedChange={() => toggleDevice('garmin')} />
             </div>
           </div>
         </div>

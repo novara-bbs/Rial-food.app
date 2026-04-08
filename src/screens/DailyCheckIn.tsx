@@ -69,8 +69,8 @@ export default function DailyCheckIn({ initialStatus, onBack, onComplete }: { in
               onClick={() => setStatus('sluggish')}
               className={`p-4 rounded-sm border-2 flex flex-col items-center justify-center gap-2 transition-all ${
                 status === 'sluggish' 
-                  ? 'border-secondary bg-secondary/10 text-secondary' 
-                  : 'border-outline-variant/20 bg-surface-container-low text-on-surface-variant hover:border-secondary/50'
+                  ? 'border-brand-secondary bg-brand-secondary/10 text-brand-secondary' 
+                  : 'border-outline-variant/20 bg-surface-container-low text-on-surface-variant hover:border-brand-secondary/50'
               }`}
             >
               <Battery className="w-6 h-6" />

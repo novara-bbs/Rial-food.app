@@ -1,34 +1,53 @@
-import React, { useState } from 'react';
+import React, { useState, Suspense } from 'react';
 import Onboarding from './components/Onboarding';
 import Sidebar from './components/Sidebar';
 import BottomNav from './components/BottomNav';
-import Home from './screens/Home';
-import Explore from './screens/Explore';
-import Cocina from './screens/Cocina';
-import More from './screens/More';
-import RecipeDetail from './screens/RecipeDetail';
-import AddMeal from './screens/AddMeal';
-import AddTolerance from './screens/AddTolerance';
-import DailyCheckIn from './screens/DailyCheckIn';
-import CreateRecipe from './screens/CreateRecipe';
-import CreatePost from './screens/CreatePost';
 import CreateModal from './components/CreateModal';
-import AICoach from './screens/AICoach';
-import RealFeelDiary from './screens/RealFeelDiary';
-import FastingTimer from './screens/FastingTimer';
-import ImportRecipeURL from './screens/ImportRecipeURL';
-import Settings from './screens/Settings';
-import Profile from './screens/Profile';
-import Pantry from './screens/Pantry';
-import WeeklyCheckIn from './screens/WeeklyCheckIn';
-import RialPlus from './screens/RialPlus';
 import GlobalHeader from './components/GlobalHeader';
+import ErrorBoundary from './components/ErrorBoundary';
 import { Sparkles } from 'lucide-react';
 import { useTheme } from './contexts/ThemeContext';
 import { useI18n } from './i18n';
 import { useNavigation } from './contexts/NavigationContext';
 import { useAppState } from './contexts/AppStateContext';
 import { Toaster, toast } from 'sonner';
+
+// Lazy-loaded screens
+const Home = React.lazy(() => import('./screens/Home'));
+const Explore = React.lazy(() => import('./screens/Explore'));
+const Cocina = React.lazy(() => import('./screens/Cocina'));
+const More = React.lazy(() => import('./screens/More'));
+const RecipeDetail = React.lazy(() => import('./screens/RecipeDetail'));
+const AddMeal = React.lazy(() => import('./screens/AddMeal'));
+const AddTolerance = React.lazy(() => import('./screens/AddTolerance'));
+const DailyCheckIn = React.lazy(() => import('./screens/DailyCheckIn'));
+const CreateRecipe = React.lazy(() => import('./screens/CreateRecipe'));
+const CreatePost = React.lazy(() => import('./screens/CreatePost'));
+const AICoach = React.lazy(() => import('./screens/AICoach'));
+const RealFeelDiary = React.lazy(() => import('./screens/RealFeelDiary'));
+const FastingTimer = React.lazy(() => import('./screens/FastingTimer'));
+const ImportRecipeURL = React.lazy(() => import('./screens/ImportRecipeURL'));
+const Settings = React.lazy(() => import('./screens/Settings'));
+const Profile = React.lazy(() => import('./screens/Profile'));
+const Pantry = React.lazy(() => import('./screens/Pantry'));
+const WeeklyCheckIn = React.lazy(() => import('./screens/WeeklyCheckIn'));
+const RialPlus = React.lazy(() => import('./screens/RialPlus'));
+const CreatorVerification = React.lazy(() => import('./screens/CreatorVerification'));
+const CreatorDashboard = React.lazy(() => import('./screens/CreatorDashboard'));
+
+function LoadingSkeleton() {
+  return (
+    <div className="px-6 max-w-4xl mx-auto space-y-4 animate-pulse pt-8">
+      <div className="h-8 w-48 bg-surface-container-low rounded-sm" />
+      <div className="h-4 w-72 bg-surface-container-low rounded-sm" />
+      <div className="grid grid-cols-2 gap-3 mt-6">
+        <div className="h-32 bg-surface-container-low rounded-sm" />
+        <div className="h-32 bg-surface-container-low rounded-sm" />
+      </div>
+      <div className="h-48 bg-surface-container-low rounded-sm" />
+    </div>
+  );
+}
 
 export default function App() {
   const { t } = useI18n();
@@ -88,6 +107,8 @@ export default function App() {
       case 'weekly-check-in': return <WeeklyCheckIn onBack={() => navigateTo('more')} />;
       case 'rial-plus': return <RialPlus onBack={() => navigateTo('more')} />;
       case 'import-url': return <ImportRecipeURL onBack={() => navigateTo(previousScreen)} onImport={handleImportRecipe} />;
+      case 'creator-verification': return <CreatorVerification onBack={() => navigateTo('more')} />;
+      case 'creator-dashboard': return <CreatorDashboard onBack={() => navigateTo('more')} />;
       default: return <Home onNavigateToRecipe={navigateToRecipe} onCheckIn={handleCheckIn} onAddMeal={() => navigateTo('add-meal')} onNavigateToPlan={() => navigateTo('cocina')} onNavigateToExplore={() => navigateTo('explore')} dailyMacros={dailyMacros} checkInStatus={checkInStatus} onLogMealNow={handleLogMealNow} mealPlan={mealPlan} hydration={hydration} setHydration={setHydration} movement={movement} setMovement={setMovement} dailyGoal={dailyGoal} setDailyGoal={setDailyGoal} userProfile={userProfile} realFeelLogs={realFeelLogs} onRealFeelLog={handleRealFeelLog} />;
     }
   };
@@ -113,15 +134,20 @@ export default function App() {
             isPro={isPro}
           />
           <main className="flex-1 overflow-y-auto pb-24 md:pb-8 pt-4 hide-scrollbar">
-            <div className="animate-in fade-in slide-in-from-bottom-4 duration-500">
-              {renderScreen()}
-            </div>
+            <ErrorBoundary>
+              <Suspense fallback={<LoadingSkeleton />}>
+                <div className="animate-in fade-in slide-in-from-bottom-4 duration-500">
+                  {renderScreen()}
+                </div>
+              </Suspense>
+            </ErrorBoundary>
           </main>
           <div className="fixed bottom-24 md:bottom-8 right-6 flex flex-col gap-4 z-50">
             {currentScreen !== 'ai-coach' && showAIBot && (
               <button
                 onClick={() => navigateTo('ai-coach')}
                 className="w-14 h-14 bg-surface-container-highest border-2 border-primary text-primary rounded-full shadow-lg flex items-center justify-center hover:bg-primary/20 transition-transform hover:scale-105"
+                aria-label="AI Coach"
               >
                 <Sparkles className="w-6 h-6" />
               </button>

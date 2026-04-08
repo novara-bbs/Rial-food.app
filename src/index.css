@@ -1,8 +1,10 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap');
 @import "tailwindcss";
+@import "tw-animate-css";
 @plugin "@tailwindcss/typography";
 
 @theme {
+  /* MD3 tokens */
   --color-background: var(--background);
   --color-surface: var(--surface);
   --color-surface-container-lowest: var(--surface-container-lowest);
@@ -14,7 +16,8 @@
   --color-primary-container: var(--primary-container);
   --color-on-primary: var(--on-primary);
   --color-on-primary-container: var(--on-primary-container);
-  --color-secondary: var(--secondary);
+  --color-brand-secondary: var(--brand-secondary);
+  --color-on-brand-secondary: var(--on-brand-secondary);
   --color-tertiary: var(--tertiary);
   --color-on-surface: var(--on-surface);
   --color-on-surface-variant: var(--on-surface-variant);
@@ -22,10 +25,35 @@
   --color-outline-variant: var(--outline-variant);
   --color-error: var(--error);
 
+  /* shadcn bridge tokens */
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-border: var(--sidebar-border);
+  --radius: 0.25rem;
+
   --font-headline: "Space Grotesk", sans-serif;
   --font-body: "Inter", sans-serif;
   --font-label: "JetBrains Mono", monospace;
-  
+
   /* Improved Accessibility Font Scale */
   --text-xs: 0.8125rem; /* 13px */
   --text-sm: 0.9375rem; /* 15px */
@@ -60,7 +88,6 @@
 @layer base {
   :root {
     /* --- VOLT PRO (Dark Technical) --- */
-    /* High-performance, data-dense aesthetic for athletes and biohackers */
     --background: #09090b; /* Zinc 950 */
     --on-background: #fafafa;
     --surface: #09090b;
@@ -74,28 +101,51 @@
     --on-primary: #000000;
     --primary-container: #1a1a1a;
     --on-primary-container: #dcfd05;
-    --secondary: #38bdf8; /* Sky Blue */
-    --on-secondary: #000000;
+    --brand-secondary: #38bdf8; /* Sky Blue */
+    --on-brand-secondary: #000000;
     --tertiary: #ffffff;
     --on-tertiary: #000000;
     --error: #ef4444;
     --on-error: #ffffff;
     --outline: #3f3f46;
     --outline-variant: #27272a;
-    
+
     /* Chart Colors */
     --chart-grid: #27272a;
     --chart-text: #71717a;
     --chart-recovery: #10b981;
     --chart-strain: #ef4444;
-    
+
     --font-headline: 'Outfit', sans-serif;
     --font-body: 'Inter', sans-serif;
     --font-label: 'JetBrains Mono', monospace;
+
+    /* shadcn bridge */
+    --foreground: var(--on-surface);
+    --card: var(--surface-container-low);
+    --card-foreground: var(--on-surface);
+    --popover: var(--surface-container);
+    --popover-foreground: var(--on-surface);
+    --primary-foreground: var(--on-primary);
+    --secondary: var(--surface-container-highest);
+    --secondary-foreground: var(--on-surface);
+    --muted: var(--surface-container);
+    --muted-foreground: var(--on-surface-variant);
+    --accent: var(--surface-container-high);
+    --accent-foreground: var(--on-surface);
+    --destructive: var(--error);
+    --destructive-foreground: var(--on-error);
+    --border: var(--outline-variant);
+    --input: var(--outline-variant);
+    --ring: var(--primary);
+    --sidebar: var(--surface-container-low);
+    --sidebar-foreground: var(--on-surface);
+    --sidebar-accent: var(--surface-container-high);
+    --sidebar-accent-foreground: var(--on-surface);
+    --sidebar-border: var(--outline-variant);
   }
 
   /* --- VOLT PRO (Light Technical) --- */
-  /* Clean, high-contrast, professional enterprise aesthetic */
   .theme-light {
     --background: #ffffff;
     --on-background: #09090b;
@@ -105,27 +155,51 @@
     --surface-container: #e4e4e7; /* Zinc 200 */
     --surface-container-high: #d4d4d8; /* Zinc 300 */
     --surface-container-highest: #a1a1aa; /* Zinc 400 */
-    --on-surface-variant: #333333; /* Darkened for better contrast */
+    --on-surface-variant: #333333;
     --primary: #09090b; /* Professional Black */
     --on-primary: #ffffff;
-    --primary-container: #dcfd05; /* Volt as accent container */
+    --primary-container: #dcfd05;
     --on-primary-container: #000000;
-    --secondary: #879b03; /* Darkened Volt for better visibility on light bg */
-    --on-secondary: #ffffff;
+    --brand-secondary: #879b03; /* Darkened Volt */
+    --on-brand-secondary: #ffffff;
     --tertiary: #18181b;
     --on-tertiary: #ffffff;
+    --error: #ef4444;
+    --on-error: #ffffff;
     --outline: #e4e4e7;
     --outline-variant: #f4f4f5;
 
-    /* Chart Colors */
     --chart-grid: #e4e4e7;
     --chart-text: #71717a;
     --chart-recovery: #10b981;
     --chart-strain: #ef4444;
+
+    /* shadcn bridge */
+    --foreground: var(--on-surface);
+    --card: var(--surface-container-low);
+    --card-foreground: var(--on-surface);
+    --popover: var(--surface-container);
+    --popover-foreground: var(--on-surface);
+    --primary-foreground: var(--on-primary);
+    --secondary: var(--surface-container-highest);
+    --secondary-foreground: var(--on-surface);
+    --muted: var(--surface-container);
+    --muted-foreground: var(--on-surface-variant);
+    --accent: var(--surface-container-high);
+    --accent-foreground: var(--on-surface);
+    --destructive: var(--error);
+    --destructive-foreground: var(--on-error);
+    --border: var(--outline-variant);
+    --input: var(--outline-variant);
+    --ring: var(--primary);
+    --sidebar: var(--surface-container-low);
+    --sidebar-foreground: var(--on-surface);
+    --sidebar-accent: var(--surface-container-high);
+    --sidebar-accent-foreground: var(--on-surface);
+    --sidebar-border: var(--outline-variant);
   }
 
   /* --- OCEAN PRO (Dark Atmospheric) --- */
-  /* Sophisticated deep blue for premium biometric tracking */
   .theme-blue-dark {
     --background: #020617; /* Slate 950 */
     --on-background: #f8fafc;
@@ -138,21 +212,47 @@
     --on-surface-variant: #94a3b8; /* Slate 400 */
     --primary: #38bdf8; /* Ocean Blue */
     --on-primary: #020617;
-    --secondary: #818cf8; /* Indigo */
-    --on-secondary: #020617;
+    --primary-container: #0f172a;
+    --on-primary-container: #38bdf8;
+    --brand-secondary: #818cf8; /* Indigo */
+    --on-brand-secondary: #020617;
     --tertiary: #ffffff;
+    --error: #f43f5e;
+    --on-error: #ffffff;
     --outline: #334155;
     --outline-variant: #1e293b;
 
-    /* Chart Colors */
     --chart-grid: #1e293b;
     --chart-text: #64748b;
     --chart-recovery: #38bdf8;
     --chart-strain: #f43f5e;
+
+    /* shadcn bridge */
+    --foreground: var(--on-surface);
+    --card: var(--surface-container-low);
+    --card-foreground: var(--on-surface);
+    --popover: var(--surface-container);
+    --popover-foreground: var(--on-surface);
+    --primary-foreground: var(--on-primary);
+    --secondary: var(--surface-container-highest);
+    --secondary-foreground: var(--on-surface);
+    --muted: var(--surface-container);
+    --muted-foreground: var(--on-surface-variant);
+    --accent: var(--surface-container-high);
+    --accent-foreground: var(--on-surface);
+    --destructive: var(--error);
+    --destructive-foreground: var(--on-error);
+    --border: var(--outline-variant);
+    --input: var(--outline-variant);
+    --ring: var(--primary);
+    --sidebar: var(--surface-container-low);
+    --sidebar-foreground: var(--on-surface);
+    --sidebar-accent: var(--surface-container-high);
+    --sidebar-accent-foreground: var(--on-surface);
+    --sidebar-border: var(--outline-variant);
   }
 
   /* --- OCEAN PRO (Light Professional) --- */
-  /* Trustworthy, clean, and calm medical-grade aesthetic */
   .theme-blue-light {
     --background: #f8fafc; /* Slate 50 */
     --on-background: #0f172a;
@@ -162,24 +262,50 @@
     --surface-container: #e2e8f0; /* Slate 200 */
     --surface-container-high: #cbd5e0; /* Slate 300 */
     --surface-container-highest: #94a3b8; /* Slate 400 */
-    --on-surface-variant: #1e293b; /* Darkened for better contrast (Slate 800) */
+    --on-surface-variant: #1e293b;
     --primary: #0284c7; /* Professional Blue */
     --on-primary: #ffffff;
-    --secondary: #4338ca; /* Darkened Indigo */
-    --on-secondary: #ffffff;
+    --primary-container: #38bdf8;
+    --on-primary-container: #020617;
+    --brand-secondary: #4338ca; /* Darkened Indigo */
+    --on-brand-secondary: #ffffff;
     --tertiary: #0f172a;
+    --error: #e11d48;
+    --on-error: #ffffff;
     --outline: #e2e8f0;
     --outline-variant: #f1f5f9;
 
-    /* Chart Colors */
     --chart-grid: #e2e8f0;
     --chart-text: #64748b;
     --chart-recovery: #0284c7;
     --chart-strain: #e11d48;
+
+    /* shadcn bridge */
+    --foreground: var(--on-surface);
+    --card: var(--surface-container-low);
+    --card-foreground: var(--on-surface);
+    --popover: var(--surface-container);
+    --popover-foreground: var(--on-surface);
+    --primary-foreground: var(--on-primary);
+    --secondary: var(--surface-container-highest);
+    --secondary-foreground: var(--on-surface);
+    --muted: var(--surface-container);
+    --muted-foreground: var(--on-surface-variant);
+    --accent: var(--surface-container-high);
+    --accent-foreground: var(--on-surface);
+    --destructive: var(--error);
+    --destructive-foreground: var(--on-error);
+    --border: var(--outline-variant);
+    --input: var(--outline-variant);
+    --ring: var(--primary);
+    --sidebar: var(--surface-container-low);
+    --sidebar-foreground: var(--on-surface);
+    --sidebar-accent: var(--surface-container-high);
+    --sidebar-accent-foreground: var(--on-surface);
+    --sidebar-border: var(--outline-variant);
   }
-  
+
   /* --- EMBER PRO (Dark Creative) --- */
-  /* Bold, energetic, yet grounded for high-achievers */
   .theme-orange-dark {
     --background: #0c0a09; /* Stone 950 */
     --on-background: #fafaf9;
@@ -192,21 +318,47 @@
     --on-surface-variant: #a8a29e; /* Stone 400 */
     --primary: #fb923c; /* Ember Orange */
     --on-primary: #0c0a09;
-    --secondary: #fcd34d; /* Amber */
-    --on-secondary: #0c0a09;
+    --primary-container: #1c1917;
+    --on-primary-container: #fb923c;
+    --brand-secondary: #fcd34d; /* Amber */
+    --on-brand-secondary: #0c0a09;
     --tertiary: #ffffff;
+    --error: #ef4444;
+    --on-error: #ffffff;
     --outline: #44403c;
     --outline-variant: #292524;
 
-    /* Chart Colors */
     --chart-grid: #292524;
     --chart-text: #78716c;
     --chart-recovery: #fb923c;
     --chart-strain: #ef4444;
+
+    /* shadcn bridge */
+    --foreground: var(--on-surface);
+    --card: var(--surface-container-low);
+    --card-foreground: var(--on-surface);
+    --popover: var(--surface-container);
+    --popover-foreground: var(--on-surface);
+    --primary-foreground: var(--on-primary);
+    --secondary: var(--surface-container-highest);
+    --secondary-foreground: var(--on-surface);
+    --muted: var(--surface-container);
+    --muted-foreground: var(--on-surface-variant);
+    --accent: var(--surface-container-high);
+    --accent-foreground: var(--on-surface);
+    --destructive: var(--error);
+    --destructive-foreground: var(--on-error);
+    --border: var(--outline-variant);
+    --input: var(--outline-variant);
+    --ring: var(--primary);
+    --sidebar: var(--surface-container-low);
+    --sidebar-foreground: var(--on-surface);
+    --sidebar-accent: var(--surface-container-high);
+    --sidebar-accent-foreground: var(--on-surface);
+    --sidebar-border: var(--outline-variant);
   }
-  
+
   /* --- EMBER PRO (Light Organic) --- */
-  /* Warm, approachable, and high-end lifestyle feel */
   .theme-orange-light {
     --background: #fafaf9; /* Stone 50 */
     --on-background: #1c1917;
@@ -216,20 +368,47 @@
     --surface-container: #e7e5e4; /* Stone 200 */
     --surface-container-high: #d6d3d1; /* Stone 300 */
     --surface-container-highest: #a8a29e; /* Stone 400 */
-    --on-surface-variant: #292524; /* Darkened for better contrast (Stone 800) */
+    --on-surface-variant: #292524;
     --primary: #ea580c; /* Burnt Orange */
     --on-primary: #ffffff;
-    --secondary: #b45309; /* Darkened Amber */
-    --on-secondary: #ffffff;
+    --primary-container: #fb923c;
+    --on-primary-container: #0c0a09;
+    --brand-secondary: #b45309; /* Darkened Amber */
+    --on-brand-secondary: #ffffff;
     --tertiary: #1c1917;
+    --error: #dc2626;
+    --on-error: #ffffff;
     --outline: #e7e5e4;
     --outline-variant: #f5f5f4;
 
-    /* Chart Colors */
     --chart-grid: #e7e5e4;
     --chart-text: #78716c;
     --chart-recovery: #ea580c;
     --chart-strain: #dc2626;
+
+    /* shadcn bridge */
+    --foreground: var(--on-surface);
+    --card: var(--surface-container-low);
+    --card-foreground: var(--on-surface);
+    --popover: var(--surface-container);
+    --popover-foreground: var(--on-surface);
+    --primary-foreground: var(--on-primary);
+    --secondary: var(--surface-container-highest);
+    --secondary-foreground: var(--on-surface);
+    --muted: var(--surface-container);
+    --muted-foreground: var(--on-surface-variant);
+    --accent: var(--surface-container-high);
+    --accent-foreground: var(--on-surface);
+    --destructive: var(--error);
+    --destructive-foreground: var(--on-error);
+    --border: var(--outline-variant);
+    --input: var(--outline-variant);
+    --ring: var(--primary);
+    --sidebar: var(--surface-container-low);
+    --sidebar-foreground: var(--on-surface);
+    --sidebar-accent: var(--surface-container-high);
+    --sidebar-accent-foreground: var(--on-surface);
+    --sidebar-border: var(--outline-variant);
   }
 
   body {

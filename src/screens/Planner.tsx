@@ -74,7 +74,7 @@ export default function Planner({ onOpenShoppingList, onAddMeal, mealPlan }: { o
               </div>
               <div className="flex flex-col items-end">
                 <span className="text-on-surface-variant">{t.home.protein}</span>
-                <span className="text-secondary font-bold text-sm">{totalPro}{t.common.g}</span>
+                <span className="text-brand-secondary font-bold text-sm">{totalPro}{t.common.g}</span>
               </div>
             </div>
           </div>
@@ -124,7 +124,7 @@ export default function Planner({ onOpenShoppingList, onAddMeal, mealPlan }: { o
                 <div className="flex items-center gap-4 sm:text-right">
                   <div className="flex gap-4 text-xs font-label tracking-widest uppercase bg-surface-container-highest px-4 py-2 rounded-lg">
                     <span className="text-primary font-bold">{meal.cal} {t.common.kcal}</span>
-                    <span className="text-secondary font-bold">{meal.pro || 0}{t.common.g} P</span>
+                    <span className="text-brand-secondary font-bold">{meal.pro || 0}{t.common.g} P</span>
                   </div>
                   <ChevronRight className="w-5 h-5 text-on-surface-variant group-hover:text-primary transition-colors hidden sm:block" />
                 </div>

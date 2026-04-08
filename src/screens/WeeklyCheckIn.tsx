@@ -103,7 +103,7 @@ export default function WeeklyCheckIn({ onBack }: { onBack: () => void }) {
             </div>
             <div className="bg-surface-container-low border border-outline-variant/20 rounded-sm p-4 text-center">
               <span className="font-label text-[9px] uppercase tracking-widest text-on-surface-variant block mb-1">Registros</span>
-              <span className="font-headline font-black text-2xl text-secondary">{thisWeekLogs.length}</span>
+              <span className="font-headline font-black text-2xl text-brand-secondary">{thisWeekLogs.length}</span>
               <span className="font-label text-[9px] uppercase tracking-widest text-on-surface-variant block mt-1">entradas RF</span>
             </div>
             <div className="bg-surface-container-low border border-outline-variant/20 rounded-sm p-4 text-center">
@@ -140,7 +140,7 @@ export default function WeeklyCheckIn({ onBack }: { onBack: () => void }) {
               />
             </div>
             <div>
-              <label className="font-headline text-xs font-bold uppercase tracking-widest text-secondary block mb-2">
+              <label className="font-headline text-xs font-bold uppercase tracking-widest text-brand-secondary block mb-2">
                 🎯 Enfoque de la próxima semana
               </label>
               <textarea
@@ -197,7 +197,7 @@ export default function WeeklyCheckIn({ onBack }: { onBack: () => void }) {
                 </div>
                 <div className="bg-surface-container-low border border-outline-variant/20 rounded-sm p-3 text-center">
                   <span className="font-label text-[9px] uppercase tracking-widest text-on-surface-variant block">Registros</span>
-                  <span className="font-headline font-black text-xl text-secondary">{pastEntry.mealsLogged}</span>
+                  <span className="font-headline font-black text-xl text-brand-secondary">{pastEntry.mealsLogged}</span>
                 </div>
                 <div className="bg-surface-container-low border border-outline-variant/20 rounded-sm p-3 text-center">
                   <span className="font-label text-[9px] uppercase tracking-widest text-on-surface-variant block">Días</span>
@@ -218,8 +218,8 @@ export default function WeeklyCheckIn({ onBack }: { onBack: () => void }) {
                 </div>
               )}
               {pastEntry.focusNextWeek && (
-                <div className="bg-surface-container-low border border-secondary/20 rounded-sm p-4">
-                  <p className="font-label text-[9px] uppercase tracking-widest text-secondary mb-2">🎯 Foco</p>
+                <div className="bg-surface-container-low border border-brand-secondary/20 rounded-sm p-4">
+                  <p className="font-label text-[9px] uppercase tracking-widest text-brand-secondary mb-2">🎯 Foco</p>
                   <p className="text-sm text-on-surface font-body leading-relaxed">{pastEntry.focusNextWeek}</p>
                 </div>
               )}

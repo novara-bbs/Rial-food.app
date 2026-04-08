@@ -152,7 +152,7 @@ export default function AddMeal({ onBack, onLogMeal, dailyMacros, savedRecipes =
               <span className="text-tertiary">{Math.max(0, macros.target.carbs - macros.consumed.carbs)}g restantes</span>
             </div>
             <div className="h-2 bg-surface-container-highest rounded-full overflow-hidden">
-              <div className="h-full bg-secondary rounded-full transition-all duration-1000" style={{ width: `${getPercentage(macros.consumed.carbs, macros.target.carbs)}%` }}></div>
+              <div className="h-full bg-brand-secondary rounded-full transition-all duration-1000" style={{ width: `${getPercentage(macros.consumed.carbs, macros.target.carbs)}%` }}></div>
             </div>
           </div>
         </div>

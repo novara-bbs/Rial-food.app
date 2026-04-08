@@ -1,10 +1,15 @@
-import { X, Utensils, Activity, BookOpen, MessageSquare, Link, Camera } from 'lucide-react';
+import { Utensils, Activity, BookOpen, MessageSquare, Link, Camera } from 'lucide-react';
 import { useI18n } from '../i18n';
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from '@/components/ui/dialog';
+import { Button } from '@/components/ui/button';
 
 export default function CreateModal({ isOpen, onClose, onSelect }: { isOpen: boolean, onClose: () => void, onSelect: (action: string) => void }) {
   const { t } = useI18n();
-
-  if (!isOpen) return null;
 
   const actions = [
     { id: 'log-meal', label: t.fab.logMeal, icon: Utensils, color: 'primary' },
@@ -16,14 +21,25 @@ export default function CreateModal({ isOpen, onClose, onSelect }: { isOpen: boo
   ];
 
   return (
-    <div className="fixed inset-0 z-[100] flex items-end md:items-center justify-center bg-background/80 backdrop-blur-sm p-4 animate-in fade-in duration-200" onClick={onClose}>
-      <div className="bg-surface-container w-full max-w-md rounded-t-2xl md:rounded-2xl border border-outline-variant/20 shadow-2xl overflow-hidden animate-in slide-in-from-bottom-8 md:slide-in-from-bottom-0 md:zoom-in-95 duration-300" onClick={e => e.stopPropagation()}>
-        <div className="p-4 border-b border-outline-variant/10 flex justify-between items-center">
-          <h3 className="font-headline text-lg font-bold uppercase text-tertiary tracking-tight">{t.nav.create}</h3>
-          <button onClick={onClose} className="w-8 h-8 rounded-full bg-surface-container-highest flex items-center justify-center text-on-surface-variant hover:text-primary transition-colors">
-            <X className="w-4 h-4" />
-          </button>
-        </div>
+    <Dialog open={isOpen} onOpenChange={(open) => { if (!open) onClose(); }}>
+      <DialogContent
+        showCloseButton={false}
+        className="bg-surface-container w-full max-w-md rounded-t-2xl md:rounded-2xl border border-outline-variant/20 shadow-2xl p-0 gap-0"
+      >
+        <DialogHeader className="p-4 border-b border-outline-variant/10 flex-row justify-between items-center space-y-0">
+          <DialogTitle className="font-headline text-lg font-bold uppercase text-tertiary tracking-tight">
+            {t.nav.create}
+          </DialogTitle>
+          <Button
+            variant="ghost"
+            size="icon-sm"
+            onClick={onClose}
+            className="rounded-full bg-surface-container-highest text-on-surface-variant hover:text-primary"
+          >
+            <span className="sr-only">Close</span>
+            &times;
+          </Button>
+        </DialogHeader>
         <div className="p-4 grid grid-cols-2 gap-3">
           {actions.map(action => (
             <button
@@ -38,7 +54,7 @@ export default function CreateModal({ isOpen, onClose, onSelect }: { isOpen: boo
             </button>
           ))}
         </div>
-      </div>
-    </div>
+      </DialogContent>
+    </Dialog>
   );
 }

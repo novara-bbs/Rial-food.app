@@ -89,15 +89,15 @@ export default function Community({ communityPosts = [], onAddComment }: { commu
               </button>
             </div>
             
-            <div className="bg-background p-4 rounded-sm border border-outline-variant/20 flex justify-between items-center group cursor-pointer hover:border-secondary/50 transition-colors">
+            <div className="bg-background p-4 rounded-sm border border-outline-variant/20 flex justify-between items-center group cursor-pointer hover:border-brand-secondary/50 transition-colors">
               <div>
                 <h4 className="font-headline font-bold text-sm uppercase text-tertiary">Reto de Hidratación: 3L/Día</h4>
                 <p className="text-[9px] text-on-surface-variant uppercase tracking-widest mt-1">850 Participantes • En Curso</p>
                 <div className="h-1 w-32 bg-surface-container-highest mt-3 rounded-full overflow-hidden">
-                  <div className="h-full bg-secondary" style={{ width: '40%' }}></div>
+                  <div className="h-full bg-brand-secondary" style={{ width: '40%' }}></div>
                 </div>
               </div>
-              <button className="bg-secondary/10 text-secondary border border-secondary/20 px-3 py-1.5 rounded-sm font-label text-[9px] font-bold tracking-widest uppercase hover:bg-secondary hover:text-on-secondary transition-all">
+              <button className="bg-brand-secondary/10 text-brand-secondary border border-brand-secondary/20 px-3 py-1.5 rounded-sm font-label text-[9px] font-bold tracking-widest uppercase hover:bg-brand-secondary hover:text-on-secondary transition-all">
                 Unirse
               </button>
             </div>
@@ -135,9 +135,9 @@ export default function Community({ communityPosts = [], onAddComment }: { commu
                     <span className="font-label text-xs tracking-widest text-primary uppercase mt-1">Recuperación</span>
                   </div>
                   <div className="flex flex-col items-center justify-center text-center p-2 border-l border-outline-variant/20">
-                    <TrendingUp className="w-6 h-6 text-secondary mb-2" />
+                    <TrendingUp className="w-6 h-6 text-brand-secondary mb-2" />
                     <span className="font-headline text-2xl font-bold text-tertiary">{post.performance.strain}</span>
-                    <span className="font-label text-xs tracking-widest text-secondary uppercase mt-1">Esfuerzo</span>
+                    <span className="font-label text-xs tracking-widest text-brand-secondary uppercase mt-1">Esfuerzo</span>
                   </div>
                 </div>
               )}
