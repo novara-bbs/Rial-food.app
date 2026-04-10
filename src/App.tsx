@@ -7,10 +7,9 @@ import GlobalHeader from './components/GlobalHeader';
 import ErrorBoundary from './components/ErrorBoundary';
 import { Sparkles } from 'lucide-react';
 import { useTheme } from './contexts/ThemeContext';
-import { useI18n } from './i18n';
 import { useNavigation } from './contexts/NavigationContext';
 import { useAppState } from './contexts/AppStateContext';
-import { Toaster, toast } from 'sonner';
+import { Toaster } from 'sonner';
 import { screens } from './config/routes';
 import { getFoodInsights } from './features/wellness/utils/correlations';
 import type { DailyArchive } from './hooks/useDailyReset';
@@ -40,7 +39,6 @@ function LoadingSkeleton() {
 }
 
 export default function App() {
-  const { t } = useI18n();
   const { theme } = useTheme();
   const { currentScreen, previousScreen, navigateTo } = useNavigation();
   const {
@@ -50,16 +48,14 @@ export default function App() {
     dailyMacros, setDailyMacros,
     hydration, setHydration,
     movement, setMovement,
-    dailyGoal, setDailyGoal,
     savedRecipes, setSavedRecipes,
     mealPlan, setMealPlan, shoppingList, setShoppingList,
     communityPosts, toleranceLogs, realFeelLogs,
     checkInStatus, selectedRecipe,
     targetPlanDay, setTargetPlanDay, dictionary,
     dailyLog, setDailyLog,
-    weightHistory, setWeightHistory, nutritionHistory,
-    selectedCreatorId, setSelectedCreatorId,
-    selectedChallengeId, setSelectedChallengeId,
+    weightHistory, nutritionHistory,
+    selectedChallengeId,
     isPro: isProState, setIsPro,
     showAIBot: showAIBotState, setShowAIBot,
     handleLogMeal, handleLogMealNow,
