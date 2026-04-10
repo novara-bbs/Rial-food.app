@@ -56,7 +56,7 @@ export default function AICoach({
     setIsLoading(true);
 
     try {
-      const ai = getGeminiClient();
+      const ai = await getGeminiClient();
       const systemInstruction = buildSystemPrompt(memoryContext, locale);
 
       const response = await ai.models.generateContent({

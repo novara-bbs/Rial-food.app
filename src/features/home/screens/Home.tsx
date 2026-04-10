@@ -206,7 +206,7 @@ export default function Home({
           </h1>
         </div>
         <div className="flex items-center gap-2">
-          <RealScoreBadge avgVitality={avgVitality} trend={vitalityTrend} onTap={() => onNavigateToProgress?.()} />
+          {!isSimpleMode && <RealScoreBadge avgVitality={avgVitality} trend={vitalityTrend} onTap={() => onNavigateToProgress?.()} />}
           <div className="flex items-center gap-1.5 bg-brand-secondary/10 text-brand-secondary px-3 py-1.5 rounded-full border border-brand-secondary/20 shadow-sm">
             <Flame className="w-4 h-4" />
             <span className="font-bold text-[10px] uppercase tracking-widest">{t.home.streak}: {streakDays} {t.home.days}</span>
@@ -264,14 +264,16 @@ export default function Home({
       {/* 3. Nutrition Hero — above the fold */}
       <NutritionHero dailyMacros={dailyMacros} mode={isSimpleMode ? 'simple' : 'detailed'} exerciseCalories={exerciseCalories} />
 
-      {/* 4. Weekly Mini Dashboard */}
-      <WeeklyMiniDash
-        calAvg={weeklyProgress.calAvg}
-        proteinHitDays={weeklyProgress.proteinHitDays}
-        totalDays={weeklyProgress.totalDays}
-        weekDelta={weeklyProgress.weekDelta}
-        onNavigateToProgress={() => onNavigateToProgress?.()}
-      />
+      {/* 4. Weekly Mini Dashboard — advanced mode only */}
+      {!isSimpleMode && (
+        <WeeklyMiniDash
+          calAvg={weeklyProgress.calAvg}
+          proteinHitDays={weeklyProgress.proteinHitDays}
+          totalDays={weeklyProgress.totalDays}
+          weekDelta={weeklyProgress.weekDelta}
+          onNavigateToProgress={() => onNavigateToProgress?.()}
+        />
+      )}
 
       {/* 5. Primary Actions — Log Meal + Check-in */}
       <div className="grid grid-cols-2 gap-4">

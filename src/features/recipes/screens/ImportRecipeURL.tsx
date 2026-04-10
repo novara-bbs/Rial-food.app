@@ -59,7 +59,7 @@ export default function ImportRecipeURL({ onBack, onImport }: { onBack: () => vo
         await new Promise(r => setTimeout(r, 1500));
         data = buildFallback(url);
       } else {
-        const ai = getGeminiClient();
+        const ai = await getGeminiClient();
         const response = await ai.models.generateContent({
           model: 'gemini-2.0-flash',
           contents: EXTRACTION_PROMPT + url,

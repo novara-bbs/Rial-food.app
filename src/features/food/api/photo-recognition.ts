@@ -63,7 +63,7 @@ export async function analyzePhotoMeal(
     ];
   }
 
-  const ai = getGeminiClient();
+  const ai = await getGeminiClient();
   const response = await ai.models.generateContent({
     model: 'gemini-2.0-flash',
     contents: [

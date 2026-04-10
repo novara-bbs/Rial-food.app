@@ -1,11 +1,11 @@
-import { GoogleGenAI } from '@google/genai';
 import { GEMINI_API_KEY } from '../../../config/env';
 
-/** Singleton Gemini client — reused across calls. */
-let client: GoogleGenAI | null = null;
+/** Singleton Gemini client — loaded dynamically to avoid bundling. */
+let client: any = null;
 
-export function getGeminiClient(): GoogleGenAI {
+export async function getGeminiClient(): Promise<any> {
   if (!client) {
+    const { GoogleGenAI } = await import('@google/genai');
     client = new GoogleGenAI({ apiKey: GEMINI_API_KEY });
   }
   return client;
