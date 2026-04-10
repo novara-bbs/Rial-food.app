@@ -27,6 +27,16 @@ export default defineConfig(({mode}) => {
     build: {
       outDir: 'dist',
       sourcemap: true,
+      rollupOptions: {
+        output: {
+          manualChunks: {
+            'vendor-react': ['react', 'react-dom'],
+            'vendor-ui': ['recharts', 'sonner', 'react-markdown'],
+            'vendor-icons': ['lucide-react'],
+          },
+        },
+      },
+      chunkSizeWarningLimit: 600,
     },
   };
 });
