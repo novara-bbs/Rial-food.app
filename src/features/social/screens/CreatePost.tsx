@@ -1,0 +1,136 @@
+import { ArrowLeft, Send, Activity, TrendingUp, ChefHat, X } from 'lucide-react';
+import { useState } from 'react';
+import { useI18n } from '../../../i18n';
+import { useAppState } from '../../../contexts/AppStateContext';
+import ImagePicker from '../components/ImagePicker';
+import RecipePicker from '../components/RecipePicker';
+
+export default function CreatePost({ onBack, onCreatePost }: { onBack: () => void, onCreatePost?: (content: string, performance?: any, options?: { images?: string[]; recipe?: any; hashtags?: string[] }) => void }) {
+  const { t } = useI18n();
+  const { savedRecipes } = useAppState();
+  const [content, setContent] = useState('');
+  const [attachPerformance, setAttachPerformance] = useState(false);
+  const [image, setImage] = useState<string | null>(null);
+  const [attachedRecipe, setAttachedRecipe] = useState<any>(null);
+  const [showRecipePicker, setShowRecipePicker] = useState(false);
+  const userPerformance = { recovery: 82, strain: 14.5 };
+
+  const handlePublish = () => {
+    onCreatePost?.(
+      content,
+      attachPerformance ? userPerformance : undefined,
+      {
+        images: image ? [image] : [],
+        recipe: attachedRecipe,
+      }
+    );
+  };
+
+  return (
+    <div className="px-6 max-w-2xl mx-auto space-y-6 pb-24">
+      <header className="flex items-center justify-between mb-6">
+        <div className="flex items-center gap-4">
+          <button onClick={onBack} className="w-10 h-10 bg-surface-container-low rounded-full flex items-center justify-center text-tertiary hover:bg-surface-container-highest transition-colors shrink-0">
+            <ArrowLeft className="w-5 h-5" />
+          </button>
+          <div>
+            <span className="font-label text-xs tracking-[0.2em] text-primary uppercase block">{t.createPost.community}</span>
+            <h2 className="font-headline text-2xl font-bold tracking-tighter uppercase text-tertiary">{t.createPost.title}</h2>
+          </div>
+        </div>
+        <button
+          onClick={handlePublish}
+          disabled={!content.trim()}
+          className="bg-primary text-on-primary px-4 py-2 rounded-sm font-label text-xs font-bold tracking-widest uppercase flex items-center gap-2 hover:bg-primary-container transition-colors disabled:opacity-50"
+        >
+          <Send className="w-4 h-4" /> {t.common.publish}
+        </button>
+      </header>
+
+      <div className="bg-surface-container-low rounded-sm border border-outline-variant/20 overflow-hidden">
+        <textarea
+          value={content}
+          onChange={(e) => setContent(e.target.value)}
+          placeholder={t.createPost.placeholder}
+          className="w-full bg-transparent p-6 font-body text-lg text-tertiary focus:outline-none placeholder:text-outline-variant min-h-[200px] resize-none"
+        />
+
+        {/* Image preview */}
+        {image && (
+          <div className="px-6 pb-4">
+            <div className="relative rounded-sm overflow-hidden border border-outline-variant/20">
+              <img src={image} alt="Preview" className="w-full max-h-48 object-cover" />
+              <button onClick={() => setImage(null)} className="absolute top-2 right-2 w-7 h-7 bg-surface-container-highest/90 rounded-full flex items-center justify-center text-on-surface-variant hover:text-error transition-colors">
+                <X className="w-4 h-4" />
+              </button>
+            </div>
+          </div>
+        )}
+
+        {/* Attached recipe preview */}
+        {attachedRecipe && (
+          <div className="px-6 pb-4">
+            <div className="bg-background rounded-sm border border-primary/30 p-3 flex items-center gap-3 relative">
+              <button onClick={() => setAttachedRecipe(null)} className="absolute -top-2 -right-2 w-6 h-6 bg-error text-on-error rounded-full flex items-center justify-center text-[10px] font-bold shadow-lg">X</button>
+              {attachedRecipe.img && (
+                <img src={attachedRecipe.img} alt={attachedRecipe.title} className="w-12 h-12 rounded-sm object-cover" referrerPolicy="no-referrer" />
+              )}
+              <div>
+                <span className="font-headline font-bold text-xs uppercase text-tertiary">{attachedRecipe.title}</span>
+                <span className="font-label text-[9px] tracking-widest text-on-surface-variant block mt-0.5">{attachedRecipe.cal} kcal · {attachedRecipe.pro}g P</span>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Performance preview */}
+        {attachPerformance && (
+          <div className="px-6 pb-6">
+            <div className="bg-background rounded-sm border border-primary/30 p-4 grid grid-cols-2 gap-4 relative">
+              <button onClick={() => setAttachPerformance(false)} className="absolute -top-2 -right-2 w-6 h-6 bg-error text-on-error rounded-full flex items-center justify-center text-[10px] font-bold shadow-lg">X</button>
+              <div className="flex flex-col items-center justify-center text-center p-2">
+                <Activity className="w-5 h-5 text-primary mb-1" />
+                <span className="font-headline text-xl font-bold text-tertiary">{userPerformance.recovery}%</span>
+                <span className="font-label text-[10px] tracking-widest text-primary uppercase">{t.community.recovery}</span>
+              </div>
+              <div className="flex flex-col items-center justify-center text-center p-2 border-l border-outline-variant/20">
+                <TrendingUp className="w-5 h-5 text-brand-secondary mb-1" />
+                <span className="font-headline text-xl font-bold text-tertiary">{userPerformance.strain}</span>
+                <span className="font-label text-[10px] tracking-widest text-brand-secondary uppercase">{t.community.strain}</span>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Action bar */}
+        <div className="border-t border-outline-variant/10 p-4 bg-surface-container-highest flex items-center gap-4">
+          <ImagePicker image={null} onImageChange={(base64) => base64 && setImage(base64)} />
+          <button
+            onClick={() => setShowRecipePicker(true)}
+            className={`w-10 h-10 rounded-full flex items-center justify-center transition-colors ${attachedRecipe ? 'bg-primary text-on-primary' : 'bg-surface-container-low text-on-surface-variant hover:text-primary hover:bg-primary/10'}`}
+            aria-label={t.createPost.addRecipe}
+          >
+            <ChefHat className="w-5 h-5" />
+          </button>
+          <button
+            onClick={() => setAttachPerformance(!attachPerformance)}
+            aria-label={t.createPost.includePerformance}
+            className={`w-10 h-10 rounded-full flex items-center justify-center transition-colors ${attachPerformance ? 'bg-primary text-on-primary' : 'bg-surface-container-low text-on-surface-variant hover:text-primary hover:bg-primary/10'}`}
+          >
+            <Activity className="w-5 h-5" />
+          </button>
+          <div className="flex-1" />
+          <span className="font-label text-xs font-bold tracking-widest text-outline-variant uppercase">{content.length} / 500</span>
+        </div>
+      </div>
+
+      {showRecipePicker && (
+        <RecipePicker
+          recipes={savedRecipes}
+          onSelect={(recipe) => { setAttachedRecipe(recipe); setShowRecipePicker(false); }}
+          onClose={() => setShowRecipePicker(false)}
+        />
+      )}
+    </div>
+  );
+}

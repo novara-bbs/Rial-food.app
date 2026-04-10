@@ -22,12 +22,10 @@
     "baseUrl": ".",
     "paths": {
       "@/*": ["./src/*"],
+      "@features/*": ["./src/features/*"],
       "@components/*": ["./src/components/*"],
-      "@screens/*": ["./src/screens/*"],
-      "@utils/*": ["./src/utils/*"],
       "@hooks/*": ["./src/hooks/*"],
-      "@i18n/*": ["./src/i18n/*"],
-      "@data/*": ["./src/data/*"]
+      "@i18n/*": ["./src/i18n/*"]
     }
   },
   "include": ["src/**/*", "vite-env.d.ts"],

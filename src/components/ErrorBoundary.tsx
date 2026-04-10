@@ -1,4 +1,5 @@
 import React from 'react';
+import { AlertTriangle } from 'lucide-react';
 
 interface Props {
   children: React.ReactNode;
@@ -11,10 +12,7 @@ interface State {
 }
 
 export default class ErrorBoundary extends React.Component<Props, State> {
-  constructor(props: Props) {
-    super(props);
-    this.state = { hasError: false, error: null };
-  }
+  state: State = { hasError: false, error: null };
 
   static getDerivedStateFromError(error: Error): State {
     return { hasError: true, error };
@@ -29,7 +27,7 @@ export default class ErrorBoundary extends React.Component<Props, State> {
       if (this.props.fallback) return this.props.fallback;
       return (
         <div className="flex flex-col items-center justify-center py-20 px-6 text-center space-y-4">
-          <div className="text-4xl">⚠️</div>
+          <AlertTriangle className="w-10 h-10 text-brand-secondary" />
           <h2 className="font-headline text-xl font-bold uppercase tracking-tighter text-tertiary">
             Algo salió mal
           </h2>

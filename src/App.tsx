@@ -1,5 +1,5 @@
-import React, { useState, Suspense } from 'react';
-import Onboarding from './components/Onboarding';
+import { useState, useMemo, Suspense } from 'react';
+import Onboarding from './features/profile/components/Onboarding';
 import Sidebar from './components/Sidebar';
 import BottomNav from './components/BottomNav';
 import CreateModal from './components/CreateModal';
@@ -11,29 +11,19 @@ import { useI18n } from './i18n';
 import { useNavigation } from './contexts/NavigationContext';
 import { useAppState } from './contexts/AppStateContext';
 import { Toaster, toast } from 'sonner';
+import { screens } from './config/routes';
+import { getFoodInsights } from './features/wellness/utils/correlations';
+import type { DailyArchive } from './hooks/useDailyReset';
+import type { WeightEntry } from './contexts/AppStateContext';
 
-// Lazy-loaded screens
-const Home = React.lazy(() => import('./screens/Home'));
-const Explore = React.lazy(() => import('./screens/Explore'));
-const Cocina = React.lazy(() => import('./screens/Cocina'));
-const More = React.lazy(() => import('./screens/More'));
-const RecipeDetail = React.lazy(() => import('./screens/RecipeDetail'));
-const AddMeal = React.lazy(() => import('./screens/AddMeal'));
-const AddTolerance = React.lazy(() => import('./screens/AddTolerance'));
-const DailyCheckIn = React.lazy(() => import('./screens/DailyCheckIn'));
-const CreateRecipe = React.lazy(() => import('./screens/CreateRecipe'));
-const CreatePost = React.lazy(() => import('./screens/CreatePost'));
-const AICoach = React.lazy(() => import('./screens/AICoach'));
-const RealFeelDiary = React.lazy(() => import('./screens/RealFeelDiary'));
-const FastingTimer = React.lazy(() => import('./screens/FastingTimer'));
-const ImportRecipeURL = React.lazy(() => import('./screens/ImportRecipeURL'));
-const Settings = React.lazy(() => import('./screens/Settings'));
-const Profile = React.lazy(() => import('./screens/Profile'));
-const Pantry = React.lazy(() => import('./screens/Pantry'));
-const WeeklyCheckIn = React.lazy(() => import('./screens/WeeklyCheckIn'));
-const RialPlus = React.lazy(() => import('./screens/RialPlus'));
-const CreatorVerification = React.lazy(() => import('./screens/CreatorVerification'));
-const CreatorDashboard = React.lazy(() => import('./screens/CreatorDashboard'));
+const {
+  Home, Explore, Cocina, More, RecipeDetail, AddMeal, AddTolerance,
+  DailyCheckIn, CreateRecipe, CreatePost, AICoach, RealFeelDiary,
+  FastingTimer, ImportRecipeURL, Settings, Profile, Pantry,
+  WeeklyCheckIn, RialPlus, CreatorVerification, CreatorDashboard, FoodDictionary,
+  Challenges, CreatorProfile, PostDetail, StoryViewer, CreateStory,
+  Notifications: NotificationsScreen, ChallengeDetail, Progress,
+} = screens;
 
 function LoadingSkeleton() {
   return (
@@ -62,10 +52,14 @@ export default function App() {
     movement, setMovement,
     dailyGoal, setDailyGoal,
     savedRecipes, setSavedRecipes,
-    mealPlan, shoppingList, setShoppingList,
+    mealPlan, setMealPlan, shoppingList, setShoppingList,
     communityPosts, toleranceLogs, realFeelLogs,
     checkInStatus, selectedRecipe,
     targetPlanDay, setTargetPlanDay, dictionary,
+    dailyLog, setDailyLog,
+    weightHistory, setWeightHistory, nutritionHistory,
+    selectedCreatorId, setSelectedCreatorId,
+    selectedChallengeId, setSelectedChallengeId,
     isPro: isProState, setIsPro,
     showAIBot: showAIBotState, setShowAIBot,
     handleLogMeal, handleLogMealNow,
@@ -76,6 +70,40 @@ export default function App() {
   } = useAppState();
 
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
+
+  const aiCoachMemory = useMemo(() => {
+    const weekAgoDate = new Date(Date.now() - 7 * 86_400_000).toISOString().slice(0, 10);
+    const recentHistory = (nutritionHistory as DailyArchive[]).filter(e => e.date >= weekAgoDate);
+    const weeklyNutritionAvg = recentHistory.length > 0
+      ? {
+          cal: Math.round(recentHistory.reduce((s, e) => s + (e.macros?.consumed?.cal || 0), 0) / recentHistory.length),
+          pro: Math.round(recentHistory.reduce((s, e) => s + (e.macros?.consumed?.pro || 0), 0) / recentHistory.length),
+          carbs: Math.round(recentHistory.reduce((s, e) => s + (e.macros?.consumed?.carbs || 0), 0) / recentHistory.length),
+          fats: Math.round(recentHistory.reduce((s, e) => s + (e.macros?.consumed?.fats || 0), 0) / recentHistory.length),
+        }
+      : undefined;
+
+    const sortedWeights = [...(weightHistory as WeightEntry[])].sort((a, b) => a.date.localeCompare(b.date));
+    const weightTrend = sortedWeights.length > 0
+      ? (() => {
+          const cur = sortedWeights[sortedWeights.length - 1].kg;
+          const weekAgoEntry = sortedWeights.find(e => e.date <= weekAgoDate);
+          const delta = weekAgoEntry ? +(cur - weekAgoEntry.kg).toFixed(1) : 0;
+          return { current: cur, delta7d: delta, ratePerWeek: delta };
+        })()
+      : undefined;
+
+    return {
+      dailyMacros, checkInStatus, toleranceLogs, savedRecipes,
+      userGoal: userProfile.goal,
+      intolerances: userProfile.intolerances || [],
+      foodDislikes: (userProfile.foodDislikes || []).map((id: string) => dictionary.find(d => d.id === id)?.name || id),
+      recentFoodInsights: getFoodInsights(realFeelLogs, dictionary).slice(0, 5).map(i => ({ name: i.ingredientName, tone: i.tone, avgLevel: i.avgLevel })),
+      weeklyNutritionAvg,
+      weightTrend,
+      loggingStreak: dailyLog.length > 0 ? 1 : 0,
+    };
+  }, [dailyMacros, checkInStatus, toleranceLogs, savedRecipes, userProfile, dictionary, realFeelLogs, nutritionHistory, weightHistory, dailyLog]);
 
   const handleCreateAction = (action: string) => {
     setIsCreateModalOpen(false);
@@ -88,8 +116,8 @@ export default function App() {
 
   const renderScreen = () => {
     switch (currentScreen) {
-      case 'home': return <Home onNavigateToRecipe={navigateToRecipe} onCheckIn={handleCheckIn} onAddMeal={() => navigateTo('add-meal')} onNavigateToPlan={() => navigateTo('cocina')} onNavigateToExplore={() => navigateTo('explore')} dailyMacros={dailyMacros} checkInStatus={checkInStatus} onLogMealNow={handleLogMealNow} mealPlan={mealPlan} hydration={hydration} setHydration={setHydration} movement={movement} setMovement={setMovement} dailyGoal={dailyGoal} setDailyGoal={setDailyGoal} userProfile={userProfile} realFeelLogs={realFeelLogs} onRealFeelLog={handleRealFeelLog} />;
-      case 'cocina': return <Cocina onAddMeal={(dayIndex) => { setTargetPlanDay(dayIndex); navigateTo('add-meal'); }} onCreateRecipe={() => navigateTo('create-recipe')} onNavigateToRecipe={navigateToRecipe} savedRecipes={savedRecipes} setSavedRecipes={setSavedRecipes} mealPlan={mealPlan} shoppingList={shoppingList} setShoppingList={setShoppingList} isPro={isPro} onImportUrl={() => navigateTo('import-url')} />;
+      case 'home': return <Home onNavigateToRecipe={navigateToRecipe} onCheckIn={handleCheckIn} onAddMeal={() => navigateTo('add-meal')} onNavigateToPlan={() => navigateTo('cocina')} onNavigateToExplore={() => navigateTo('explore')} onNavigateToProgress={() => navigateTo('progress')} dailyMacros={dailyMacros} setDailyMacros={setDailyMacros} checkInStatus={checkInStatus} onLogMealNow={handleLogMealNow} mealPlan={mealPlan} hydration={hydration} setHydration={setHydration} movement={movement} setMovement={setMovement} userProfile={userProfile} realFeelLogs={realFeelLogs} onRealFeelLog={handleRealFeelLog} dailyLog={dailyLog} setDailyLog={setDailyLog} nutritionHistory={nutritionHistory} />;
+      case 'cocina': return <Cocina onAddMeal={(dayIndex) => { setTargetPlanDay(dayIndex); navigateTo('add-meal'); }} onCreateRecipe={() => navigateTo('create-recipe')} onNavigateToRecipe={navigateToRecipe} savedRecipes={savedRecipes} setSavedRecipes={setSavedRecipes} mealPlan={mealPlan} setMealPlan={setMealPlan} shoppingList={shoppingList} setShoppingList={setShoppingList} onLogMeal={handleLogMeal} isPro={isPro} onImportUrl={() => navigateTo('import-url')} />;
       case 'explore': return <Explore onNavigateToRecipe={navigateToRecipe} savedRecipes={savedRecipes} onSaveRecipe={handleSaveRecipe} communityPosts={communityPosts} onAddComment={handleAddComment} />;
       case 'more': return <More navigateTo={navigateTo} />;
       case 'recipe-detail': return <RecipeDetail recipe={selectedRecipe} onBack={() => navigateTo(previousScreen)} onSaveRecipe={handleSaveRecipe} isSaved={savedRecipes.some((r: any) => r.id === selectedRecipe?.id)} onAddToPlan={handleAddToPlan} onLogMealNow={handleLogMealNow} onAddToShoppingList={(items: any) => setShoppingList((prev: any) => [...prev, ...items])} dictionary={dictionary} userProfile={userProfile} />;
@@ -98,9 +126,9 @@ export default function App() {
       case 'create-recipe': return <CreateRecipe onBack={() => navigateTo(previousScreen)} onCreateRecipe={handleCreateRecipeSubmit} dictionary={dictionary} />;
       case 'create-post': return <CreatePost onBack={() => navigateTo(previousScreen)} onCreatePost={handleCreatePost} />;
       case 'daily-check-in': return <DailyCheckIn initialStatus={checkInStatus?.status || null} onBack={() => navigateTo(previousScreen)} onComplete={handleCompleteCheckIn} />;
-      case 'ai-coach': return <AICoach onBack={() => navigateTo(previousScreen)} isPro={isPro} memoryContext={{ dailyMacros, checkInStatus, toleranceLogs, savedRecipes }} />;
+      case 'ai-coach': return <AICoach onBack={() => navigateTo(previousScreen)} isPro={isPro} memoryContext={aiCoachMemory} />;
       case 'profile': return <Profile userProfile={userProfile} onBack={() => navigateTo(previousScreen)} realFeelLogs={realFeelLogs} savedRecipes={savedRecipes} communityPosts={communityPosts} />;
-      case 'settings': return <Settings dailyMacros={dailyMacros} setDailyMacros={setDailyMacros} isPro={isProState} setIsPro={setIsPro} showAIBot={showAIBotState} setShowAIBot={setShowAIBot} userProfile={userProfile} setUserProfile={setUserProfile} />;
+      case 'settings': return <Settings dailyMacros={dailyMacros} setDailyMacros={setDailyMacros} isPro={isProState} setIsPro={setIsPro} showAIBot={showAIBotState} setShowAIBot={setShowAIBot} userProfile={userProfile} setUserProfile={setUserProfile} dictionary={dictionary} />;
       case 'real-feel-diary': return <RealFeelDiary realFeelLogs={realFeelLogs} onBack={() => navigateTo('more')} />;
       case 'fasting-timer': return <FastingTimer onBack={() => navigateTo('more')} />;
       case 'pantry': return <Pantry onBack={() => navigateTo('more')} />;
@@ -109,7 +137,16 @@ export default function App() {
       case 'import-url': return <ImportRecipeURL onBack={() => navigateTo(previousScreen)} onImport={handleImportRecipe} />;
       case 'creator-verification': return <CreatorVerification onBack={() => navigateTo('more')} />;
       case 'creator-dashboard': return <CreatorDashboard onBack={() => navigateTo('more')} />;
-      default: return <Home onNavigateToRecipe={navigateToRecipe} onCheckIn={handleCheckIn} onAddMeal={() => navigateTo('add-meal')} onNavigateToPlan={() => navigateTo('cocina')} onNavigateToExplore={() => navigateTo('explore')} dailyMacros={dailyMacros} checkInStatus={checkInStatus} onLogMealNow={handleLogMealNow} mealPlan={mealPlan} hydration={hydration} setHydration={setHydration} movement={movement} setMovement={setMovement} dailyGoal={dailyGoal} setDailyGoal={setDailyGoal} userProfile={userProfile} realFeelLogs={realFeelLogs} onRealFeelLog={handleRealFeelLog} />;
+      case 'challenges': return <Challenges onBack={() => navigateTo('more')} />;
+      case 'creator-profile': return <CreatorProfile onBack={() => navigateTo(previousScreen)} />;
+      case 'post-detail': return <PostDetail onBack={() => navigateTo(previousScreen)} />;
+      case 'story-viewer': return <StoryViewer onBack={() => navigateTo(previousScreen)} />;
+      case 'create-story': return <CreateStory onBack={() => navigateTo(previousScreen)} />;
+      case 'notifications': return <NotificationsScreen onBack={() => navigateTo(previousScreen)} />;
+      case 'challenge-detail': return <ChallengeDetail onBack={() => navigateTo(previousScreen)} challengeId={selectedChallengeId || 'green-7'} />;
+      case 'progress': return <Progress onBack={() => navigateTo(previousScreen)} />;
+      case 'food-dictionary': return <FoodDictionary navigateTo={navigateTo} />;
+      default: return null;
     }
   };
 
@@ -129,7 +166,7 @@ export default function App() {
           <GlobalHeader
             onOpenSettings={() => navigateTo('settings')}
             onOpenProfile={() => navigateTo('profile')}
-            onOpenNotifications={() => toast.info(t.common.comingSoon)}
+            onOpenNotifications={() => navigateTo('notifications')}
             userName={userProfile?.name}
             isPro={isPro}
           />

@@ -53,15 +53,6 @@
   --font-headline: "Space Grotesk", sans-serif;
   --font-body: "Inter", sans-serif;
   --font-label: "JetBrains Mono", monospace;
-
-  /* Improved Accessibility Font Scale */
-  --text-xs: 0.8125rem; /* 13px */
-  --text-sm: 0.9375rem; /* 15px */
-  --text-base: 1.0625rem; /* 17px */
-  --text-lg: 1.1875rem; /* 19px */
-  --text-xl: 1.3125rem; /* 21px */
-  --text-2xl: 1.625rem; /* 26px */
-  --text-3xl: 2rem; /* 32px */
 }
 
 @layer components {
@@ -116,10 +107,6 @@
     --chart-recovery: #10b981;
     --chart-strain: #ef4444;
 
-    --font-headline: 'Outfit', sans-serif;
-    --font-body: 'Inter', sans-serif;
-    --font-label: 'JetBrains Mono', monospace;
-
     /* shadcn bridge */
     --foreground: var(--on-surface);
     --card: var(--surface-container-low);
@@ -160,7 +147,7 @@
     --on-primary: #ffffff;
     --primary-container: #dcfd05;
     --on-primary-container: #000000;
-    --brand-secondary: #879b03; /* Darkened Volt */
+    --brand-secondary: #5c6800; /* Deep Chartreuse — AAA on white */
     --on-brand-secondary: #ffffff;
     --tertiary: #18181b;
     --on-tertiary: #ffffff;
@@ -216,7 +203,7 @@
     --on-primary-container: #38bdf8;
     --brand-secondary: #818cf8; /* Indigo */
     --on-brand-secondary: #020617;
-    --tertiary: #ffffff;
+    --tertiary: #f0f9ff; /* Sky 50 — blue-tinted white for palette coherence */
     --error: #f43f5e;
     --on-error: #ffffff;
     --outline: #334155;
@@ -316,11 +303,11 @@
     --surface-container-high: #44403c; /* Stone 700 */
     --surface-container-highest: #57534e; /* Stone 600 */
     --on-surface-variant: #a8a29e; /* Stone 400 */
-    --primary: #fb923c; /* Ember Orange */
+    --primary: #fdac6c; /* Ember Orange — AA fix: 5.7:1 on #0c0a09 */
     --on-primary: #0c0a09;
     --primary-container: #1c1917;
-    --on-primary-container: #fb923c;
-    --brand-secondary: #fcd34d; /* Amber */
+    --on-primary-container: #fdac6c;
+    --brand-secondary: #f59e0b; /* Amber 500 — distinct from primary */
     --on-brand-secondary: #0c0a09;
     --tertiary: #ffffff;
     --error: #ef4444;
