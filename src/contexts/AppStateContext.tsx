@@ -317,14 +317,14 @@ export function AppStateProvider({ children }: { children: React.ReactNode }) {
   const handleDuplicateRecipe = createHandleDuplicateRecipe({ setSavedRecipes, navigateTo, t });
   const handleImportRecipe = createHandleImportRecipe({ setSavedRecipes, navigateTo, t });
   const [recipeToEdit, setRecipeToEdit] = useState<any>(null);
-  const handleCreatePost = createHandleCreatePost({ setCommunityPosts, navigateTo, t });
-  const handlePublishStory = createHandlePublishStory({ setCommunityStories, navigateTo, t });
+  const handleCreatePost = createHandleCreatePost({ setCommunityPosts, navigateTo });
+  const handlePublishStory = createHandlePublishStory({ setCommunityStories, navigateTo });
   const handleMarkStoryViewed = createHandleMarkStoryViewed({ setCommunityStories });
-  const handleAddComment = createHandleAddComment({ setCommunityPosts, t });
-  const handleAddToleranceLog = createHandleAddToleranceLog({ setToleranceLogs, navigateTo, t });
+  const handleAddComment = createHandleAddComment({ setCommunityPosts });
+  const handleAddToleranceLog = createHandleAddToleranceLog({ setToleranceLogs, navigateTo });
   const handleRealFeelLog = createHandleRealFeelLog({ setRealFeelLogs, getDailyLog: () => dailyLog });
   const handleCheckIn = createHandleCheckIn({ setCheckInStatus, navigateTo });
-  const handleCompleteCheckIn = createHandleCompleteCheckIn({ setCheckInStatus, navigateTo, t });
+  const handleCompleteCheckIn = createHandleCompleteCheckIn({ setCheckInStatus, navigateTo });
 
   // ─── Context value ──────────────────────────────────────────────────────────
 
