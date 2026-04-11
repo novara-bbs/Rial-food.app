@@ -1,4 +1,4 @@
-import { ArrowLeft, Clock, Flame, Droplet, Activity, CheckCircle2, Circle, Minus, Plus, MessageSquare, Bookmark, X, Users, ShoppingCart, ChefHat, UtensilsCrossed, ThumbsUp, AlertTriangle, Target, Share2, ExternalLink, Pencil, Trash2 } from 'lucide-react';
+import { ArrowLeft, Clock, Flame, Droplet, Activity, CheckCircle2, Circle, Minus, Plus, MessageSquare, Bookmark, X, Users, ShoppingCart, ChefHat, UtensilsCrossed, ThumbsUp, AlertTriangle, Target, Share2, ExternalLink, Pencil, Trash2, GitFork } from 'lucide-react';
 import SearchInput from '../../../components/patterns/SearchInput';
 import { useState, useMemo, useEffect } from 'react';
 import CookMode from '../components/CookMode';
@@ -23,7 +23,7 @@ import ConfirmDialog from '../../../components/ConfirmDialog';
 export default function RecipeDetail({ recipe, onBack, onSaveRecipe, isSaved, onAddToPlan, onLogMealNow, onAddToShoppingList, dictionary = [], userProfile }: { recipe: any, onBack: () => void, onSaveRecipe?: (r: any) => void, isSaved?: boolean, onAddToPlan?: (recipe: any, dayIndex: number) => void, onLogMealNow?: (recipe: any, servings: number) => void, onAddToShoppingList?: (items: any[]) => void, dictionary?: any[], userProfile?: any }) {
   const { t } = useI18n();
   const { navigateTo } = useNavigation();
-  const { setSelectedCreatorId, communityPosts, savedRecipes, savedPosts, navigateToRecipe: navToRecipe, handleDeleteRecipe, setRecipeToEdit, handleCreateRecipeSubmit } = useAppState();
+  const { setSelectedCreatorId, communityPosts, savedRecipes, savedPosts, navigateToRecipe: navToRecipe, handleDeleteRecipe, handleDuplicateRecipe, setRecipeToEdit, handleCreateRecipeSubmit } = useAppState();
   const [followedCreators, setFollowedCreators] = useLocalStorageState<string[]>('followedCreators', []);
   const [checkedIngredients, setCheckedIngredients] = useState<string[]>([]);
   const [servings, setServings] = useState(1);
@@ -336,6 +336,29 @@ export default function RecipeDetail({ recipe, onBack, onSaveRecipe, isSaved, on
         </div>
       )}
 
+      {/* ══ Forked from attribution ══ */}
+      {data.forkedFrom && (
+        <div className="px-6 max-w-4xl mx-auto mt-3">
+          <button
+            type="button"
+            onClick={() => {
+              const original = savedRecipes.find((r: any) => String(r.id) === String(data.forkedFrom.recipeId));
+              if (original) navToRecipe(original);
+            }}
+            className="flex items-center gap-2 w-full bg-surface-container-low border border-outline-variant/20 rounded-sm px-4 py-2.5 hover:border-primary/30 transition-colors text-left"
+          >
+            <GitFork className="w-4 h-4 text-on-surface-variant shrink-0" />
+            <span className="text-[10px] font-label uppercase tracking-widest text-on-surface-variant">
+              {t.recipeDetail.basedOn || 'Basada en'}
+            </span>
+            <span className="text-[10px] font-headline font-bold text-primary uppercase tracking-widest truncate">
+              @{data.forkedFrom.creatorName} · {data.forkedFrom.title}
+            </span>
+            <ChefHat className="w-3.5 h-3.5 text-on-surface-variant/50 ml-auto shrink-0" />
+          </button>
+        </div>
+      )}
+
       {/* ══ Macro summary bar ══ */}
       <div className="px-6 max-w-4xl mx-auto">
         <div className={`grid grid-cols-4 gap-2 ${hasCreator ? 'mt-3' : '-mt-4'} relative z-10`}>
@@ -525,11 +548,8 @@ export default function RecipeDetail({ recipe, onBack, onSaveRecipe, isSaved, on
               <Button variant="outline" className="flex-1" onClick={() => setShowDaySelector(true)}>
                 {t.recipeDetail.addToPlan}
               </Button>
-              <Button variant="outline" className="flex-1" onClick={() => {
-                const copy = { ...getModifiedRecipe(), title: `${t.recipeDetail.duplicatePrefix || 'Copia de'} ${data.title}` };
-                delete copy.id;
-                handleCreateRecipeSubmit(copy);
-              }}>
+              <Button variant="outline" className="flex-1" onClick={() => handleDuplicateRecipe(getModifiedRecipe())}>
+                <GitFork className="w-4 h-4 mr-2" />
                 {t.recipeDetail.duplicate || 'Duplicar'}
               </Button>
             </div>

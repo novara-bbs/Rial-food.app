@@ -13,7 +13,7 @@ import { SEED_POSTS } from '../features/social/data/seed-posts';
 import { SEED_TOLERANCE_LOGS } from '../features/wellness/data/seed-tolerance';
 import { createHandleLogMeal, createHandleLogMealNow, DailyLogEntry, FoodHistoryEntry } from '../features/food/handlers/meal-handlers';
 import { useI18n } from '../i18n';
-import { createHandleSaveRecipe, createHandleAddToPlan, createHandleCreateRecipeSubmit, createHandleImportRecipe, createHandleDeleteRecipe } from '../features/recipes/handlers/recipe-handlers';
+import { createHandleSaveRecipe, createHandleAddToPlan, createHandleCreateRecipeSubmit, createHandleImportRecipe, createHandleDeleteRecipe, createHandleDuplicateRecipe } from '../features/recipes/handlers/recipe-handlers';
 import { createHandleCreatePost, createHandleAddComment } from '../features/social/handlers/social-handlers';
 import { createHandlePublishStory, createHandleMarkStoryViewed } from '../features/social/handlers/story-handlers';
 import { SEED_STORIES } from '../features/social/data/seed-stories';
@@ -119,6 +119,7 @@ interface AppStateContextType {
   handleCheckIn: (status?: string) => void;
   handleCompleteCheckIn: (data: any) => void;
   handleDeleteRecipe: (recipeId: any) => void;
+  handleDuplicateRecipe: (recipe: any) => void;
   navigateToRecipe: (recipe: any) => void;
   recipeToEdit: any;
   setRecipeToEdit: (recipe: any) => void;
@@ -299,6 +300,7 @@ export function AppStateProvider({ children }: { children: React.ReactNode }) {
   const handleAddToPlan = createHandleAddToPlan({ setSavedRecipes, setMealPlan, setShoppingList, navigateTo });
   const handleCreateRecipeSubmit = createHandleCreateRecipeSubmit({ setSavedRecipes, navigateTo });
   const handleDeleteRecipe = createHandleDeleteRecipe({ setSavedRecipes, navigateTo });
+  const handleDuplicateRecipe = createHandleDuplicateRecipe({ setSavedRecipes, navigateTo });
   const handleImportRecipe = createHandleImportRecipe({ setSavedRecipes, navigateTo });
   const [recipeToEdit, setRecipeToEdit] = useState<any>(null);
   const handleCreatePost = createHandleCreatePost({ setCommunityPosts, navigateTo });
@@ -357,6 +359,7 @@ export function AppStateProvider({ children }: { children: React.ReactNode }) {
     handleCheckIn,
     handleCompleteCheckIn,
     handleDeleteRecipe,
+    handleDuplicateRecipe,
     navigateToRecipe,
     recipeToEdit, setRecipeToEdit,
   };

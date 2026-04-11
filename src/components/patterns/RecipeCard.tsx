@@ -1,5 +1,5 @@
 import React from 'react';
-import { Clock, Flame, ChefHat, Share2, Bookmark, Trash2 } from 'lucide-react';
+import { Clock, Flame, ChefHat, Share2, Bookmark, Trash2, GitFork } from 'lucide-react';
 import { useI18n } from '../../i18n';
 import { CREATORS_MAP } from '../../features/social/data/seed-creators';
 import { cn } from '../../lib/utils';
@@ -15,6 +15,7 @@ export interface RecipeCardRecipe {
   cal?: number;
   pro?: number;
   publishedBy?: string;
+  forkedFrom?: { recipeId: string | number; creatorId: string; creatorName: string; title: string };
 }
 
 export interface RecipeCardProps {
@@ -199,6 +200,11 @@ export default function RecipeCard({
               className={`font-label ${creatorSz} text-on-surface-variant/80 tracking-widest uppercase block mb-1`}
             >
               @{creator.name}
+            </span>
+          )}
+          {recipe.forkedFrom && (
+            <span className={`font-label ${creatorSz} text-on-surface-variant/60 tracking-widest uppercase flex items-center gap-1 mb-1`}>
+              <GitFork className="w-3 h-3" /> @{recipe.forkedFrom.creatorName}
             </span>
           )}
           <div className={`flex items-center gap-1.5 ${variant === 'grid' ? 'flex-wrap' : ''}`}>

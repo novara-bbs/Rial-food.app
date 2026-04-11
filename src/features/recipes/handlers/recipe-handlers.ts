@@ -94,6 +94,41 @@ export function createHandleDeleteRecipe(deps: Pick<RecipeHandlerDeps, 'setSaved
   };
 }
 
+export function createHandleDuplicateRecipe(deps: Pick<RecipeHandlerDeps, 'setSavedRecipes' | 'navigateTo'>) {
+  return (recipe: any) => {
+    // Fork-the-original policy: if this recipe is itself a fork, trace back to the original
+    const origin = recipe.forkedFrom || {
+      recipeId: recipe.id,
+      creatorId: recipe.publishedBy || 'unknown',
+      creatorName: recipe.publishedByName || recipe.publishedBy || 'Unknown',
+      title: recipe.title,
+    };
+
+    const newRecipe = {
+      ...recipe,
+      id: Date.now(),
+      title: `Copia de ${origin.title}`,
+      publishedBy: 'self',
+      publishedByName: undefined,
+      tag: 'MI RECETA',
+      forkedFrom: origin,
+      forkCount: 0,
+    };
+
+    deps.setSavedRecipes((prev: any[]) => {
+      // Increment forkCount on the original recipe
+      const updated = prev.map((r: any) =>
+        String(r.id) === String(origin.recipeId)
+          ? { ...r, forkCount: (r.forkCount || 0) + 1 }
+          : r
+      );
+      return [newRecipe, ...updated];
+    });
+    toast.success('Receta duplicada');
+    deps.navigateTo('cocina');
+  };
+}
+
 export function createHandleImportRecipe(deps: Pick<RecipeHandlerDeps, 'setSavedRecipes' | 'navigateTo'>) {
   return (recipe: any) => {
     deps.setSavedRecipes((prev: any[]) => [{ ...recipe, id: Date.now(), tag: 'IMPORTADA', publishedBy: 'self' }, ...prev]);

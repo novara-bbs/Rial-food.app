@@ -29,4 +29,11 @@ export interface Recipe {
   recipeIngredients?: RecipeIngredient[];
   instructions?: string[]; // Legacy plain strings
   steps?: RecipeStep[]; // Rich steps with optional media/timer
+  forkedFrom?: {
+    recipeId: string | number;
+    creatorId: string;
+    creatorName: string;
+    title: string;
+  };
+  forkCount?: number;
 }
