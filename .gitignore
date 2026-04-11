@@ -1,0 +1,4 @@
+.vercel
+.claude/
+.sixth/
+# Ignore local IDE / workspace state directories
