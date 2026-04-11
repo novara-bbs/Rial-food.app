@@ -288,6 +288,21 @@ export default function Settings({ dailyMacros, setDailyMacros, isPro, setIsPro,
               />
             </div>
             <div>
+              <label className="block font-label text-[10px] tracking-widest uppercase text-on-surface-variant mb-2">{t.settings.targetWeight || 'Peso objetivo'} ({getBodyWeightUnit(userProfile?.unitSystem ?? 'metric')})</label>
+              <input
+                type="number"
+                step="0.1"
+                inputMode="decimal"
+                value={userProfile?.targetWeight ? bodyWeightFromKg(userProfile.targetWeight, userProfile?.unitSystem ?? 'metric') : ''}
+                onChange={(e) => {
+                  const val = parseFloat(e.target.value);
+                  updateBiometric('targetWeight', val ? bodyWeightToKg(val, userProfile?.unitSystem ?? 'metric') : undefined);
+                }}
+                placeholder={t.settings.optional || 'Opcional'}
+                className="w-full bg-surface-container-low border border-outline-variant/20 rounded-sm py-2 px-3 text-tertiary text-sm focus:outline-none focus:border-primary"
+              />
+            </div>
+            <div>
               <label className="block font-label text-[10px] tracking-widest uppercase text-on-surface-variant mb-2">{t.settings.gender}</label>
               <select 
                 value={userProfile?.gender || 'female'}

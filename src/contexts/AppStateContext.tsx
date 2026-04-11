@@ -147,6 +147,8 @@ interface UserProfile {
   displayName?: string;
   /** Social media links for creator profile */
   socialLinks?: SocialLinks;
+  /** Target weight in kg — for goal tracking */
+  targetWeight?: number;
 }
 
 interface DailyMacros {
