@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>RIAL | Vitality Trends Report</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#ec5b13",
+                        "background-light": "#f8f6f6",
+                        "background-dark": "#221610",
+                    },
+                    fontFamily: {
+                        "display": ["Public Sans"]
+                    },
+                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>
+        body { font-family: 'Public Sans', sans-serif; }
+        .chart-gradient {
+            background: linear-gradient(180deg, rgba(236, 91, 19, 0.2) 0%, rgba(236, 91, 19, 0) 100%);
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 font-display">
+<!-- Header Navigation -->
+<header class="sticky top-0 z-50 bg-background-light/80 dark:bg-background-dark/80 backdrop-blur-md border-b border-primary/10">
+<div class="flex items-center justify-between p-4 max-w-2xl mx-auto">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-primary">arrow_back</span>
+<h1 class="text-lg font-bold tracking-tight">Vitality Trends</h1>
+</div>
+<div class="flex gap-4">
+<button class="flex items-center justify-center p-2 rounded-full hover:bg-primary/10 transition-colors">
+<span class="material-symbols-outlined text-slate-700 dark:text-slate-300">share</span>
+</button>
+<button class="flex items-center justify-center p-2 rounded-full hover:bg-primary/10 transition-colors">
+<span class="material-symbols-outlined text-slate-700 dark:text-slate-300">more_vert</span>
+</button>
+</div>
+</div>
+</header>
+<main class="max-w-2xl mx-auto pb-24">
+<!-- Time Range Selector -->
+<div class="px-4 py-2">
+<div class="flex bg-slate-200/50 dark:bg-slate-800/50 rounded-xl p-1">
+<button class="flex-1 py-2 text-sm font-semibold text-slate-500 dark:text-slate-400">7 Days</button>
+<button class="flex-1 py-2 text-sm font-bold bg-primary text-white rounded-lg shadow-sm">30 Days</button>
+<button class="flex-1 py-2 text-sm font-semibold text-slate-500 dark:text-slate-400">90 Days</button>
+</div>
+</div>
+<!-- High Contrast Performance Metrics -->
+<section class="grid grid-cols-2 gap-4 p-4">
+<div class="bg-white dark:bg-slate-800/50 p-5 rounded-xl border border-primary/5 shadow-sm">
+<div class="flex items-center justify-between mb-2">
+<p class="text-xs font-bold uppercase tracking-wider text-slate-500">Avg Vitality</p>
+<span class="material-symbols-outlined text-primary text-lg">bolt</span>
+</div>
+<p class="text-3xl font-bold text-slate-900 dark:text-white">88<span class="text-sm font-normal text-slate-400 ml-1">/100</span></p>
+<div class="flex items-center gap-1 mt-2">
+<span class="material-symbols-outlined text-emerald-500 text-xs">trending_up</span>
+<p class="text-emerald-500 text-xs font-bold">+5.2% vs last month</p>
+</div>
+</div>
+<div class="bg-white dark:bg-slate-800/50 p-5 rounded-xl border border-primary/5 shadow-sm">
+<div class="flex items-center justify-between mb-2">
+<p class="text-xs font-bold uppercase tracking-wider text-slate-500">Bio-Sync</p>
+<span class="material-symbols-outlined text-primary text-lg">sync_saved_locally</span>
+</div>
+<p class="text-3xl font-bold text-slate-900 dark:text-white">94%</p>
+<div class="flex items-center gap-1 mt-2">
+<span class="material-symbols-outlined text-emerald-500 text-xs">trending_up</span>
+<p class="text-emerald-500 text-xs font-bold">+1.8% accuracy</p>
+</div>
+</div>
+</section>
+<!-- Correlation Analysis Hero Chart -->
+<section class="p-4">
+<div class="bg-white dark:bg-slate-800/50 rounded-xl border border-primary/5 p-6 shadow-sm">
+<div class="flex flex-col gap-1 mb-6">
+<h3 class="text-base font-bold text-slate-900 dark:text-white">Real Feel vs. Bio-Data Correlation</h3>
+<p class="text-xs text-slate-500">Alignment between subjective perception and clinical telemetry</p>
+</div>
+<div class="relative h-48 w-full flex items-end gap-1">
+<!-- Simplified Visual Representation of a sophisticated chart -->
+<div class="absolute inset-0 flex flex-col justify-between pointer-events-none">
+<div class="border-b border-slate-100 dark:border-slate-700 w-full h-0"></div>
+<div class="border-b border-slate-100 dark:border-slate-700 w-full h-0"></div>
+<div class="border-b border-slate-100 dark:border-slate-700 w-full h-0"></div>
+</div>
+<svg class="w-full h-full" preserveaspectratio="none" viewbox="0 0 400 150">
+<!-- Bio Data Line -->
+<path d="M0,120 Q50,40 100,80 T200,60 T300,100 T400,40" fill="none" stroke="#ec5b13" stroke-linecap="round" stroke-width="3"></path>
+<!-- Real Feel Area -->
+<path d="M0,150 L0,110 Q50,60 100,100 T200,90 T300,110 T400,70 L400,150 Z" fill="rgba(236, 91, 19, 0.1)"></path>
+</svg>
+</div>
+<div class="flex justify-between mt-4">
+<div class="flex items-center gap-2">
+<div class="w-3 h-3 rounded-full bg-primary"></div>
+<span class="text-[10px] font-bold uppercase text-slate-500 tracking-tighter">Clinical Bio-Sync</span>
+</div>
+<div class="flex items-center gap-2">
+<div class="w-3 h-3 rounded-full bg-primary/20"></div>
+<span class="text-[10px] font-bold uppercase text-slate-500 tracking-tighter">Subjective Real Feel</span>
+</div>
+</div>
+</div>
+</section>
+<!-- Actionable Insights Card -->
+<section class="p-4">
+<div class="bg-primary/5 dark:bg-primary/10 rounded-xl border border-primary/20 p-6">
+<div class="flex items-center gap-3 mb-4">
+<span class="material-symbols-outlined text-primary">lightbulb</span>
+<h3 class="text-sm font-bold text-primary uppercase tracking-widest">Actionable Insights</h3>
+</div>
+<div class="space-y-4">
+<div class="flex gap-4">
+<div class="flex-shrink-0 w-10 h-10 rounded-lg bg-white dark:bg-slate-800 flex items-center justify-center text-primary border border-primary/10">
+<span class="material-symbols-outlined">bedtime</span>
+</div>
+<div>
+<p class="text-sm font-bold text-slate-900 dark:text-white">Late-Night Habit Impact</p>
+<p class="text-xs text-slate-600 dark:text-slate-400 mt-1 leading-relaxed">Activity after 11:30 PM correlates with a 22% drop in morning Vitality scores and increased cortisol reactivity at 8:00 AM.</p>
+</div>
+</div>
+<div class="flex gap-4">
+<div class="flex-shrink-0 w-10 h-10 rounded-lg bg-white dark:bg-slate-800 flex items-center justify-center text-primary border border-primary/10">
+<span class="material-symbols-outlined">coffee</span>
+</div>
+<div>
+<p class="text-sm font-bold text-slate-900 dark:text-white">Caffeine Window Optimization</p>
+<p class="text-xs text-slate-600 dark:text-slate-400 mt-1 leading-relaxed">Your data suggests shifting your last caffeine intake to 1:45 PM would improve deep sleep duration by an estimated 14%.</p>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Detailed Breakdown -->
+<section class="px-4 py-2">
+<h3 class="text-xs font-bold uppercase tracking-widest text-slate-500 mb-4 px-1">Weekly Metric Variance</h3>
+<div class="space-y-3">
+<div class="bg-white dark:bg-slate-800/50 p-4 rounded-xl flex items-center justify-between border border-slate-100 dark:border-slate-800">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-primary/60">monitor_heart</span>
+<span class="text-sm font-medium">HRV Recovery Rate</span>
+</div>
+<div class="flex items-center gap-4">
+<span class="text-sm font-bold">72ms</span>
+<span class="text-[10px] font-bold bg-emerald-100 text-emerald-700 px-2 py-1 rounded-full">+12%</span>
+</div>
+</div>
+<div class="bg-white dark:bg-slate-800/50 p-4 rounded-xl flex items-center justify-between border border-slate-100 dark:border-slate-800">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-primary/60">self_improvement</span>
+<span class="text-sm font-medium">Stress Equilibrium</span>
+</div>
+<div class="flex items-center gap-4">
+<span class="text-sm font-bold">Stable</span>
+<span class="text-[10px] font-bold bg-slate-100 text-slate-700 dark:bg-slate-700 dark:text-slate-300 px-2 py-1 rounded-full">0%</span>
+</div>
+</div>
+<div class="bg-white dark:bg-slate-800/50 p-4 rounded-xl flex items-center justify-between border border-slate-100 dark:border-slate-800">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-primary/60">directions_run</span>
+<span class="text-sm font-medium">Metabolic Efficiency</span>
+</div>
+<div class="flex items-center gap-4">
+<span class="text-sm font-bold">Optimal</span>
+<span class="text-[10px] font-bold bg-emerald-100 text-emerald-700 px-2 py-1 rounded-full">+4%</span>
+</div>
+</div>
+</div>
+</section>
+</main>
+<!-- Bottom Navigation Bar -->
+<nav class="fixed bottom-0 left-0 right-0 bg-white/95 dark:bg-background-dark/95 backdrop-blur-md border-t border-slate-200 dark:border-slate-800 z-50">
+<div class="flex justify-around items-center max-w-2xl mx-auto px-4 py-3">
+<a class="flex flex-col items-center gap-1 group" href="#">
+<span class="material-symbols-outlined text-slate-400 group-hover:text-primary transition-colors">description</span>
+<span class="text-[10px] font-bold uppercase text-slate-400 group-hover:text-primary tracking-tighter">Logs</span>
+</a>
+<a class="flex flex-col items-center gap-1 group" href="#">
+<span class="material-symbols-outlined text-primary">analytics</span>
+<span class="text-[10px] font-bold uppercase text-primary tracking-tighter">Trends</span>
+</a>
+<div class="relative -top-6">
+<div class="bg-primary p-4 rounded-full shadow-lg shadow-primary/30 text-white">
+<span class="material-symbols-outlined">add</span>
+</div>
+</div>
+<a class="flex flex-col items-center gap-1 group" href="#">
+<span class="material-symbols-outlined text-slate-400 group-hover:text-primary transition-colors">sync</span>
+<span class="text-[10px] font-bold uppercase text-slate-400 group-hover:text-primary tracking-tighter">Sync</span>
+</a>
+<a class="flex flex-col items-center gap-1 group" href="#">
+<span class="material-symbols-outlined text-slate-400 group-hover:text-primary transition-colors">person</span>
+<span class="text-[10px] font-bold uppercase text-slate-400 group-hover:text-primary tracking-tighter">Profile</span>
+</a>
+</div>
+<div class="h-6 w-full"></div> <!-- Safe area for mobile home indicators -->
+</nav>
+</body></html>

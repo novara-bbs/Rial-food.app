@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#d4ff00", // Vitality Lime
+                        "background-light": "#f5f7f8",
+                        "background-dark": "#0f1923",
+                        "surface-dark": "#1a242d",
+                        "accent-gray": "#2d3843"
+                    },
+                    fontFamily: {
+                        "display": ["Space Grotesk"]
+                    },
+                    borderRadius: {"DEFAULT": "0.5rem", "lg": "1rem", "xl": "1.5rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>
+        body { font-family: 'Space Grotesk', sans-serif; }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .filled-icon {
+            font-variation-settings: 'FILL' 1;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 min-h-screen pb-24">
+<!-- Header -->
+<header class="sticky top-0 z-50 bg-background-light/80 dark:bg-background-dark/80 backdrop-blur-md border-b border-primary/10 px-4 py-3 flex items-center justify-between">
+<div class="flex items-center gap-3">
+<div class="size-10 rounded-full bg-primary flex items-center justify-center text-background-dark">
+<span class="material-symbols-outlined font-bold">bolt</span>
+</div>
+<div>
+<h1 class="text-lg font-bold tracking-tight leading-none">RIAL</h1>
+<p class="text-[10px] uppercase tracking-widest text-primary font-bold">Community</p>
+</div>
+</div>
+<div class="flex items-center gap-2">
+<button class="p-2 rounded-full bg-primary/10 text-primary border border-primary/20">
+<span class="material-symbols-outlined text-xl">notifications</span>
+</button>
+<button class="p-2 rounded-full bg-primary/10 text-primary border border-primary/20">
+<span class="material-symbols-outlined text-xl">search</span>
+</button>
+</div>
+</header>
+<!-- Horizontal Stories / Pro Updates -->
+<section class="py-6 overflow-x-auto no-scrollbar">
+<div class="flex px-4 gap-4 min-w-max">
+<!-- Add Story -->
+<div class="flex flex-col items-center gap-2">
+<div class="relative size-16 rounded-full border-2 border-dashed border-primary/40 p-1 flex items-center justify-center">
+<span class="material-symbols-outlined text-primary">add</span>
+</div>
+<span class="text-[10px] font-medium opacity-60">Your Post</span>
+</div>
+<!-- Pro Creators -->
+<div class="flex flex-col items-center gap-2">
+<div class="size-16 rounded-full border-2 border-primary p-0.5">
+<div class="w-full h-full rounded-full bg-center bg-cover" data-alt="Portrait of a professional fitness chef" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuDVhMeMNFsaKT5JdBDQqNW3zjcQxYUiIkSjE25psoq1g-2_xFS4ZJVvpDmKB8jJMnqKxKWBvdMa7NRYMq18uEdSccdEBU4JKYdkghpjG_7mllQnjkcVLS55JvXp3NFLaPtlUWLW0hXUIcqE2GbNNnlQXQ0taAJ2O8F_-dc6Z6X0XLra-cjC0UWlx6m_mUuGJ9QosZpqigfCsR17EE4Xw0ohO-G0q_b6M-V6CV2Fgh0mz-tkul7bouY6OYzr44gHWOAo8tk1RxDPHa0N')"></div>
+</div>
+<span class="text-[10px] font-medium">Chef Leo</span>
+</div>
+<div class="flex flex-col items-center gap-2">
+<div class="size-16 rounded-full border-2 border-primary p-0.5">
+<div class="w-full h-full rounded-full bg-center bg-cover" data-alt="Portrait of a wellness coach" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuB2ASpIwxRlSUNyxyjFeCFEzX26ltSdprRJheZ-kOa59D-YyUzpNZ65-oQJtC5uFURgYicpWFOSqYuF21PsUrhJFtJPZr-N9zhY5UnJv_IW9Ty-q_CansNAsTqqqWcT2NxuCTSwSeuieddEqytdWIKPAhtr2dsudO8B8n2heJmboQ6banQmkdge8FCPLGovJbcQwnlV5YHe7XKNVEkKehlaIgKwm4sa8JoeMnyJx48VPFg-bBWVs8y_2y_E3Yav4xUgt_kk44GlpNyn')"></div>
+</div>
+<span class="text-[10px] font-medium">Dr. Aris</span>
+</div>
+<div class="flex flex-col items-center gap-2">
+<div class="size-16 rounded-full border-2 border-primary p-0.5">
+<div class="w-full h-full rounded-full bg-center bg-cover" data-alt="Portrait of a yoga instructor" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuDFiyWgU5g4otjkmVewYnsoS_AJkjzbDofaRL5LJAiAy3oVUqg7vJExA_M_adGGCEBuagJ4F181w7pmfR80aVkQWwJcfKtpAN2jiuPBjTc6r8tt4jgsM-a28MlnwDiDIIkmyv4HMLFcSPRVDKEchd6rKt6Yu3JxQ0f4EtIKWK4soBU97NIhsfvx7THdRr11Wc_hVfziOVBgMoe6GDcYMdJ8KBX4JuyHzkeXTtKRt_eGNFSoDIckkDjPa5EH3FzNVgW4FBUUTx481jdv')"></div>
+</div>
+<span class="text-[10px] font-medium">Yoga Maya</span>
+</div>
+<div class="flex flex-col items-center gap-2">
+<div class="size-16 rounded-full border-2 border-slate-700 p-0.5">
+<div class="w-full h-full rounded-full bg-center bg-cover grayscale" data-alt="Portrait of a nutrition expert" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuDZaVh0tCXkjgng21DMS8rEioJl02KulYTuX-yHhe_1nRkL684YNyOY4lPChLh3zqscYuhypwcpCJmNW6DvIA0DDAHEdoan60-ZE9SvlGKSwLm8O4tZUvUlCJxt1t2pzgbsRvF6D6kuC3FyiXkL6c5u6U1T5tm3CceH0ZWtcU9_NrC0EI8q6o6Bl0NZRADxqgk-l2Z7xZBR38Ff0ODJvj0Y5grBOEkB1aABUkxk0LLjze6CIHMLz2XtEc1MTTy4geqO0Cy8GmNimgyA')"></div>
+</div>
+<span class="text-[10px] font-medium opacity-60">Nutritionist</span>
+</div>
+</div>
+</section>
+<!-- Join Challenge Card -->
+<div class="px-4 mb-8">
+<div class="relative overflow-hidden rounded-xl bg-primary p-6 text-background-dark">
+<div class="relative z-10">
+<div class="flex items-center gap-2 mb-2">
+<span class="material-symbols-outlined filled-icon">trophy</span>
+<span class="text-xs font-bold uppercase tracking-widest">Active Challenge</span>
+</div>
+<h3 class="text-2xl font-bold leading-tight mb-4">7-Day Zero Processed<br/>Sugar Reset</h3>
+<div class="flex items-center justify-between">
+<div class="flex -space-x-2">
+<div class="size-8 rounded-full border-2 border-primary bg-slate-800 flex items-center justify-center text-[10px] text-white">4k+</div>
+<div class="size-8 rounded-full border-2 border-primary bg-cover" data-alt="User participant avatar" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuBMPac_r6CxZUprse48_3WruXosgWOC8wapH8vb8PBiiB8TJYbpCLXVuy16CLL8_iGbpu4IR6hmtJP5rzHkC4L1dNf4DHtDoSsiSvMaVvA4HC8bzoz7nTZZmDLMQaQZoxDDcI4xgIE7BY2flTg2pSUrroOML_iRan0ToLd5yUQzl8Ojx5Ok0xpG89qAsYjiJpTwaTHRw_B9gxg19EkgsXYj4mJPFcSGGJtYPbD_-s_ai06a3LZgW3Ipb4ng3pBfGZgCxqYKGY-DKLvs')"></div>
+</div>
+<button class="bg-background-dark text-primary font-bold px-6 py-2 rounded-full text-sm">Join Now</button>
+</div>
+</div>
+<!-- Decorative abstract background -->
+<div class="absolute top-0 right-0 w-32 h-32 bg-background-dark/10 rounded-full -mr-16 -mt-16 blur-2xl"></div>
+</div>
+</div>
+<!-- Feed Content -->
+<main class="space-y-8">
+<!-- Social Post 1 -->
+<article class="px-4">
+<div class="flex items-center justify-between mb-3">
+<div class="flex items-center gap-3">
+<div class="size-10 rounded-full bg-center bg-cover border border-primary/20" data-alt="User profile picture" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuB_yAdJJoP8Olgb8HZiAt62D0BBlM-PUW3JY1dujb4BMF9PlUfVlpIWjuDEe4QM6LQu7d78FPV9BIlsydNTk5ZU68IDgc2bD0VJMWtplLm_LmVqt7po4QWNpIitC-EG_GJS94aBC90j6t1CB_15z4Q1qCYLru_DHymEldOGRrVnkN-0Dd8UvcqUZVWgN8siR8pX62JVM1J_s2_89B2eM1Pvlxrpc5_JUvzyFmXbSosFB55w_pby_nbnMYALNPhq90KjI-q-hjQtrlq0')"></div>
+<div>
+<p class="font-bold text-sm">Marcus Chen</p>
+<p class="text-[10px] opacity-60">24 mins ago • San Francisco, CA</p>
+</div>
+</div>
+<button class="text-slate-400"><span class="material-symbols-outlined">more_horiz</span></button>
+</div>
+<!-- Photo with editorial framing -->
+<div class="relative group">
+<div class="aspect-square rounded-xl overflow-hidden bg-accent-gray border border-primary/10">
+<img class="w-full h-full object-cover" data-alt="Healthy colorful grain bowl with avocado" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAd7HRGSOgDEUWgqPcxPfU2QF2XRZHUPUTsUw2Ps2QY6iaNRWZo2JwR00z3-nhgCthyjjtrex_UxeiM1J1zXcFtbYpFPlOqCXALs2mAYQEKWEmZQrTjT1oxg426q56lYCw7qQYXowMIyeoYN0vrBMGkYCtFFx6nfbN-ou8YoAJILGfR-rj0aJhWFr3PDQwePgnRy_p1gDaJn27bI_MCH9LrVq3Um0o0R9ew9OI2JyE3YNXEp6xC8NsFnzQ05jnPlupQDgU2OK_Owrdt"/>
+</div>
+<!-- Precision Overlays -->
+<div class="absolute top-4 left-4 flex flex-col gap-2">
+<div class="bg-background-dark/80 backdrop-blur-md px-3 py-1.5 rounded-lg border border-primary/20 flex items-center gap-2">
+<span class="text-primary text-xs font-bold">94%</span>
+<span class="text-[10px] uppercase tracking-tighter font-medium">Real Match</span>
+</div>
+</div>
+<div class="absolute bottom-4 right-4">
+<div class="bg-primary px-3 py-1.5 rounded-lg text-background-dark flex items-center gap-2 shadow-xl">
+<span class="material-symbols-outlined text-sm filled-icon">bolt</span>
+<span class="text-[10px] uppercase tracking-tighter font-bold">Energized</span>
+</div>
+</div>
+</div>
+<!-- Post Metadata & Interaction -->
+<div class="mt-4">
+<div class="flex items-center gap-4 mb-3">
+<div class="flex items-center gap-1.5">
+<span class="material-symbols-outlined text-primary text-xl">favorite</span>
+<span class="text-xs font-bold">142</span>
+</div>
+<div class="flex items-center gap-1.5">
+<span class="material-symbols-outlined text-xl">chat_bubble</span>
+<span class="text-xs font-bold">28</span>
+</div>
+<div class="flex items-center gap-1.5">
+<span class="material-symbols-outlined text-xl">share</span>
+</div>
+<div class="ml-auto flex items-center gap-2 bg-primary/5 px-3 py-1 rounded-full border border-primary/10">
+<span class="text-[10px] font-bold text-primary uppercase tracking-widest">Recipe</span>
+<span class="material-symbols-outlined text-primary text-sm">restaurant</span>
+</div>
+</div>
+<p class="text-sm leading-relaxed">
+<span class="font-bold">Marcus Chen</span> Post-ride recovery bowl. High protein, high vibration. The ginger-tumeric dressing is the secret sauce here. 
+                </p>
+<button class="mt-2 text-primary text-xs font-bold">View full data breakdown →</button>
+</div>
+</article>
+<!-- Social Post 2: Community Recipe Share -->
+<article class="bg-surface-dark/40 py-8">
+<div class="px-4">
+<div class="flex items-center gap-3 mb-4">
+<div class="size-10 rounded-full bg-center bg-cover border border-primary/20" data-alt="Community creator profile" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCm8AzXfuNXDqHyu0enXRG_2S4dhQXOeiJUEVGQx8oIJXYYV-BXgCGDVwH_8q3rahODNvb1Q3PPlvKDP40YZEjczCNP89WGAU4CZ9WONfpTQ1oy0gdpkWTYFyp7FmfnWvwjrZOWsT8HiRWO5QIoMrCbXafjvcyNAAWhmFK5Oi8oWRuJ74i56XLu_TfVZ7l2ZpawnQD9QEiO8FTbj8wYCQQNS9ESsualA-nu2__zQ1MJe5Wy4CI3vu7KcVG4e8c0zCe424zhxrucchtl')"></div>
+<div>
+<p class="font-bold text-sm">Sasha Wellness</p>
+<p class="text-[10px] opacity-60">1 hour ago • London</p>
+</div>
+</div>
+<div class="grid grid-cols-2 gap-2 mb-4">
+<div class="aspect-[4/5] rounded-xl overflow-hidden relative">
+<img class="w-full h-full object-cover" data-alt="Raw prep of green smoothie ingredients" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD7DxX-csbb8-N8_trsaLNWuEut1RDM-GtdNUdN86ogp6LckUb4VDDw1vrW0VKplLtC4plihPLvOkJAXGhDJDvRQXXrXXGOC5kliCuOMrVP7hquEhbom4PapLgbO9n31E2Li2m3e0lQ3kmE7cCuK4bpGRJfdnIIAHtX8b7yJ1iKwAqG6hR5Ms_kGMb2zNmoGXGUuFPVPdfJVJeGxmqR6XERGiBj3-xtqdvlaxXxR3nerE2rVrddbg2JHXaWhK7E9iD3f_sEcaQNCvaF"/>
+<div class="absolute inset-0 bg-gradient-to-t from-background-dark/60 to-transparent"></div>
+</div>
+<div class="aspect-[4/5] rounded-xl overflow-hidden relative">
+<img class="w-full h-full object-cover" data-alt="Finished vibrant green smoothie in a glass" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAHmnA6O99Chj_vw842rqkFuIDQHf85TU5ZqXhp4DwK-1rs7Qifin64vG0gDkYmWjtF5tU3NnQ0cDuxNRoJq3c0xRJNOYmATbwqKDnQSkcoFuGkl6hir7eChqpukzZ5BiK95580riOXHSJnf2D2FcRopiWOxm4WX_IMEddKOyYyBWn1XJ3AhwomF6kYWFzjpk7W904NErDk9Zuo_gsBMK2my7nNGo2sIZmYSeLFW0RIvntsJGj06e6cC0AG8Q3nKxMWRJvhOq-wydgJ"/>
+<div class="absolute inset-0 bg-gradient-to-t from-background-dark/60 to-transparent"></div>
+</div>
+</div>
+<div class="p-4 bg-background-dark rounded-xl border border-primary/10">
+<div class="flex justify-between items-start mb-4">
+<h4 class="text-lg font-bold">Daily Green Protocol</h4>
+<div class="text-right">
+<p class="text-primary text-xl font-bold leading-none">88%</p>
+<p class="text-[8px] uppercase tracking-widest opacity-60">Match</p>
+</div>
+</div>
+<div class="flex gap-4 mb-4 overflow-x-auto no-scrollbar">
+<div class="flex flex-col gap-1 min-w-[60px]">
+<span class="text-[10px] opacity-60 uppercase">Cals</span>
+<span class="text-sm font-bold">240</span>
+</div>
+<div class="flex flex-col gap-1 min-w-[60px]">
+<span class="text-[10px] opacity-60 uppercase">Fiber</span>
+<span class="text-sm font-bold">12g</span>
+</div>
+<div class="flex flex-col gap-1 min-w-[60px]">
+<span class="text-[10px] opacity-60 uppercase">Protein</span>
+<span class="text-sm font-bold">8g</span>
+</div>
+</div>
+<button class="w-full bg-primary text-background-dark font-bold py-3 rounded-lg text-sm flex items-center justify-center gap-2">
+<span class="material-symbols-outlined text-sm">bookmark</span>
+                        Save to Planner
+                    </button>
+</div>
+</div>
+</article>
+</main>
+<!-- Bottom Navigation Bar -->
+<nav class="fixed bottom-0 left-0 right-0 z-50 bg-background-light dark:bg-background-dark border-t border-primary/10 px-6 py-4 flex items-center justify-between">
+<a class="flex flex-col items-center gap-1 text-primary" href="#">
+<span class="material-symbols-outlined filled-icon">home</span>
+<span class="text-[10px] font-bold uppercase tracking-wider">Feed</span>
+</a>
+<a class="flex flex-col items-center gap-1 opacity-40" href="#">
+<span class="material-symbols-outlined">explore</span>
+<span class="text-[10px] font-bold uppercase tracking-wider">Explore</span>
+</a>
+<div class="relative -mt-12">
+<button class="size-14 bg-primary rounded-full shadow-lg shadow-primary/40 flex items-center justify-center text-background-dark border-4 border-background-dark">
+<span class="material-symbols-outlined font-bold text-3xl">add</span>
+</button>
+</div>
+<a class="flex flex-col items-center gap-1 opacity-40" href="#">
+<span class="material-symbols-outlined">monitoring</span>
+<span class="text-[10px] font-bold uppercase tracking-wider">Data</span>
+</a>
+<a class="flex flex-col items-center gap-1 opacity-40" href="#">
+<span class="material-symbols-outlined">account_circle</span>
+<span class="text-[10px] font-bold uppercase tracking-wider">Profile</span>
+</a>
+</nav>
+</body></html>

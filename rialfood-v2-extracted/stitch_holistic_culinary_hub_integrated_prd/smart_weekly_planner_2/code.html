@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Holistic Culinary Hub - Smart Weekly Planner</title>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,200..800;1,6..72,200..800&amp;family=Satoshi:wght@400;500;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#4A5D23",
+                        "primary-hover": "#3A4A1C",
+                        "background-light": "#F9F8F6",
+                        "background-dark": "#1c2210",
+                        "surface": "#FFFFFF",
+                        "text-main": "#2B2927",
+                        "muted": "#A39F98",
+                        "accent": "#D47A43",
+                        "border-subtle": "#E5E3DF",
+                    },
+                    fontFamily: {
+                        "display": ["Newsreader", "serif"],
+                        "body": ["Satoshi", "sans-serif"]
+                    },
+                    borderRadius: {"DEFAULT": "0px", "sm": "0px", "md": "4px", "lg": "4px", "xl": "4px", "full": "9999px"},
+                    backgroundImage: {
+                        'leftover-pattern': 'repeating-linear-gradient(45deg, transparent, transparent 10px, rgba(163, 159, 152, 0.1) 10px, rgba(163, 159, 152, 0.1) 20px)'
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        body {
+            font-family: 'Satoshi', sans-serif;
+            background-color: theme('colors.background-light');
+            color: theme('colors.text-main');
+        }
+        h1, h2, h3, h4, h5, h6, .font-display {
+            font-family: 'Newsreader', serif;
+        }
+        /* Custom scrollbar for a cleaner look */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: theme('colors.border-subtle');
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: theme('colors.muted');
+        }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark text-text-main h-screen flex overflow-hidden">
+<!-- Sidebar (Reused/Adapted) -->
+<nav class="w-64 bg-background-light border-r border-border-subtle flex flex-col justify-between h-full shrink-0">
+<div class="p-6 flex flex-col gap-8">
+<h1 class="font-display italic font-semibold text-2xl tracking-tight">Culinary Hub</h1>
+<div class="flex flex-col gap-2">
+<a class="flex items-center gap-3 px-3 py-2 text-text-main hover:bg-black/5 rounded-md transition-colors" href="#">
+<span class="material-symbols-outlined text-[20px]">home</span>
+<span class="text-sm font-medium">The Daily Hub</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 text-text-main hover:bg-black/5 rounded-md transition-colors" href="#">
+<span class="material-symbols-outlined text-[20px]">monitor_heart</span>
+<span class="text-sm font-medium">Vitals &amp; Diary</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 text-text-main hover:bg-black/5 rounded-md transition-colors" href="#">
+<span class="material-symbols-outlined text-[20px]">bookmark</span>
+<span class="text-sm font-medium">Recipe Vault</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 bg-black/5 text-text-main rounded-md border-l-2 border-primary" href="#">
+<span class="material-symbols-outlined text-[20px] fill-current">calendar_month</span>
+<span class="text-sm font-bold">Weekly Planner</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 text-text-main hover:bg-black/5 rounded-md transition-colors" href="#">
+<span class="material-symbols-outlined text-[20px]">group</span>
+<span class="text-sm font-medium">Community</span>
+</a>
+</div>
+</div>
+<div class="p-6 border-t border-border-subtle">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-full bg-border-subtle overflow-hidden">
+<img alt="User Profile Avatar" class="w-full h-full object-cover" data-alt="User profile picture of a woman" src="https://lh3.googleusercontent.com/aida-public/AB6AXuA-nT14GsCGaMVmEAxVJ-nQjWvYT7ImUTwyl_UUkMXcHsmTQ8maJ8vROTxIKbTjLyEtZFTEiIAYcsYIrW8JcjrPlMQSSRgJdsblYOHzpVjM7InWGI96vKEUzfEOHh9ymF1h-sAmeoFGQuOSeE9KX79ZzqSHJJGNBRP5mEA47G038BMKCPQgrfyfUdVhy3Gy0_fNTz3eLIVgO1MrSdj2UBYXKu6SkF7H5IWvXdPDatAkXmbydP--Fofjw0yoqViHTyKkJxJnws81mhM"/>
+</div>
+<div>
+<p class="text-sm font-bold">Elena R.</p>
+<p class="text-[11px] text-muted uppercase tracking-wider font-medium">Lvl 12 • Sous Chef</p>
+</div>
+</div>
+</div>
+</nav>
+<!-- Main Content Area -->
+<main class="flex-1 flex flex-col h-full overflow-hidden">
+<!-- Header -->
+<header class="px-8 py-6 border-b border-border-subtle bg-background-light flex justify-between items-end shrink-0">
+<div>
+<p class="text-sm text-muted mb-1 font-medium">Oct 12 - Oct 18</p>
+<h2 class="font-display font-semibold text-4xl tracking-tight">Smart Weekly Planner</h2>
+</div>
+<div class="flex gap-3">
+<button class="px-4 py-2 border border-border-subtle rounded-md text-sm font-bold hover:bg-black/5 transition-colors">
+                    Clear Week
+                </button>
+<button class="px-4 py-2 bg-primary text-surface rounded-md text-sm font-bold hover:bg-primary-hover transition-colors flex items-center gap-2">
+<span class="material-symbols-outlined text-[18px]">auto_awesome</span>
+                    Auto-Fill
+                </button>
+</div>
+</header>
+<!-- Split Layout Container -->
+<div class="flex-1 flex flex-col overflow-hidden">
+<!-- Top Section: 7-Column Calendar Grid (approx 60% height) -->
+<div class="flex-1 overflow-x-auto overflow-y-auto bg-background-light p-6 min-h-[400px]">
+<div class="min-w-[1000px] h-full flex gap-4">
+<!-- Day Column: Monday -->
+<div class="flex-1 flex flex-col min-w-[140px]">
+<div class="pb-3 mb-3 border-b-2 border-text-main flex items-baseline justify-between">
+<h3 class="font-display italic text-lg font-semibold">Mon</h3>
+<span class="text-xs text-muted font-medium">12</span>
+</div>
+<div class="flex-1 flex flex-col gap-3">
+<!-- Drop Zone / Meal Slot -->
+<div class="text-xs font-bold text-muted uppercase tracking-wider mb-1">Breakfast</div>
+<!-- Mini Recipe Card -->
+<div class="bg-surface border border-border-subtle p-3 rounded-md shadow-sm group cursor-grab active:cursor-grabbing hover:border-primary transition-colors relative">
+<div class="absolute right-2 top-2 opacity-0 group-hover:opacity-100 transition-opacity text-muted">
+<span class="material-symbols-outlined text-[16px]">drag_indicator</span>
+</div>
+<h4 class="font-display font-medium text-base leading-tight mb-2 pr-4">Overnight Oats</h4>
+<div class="flex flex-wrap gap-1">
+<span class="px-1.5 py-0.5 bg-background-light text-[10px] font-medium rounded-sm border border-border-subtle text-muted">Prep</span>
+</div>
+</div>
+<div class="text-xs font-bold text-muted uppercase tracking-wider mt-2 mb-1">Lunch</div>
+<!-- Mini Recipe Card -->
+<div class="bg-surface border border-border-subtle p-3 rounded-md shadow-sm group cursor-grab active:cursor-grabbing hover:border-primary transition-colors relative">
+<div class="absolute right-2 top-2 opacity-0 group-hover:opacity-100 transition-opacity text-muted">
+<span class="material-symbols-outlined text-[16px]">drag_indicator</span>
+</div>
+<h4 class="font-display font-medium text-base leading-tight mb-2 pr-4">Quinoa Bowl</h4>
+</div>
+<div class="text-xs font-bold text-muted uppercase tracking-wider mt-2 mb-1">Dinner</div>
+<!-- Mini Recipe Card w/ Badge -->
+<div class="bg-surface border border-primary p-3 rounded-md shadow-sm group cursor-grab active:cursor-grabbing relative">
+<div class="absolute right-2 top-2 opacity-0 group-hover:opacity-100 transition-opacity text-muted">
+<span class="material-symbols-outlined text-[16px]">drag_indicator</span>
+</div>
+<h4 class="font-display font-medium text-base leading-tight mb-2 pr-4">Lemon Herb Salmon</h4>
+<div class="flex flex-wrap gap-1">
+<span class="px-1.5 py-0.5 bg-accent/10 text-accent text-[10px] font-bold rounded-sm border border-accent/20 flex items-center gap-1">
+<span class="material-symbols-outlined text-[10px]">soup_kitchen</span>
+                                        Batch (4)
+                                    </span>
+</div>
+</div>
+<!-- Empty Drop Zone -->
+<div class="mt-2 h-12 border border-dashed border-border-subtle rounded-md flex items-center justify-center text-muted hover:bg-black/5 transition-colors cursor-pointer">
+<span class="material-symbols-outlined text-[18px]">add</span>
+</div>
+</div>
+</div>
+<!-- Day Column: Tuesday -->
+<div class="flex-1 flex flex-col min-w-[140px]">
+<div class="pb-3 mb-3 border-b-2 border-text-main flex items-baseline justify-between">
+<h3 class="font-display italic text-lg font-semibold">Tue</h3>
+<span class="text-xs text-muted font-medium">13</span>
+</div>
+<div class="flex-1 flex flex-col gap-3">
+<div class="text-xs font-bold text-muted uppercase tracking-wider mb-1">Breakfast</div>
+<div class="bg-surface border border-border-subtle p-3 rounded-md shadow-sm group cursor-grab relative">
+<h4 class="font-display font-medium text-base leading-tight mb-2 pr-4">Avocado Toast</h4>
+</div>
+<div class="text-xs font-bold text-muted uppercase tracking-wider mt-2 mb-1">Lunch</div>
+<!-- Leftover Slot -->
+<div class="bg-surface border border-border-subtle p-3 rounded-md shadow-sm bg-leftover-pattern relative group cursor-grab">
+<h4 class="font-display font-medium text-base leading-tight mb-2 pr-4">Lemon Herb Salmon</h4>
+<div class="flex flex-wrap gap-1">
+<span class="px-1.5 py-0.5 bg-background-light text-[10px] font-medium rounded-sm border border-border-subtle text-muted flex items-center gap-1">
+<span class="material-symbols-outlined text-[10px]">history</span>
+                                        Leftover
+                                    </span>
+</div>
+</div>
+<div class="text-xs font-bold text-muted uppercase tracking-wider mt-2 mb-1">Dinner</div>
+<div class="bg-surface border border-border-subtle p-3 rounded-md shadow-sm group cursor-grab relative">
+<h4 class="font-display font-medium text-base leading-tight mb-2 pr-4">Chicken Stir-fry</h4>
+</div>
+</div>
+</div>
+<!-- Day Column: Wednesday (Empty/Partial) -->
+<div class="flex-1 flex flex-col min-w-[140px]">
+<div class="pb-3 mb-3 border-b-2 border-text-main flex items-baseline justify-between text-muted">
+<h3 class="font-display italic text-lg font-semibold">Wed</h3>
+<span class="text-xs font-medium">14</span>
+</div>
+<div class="flex-1 flex flex-col gap-3">
+<div class="text-xs font-bold text-muted uppercase tracking-wider mb-1">Breakfast</div>
+<div class="bg-surface border border-border-subtle p-3 rounded-md shadow-sm group cursor-grab relative">
+<h4 class="font-display font-medium text-base leading-tight pr-4">Protein Shake</h4>
+</div>
+<div class="text-xs font-bold text-muted uppercase tracking-wider mt-2 mb-1">Lunch</div>
+<div class="h-16 border border-dashed border-border-subtle rounded-md flex items-center justify-center text-muted hover:bg-black/5 transition-colors cursor-pointer">
+<span class="text-sm">Drop Recipe</span>
+</div>
+<div class="text-xs font-bold text-muted uppercase tracking-wider mt-2 mb-1">Dinner</div>
+<div class="bg-surface border border-border-subtle p-3 rounded-md shadow-sm bg-leftover-pattern relative group cursor-grab">
+<h4 class="font-display font-medium text-base leading-tight mb-2 pr-4">Chicken Stir-fry</h4>
+<span class="px-1.5 py-0.5 bg-background-light text-[10px] font-medium rounded-sm border border-border-subtle text-muted">Leftover</span>
+</div>
+</div>
+</div>
+<!-- Day Column: Thursday (Empty) -->
+<div class="flex-1 flex flex-col min-w-[140px] opacity-70 hover:opacity-100 transition-opacity">
+<div class="pb-3 mb-3 border-b-2 border-text-main flex items-baseline justify-between text-muted">
+<h3 class="font-display italic text-lg font-semibold">Thu</h3>
+<span class="text-xs font-medium">15</span>
+</div>
+<div class="flex-1 flex flex-col gap-3">
+<div class="flex-1 border border-dashed border-border-subtle rounded-md flex flex-col items-center justify-center text-muted gap-2 bg-black/[0.02]">
+<span class="material-symbols-outlined text-[24px]">restaurant_menu</span>
+<span class="text-sm font-medium">Plan meals</span>
+</div>
+</div>
+</div>
+<!-- Columns Fri-Sun (Simplified for brevity, maintaining structure) -->
+<div class="flex-1 flex flex-col min-w-[140px] opacity-50">
+<div class="pb-3 mb-3 border-b-2 border-text-main flex items-baseline justify-between text-muted">
+<h3 class="font-display italic text-lg font-semibold">Fri</h3>
+<span class="text-xs font-medium">16</span>
+</div>
+<div class="flex-1 border border-dashed border-border-subtle rounded-md bg-black/[0.02]"></div>
+</div>
+<div class="flex-1 flex flex-col min-w-[140px] opacity-50">
+<div class="pb-3 mb-3 border-b-2 border-text-main flex items-baseline justify-between text-muted">
+<h3 class="font-display italic text-lg font-semibold">Sat</h3>
+<span class="text-xs font-medium">17</span>
+</div>
+<div class="flex-1 border border-dashed border-border-subtle rounded-md bg-black/[0.02]"></div>
+</div>
+<div class="flex-1 flex flex-col min-w-[140px] opacity-50">
+<div class="pb-3 mb-3 border-b-2 border-text-main flex items-baseline justify-between text-muted">
+<h3 class="font-display italic text-lg font-semibold">Sun</h3>
+<span class="text-xs font-medium">18</span>
+</div>
+<div class="flex-1 border border-dashed border-border-subtle rounded-md bg-black/[0.02]"></div>
+</div>
+</div>
+</div>
+<!-- Bottom Section: Grocery List Drawer (approx 40% height) -->
+<div class="h-2/5 min-h-[250px] bg-surface border-t border-border-subtle flex flex-col shrink-0">
+<div class="px-8 py-4 border-b border-border-subtle flex justify-between items-center bg-background-light/50">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-primary">shopping_basket</span>
+<h3 class="font-display text-xl font-semibold">Auto-Generated Grocery List</h3>
+<span class="bg-black/5 px-2 py-0.5 rounded text-xs font-bold ml-2">24 Items</span>
+</div>
+<div class="flex gap-2">
+<button class="text-sm font-medium text-muted hover:text-text-main flex items-center gap-1 transition-colors">
+<span class="material-symbols-outlined text-[18px]">ios_share</span> Export
+                        </button>
+</div>
+</div>
+<div class="flex-1 p-8 overflow-y-auto">
+<div class="max-w-4xl mx-auto columns-1 md:columns-2 lg:columns-3 gap-8">
+<!-- Aisle Category -->
+<div class="mb-6 break-inside-avoid">
+<h4 class="font-display italic font-semibold text-lg border-b border-border-subtle pb-1 mb-3">Produce</h4>
+<ul class="space-y-2">
+<li class="flex items-start gap-3 group">
+<input class="mt-1 w-4 h-4 rounded-sm border-border-subtle text-primary focus:ring-primary focus:ring-offset-0 cursor-pointer" type="checkbox"/>
+<span class="text-sm group-hover:text-primary transition-colors cursor-pointer select-none leading-tight">2 Lemons</span>
+</li>
+<li class="flex items-start gap-3 group">
+<input class="mt-1 w-4 h-4 rounded-sm border-border-subtle text-primary focus:ring-primary focus:ring-offset-0 cursor-pointer" type="checkbox"/>
+<span class="text-sm group-hover:text-primary transition-colors cursor-pointer select-none leading-tight">1 bunch Fresh Dill</span>
+</li>
+<li class="flex items-start gap-3 group">
+<input class="mt-1 w-4 h-4 rounded-sm border-border-subtle text-primary focus:ring-primary focus:ring-offset-0 cursor-pointer" type="checkbox"/>
+<span class="text-sm group-hover:text-primary transition-colors cursor-pointer select-none leading-tight">3 Avocados</span>
+</li>
+<li class="flex items-start gap-3 group opacity-50">
+<input checked="" class="mt-1 w-4 h-4 rounded-sm border-border-subtle text-primary focus:ring-primary focus:ring-offset-0 cursor-pointer" type="checkbox"/>
+<span class="text-sm line-through cursor-pointer select-none leading-tight">1 head Broccoli</span>
+</li>
+</ul>
+</div>
+<!-- Aisle Category -->
+<div class="mb-6 break-inside-avoid">
+<h4 class="font-display italic font-semibold text-lg border-b border-border-subtle pb-1 mb-3">Meat &amp; Seafood</h4>
+<ul class="space-y-2">
+<li class="flex items-start gap-3 group">
+<input class="mt-1 w-4 h-4 rounded-sm border-border-subtle text-primary focus:ring-primary focus:ring-offset-0 cursor-pointer" type="checkbox"/>
+<span class="text-sm group-hover:text-primary transition-colors cursor-pointer select-none leading-tight flex-1">
+<span class="font-medium">Salmon Fillets</span> <span class="text-muted">(1.5 lbs)</span>
+</span>
+</li>
+<li class="flex items-start gap-3 group">
+<input class="mt-1 w-4 h-4 rounded-sm border-border-subtle text-primary focus:ring-primary focus:ring-offset-0 cursor-pointer" type="checkbox"/>
+<span class="text-sm group-hover:text-primary transition-colors cursor-pointer select-none leading-tight flex-1">
+<span class="font-medium">Chicken Breast</span> <span class="text-muted">(2 lbs)</span>
+</span>
+</li>
+</ul>
+</div>
+<!-- Aisle Category -->
+<div class="mb-6 break-inside-avoid">
+<h4 class="font-display italic font-semibold text-lg border-b border-border-subtle pb-1 mb-3">Pantry</h4>
+<ul class="space-y-2">
+<li class="flex items-start gap-3 group">
+<input class="mt-1 w-4 h-4 rounded-sm border-border-subtle text-primary focus:ring-primary focus:ring-offset-0 cursor-pointer" type="checkbox"/>
+<span class="text-sm group-hover:text-primary transition-colors cursor-pointer select-none leading-tight">Rolled Oats (1 bag)</span>
+</li>
+<li class="flex items-start gap-3 group">
+<input class="mt-1 w-4 h-4 rounded-sm border-border-subtle text-primary focus:ring-primary focus:ring-offset-0 cursor-pointer" type="checkbox"/>
+<span class="text-sm group-hover:text-primary transition-colors cursor-pointer select-none leading-tight">Quinoa (1 box)</span>
+</li>
+<li class="flex items-start gap-3 group">
+<input class="mt-1 w-4 h-4 rounded-sm border-border-subtle text-primary focus:ring-primary focus:ring-offset-0 cursor-pointer" type="checkbox"/>
+<span class="text-sm group-hover:text-primary transition-colors cursor-pointer select-none leading-tight">Soy Sauce</span>
+</li>
+</ul>
+</div>
+<!-- Aisle Category -->
+<div class="mb-6 break-inside-avoid">
+<h4 class="font-display italic font-semibold text-lg border-b border-border-subtle pb-1 mb-3">Dairy &amp; Fridge</h4>
+<ul class="space-y-2">
+<li class="flex items-start gap-3 group">
+<input class="mt-1 w-4 h-4 rounded-sm border-border-subtle text-primary focus:ring-primary focus:ring-offset-0 cursor-pointer" type="checkbox"/>
+<span class="text-sm group-hover:text-primary transition-colors cursor-pointer select-none leading-tight">Almond Milk (Unsweetened)</span>
+</li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+</body></html>

@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#ccff00",
+                        "background-light": "#f8f8f5",
+                        "background-dark": "#1f230f",
+                    },
+                    fontFamily: {
+                        "display": ["Space Grotesk"]
+                    },
+                    borderRadius: {"DEFAULT": "0.5rem", "lg": "1rem", "xl": "1.5rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark font-display text-slate-900 dark:text-slate-100 min-h-screen">
+<div class="relative flex h-auto min-h-screen w-full max-w-md mx-auto flex-col bg-background-light dark:bg-background-dark overflow-x-hidden">
+<header class="flex items-center p-4 pb-2 justify-between">
+<div class="text-slate-900 dark:text-slate-100 flex size-12 shrink-0 items-center cursor-pointer" data-icon="ArrowLeft">
+<span class="material-symbols-outlined">arrow_back</span>
+</div>
+<h2 class="text-slate-900 dark:text-slate-100 text-lg font-bold leading-tight tracking-[-0.015em] flex-1 text-center pr-12">Review &amp; Publish</h2>
+</header>
+<div class="flex w-full flex-row items-center justify-center gap-3 py-5">
+<div class="h-2 w-2 rounded-full bg-primary/30"></div>
+<div class="h-2 w-2 rounded-full bg-primary/30"></div>
+<div class="h-2 w-8 rounded-full bg-primary"></div>
+</div>
+<main class="flex-1 flex flex-col gap-6 px-4 pb-24">
+<section>
+<h3 class="text-slate-900 dark:text-slate-100 text-xl font-bold leading-tight tracking-tight pb-4">Recipe Preview</h3>
+<div class="@container">
+<div class="flex flex-col items-stretch justify-start rounded-xl shadow-lg bg-white dark:bg-slate-800/50 border border-slate-200 dark:border-white/10 overflow-hidden">
+<div class="w-full bg-center bg-no-repeat aspect-video bg-cover" data-alt="A vibrant green avocado quinoa salad bowl" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuA2c94guBpvSvXXix228GpgGm7Hs09K-y3nYF3tXiiPx0CnQ5SfVTsEFQ1INQINLeeFujWx-e_C6VhjvyQgJAu0gzRInsZ5AlDfH093etSVoh07KVhqqkg3u0FG1_GH6AS7rmkH8bpK448S7SYy34sYDt3Kybcmw0FypyU4Ct0A6vYzqolvuN_zaIpqcOHrMG3PozfLztcQEqy1FHVbjzzFtypKbhlLCLEIayrXekCPLAdolbimdL5e99m0MBRgd67I7uRMJiV-Zc3r");'></div>
+<div class="flex w-full min-w-72 grow flex-col items-stretch justify-center gap-2 p-4">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary text-sm">bolt</span>
+<p class="text-slate-500 dark:text-primary/70 text-sm font-medium uppercase tracking-wider">NutriPulse Hub</p>
+</div>
+<p class="text-slate-900 dark:text-white text-xl font-bold leading-tight tracking-tight">Avocado Quinoa Salad</p>
+<div class="flex flex-col gap-3">
+<div class="flex items-center gap-4 text-slate-600 dark:text-slate-400 text-sm">
+<span class="flex items-center gap-1">
+<span class="material-symbols-outlined text-base">schedule</span> 15 mins
+                                    </span>
+<span class="flex items-center gap-1">
+<span class="material-symbols-outlined text-base">local_fire_department</span> 350 kcal
+                                    </span>
+</div>
+<p class="text-slate-600 dark:text-slate-400 text-base font-normal leading-relaxed">
+                                    A fresh, nutrient-dense bowl packed with protein and healthy fats, perfect for a quick energizing lunch.
+                                </p>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section class="bg-white dark:bg-slate-800/40 p-4 rounded-xl border border-slate-200 dark:border-white/10">
+<h3 class="text-slate-900 dark:text-slate-100 text-lg font-bold leading-tight tracking-tight mb-4">Privacy Settings</h3>
+<div class="space-y-4">
+<label class="flex items-center justify-between cursor-pointer group">
+<div class="flex flex-col">
+<span class="text-slate-900 dark:text-white font-semibold">Post to Community</span>
+<span class="text-slate-500 dark:text-slate-400 text-sm">Visible to everyone in the Hub</span>
+</div>
+<div class="relative inline-flex items-center cursor-pointer">
+<input checked="" class="sr-only peer" name="privacy" type="radio"/>
+<div class="w-11 h-6 bg-slate-200 dark:bg-slate-700 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
+</div>
+</label>
+<div class="h-[1px] bg-slate-200 dark:bg-white/5"></div>
+<label class="flex items-center justify-between cursor-pointer group">
+<div class="flex flex-col">
+<span class="text-slate-900 dark:text-white font-semibold">Private Recipe</span>
+<span class="text-slate-500 dark:text-slate-400 text-sm">Only visible to you</span>
+</div>
+<div class="relative inline-flex items-center cursor-pointer">
+<input class="sr-only peer" name="privacy" type="radio"/>
+<div class="w-11 h-6 bg-slate-200 dark:bg-slate-700 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
+</div>
+</label>
+</div>
+</section>
+<section class="flex flex-col gap-3 p-4 bg-primary/10 rounded-xl border border-primary/20">
+<div class="flex items-start gap-3">
+<span class="material-symbols-outlined text-primary">info</span>
+<p class="text-sm text-slate-700 dark:text-slate-300">
+                        By publishing to the Hub, you agree to our Community Guidelines. Your recipe will be audited for nutritional accuracy.
+                    </p>
+</div>
+</section>
+</main>
+<footer class="fixed bottom-0 left-0 right-0 p-4 bg-background-light/80 dark:bg-background-dark/80 backdrop-blur-md max-w-md mx-auto">
+<button class="w-full flex cursor-pointer items-center justify-center overflow-hidden rounded-xl h-14 px-6 bg-primary text-slate-900 text-lg font-bold leading-normal transition-transform active:scale-95 shadow-[0_0_20px_rgba(204,255,0,0.3)]">
+<span class="truncate">Publish to Hub</span>
+<span class="material-symbols-outlined ml-2">rocket_launch</span>
+</button>
+</footer>
+</div>
+</body></html>

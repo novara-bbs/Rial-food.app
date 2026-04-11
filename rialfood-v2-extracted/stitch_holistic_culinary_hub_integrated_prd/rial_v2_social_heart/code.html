@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>The Social Heart - Daily Hub</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6-72,200..800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#a4ec13",
+                        "background-light": "#f7f8f6",
+                        "background-dark": "#1c2210",
+                    },
+                    fontFamily: {
+                        "display": ["Newsreader", "serif"]
+                    },
+                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>
+        body {
+            font-family: 'Newsreader', serif;
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .fill-icon {
+            font-variation-settings: 'FILL' 1;
+        }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100">
+<div class="relative flex h-auto min-h-screen w-full flex-col overflow-x-hidden">
+<div class="layout-container flex h-full grow flex-col">
+<!-- Navigation Header -->
+<header class="flex items-center justify-between border-b border-primary/10 bg-background-light dark:bg-background-dark px-6 py-4 lg:px-20">
+<div class="flex items-center gap-8">
+<div class="flex items-center gap-3 text-slate-900 dark:text-slate-100">
+<div class="size-8 bg-primary rounded-full flex items-center justify-center">
+<span class="material-symbols-outlined text-background-dark">favorite</span>
+</div>
+<h2 class="text-xl font-bold leading-tight tracking-tight font-display">The Social Heart</h2>
+</div>
+<nav class="hidden md:flex items-center gap-8">
+<a class="text-slate-900 dark:text-slate-100 text-sm font-semibold border-b-2 border-primary pb-1" href="#">Feed</a>
+<a class="text-slate-600 dark:text-slate-400 text-sm font-medium hover:text-primary transition-colors" href="#">Recipes</a>
+<a class="text-slate-600 dark:text-slate-400 text-sm font-medium hover:text-primary transition-colors" href="#">Creators</a>
+<a class="text-slate-600 dark:text-slate-400 text-sm font-medium hover:text-primary transition-colors" href="#">Goals</a>
+</nav>
+</div>
+<div class="flex flex-1 justify-end gap-6 items-center">
+<label class="hidden sm:flex flex-col min-w-40 h-10 max-w-64">
+<div class="flex w-full flex-1 items-stretch rounded-full bg-slate-200/50 dark:bg-slate-800/50">
+<div class="flex items-center justify-center pl-4 text-slate-500">
+<span class="material-symbols-outlined text-xl">search</span>
+</div>
+<input class="form-input w-full border-none bg-transparent focus:ring-0 text-sm placeholder:text-slate-500" placeholder="Find recipes or creators"/>
+</div>
+</label>
+<div class="relative">
+<span class="material-symbols-outlined text-slate-700 dark:text-slate-300 cursor-pointer">notifications</span>
+<span class="absolute top-0 right-0 size-2 bg-primary rounded-full border-2 border-background-light"></span>
+</div>
+<div class="bg-center bg-no-repeat aspect-square bg-cover rounded-full size-10 ring-2 ring-primary/30" data-alt="User profile picture of a smiling man" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuCuzwUisWk80hBak20mXLT5csUNCiJt7l9IZBorsznq_0TjwMTb6Gcas0M9l3Cv6B8MKuDqyPh_w_G1Dt4Lg-vgkuw1dj1wn-2VvJJ7Jva1sC_SJQ0nFDQWpgaHuKtxgrE7txI7601kODy6fTQT0TVM0ttmHg9k3CSB-fWLqZmPL1QenYNDv3EQcKH7GqjuNRQ0M04AswHPCXvzF_WX7mN_Nc6N-1DtBECy0OAp8gafaizbBREHT-mSuMol1zvT19p1JJyYJ4SSg3E");'></div>
+</div>
+</header>
+<main class="flex flex-1 flex-col lg:flex-row gap-8 px-6 lg:px-20 py-8">
+<!-- Sidebar Left -->
+<aside class="w-full lg:w-72 flex flex-col gap-6">
+<div class="bg-white dark:bg-slate-900 p-6 rounded-xl shadow-sm border border-slate-100 dark:border-slate-800">
+<div class="flex items-center gap-4 mb-6">
+<div class="size-12 rounded-full bg-primary/20 flex items-center justify-center">
+<span class="material-symbols-outlined text-primary fill-icon">military_tech</span>
+</div>
+<div>
+<h3 class="font-bold text-lg font-display">Alex Rivera</h3>
+<p class="text-xs text-primary font-bold uppercase tracking-wider">Level 5 Artisan</p>
+</div>
+</div>
+<nav class="flex flex-col gap-1">
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg bg-primary/10 text-slate-900 dark:text-slate-100 font-semibold" href="#">
+<span class="material-symbols-outlined fill-icon">dashboard</span> Home
+                            </a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-slate-500 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors" href="#">
+<span class="material-symbols-outlined">group</span> My Community
+                            </a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-slate-500 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors" href="#">
+<span class="material-symbols-outlined">explore</span> Discovery Hub
+                            </a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-slate-500 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors" href="#">
+<span class="material-symbols-outlined">restaurant</span> Personal Kitchen
+                            </a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-slate-500 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors" href="#">
+<span class="material-symbols-outlined">flag</span> My Goals
+                            </a>
+</nav>
+</div>
+<!-- Shared Goals Card -->
+<div class="bg-primary p-6 rounded-xl shadow-md text-background-dark">
+<div class="flex justify-between items-start mb-4">
+<h4 class="font-bold text-lg font-display leading-tight">30-Day Plant Power Challenge</h4>
+<span class="material-symbols-outlined">groups</span>
+</div>
+<div class="flex items-center -space-x-2 mb-4">
+<div class="size-8 rounded-full border-2 border-primary bg-slate-300" data-alt="Community member avatar" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuBtAKxx9hTZ4CpIPQfQG1bYbJmCJV1DsefUXvrmtI3uMXeJKGVookLanNoh2Xl8CWPGcpRrhDezEKDzfpC4_CRUX3OUwheoRlUNqTt93KsuSEkJ1TmW_J63_gFVpaWQYeyjOqI_-rrtJ4vZOUAYo6yLgQSFSwt9z7VAg8gambZT4Rhg-4USuQSPMC7MPVNknDaUUgu5rIW4svMQ_aH-GQIZTE0JY5i4P0ExEpDMr7DEdjJxRnjJylKt76zIWdCYP25enda0TZJKAQY"); background-size: cover;'></div>
+<div class="size-8 rounded-full border-2 border-primary bg-slate-400" data-alt="Community member avatar" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuDaUu85jXAEVvWpQiFD3O1VmYEN1rtGqeRbg0tO9Wk52ZPbAf3M32tH83uEgqIHs8ZUl24eIzAITWfuUSTCrkQbRbmN-R9l1P9qgpBMP6au4VrNHNdfOFIVGxTg-qkm3AobrzWMCzisiImk0L5pmUxp6F5CBJLzGAQySeOHS30wPMZEu6qEOhN91ojoVabCDN0iXOVHbc3E9rnCT5fIzjnQe57d6w4oKQVUNh3SMgsxretn7L9znnnEp05QtTrxt3_Tt_4I-fWpxH8"); background-size: cover;'></div>
+<div class="size-8 rounded-full border-2 border-primary bg-slate-500" data-alt="Community member avatar" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuDifo-U-rbJljdTINf1oNvifGFN17GehyoO2vkBGq7jZAy0rxX6iRyImhjoXz8zoCCzNTRtXfhzNSnnQJIDhVittDrT829aOEtMJVlpAGBetzdRWVf5iFjpa_amVdpTxx5O5cx4s3FdzT0toEHW9oaWGe1vGdhsLZCY3NIIyB22w-YzgEXD6aXJzFjomXlq_V8LQ6XOvwtXBLGOPQhtPbLmDeMYClspfTGrtlBp6nqP7ObEqGH_-y3HHCgl3im4NyfAHKhHF9LI1XE"); background-size: cover;'></div>
+<div class="size-8 rounded-full border-2 border-primary bg-background-dark flex items-center justify-center text-[10px] text-white font-bold">+2k</div>
+</div>
+<div class="w-full bg-background-dark/20 h-2 rounded-full mb-2">
+<div class="bg-background-dark h-full rounded-full w-2/3"></div>
+</div>
+<p class="text-xs font-medium">67% Complete • Team Alpha</p>
+</div>
+</aside>
+<!-- Feed Content Center -->
+<div class="flex-1 flex flex-col gap-8">
+<!-- Top Creators Stories -->
+<div class="flex items-center gap-6 overflow-x-auto pb-2 scrollbar-hide">
+<div class="flex flex-col items-center gap-2 min-w-[70px]">
+<div class="size-16 rounded-full border-4 border-primary p-0.5">
+<div class="w-full h-full rounded-full bg-center bg-cover" data-alt="Chef Mario profile" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuDvGu3MRIDfrj0PszK3HRoPtiJa7No1-3U9nkJpiW7mzZxy2H5ZLP5J2vQNoxZFA0a0SaLoiED7017XbH9g5hbAhXDRxpcH7jL6t_WtxdjrEQbOlxGYWF_EhssSoJZM7h7SheMETR6-VLomXanx3Cq9NiHCyaST0GGH2BPZ3pdIdRAxxcKc0T5RNVpFwsEBsa77fz3861JZdiO0w80wQ0I8JKrjhoxcszeKoFtryaf8ImkPK6Df8-yzPLIo8TALDQ9swPDimIcZLpM");'></div>
+</div>
+<span class="text-xs font-bold text-center">Mario C.</span>
+</div>
+<div class="flex flex-col items-center gap-2 min-w-[70px]">
+<div class="size-16 rounded-full border-4 border-primary p-0.5">
+<div class="w-full h-full rounded-full bg-center bg-cover" data-alt="Healthy Liz profile" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuBHxmfdbfP5-ORL_kVBKPsuZrYhn3cAZRcWaJdZ0epAdIF-eUJz6M0jPMiZ14ymuFTDFKl7t6PDzD-KPpDGXWIJaBHtjJ4CHJOWQadZHWPg0oOLxd_aG4gXLDVjlGYGeN0waXMD1RHNNw5MVsrb87pUGL8M_LZdQ_lom8rfH1IeXwrpjfrjcAme_B2Pf97pfdwWmcGqDTTap3gux0MheMJ52Bb80CQmOzh5zji_JVBAT4VCqChDDLG_GXcKER1myCrTqES0FOscYho");'></div>
+</div>
+<span class="text-xs font-bold text-center">Healthy Liz</span>
+</div>
+<div class="flex flex-col items-center gap-2 min-w-[70px]">
+<div class="size-16 rounded-full border-2 border-slate-300 p-0.5">
+<div class="w-full h-full rounded-full bg-center bg-cover grayscale" data-alt="Baker Tom profile" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuDcj3KkBxfcxYJSMYEkYTZQalumFVYRwfq57JyNoTRKtaQU88JehczFn39AeyTuLY8Ews2-2dfCpf0dNan0E6b8ssd-86JliOMryf9htKiGdqVUUbSy_veAO2FxKMfvz56BNgitmtNzz-a5CUmfjjdZByAN3ve_1cyCJqp4R1q51LmY92Fl1OFZwaIwjJii0zyqKSrkugEjj1UU8r7MkKVZPShcPvl_fKBs6cv5PQPFT8vR1kAcWxmT8RylyyPI5Rxsc-ugEi4f6pg");'></div>
+</div>
+<span class="text-xs font-medium text-slate-500 text-center">Baker Tom</span>
+</div>
+<div class="flex flex-col items-center gap-2 min-w-[70px]">
+<div class="size-16 rounded-full border-2 border-slate-300 p-0.5">
+<div class="w-full h-full rounded-full bg-center bg-cover grayscale" data-alt="Fit Fuel profile" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuDowoMdQ8wZQGsMdgR5z1EhraO6hDxzrEspjk87-yN9xt-ot4ovLeJI9eDaf2psTrpfvZnK47ImB2jXOUXhTkAuJN_kJPDeqGL4-Nw4q72iEL62IjWaeb76ANxeNCRXPzhmVXL55oZHNL_k1Z7CpND6W1w1BWhQwHcBRRmPnxBSXtViDf1qRq-298cV6H4eyKfOlixgbQEbEBEKMYpvw9MWzjwX1kWWyw22LgRKZ1UJvWwWLOZ9IFUswhoOJM9V_h2g6_t-hnWgoCY");'></div>
+</div>
+<span class="text-xs font-medium text-slate-500 text-center">Fit Fuel</span>
+</div>
+<div class="flex flex-col items-center gap-2 min-w-[70px]">
+<div class="size-16 rounded-full border-2 border-slate-300 p-0.5">
+<div class="w-full h-full rounded-full bg-center bg-cover grayscale" data-alt="Sara K profile" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuBDfIDQdNlDEoJs0HEwcxvJNTLOPUJWd2-SGL79IbAkV0rJnurK5PO5wgwWsjfjIV7cnFp5K23FY0E1dDcM0kmMH-hqSyQ1g4MbLT0EgG5Wn9ZyAJVzT8gbZ8tkjki2IKK1MGOEE3GZzy6VRubpAwKg6anF22_oq_eO1M1GEk-5JcdhC4nZizUfP34XT-W7RPe3XJe5WoVQn319MAaDwSJLWJEeRb7TC9Xlx_AZf_ggYOlLLXdFqY6u4mqlDLHKLukTizYbygwYV9k");'></div>
+</div>
+<span class="text-xs font-medium text-slate-500 text-center">Sara K.</span>
+</div>
+</div>
+<!-- Main Feed Section -->
+<div class="flex flex-col gap-6">
+<div class="flex items-center justify-between">
+<h2 class="text-2xl font-bold font-display">Community Feed</h2>
+<div class="flex gap-2">
+<button class="px-4 py-1 text-sm font-bold bg-primary rounded-full">Recent</button>
+<button class="px-4 py-1 text-sm font-medium text-slate-500 hover:bg-slate-100 rounded-full transition-colors">Following</button>
+</div>
+</div>
+<!-- Feed Item 1: Large Featured Card -->
+<article class="bg-white dark:bg-slate-900 rounded-2xl overflow-hidden shadow-sm border border-slate-100 dark:border-slate-800">
+<div class="relative h-72 w-full bg-center bg-cover" data-alt="Gourmet smash burger with melted cheese and fresh greens" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuBRkZsLdaLzG2QPevxapSN53iWJFCVMRaBavGmm28X4CVJ2e_KfdOsLZ9euySJeYHBXNrgBe4gTprBxA9NQkGCnOx8BcKpn0or-BFTkCebtlRLCC1X3H3LmoiBPdQ_ze98xCR9eKIFaxa95RZOWYp_PiJ8uxxLtFsT5ZW6eZ3BKiiVXgQph1Y5PnzcGVD2aVAgFuRw5oIodrkatmG45Ra2pbxH9zBvDJBK84FD-xm_k6U0XT-dSugO69aGXX-oQI-rviJnDXCEfJCo");'>
+<div class="absolute top-4 right-4 bg-background-light/90 backdrop-blur-sm px-3 py-1 rounded-full flex items-center gap-1">
+<span class="material-symbols-outlined text-primary text-sm fill-icon">star</span>
+<span class="text-xs font-bold text-slate-900">Featured</span>
+</div>
+</div>
+<div class="p-6">
+<div class="flex items-center gap-3 mb-4">
+<div class="size-10 rounded-full bg-center bg-cover ring-2 ring-primary ring-offset-2" data-alt="Chef Mario avatar" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuAQFgXiupGFjJQ0GtJ2WMHlopJvF7f-f4Cq0FFtPFJXZANlkQr_nYx_JhRghyds9afS5vZkzlu6wXoLnYjQbG93vHq8eI3M-3HwRJmquErFdyJir7Z53aMhGH_ZZBo_htvg06uHQWnhUSFGsWuub4uo_xxAviEn3HGfQVDY9RfOM3-67X8Ux7IkyLuQ9bVBsFjYEffaop7I9NyQ6efVu-lI7pvHUvk2F3xkzkIy2JyNTvFN5DAHLX3fr_nCs5koQm3ArTyokXgPqY4");'></div>
+<div>
+<p class="text-sm font-bold flex items-center gap-1">Chef Mario <span class="material-symbols-outlined text-blue-500 text-base fill-icon">verified</span></p>
+<p class="text-xs text-slate-500">Shared 2h ago</p>
+</div>
+</div>
+<h3 class="text-2xl font-bold font-display mb-2">The Ultimate Weekend Smash Burger</h3>
+<p class="text-slate-600 dark:text-slate-400 text-sm mb-6 line-clamp-2">The secret is the cold cast iron and the 20% fat ratio. Don't flip it more than once if you want that perfect Maillard reaction crust!</p>
+<div class="flex items-center justify-between border-t border-slate-50 dark:border-slate-800 pt-6">
+<div class="flex items-center gap-6">
+<div class="flex items-center gap-1.5 cursor-pointer hover:text-red-500 transition-colors">
+<span class="material-symbols-outlined text-xl">favorite</span>
+<span class="text-sm font-medium">1.2k</span>
+</div>
+<div class="flex items-center gap-1.5 cursor-pointer hover:text-primary transition-colors">
+<span class="material-symbols-outlined text-xl">chat_bubble</span>
+<span class="text-sm font-medium">84</span>
+</div>
+<div class="flex items-center gap-1.5 cursor-pointer hover:text-primary transition-colors">
+<span class="material-symbols-outlined text-xl">share</span>
+<span class="text-sm font-medium">12</span>
+</div>
+</div>
+<button class="bg-primary text-background-dark px-6 py-2 rounded-lg font-bold text-sm shadow-sm hover:opacity-90 transition-opacity">
+                                        View Recipe
+                                    </button>
+</div>
+</div>
+</article>
+<!-- Feed Item 2: Goal Milestone -->
+<article class="bg-primary/5 dark:bg-primary/10 rounded-2xl p-6 border-l-4 border-primary shadow-sm">
+<div class="flex justify-between items-start">
+<div class="flex gap-4">
+<div class="size-12 rounded-full bg-primary/20 flex items-center justify-center">
+<span class="material-symbols-outlined text-primary fill-icon">emoji_events</span>
+</div>
+<div>
+<h4 class="font-bold text-lg font-display">Goal Reached: 'The Green Week'</h4>
+<p class="text-sm text-slate-600 dark:text-slate-400">Team Alpha collectively cooked 500+ plant-based meals!</p>
+</div>
+</div>
+<span class="text-xs font-bold text-slate-400">1h ago</span>
+</div>
+<div class="mt-6 flex items-center gap-4">
+<div class="flex -space-x-3">
+<div class="size-8 rounded-full border-2 border-white dark:border-slate-900 bg-center bg-cover" data-alt="Team member" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuBe4MbUYvWpzUl6OGeql1OfK5uHVVdnfGiaSt7q22mTkHZIp4xekCdQZ0i5G_Y3x5h8x2L-IPhZEsBqgBaCOOhwcPQF8SYFJBJ0UqxLifY2-ipowFWpK1lZBbDCq72LbfcjUcQmxSqcA3aZjUb-uMpYNUXEQ7YiwrFIzGGZFh17-xS5fbLNA6RipmMmKMxKa5lxqOojSdbrl9Ab0dIuUBGWMXRxVXy22zOWYHRNZrP8e4QgHp2hWdrGY-2RgUkJ6ij2hre0VkHf6FE");'></div>
+<div class="size-8 rounded-full border-2 border-white dark:border-slate-900 bg-center bg-cover" data-alt="Team member" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuArZfUrBYBCJadVvGNQPNIX2mmxKjHgHjsXkQ4LTwpUOaBicTFLYsJ5ZQXB1GUCdrahojZn400yDHtb10RD5G5nSO5asNewbrSryOowjbFwC4iNsfnmaY7f7e1DomAoz8AudAey14xBDcPDyRIgvUFjUW9eSwILT6LS5eK_HuVbpeRI7wpcYENe6ic1GIs2eTGMgCvZqY0jcWvvMn7pEHVVPnIS0tLLNSlKMa35hoGgt_s5gclsQNVgC3773SWINtoLtOvG1YDuVv8");'></div>
+<div class="size-8 rounded-full border-2 border-white dark:border-slate-900 bg-center bg-cover" data-alt="Team member" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuA4-EbCkmHrbocv9qi1-Lg4XP7BRN40wqHYA7Rp2tT6zsSKOvzdC-PxJj5FYbo2DwU8ZR8UDIYIOF5Pp0-eJ5ovBb4wJ0IFlPZBkHU6PrF4_Boo79JArDFZOpsnWc-ZLML0pCQp90eQ91xvxNdOajaSt19UwVR6c45ZJTsxTIZ0Bn0081tjHG3h2CwAN_baqJgaWCMT-dpI4TZ3O33Q6e97KhTxoUYtjzEtjUSfc3pOqfN53BXQSyLgNwhn0yILaHiw6vmCJQ1uxxk");'></div>
+</div>
+<span class="text-sm font-medium text-slate-600">Great work, Alex! You contributed 7 meals.</span>
+</div>
+</article>
+<!-- Feed Item 3: Secondary Card -->
+<article class="flex flex-col md:flex-row bg-white dark:bg-slate-900 rounded-2xl overflow-hidden shadow-sm border border-slate-100 dark:border-slate-800">
+<div class="w-full md:w-64 h-48 md:h-auto bg-center bg-cover" data-alt="Pesto pasta with roasted tomatoes and basil" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuBsGaGenLdEjNT2f1Gz-OFeONo5-w55yMaP1c9T6gK9wUTMPA2Ef8f4SrFGsVj5NL0kxkXlYCQ8r0q8ILP7ZWMy5XCGj12zNaH_mf28M4UrLyPODcG-Hsq2_ejfIDG2Y-eP7ks3DqTZL10WxAJQLKYzBl__Bn1CziN75750N5LBGZ5QlGUyndoxOARamtZzNXJrLPdXQ5ZGY39d94vWpWoEhzlBf37WKIcO5UCNlYSfN9utMZ-S0ABRVKs097FnOrVGmngW4brxsZc");'></div>
+<div class="flex-1 p-6">
+<p class="text-xs font-bold text-primary mb-2 uppercase tracking-wide">Trending: Quick Lunch</p>
+<h3 class="text-xl font-bold font-display mb-2">15-Minute Walnut &amp; Basil Pesto</h3>
+<div class="flex items-center gap-2 mb-4">
+<span class="text-xs text-slate-500">by</span>
+<span class="text-xs font-bold">Healthy Liz</span>
+<span class="text-slate-300">•</span>
+<span class="text-xs text-slate-500">452 saves</span>
+</div>
+<div class="flex gap-2">
+<span class="px-2 py-0.5 rounded bg-slate-100 dark:bg-slate-800 text-[10px] font-bold text-slate-600 dark:text-slate-400">VEGAN</span>
+<span class="px-2 py-0.5 rounded bg-slate-100 dark:bg-slate-800 text-[10px] font-bold text-slate-600 dark:text-slate-400">LOW CARB</span>
+</div>
+</div>
+</article>
+</div>
+</div>
+<!-- Trending/Creators Sidebar Right -->
+<aside class="w-full lg:w-80 flex flex-col gap-8">
+<!-- Top Creators Section -->
+<div class="bg-white dark:bg-slate-900 p-6 rounded-xl shadow-sm border border-slate-100 dark:border-slate-800">
+<div class="flex items-center justify-between mb-6">
+<h3 class="font-bold text-lg font-display">Rising Creators</h3>
+<a class="text-xs font-bold text-primary" href="#">See All</a>
+</div>
+<div class="flex flex-col gap-5">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-3">
+<div class="size-10 rounded-full bg-center bg-cover" data-alt="Creator avatar" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuAz9rule6SBY9EqXcGOYsDWaleWf2DLoC405ZxD1i0hOC2Pj78mT1soJc9ZigkDWvn9EgtaXUSq_GSpKZdSn52GG4mnwUNqFbWGbCTUIbv-G5jJJSS3ESfLM6FEtnwsUfqoWPbA3otrgS8l592N16_kaJ2JOJr9Ve_t8uLmfNSoedY9i770cqIR6i_b6Rs4p9dMbL6xzhrzLpnjuR5y-HEose-hsz3jytJJyAN9C8W_QYAaJcUCePzmF3Ouwj-nQ223d9TGQ4mtep4");'></div>
+<div>
+<p class="text-sm font-bold">Spicy_Kitchen</p>
+<p class="text-[10px] text-slate-500">12.5k followers</p>
+</div>
+</div>
+<button class="p-1.5 rounded-full border border-slate-200 hover:bg-primary transition-colors">
+<span class="material-symbols-outlined text-sm">person_add</span>
+</button>
+</div>
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-3">
+<div class="size-10 rounded-full bg-center bg-cover" data-alt="Creator avatar" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuCN4MsKRW-i_jFEQQd8mDh4g48GeVvY2wYHQAJQT8znurZIuJV7McBlBBnLKyH3CGpzWhE_xtBHRxYGnn5YSttAezY4GN0ZvSB8zV92-1syitbFOLBpBMXRPbUnnh_oiC6CaTRFXd6e8Rai6JIa5rIaopq4r-4Pa6alsLialyC43269yX6qhklZnwsAAYyDH1UCCViDuoxf254lAqSnlBQob9T3j3hEt0wqgflAhoU3QKj3VdA6xz7Hqzzw8G48Lg6hlBkTD192DOI");'></div>
+<div>
+<p class="text-sm font-bold">PastryKing</p>
+<p class="text-[10px] text-slate-500">8.2k followers</p>
+</div>
+</div>
+<button class="p-1.5 rounded-full border border-slate-200 hover:bg-primary transition-colors">
+<span class="material-symbols-outlined text-sm">person_add</span>
+</button>
+</div>
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-3">
+<div class="size-10 rounded-full bg-center bg-cover" data-alt="Creator avatar" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuDRxA3ejJJ6UulVo_XF_NbPEwxA86QR82ZXUQfubi04PpQowk9PterqLsYxBwisWEqIWSp8FZWND4WT4IS5sAjwYdMwLZIdK4PvO6iJiuBMTvslt7X4iAx_fiyBCZreopggFGnnZoIFlSdCMYyKImfhFcwLVVPXhlAbYAI_CJgJSFQNLdsd9NHviPrUGdW6RcIjydrNqr_qZjjyUJkza8_Jyhmq0g5opaGnegYL495qRZ7Db_GHx6FvIk612aNnpKwtLtz5D0c2TVw");'></div>
+<div>
+<p class="text-sm font-bold">FermentFanatic</p>
+<p class="text-[10px] text-slate-500">24k followers</p>
+</div>
+</div>
+<button class="p-1.5 rounded-full border border-slate-200 hover:bg-primary transition-colors">
+<span class="material-symbols-outlined text-sm">person_add</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Social Validation: Recently Made -->
+<div class="bg-white dark:bg-slate-900 p-6 rounded-xl shadow-sm border border-slate-100 dark:border-slate-800">
+<h3 class="font-bold text-lg font-display mb-4">Tried &amp; Tested</h3>
+<p class="text-xs text-slate-500 mb-6">Real photos from the community</p>
+<div class="grid grid-cols-2 gap-3">
+<div class="aspect-square rounded-lg bg-center bg-cover" data-alt="Community made French toast" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuCUwrjVZ1gMvTbdoi2QKAYtUEiXfTCyx4CoWcHYqqNcmmwOb7kBz-7Gj4LrDBF8FTwqf-yNQHyy6NtXsJ74f2URGqUXeD1gXXIliCSouuIeeETLUiJUgK7D-Kz-FTiNmB6XyaecIszeiJ_SjftUcR89EHdAUA0T_2yE2Dy0vpfIR_-84gxbMyzrMjhbJp7cMXqP3okzCU-ARhTKpLuG9Jn24P8J_MIvtD-zAFf1EPza0YzpyrXWLxmWbg_3JQVG8jSehu5DQQvwEUc");'></div>
+<div class="aspect-square rounded-lg bg-center bg-cover" data-alt="Community made fresh salad" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuBp8u8-YSk2MLMtgAlNscLN96_caSSV6ZDz3R0gv7wX3z4pdNvgXiav5d0DwkRRv_kxmjnNaqNXwwK0NxYagJ6CZSdG-pobh0amlj7MO6Ob-Wi67CZpyfGS-5l6h40Bp_4jCDbqJL6ob01_0kKbEkVIKTDRZDSOeUHIlwe9Gl2svzU0QS87YlBuAyaaA0Jebvja5JLfcDrbuQ9kBLLl2N3hiBnAWRPIEoVGOguL7fJTBMdSsOm-3_Suq-VV4FkaOwtk7xNSBdWKnac");'></div>
+<div class="aspect-square rounded-lg bg-center bg-cover" data-alt="Community made Buddha bowl" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuC0T6cpIqBGGsG2HlMLEwPfQIiIwpw0j04RVH0sS0UDuKwwQRZcODz_EYUCtkmogbZlaN3777XsRBD-Z4X7ZmSgaSTlgS_szrgWox1IzhjsVKBvdSXOg5N2RebuBCF1snGsxFH9MXjZlR6oB9xjqsEoZERmkC56_liuB7GsT0yb7fu-MgWu74QQzB0w5PmDeXsci1gWF71KiOC30u8Aks9NXJ8OUaboa-nRPCmcgTzJ2nOILsh6if5Ts0b6DJJ7XYRidbITcU74nNM");'></div>
+<div class="aspect-square rounded-lg bg-slate-100 dark:bg-slate-800 flex items-center justify-center text-xs font-bold text-slate-400">
+                                +150 photos
+                            </div>
+</div>
+</div>
+<!-- Community Badge Teaser -->
+<div class="bg-background-dark text-white p-6 rounded-xl relative overflow-hidden">
+<div class="absolute -right-4 -bottom-4 opacity-10 rotate-12">
+<span class="material-symbols-outlined text-9xl">workspace_premium</span>
+</div>
+<p class="text-primary text-[10px] font-bold uppercase tracking-widest mb-1">Next Badge</p>
+<h4 class="text-xl font-display font-bold mb-4 italic">Master of Dough</h4>
+<p class="text-sm text-slate-400 mb-6">Complete 3 more bread recipes to unlock your next creator badge.</p>
+<div class="flex items-center gap-2">
+<div class="flex-1 h-1.5 bg-slate-800 rounded-full">
+<div class="bg-primary h-full rounded-full w-[70%]"></div>
+</div>
+<span class="text-xs font-bold">2/5</span>
+</div>
+</div>
+</aside>
+</main>
+</div>
+</div>
+</body></html>

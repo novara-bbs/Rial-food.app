@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,200..800;1,6..72,200..800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#4A5D23",
+                        "accent": "#a4ec13",
+                        "background-light": "#F9F8F6",
+                        "background-dark": "#1c2210",
+                        "border-muted": "#E5E3D8",
+                    },
+                    fontFamily: {
+                        "display": ["Newsreader", "serif"],
+                        "sans": ["Satoshi", "Inter", "sans-serif"]
+                    },
+                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>
+        body {
+            font-family: 'Satoshi', sans-serif;
+        }
+        .font-display {
+            font-family: 'Newsreader', serif;
+        }
+        /* Custom slider styling for biometric metrics */
+        input[type='range']::-webkit-slider-runnable-track {
+            background: #E5E3D8;
+            height: 4px;
+            border-radius: 2px;
+        }
+        input[type='range']::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            margin-top: -6px;
+            background-color: #4A5D23;
+            height: 16px;
+            width: 16px;
+            border-radius: 50%;
+        }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark min-h-screen text-slate-900 dark:text-slate-100">
+<div class="relative flex min-h-screen w-full flex-col overflow-x-hidden">
+<div class="layout-container flex h-full grow flex-col">
+<!-- Top Navigation Bar -->
+<header class="flex items-center justify-between border-b border-border-muted px-6 md:px-20 py-4 bg-background-light/80 backdrop-blur-md sticky top-0 z-50">
+<div class="flex items-center gap-3">
+<div class="text-primary">
+<span class="material-symbols-outlined text-3xl">biotech</span>
+</div>
+<h2 class="font-display italic text-2xl font-semibold tracking-tight text-primary">RIAL V1</h2>
+</div>
+<div class="flex items-center gap-4">
+<button class="flex items-center justify-center rounded-full p-2 hover:bg-primary/10 transition-colors text-primary">
+<span class="material-symbols-outlined">close</span>
+</button>
+</div>
+</header>
+<!-- Main Content Area -->
+<main class="flex flex-1 justify-center py-8 px-4">
+<div class="max-w-[640px] w-full flex flex-col gap-10">
+<!-- Header Section -->
+<section class="flex flex-col gap-3">
+<span class="text-xs font-bold uppercase tracking-widest text-primary/70">Clinical Insight Report</span>
+<h1 class="font-display text-5xl font-medium leading-tight">Share Recipe Insight</h1>
+<p class="text-slate-600 dark:text-slate-400 text-lg">Correlate your metabolic data with recent consumption to refine the community knowledge base.</p>
+</section>
+<!-- Recipe Selection -->
+<section class="flex flex-col gap-4">
+<div class="flex items-center justify-between">
+<h3 class="font-display text-xl font-semibold italic">Selected Recipe</h3>
+<button class="text-sm font-medium text-primary hover:underline flex items-center gap-1">
+<span class="material-symbols-outlined text-sm">history</span>
+                                Change Recent
+                            </button>
+</div>
+<div class="flex items-center gap-5 p-4 rounded-xl border border-border-muted bg-white dark:bg-slate-900/50 shadow-sm">
+<div class="bg-center bg-no-repeat aspect-square bg-cover rounded-lg size-20 shrink-0 shadow-inner" data-alt="Miso-glazed salmon with sesame seeds and green onions" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuCStD7qudDu1butFxql8dNY_d-Oz2x2dwzWLncrM56Y7mye-xaUEreA3O8wS1RvcQfBMOKrb_uTvI80kvJ_BCmzfYAimCJZSaA2NNljkBxndjITPOXeM62M8J9GhwuoYgK1Dpicj1-86g1048RJyIUaG94-sbF64PXi4U9QklfrP6Ys5Jm59tS4hU-zHWnYgqsOFRFirDDUJPg66b0qKKQLfjDGedXUO1dni5zS5LWnx2RDN1qAM0TrOtGbruFNh3859KKvcrSXwP4");'>
+</div>
+<div class="flex flex-col justify-center grow">
+<p class="text-xl font-semibold text-slate-900 dark:text-slate-100">Miso-Glazed Salmon</p>
+<p class="text-primary font-medium text-sm">Consumed 2 hours ago • Post-Prandial Phase</p>
+</div>
+<div class="shrink-0 text-slate-400">
+<span class="material-symbols-outlined">check_circle</span>
+</div>
+</div>
+</section>
+<!-- Real Feel Metrics -->
+<section class="flex flex-col gap-6">
+<div class="flex flex-col gap-1">
+<h3 class="font-display text-xl font-semibold italic">Real Feel Metrics</h3>
+<p class="text-sm text-slate-500">How do you feel at the 2-hour mark?</p>
+</div>
+<div class="grid gap-8 p-6 rounded-xl border border-border-muted bg-white dark:bg-slate-900/50">
+<!-- Metric: Energy -->
+<div class="flex flex-col gap-3">
+<div class="flex justify-between items-center">
+<label class="font-bold text-sm tracking-wide text-slate-700 dark:text-slate-300 uppercase">Energy Level</label>
+<span class="text-primary font-bold">Stable</span>
+</div>
+<input class="w-full h-1 bg-border-muted rounded-lg appearance-none cursor-pointer accent-primary" max="5" min="1" type="range" value="3"/>
+<div class="flex justify-between text-[10px] text-slate-400 font-bold uppercase tracking-tighter">
+<span>Lethargic</span>
+<span>Vibrant</span>
+</div>
+</div>
+<!-- Metric: Digestion -->
+<div class="flex flex-col gap-3">
+<div class="flex justify-between items-center">
+<label class="font-bold text-sm tracking-wide text-slate-700 dark:text-slate-300 uppercase">Digestion</label>
+<span class="text-primary font-bold">Excellent</span>
+</div>
+<input class="w-full h-1 bg-border-muted rounded-lg appearance-none cursor-pointer accent-primary" max="5" min="1" type="range" value="5"/>
+<div class="flex justify-between text-[10px] text-slate-400 font-bold uppercase tracking-tighter">
+<span>Heavy</span>
+<span>Light</span>
+</div>
+</div>
+<!-- Metric: Mood -->
+<div class="flex flex-col gap-3">
+<div class="flex justify-between items-center">
+<label class="font-bold text-sm tracking-wide text-slate-700 dark:text-slate-300 uppercase">Mood</label>
+<span class="text-primary font-bold">Focused</span>
+</div>
+<input class="w-full h-1 bg-border-muted rounded-lg appearance-none cursor-pointer accent-primary" max="5" min="1" type="range" value="4"/>
+<div class="flex justify-between text-[10px] text-slate-400 font-bold uppercase tracking-tighter">
+<span>Irritable</span>
+<span>Serene</span>
+</div>
+</div>
+</div>
+</section>
+<!-- The Correlation Text Area -->
+<section class="flex flex-col gap-4">
+<div class="flex flex-col gap-1">
+<h3 class="font-display text-xl font-semibold italic">The Correlation</h3>
+<p class="text-sm text-slate-500">Subjective notes on your physiological response.</p>
+</div>
+<div class="relative">
+<textarea class="w-full min-h-[160px] p-4 rounded-xl border border-border-muted bg-white dark:bg-slate-900/50 focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all resize-none text-slate-800 dark:text-slate-200" placeholder="Example: The high protein content and healthy fats seem to prevent the usual mid-afternoon energy crash. Digestion felt remarkably efficient compared to the pasta dish yesterday..."></textarea>
+<div class="absolute bottom-3 right-3 text-xs text-slate-400">
+                                0 / 500
+                            </div>
+</div>
+</section>
+<!-- Action Buttons -->
+<section class="flex flex-col gap-4 pt-4 pb-12">
+<button class="w-full py-4 bg-primary text-background-light font-bold rounded-xl shadow-lg shadow-primary/20 hover:bg-primary/90 transition-all active:scale-[0.98] flex items-center justify-center gap-2">
+<span class="material-symbols-outlined text-xl">public</span>
+                            Publish to Community
+                        </button>
+<button class="w-full py-4 bg-transparent text-primary font-bold rounded-xl border border-primary/20 hover:bg-primary/5 transition-all">
+                            Save as Private Note
+                        </button>
+<p class="text-center text-xs text-slate-400 italic">Insights are anonymized and aggregated for clinical research.</p>
+</section>
+</div>
+</main>
+<!-- Bottom Indicator for Mobile -->
+<div class="md:hidden flex justify-center pb-4">
+<div class="w-32 h-1.5 bg-slate-300 dark:bg-slate-700 rounded-full"></div>
+</div>
+</div>
+</div>
+</body></html>

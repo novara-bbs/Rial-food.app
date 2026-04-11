@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+
+<html class="" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>RIAL Master Journal</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">tailwind.config = {darkMode: "class", theme: {extend: {colors: {primary: "#607AFB", "background-light": "#f5f6f8", "background-dark": "#0f1323", "surface-dark": "#1a1a1a", "accent-muted": "#1f230f"}, fontFamily: {display: "Space Grotesk"}, borderRadius: {DEFAULT: "0.5rem", lg: "1rem", xl: "1.5rem", full: "9999px"}}}};</script>
+<style>
+        body {
+            font-family: 'Space Grotesk', sans-serif;
+        }
+        .hide-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .hide-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 min-h-screen flex flex-col">
+<!-- Header / Profile Section -->
+<header class="sticky top-0 z-50 bg-background-light/80 dark:bg-background-dark/80 backdrop-blur-md border-b border-slate-200 dark:border-slate-800">
+<div class="max-w-xl mx-auto px-4 h-16 flex items-center justify-between">
+<div class="flex items-center gap-3">
+<div class="size-10 rounded-full overflow-hidden border-2 border-primary bg-slate-200 dark:bg-slate-800" data-alt="Close up portrait of a smiling professional athlete" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuDSjeOeqXhuRk5Ov0kN5HoX_bwR7WmEIR7QEfqtNJeIkXex30K9aVvpbHI2DLgTmqZKtJk5rKycO-1li-hfR8OAzpo_b7zW5hxr1M6FuitvIB3piR_Yd6ki-ztJ8eBydaYrPlRjaE_7mXsG1B2QGJTJZYy0nAAMBGZ36AYFgNR9WMAxJ102E2Sr--ZhFJSg7smCLYHBB9UI_sx_0Kr1onXtT4o0Exl_Yo-LPDnbnQFcimVUNEdnFWRAeKx2-xvX0rvN7w7ZnIRPwezK"); background-size: cover; background-position: center;'>
+</div>
+<div>
+<h1 class="text-sm font-bold tracking-tight">RIAL MASTER</h1>
+<p class="text-[10px] text-primary uppercase tracking-widest font-semibold">Human Edge System</p>
+</div>
+</div>
+<div class="flex gap-2">
+<button class="size-10 flex items-center justify-center rounded-full bg-slate-100 dark:bg-surface-dark text-slate-600 dark:text-slate-400">
+<span class="material-symbols-outlined text-[20px]">search</span>
+</button>
+<button class="size-10 flex items-center justify-center rounded-full bg-primary text-black">
+<span class="material-symbols-outlined text-[20px]">add</span>
+</button>
+</div>
+</div>
+</header>
+<main class="flex-1 max-w-xl mx-auto w-full pb-32">
+<!-- Date Selector -->
+<div class="p-4 flex gap-4 overflow-x-auto hide-scrollbar">
+<div class="flex flex-col items-center justify-center min-w-[50px] h-20 rounded-xl bg-slate-100 dark:bg-surface-dark border border-slate-200 dark:border-slate-800 opacity-50">
+<span class="text-xs uppercase font-medium">Mon</span>
+<span class="text-lg font-bold">12</span>
+</div>
+<div class="flex flex-col items-center justify-center min-w-[50px] h-20 rounded-xl bg-slate-100 dark:bg-surface-dark border border-slate-200 dark:border-slate-800 opacity-50">
+<span class="text-xs uppercase font-medium">Tue</span>
+<span class="text-lg font-bold">13</span>
+</div>
+<div class="flex flex-col items-center justify-center min-w-[60px] h-24 -mt-2 rounded-2xl bg-primary text-black shadow-lg shadow-primary/20">
+<span class="text-xs uppercase font-bold">Wed</span>
+<span class="text-2xl font-bold">14</span>
+</div>
+<div class="flex flex-col items-center justify-center min-w-[50px] h-20 rounded-xl bg-slate-100 dark:bg-surface-dark border border-slate-200 dark:border-slate-800">
+<span class="text-xs uppercase font-medium text-slate-400">Thu</span>
+<span class="text-lg font-bold">15</span>
+</div>
+<div class="flex flex-col items-center justify-center min-w-[50px] h-20 rounded-xl bg-slate-100 dark:bg-surface-dark border border-slate-200 dark:border-slate-800">
+<span class="text-xs uppercase font-medium text-slate-400">Fri</span>
+<span class="text-lg font-bold">16</span>
+</div>
+</div>
+<!-- Biometric Summary Cards -->
+<section class="px-4 py-2">
+<h2 class="text-xl font-bold mb-4 tracking-tight">Real-Feel Biometrics</h2>
+<div class="grid grid-cols-3 gap-3">
+<div class="bg-slate-100 dark:bg-surface-dark p-4 rounded-2xl border border-slate-200 dark:border-slate-800">
+<span class="material-symbols-outlined text-primary mb-2">bolt</span>
+<p class="text-[10px] uppercase font-bold text-slate-500 tracking-wider">Energy</p>
+<p class="text-xl font-bold">85%</p>
+<div class="mt-2 h-1 w-full bg-slate-200 dark:bg-slate-700 rounded-full overflow-hidden">
+<div class="h-full bg-primary w-[85%]"></div>
+</div>
+</div>
+<div class="bg-slate-100 dark:bg-surface-dark p-4 rounded-2xl border border-slate-200 dark:border-slate-800">
+<span class="material-symbols-outlined text-primary mb-2">center_focus_strong</span>
+<p class="text-[10px] uppercase font-bold text-slate-500 tracking-wider">Focus</p>
+<p class="text-xl font-bold">92%</p>
+<div class="mt-2 h-1 w-full bg-slate-200 dark:bg-slate-700 rounded-full overflow-hidden">
+<div class="h-full bg-primary w-[92%]"></div>
+</div>
+</div>
+<div class="bg-slate-100 dark:bg-surface-dark p-4 rounded-2xl border border-slate-200 dark:border-slate-800">
+<span class="material-symbols-outlined text-primary mb-2">restaurant</span>
+<p class="text-[10px] uppercase font-bold text-slate-500 tracking-wider">Digestion</p>
+<p class="text-xl font-bold">Optimal</p>
+<div class="mt-2 flex gap-1">
+<div class="h-1 flex-1 bg-primary rounded-full"></div>
+<div class="h-1 flex-1 bg-primary rounded-full"></div>
+<div class="h-1 flex-1 bg-primary rounded-full"></div>
+</div>
+</div>
+</div>
+</section>
+<!-- Today's Intake Editorial Layout -->
+<section class="px-4 py-6">
+<div class="flex justify-between items-end mb-6">
+<div>
+<h2 class="text-2xl font-bold tracking-tight">Today's Intake</h2>
+<p class="text-slate-500 dark:text-slate-400 text-sm">Fueling for performance and family.</p>
+</div>
+<button class="text-primary text-sm font-bold uppercase tracking-widest">See All</button>
+</div>
+<!-- Breakfast Card (Magazine Style) -->
+<div class="group relative overflow-hidden rounded-3xl mb-6 aspect-[4/5] bg-slate-200 dark:bg-surface-dark">
+<div class="absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover:scale-105" data-alt="Editorial top-down photo of an avocado toast and poached egg" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuB8Vzq1j319z0l0-ZXiPUwMwlKmcFgMXKEy1CgzWP_F8Kl3JSy-VhfJp_X8XkYu5D1W98jZ4tfrG86I9qMLJbND15x94gwCs4PZw2wJvzm66JcnlLnftZZB29SfYTa9tQVMSh3VCnrvkuEf99eTLJyQ5hZoVt-amBXilp62HckTLTIzKLuHnYxJ1dXg2X_pHFJuX-rY7tc-SCdnkoJ0jdOyZU0Crmjxcf4FrfPTQKomH6HofW-U0VvyUg4QYcRtQKdKAZYIRIh0Es2K");'></div>
+<div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent"></div>
+<div class="absolute top-4 left-4">
+<span class="px-3 py-1 bg-primary text-black text-[10px] font-black uppercase tracking-widest rounded-full">Breakfast • 07:30 AM</span>
+</div>
+<div class="absolute bottom-6 left-6 right-6">
+<h3 class="text-3xl font-bold text-white mb-2 leading-tight">Poached Egg &amp; <br/>Avocado Sourdough</h3>
+<div class="flex gap-4 text-white/80 text-sm font-medium">
+<span class="flex items-center gap-1"><span class="w-2 h-2 rounded-full bg-primary"></span> 420 kcal</span>
+<span class="flex items-center gap-1"><span class="w-2 h-2 rounded-full bg-primary"></span> 24g Protein</span>
+</div>
+<div class="mt-4 flex gap-2">
+<span class="px-2 py-1 bg-white/10 backdrop-blur-md rounded text-[10px] uppercase font-bold text-white">Gut-Health+</span>
+<span class="px-2 py-1 bg-white/10 backdrop-blur-md rounded text-[10px] uppercase font-bold text-white">High Fiber</span>
+</div>
+</div>
+</div>
+<!-- Lunch Grid -->
+<div class="grid grid-cols-2 gap-4">
+<div class="group relative aspect-square rounded-2xl overflow-hidden bg-slate-200 dark:bg-surface-dark">
+<div class="absolute inset-0 bg-cover bg-center" data-alt="Modern salad bowl with vibrant vegetables" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuD705NouLsfdqF2-ZXcZrRtvnZwbc6r8xHwQHXUP6tmFgwVY2u_I5RuR7G0Q8-PM0y56QxPlRxEdnJlgq0UDq5DmP4zO9zzIfxAA4ZwacyRklgJsWYEKQ3yxmgNpRykCi7MEtD9vVjkQSLa0HyaDDxVTX_iQ5fLDtotP9Vz-ISYcQuUg3fvGlg2XA65yxi4vxJVW5_rBukBirlZXnb3ABydCwoxgpaevmCAnvzA5cYGJuJ2n7ZioqGPoalYsXWoDwoFgNhy1YjzNNBW");'></div>
+<div class="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent"></div>
+<div class="absolute bottom-3 left-3">
+<p class="text-[10px] text-primary font-bold uppercase mb-0.5">Lunch</p>
+<p class="text-white font-bold text-sm">Zen Power Bowl</p>
+</div>
+</div>
+<div class="group relative aspect-square rounded-2xl overflow-hidden bg-slate-200 dark:bg-surface-dark">
+<div class="absolute inset-0 bg-cover bg-center" data-alt="Berry smoothie in a glass with artistic garnish" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuA27Q2gCbNVxeFAqsJfi9qdXD3qTd52c5fDgOQ9yZ0zCIbI-B8LjgUFozgdZ4u4EwQOzOIZLg7kqJdaOm-Io96KiZwcRAgVzrcizYpw6BN8UVk4-itXWqa1fMxdHptWgM-FVi8FEizSebdBRNSEmFZtEmmK5MfQzOPrVRNwKbIpJRNbmZYu0NidQRJf94w8p5K9AmDQxAk7muHkaztE-aYXjX-uozDZ0rIWHY5tE8vCaVxNgU4nEQP0b1EU8c-wzt6ppVfeLoclaHMv");'></div>
+<div class="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent"></div>
+<div class="absolute bottom-3 left-3">
+<p class="text-[10px] text-primary font-bold uppercase mb-0.5">Snack</p>
+<p class="text-white font-bold text-sm">Berry Recovery</p>
+</div>
+</div>
+</div>
+</section>
+<!-- AI Insights / Journal Section -->
+<section class="px-4 py-2">
+<div class="bg-primary/10 border border-primary/20 rounded-3xl p-6">
+<div class="flex items-center gap-3 mb-4">
+<div class="size-8 rounded-full bg-primary flex items-center justify-center">
+<span class="material-symbols-outlined text-black text-sm">neurology</span>
+</div>
+<h3 class="text-lg font-bold tracking-tight">RIAL Insight</h3>
+</div>
+<p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4">
+                    Your energy levels peaked 2 hours after the <span class="text-primary font-bold">Zen Power Bowl</span>. Consider increasing complex carbs during tomorrow's lunch for sustained evening performance.
+                </p>
+<div class="flex gap-2">
+<button class="px-4 py-2 bg-primary text-black text-xs font-bold rounded-full uppercase tracking-widest">Adjust Plan</button>
+<button class="px-4 py-2 bg-transparent border border-primary/30 text-primary text-xs font-bold rounded-full uppercase tracking-widest">Log Note</button>
+</div>
+</div>
+</section>
+</main>
+<!-- Bottom Navigation Bar -->
+<nav class="fixed bottom-0 left-0 right-0 z-50 bg-background-light dark:bg-background-dark/90 backdrop-blur-xl border-t border-slate-200 dark:border-slate-800 pb-safe">
+<div class="max-w-xl mx-auto px-6 h-20 flex items-center justify-between">
+<a class="flex flex-col items-center gap-1 text-primary" href="#">
+<span class="material-symbols-outlined font-fill text-[26px]">menu_book</span>
+<span class="text-[10px] font-bold uppercase tracking-wider">Journal</span>
+</a>
+<a class="flex flex-col items-center gap-1 text-slate-400" href="#">
+<span class="material-symbols-outlined text-[26px]">analytics</span>
+<span class="text-[10px] font-bold uppercase tracking-wider">Stats</span>
+</a>
+<div class="size-14 -mt-10 bg-primary rounded-full flex items-center justify-center shadow-xl shadow-primary/40 border-4 border-background-light dark:border-background-dark">
+<span class="material-symbols-outlined text-black font-bold text-[32px]">photo_camera</span>
+</div>
+<a class="flex flex-col items-center gap-1 text-slate-400" href="#">
+<span class="material-symbols-outlined text-[26px]">ecg_heart</span>
+<span class="text-[10px] font-bold uppercase tracking-wider">Vitals</span>
+</a>
+<a class="flex flex-col items-center gap-1 text-slate-400" href="#">
+<span class="material-symbols-outlined text-[26px]">person</span>
+<span class="text-[10px] font-bold uppercase tracking-wider">Me</span>
+</a>
+</div>
+</nav>
+</body></html>

@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>RIAL Family Planner &amp; Insights</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#ddff00",
+                        "background-light": "#f8f8f5",
+                        "background-dark": "#20230f",
+                    },
+                    fontFamily: {
+                        "display": ["Space Grotesk"]
+                    },
+                    borderRadius: {"DEFAULT": "0.5rem", "lg": "1rem", "xl": "1.5rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>
+        body { font-family: 'Space Grotesk', sans-serif; }
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 min-h-screen">
+<!-- Top Navigation Bar -->
+<header class="sticky top-0 z-50 bg-white/80 dark:bg-background-dark/80 backdrop-blur-md border-b border-slate-200 dark:border-slate-800">
+<div class="flex items-center p-4 justify-between max-w-2xl mx-auto">
+<div class="flex items-center gap-3">
+<div class="size-10 rounded-full bg-primary flex items-center justify-center text-slate-900">
+<span class="material-symbols-outlined font-bold">family_restroom</span>
+</div>
+<div>
+<h1 class="text-lg font-bold leading-none">RIAL Family</h1>
+<p class="text-xs text-slate-500 dark:text-slate-400">Human-Centric Precision</p>
+</div>
+</div>
+<div class="flex gap-2">
+<button class="size-10 flex items-center justify-center rounded-full bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300">
+<span class="material-symbols-outlined">notifications</span>
+</button>
+<button class="size-10 flex items-center justify-center rounded-full bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300">
+<span class="material-symbols-outlined">settings</span>
+</button>
+</div>
+</div>
+<!-- Dual Purpose Toggle -->
+<div class="px-4 pb-2 max-w-2xl mx-auto">
+<div class="flex bg-slate-100 dark:bg-slate-800 p-1 rounded-lg">
+<button class="flex-1 py-2 text-sm font-bold rounded-md bg-white dark:bg-slate-700 shadow-sm transition-all">
+                    Tactical Planning
+                </button>
+<button class="flex-1 py-2 text-sm font-medium text-slate-500 dark:text-slate-400 hover:text-slate-900">
+                    Personal Insights
+                </button>
+</div>
+</div>
+</header>
+<main class="max-w-2xl mx-auto pb-24">
+<!-- Tactical Planning Section -->
+<section class="p-4 space-y-6">
+<div class="flex items-center justify-between">
+<h2 class="text-xl font-bold tracking-tight">Batch Cooking &amp; Scaling</h2>
+<span class="bg-primary/20 text-slate-900 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider">Active Plan</span>
+</div>
+<!-- Main Planning Card -->
+<div class="bg-white dark:bg-slate-900 rounded-xl overflow-hidden border border-slate-200 dark:border-slate-800 shadow-sm">
+<div class="h-48 bg-slate-200 relative overflow-hidden">
+<div class="absolute inset-0 bg-cover bg-center" data-alt="Overhead view of healthy meal prep containers with vegetables" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuBpDMoMy15rnyHHNYZ37ofTRfzXvyskePZ1NYIaV2SU1bFlyW3K3k9ATtH7SwZj05DEIgrxuZjp3H-hvNClYdbvfRAgLvUvtEGTRcya5X1Wm4o0-mas192O0izKiWPK_zsK2IlNC6LSOCDCzA3rRD-ZArZkPzekkoe56mKFzaakKubMZPp0YRFaUf_MdSeIjUHHE6WQqDBkdJHLUASy9verXADTFA6tA90O5XFXzEO5NxUnMuBoUXCBGY_eZOXcRZbDzoIoJtUBDwoP')"></div>
+<div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
+<div class="absolute bottom-4 left-4 text-white">
+<p class="text-xs font-medium uppercase tracking-widest text-primary">Sunday Prep</p>
+<h3 class="text-xl font-bold">Mediterranean Macro Bowls</h3>
+</div>
+</div>
+<div class="p-4 space-y-4">
+<div class="grid grid-cols-2 gap-4">
+<div class="bg-background-light dark:bg-slate-800 p-3 rounded-lg border-l-4 border-primary">
+<p class="text-[10px] uppercase font-bold text-slate-500 dark:text-slate-400">Total Yield</p>
+<p class="text-lg font-bold">12 Portions</p>
+</div>
+<div class="bg-background-light dark:bg-slate-800 p-3 rounded-lg border-l-4 border-primary">
+<p class="text-[10px] uppercase font-bold text-slate-500 dark:text-slate-400">Prep Time</p>
+<p class="text-lg font-bold">45 Mins</p>
+</div>
+</div>
+<!-- Portion Scaling UI -->
+<div class="space-y-3">
+<div class="flex items-center justify-between">
+<p class="text-sm font-bold">Family Portion Scaling</p>
+<button class="text-xs text-primary font-bold bg-primary/10 px-2 py-1 rounded">Adjust All</button>
+</div>
+<div class="flex gap-2 overflow-x-auto no-scrollbar pb-2">
+<div class="flex-shrink-0 w-28 p-3 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 flex flex-col items-center text-center">
+<span class="material-symbols-outlined text-slate-400 mb-1">person</span>
+<p class="text-xs font-bold">Dad</p>
+<p class="text-[10px] text-slate-500">Fitness/High Pro</p>
+<div class="mt-2 text-sm font-bold text-primary">650 kcal</div>
+</div>
+<div class="flex-shrink-0 w-28 p-3 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 flex flex-col items-center text-center">
+<span class="material-symbols-outlined text-slate-400 mb-1">person_2</span>
+<p class="text-xs font-bold">Mom</p>
+<p class="text-[10px] text-slate-500">Balanced/Maintenance</p>
+<div class="mt-2 text-sm font-bold text-primary">520 kcal</div>
+</div>
+<div class="flex-shrink-0 w-28 p-3 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 flex flex-col items-center text-center">
+<span class="material-symbols-outlined text-slate-400 mb-1">child_care</span>
+<p class="text-xs font-bold">Leo</p>
+<p class="text-[10px] text-slate-500">Growth/Reduced Carb</p>
+<div class="mt-2 text-sm font-bold text-primary">380 kcal</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Smart Shopping List Toggle -->
+<div class="bg-primary p-4 rounded-xl flex items-center justify-between shadow-lg shadow-primary/20">
+<div class="flex items-center gap-3">
+<div class="bg-white/20 p-2 rounded-lg">
+<span class="material-symbols-outlined text-slate-900">shopping_cart</span>
+</div>
+<div>
+<p class="text-slate-900 font-bold leading-none">Smart Shopping List</p>
+<p class="text-slate-800 text-xs mt-1">24 items synced to 3 devices</p>
+</div>
+</div>
+<div class="relative inline-flex items-center cursor-pointer">
+<input checked="" class="sr-only peer" type="checkbox"/>
+<div class="w-11 h-6 bg-slate-800/20 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-slate-900"></div>
+</div>
+</div>
+</section>
+<!-- Personal Insights Section -->
+<section class="p-4 space-y-6">
+<h2 class="text-xl font-bold tracking-tight">Personal Insights &amp; Trends</h2>
+<div class="grid grid-cols-2 gap-4">
+<!-- Vitality Score -->
+<div class="bg-white dark:bg-slate-900 p-4 rounded-xl border border-slate-200 dark:border-slate-800">
+<p class="text-xs font-bold text-slate-500 uppercase tracking-widest">Vitality Score</p>
+<div class="flex items-end gap-2 mt-2">
+<span class="text-3xl font-bold">84</span>
+<span class="text-primary text-sm font-bold flex items-center mb-1">
+<span class="material-symbols-outlined text-xs">arrow_upward</span> 12%
+                        </span>
+</div>
+<!-- Simplified Sparkline -->
+<div class="h-12 flex items-end gap-1 mt-4">
+<div class="flex-1 bg-primary/20 rounded-t h-[40%]"></div>
+<div class="flex-1 bg-primary/20 rounded-t h-[60%]"></div>
+<div class="flex-1 bg-primary/40 rounded-t h-[50%]"></div>
+<div class="flex-1 bg-primary/60 rounded-t h-[80%]"></div>
+<div class="flex-1 bg-primary rounded-t h-[100%]"></div>
+</div>
+</div>
+<!-- Food-Mood Correlation -->
+<div class="bg-white dark:bg-slate-900 p-4 rounded-xl border border-slate-200 dark:border-slate-800">
+<p class="text-xs font-bold text-slate-500 uppercase tracking-widest">Food-Mood</p>
+<div class="flex items-center gap-2 mt-2">
+<span class="material-symbols-outlined text-primary">sentiment_very_satisfied</span>
+<span class="text-sm font-bold">High Focus</span>
+</div>
+<p class="text-[10px] text-slate-500 dark:text-slate-400 mt-2 leading-tight">Correlation: High Protein breakfast leads to +20% focus score.</p>
+</div>
+</div>
+<!-- Detailed Breakdown List -->
+<div class="space-y-3">
+<div class="flex items-center justify-between p-4 bg-white dark:bg-slate-900 rounded-lg border border-slate-200 dark:border-slate-800">
+<div class="flex items-center gap-3">
+<div class="bg-blue-100 dark:bg-blue-900/30 text-blue-600 p-2 rounded-lg">
+<span class="material-symbols-outlined">water_drop</span>
+</div>
+<div>
+<p class="text-sm font-bold">Hydration Level</p>
+<p class="text-[10px] text-slate-500">Optimal (2.4L today)</p>
+</div>
+</div>
+<div class="w-16 h-2 bg-slate-100 dark:bg-slate-800 rounded-full overflow-hidden">
+<div class="bg-blue-500 h-full w-[80%]"></div>
+</div>
+</div>
+<div class="flex items-center justify-between p-4 bg-white dark:bg-slate-900 rounded-lg border border-slate-200 dark:border-slate-800">
+<div class="flex items-center gap-3">
+<div class="bg-orange-100 dark:bg-orange-900/30 text-orange-600 p-2 rounded-lg">
+<span class="material-symbols-outlined">local_fire_department</span>
+</div>
+<div>
+<p class="text-sm font-bold">Metabolic Window</p>
+<p class="text-[10px] text-slate-500">Closing in 1h 45m</p>
+</div>
+</div>
+<div class="text-xs font-bold text-orange-500">Priority</div>
+</div>
+</div>
+</section>
+</main>
+<!-- Bottom Navigation -->
+<nav class="fixed bottom-0 left-0 right-0 bg-white/90 dark:bg-background-dark/90 backdrop-blur-xl border-t border-slate-200 dark:border-slate-800 pb-6 pt-2 z-50">
+<div class="flex items-center justify-around max-w-2xl mx-auto px-4">
+<a class="flex flex-col items-center gap-1 text-slate-900 dark:text-primary" href="#">
+<span class="material-symbols-outlined fill-1">calendar_today</span>
+<span class="text-[10px] font-bold uppercase tracking-tighter">Plan</span>
+</a>
+<a class="flex flex-col items-center gap-1 text-slate-400" href="#">
+<span class="material-symbols-outlined">analytics</span>
+<span class="text-[10px] font-bold uppercase tracking-tighter">Insights</span>
+</a>
+<div class="-mt-8">
+<button class="bg-primary size-14 rounded-full flex items-center justify-center shadow-lg shadow-primary/40 border-4 border-white dark:border-background-dark">
+<span class="material-symbols-outlined text-slate-900 text-3xl font-bold">add</span>
+</button>
+</div>
+<a class="flex flex-col items-center gap-1 text-slate-400" href="#">
+<span class="material-symbols-outlined">shopping_basket</span>
+<span class="text-[10px] font-bold uppercase tracking-tighter">Grocery</span>
+</a>
+<a class="flex flex-col items-center gap-1 text-slate-400" href="#">
+<span class="material-symbols-outlined">account_circle</span>
+<span class="text-[10px] font-bold uppercase tracking-tighter">Profile</span>
+</a>
+</div>
+</nav>
+</body></html>

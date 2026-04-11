@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#ccff00",
+                        "background-light": "#f8f8f5",
+                        "background-dark": "#1f230f",
+                    },
+                    fontFamily: {
+                        "display": ["Space Grotesk", "sans-serif"]
+                    },
+                    borderRadius: {"DEFAULT": "0.5rem", "lg": "1rem", "xl": "1.5rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<title>NutriPulse | Discover Recipes</title>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark font-display text-slate-900 dark:text-slate-100 antialiased">
+<div class="relative flex min-h-screen flex-col overflow-x-hidden">
+<!-- Header / Navigation -->
+<header class="sticky top-0 z-50 flex items-center justify-between border-b border-primary/10 bg-background-light/80 dark:bg-background-dark/80 px-6 py-4 backdrop-blur-md">
+<div class="flex items-center gap-2">
+<div class="flex h-10 w-10 items-center justify-center rounded-lg bg-primary text-background-dark">
+<span class="material-symbols-outlined font-bold">restaurant_menu</span>
+</div>
+<h1 class="text-xl font-bold tracking-tight text-slate-900 dark:text-slate-100">NutriPulse</h1>
+</div>
+<div class="flex items-center gap-4">
+<button class="rounded-full bg-primary/10 p-2 text-primary dark:bg-primary/20">
+<span class="material-symbols-outlined">notifications</span>
+</button>
+<div class="h-10 w-10 overflow-hidden rounded-full border-2 border-primary/30">
+<img class="h-full w-full object-cover" data-alt="Profile picture of a smiling mother" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDIBKmxDbLYdZQCsj721d5qZ9Ra33hgOHIFRWkyPFQNrBdrikHAe3yt3e35G0MY3HKfm-qnIGmLXzOJoiU7fYQC5qywrBzs1HI9bGxZTsS95px6UDHg7AlqZrIQXpSPXxtsTfzipPItGS4IVwfr3PKNINjcptgi7O1VL1uKThjFK36fKSy0Aivk2V_hpmJO0mLe5x9gr08L_VS-ssQFbcf4bQCq5XyGruVc1umUU6e8yZacXXK9yRIRjR1TE2t9AiPxNln0XOGOWIKn"/>
+</div>
+</div>
+</header>
+<main class="flex-1 pb-24">
+<!-- Search & Filters -->
+<section class="px-6 pt-8">
+<div class="mb-6">
+<h2 class="text-3xl font-bold leading-tight">Feed your family <br/><span class="text-primary">the best.</span></h2>
+<p class="mt-2 text-slate-600 dark:text-slate-400">10,000+ wholesome recipes curated by nutritionists.</p>
+</div>
+<div class="relative flex items-center">
+<span class="material-symbols-outlined absolute left-4 text-slate-400">search</span>
+<input class="w-full rounded-xl border-none bg-slate-100 py-4 pl-12 pr-4 text-slate-900 focus:ring-2 focus:ring-primary dark:bg-slate-800 dark:text-slate-100 dark:placeholder:text-slate-500" placeholder="Search healthy dinners, snacks, or toddler meals..." type="text"/>
+</div>
+<!-- Trending Tags -->
+<div class="mt-6 flex gap-3 overflow-x-auto pb-2 scrollbar-hide">
+<button class="flex shrink-0 items-center gap-2 rounded-full bg-primary px-4 py-2 text-sm font-semibold text-background-dark">
+<span class="material-symbols-outlined text-sm">local_fire_department</span> Trending
+                    </button>
+<button class="flex shrink-0 items-center gap-2 rounded-full bg-primary/10 px-4 py-2 text-sm font-semibold text-slate-700 dark:bg-primary/10 dark:text-primary">
+                        Family Friendly
+                    </button>
+<button class="flex shrink-0 items-center gap-2 rounded-full bg-primary/10 px-4 py-2 text-sm font-semibold text-slate-700 dark:bg-primary/10 dark:text-primary">
+                        Quick &amp; Easy
+                    </button>
+<button class="flex shrink-0 items-center gap-2 rounded-full bg-primary/10 px-4 py-2 text-sm font-semibold text-slate-700 dark:bg-primary/10 dark:text-primary">
+                        Toddler Approved
+                    </button>
+<button class="flex shrink-0 items-center gap-2 rounded-full bg-primary/10 px-4 py-2 text-sm font-semibold text-slate-700 dark:bg-primary/10 dark:text-primary">
+                        High Protein
+                    </button>
+</div>
+</section>
+<!-- Featured Large Magazine Style Card -->
+<section class="mt-8 px-6">
+<div class="group relative overflow-hidden rounded-xl bg-slate-900 shadow-2xl">
+<img class="h-[450px] w-full object-cover transition-transform duration-500 group-hover:scale-105 opacity-80" data-alt="Beautifully plated roasted salmon with asparagus and lemon" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBp0ZDNA_jyYYmRznsIu0z2S4f_22HqKgUKECqlVfm7WIoJqiaJtXimCN_kCYJN1ACHe1kaYtFsZPrPsr6-5Mp-4AQOZ8avRtGlf1w-nF6JRkdyBqFgtx-T57u9PsgYP0-HlPFBEH0v3ajUQqD1Uk0NgNOpkkTZUma6uRQapT6wKZ3Q7IritgmP0izwfPvxgQTgO-S822NbDcjgRXXO8uZxG4n21XNM1GI9SS_1is93orrbwwlfBKRoNuhOXihBlu2uKtkR3WwTi_oi"/>
+<div class="absolute inset-0 bg-gradient-to-t from-background-dark via-transparent to-transparent"></div>
+<div class="absolute bottom-0 p-8">
+<span class="inline-block rounded-lg bg-primary px-3 py-1 text-xs font-bold uppercase tracking-widest text-background-dark">Featured Recipe</span>
+<h3 class="mt-3 text-4xl font-bold text-white leading-tight">Honey Garlic Salmon with Roasted Greens</h3>
+<div class="mt-4 flex items-center gap-6 text-slate-300">
+<div class="flex items-center gap-1"><span class="material-symbols-outlined text-sm">schedule</span> 25 mins</div>
+<div class="flex items-center gap-1"><span class="material-symbols-outlined text-sm">restaurant</span> Family of 4</div>
+<div class="flex items-center gap-1 text-primary"><span class="material-symbols-outlined text-sm">star</span> 4.9 (2k+)</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Grid Sections -->
+<section class="mt-12">
+<div class="flex items-center justify-between px-6">
+<h4 class="text-xl font-bold">Kid-Approved Favorites</h4>
+<a class="text-sm font-semibold text-primary" href="#">See all</a>
+</div>
+<div class="mt-6 flex gap-6 overflow-x-auto px-6 pb-6 scrollbar-hide">
+<!-- Recipe Card 1 -->
+<div class="min-w-[280px] group">
+<div class="relative h-48 overflow-hidden rounded-xl">
+<img class="h-full w-full object-cover transition-transform duration-300 group-hover:scale-110" data-alt="Healthy colorful breakfast bowl for kids" src="https://lh3.googleusercontent.com/aida-public/AB6AXuC5HKw2BYs8S2FOG1_Yjk3bH4-zf0zYumq687owQJp5JO7wLHxA-tVw9S0o1FsswzRJbR5Y6tfQ5B4DVo1TXJT1cZ-o5u_imsSdBqxoEcTGz8mAW9buf48y2u5f-mHb_V8Jzva9MUJcNIFNMumQPlgMhHRZ0znrpxogaQFajUaFJ7x1Dc5dKdUw83tnqaujCJOI-F0-0sQUBp8FjuCKGoW6xJLxylHTzw8f5Do78o_73cfo-kMAjEnOYWAC8sSpifO4GqJszdv7aVVr"/>
+<button class="absolute right-3 top-3 flex h-8 w-8 items-center justify-center rounded-full bg-white/20 backdrop-blur-md text-white">
+<span class="material-symbols-outlined text-xl">favorite</span>
+</button>
+</div>
+<div class="mt-3">
+<div class="flex gap-2">
+<span class="text-[10px] font-bold uppercase tracking-wider text-primary">Toddler Approved</span>
+</div>
+<h5 class="mt-1 font-bold group-hover:underline">Rainbow Breakfast Power Bowls</h5>
+<p class="text-sm text-slate-500">Perfect start for picky eaters</p>
+</div>
+</div>
+<!-- Recipe Card 2 -->
+<div class="min-w-[280px] group">
+<div class="relative h-48 overflow-hidden rounded-xl">
+<img class="h-full w-full object-cover transition-transform duration-300 group-hover:scale-110" data-alt="Gourmet healthy salad with avocado and egg" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBWYfqMnOERsI-Vz02D1kyCnX_pK3rQ2enled9aMtLO5TBSUo8eLZxj8F7gNxCWgfbAgkzcJNE0TGtBl8QTI7GedxKS9FQx6yJKbPlg4p1J1YKiboA9UnAyAxL91IkOpxAUDigY3sXgWqpNoONetpk272qlb4Kvh9Sr2by4vAOoDBwgxgGbvKDaPMdR7bt-xejGkIFjWl1Vr6ElHSFqAjX5J9F227VluIYPvaNBB64No8x9U6dVaHOE1B3LPQENrfBsp-J_swX67aS-"/>
+<button class="absolute right-3 top-3 flex h-8 w-8 items-center justify-center rounded-full bg-white/20 backdrop-blur-md text-white">
+<span class="material-symbols-outlined text-xl">favorite</span>
+</button>
+</div>
+<div class="mt-3">
+<div class="flex gap-2">
+<span class="text-[10px] font-bold uppercase tracking-wider text-primary">Quick Prep</span>
+</div>
+<h5 class="mt-1 font-bold group-hover:underline">15-Min Avocado &amp; Egg Power Salad</h5>
+<p class="text-sm text-slate-500">High protein lunch for busy parents</p>
+</div>
+</div>
+<!-- Recipe Card 3 -->
+<div class="min-w-[280px] group">
+<div class="relative h-48 overflow-hidden rounded-xl">
+<img class="h-full w-full object-cover transition-transform duration-300 group-hover:scale-110" data-alt="Grilled chicken with roasted Mediterranean vegetables" src="https://lh3.googleusercontent.com/aida-public/AB6AXuC276D8UmeQJlqwWI5zQDghLkyohrGMsEStXoYgi_b8kguBlY-QvoBoYVIy8ggOm1xd-TZQGlzjbsJkHEEpBF2xb5c5GEwIqLgfwyVhHyspYs7D24aJTZfozI6q4hEscJGa4xN-2gKRHvoD72bjeYaYsPrdp6wz4YwwuSDQ87nZl-nOKuvOOK5ts-w_i83TZ-BrpZgsnLMRRfyfddN8FlrUZA0-_TPVoFyTNzHV07UjaHwPlL5BddKX_D-qVl8cRfrGBvwZZE7bqeEO"/>
+<button class="absolute right-3 top-3 flex h-8 w-8 items-center justify-center rounded-full bg-white/20 backdrop-blur-md text-white">
+<span class="material-symbols-outlined text-xl">favorite</span>
+</button>
+</div>
+<div class="mt-3">
+<div class="flex gap-2">
+<span class="text-[10px] font-bold uppercase tracking-wider text-primary">High Protein</span>
+</div>
+<h5 class="mt-1 font-bold group-hover:underline">Mediterranean Lemon Herb Chicken</h5>
+<p class="text-sm text-slate-500">A weekend family favorite</p>
+</div>
+</div>
+</div>
+</section>
+<!-- Healthy Living Magazine Section -->
+<section class="mt-8 px-6">
+<div class="rounded-xl bg-primary/5 p-6 border border-primary/20">
+<h4 class="text-xl font-bold text-primary">NutriPulse Magazine</h4>
+<p class="mt-2 text-slate-400">This week's guides for healthy homes.</p>
+<div class="mt-6 space-y-4">
+<div class="flex items-center gap-4">
+<div class="h-16 w-16 shrink-0 overflow-hidden rounded-lg">
+<img class="h-full w-full object-cover" data-alt="Fruit and vegetable storage organization" src="https://lh3.googleusercontent.com/aida-public/AB6AXuB4f5bIYg6qIvDX_y8FlKZ36CUS-MedktX3iKECgA704kMYaP19nbPPWnRF27suGZWtmXCvX9eU-R97B09oxzFqlSQcuaBlfAlczV0xi2qJWIqQqumzSI-52lMyfW9vxZjWcR1LxmpoKavuKqkr_rrvcNdG4IVRqWmpvTRQ4OiFh2KyyTHB36U-ukufBua-2lO12DKXTqu5IYmy4TdoXxI7xQKeeYOifiXkvpEBbyc-lT0SYjpxQwZZ9qC4R9kO91qfPTku7Q6wtNeU"/>
+</div>
+<div>
+<h6 class="font-semibold">Mastering Meal Prep for 4+ People</h6>
+<p class="text-xs text-slate-500">Read in 5 minutes • Kitchen Hacks</p>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<div class="h-16 w-16 shrink-0 overflow-hidden rounded-lg">
+<img class="h-full w-full object-cover" data-alt="Close up of a fresh green juice" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDx9G6mNZKPm47YCQiV6e1Us87q8jiDal52npfTs_cKq7kRXUiuW4b19oGKmktX92xBT22u__RHrWGOR-kVBejnJWXEIFVyBzZfKl7QEL68ogaH0KwsB724CmwOkxOS9XzJBJx3KQWQVCRybdUDIgChwOPwf5gWnYqHrtIjGQ2dr2T4YiouuQQnj4Qk3XR28cFOYvStoYQxlqvhDaUNRS9TjDri5czaUyebdgqiQUZLxL045HBkGxLpcOixU0Olnj_0PKzYQrNUP-6V"/>
+</div>
+<div>
+<h6 class="font-semibold">Hydration Hacks for Active Kids</h6>
+<p class="text-xs text-slate-500">Read in 3 minutes • Wellness</p>
+</div>
+</div>
+</div>
+</div>
+</section>
+</main>
+<!-- Bottom Navigation -->
+<nav class="fixed bottom-0 z-50 w-full border-t border-primary/10 bg-background-light/95 dark:bg-background-dark/95 backdrop-blur-xl">
+<div class="flex h-20 items-center justify-around px-2">
+<a class="flex flex-col items-center gap-1 text-primary" href="#">
+<span class="material-symbols-outlined">explore</span>
+<span class="text-[10px] font-medium">Discover</span>
+</a>
+<a class="flex flex-col items-center gap-1 text-slate-400 dark:text-slate-500" href="#">
+<span class="material-symbols-outlined">menu_book</span>
+<span class="text-[10px] font-medium">My Recipes</span>
+</a>
+<a class="flex flex-col items-center gap-1 text-slate-400 dark:text-slate-500" href="#">
+<span class="material-symbols-outlined">calendar_today</span>
+<span class="text-[10px] font-medium">Planner</span>
+</a>
+<a class="flex flex-col items-center gap-1 text-slate-400 dark:text-slate-500" href="#">
+<span class="material-symbols-outlined">groups</span>
+<span class="text-[10px] font-medium">Community</span>
+</a>
+</div>
+</nav>
+</div>
+</body></html>

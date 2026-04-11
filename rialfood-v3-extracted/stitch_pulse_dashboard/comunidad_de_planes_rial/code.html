@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#ccff00",
+                        "background-light": "#f8f8f5",
+                        "background-dark": "#1f230f",
+                    },
+                    fontFamily: {
+                        "display": ["Space Grotesk"]
+                    },
+                    borderRadius: {"DEFAULT": "0.5rem", "lg": "1rem", "xl": "1.5rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<title>RIAL | Community Plan Hub</title>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark font-display text-slate-900 dark:text-slate-100 min-h-screen">
+<div class="relative flex min-h-screen w-full flex-col overflow-x-hidden">
+<header class="flex items-center bg-background-light dark:bg-background-dark p-4 justify-between sticky top-0 z-50 border-b border-primary/10">
+<div class="flex size-12 shrink-0 items-center">
+<span class="material-symbols-outlined text-2xl">menu</span>
+</div>
+<h1 class="text-xl font-bold tracking-tighter flex-1 text-center">RIAL</h1>
+<div class="flex w-12 items-center justify-end">
+<button class="flex size-10 items-center justify-center rounded-full hover:bg-primary/10">
+<span class="material-symbols-outlined">search</span>
+</button>
+</div>
+</header>
+<nav class="bg-background-light dark:bg-background-dark pt-2">
+<div class="flex border-b border-primary/10 px-4 gap-8 overflow-x-auto no-scrollbar">
+<a class="flex flex-col items-center justify-center border-b-2 border-primary text-primary pb-3 pt-2 shrink-0" href="#">
+<p class="text-sm font-bold">Trending</p>
+</a>
+<a class="flex flex-col items-center justify-center border-b-2 border-transparent text-slate-500 dark:text-slate-400 pb-3 pt-2 shrink-0" href="#">
+<p class="text-sm font-bold">Following</p>
+</a>
+<a class="flex flex-col items-center justify-center border-b-2 border-transparent text-slate-500 dark:text-slate-400 pb-3 pt-2 shrink-0" href="#">
+<p class="text-sm font-bold">Newest</p>
+</a>
+<a class="flex flex-col items-center justify-center border-b-2 border-transparent text-slate-500 dark:text-slate-400 pb-3 pt-2 shrink-0" href="#">
+<p class="text-sm font-bold">My Plans</p>
+</a>
+</div>
+</nav>
+<div class="flex gap-3 p-4 overflow-x-auto no-scrollbar">
+<button class="flex h-9 shrink-0 items-center justify-center gap-x-2 rounded-full bg-primary/10 border border-primary/20 px-4">
+<p class="text-sm font-medium">Nutrition</p>
+<span class="material-symbols-outlined text-sm">keyboard_arrow_down</span>
+</button>
+<button class="flex h-9 shrink-0 items-center justify-center gap-x-2 rounded-full bg-primary/10 border border-primary/20 px-4">
+<p class="text-sm font-medium">Training</p>
+<span class="material-symbols-outlined text-sm">keyboard_arrow_down</span>
+</button>
+<button class="flex h-9 shrink-0 items-center justify-center gap-x-2 rounded-full bg-primary/10 border border-primary/20 px-4">
+<p class="text-sm font-medium">Family</p>
+<span class="material-symbols-outlined text-sm">keyboard_arrow_down</span>
+</button>
+<button class="flex h-9 shrink-0 items-center justify-center gap-x-2 rounded-full bg-primary/10 border border-primary/20 px-4">
+<p class="text-sm font-medium">4-Week</p>
+<span class="material-symbols-outlined text-sm">keyboard_arrow_down</span>
+</button>
+</div>
+<main class="p-4 space-y-6 pb-24">
+<section class="group">
+<div class="flex flex-col overflow-hidden rounded-xl bg-slate-100 dark:bg-primary/5 border border-primary/10">
+<div class="relative w-full aspect-video bg-cover bg-center" data-alt="High quality food prep and healthy meal setup" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuDBg1CgI1acnHmkTMwpqpSUOlrlr1H927vbgc94yEEKY8UiBRNYslJUtHB2CylH8ceD1kYoT_fSYgbQHZu1kvxEav1kPtnPB4EAlSLyGSLkWQMLQGwbKdu2Yw8DeyfmRDqa_561LQVk2vyKB8FFbRFhTXTHtDCj35mGMOcfm2wdYRLn8qXHhxMgIt__0CDbQsBBjfVeR36AFAPNHchpcCUWt37A9Mm0d1rXgIlOjT4i_YJN8ian5VWCpzW1StHVOB6RTAb4vOehiHYV');">
+<div class="absolute inset-0 bg-black/20 flex items-center justify-center">
+<div class="size-14 rounded-full bg-primary/90 flex items-center justify-center text-background-dark shadow-xl">
+<span class="material-symbols-outlined !text-4xl fill-1">play_arrow</span>
+</div>
+</div>
+<div class="absolute top-3 right-3 bg-primary text-background-dark text-[10px] font-bold px-2 py-1 rounded-full uppercase tracking-wider">Featured Creator</div>
+</div>
+<div class="flex flex-col gap-3 p-5">
+<div class="flex items-center gap-2">
+<div class="size-8 rounded-full overflow-hidden border border-primary">
+<img alt="Profile" data-alt="Creator profile picture Sarah" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD8WWhr1McZxCR-Y4cJWvpsv8bCmnSj6O78GRND0eX5uTG6oF2aSUzqh7XCuT9k1KuMPa1lCaTxQ1p2aoMrKJVr4waTblShORpJjzHsMuO5qXk3L8jRZ3ifgB3OuTYvOmm4GJvzMeEVpaI16DvWxNQ0E1pTwL4TEeXSQUIL9nHdA18qJXggVNH5dTCMfP3t3MdVLiNX5sSECxCw3ugRstWkSNp__WwbqDJq9fX3NSsT7YXxM7Z_V0Y9_UnQRCYuv6HHBI4dhLHkGE2H"/>
+</div>
+<span class="text-xs font-medium text-slate-500 dark:text-slate-400">Coach Sarah • 4 weeks • High Intensity</span>
+</div>
+<h3 class="text-xl font-bold leading-tight">My 4-Week Definition Plan</h3>
+<div class="flex flex-wrap items-center gap-x-4 gap-y-2 text-sm">
+<div class="flex items-center gap-1 text-primary">
+<span class="material-symbols-outlined text-base fill-1">verified</span>
+<span class="font-bold">98% Success Rate</span>
+</div>
+<div class="text-slate-500 dark:text-slate-400">450 Adoptions</div>
+</div>
+<button class="w-full mt-2 bg-primary text-background-dark py-3 rounded-lg font-bold text-sm transition-transform active:scale-95">
+                            Adopt this Plan
+                        </button>
+</div>
+</div>
+</section>
+<section class="group">
+<div class="flex flex-col overflow-hidden rounded-xl bg-slate-100 dark:bg-primary/5 border border-primary/10">
+<div class="relative w-full aspect-video bg-cover bg-center" data-alt="Family kitchen setting with fresh ingredients" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCsVnBtZh-pb5VpA7j0diR4a5o_oym8z-JUTNGnJCQq1o4Ugfi8bqt0Z1AU6u0nEiRkQxuhukFrpyoc57ww1vDi14xfTPulyu0cVKVrtMl1_32-LKIGmR9zBoSiYiORudMBJ6ef1qHwIAUOZ74-FQwh8MW0OuRrpPJx7ARxMH5MTWaE8xYF9lCLshXht1zUfrqubbhiLccaGJWV_OQKXDZb2faBiXwLeJSGpTTHPy9vrNFh0Zkd6zII4PGzGNT40BpoD5sMzgDm2wia');">
+<div class="absolute top-3 right-3 bg-slate-900/60 backdrop-blur-md text-white text-[10px] font-bold px-2 py-1 rounded-full uppercase tracking-wider">Top Rated</div>
+</div>
+<div class="flex flex-col gap-3 p-5">
+<div class="flex items-center gap-2">
+<div class="size-8 rounded-full overflow-hidden border border-primary">
+<img alt="Profile" data-alt="Creator profile picture Mark" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCC7mPrwnCGuR3DlrzRYYveMCaJx5kuCWwAa43jCI8zwJv_B8-YtGjMAkRBX3kPUWYaFsI5ovh3-i7VtDQT-CorrrMyIYzIMX3Sil9y1ozIM9Zi6-l41EI8NUQJ2gsr4dv94MbvdOKSmE53OpV0YoZjhZn_bjhs8gER3aSAdhVe6YY7LEM8WwhgGnWFMvkI3LWYZfqIliIZh69GmWpJMYpvZSqd6-U2W00lGrpDyDAgg6f1ovqi5OV2TCCgdpWku8FNHsNOSe29VIF3"/>
+</div>
+<span class="text-xs font-medium text-slate-500 dark:text-slate-400">Dad &amp; Chef Mark • 2 weeks • Family Friendly</span>
+</div>
+<h3 class="text-xl font-bold leading-tight">Family Batch Cooking for 2</h3>
+<div class="flex flex-wrap items-center gap-x-4 gap-y-2 text-sm">
+<div class="flex items-center gap-1 text-primary">
+<span class="material-symbols-outlined text-base fill-1">favorite</span>
+<span class="font-bold">92% Vibe Rating</span>
+</div>
+<div class="text-slate-500 dark:text-slate-400">1.2k Adoptions</div>
+</div>
+<button class="w-full mt-2 bg-primary/20 text-primary border border-primary/30 py-3 rounded-lg font-bold text-sm transition-transform active:scale-95">
+                            Adopt this Plan
+                        </button>
+</div>
+</div>
+</section>
+<section class="group">
+<div class="flex flex-col overflow-hidden rounded-xl bg-slate-100 dark:bg-primary/5 border border-primary/10">
+<div class="relative w-full aspect-video bg-cover bg-center" data-alt="Dumbbells and workout equipment in gym" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuDjvzBSBzRpBxRgrsoW4HbYIKZiymxLQLsCwK3MON4nznNvTixcQfKnJLBHxLdR3xv9nv4dJb9msEmwgp4ng2sW5bYxv0Lr7zbkBB87sz3SDNU3CC3nhjBzeIr1Mz9yjoJoNmOCAPbZ9FcFxcFoBG38ToMpHgqCS5vs3aftRmo5G_YLA32-mW0MoMOIx3ucbSc1dDsglTof6uFj1F7OPyX0oSh-LkbKMcT8CJBGClnSgBsNuG_EBuiQpxonv3QFhGOIqkAdAwPOiyzH');">
+<div class="absolute inset-0 bg-black/20 flex items-center justify-center">
+<div class="size-14 rounded-full bg-primary/90 flex items-center justify-center text-background-dark shadow-xl">
+<span class="material-symbols-outlined !text-4xl fill-1">play_arrow</span>
+</div>
+</div>
+</div>
+<div class="flex flex-col gap-3 p-5">
+<div class="flex items-center gap-2">
+<div class="size-8 rounded-full overflow-hidden border border-primary">
+<img alt="Profile" data-alt="Creator profile picture Elena" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCXSK1sOXd-mNq1JGWhgLJwmOCCJhexAyVz7Ch_PQjbIYG6WO2VWoWO_0p9TKES0s3LlpMG1-CIBXRoqDfByG3eEdSWlcxbxw5UJFFmliAjx9p0vWK-0mXcDGjXp6lpwuvPn21EuR5Ya14jUEcn0pPxZtL0DjHBh11c8C1BAZX0CRzw62q3k4mKE7plHbtSozXgZ6gI3KeTITIGQyV0hbg51oPhLCVhgR5vLRng0G-xgstfyZagW0GnvE1zs1wzT-JUW04Zhs4MHh_L"/>
+</div>
+<span class="text-xs font-medium text-slate-500 dark:text-slate-400">Elena Runs • 12 weeks • Marathon Prep</span>
+</div>
+<h3 class="text-xl font-bold leading-tight">The "Finish Line" Fueling Guide</h3>
+<div class="flex flex-wrap items-center gap-x-4 gap-y-2 text-sm">
+<div class="flex items-center gap-1 text-primary">
+<span class="material-symbols-outlined text-base fill-1">star</span>
+<span class="font-bold">95% Success Rate</span>
+</div>
+<div class="text-slate-500 dark:text-slate-400">830 Adoptions</div>
+</div>
+<button class="w-full mt-2 bg-primary text-background-dark py-3 rounded-lg font-bold text-sm transition-transform active:scale-95">
+                            Adopt this Plan
+                        </button>
+</div>
+</div>
+</section>
+</main>
+<footer class="fixed bottom-0 w-full max-w-full z-50">
+<div class="flex gap-2 border-t border-primary/10 bg-background-light dark:bg-background-dark px-4 pb-6 pt-2">
+<a class="flex flex-1 flex-col items-center justify-end gap-1 text-primary" href="#">
+<span class="material-symbols-outlined fill-1">home</span>
+<p class="text-[10px] font-medium leading-normal">Home</p>
+</a>
+<a class="flex flex-1 flex-col items-center justify-end gap-1 text-slate-500 dark:text-slate-400" href="#">
+<span class="material-symbols-outlined">explore</span>
+<p class="text-[10px] font-medium leading-normal">Hub</p>
+</a>
+<a class="flex flex-1 flex-col items-center justify-end gap-1 text-slate-500 dark:text-slate-400" href="#">
+<div class="bg-primary text-background-dark rounded-full size-10 flex items-center justify-center mb-1">
+<span class="material-symbols-outlined !text-3xl">add</span>
+</div>
+</a>
+<a class="flex flex-1 flex-col items-center justify-end gap-1 text-slate-500 dark:text-slate-400" href="#">
+<span class="material-symbols-outlined">forum</span>
+<p class="text-[10px] font-medium leading-normal">Social</p>
+</a>
+<a class="flex flex-1 flex-col items-center justify-end gap-1 text-slate-500 dark:text-slate-400" href="#">
+<span class="material-symbols-outlined">person</span>
+<p class="text-[10px] font-medium leading-normal">Profile</p>
+</a>
+</div>
+</footer>
+</div>
+<style>
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+        .fill-1 {
+            font-variation-settings: 'FILL' 1;
+        }
+    </style>
+</body></html>

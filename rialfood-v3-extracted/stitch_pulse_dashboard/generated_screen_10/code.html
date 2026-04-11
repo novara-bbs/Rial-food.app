@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>RIAL Smart Shopping List - Ingredient Detail</title>
+<!-- BEGIN: External Resources -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- END: External Resources -->
+<!-- BEGIN: Tailwind Configuration -->
+<script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            primary: '#607AFB',
+            surface: '#F8F9FA',
+            dark: '#1A1A1A',
+          },
+          fontFamily: {
+            sans: ['Space Grotesk', 'sans-serif'],
+          },
+          borderRadius: {
+            'twelve': '12px',
+          }
+        }
+      }
+    }
+  </script>
+<!-- END: Tailwind Configuration -->
+<!-- BEGIN: Custom Styles -->
+<style data-purpose="typography">
+    body {
+      font-family: 'Space Grotesk', sans-serif;
+      background-color: #FFFFFF;
+      color: #1A1A1A;
+      -webkit-font-smoothing: antialiased;
+    }
+    .editorial-caps {
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      font-weight: 600;
+    }
+  </style>
+<style data-purpose="layout-ui">
+    .ios-blur {
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+    }
+    .scroll-hide::-webkit-scrollbar {
+      display: none;
+    }
+    .ingredient-card-shadow {
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+    }
+  </style>
+<!-- END: Custom Styles -->
+</head>
+<body class="bg-white min-h-screen">
+<!-- BEGIN: Mobile Header -->
+<header class="sticky top-0 z-50 bg-white/80 ios-blur border-b border-gray-100 px-5 py-4 flex items-center justify-between">
+<button aria-label="Go back" class="p-2 -ml-2">
+<svg fill="none" height="24" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="24"><path d="M19 12H5M12 19l-7-7 7-7"></path></svg>
+</button>
+<h1 class="text-sm editorial-caps tracking-widest text-gray-500">Ingredient Detail</h1>
+<button class="p-2 -mr-2 text-primary">
+<svg fill="none" height="24" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="24"><circle cx="12" cy="12" r="1"></circle><circle cx="19" cy="12" r="1"></circle><circle cx="5" cy="12" r="1"></circle></svg>
+</button>
+</header>
+<!-- END: Mobile Header -->
+<main class="pb-24">
+<!-- BEGIN: Hero Section -->
+<section class="p-5" data-purpose="hero-display">
+<div class="relative aspect-square w-full rounded-twelve overflow-hidden bg-surface mb-6">
+<!-- Main Ingredient Image -->
+<img alt="Organic Chicken Breast" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBxMbRaqVJXqjmHPmlpOpO_FY7iAfk_Gi4erJ6VGlr_TlugJ4eppfKkwaxqKrS61T2iLhQGNKA6l12ER0WrvOtTV8kwMqMdG29gnAUP2v26EkzZ1OG-zj6jGVWOAk8IOqHwGCLGxdVuoI4PaD-fK76cDaghvS5V9O6AT52C0xhYJQExzdgjTL_qsUlYfwN6FnKQYAqJvbsbKRMGJV7hMKWweXRGoUopgt_64jbUcNtGYYRSu7PWdVLhsBKi5XL_wyyoBjmpZDGhK4ww"/>
+<div class="absolute top-4 right-4 bg-white/90 px-3 py-1 rounded-full text-xs font-bold editorial-caps shadow-sm">
+          Organic
+        </div>
+</div>
+<div class="space-y-1">
+<span class="text-xs text-primary font-bold editorial-caps">Proteins &amp; Poultry</span>
+<h2 class="text-3xl font-bold tracking-tight">Organic Chicken Breast</h2>
+<p class="text-gray-500 text-sm">Responsibly sourced, air-chilled, skinless.</p>
+</div>
+<div class="mt-6 flex items-center justify-between p-4 bg-surface rounded-twelve border border-gray-100">
+<div class="flex flex-col">
+<span class="text-[10px] editorial-caps text-gray-400">Total Required</span>
+<span class="text-xl font-bold">1.2 kg</span>
+</div>
+<div class="flex gap-2">
+<button class="w-10 h-10 rounded-full border border-gray-200 flex items-center justify-center bg-white active:scale-95 transition-transform">-</button>
+<div class="w-12 h-10 flex items-center justify-center font-bold">1.2</div>
+<button class="w-10 h-10 rounded-full bg-dark text-white flex items-center justify-center active:scale-95 transition-transform">+</button>
+</div>
+</div>
+</section>
+<!-- END: Hero Section -->
+<!-- BEGIN: Planned Meals Breakdown -->
+<section class="px-5 mt-4" data-purpose="usage-breakdown">
+<div class="flex items-center justify-between mb-4">
+<h3 class="text-sm editorial-caps font-bold">Required for 3 Meals</h3>
+<span class="h-px flex-1 bg-gray-100 ml-4"></span>
+</div>
+<div class="space-y-3">
+<!-- Meal Item 1 -->
+<div class="flex items-center p-3 border border-gray-100 rounded-twelve">
+<div class="w-12 h-12 rounded-lg overflow-hidden bg-gray-100 flex-shrink-0">
+<img alt="Meal thumbnail" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDxRLBwypw074XctgzACTPde6Q7N_hGALiMix8bE2_ovvyW7eg3Syzi3kfvdHItUxYdzQS8bq4whfLGtTPeOQBjVwKohCWLAgxuXo30vdrPaecW3IMhSbuYzdO-5FN5sJlOfdSWSktV-FkQBhl6uvh3bx-ozrrQI71BfCaIkrO7Sx3iwMGAUxglaBlMXnkyEAJ9dgYz5q9rZ0XCZZKMlI6NL5jeQbzfEeVhgagO3iXJinCdhgvuhVT0vnFL5jDeUHmeTK-t3lu4z7S_"/>
+</div>
+<div class="ml-4 flex-1">
+<h4 class="text-sm font-semibold">Lemon Herb Grilled Chicken</h4>
+<p class="text-xs text-gray-500">Scheduled: Tuesday Dinner</p>
+</div>
+<div class="text-sm font-bold">400g</div>
+</div>
+<!-- Meal Item 2 -->
+<div class="flex items-center p-3 border border-gray-100 rounded-twelve">
+<div class="w-12 h-12 rounded-lg overflow-hidden bg-gray-100 flex-shrink-0">
+<img alt="Meal thumbnail" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDKfemWS_IG1lC-dVB3stkSK3rDQeS2nYNIn7VL7TDfuEQHjC1MtUsKxP7VwKEh4opjE-8KtXOKHOGolIsu-11HTLQJMibuCbyEAOcaT0PXcZ4Sh5LR5yaMXEDvxUo0j09INGF13oqe4K8e5wq4IVbBqnrUkaC3wL7lkyp6PumvgMpRzl9OyrCIH3qgQaOtUJPYcoX3dfgNWyH4wOs_jd71rc7Bv5RlOvJwrECG6dS4p9yor8u4p8tELkgnTsQxW9xzDrmtoU-7w_OU"/>
+</div>
+<div class="ml-4 flex-1">
+<h4 class="text-sm font-semibold">Thai Basil Chicken Stir-fry</h4>
+<p class="text-xs text-gray-500">Scheduled: Thursday Lunch</p>
+</div>
+<div class="text-sm font-bold">500g</div>
+</div>
+<!-- Meal Item 3 -->
+<div class="flex items-center p-3 border border-gray-100 rounded-twelve">
+<div class="w-12 h-12 rounded-lg overflow-hidden bg-gray-100 flex-shrink-0">
+<img alt="Meal thumbnail" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAZW_OeE-bOcVL2Z9G6SZCn75iVUxRD4k1vvKZZ98kP1gpHkpufRnV5lv6zq1jBU1P4rHGGZ7txM7wxNTmPZx7S-KDLe4MnN52W5o32jhV8oO_mnZ3AmkT6sFETJ7KdQBblz3VZfnfh-ynplZicpzlK2Iel6wxj6yq-xHuoUcVa5kpUIt45UU5pk5_uPu4vHhTuvKO0aBYxP4aR8FJvr2g5ol60hn7e9p656pkgInrpRJAOjhKIvhLtndy-1rRUNFDlgpaUagVAR09C"/>
+</div>
+<div class="ml-4 flex-1">
+<h4 class="text-sm font-semibold">Creamy Pesto Pasta</h4>
+<p class="text-xs text-gray-500">Scheduled: Friday Dinner</p>
+</div>
+<div class="text-sm font-bold">300g</div>
+</div>
+</div>
+</section>
+<!-- END: Planned Meals Breakdown -->
+<!-- BEGIN: Substitutes Section -->
+<section class="px-5 mt-10" data-purpose="real-substitutes">
+<div class="flex items-center justify-between mb-4">
+<h3 class="text-sm editorial-caps font-bold">Real Substitutes</h3>
+<span class="text-[10px] text-gray-400 font-medium">NOT IN STOCK?</span>
+</div>
+<div class="flex gap-4 overflow-x-auto scroll-hide pb-4 -mx-5 px-5">
+<!-- Substitute 1 -->
+<div class="min-w-[160px] bg-surface rounded-twelve p-3 border border-gray-100">
+<img alt="Substitute" class="w-full aspect-square rounded-lg object-cover mb-3" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAjhYvTJSmtmBqe8gqxxjd91Czs9Ut6ryIAkH-RH7dQmsGHtMZvgANg20TUcf1F69_GQ11tpva-C5SWZfOFxvjkaWnJpAmYqtflq9HrDIoxBsaljelDlLiZ2F1wUSUqM00keL5moKi-W9Tc8GVmezhabM71hf0J-mxQQtFh_7ZpoddUTO9lQ-BJosq1eaoYsm0aQJYcJBMzzC6hsPkpV2VVbOFtFuGBKArET1dJvwU0q1k_O1sEaI60SXtbSTD6YsIfmnK-DMIcVoAX"/>
+<h4 class="text-xs font-bold leading-tight">Boneless Chicken Thighs</h4>
+<p class="text-[10px] text-gray-500 mt-1">Juicier, slightly more fat.</p>
+<div class="mt-3 flex items-center justify-between">
+<span class="text-xs font-bold text-primary">95% Match</span>
+<button class="text-primary hover:bg-primary/10 p-1 rounded">
+<svg fill="none" height="16" stroke="currentColor" stroke-width="2.5" viewbox="0 0 24 24" width="16"><path d="M12 5v14M5 12h14"></path></svg>
+</button>
+</div>
+</div>
+<!-- Substitute 2 -->
+<div class="min-w-[160px] bg-surface rounded-twelve p-3 border border-gray-100">
+<img alt="Substitute" class="w-full aspect-square rounded-lg object-cover mb-3" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCCbVNkJEA_pEyXj-hiOMWJlX37MICupoyh_H2IWggMe0HdudRdCpRxLa-OQi2GlDwBIvQMFeFZeluGZjzo5Rc_d9gwPa6sIx_yoTy6Nh38yYNywpF9LhhgBRfa2VmM7ojPVYXr22DjhfA_Q5NiGcd94K6zl7C-qaren9Y3wz4DygKFGkMAs7bVOCnkbIgJWUUSFEhrG9JD8GjWU0L9nnht2xVtTK0xCLg7p8ybBTNmFZn22Skv5iNBrXY8lxxKXvbcRb4z2AM8gPNA"/>
+<h4 class="text-xs font-bold leading-tight">Organic Turkey Breast</h4>
+<p class="text-[10px] text-gray-500 mt-1">Leaner profile, neutral taste.</p>
+<div class="mt-3 flex items-center justify-between">
+<span class="text-xs font-bold text-primary">88% Match</span>
+<button class="text-primary hover:bg-primary/10 p-1 rounded">
+<svg fill="none" height="16" stroke="currentColor" stroke-width="2.5" viewbox="0 0 24 24" width="16"><path d="M12 5v14M5 12h14"></path></svg>
+</button>
+</div>
+</div>
+<!-- Substitute 3 -->
+<div class="min-w-[160px] bg-surface rounded-twelve p-3 border border-gray-100">
+<img alt="Substitute" class="w-full aspect-square rounded-lg object-cover mb-3" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCMaAh-nvsUTtwj8aLNxyqw2YnnS4DkhK23CR2YxC_jhdFuJZ1QGGD8S__u8tiJD-mvCFOcWEub6tJ4eMuzaoEh4B_OF0wHMMElWqqa6nSooFFqtLWJhFfeglb2eCq0xiLNq3JulMdgSf076hhW0N-B4QqEIYS5ExgzC0zijZ40nYs9bmqkSgaOnwpimJraHlqt8_zoix-fp0fHeOlx9sGZC-_eMdGAGh1lzuwTlUsMETKUMV7obuxEFVGEUCWIbBM0PHylkmmbQ1ht"/>
+<h4 class="text-xs font-bold leading-tight">Extra Firm Tofu</h4>
+<p class="text-[10px] text-gray-500 mt-1">Plant-based alternative.</p>
+<div class="mt-3 flex items-center justify-between">
+<span class="text-xs font-bold text-primary">70% Match</span>
+<button class="text-primary hover:bg-primary/10 p-1 rounded">
+<svg fill="none" height="16" stroke="currentColor" stroke-width="2.5" viewbox="0 0 24 24" width="16"><path d="M12 5v14M5 12h14"></path></svg>
+</button>
+</div>
+</div>
+</div>
+</section>
+<!-- END: Substitutes Section -->
+</main>
+<!-- BEGIN: Bottom Action Bar -->
+<footer class="fixed bottom-0 left-0 right-0 bg-white/90 ios-blur border-t border-gray-100 p-5 pb-8 flex items-center gap-4">
+<button class="flex-1 bg-primary text-white font-bold py-4 rounded-twelve shadow-lg shadow-primary/20 flex items-center justify-center gap-2 active:scale-[0.98] transition-all" data-purpose="primary-action">
+<span>Add to Cart</span>
+<span class="w-px h-4 bg-white/30"></span>
+<span>$18.40</span>
+</button>
+<button aria-label="Save for later" class="w-14 h-14 rounded-twelve border border-gray-200 flex items-center justify-center bg-white">
+<svg fill="none" height="24" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="24"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"></path></svg>
+</button>
+</footer>
+<!-- END: Bottom Action Bar -->
+</body></html>

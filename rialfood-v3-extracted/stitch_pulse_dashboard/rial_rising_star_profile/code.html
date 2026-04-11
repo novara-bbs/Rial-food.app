@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#25aff4",
+                        "background-light": "#f5f7f8",
+                        "background-dark": "#101c22",
+                    },
+                    fontFamily: {
+                        "display": ["Inter", "sans-serif"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
+<style>
+        body { font-family: 'Inter', sans-serif; }
+        .glass-effect { background: rgba(255, 255, 255, 0.8); backdrop-filter: blur(8px); }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 antialiased">
+<!-- Header / Navigation -->
+<header class="sticky top-0 z-50 glass-effect border-b border-slate-200 dark:border-slate-800">
+<div class="max-w-2xl mx-auto px-4 h-16 flex items-center justify-between">
+<button class="p-2 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-full transition-colors">
+<span class="material-symbols-outlined text-slate-600 dark:text-slate-400">arrow_back</span>
+</button>
+<h1 class="text-sm font-extrabold uppercase tracking-widest text-primary">Rising Star</h1>
+<button class="p-2 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-full transition-colors">
+<span class="material-symbols-outlined text-slate-600 dark:text-slate-400">share</span>
+</button>
+</div>
+</header>
+<main class="max-w-2xl mx-auto pb-32">
+<!-- Hero Section -->
+<section class="px-6 pt-10 pb-8 flex flex-col items-center text-center">
+<div class="relative mb-6">
+<div class="size-40 rounded-full ring-4 ring-primary/20 p-1 overflow-hidden shadow-2xl">
+<img alt="Portrait of Rial" class="w-full h-full object-cover rounded-full" data-alt="Close up portrait of a smiling woman in a professional wellness setting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBLkDHA7sZrF-m2OEnAMwFlkRq1Ahvd1i6Zuw-5jTiOwVBj7FYWpW5sEX-wHnMiO3BJ8rNnVtH8irPWNv4RoDrCDFAXChPOj5fD6GM9suFiRBWIJJU7t1DbZKC715nuQmFz4iZTbRWIqrbngP83rFXhh8WAoX1lm0cyRfJ4DwEpxt8NSxNIJwq0FG7_2LebFIHZwLW4X5aInfHEJ-h_gBvO2znEgfZw3u1Mq3Vx63nNa4fsqbYCiji0o-y-L4H7rSAXlhUcJSRtfGDa"/>
+</div>
+<div class="absolute bottom-2 right-2 bg-primary text-white p-1.5 rounded-full border-4 border-white dark:border-background-dark">
+<span class="material-symbols-outlined text-sm block">verified</span>
+</div>
+</div>
+<h2 class="text-4xl font-extrabold tracking-tight mb-2">Rial</h2>
+<p class="text-slate-500 dark:text-slate-400 font-medium mb-1">Mindful Chef &amp; Wellness Enthusiast</p>
+<div class="flex items-center gap-1.5 text-xs text-slate-400 uppercase tracking-wider font-semibold">
+<span class="material-symbols-outlined text-xs">calendar_today</span>
+                Joined January 2024
+            </div>
+<div class="flex gap-3 w-full max-w-xs mt-8">
+<button class="flex-1 bg-primary text-white font-bold py-3 rounded-xl shadow-lg shadow-primary/30 hover:opacity-90 transition-all">
+                    Follow
+                </button>
+<button class="flex-1 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 font-bold py-3 rounded-xl hover:bg-slate-50 dark:hover:bg-slate-700 transition-all">
+                    Message
+                </button>
+</div>
+</section>
+<!-- Stats Grid -->
+<section class="px-6 py-4">
+<div class="grid grid-cols-3 gap-4">
+<div class="bg-white dark:bg-slate-800 p-5 rounded-2xl border border-slate-100 dark:border-slate-700 shadow-sm text-center">
+<p class="text-primary text-2xl font-black mb-1">#12</p>
+<p class="text-[10px] uppercase tracking-widest text-slate-500 font-bold">Community Rank</p>
+</div>
+<div class="bg-white dark:bg-slate-800 p-5 rounded-2xl border border-slate-100 dark:border-slate-700 shadow-sm text-center">
+<p class="text-slate-900 dark:text-white text-2xl font-black mb-1">1.2k</p>
+<p class="text-[10px] uppercase tracking-widest text-slate-500 font-bold">Followers</p>
+</div>
+<div class="bg-white dark:bg-slate-800 p-5 rounded-2xl border border-slate-100 dark:border-slate-700 shadow-sm text-center">
+<p class="text-slate-900 dark:text-white text-2xl font-black mb-1">48</p>
+<p class="text-[10px] uppercase tracking-widest text-slate-500 font-bold">Logs</p>
+</div>
+</div>
+</section>
+<!-- Milestone Badges -->
+<section class="px-6 py-8">
+<h3 class="text-sm font-bold uppercase tracking-[0.2em] text-slate-400 mb-6 text-center">Milestone Badges</h3>
+<div class="flex justify-center gap-8">
+<div class="group flex flex-col items-center">
+<div class="size-16 rounded-full bg-yellow-400/20 flex items-center justify-center mb-2 border-2 border-yellow-500 shadow-inner">
+<span class="material-symbols-outlined text-yellow-600 text-3xl font-light">workspace_premium</span>
+</div>
+<span class="text-[10px] font-bold text-slate-600 dark:text-slate-400">GOLD</span>
+</div>
+<div class="group flex flex-col items-center">
+<div class="size-16 rounded-full bg-slate-300/20 flex items-center justify-center mb-2 border-2 border-slate-400 shadow-inner">
+<span class="material-symbols-outlined text-slate-500 text-3xl font-light">star</span>
+</div>
+<span class="text-[10px] font-bold text-slate-600 dark:text-slate-400">SILVER</span>
+</div>
+<div class="group flex flex-col items-center">
+<div class="size-16 rounded-full bg-orange-300/20 flex items-center justify-center mb-2 border-2 border-orange-500 shadow-inner">
+<span class="material-symbols-outlined text-orange-700 text-3xl font-light">military_tech</span>
+</div>
+<span class="text-[10px] font-bold text-slate-600 dark:text-slate-400">BRONZE</span>
+</div>
+</div>
+</section>
+<!-- Signature Recipes Gallery -->
+<section class="px-6 py-8">
+<div class="flex items-end justify-between mb-6">
+<h3 class="text-2xl font-black tracking-tight">Signature Recipes</h3>
+<a class="text-primary text-sm font-bold" href="#">View all</a>
+</div>
+<div class="grid grid-cols-2 gap-4">
+<div class="group cursor-pointer">
+<div class="aspect-[4/5] overflow-hidden rounded-2xl mb-3 shadow-md">
+<img alt="Healthy Salad" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" data-alt="Vibrant healthy salad bowl with fresh greens and seeds" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDFxx2pXFsbYAoStZQnyUmmdyYoIDJ3p-WfqCmOsukYVUsMK3tVa7r3c-s15FyarnQkuZhBQveBnChNxw5vsedcnxrMxmU9_mHjfh5zNqcWosommufMAaiNScaTVwNxbIKfxCdMYw2YfPEhrc9DBvs5NmI3nGWLhtA8xwlX1sAqULbFDpTGYoYjo-oov0E-EBYnMq2DI9hMivM6wseDZK4kdPL8QooqVKeZTrof3SHrjVS0-mtuaEX3Y1Q0tEa7sZJwVfHsi2PpnjVH"/>
+</div>
+<p class="font-bold text-sm leading-snug">Zen Harvest Bowl</p>
+<p class="text-xs text-slate-500 mt-1">15 mins • Easy</p>
+</div>
+<div class="group cursor-pointer">
+<div class="aspect-[4/5] overflow-hidden rounded-2xl mb-3 shadow-md">
+<img alt="Acai Bowl" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" data-alt="Beautifully decorated acai bowl with berries and nuts" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCCVOsCV12oWMzZ8fFWzV7K3iAa5_VZ4fDW1ueR2MJcwuFXJSdUuD4ZLJNlG7lE_nPL5kQyJXAv-4ExhFXAXl9CLXjF6474T9kWksyBkmbgfwUQlTEZ3COycVu27p0XZ8Nj2mo51u0YC3X3Pm7o63g91uZ-ClH7KIZadbVziggOKA28l1sH5If8rgyIRz0iyGjN-uVXmF9Ng1BKf7nZ4gs_zhfPDiGyKXqcF3U-mWcMJvtLxDQ_L7YDDeBzx4451jOXsbTvhwieBBZm"/>
+</div>
+<p class="font-bold text-sm leading-snug">Midnight Berry Refresher</p>
+<p class="text-xs text-slate-500 mt-1">10 mins • Pro</p>
+</div>
+</div>
+</section>
+<!-- Real Feel Logs -->
+<section class="px-6 py-8">
+<h3 class="text-2xl font-black tracking-tight mb-6">Real Feel Logs</h3>
+<div class="space-y-4">
+<div class="bg-white dark:bg-slate-800 p-6 rounded-2xl border border-slate-100 dark:border-slate-700 shadow-sm">
+<div class="flex items-center justify-between mb-4">
+<span class="text-xs font-bold text-slate-400 uppercase tracking-widest">Yesterday, 8:45 PM</span>
+<div class="flex gap-1">
+<span class="material-symbols-outlined text-primary text-sm">favorite</span>
+<span class="material-symbols-outlined text-primary text-sm">favorite</span>
+<span class="material-symbols-outlined text-primary text-sm">favorite</span>
+<span class="material-symbols-outlined text-primary text-sm">favorite</span>
+<span class="material-symbols-outlined text-slate-200 text-sm">favorite</span>
+</div>
+</div>
+<p class="text-slate-700 dark:text-slate-300 italic font-medium leading-relaxed">
+                        "Ending the day with a focused mind. The new meditation flow combined with the protein-rich dinner has me feeling incredibly centered."
+                    </p>
+</div>
+<div class="bg-white dark:bg-slate-800 p-6 rounded-2xl border border-slate-100 dark:border-slate-700 shadow-sm">
+<div class="flex items-center justify-between mb-4">
+<span class="text-xs font-bold text-slate-400 uppercase tracking-widest">March 12, 7:15 AM</span>
+<div class="flex gap-1">
+<span class="material-symbols-outlined text-primary text-sm">favorite</span>
+<span class="material-symbols-outlined text-primary text-sm">favorite</span>
+<span class="material-symbols-outlined text-primary text-sm">favorite</span>
+<span class="material-symbols-outlined text-primary text-sm">favorite</span>
+<span class="material-symbols-outlined text-primary text-sm">favorite</span>
+</div>
+</div>
+<p class="text-slate-700 dark:text-slate-300 italic font-medium leading-relaxed">
+                        "Woke up before the alarm. Energy levels are peaking. Truly believe it's the consistent sleep schedule paying off."
+                    </p>
+</div>
+</div>
+</section>
+</main>
+<!-- Bottom Navigation -->
+<nav class="fixed bottom-0 left-0 right-0 glass-effect border-t border-slate-200 dark:border-slate-800 pb-8 pt-4">
+<div class="max-w-2xl mx-auto flex justify-around items-center px-4">
+<a class="flex flex-col items-center gap-1 text-slate-400 hover:text-primary transition-colors" href="#">
+<span class="material-symbols-outlined">home</span>
+<span class="text-[10px] font-bold uppercase tracking-wider">Home</span>
+</a>
+<a class="flex flex-col items-center gap-1 text-slate-400 hover:text-primary transition-colors" href="#">
+<span class="material-symbols-outlined">explore</span>
+<span class="text-[10px] font-bold uppercase tracking-wider">Discover</span>
+</a>
+<button class="size-12 bg-primary rounded-full flex items-center justify-center text-white shadow-lg shadow-primary/40 -mt-8">
+<span class="material-symbols-outlined">add</span>
+</button>
+<a class="flex flex-col items-center gap-1 text-slate-400 hover:text-primary transition-colors" href="#">
+<span class="material-symbols-outlined">trophy</span>
+<span class="text-[10px] font-bold uppercase tracking-wider">Ranks</span>
+</a>
+<a class="flex flex-col items-center gap-1 text-primary" href="#">
+<span class="material-symbols-outlined font-fill">person</span>
+<span class="text-[10px] font-bold uppercase tracking-wider">Profile</span>
+</a>
+</div>
+</nav>
+</body></html>

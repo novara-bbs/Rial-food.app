@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Smart Ingredient Dictionary - Avocado</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#ddff00",
+                        "background-light": "#f8f8f5",
+                        "background-dark": "#20230f",
+                    },
+                    fontFamily: {
+                        "display": ["Space Grotesk"]
+                    },
+                    borderRadius: {"DEFAULT": "0.5rem", "lg": "1rem", "xl": "1.5rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>
+        body { font-family: 'Space Grotesk', sans-serif; }
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100">
+<div class="relative flex min-h-screen w-full flex-col max-w-md mx-auto bg-white dark:bg-background-dark shadow-xl overflow-x-hidden">
+<!-- Header -->
+<div class="sticky top-0 z-10 flex items-center bg-white/80 dark:bg-background-dark/80 backdrop-blur-md p-4 justify-between border-b border-slate-100 dark:border-slate-800">
+<div class="text-slate-900 dark:text-slate-100 flex size-10 items-center justify-center cursor-pointer">
+<span class="material-symbols-outlined">arrow_back</span>
+</div>
+<h2 class="text-slate-900 dark:text-slate-100 text-lg font-bold leading-tight tracking-tight flex-1 text-center font-display">Ingredient Profile</h2>
+<div class="flex size-10 items-center justify-end">
+<button class="flex items-center justify-center text-slate-900 dark:text-slate-100">
+<span class="material-symbols-outlined">share</span>
+</button>
+</div>
+</div>
+<!-- Ingredient Hero -->
+<div class="flex p-6 @container">
+<div class="flex w-full flex-col gap-6 items-center">
+<div class="relative">
+<div class="bg-center bg-no-repeat aspect-square bg-cover rounded-full h-48 w-48 ring-4 ring-primary/20" data-alt="A fresh ripe halved avocado showing pit" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuAJeK1xPRhLQWOWErrlXQBcmELfq8iy-WYkGpEMtDYFGADkflhTGD0GK0hmAHcOeo9-5Z74mlSWR1EgX8oLeMgozxj4rp_1PFtZy93Af05lhrNITxhKpboRVqBrnXhiMzqQ8MvOxa5CiutID-8kjz235iPC0gHUkrdLHf6IGyQtbaMKsshL1q31lsnemOkal2l4wBBsRWh4bfDTWeEqjxicCsWgTzVo0gLK0rR15mcbmSVulGj4rfGvkaHxdgO71guPenuClJpUe1Zj");'>
+</div>
+<div class="absolute bottom-2 right-2 bg-primary text-slate-900 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-widest">A+ Grade</div>
+</div>
+<div class="flex flex-col items-center justify-center">
+<p class="text-slate-900 dark:text-slate-100 text-3xl font-bold leading-tight tracking-tighter text-center font-display">Avocado</p>
+<p class="text-slate-500 dark:text-slate-400 text-sm italic font-normal leading-normal text-center">Persea americana</p>
+<div class="mt-3 flex gap-2">
+<span class="px-3 py-1 bg-primary/10 text-slate-700 dark:text-slate-300 rounded-full text-xs font-medium border border-primary/20">Superfood</span>
+<span class="px-3 py-1 bg-primary/10 text-slate-700 dark:text-slate-300 rounded-full text-xs font-medium border border-primary/20">Omega-3</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Nutritional Overview -->
+<div class="flex flex-wrap gap-3 p-4">
+<div class="flex min-w-[100px] flex-1 flex-col gap-1 rounded-xl p-4 bg-slate-50 dark:bg-slate-800/50 border border-slate-100 dark:border-slate-800">
+<p class="text-slate-500 dark:text-slate-400 text-xs font-medium">Calories</p>
+<p class="text-slate-900 dark:text-slate-100 text-xl font-bold leading-tight font-display">160 <span class="text-xs font-normal">kcal</span></p>
+</div>
+<div class="flex min-w-[100px] flex-1 flex-col gap-1 rounded-xl p-4 bg-slate-50 dark:bg-slate-800/50 border border-slate-100 dark:border-slate-800">
+<p class="text-slate-500 dark:text-slate-400 text-xs font-medium">Healthy Fats</p>
+<p class="text-slate-900 dark:text-slate-100 text-xl font-bold leading-tight font-display">15g</p>
+</div>
+<div class="flex min-w-[100px] flex-1 flex-col gap-1 rounded-xl p-4 bg-slate-50 dark:bg-slate-800/50 border border-slate-100 dark:border-slate-800">
+<p class="text-slate-500 dark:text-slate-400 text-xs font-medium">Fiber</p>
+<p class="text-slate-900 dark:text-slate-100 text-xl font-bold leading-tight font-display">7g</p>
+</div>
+</div>
+<!-- Bio-Active Properties -->
+<section class="px-4 py-6">
+<h3 class="text-slate-900 dark:text-slate-100 text-lg font-bold leading-tight tracking-tight mb-4 font-display flex items-center gap-2">
+<span class="material-symbols-outlined text-primary">biotech</span>
+                Bio-Active Properties
+            </h3>
+<div class="grid grid-cols-1 gap-3">
+<div class="flex items-center gap-4 p-4 bg-white dark:bg-slate-800 rounded-xl border border-slate-100 dark:border-slate-800 shadow-sm">
+<div class="w-12 h-12 rounded-lg bg-primary/20 flex items-center justify-center text-slate-800 dark:text-slate-100">
+<span class="material-symbols-outlined">shield_with_heart</span>
+</div>
+<div>
+<p class="font-bold text-slate-900 dark:text-white">Monounsaturated Fats</p>
+<p class="text-xs text-slate-500 dark:text-slate-400 leading-snug">Primarily oleic acid, associated with reduced inflammation.</p>
+</div>
+</div>
+<div class="flex items-center gap-4 p-4 bg-white dark:bg-slate-800 rounded-xl border border-slate-100 dark:border-slate-800 shadow-sm">
+<div class="w-12 h-12 rounded-lg bg-primary/20 flex items-center justify-center text-slate-800 dark:text-slate-100">
+<span class="material-symbols-outlined">visibility</span>
+</div>
+<div>
+<p class="font-bold text-slate-900 dark:text-white">Lutein &amp; Zeaxanthin</p>
+<p class="text-xs text-slate-500 dark:text-slate-400 leading-snug">Powerful antioxidants that are incredibly important for eye health.</p>
+</div>
+</div>
+<div class="flex items-center gap-4 p-4 bg-white dark:bg-slate-800 rounded-xl border border-slate-100 dark:border-slate-800 shadow-sm">
+<div class="w-12 h-12 rounded-lg bg-primary/20 flex items-center justify-center text-slate-800 dark:text-slate-100">
+<span class="material-symbols-outlined">skeleton</span>
+</div>
+<div>
+<p class="font-bold text-slate-900 dark:text-white">Vitamin K</p>
+<p class="text-xs text-slate-500 dark:text-slate-400 leading-snug">Essential for bone health by increasing calcium absorption.</p>
+</div>
+</div>
+</div>
+</section>
+<!-- Real Feel Correlation -->
+<section class="px-4 py-6 bg-primary/5">
+<h3 class="text-slate-900 dark:text-slate-100 text-lg font-bold leading-tight tracking-tight mb-4 font-display flex items-center gap-2">
+<span class="material-symbols-outlined text-primary">analytics</span>
+                Real Feel Correlation
+            </h3>
+<p class="text-sm text-slate-600 dark:text-slate-400 mb-4">Community data analysis shows how users typically feel after consumption:</p>
+<div class="space-y-4">
+<div>
+<div class="flex justify-between items-end mb-1">
+<span class="text-sm font-medium">Sustained Energy</span>
+<span class="text-sm font-bold text-primary-700">88% Positive</span>
+</div>
+<div class="w-full bg-slate-200 dark:bg-slate-700 rounded-full h-2">
+<div class="bg-primary h-2 rounded-full" style="width: 88%"></div>
+</div>
+</div>
+<div>
+<div class="flex justify-between items-end mb-1">
+<span class="text-sm font-medium">Digestion Ease</span>
+<span class="text-sm font-bold text-primary-700">92% Positive</span>
+</div>
+<div class="w-full bg-slate-200 dark:bg-slate-700 rounded-full h-2">
+<div class="bg-primary h-2 rounded-full" style="width: 92%"></div>
+</div>
+</div>
+<div>
+<div class="flex justify-between items-end mb-1">
+<span class="text-sm font-medium">Focus/Clarity</span>
+<span class="text-sm font-bold text-primary-700">74% Positive</span>
+</div>
+<div class="w-full bg-slate-200 dark:bg-slate-700 rounded-full h-2">
+<div class="bg-primary h-2 rounded-full" style="width: 74%"></div>
+</div>
+</div>
+</div>
+</section>
+<!-- Creator Pro-Tip -->
+<section class="p-4 py-8">
+<div class="relative bg-slate-900 dark:bg-slate-800 rounded-2xl p-6 overflow-hidden">
+<div class="absolute top-0 right-0 p-4 opacity-10">
+<span class="material-symbols-outlined text-white text-6xl">tips_and_updates</span>
+</div>
+<div class="flex items-center gap-3 mb-4">
+<div class="w-10 h-10 rounded-full bg-cover bg-center border-2 border-primary" data-alt="Portrait of a female wellness creator" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuBMjyy_sHkjwgtblywTbhWujzjgNatiHZgdHZTi3gcR2-m6-N8mVT7uCuGmacmVAKZOrzEM3eNEJw9LHDaSWS1HykaINJRw9T45PIhQ1X5U6hjajoT7BdJH7rdghbzT1KX-2t0H-iFopf_oIvkwodgwUJkrF_Nsxgr1ajnybzhYUuvbCr_hebV39q4lzmGtUmfaU1dtiMzsiOQyl0crn-Xc6HVBrpmEnlEFrIPt043jk_YsQwcmWjMzSnnbA-ufPMUuZ0sGJrRpGOyi");'></div>
+<div>
+<p class="text-white text-sm font-bold">Chef Elena's Pro-Tip</p>
+<p class="text-primary text-[10px] uppercase tracking-widest font-bold">Top Contributor</p>
+</div>
+</div>
+<p class="text-slate-300 text-sm italic leading-relaxed">
+                    "To maximize absorption of Vitamin K and heart-healthy fats, pair your avocado with a squeeze of fresh lemon and a pinch of chili flakes. The acidity breaks down the density, making it easier on the stomach during lunch!"
+                </p>
+</div>
+</section>
+<div class="h-24"></div>
+<!-- Bottom Navigation Bar -->
+<div class="fixed bottom-0 left-1/2 -translate-x-1/2 w-full max-w-md flex gap-2 border-t border-slate-100 dark:border-slate-800 bg-white/95 dark:bg-background-dark/95 backdrop-blur-md px-4 pb-6 pt-3 z-50">
+<a class="flex flex-1 flex-col items-center justify-center gap-1 text-slate-400 dark:text-slate-500" href="#">
+<span class="material-symbols-outlined">home</span>
+<p class="text-[10px] font-medium font-display">Home</p>
+</a>
+<a class="flex flex-1 flex-col items-center justify-center gap-1 text-slate-900 dark:text-primary" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1">book_2</span>
+<p class="text-[10px] font-medium font-display">Dictionary</p>
+</a>
+<a class="flex flex-1 flex-col items-center justify-center gap-1 text-slate-400 dark:text-slate-500" href="#">
+<div class="bg-primary p-2 rounded-full -mt-8 shadow-lg shadow-primary/30 border-4 border-white dark:border-background-dark">
+<span class="material-symbols-outlined text-slate-900">qr_code_scanner</span>
+</div>
+<p class="text-[10px] font-medium font-display">Scan</p>
+</a>
+<a class="flex flex-1 flex-col items-center justify-center gap-1 text-slate-400 dark:text-slate-500" href="#">
+<span class="material-symbols-outlined">groups</span>
+<p class="text-[10px] font-medium font-display">Community</p>
+</a>
+<a class="flex flex-1 flex-col items-center justify-center gap-1 text-slate-400 dark:text-slate-500" href="#">
+<span class="material-symbols-outlined">person</span>
+<p class="text-[10px] font-medium font-display">Profile</p>
+</a>
+</div>
+</div>
+</body></html>

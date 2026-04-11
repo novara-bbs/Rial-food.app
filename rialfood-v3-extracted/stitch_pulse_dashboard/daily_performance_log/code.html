@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#ccff00",
+                        "background-light": "#f8f8f5",
+                        "background-dark": "#1f230f",
+                    },
+                    fontFamily: {
+                        "display": ["Space Grotesk", "sans-serif"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.5rem",
+                        "lg": "1rem",
+                        "xl": "1.5rem",
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
+<title>NutriPulse Daily Log</title>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark font-display text-slate-900 dark:text-slate-100 min-h-screen">
+<div class="max-w-md mx-auto min-h-screen flex flex-col bg-background-light dark:bg-background-dark relative pb-24">
+<!-- Header -->
+<header class="flex items-center justify-between p-6 pb-2">
+<div class="flex items-center gap-3">
+<div class="size-10 rounded-full bg-primary/20 flex items-center justify-center border border-primary/30">
+<span class="material-symbols-outlined text-primary">person</span>
+</div>
+<div>
+<h1 class="text-xl font-bold leading-tight">Daily Log</h1>
+<p class="text-sm text-slate-500 dark:text-slate-400">Tuesday, Oct 24</p>
+</div>
+</div>
+<button class="size-10 flex items-center justify-center rounded-full bg-slate-100 dark:bg-slate-800">
+<span class="material-symbols-outlined text-slate-600 dark:text-slate-300">notifications</span>
+</button>
+</header>
+<!-- Recovery Score (Whoop Style) -->
+<section class="p-6">
+<div class="bg-slate-900 dark:bg-black/40 rounded-xl p-6 border border-slate-800 relative overflow-hidden">
+<div class="absolute top-0 right-0 p-4">
+<span class="material-symbols-outlined text-primary/40 text-6xl rotate-12">bolt</span>
+</div>
+<div class="relative z-10 flex justify-between items-end">
+<div>
+<p class="text-slate-400 text-sm font-medium mb-1 uppercase tracking-wider">Recovery Score</p>
+<div class="flex items-baseline gap-2">
+<span class="text-5xl font-bold text-white tracking-tighter">88%</span>
+<span class="text-primary font-medium flex items-center text-sm">
+<span class="material-symbols-outlined text-sm">trending_up</span> +5%
+                            </span>
+</div>
+<p class="text-slate-400 text-xs mt-2 italic">Optimized for high-intensity training today</p>
+</div>
+<div class="flex flex-col items-end gap-1">
+<div class="size-16 rounded-full border-4 border-slate-800 flex items-center justify-center relative">
+<svg class="absolute inset-0 -rotate-90" viewbox="0 0 100 100">
+<circle class="text-primary" cx="50" cy="50" fill="none" r="45" stroke="currentColor" stroke-dasharray="282.7" stroke-dashoffset="33.9" stroke-width="8"></circle>
+</svg>
+<span class="material-symbols-outlined text-white">bedtime</span>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Calorie Tracker (MFP Style) -->
+<section class="px-6 pb-6">
+<div class="bg-white dark:bg-slate-800/50 rounded-xl p-5 border border-slate-200 dark:border-slate-700 shadow-sm">
+<div class="flex justify-between items-center mb-4">
+<h3 class="font-bold text-lg">Calories</h3>
+<div class="px-3 py-1 rounded-full bg-primary/10 text-primary text-xs font-bold uppercase">Goal: 3,000</div>
+</div>
+<div class="flex items-center gap-6 mb-6">
+<div class="relative size-24 flex items-center justify-center">
+<svg class="absolute inset-0 -rotate-90" viewbox="0 0 100 100">
+<circle class="text-slate-100 dark:text-slate-700" cx="50" cy="50" fill="none" r="40" stroke="currentColor" stroke-width="10"></circle>
+<circle class="text-primary" cx="50" cy="50" fill="none" r="40" stroke="currentColor" stroke-dasharray="251.3" stroke-dashoffset="88" stroke-linecap="round" stroke-width="10"></circle>
+</svg>
+<div class="text-center">
+<span class="block text-xl font-bold">1,420</span>
+<span class="text-[10px] text-slate-500 uppercase font-bold">Left</span>
+</div>
+</div>
+<div class="flex-1 grid grid-cols-2 gap-4">
+<div>
+<p class="text-xs text-slate-500 dark:text-slate-400 font-medium">Food</p>
+<p class="text-lg font-bold">1,580</p>
+</div>
+<div>
+<p class="text-xs text-slate-500 dark:text-slate-400 font-medium">Exercise</p>
+<p class="text-lg font-bold text-primary">+240</p>
+</div>
+</div>
+</div>
+<!-- Macros -->
+<div class="grid grid-cols-3 gap-3 pt-4 border-t border-slate-100 dark:border-slate-700">
+<div class="space-y-1">
+<div class="flex justify-between text-[10px] font-bold uppercase text-slate-400">
+<span>Carbs</span>
+<span>180/300g</span>
+</div>
+<div class="h-1.5 w-full bg-slate-100 dark:bg-slate-700 rounded-full overflow-hidden">
+<div class="h-full bg-blue-400" style="width: 60%"></div>
+</div>
+</div>
+<div class="space-y-1">
+<div class="flex justify-between text-[10px] font-bold uppercase text-slate-400">
+<span>Protein</span>
+<span>95/150g</span>
+</div>
+<div class="h-1.5 w-full bg-slate-100 dark:bg-slate-700 rounded-full overflow-hidden">
+<div class="h-full bg-primary" style="width: 63%"></div>
+</div>
+</div>
+<div class="space-y-1">
+<div class="flex justify-between text-[10px] font-bold uppercase text-slate-400">
+<span>Fat</span>
+<span>45/70g</span>
+</div>
+<div class="h-1.5 w-full bg-slate-100 dark:bg-slate-700 rounded-full overflow-hidden">
+<div class="h-full bg-orange-400" style="width: 64%"></div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Activity Feed -->
+<section class="px-6 pb-4">
+<div class="flex items-center justify-between mb-3">
+<h3 class="font-bold text-lg">Activity</h3>
+<button class="text-primary text-sm font-bold">View All</button>
+</div>
+<div class="flex gap-4 overflow-x-auto pb-2 no-scrollbar">
+<div class="flex-none w-32 bg-white dark:bg-slate-800/50 p-4 rounded-xl border border-slate-200 dark:border-slate-700 text-center">
+<span class="material-symbols-outlined text-primary mb-2">directions_run</span>
+<p class="text-xs text-slate-500 dark:text-slate-400 font-medium">Steps</p>
+<p class="text-lg font-bold">8,432</p>
+</div>
+<div class="flex-none w-32 bg-white dark:bg-slate-800/50 p-4 rounded-xl border border-slate-200 dark:border-slate-700 text-center">
+<span class="material-symbols-outlined text-primary mb-2">fitness_center</span>
+<p class="text-xs text-slate-500 dark:text-slate-400 font-medium">Workouts</p>
+<p class="text-lg font-bold">45m</p>
+</div>
+<div class="flex-none w-32 bg-white dark:bg-slate-800/50 p-4 rounded-xl border border-slate-200 dark:border-slate-700 text-center">
+<span class="material-symbols-outlined text-primary mb-2">water_drop</span>
+<p class="text-xs text-slate-500 dark:text-slate-400 font-medium">Water</p>
+<p class="text-lg font-bold">1.2L</p>
+</div>
+</div>
+</section>
+<!-- Food Diary -->
+<section class="px-6 space-y-4">
+<div class="flex items-center justify-between">
+<h3 class="font-bold text-lg">Food Diary</h3>
+<button class="size-8 rounded-full bg-primary text-slate-900 flex items-center justify-center">
+<span class="material-symbols-outlined font-bold">add</span>
+</button>
+</div>
+<!-- Breakfast -->
+<div class="bg-white dark:bg-slate-800/50 rounded-xl overflow-hidden border border-slate-200 dark:border-slate-700">
+<div class="p-4 flex items-center justify-between border-b border-slate-100 dark:border-slate-700/50">
+<div class="flex items-center gap-3">
+<div class="size-8 rounded-lg bg-orange-100 dark:bg-orange-500/20 flex items-center justify-center">
+<span class="material-symbols-outlined text-orange-600 dark:text-orange-400 text-xl">wb_sunny</span>
+</div>
+<h4 class="font-bold">Breakfast</h4>
+</div>
+<span class="text-sm font-medium text-slate-500">420 kcal</span>
+</div>
+<div class="p-4 space-y-3">
+<div class="flex justify-between items-center text-sm">
+<span class="text-slate-600 dark:text-slate-300">Greek Yogurt with Berries</span>
+<span class="text-slate-400 text-xs font-medium">320 kcal</span>
+</div>
+<div class="flex justify-between items-center text-sm">
+<span class="text-slate-600 dark:text-slate-300">Black Coffee</span>
+<span class="text-slate-400 text-xs font-medium">0 kcal</span>
+</div>
+<div class="flex justify-between items-center text-sm">
+<span class="text-slate-600 dark:text-slate-300">Almonds (10pcs)</span>
+<span class="text-slate-400 text-xs font-medium">100 kcal</span>
+</div>
+</div>
+</div>
+<!-- Lunch -->
+<div class="bg-white dark:bg-slate-800/50 rounded-xl overflow-hidden border border-slate-200 dark:border-slate-700">
+<div class="p-4 flex items-center justify-between border-b border-slate-100 dark:border-slate-700/50">
+<div class="flex items-center gap-3">
+<div class="size-8 rounded-lg bg-blue-100 dark:bg-blue-500/20 flex items-center justify-center">
+<span class="material-symbols-outlined text-blue-600 dark:text-blue-400 text-xl">lunch_dining</span>
+</div>
+<h4 class="font-bold">Lunch</h4>
+</div>
+<span class="text-sm font-medium text-slate-500">640 kcal</span>
+</div>
+<div class="p-4 space-y-3">
+<div class="flex justify-between items-center text-sm">
+<span class="text-slate-600 dark:text-slate-300">Grilled Chicken Salad</span>
+<span class="text-slate-400 text-xs font-medium">540 kcal</span>
+</div>
+<div class="flex justify-between items-center text-sm">
+<span class="text-slate-600 dark:text-slate-300">Olive Oil Dressing</span>
+<span class="text-slate-400 text-xs font-medium">100 kcal</span>
+</div>
+</div>
+</div>
+<!-- Dinner (Empty state example) -->
+<div class="bg-white dark:bg-slate-800/30 rounded-xl border-2 border-dashed border-slate-200 dark:border-slate-700 p-4 flex items-center justify-between group cursor-pointer">
+<div class="flex items-center gap-3">
+<div class="size-8 rounded-lg bg-slate-100 dark:bg-slate-800 flex items-center justify-center">
+<span class="material-symbols-outlined text-slate-400 text-xl">dark_mode</span>
+</div>
+<h4 class="font-bold text-slate-400">Dinner</h4>
+</div>
+<span class="material-symbols-outlined text-slate-400 group-hover:text-primary transition-colors">add_circle</span>
+</div>
+</section>
+<!-- Bottom Navigation Bar -->
+<nav class="fixed bottom-0 left-0 right-0 bg-white/80 dark:bg-background-dark/80 backdrop-blur-lg border-t border-slate-200 dark:border-slate-800 px-6 py-3 flex justify-between items-center z-50">
+<a class="flex flex-col items-center gap-1 text-primary" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1">calendar_today</span>
+<span class="text-[10px] font-bold uppercase tracking-wider">Log</span>
+</a>
+<a class="flex flex-col items-center gap-1 text-slate-400" href="#">
+<span class="material-symbols-outlined">analytics</span>
+<span class="text-[10px] font-bold uppercase tracking-wider">Insights</span>
+</a>
+<div class="size-14 -mt-8 bg-primary rounded-full flex items-center justify-center shadow-lg shadow-primary/20 border-4 border-background-light dark:border-background-dark">
+<span class="material-symbols-outlined text-slate-900 font-bold text-3xl">add</span>
+</div>
+<a class="flex flex-col items-center gap-1 text-slate-400" href="#">
+<span class="material-symbols-outlined">restaurant_menu</span>
+<span class="text-[10px] font-bold uppercase tracking-wider">Plans</span>
+</a>
+<a class="flex flex-col items-center gap-1 text-slate-400" href="#">
+<span class="material-symbols-outlined">person</span>
+<span class="text-[10px] font-bold uppercase tracking-wider">Profile</span>
+</a>
+</nav>
+</div>
+<style>
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+    </style>
+</body></html>

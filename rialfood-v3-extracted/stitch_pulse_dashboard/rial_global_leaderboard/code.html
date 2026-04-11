@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#25aff4",
+                        "background-light": "#f5f7f8",
+                        "background-dark": "#101c22",
+                    },
+                    fontFamily: {
+                        "display": ["Inter", "sans-serif"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
+<style>
+        body { font-family: 'Inter', sans-serif; }
+        .editorial-shadow { shadow-[0_10px_30px_-15px_rgba(37,175,244,0.3)] }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 font-display">
+<!-- Header Section -->
+<div class="sticky top-0 z-20 bg-background-light/80 dark:bg-background-dark/80 backdrop-blur-md border-b border-primary/10">
+<div class="flex items-center p-4 justify-between max-w-2xl mx-auto">
+<div class="text-slate-900 dark:text-slate-100 flex size-10 items-center justify-center rounded-full bg-white dark:bg-slate-800 shadow-sm">
+<span class="material-symbols-outlined">arrow_back</span>
+</div>
+<div class="flex flex-col items-center">
+<span class="text-[10px] uppercase tracking-[0.2em] text-primary font-bold">Editorial Tech</span>
+<h1 class="text-xl font-extrabold leading-tight tracking-tighter uppercase italic">The RIAL List</h1>
+</div>
+<div class="flex size-10 items-center justify-center rounded-full bg-white dark:bg-slate-800 shadow-sm">
+<span class="material-symbols-outlined">search</span>
+</div>
+</div>
+<!-- Timeframe Toggle -->
+<div class="flex px-4 py-4 max-w-2xl mx-auto">
+<div class="flex h-12 flex-1 items-center justify-center rounded-xl bg-slate-200/50 dark:bg-slate-800/50 p-1.5 backdrop-blur-sm">
+<label class="flex cursor-pointer h-full grow items-center justify-center rounded-lg px-2 has-[:checked]:bg-white dark:has-[:checked]:bg-slate-700 has-[:checked]:shadow-md transition-all duration-300">
+<span class="text-xs font-bold uppercase tracking-wider">Weekly</span>
+<input checked="" class="hidden" name="timeframe" type="radio" value="Weekly"/>
+</label>
+<label class="flex cursor-pointer h-full grow items-center justify-center rounded-lg px-2 has-[:checked]:bg-white dark:has-[:checked]:bg-slate-700 has-[:checked]:shadow-md transition-all duration-300">
+<span class="text-xs font-bold uppercase tracking-wider">Monthly</span>
+<input class="hidden" name="timeframe" type="radio" value="Monthly"/>
+</label>
+<label class="flex cursor-pointer h-full grow items-center justify-center rounded-lg px-2 has-[:checked]:bg-white dark:has-[:checked]:bg-slate-700 has-[:checked]:shadow-md transition-all duration-300">
+<span class="text-xs font-bold uppercase tracking-wider">All-Time</span>
+<input class="hidden" name="timeframe" type="radio" value="All Time"/>
+</label>
+</div>
+</div>
+</div>
+<!-- Main Content -->
+<main class="max-w-2xl mx-auto pb-32">
+<!-- Rising Stars Section (Editorial Carousel) -->
+<section class="mt-6">
+<div class="px-4 flex justify-between items-end mb-4">
+<h3 class="text-2xl font-black italic uppercase tracking-tighter">Rising <span class="text-primary underline decoration-2 underline-offset-4">Stars</span></h3>
+<span class="text-[10px] font-bold uppercase tracking-widest opacity-50">Discovery Phase</span>
+</div>
+<div class="flex overflow-x-auto gap-4 px-4 pb-4 no-scrollbar">
+<div class="flex flex-none flex-col w-32 group">
+<div class="relative w-full aspect-[3/4] overflow-hidden rounded-xl border border-primary/20">
+<img class="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-500 scale-105 group-hover:scale-100" data-alt="Close up editorial portrait of a woman" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBW7KLz_KORPGB6apTsDLN54wxdVawPAtHSTK5MaYk0HsuqennR04EhdcC-Q8gIjmmGXKnhw-1-mn2OA0Zb0tD3aObce-tczcHU8ajo1t54eqG0fex_PZgCHYn7RFW8N0xP0J0dpExpCgxtjIwXO9JS39bncViZI5hSJKpqQHre6gdyM7bak6TKi9ii59AwRSKMR4jK_Elg-0B7j2bLgtXAwqnmp0537mt5ZC9mdJeNz036Vl2cIBbFr6Gva0UTzAUI0etSrSiBJVDy"/>
+<div class="absolute bottom-2 left-2 bg-primary text-white text-[9px] font-bold px-2 py-0.5 rounded-full">NEW</div>
+</div>
+<p class="mt-2 text-xs font-bold uppercase tracking-tight">@elara_v</p>
+<p class="text-[10px] text-primary font-medium">98% Match</p>
+</div>
+<div class="flex flex-none flex-col w-32 group">
+<div class="relative w-full aspect-[3/4] overflow-hidden rounded-xl border border-primary/20">
+<img class="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-500 scale-105 group-hover:scale-100" data-alt="Minimalist editorial portrait of a man" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDfTcCGqHjYyw7esxEsNAbXzF8pHs2zXMdy1u2LC5-OY7GLp-nsl468ClOe0KvT6n2tkgh8uJp-UuFANA-kHyVQYFmlzP_f0NI1x_BlUvqRtha9zjLHAQpPWPjjA--nJOEYv-rxTJuPEuLsxQBRDVGcRl91rpQu-r_jUJg79zzMtsylCM5rrSdbsKY2RDg8REhtTjO4UzJpzp__ad9tn8_SeMfkYzZsRPALfVmIIWBG9W7Uq_ydz28BglGfDZwnGWeCU8LPDG0q7dKd"/>
+<div class="absolute bottom-2 left-2 bg-primary text-white text-[9px] font-bold px-2 py-0.5 rounded-full">TRENDING</div>
+</div>
+<p class="mt-2 text-xs font-bold uppercase tracking-tight">@kade_studio</p>
+<p class="text-[10px] text-primary font-medium">94% Match</p>
+</div>
+<div class="flex flex-none flex-col w-32 group">
+<div class="relative w-full aspect-[3/4] overflow-hidden rounded-xl border border-primary/20">
+<img class="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-500 scale-105 group-hover:scale-100" data-alt="High fashion editorial portrait woman" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDTyPB70fgXMqSthwb3l15izOU1DrLzR8jh34lFWleOUk6GcnD_mYdUM8L1FnAsV7Gh2QpqT5PJX7UTt8bd_R4nvb9srhJ2gaStHZwubc7pn9ghmBzt__ECwAoH7aQr_iDHrkuSmYZTta85WjWbrqYH3E4GxSUHqMSEACW5bV3w7Ffnf0wPYaFd-c73H3mn069lHNiO-f3K4bGEiiEhzxrx4EksW0VGaOE_Qk7uZuXRqlBCQcA-lRjz58EKTi8gsc6ZU7W4uiLEkb-F"/>
+</div>
+<p class="mt-2 text-xs font-bold uppercase tracking-tight">@mira_r</p>
+<p class="text-[10px] text-primary font-medium">91% Match</p>
+</div>
+<div class="flex flex-none flex-col w-32 group">
+<div class="relative w-full aspect-[3/4] overflow-hidden rounded-xl border border-primary/20">
+<img class="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-500 scale-105 group-hover:scale-100" data-alt="Sharp portrait of a stylish man" src="https://lh3.googleusercontent.com/aida-public/AB6AXuB1KAariiLGYVK8-70QpaznME_jlb-CThLXCdWc4DXxVXt5K_eBwwn6v9nqY-QZcmKbLdzI6Bh9RT_nXFVI7kM5XiiZ1cLlFACDeOlP-gYB2Tdo8MXzDQ0LoNGhC6kVZ9Gd3lobDnf-EZBrEOKZKmtAKiHcxMfeUu9Lufrr_jOPbT3flfkX8roQ6JwXHAWf1qcn_ya2RkVBCCFXaPDNSjSgqUAl9W9VIj2l1UhacGwOI4Js4xyum7vPCjFL8ozqhcCkOS3ZLpf_R2Bj"/>
+</div>
+<p class="mt-2 text-xs font-bold uppercase tracking-tight">@jax_on</p>
+<p class="text-[10px] text-primary font-medium">89% Match</p>
+</div>
+</div>
+</section>
+<!-- Leaderboard Main List -->
+<section class="mt-8 px-4">
+<div class="flex items-center justify-between mb-6">
+<h3 class="text-xs font-bold uppercase tracking-[0.3em] text-slate-400">Consistency Ranking</h3>
+<div class="h-px flex-1 mx-4 bg-slate-200 dark:bg-slate-800"></div>
+</div>
+<!-- List Items -->
+<div class="space-y-3">
+<!-- Rank 1 -->
+<div class="flex items-center gap-4 bg-white dark:bg-slate-800/40 p-3 rounded-2xl border border-primary/5 hover:border-primary/30 transition-all">
+<div class="w-8 text-center font-black italic text-2xl text-primary opacity-50">01</div>
+<div class="relative size-14 shrink-0 rounded-xl overflow-hidden ring-2 ring-primary ring-offset-2 ring-offset-white dark:ring-offset-background-dark">
+<img class="w-full h-full object-cover" data-alt="Editorial portrait of top ranked user" src="https://lh3.googleusercontent.com/aida-public/AB6AXuB-bh9IKLIP6EkaBx5n6qomtU5ORfX7_RuxF9fQ65CCpJjti243Q2At3tPK1eRSe3wauEroNgw0PJcVddvI8ay8rXs_-VExC3OF_Uijhiepcct73qZJm-Ud2UBQrj9j_ghRkykNJ1r-w_GqyO5oA_GPNjYrE3l6z8oLffbUSLnJqci2E92-jwZ1oCJp0CNWwmBcsprUKmC0RS_OYsgKM8MsbI-vZPG4pYIZAQ7KsDuZ1eJCycqVw3uJP1kRK-RmSfDrzGZ-BRzfl6Gd"/>
+</div>
+<div class="flex-1">
+<p class="text-sm font-bold uppercase">Sienna West</p>
+<p class="text-[10px] uppercase font-bold text-slate-400 tracking-tighter">Gold Milestone</p>
+</div>
+<div class="text-right">
+<p class="text-lg font-black italic text-slate-900 dark:text-slate-100">99.8</p>
+<p class="text-[9px] uppercase font-bold text-primary tracking-widest">Consistency</p>
+</div>
+</div>
+<!-- Rank 2 -->
+<div class="flex items-center gap-4 bg-white dark:bg-slate-800/40 p-3 rounded-2xl border border-primary/5">
+<div class="w-8 text-center font-black italic text-2xl text-slate-300">02</div>
+<div class="size-14 shrink-0 rounded-xl overflow-hidden grayscale">
+<img class="w-full h-full object-cover" data-alt="Editorial portrait of second ranked user" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBfjtNW4fH6Fdlj2ejwJyHGHfZF4AY2LydUImYRo0Cnzq4QVH-4y6en8ULhdNBAdve37_f1pF8IQ7cWorR0alxqHsh55EHpQH_lPv473rcnDvOC-hLnyIshBh8Sl2f1lSCoeJBhZR1t20vtLv2NHzya6GYZX2J06eJsxlEoY0uT2TK4Q9QxUFOU_gWBJGG6SP_olQE8FH95sBZeKzfeIm2Htca_hQLXrkE8jGtFy-gia4y4krr9SAjj0sXDXXfvFOhf8Srn4K0nOtDB"/>
+</div>
+<div class="flex-1">
+<p class="text-sm font-bold uppercase">Marcus Vane</p>
+<p class="text-[10px] uppercase font-bold text-slate-400 tracking-tighter">Silver Milestone</p>
+</div>
+<div class="text-right">
+<p class="text-lg font-black italic text-slate-900 dark:text-slate-100">97.4</p>
+<p class="text-[9px] uppercase font-bold text-slate-400 tracking-widest">Consistency</p>
+</div>
+</div>
+<!-- Rank 3 -->
+<div class="flex items-center gap-4 bg-white dark:bg-slate-800/40 p-3 rounded-2xl border border-primary/5">
+<div class="w-8 text-center font-black italic text-2xl text-slate-300">03</div>
+<div class="size-14 shrink-0 rounded-xl overflow-hidden grayscale">
+<img class="w-full h-full object-cover" data-alt="Editorial portrait of third ranked user" src="https://lh3.googleusercontent.com/aida-public/AB6AXuChx8hn1MKIztnR9lEVcybaGgQjoPoZslu2ATVDbCtHzj0m6Ios8iog62jy3bPX5WdrCFkY0uAQ6W10WLUufBiXaPWiOSVm6ehCq9EVvuOZlHGo-3TXtu640wRyxe2Tnwy3dMtmGk_ikmPieelJ6YLm2sMkqvv_x95do2S16KOmimkOHIQJK5h-c-3nFipz5Nshn7Abj0LJpqbhSLG59eBhNK-MVFlZzoXvFZwPgCNhQJ44yHqV09qwWAH97JzrK4UdMx4KsNfv29Ja"/>
+</div>
+<div class="flex-1">
+<p class="text-sm font-bold uppercase">Aria Thorne</p>
+<p class="text-[10px] uppercase font-bold text-slate-400 tracking-tighter">Silver Milestone</p>
+</div>
+<div class="text-right">
+<p class="text-lg font-black italic text-slate-900 dark:text-slate-100">95.2</p>
+<p class="text-[9px] uppercase font-bold text-slate-400 tracking-widest">Consistency</p>
+</div>
+</div>
+<!-- You Indicator -->
+<div class="relative py-2">
+<div aria-hidden="true" class="absolute inset-0 flex items-center">
+<div class="w-full border-t-2 border-dashed border-primary/30"></div>
+</div>
+<div class="relative flex justify-center">
+<span class="bg-primary px-3 py-0.5 rounded-full text-[9px] font-black uppercase text-white tracking-[0.2em]">Your Current Standing</span>
+</div>
+</div>
+<!-- You Rank -->
+<div class="flex items-center gap-4 bg-primary/10 dark:bg-primary/5 p-4 rounded-2xl border-2 border-primary shadow-lg shadow-primary/20">
+<div class="w-8 text-center font-black italic text-2xl text-primary">12</div>
+<div class="relative size-16 shrink-0 rounded-xl overflow-hidden ring-4 ring-primary/30">
+<img class="w-full h-full object-cover" data-alt="Your editorial user profile photo" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBFfORIIJiP9GsOFMN9CdHqNLewIbC0rCYvoVt1dl90s8D09o7bRtcgMW6w0NSSrxcBw_ps5YyaCq31XFnonOiyZP6Q8-AwKczw-3dAxYSkkCk18sFa-GKAeEZcrb_0BTuQMlULB7Ffy0IlDtCmh-4gClmmZNrLwHA73ECwmjC_9RmSbr-RI-M1GnTWV7JURqQux6aMrrgg7eAeggPF0EomNqSc65tCqZGTSaL0lNFk92xcOZK3omPKp4esrIJlWHxsEO541mVlvWAq"/>
+<div class="absolute inset-0 bg-primary/20 flex items-center justify-center">
+<span class="material-symbols-outlined text-white text-3xl">face</span>
+</div>
+</div>
+<div class="flex-1">
+<p class="text-base font-black uppercase text-primary">You (Jordan K.)</p>
+<p class="text-[10px] uppercase font-bold text-slate-500 tracking-tighter">Bronze Milestone Peak</p>
+</div>
+<div class="text-right">
+<p class="text-2xl font-black italic text-primary">88.9</p>
+<p class="text-[9px] uppercase font-bold text-slate-500 tracking-widest">Consistency</p>
+</div>
+</div>
+<!-- Rank 13 (After you) -->
+<div class="flex items-center gap-4 bg-white dark:bg-slate-800/40 p-3 rounded-2xl border border-primary/5 opacity-70">
+<div class="w-8 text-center font-black italic text-2xl text-slate-300">13</div>
+<div class="size-14 shrink-0 rounded-xl overflow-hidden grayscale">
+<img class="w-full h-full object-cover" data-alt="Portrait of next ranked user" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAxorpxEemCzO1y-rHfJBnjH5w4u_YJ66JFiRwR2fdE31TKpwzuTIkzvgOaBtcDIW_BQfckWlN9rK3RtrMpqDjP9gJ8tB2DbfUvcmssrV1saHOaa4ieRQr2sW4HDvNCWBGbvsZaiaAUL00GkEiVo_SWDkix42bR_0zNvwUdCph8NZeqwmenkpE3GyCr4yacv9izKk78HtL1yU31-gCtiUXoZj-TOaU1IhrYCBnn_AE1vBtjtxA9SXnGjVN22mUXaGY3j6KdCewComY8"/>
+</div>
+<div class="flex-1">
+<p class="text-sm font-bold uppercase">Luca Moore</p>
+<p class="text-[10px] uppercase font-bold text-slate-400 tracking-tighter">Bronze Milestone</p>
+</div>
+<div class="text-right">
+<p class="text-lg font-black italic text-slate-900 dark:text-slate-100">87.5</p>
+<p class="text-[9px] uppercase font-bold text-slate-400 tracking-widest">Consistency</p>
+</div>
+</div>
+</div>
+</section>
+<!-- Real Feel Milestones Mini-Section -->
+<section class="mt-10 px-4">
+<h3 class="text-xs font-bold uppercase tracking-[0.3em] text-slate-400 mb-4 text-center">Real Feel Distribution</h3>
+<div class="grid grid-cols-3 gap-2">
+<div class="bg-primary/5 dark:bg-slate-800/60 p-3 rounded-xl border border-primary/10 text-center">
+<span class="material-symbols-outlined text-primary mb-1">workspace_premium</span>
+<p class="text-[9px] uppercase font-black text-slate-400">Gold</p>
+<p class="text-sm font-bold">12 Users</p>
+</div>
+<div class="bg-primary/5 dark:bg-slate-800/60 p-3 rounded-xl border border-primary/10 text-center">
+<span class="material-symbols-outlined text-slate-400 mb-1">stars</span>
+<p class="text-[9px] uppercase font-black text-slate-400">Silver</p>
+<p class="text-sm font-bold">45 Users</p>
+</div>
+<div class="bg-primary/5 dark:bg-slate-800/60 p-3 rounded-xl border border-primary/10 text-center">
+<span class="material-symbols-outlined text-orange-400 mb-1">military_tech</span>
+<p class="text-[9px] uppercase font-black text-slate-400">Bronze</p>
+<p class="text-sm font-bold">128 Users</p>
+</div>
+</div>
+</section>
+</main>
+<!-- Bottom Navigation Bar -->
+<nav class="fixed bottom-0 left-0 right-0 bg-white/90 dark:bg-slate-900/90 backdrop-blur-xl border-t border-primary/10 z-50">
+<div class="max-w-2xl mx-auto flex items-center justify-between px-6 py-4">
+<a class="flex flex-col items-center gap-1 text-slate-400 hover:text-primary transition-colors" href="#">
+<span class="material-symbols-outlined">grid_view</span>
+<p class="text-[9px] font-bold uppercase tracking-widest">Feed</p>
+</a>
+<a class="flex flex-col items-center gap-1 text-slate-400 hover:text-primary transition-colors" href="#">
+<span class="material-symbols-outlined">explore</span>
+<p class="text-[9px] font-bold uppercase tracking-widest">Explore</p>
+</a>
+<a class="flex flex-col items-center gap-1 text-primary" href="#">
+<div class="p-2 bg-primary/10 rounded-full">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1">emoji_events</span>
+</div>
+<p class="text-[9px] font-bold uppercase tracking-widest">Ranks</p>
+</a>
+<a class="flex flex-col items-center gap-1 text-slate-400 hover:text-primary transition-colors" href="#">
+<span class="material-symbols-outlined">person</span>
+<p class="text-[9px] font-bold uppercase tracking-widest">Profile</p>
+</a>
+</div>
+</nav>
+<!-- Design Accents -->
+<div class="fixed top-20 right-[-5%] w-64 h-64 bg-primary/5 rounded-full blur-[100px] pointer-events-none -z-10"></div>
+<div class="fixed bottom-40 left-[-5%] w-64 h-64 bg-primary/5 rounded-full blur-[100px] pointer-events-none -z-10"></div>
+</body></html>

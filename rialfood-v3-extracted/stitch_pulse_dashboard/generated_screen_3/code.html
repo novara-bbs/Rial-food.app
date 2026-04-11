@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>RIAL - Family Planner</title>
+<!-- Tailwind CSS v3 CDN -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- Google Fonts for Editorial Tech Style (Serif and Sans) -->
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,700&amp;family=Inter:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<style data-purpose="typography">
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: #F9F9F7;
+    }
+    .serif-title {
+      font-family: 'Playfair Display', serif;
+    }
+  </style>
+<style data-purpose="custom-layout">
+    /* Hide scrollbars for clean magazine look while allowing horizontal scroll */
+    .no-scrollbar::-webkit-scrollbar {
+      display: none;
+    }
+    .no-scrollbar {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
+    .glass-card {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(8px);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+  </style>
+</head>
+<body class="text-slate-800 pb-24">
+<!-- BEGIN: Header -->
+<header class="p-6 bg-white border-b border-gray-100 flex justify-between items-center sticky top-0 z-50">
+<div data-purpose="logo-container">
+<h1 class="serif-title italic text-2xl font-bold text-slate-800 leading-none">RIAL</h1>
+<p class="text-[10px] uppercase tracking-widest text-slate-400 font-semibold mt-1">Family Planner</p>
+</div>
+<div class="flex items-center gap-3 bg-gray-50 px-4 py-2 rounded-full border border-gray-200" data-purpose="family-toggle">
+<span class="text-xs font-medium text-slate-600">Family of 4</span>
+<label class="relative inline-flex items-center cursor-pointer">
+<input checked="" class="sr-only peer" type="checkbox" value=""/>
+<div class="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-lime-600"></div>
+</label>
+</div>
+</header>
+<!-- END: Header -->
+<main class="max-w-md mx-auto">
+<!-- BEGIN: Batch Session Hero -->
+<section class="px-5 mt-6" data-purpose="batch-session-card">
+<div class="relative overflow-hidden rounded-[2.5rem] bg-slate-900 aspect-[1/0.9] flex flex-col justify-end p-8 text-white shadow-xl shadow-slate-200">
+<!-- Background Overlay Image (Faded Ingredients) -->
+<div class="absolute inset-0 opacity-40 bg-[url('https://placehold.co/600x800/1e293b/white?text=Ingredients+Overlay')] bg-cover bg-center"></div>
+<div class="relative z-10">
+<div class="flex justify-between items-start mb-6">
+<span class="bg-yellow-500/20 text-yellow-500 text-[10px] font-bold uppercase tracking-widest px-3 py-1 rounded-full border border-yellow-500/30">Weekly Prep</span>
+<span class="text-sm font-medium opacity-80">Sunday • 90 mins</span>
+</div>
+<h2 class="serif-title italic text-4xl mb-4">Batch Session</h2>
+<p class="text-sm opacity-90 leading-relaxed mb-8 max-w-[240px]">
+            Prepare the foundational blocks for 5 nutritious family dinners.
+          </p>
+<div class="flex gap-2">
+<div class="glass-card rounded-xl p-3 flex-1">
+<p class="text-[10px] leading-tight opacity-90">Slow-Cooked Pulled Pork</p>
+</div>
+<div class="glass-card rounded-xl p-3 flex-1">
+<p class="text-[10px] leading-tight opacity-90">Roasted Root Veg</p>
+</div>
+<div class="glass-card rounded-xl p-2 w-12 flex items-center justify-center">
+<p class="text-[10px] font-bold">+3 more</p>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- END: Batch Session Hero -->
+<!-- BEGIN: Horizontal Calendar -->
+<section class="mt-10" data-purpose="weekly-calendar">
+<div class="px-6 flex justify-between items-end mb-6">
+<h3 class="serif-title italic text-3xl text-slate-800">The Week Ahead</h3>
+<a class="text-xs font-semibold text-lime-700 border-b border-lime-700/30 pb-1" href="#">View Shopping List</a>
+</div>
+<div class="flex overflow-x-auto px-5 gap-4 no-scrollbar pb-4">
+<!-- Monday Card -->
+<article class="min-w-[85%] bg-white rounded-[2rem] p-6 border-2 border-lime-100 shadow-sm" data-purpose="meal-card-monday">
+<div class="flex justify-between items-center mb-4">
+<span class="text-[11px] font-bold uppercase tracking-[0.2em] text-slate-400">Monday</span>
+<span class="text-[10px] font-bold text-emerald-600 bg-emerald-50 px-2 py-1 rounded border border-emerald-100">Low Effort</span>
+</div>
+<h4 class="text-2xl font-bold text-slate-900 mb-1">Pulled Pork Soft Tacos</h4>
+<p class="text-sm italic text-slate-500 mb-6">Fresh salsa &amp; pickled onions</p>
+<div class="bg-slate-50 rounded-2xl p-4 border border-slate-100 relative" data-purpose="leftover-logic">
+<div class="absolute left-4 top-4 bottom-4 w-1 bg-yellow-400 rounded-full"></div>
+<div class="pl-4">
+<p class="text-[11px] font-bold uppercase tracking-wider text-slate-800 mb-1">Leftover Logic</p>
+<p class="text-xs text-slate-600 leading-relaxed">Use 1/3 of Sunday's Pulled Pork. Save bones for Tuesday's broth.</p>
+</div>
+</div>
+</article>
+<!-- Tuesday Card (Partial) -->
+<article class="min-w-[85%] bg-white rounded-[2rem] p-6 border border-gray-100 shadow-sm opacity-50" data-purpose="meal-card-tuesday">
+<div class="flex justify-between items-center mb-4">
+<span class="text-[11px] font-bold uppercase tracking-[0.2em] text-slate-400">Tuesday</span>
+</div>
+<h4 class="text-2xl font-bold text-slate-900 mb-1">Hearty Root Stew</h4>
+</article>
+</div>
+</section>
+<!-- END: Horizontal Calendar -->
+<!-- BEGIN: Stats Grid -->
+<section class="px-5 mt-4 grid grid-cols-2 gap-4" data-purpose="efficiency-stats">
+<div class="bg-white rounded-[2rem] p-4 flex items-center justify-center aspect-square shadow-sm">
+<!-- Family illustration placeholder -->
+<img alt="Family eating" class="w-full h-auto object-contain" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAGzzHxc8liB_fPyfivTWd0dww7PJEFjtVZ8hNXeYe3se57OJ09-TfV_JAdDGQpi7O38Rh7CV06WzxPe4KzSAZoKpxEmofHFkOH9oKhyej9YIEOUPq0lXqsZhSpQjqQDPXR2oJTNffTwWVNBpPjTHxQTQ-scg5RJjh1hu03GT8eisASOPURarG9PheRGaq0J56ysAY0SgqWKLHpXM1m7AwaFdY3QdhhJL1Ex83SxtoWI-JitFKjGLd3bofpYBzf3rcc8ZRhhhFMktO2"/>
+</div>
+<div class="grid grid-rows-2 gap-4">
+<div class="bg-lime-50 rounded-[1.5rem] p-5 flex flex-col justify-center border border-lime-100">
+<span class="text-[10px] font-bold uppercase tracking-wider text-lime-800/60 mb-1">Time Saved</span>
+<p class="serif-title italic text-3xl text-lime-900">4.5 hrs</p>
+</div>
+<div class="bg-white rounded-[1.5rem] p-5 flex flex-col justify-center border border-gray-100 shadow-sm">
+<span class="text-[10px] font-bold uppercase tracking-wider text-slate-400 mb-1">Food Waste</span>
+<p class="serif-title italic text-3xl text-slate-900">-30%</p>
+</div>
+</div>
+</section>
+<!-- END: Stats Grid -->
+</main>
+<!-- BEGIN: Bottom Navigation -->
+<nav class="fixed bottom-0 left-0 right-0 bg-white/80 backdrop-blur-md border-t border-gray-100 px-8 py-4 flex justify-between items-center z-50">
+<button class="flex flex-col items-center gap-1 group" data-purpose="nav-item">
+<svg class="w-6 h-6 text-lime-700" fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+<path d="m2.25 12 8.954-8.955c.44-.439 1.152-.439 1.591 0L21.75 12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125H9.75v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21h4.125c.621 0 1.125-.504 1.125-1.125V9.75M8.25 21h8.25" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+<span class="text-[9px] font-bold uppercase tracking-widest text-lime-800">Planner</span>
+</button>
+<button class="flex flex-col items-center gap-1 opacity-40 hover:opacity-100 transition-opacity" data-purpose="nav-item">
+<svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+<path d="M12 21v-8.25M15.75 21v-8.25M8.25 21v-8.25M3 9l9-6 9 6m-1.5 12V10.332A4.833 4.833 0 0 0 12 6c-2.669 0-4.833 2.164-4.833 4.832V21" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+<span class="text-[9px] font-bold uppercase tracking-widest">Kitchen</span>
+</button>
+<button class="flex flex-col items-center gap-1 opacity-40 hover:opacity-100 transition-opacity" data-purpose="nav-item">
+<svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+<path d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+<span class="text-[9px] font-bold uppercase tracking-widest">Family</span>
+</button>
+</nav>
+<!-- END: Bottom Navigation -->
+</body></html>

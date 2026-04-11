@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#007dff",
+                        "background-light": "#f5f7f8",
+                        "background-dark": "#0f1923",
+                    },
+                    fontFamily: {
+                        "display": ["Space Grotesk"]
+                    },
+                    borderRadius: {"DEFAULT": "0.5rem", "lg": "1rem", "xl": "1.5rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .filled-icon {
+            font-variation-settings: 'FILL' 1;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark font-display text-slate-900 dark:text-slate-100">
+<div class="relative flex min-h-screen w-full flex-col overflow-x-hidden">
+<!-- Header -->
+<header class="sticky top-0 z-10 flex items-center justify-between bg-background-light/80 dark:bg-background-dark/80 backdrop-blur-md p-4 border-b border-slate-200 dark:border-slate-800">
+<div class="flex items-center gap-3">
+<button class="flex items-center justify-center size-10 rounded-full hover:bg-slate-200 dark:hover:bg-slate-800 transition-colors">
+<span class="material-symbols-outlined">arrow_back</span>
+</button>
+<h1 class="text-xl font-bold tracking-tight">Ingredient Dictionary</h1>
+</div>
+<div class="flex items-center gap-2">
+<button class="flex items-center justify-center size-10 rounded-full hover:bg-slate-200 dark:hover:bg-slate-800 transition-colors">
+<span class="material-symbols-outlined">share</span>
+</button>
+<button class="flex items-center justify-center size-10 rounded-full hover:bg-slate-200 dark:hover:bg-slate-800 transition-colors">
+<span class="material-symbols-outlined">bookmark</span>
+</button>
+</div>
+</header>
+<main class="flex-1 pb-24">
+<!-- Hero Section -->
+<div class="p-4 @container">
+<div class="relative h-80 w-full overflow-hidden rounded-xl group">
+<div class="absolute inset-0 bg-cover bg-center" data-alt="A sliced ripe avocado on a dark background" style="background-image: linear-gradient(to top, rgba(15, 25, 35, 0.9) 0%, rgba(15, 25, 35, 0.2) 50%, rgba(15, 25, 35, 0) 100%), url('https://lh3.googleusercontent.com/aida-public/AB6AXuBpiHj8JKNbXRpyiz-V8mAW09kVPL2kuR5SyHfExSzRacyM8Dk7KiV5D4zypeYBBcz6zP6fYN19IpyE4AEwOVu98PPXB_jkkk_Zy1df1uSAfNrcXI4p0Q1WvztMmF9d4eqE15DeV1nq06qo8bYHAwmand7uioN68xqeASsk-2-0KlHDiklSJuCrHXiy51Xkc6KhPSuaYW-aBHKyy4UHi04z6TRaHmzys5OioIj6wO3y32BWQDTVkVWOLIVi8NpdQmSUB1Un0FXAFtX0');"></div>
+<div class="absolute bottom-0 left-0 p-6 w-full">
+<div class="flex flex-col gap-1">
+<span class="text-primary font-bold text-xs uppercase tracking-widest">Superfood Series</span>
+<h2 class="text-4xl font-bold text-white leading-none">Avocado</h2>
+<p class="text-slate-300 text-sm mt-2 max-w-md">Persea americana • Lauraceae Family</p>
+</div>
+</div>
+<div class="absolute top-4 right-4 bg-primary/20 backdrop-blur-md border border-primary/30 text-primary px-3 py-1 rounded-full text-xs font-bold">
+                        PREMIUM DATA
+                    </div>
+</div>
+</div>
+<!-- Technical Data Grid -->
+<div class="grid grid-cols-2 md:grid-cols-4 gap-3 px-4 py-2">
+<div class="flex flex-col items-center justify-center p-4 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900/50">
+<span class="text-3xl font-bold text-primary">84</span>
+<span class="text-xs font-medium text-slate-500 dark:text-slate-400 uppercase tracking-tighter mt-1">Real Feel® Score</span>
+</div>
+<div class="flex flex-col items-center justify-center p-4 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900/50">
+<span class="text-3xl font-bold text-emerald-500">High</span>
+<span class="text-xs font-medium text-slate-500 dark:text-slate-400 uppercase tracking-tighter mt-1">Bio-Activity</span>
+</div>
+<div class="flex flex-col items-center justify-center p-4 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900/50">
+<span class="text-3xl font-bold text-orange-500">Low</span>
+<span class="text-xs font-medium text-slate-500 dark:text-slate-400 uppercase tracking-tighter mt-1">Glycemic Index</span>
+</div>
+<div class="flex flex-col items-center justify-center p-4 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900/50">
+<span class="text-3xl font-bold text-sky-500">72%</span>
+<span class="text-xs font-medium text-slate-500 dark:text-slate-400 uppercase tracking-tighter mt-1">Lipid Density</span>
+</div>
+</div>
+<!-- Detailed Analysis Section -->
+<section class="mt-8 px-4">
+<div class="flex items-center justify-between mb-4">
+<h3 class="text-lg font-bold">Bio-active Properties</h3>
+<span class="text-xs text-primary font-semibold">Laboratory Verified</span>
+</div>
+<div class="space-y-4">
+<div class="p-4 rounded-xl bg-slate-100 dark:bg-slate-800/50 border-l-4 border-primary">
+<div class="flex items-start gap-3">
+<span class="material-symbols-outlined text-primary">biotech</span>
+<div>
+<h4 class="font-bold text-sm">Monounsaturated Fatty Acids (MUFA)</h4>
+<p class="text-sm text-slate-600 dark:text-slate-400 mt-1">Primarily oleic acid, associated with reduced systemic inflammation and cardiovascular optimization.</p>
+</div>
+</div>
+</div>
+<div class="p-4 rounded-xl bg-slate-100 dark:bg-slate-800/50 border-l-4 border-emerald-500">
+<div class="flex items-start gap-3">
+<span class="material-symbols-outlined text-emerald-500">psychology</span>
+<div>
+<h4 class="font-bold text-sm">Lutein &amp; Zeaxanthin Content</h4>
+<p class="text-sm text-slate-600 dark:text-slate-400 mt-1">Crucial carotenoids that provide antioxidant protection for both ocular tissue and neural pathways.</p>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Culinary Uses Section -->
+<section class="mt-8 px-4">
+<h3 class="text-lg font-bold mb-4">Culinary Applications</h3>
+<div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+<div class="flex items-center gap-3 p-3 rounded-lg border border-slate-200 dark:border-slate-800 hover:bg-slate-50 dark:hover:bg-slate-800/30 transition-colors">
+<div class="size-12 rounded-lg overflow-hidden shrink-0 bg-slate-200 dark:bg-slate-800">
+<img alt="Avocado toast close up" class="w-full h-full object-cover" data-alt="Modern avocado toast breakfast" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDmUkMQQUT4ohC0iXfkPYUueZA229NSv8YkdtvDpinYHUYVlgfM9BjClzKru5C_nRtWdg82NLDM-6PZROJX71e7ydFf39CagAufhqHORaxgGVynbjjcooi4hddj6d2DojVO-WkiiaWQ808mdFXcmdVSkMLSv1CGIPPOTvYG6q0YEPLMVAXBchH73scAfUIVH1FqcWSJHwVGDM1cFH4wkc9UBT4RO8wmCUtWu05hldCPuvH_Mo6Vnnj5WWK6ge9jrFuQur_-e64e4WXm"/>
+</div>
+<div>
+<p class="font-bold text-sm">Lipid-Based Emulsions</p>
+<p class="text-xs text-slate-500">Guacamole, aiolis, and dressings</p>
+</div>
+</div>
+<div class="flex items-center gap-3 p-3 rounded-lg border border-slate-200 dark:border-slate-800 hover:bg-slate-50 dark:hover:bg-slate-800/30 transition-colors">
+<div class="size-12 rounded-lg overflow-hidden shrink-0 bg-slate-200 dark:bg-slate-800">
+<img alt="Avocado oil bottle" class="w-full h-full object-cover" data-alt="Cold pressed avocado oil" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAzDHSsriwjwe1LAwEmXd1sXUKLd69GreTvdDjg_JtfsQfdfdrBFqDZI9lR7UFGXOu5pebssERkm8-xAZac2cAHeCXaL_sEWRSy3CbdUXtgNI939g3HjH6INkDEepvFJRU00fc9CBw-PfOTfRzJsMILar0j8ELa_2fnAXAdKqGrvwFPSvn675wpz0KBOsfe6GngNnNWRwObQi-DYtvffAGUj5fQygNZvU0vo3dt655ZxhPl8B9Va4gHvHIVjzkdRSCYGDU1bAE7RRX9"/>
+</div>
+<div>
+<p class="font-bold text-sm">High-Heat Oxidation</p>
+<p class="text-xs text-slate-500">Refined oil smoke point: 520°F (271°C)</p>
+</div>
+</div>
+</div>
+</section>
+<!-- Real Feel Correlation Section -->
+<section class="mt-8 px-4">
+<div class="bg-primary/5 dark:bg-primary/10 rounded-2xl p-6 border border-primary/20">
+<h3 class="text-lg font-bold text-primary mb-2 flex items-center gap-2">
+<span class="material-symbols-outlined">insights</span>
+                        Real Feel Correlation
+                    </h3>
+<p class="text-sm text-slate-600 dark:text-slate-400 mb-6 italic">How the physiological properties of Avocado translate to immediate sensory and metabolic feedback.</p>
+<div class="space-y-6">
+<div>
+<div class="flex justify-between text-xs font-bold uppercase mb-2">
+<span>Satiety Index</span>
+<span>92%</span>
+</div>
+<div class="h-2 w-full bg-slate-200 dark:bg-slate-800 rounded-full overflow-hidden">
+<div class="h-full bg-primary rounded-full" style="width: 92%"></div>
+</div>
+</div>
+<div>
+<div class="flex justify-between text-xs font-bold uppercase mb-2">
+<span>Digestive Effort</span>
+<span>18% (Very Low)</span>
+</div>
+<div class="h-2 w-full bg-slate-200 dark:bg-slate-800 rounded-full overflow-hidden">
+<div class="h-full bg-primary rounded-full" style="width: 18%"></div>
+</div>
+</div>
+<div>
+<div class="flex justify-between text-xs font-bold uppercase mb-2">
+<span>Energy Release</span>
+<span>Sustained</span>
+</div>
+<div class="h-2 w-full bg-slate-200 dark:bg-slate-800 rounded-full overflow-hidden">
+<div class="h-full bg-primary rounded-full" style="width: 65%"></div>
+</div>
+</div>
+</div>
+</div>
+</section>
+</main>
+<!-- Bottom Navigation Bar -->
+<nav class="fixed bottom-0 left-0 right-0 z-20 border-t border-slate-200 dark:border-slate-800 bg-white/90 dark:bg-background-dark/90 backdrop-blur-xl px-4 pb-6 pt-3">
+<div class="flex items-center justify-around max-w-screen-xl mx-auto">
+<a class="flex flex-col items-center gap-1 text-primary" href="#">
+<span class="material-symbols-outlined filled-icon">menu_book</span>
+<span class="text-[10px] font-bold uppercase tracking-widest">Dictionary</span>
+</a>
+<a class="flex flex-col items-center gap-1 text-slate-400 dark:text-slate-500 hover:text-primary transition-colors" href="#">
+<span class="material-symbols-outlined">qr_code_scanner</span>
+<span class="text-[10px] font-bold uppercase tracking-widest">Scanner</span>
+</a>
+<a class="flex flex-col items-center gap-1 text-slate-400 dark:text-slate-500 hover:text-primary transition-colors" href="#">
+<span class="material-symbols-outlined">favorite</span>
+<span class="text-[10px] font-bold uppercase tracking-widest">Favorites</span>
+</a>
+<a class="flex flex-col items-center gap-1 text-slate-400 dark:text-slate-500 hover:text-primary transition-colors" href="#">
+<span class="material-symbols-outlined">person</span>
+<span class="text-[10px] font-bold uppercase tracking-widest">Profile</span>
+</a>
+</div>
+</nav>
+</div>
+</body></html>

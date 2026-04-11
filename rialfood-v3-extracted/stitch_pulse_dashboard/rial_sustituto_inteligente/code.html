@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#607AFB",
+                        "background-light": "#f5f6f8",
+                        "background-dark": "#0f1323",
+                    },
+                    fontFamily: {
+                        "display": ["Space Grotesk"]
+                    },
+                    borderRadius: {"DEFAULT": "0.5rem", "lg": "1rem", "xl": "1.5rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>
+        body {
+            font-family: 'Space Grotesk', sans-serif;
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 min-h-screen">
+<div class="max-w-md mx-auto bg-white dark:bg-slate-900 min-h-screen shadow-xl flex flex-col">
+<!-- Header -->
+<div class="flex items-center bg-white dark:bg-slate-900 p-4 sticky top-0 z-10 border-b border-slate-100 dark:border-slate-800">
+<div class="text-slate-900 dark:text-slate-100 flex size-10 shrink-0 items-center justify-center cursor-pointer hover:bg-slate-100 rounded-full transition-colors">
+<span class="material-symbols-outlined">arrow_back</span>
+</div>
+<div class="flex-1 px-2">
+<h1 class="text-slate-900 dark:text-slate-100 text-lg font-bold leading-tight tracking-tight">Mediterranean Bowl</h1>
+<p class="text-slate-500 text-xs font-medium">Smart Swapper Active</p>
+</div>
+<button class="flex size-10 items-center justify-center rounded-full hover:bg-slate-100 dark:hover:bg-slate-800">
+<span class="material-symbols-outlined">more_horiz</span>
+</button>
+</div>
+<!-- Recipe Overview -->
+<div class="p-4">
+<div class="relative w-full aspect-video rounded-xl overflow-hidden mb-4">
+<div class="absolute inset-0 bg-cover bg-center" data-alt="Fresh mediterranean salad bowl with colorful vegetables" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCqUUf-9iFkWw_lZKvw6nfzv4cwKWwSoQanjS9XeCm_PGqCHnAtFa01fNP2OyO9yPANbnZo_TzydjRIw7u9UUd_QqvbkZmXStw6bY2chV0zAgwD9IR5ESKpuvkPfslPoRy8WmeoGAGbS_Xm4fuMpetgijgoBsdIV3qIcWiDGUI0Kmh62CJqgeKtfsp8Zz9IlYdWJUug-O1CXiqAd1TCDTtsTkf4wlML3F-rgJ0gGUmziEKPT3MfH8m8f1xVejaYbg8qVz9SMC2xINxE')"></div>
+<div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
+<div class="absolute bottom-4 left-4">
+<span class="bg-primary text-white text-[10px] font-bold px-2 py-1 rounded uppercase tracking-wider">Original Recipe</span>
+</div>
+</div>
+<!-- Real Match Score Card -->
+<div class="bg-primary/5 dark:bg-primary/10 border border-primary/20 rounded-xl p-4 mb-6">
+<div class="flex items-center justify-between mb-2">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary">analytics</span>
+<p class="text-slate-900 dark:text-slate-100 text-base font-bold">Real Match Score</p>
+</div>
+<span class="text-primary text-xl font-bold">82%</span>
+</div>
+<p class="text-slate-600 dark:text-slate-400 text-sm leading-relaxed mb-3">
+                    Based on your inventory of <span class="font-semibold text-slate-800 dark:text-slate-200">quinoa, kale, and chickpeas</span>.
+                </p>
+<div class="w-full bg-slate-200 dark:bg-slate-700 h-2 rounded-full overflow-hidden">
+<div class="bg-primary h-full w-[82%] rounded-full"></div>
+</div>
+</div>
+<h2 class="text-slate-900 dark:text-slate-100 text-xl font-bold tracking-tight mb-4">AI Recommended Swaps</h2>
+<!-- Swap Card 1 -->
+<div class="space-y-4">
+<div class="flex items-stretch gap-4 rounded-xl bg-white dark:bg-slate-800 p-4 shadow-sm border border-slate-100 dark:border-slate-700">
+<div class="flex flex-[2_2_0px] flex-col justify-between">
+<div>
+<div class="flex items-center gap-1.5 mb-1">
+<span class="material-symbols-outlined text-[14px] text-primary" style="font-variation-settings: 'FILL' 1">auto_awesome</span>
+<p class="text-primary text-[10px] font-bold tracking-widest uppercase">Inventory Match</p>
+</div>
+<p class="text-slate-900 dark:text-slate-100 text-base font-bold leading-tight mb-1">Quinoa for White Rice</p>
+<p class="text-slate-500 dark:text-slate-400 text-xs font-normal leading-normal">
+                                +4g Fiber • Matches weight goal • In stock (2.4kg)
+                            </p>
+</div>
+<button class="mt-3 flex items-center justify-center rounded-lg h-9 px-4 bg-primary text-white text-sm font-semibold gap-2 hover:bg-primary/90 transition-colors">
+<span class="material-symbols-outlined text-sm">swap_horiz</span>
+<span>Swap Now</span>
+</button>
+</div>
+<div class="w-24 h-24 bg-center bg-cover rounded-lg shrink-0" data-alt="Bowl of cooked organic quinoa grains" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuACmoyh0LF3cqEKLNoxx9ZBiv8AqEGZp9zRx8KgyJCKLLLOMkjxVau_ATkcJJMQRk5XYJDxzTFN5PhpiT4Xgv36xJ3c9Tc5QpSl595wMwS8wlFuPnEd_NEHKuQ2UrSfBDnGLTNVNyWRGFCsY8ZqkjtZLBZyQ6vNXlHE2KCVSWGQQhD918NdNWi9OaHBC_PfsWoOfUTyAGSTUN6jNwGESBA-HRVyUWbsBcaZqGxaCmEiY1NU--Z4PyCpPX2OPC780CUkbCDo0NJ4kQmr')"></div>
+</div>
+<!-- Swap Card 2 -->
+<div class="flex items-stretch gap-4 rounded-xl bg-white dark:bg-slate-800 p-4 shadow-sm border border-slate-100 dark:border-slate-700">
+<div class="flex flex-[2_2_0px] flex-col justify-between">
+<div>
+<div class="flex items-center gap-1.5 mb-1">
+<span class="material-symbols-outlined text-[14px] text-emerald-500" style="font-variation-settings: 'FILL' 1">eco</span>
+<p class="text-emerald-500 text-[10px] font-bold tracking-widest uppercase">Goal Boost</p>
+</div>
+<p class="text-slate-900 dark:text-slate-100 text-base font-bold leading-tight mb-1">Kale for Iceberg Lettuce</p>
+<p class="text-slate-500 dark:text-slate-400 text-xs font-normal leading-normal">
+                                3x Vitamin K • Higher Antioxidants • Use today
+                            </p>
+</div>
+<button class="mt-3 flex items-center justify-center rounded-lg h-9 px-4 bg-slate-100 dark:bg-slate-700 text-slate-900 dark:text-slate-100 text-sm font-semibold gap-2 hover:bg-slate-200 transition-colors">
+<span class="material-symbols-outlined text-sm">swap_horiz</span>
+<span>Swap Now</span>
+</button>
+</div>
+<div class="w-24 h-24 bg-center bg-cover rounded-lg shrink-0" data-alt="Fresh dark green curly kale leaves" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuBH3TCtCFhY6_Ycc7rxNX6gy89x_eJ5x2O8TxPOW5ozzGewf9yUQ7wgfJ6TUSHekKjvK4fKpmhj3ztuxTnHtwyWRihwLbiOyhbRgS604-zs1kbzeU7KDJGfMJQesFO0jUkcrATkGduKNDU35JjC_ao1tVPYL5xghzqxV1NptsJQ9Wvu246n4FD7ZjeHQSglp3SlYxg_tjc4iP7akA3MReqLITwPp4yQ5i_LWB_zRnnoM__zK2-WKMc-SnuWgEKqhxp_BTlH8qtCfbrs')"></div>
+</div>
+</div>
+<!-- Impact Summary -->
+<div class="mt-8 p-5 rounded-xl border border-dashed border-slate-300 dark:border-slate-600 bg-slate-50/50 dark:bg-slate-800/50">
+<p class="text-slate-900 dark:text-slate-100 text-sm font-bold mb-3 flex items-center gap-2">
+<span class="material-symbols-outlined text-primary text-lg">trending_up</span>
+                    Potential Optimization
+                </p>
+<p class="text-slate-600 dark:text-slate-400 text-sm mb-4">
+                    Applying these two swaps will increase your nutritional match from <span class="text-slate-900 dark:text-slate-100 font-bold">82%</span> to <span class="text-primary font-bold">91%</span>.
+                </p>
+<button class="w-full py-3 bg-slate-900 dark:bg-primary text-white text-sm font-bold rounded-xl flex items-center justify-center gap-2">
+                    Apply All AI Suggestions
+                </button>
+</div>
+</div>
+<div class="flex-1"></div>
+<!-- Bottom Navigation Bar -->
+<div class="flex gap-2 border-t border-slate-100 dark:border-slate-800 bg-white dark:bg-slate-900 px-4 pb-6 pt-3 sticky bottom-0">
+<a class="flex flex-1 flex-col items-center justify-end gap-1 text-slate-400" href="#">
+<span class="material-symbols-outlined text-2xl">restaurant_menu</span>
+<p class="text-[10px] font-medium tracking-wide">Recipe</p>
+</a>
+<a class="flex flex-1 flex-col items-center justify-end gap-1 text-primary" href="#">
+<span class="material-symbols-outlined text-2xl" style="font-variation-settings: 'FILL' 1">swap_calls</span>
+<p class="text-[10px] font-bold tracking-wide">Swapper</p>
+</a>
+<a class="flex flex-1 flex-col items-center justify-end gap-1 text-slate-400" href="#">
+<span class="material-symbols-outlined text-2xl">inventory_2</span>
+<p class="text-[10px] font-medium tracking-wide">Inventory</p>
+</a>
+<a class="flex flex-1 flex-col items-center justify-end gap-1 text-slate-400" href="#">
+<span class="material-symbols-outlined text-2xl">person</span>
+<p class="text-[10px] font-medium tracking-wide">Profile</p>
+</a>
+</div>
+</div>
+</body></html>

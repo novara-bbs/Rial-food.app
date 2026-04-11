@@ -1,0 +1,139 @@
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#ec5b13",
+                        "background-light": "#f8f6f6",
+                        "background-dark": "#221610",
+                    },
+                    fontFamily: {
+                        "display": ["Public Sans"]
+                    },
+                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark font-display text-slate-900 dark:text-slate-100 min-h-screen">
+<div class="relative flex h-auto min-h-screen w-full flex-col bg-background-light dark:bg-background-dark overflow-x-hidden">
+<!-- Top App Bar -->
+<div class="flex items-center bg-background-light dark:bg-background-dark p-4 pb-2 justify-between border-b border-primary/10">
+<div class="text-slate-900 dark:text-slate-100 flex size-12 shrink-0 items-center cursor-pointer">
+<span class="material-symbols-outlined">arrow_back</span>
+</div>
+<h2 class="text-slate-900 dark:text-slate-100 text-lg font-bold leading-tight tracking-tight flex-1 ml-2">Privacy &amp; Community</h2>
+<div class="text-slate-900 dark:text-slate-100 flex size-12 shrink-0 items-center justify-end cursor-pointer">
+<span class="material-symbols-outlined">help_outline</span>
+</div>
+</div>
+<div class="max-w-2xl mx-auto w-full">
+<!-- Header Section -->
+<div class="px-4 pb-3 pt-6">
+<h2 class="text-slate-900 dark:text-slate-100 text-2xl font-bold leading-tight tracking-tight">Community Controls</h2>
+<p class="text-slate-600 dark:text-slate-400 text-sm mt-1">Manage your visibility and interaction levels within the RIAL network.</p>
+</div>
+<!-- Privacy Level Selector (Custom Component) -->
+<div class="p-4">
+<div class="bg-white dark:bg-slate-800/50 rounded-xl border border-primary/10 p-5">
+<p class="text-slate-900 dark:text-slate-100 text-base font-bold mb-4">Privacy Level</p>
+<div class="grid grid-cols-3 gap-2 p-1 bg-slate-100 dark:bg-slate-900 rounded-lg">
+<button class="flex flex-col items-center justify-center py-3 rounded-lg bg-primary text-white shadow-sm transition-all">
+<span class="material-symbols-outlined text-xl mb-1">lock</span>
+<span class="text-xs font-semibold">Private</span>
+</button>
+<button class="flex flex-col items-center justify-center py-3 rounded-lg text-slate-500 dark:text-slate-400 hover:bg-slate-200 dark:hover:bg-slate-800 transition-all">
+<span class="material-symbols-outlined text-xl mb-1">group</span>
+<span class="text-xs font-semibold">Friends</span>
+</button>
+<button class="flex flex-col items-center justify-center py-3 rounded-lg text-slate-500 dark:text-slate-400 hover:bg-slate-200 dark:hover:bg-slate-800 transition-all">
+<span class="material-symbols-outlined text-xl mb-1">public</span>
+<span class="text-xs font-semibold">Community</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Toggles Section -->
+<div class="p-4 space-y-4">
+<!-- Share My Daily Log -->
+<div class="flex flex-1 flex-col items-start justify-between gap-4 rounded-xl border border-primary/10 bg-white dark:bg-slate-800/50 p-5 @[480px]:flex-row @[480px]:items-center">
+<div class="flex flex-col gap-1">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary">calendar_today</span>
+<p class="text-slate-900 dark:text-slate-100 text-base font-bold leading-tight">Share My Daily Log</p>
+</div>
+<p class="text-slate-500 dark:text-slate-400 text-sm font-normal leading-normal">Allow others to see your daily activity and progress logs.</p>
+</div>
+<label class="relative flex h-[31px] w-[51px] cursor-pointer items-center rounded-full border-none bg-slate-300 dark:bg-slate-700 p-0.5 has-[:checked]:justify-end has-[:checked]:bg-primary transition-all">
+<div class="h-full w-[27px] rounded-full bg-white shadow-md"></div>
+<input checked="" class="invisible absolute" type="checkbox"/>
+</label>
+</div>
+<!-- Show My Real Match Scores -->
+<div class="flex flex-1 flex-col items-start justify-between gap-4 rounded-xl border border-primary/10 bg-white dark:bg-slate-800/50 p-5 @[480px]:flex-row @[480px]:items-center">
+<div class="flex flex-col gap-1">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary">leaderboard</span>
+<p class="text-slate-900 dark:text-slate-100 text-base font-bold leading-tight">Show My Real Match Scores</p>
+</div>
+<p class="text-slate-500 dark:text-slate-400 text-sm font-normal leading-normal">Display your competitive scores on the public leaderboard.</p>
+</div>
+<label class="relative flex h-[31px] w-[51px] cursor-pointer items-center rounded-full border-none bg-slate-300 dark:bg-slate-700 p-0.5 has-[:checked]:justify-end has-[:checked]:bg-primary transition-all">
+<div class="h-full w-[27px] rounded-full bg-white shadow-md"></div>
+<input class="invisible absolute" type="checkbox"/>
+</label>
+</div>
+<!-- Public Recipe Profile -->
+<div class="flex flex-1 flex-col items-start justify-between gap-4 rounded-xl border border-primary/10 bg-white dark:bg-slate-800/50 p-5 @[480px]:flex-row @[480px]:items-center">
+<div class="flex flex-col gap-1">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary">menu_book</span>
+<p class="text-slate-900 dark:text-slate-100 text-base font-bold leading-tight">Public Recipe Profile</p>
+</div>
+<p class="text-slate-500 dark:text-slate-400 text-sm font-normal leading-normal">Make your saved and created recipes visible to the community.</p>
+</div>
+<label class="relative flex h-[31px] w-[51px] cursor-pointer items-center rounded-full border-none bg-slate-300 dark:bg-slate-700 p-0.5 has-[:checked]:justify-end has-[:checked]:bg-primary transition-all">
+<div class="h-full w-[27px] rounded-full bg-white shadow-md"></div>
+<input checked="" class="invisible absolute" type="checkbox"/>
+</label>
+</div>
+<!-- Discoverability -->
+<div class="flex flex-1 flex-col items-start justify-between gap-4 rounded-xl border border-primary/10 bg-white dark:bg-slate-800/50 p-5 @[480px]:flex-row @[480px]:items-center">
+<div class="flex flex-col gap-1">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary">person_search</span>
+<p class="text-slate-900 dark:text-slate-100 text-base font-bold leading-tight">Discoverability</p>
+</div>
+<p class="text-slate-500 dark:text-slate-400 text-sm font-normal leading-normal">Allow other users to find you via search or suggestions.</p>
+</div>
+<label class="relative flex h-[31px] w-[51px] cursor-pointer items-center rounded-full border-none bg-slate-300 dark:bg-slate-700 p-0.5 has-[:checked]:justify-end has-[:checked]:bg-primary transition-all">
+<div class="h-full w-[27px] rounded-full bg-white shadow-md"></div>
+<input checked="" class="invisible absolute" type="checkbox"/>
+</label>
+</div>
+</div>
+<!-- Danger Zone / Reset -->
+<div class="p-4 mt-4">
+<button class="w-full py-4 rounded-xl border border-slate-200 dark:border-slate-700 text-slate-500 dark:text-slate-400 font-semibold hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors flex items-center justify-center gap-2">
+<span class="material-symbols-outlined">restart_alt</span>
+                    Reset to Default Settings
+                </button>
+</div>
+<div class="h-20"></div>
+</div>
+</div>
+</body></html>

@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              colors: {
+                "primary": "#ccff00",
+                "background-light": "#f8f8f5",
+                "background-dark": "#1f230f",
+              },
+              fontFamily: {
+                "display": ["Space Grotesk"]
+              },
+              borderRadius: {"DEFAULT": "0.5rem", "lg": "1rem", "xl": "1.5rem", "full": "9999px"},
+            },
+          },
+        }
+    </script>
+<style>
+        .radar-grid {
+            background-image: radial-gradient(circle, rgba(204, 255, 0, 0.1) 1px, transparent 1px);
+            background-size: 20px 20px;
+        }
+        .glass-panel {
+            background: rgba(204, 255, 0, 0.05);
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(204, 255, 0, 0.1);
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark font-display text-slate-900 dark:text-slate-100 min-h-screen">
+<div class="relative flex min-h-screen w-full flex-col overflow-x-hidden">
+<!-- Header Section -->
+<div class="flex items-center bg-background-light dark:bg-background-dark p-4 pb-2 justify-between border-b border-primary/10">
+<div class="text-slate-900 dark:text-slate-100 flex size-12 shrink-0 items-center justify-center cursor-pointer">
+<span class="material-symbols-outlined">arrow_back</span>
+</div>
+<div class="flex flex-col items-center flex-1">
+<h2 class="text-primary text-xs font-bold tracking-[0.2em] uppercase">RIAL Engine</h2>
+<h1 class="text-slate-900 dark:text-slate-100 text-lg font-bold leading-tight tracking-[-0.015em]">Real Match Analysis</h1>
+</div>
+<div class="flex w-12 items-center justify-end">
+<button class="flex cursor-pointer items-center justify-center rounded-xl h-12 bg-transparent text-slate-900 dark:text-slate-100 p-0">
+<span class="material-symbols-outlined">share</span>
+</button>
+</div>
+</div>
+<!-- Progress Steps -->
+<div class="flex w-full flex-row items-center justify-center gap-3 py-6">
+<div class="h-1.5 w-6 rounded-full bg-primary/20"></div>
+<div class="h-1.5 w-12 rounded-full bg-primary"></div>
+<div class="h-1.5 w-6 rounded-full bg-primary/20"></div>
+</div>
+<!-- Hero Score Section -->
+<div class="relative px-6 py-8 text-center overflow-hidden">
+<div class="absolute inset-0 radar-grid opacity-20"></div>
+<div class="relative z-10">
+<p class="text-primary text-sm font-medium tracking-widest uppercase mb-2">Step 2: Result Breakdown</p>
+<div class="inline-flex items-center justify-center relative">
+<svg class="w-48 h-48 transform -rotate-90">
+<circle class="text-primary/10" cx="96" cy="96" fill="transparent" r="88" stroke="currentColor" stroke-width="4"></circle>
+<circle class="text-primary" cx="96" cy="96" fill="transparent" r="88" stroke="currentColor" stroke-dasharray="552.92" stroke-dashoffset="11" stroke-width="4"></circle>
+</svg>
+<div class="absolute inset-0 flex flex-col items-center justify-center">
+<span class="text-5xl font-bold text-slate-900 dark:text-slate-100">98%</span>
+<span class="text-xs font-medium text-primary tracking-widest uppercase">Match</span>
+</div>
+</div>
+<h3 class="mt-6 text-xl font-bold">Organic Quinoa Power Bowl</h3>
+<p class="text-slate-500 dark:text-slate-400 text-sm mt-1">Optimized for your current metabolic state</p>
+</div>
+</div>
+<!-- Breakdown Grid -->
+<div class="px-6 space-y-4 pb-24">
+<!-- Tech Radar Comparison View -->
+<div class="glass-panel p-6 rounded-xl relative">
+<div class="flex justify-between items-center mb-6">
+<h4 class="text-sm font-bold tracking-tight text-primary">Biometric Alignment</h4>
+<div class="flex gap-4 text-[10px] uppercase font-bold tracking-widest">
+<div class="flex items-center gap-1.5"><div class="w-2 h-2 rounded-full bg-primary"></div> Need</div>
+<div class="flex items-center gap-1.5"><div class="w-2 h-2 rounded-full bg-slate-400"></div> Recipe</div>
+</div>
+</div>
+<div class="space-y-6">
+<!-- Energy -->
+<div class="space-y-2">
+<div class="flex justify-between items-end">
+<span class="text-xs font-medium text-slate-400 uppercase tracking-wider">Energy Sustenance</span>
+<span class="text-primary text-xs font-bold">99% Fit</span>
+</div>
+<div class="relative h-2 w-full bg-primary/10 rounded-full overflow-hidden">
+<div class="absolute h-full w-[98%] bg-primary rounded-full z-10"></div>
+<div class="absolute h-full w-[100%] bg-slate-400/30 rounded-full"></div>
+</div>
+</div>
+<!-- Focus -->
+<div class="space-y-2">
+<div class="flex justify-between items-end">
+<span class="text-xs font-medium text-slate-400 uppercase tracking-wider">Cognitive Focus</span>
+<span class="text-primary text-xs font-bold">96% Fit</span>
+</div>
+<div class="relative h-2 w-full bg-primary/10 rounded-full overflow-hidden">
+<div class="absolute h-full w-[94%] bg-primary rounded-full z-10"></div>
+<div class="absolute h-full w-[98%] bg-slate-400/30 rounded-full"></div>
+</div>
+</div>
+<!-- Gut Health -->
+<div class="space-y-2">
+<div class="flex justify-between items-end">
+<span class="text-xs font-medium text-slate-400 uppercase tracking-wider">Gut Biome Support</span>
+<span class="text-primary text-xs font-bold">100% Fit</span>
+</div>
+<div class="relative h-2 w-full bg-primary/10 rounded-full overflow-hidden">
+<div class="absolute h-full w-[100%] bg-primary rounded-full z-10"></div>
+<div class="absolute h-full w-[95%] bg-slate-400/30 rounded-full"></div>
+</div>
+</div>
+</div>
+</div>
+<!-- Why it matches block -->
+<div class="p-6 bg-slate-900/40 dark:bg-primary/5 rounded-xl border border-primary/10">
+<div class="flex items-center gap-3 mb-3 text-primary">
+<span class="material-symbols-outlined text-xl">psychology</span>
+<h4 class="font-bold text-sm tracking-tight uppercase">Why it matches</h4>
+</div>
+<p class="text-sm leading-relaxed text-slate-400">
+                    Your current cortisol levels indicate a need for complex carbohydrates and magnesium. The <span class="text-primary">Quinoa Power Bowl</span> provides a steady glucose release profile, while the high fiber content directly supports your morning gut motility goals. 
+                </p>
+<div class="mt-4 pt-4 border-t border-primary/5 flex items-center gap-4">
+<div class="flex-1">
+<p class="text-[10px] text-slate-500 uppercase font-bold">Predicted State</p>
+<p class="text-xs font-medium">+14% Clarity</p>
+</div>
+<div class="h-8 w-px bg-primary/10"></div>
+<div class="flex-1">
+<p class="text-[10px] text-slate-500 uppercase font-bold">Digestion Time</p>
+<p class="text-xs font-medium">Fast (45m)</p>
+</div>
+</div>
+</div>
+<!-- Action Button -->
+<button class="w-full bg-primary text-background-dark font-bold py-4 rounded-xl shadow-lg shadow-primary/20 flex items-center justify-center gap-2 hover:opacity-90 transition-opacity">
+<span>GENERATE PREP PLAN</span>
+<span class="material-symbols-outlined text-sm">bolt</span>
+</button>
+</div>
+<!-- Bottom Navigation Bar -->
+<div class="fixed bottom-0 left-0 right-0 z-50">
+<div class="flex gap-2 border-t border-primary/10 bg-background-light dark:bg-background-dark px-4 pb-6 pt-2">
+<a class="flex flex-1 flex-col items-center justify-end gap-1 text-slate-400" href="#">
+<div class="flex h-8 items-center justify-center">
+<span class="material-symbols-outlined">home</span>
+</div>
+<p class="text-[10px] font-bold uppercase tracking-widest">Home</p>
+</a>
+<a class="flex flex-1 flex-col items-center justify-end gap-1 text-primary" href="#">
+<div class="flex h-8 items-center justify-center">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1">target</span>
+</div>
+<p class="text-[10px] font-bold uppercase tracking-widest">Match</p>
+</a>
+<a class="flex flex-1 flex-col items-center justify-end gap-1 text-slate-400" href="#">
+<div class="flex h-8 items-center justify-center">
+<span class="material-symbols-outlined">restaurant_menu</span>
+</div>
+<p class="text-[10px] font-bold uppercase tracking-widest">Recipes</p>
+</a>
+<a class="flex flex-1 flex-col items-center justify-end gap-1 text-slate-400" href="#">
+<div class="flex h-8 items-center justify-center">
+<span class="material-symbols-outlined">person</span>
+</div>
+<p class="text-[10px] font-bold uppercase tracking-widest">Profile</p>
+</a>
+</div>
+</div>
+</div>
+</body></html>

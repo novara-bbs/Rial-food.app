@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>RIAL Personal Insights</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#25aff4",
+                        "background-light": "#f5f7f8",
+                        "background-dark": "#101c22",
+                    },
+                    fontFamily: {
+                        "display": ["Inter", "sans-serif"]
+                    },
+                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .chart-gradient {
+            background: linear-gradient(180deg, rgba(37, 175, 244, 0.2) 0%, rgba(37, 175, 244, 0) 100%);
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark font-display text-slate-900 dark:text-slate-100 antialiased">
+<div class="relative flex min-h-screen w-full flex-col max-w-md mx-auto overflow-x-hidden border-x border-slate-200 dark:border-slate-800">
+<!-- Header -->
+<header class="flex items-center bg-background-light dark:bg-background-dark p-4 pb-2 justify-between sticky top-0 z-10">
+<div class="text-slate-900 dark:text-slate-100 flex size-12 shrink-0 items-center justify-start">
+<span class="material-symbols-outlined">arrow_back</span>
+</div>
+<h2 class="text-slate-900 dark:text-slate-100 text-lg font-bold leading-tight tracking-tight flex-1 text-center">Personal Insights</h2>
+<div class="flex w-12 items-center justify-end">
+<button class="flex size-12 cursor-pointer items-center justify-center rounded-lg bg-transparent text-slate-900 dark:text-slate-100">
+<span class="material-symbols-outlined">share</span>
+</button>
+</div>
+</header>
+<!-- Navigation Tabs -->
+<div class="pb-3 bg-background-light dark:bg-background-dark">
+<div class="flex border-b border-slate-200 dark:border-slate-800 px-4 gap-8">
+<a class="flex flex-col items-center justify-center border-b-[3px] border-transparent text-slate-500 dark:text-slate-400 pb-[13px] pt-4" href="#">
+<p class="text-sm font-bold leading-normal">Day</p>
+</a>
+<a class="flex flex-col items-center justify-center border-b-[3px] border-primary text-primary pb-[13px] pt-4" href="#">
+<p class="text-sm font-bold leading-normal">Week</p>
+</a>
+<a class="flex flex-col items-center justify-center border-b-[3px] border-transparent text-slate-500 dark:text-slate-400 pb-[13px] pt-4" href="#">
+<p class="text-sm font-bold leading-normal">Month</p>
+</a>
+</div>
+</div>
+<!-- Main Content -->
+<main class="flex-1 overflow-y-auto px-4 py-6">
+<!-- Correlation Header -->
+<section class="mb-8">
+<h3 class="text-slate-900 dark:text-slate-100 text-2xl font-bold leading-tight pb-2">Your Wellness Correlation</h3>
+<p class="text-slate-600 dark:text-slate-400 text-base font-normal leading-relaxed">
+                    Based on your recent logs, we've noticed you feel <span class="text-primary font-semibold">more energized</span> on days you include leafy greens and magnesium-rich foods.
+                </p>
+</section>
+<!-- Insight Card: Energy vs Food -->
+<div class="bg-slate-100 dark:bg-slate-900 rounded-xl p-5 mb-6 border border-slate-200 dark:border-slate-800">
+<div class="flex justify-between items-start mb-4">
+<div>
+<h4 class="font-bold text-slate-900 dark:text-slate-100">Energy Levels</h4>
+<p class="text-xs text-slate-500 dark:text-slate-400 uppercase tracking-wider">Correlation with Fiber Intake</p>
+</div>
+<span class="text-xs font-medium px-2 py-1 bg-primary/10 text-primary rounded-full">84% Match</span>
+</div>
+<!-- Simple Soft Chart Placeholder -->
+<div class="h-40 w-full relative mt-6 flex items-end gap-2">
+<div class="flex-1 bg-primary/20 rounded-t-lg h-[40%] transition-all"></div>
+<div class="flex-1 bg-primary/20 rounded-t-lg h-[60%] transition-all"></div>
+<div class="flex-1 bg-primary/40 rounded-t-lg h-[55%] transition-all"></div>
+<div class="flex-1 bg-primary/60 rounded-t-lg h-[85%] transition-all"></div>
+<div class="flex-1 bg-primary rounded-t-lg h-[95%] transition-all"></div>
+<div class="flex-1 bg-primary/50 rounded-t-lg h-[70%] transition-all"></div>
+<div class="flex-1 bg-primary/30 rounded-t-lg h-[45%] transition-all"></div>
+</div>
+<div class="flex justify-between mt-3 text-[10px] text-slate-400 font-medium uppercase">
+<span>Mon</span>
+<span>Tue</span>
+<span>Wed</span>
+<span>Thu</span>
+<span>Fri</span>
+<span>Sat</span>
+<span>Sun</span>
+</div>
+</div>
+<!-- Focus Insight -->
+<div class="space-y-4">
+<div class="flex gap-4 p-4 rounded-xl bg-primary/5 border border-primary/10">
+<div class="size-10 rounded-full bg-primary/20 flex items-center justify-center text-primary shrink-0">
+<span class="material-symbols-outlined">lightbulb</span>
+</div>
+<div>
+<h5 class="text-sm font-bold text-slate-900 dark:text-slate-100 mb-1">Human-Centric Insight</h5>
+<p class="text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
+                            Your focus peaks roughly 2 hours after your morning smoothie. Consider keeping this ritual to maintain cognitive clarity throughout your meetings.
+                        </p>
+</div>
+</div>
+<!-- Food Recommendations -->
+<div class="bg-slate-100 dark:bg-slate-900 rounded-xl p-5 border border-slate-200 dark:border-slate-800">
+<h4 class="font-bold text-slate-900 dark:text-slate-100 mb-4">Recommended for Tomorrow</h4>
+<div class="flex gap-4 overflow-x-auto pb-2 scrollbar-hide">
+<div class="flex-none w-32">
+<div class="aspect-square rounded-lg bg-slate-200 dark:bg-slate-800 mb-2 overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="Fresh vibrant green salad bowl" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAhpJVNrDn5eqLBmyRGgLraZbB7Yr8dXDEQ0Q9azOplHOJBaqWk-gn5kmPgZryc7KUS7br1frCuImpWR1cjVCVGdRUD8DdSDsCfNe068MoigydGGs_Pet8EAEmGvin6L6D8iFwCyUhO18HQ9v0jFltRAXKS4vcwQXskPqX1EbtNGAqDwDE2eMmha1I8o5YFVAZpGljxpBfJFQpPFqofSMXa4pHAIX8hdMmYzYoTdUsl-bPyW_T6KOcCOwrUhHbSBi_PHQJnXnaDVRt7"/>
+</div>
+<p class="text-xs font-semibold text-slate-900 dark:text-slate-100">Spinach Salad</p>
+<p class="text-[10px] text-slate-500">High Magnesium</p>
+</div>
+<div class="flex-none w-32">
+<div class="aspect-square rounded-lg bg-slate-200 dark:bg-slate-800 mb-2 overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="Balanced plate with salmon and asparagus" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDKd9cNo8dihB6hTXlpOM0g1skasDL4rlaIPWrN5m_vDDbXJ5ckxAqb5V5m_CyiDvCV5X9NWollnL-SIH0sDfif2WmsHlS3KHOTlIahXU9AuVkpSaMstJsmYJPgFWERO0XjFcLib19njMxZM4I6jFRk73eRATZWe6ZEFWZGfLPrseoWIEq6XmQKPcZwk7t1qio8Rb756yepYhQa5Uiyrdwp9xQWo4JSX2wICswIsxXP4n0HfJX7wxaCGBRuzpwX0U_Yr1VrQkA6dsHg"/>
+</div>
+<p class="text-xs font-semibold text-slate-900 dark:text-slate-100">Grilled Salmon</p>
+<p class="text-[10px] text-slate-500">Omega-3 Boost</p>
+</div>
+<div class="flex-none w-32">
+<div class="aspect-square rounded-lg bg-slate-200 dark:bg-slate-800 mb-2 overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="Healthy bowl with quinoa and vegetables" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCzV0M4fZr-Wvo7XFfNsrPKPQYxapR7eXPIXCoeix3xFUjhryGfCRzvIO3Eh2VoiRzKwXfWMn_e8GK0NTULgvwjwMbugsHx6y6d3YI5Z-PO7tPOLqvCwrEKS8ECAY8GaY3ZSw_HlmGH7Q5IwatMS3Czb3zZ2TTtw9wxZd4ETOcVh-nzB_FuXXUKp_qaF-an16I-NrJYnexKSOem4Ae1rrthss1neYeXWPZJU9dQuVYwJiIX4SKs2rzIgW4R77jrzex4QG0oe7LTUj1y"/>
+</div>
+<p class="text-xs font-semibold text-slate-900 dark:text-slate-100">Quinoa Bowl</p>
+<p class="text-[10px] text-slate-500">Sustained Energy</p>
+</div>
+</div>
+</div>
+</div>
+</main>
+<!-- Bottom Navigation Bar -->
+<nav class="flex gap-2 border-t border-slate-200 dark:border-slate-800 bg-background-light dark:bg-background-dark px-4 pb-6 pt-2 sticky bottom-0">
+<a class="flex flex-1 flex-col items-center justify-center gap-1 text-slate-500 dark:text-slate-400" href="#">
+<span class="material-symbols-outlined">book_4</span>
+<p class="text-xs font-medium leading-normal tracking-tight">Journal</p>
+</a>
+<a class="flex flex-1 flex-col items-center justify-center gap-1 text-primary" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">bar_chart</span>
+<p class="text-xs font-medium leading-normal tracking-tight">Insights</p>
+</a>
+<a class="flex flex-1 flex-col items-center justify-center gap-1 text-slate-500 dark:text-slate-400" href="#">
+<span class="material-symbols-outlined">calendar_today</span>
+<p class="text-xs font-medium leading-normal tracking-tight">Plan</p>
+</a>
+<a class="flex flex-1 flex-col items-center justify-center gap-1 text-slate-500 dark:text-slate-400" href="#">
+<span class="material-symbols-outlined">person</span>
+<p class="text-xs font-medium leading-normal tracking-tight">Profile</p>
+</a>
+</nav>
+</div>
+</body></html>

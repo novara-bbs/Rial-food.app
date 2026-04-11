@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>RIAL - Earth &amp; Data Brand Identity</title>
+<!-- Tailwind CSS CDN with Plugins -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            sand: '#F2E8D5',
+            terracotta: '#C96D4D',
+            forest: '#1B3022',
+            earth: '#4A3728',
+          },
+          fontFamily: {
+            sans: ['Quicksand', 'ui-sans-serif', 'system-ui'],
+          }
+        }
+      }
+    }
+  </script>
+<!-- Google Fonts for Soft Rounded Sans-serif -->
+<link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;500;700&amp;display=swap" rel="stylesheet"/>
+<style data-purpose="brand-textures">/* Textured background effect for the organic feel */
+.bg-texture {
+    background-image: url(https://lh3.googleusercontent.com/aida-public/AB6AXuCVooVhVEYiqMIaMcks8L2ZLBdqwL4EPwxXh1WANPhTu6zQpsXIzIJFD6Z6azUleDSzKEHhX6MZT_0Uazen1q7PUE-REeuEOzRXK366qmFBgczMoJjt1pgxii8VnGvulAZ79gDdLUjv7mICEVeepcKMFQHRaTHR_NCdOow9Z-Jr8rNsz6GK-9kLp9HMuqavG5DeQWXh5kRBlbei4mh9tk0UwTuMuQ-Mtl82DyQ9bQ4UtFd95wiKIQkZgDVEcWPTYkjNohOoDHSHeUj6);
+    background-blend-mode: multiply
+    }
+/* Warm overlay for images */
+.warm-overlay {
+    position: relative
+    }
+.warm-overlay::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(201, 109, 77, 0.15);
+    /* Terracotta tint */
+    mix-blend-mode: sepia;
+    pointer-events: none
+    }
+/* Soft vignette to unify different quality levels */
+.vignette {
+    box-shadow: inset 0 0 60px rgba(74, 55, 40, 0.3)
+    }
+/* Custom scrollbar for brand consistency */
+::-webkit-scrollbar {
+    width: 6px
+    }
+::-webkit-scrollbar-track {
+    background: #F2E8D5
+    }
+::-webkit-scrollbar-thumb {
+    background: #C96D4D;
+    border-radius: 10px
+    }</style>
+</head>
+<body class="bg-sand text-earth font-sans min-h-screen bg-texture">
+<!-- BEGIN: Navigation Header -->
+<header class="p-6 flex justify-between items-center border-b border-terracotta/20" data-purpose="brand-navigation">
+<div class="flex items-center gap-2">
+<div class="w-8 h-8 bg-forest rounded-full flex items-center justify-center">
+<span class="text-sand text-xs font-bold">R</span>
+</div>
+<h1 class="text-xl font-bold tracking-tight text-forest">RIAL <span class="font-normal opacity-60">Earth &amp; Data</span></h1>
+</div>
+<button class="bg-forest text-sand px-4 py-2 rounded-full text-sm font-medium shadow-md">
+      Our Board
+    </button>
+</header>
+<!-- END: Navigation Header -->
+<main class="max-w-md mx-auto px-4 py-8 space-y-12">
+<!-- BEGIN: Brand Concept Section -->
+<section class="text-center" data-purpose="brand-intro">
+<span class="text-xs uppercase tracking-widest text-terracotta font-bold">The Aesthetic</span>
+<h2 class="text-3xl font-bold text-forest mt-2 mb-4">Grounding Community</h2>
+<p class="text-earth leading-relaxed">
+        A premium community cookbook where the data is raw and the Earth is warm. We blend high-fidelity photography with real, unedited human moments.
+      </p>
+</section>
+<!-- END: Brand Concept Section -->
+<!-- BEGIN: Color Palette Section -->
+<section class="space-y-4" data-purpose="color-palette">
+<h3 class="text-sm font-bold uppercase text-terracotta border-b border-terracotta/20 pb-2">Primary Palette</h3>
+<div class="grid grid-cols-3 gap-2">
+<div class="flex flex-col gap-2">
+<div class="h-20 bg-sand rounded-2xl border border-earth/10"></div>
+<span class="text-[10px] text-center font-bold">SAND</span>
+</div>
+<div class="flex flex-col gap-2">
+<div class="h-20 bg-terracotta rounded-2xl"></div>
+<span class="text-[10px] text-center font-bold">TERRACOTTA</span>
+</div>
+<div class="flex flex-col gap-2">
+<div class="h-20 bg-forest rounded-2xl"></div>
+<span class="text-[10px] text-center font-bold">DEEP FOREST</span>
+</div>
+</div>
+</section>
+<!-- END: Color Palette Section -->
+<!-- BEGIN: Visual Comparison Section -->
+<section class="space-y-6" data-purpose="image-unification-demo">
+<h3 class="text-sm font-bold uppercase text-terracotta border-b border-terracotta/20 pb-2">Unifying Content</h3>
+<!-- Example 1: Premium Shot -->
+<div class="bg-white/40 p-3 rounded-[2rem] shadow-sm border border-white/60">
+<div class="relative overflow-hidden rounded-2xl aspect-square warm-overlay vignette">
+<!-- Placeholder for High-Quality Recipe Shot -->
+<img alt="High quality recipe" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDFoR9vGZy0mhHPTFCwvPkvisUgYB5beYkVaBP0WaxvhSfvLjoV8HghZB6c8_3FpDkTdVxANEBb-ujMHeM2V3jZwAQmHUALJtNURIL3K5kznAUdkaClcKbaJvLJRTFPRwywLNbykzdlts5ERTobCUcG_ZJnZlJqhS0jN04Arpd17AJEkZXsGMAQL64Z8FzgIZDyvWVo-aIGPUb-9LhKVH6FfoYCAGsvc3OopwQgSirqNz7vryrFPry9_kblbOpFkKD0hT7O4xLsTPE2"/>
+<div class="absolute bottom-4 left-4 bg-forest/80 backdrop-blur-md text-sand text-[10px] px-3 py-1 rounded-full">
+            Featured Recipe
+          </div>
+</div>
+<div class="mt-3 px-2">
+<h4 class="font-bold text-forest">Artisan Sourdough</h4>
+<p class="text-xs text-earth/70">By Chef Julien</p>
+</div>
+</div>
+<!-- Example 2: User 'Ugly' Shot with Treatment -->
+<div class="bg-white/40 p-3 rounded-[2rem] shadow-sm border border-white/60">
+<div class="relative overflow-hidden rounded-2xl aspect-square warm-overlay vignette">
+<!-- This simulates a lower quality user photo being 'softened' by the brand treatment -->
+<img alt="User upload" class="w-full h-full object-cover grayscale-[20%] contrast-[90%] blur-[0.5px]" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCbBSgjk37HKOFzNayHGugeABioNeqVO6oHQ8G-dWEMxGr-QacshXOFAWmu_i2O01Rgow58wAX2TMK8eWHKSBrOQrR_zmKltxOtme4QwFWC9pHtk3wNtlyoyc-eMciIb9zZVS6vwM_KaSfqS5VzzxuwWMj-1PIOFzFzf6m28OwpHbFrj0Gqd9hbXQKGUtGyHAo_3c1rP-va6UbPyfReCmVU4rmK_BUohnByRh9BtwXDrxIMO2bjVVebGRBKBpuXb6BMCxop4LjTAZAJ"/>
+<div class="absolute top-4 right-4 bg-sand/90 text-terracotta text-[10px] px-3 py-1 rounded-full font-bold">
+            Community Log
+          </div>
+<!-- Grain texture overlay specific to user shots -->
+<div class="absolute inset-0 opacity-20 pointer-events-none bg-[url('https://www.transparenttextures.com/patterns/stardust.png')]"></div>
+</div>
+<div class="mt-3 px-2">
+<h4 class="font-bold text-forest">My First Attempt</h4>
+<p class="text-xs text-earth/70">By @breadmaker99 • 2h ago</p>
+</div>
+</div>
+<div class="text-center italic text-xs text-earth/60 px-8">
+        "Note how the warm terracotta overlay and vignette blend the sharp professional shots with the grainy mobile uploads."
+      </div>
+</section>
+<!-- END: Visual Comparison Section -->
+<!-- BEGIN: Typography Showcase -->
+<section class="bg-forest text-sand p-8 rounded-[2.5rem] space-y-4" data-purpose="typography-showcase">
+<h3 class="text-xs font-bold uppercase tracking-widest opacity-60">Typography</h3>
+<div class="space-y-1">
+<p class="text-4xl font-bold leading-tight">Rounded, Soft, Accessible.</p>
+<p class="text-lg opacity-80">Quicksand Sans-Serif</p>
+</div>
+<div class="pt-4 flex flex-wrap gap-2">
+<span class="px-3 py-1 border border-sand/30 rounded-full text-xs">Aa Bb Cc</span>
+<span class="px-3 py-1 border border-sand/30 rounded-full text-xs">0123456789</span>
+<span class="px-3 py-1 border border-sand/30 rounded-full text-xs font-bold">Bold Weight</span>
+</div>
+</section>
+<!-- END: Typography Showcase -->
+</main>
+<!-- BEGIN: Footer Branding -->
+<footer class="mt-12 mb-10 text-center px-6">
+<div class="flex justify-center gap-4 mb-4">
+<div class="w-2 h-2 rounded-full bg-terracotta"></div>
+<div class="w-2 h-2 rounded-full bg-forest"></div>
+<div class="w-2 h-2 rounded-full bg-sand border border-earth/20"></div>
+</div>
+<p class="text-[10px] uppercase tracking-tighter text-earth/40">RIAL Brand Identity Board • Earth &amp; Data v1.0</p>
+</footer>
+<!-- END: Footer Branding -->
+</body></html>

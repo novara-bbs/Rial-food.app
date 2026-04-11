@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#ddff00",
+                        "background-light": "#f8f8f5",
+                        "background-dark": "#0a0a0a", // Deep Obsidian adjustment
+                        "obsidian-light": "#1a1d0e",
+                        "obsidian-dark": "#050505",
+                    },
+                    fontFamily: {
+                        "display": ["Space Grotesk", "sans-serif"]
+                    },
+                    borderRadius: {"DEFAULT": "0.5rem", "lg": "1rem", "xl": "1.5rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>
+        body {
+            font-family: 'Space Grotesk', sans-serif;
+        }
+        .glass-panel {
+            background: rgba(26, 29, 14, 0.6);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(221, 255, 0, 0.1);
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 min-h-screen">
+<div class="relative flex h-auto min-h-screen w-full flex-col bg-background-light dark:bg-background-dark overflow-x-hidden">
+<header class="flex items-center bg-background-light dark:bg-background-dark p-4 border-b border-slate-200 dark:border-primary/10 sticky top-0 z-50">
+<div class="text-slate-900 dark:text-primary flex size-10 shrink-0 items-center justify-center cursor-pointer">
+<span class="material-symbols-outlined">arrow_back</span>
+</div>
+<div class="flex-1 px-4">
+<h2 class="text-slate-900 dark:text-slate-100 text-lg font-bold leading-tight tracking-tight">RIAL Trend Analysis</h2>
+<p class="text-xs text-slate-500 dark:text-primary/60 font-medium">Human-Centric Precision System</p>
+</div>
+<div class="flex items-center gap-2">
+<button class="flex size-10 items-center justify-center rounded-full bg-primary/10 text-primary">
+<span class="material-symbols-outlined text-[20px]">share</span>
+</button>
+</div>
+</header>
+<nav class="bg-background-light dark:bg-background-dark sticky top-[73px] z-40">
+<div class="flex border-b border-slate-200 dark:border-primary/10 px-4 overflow-x-auto no-scrollbar">
+<a class="flex flex-col items-center justify-center border-b-2 border-primary text-primary pb-3 pt-4 px-4 shrink-0" href="#">
+<p class="text-sm font-bold tracking-wide">Overview</p>
+</a>
+<a class="flex flex-col items-center justify-center border-b-2 border-transparent text-slate-500 dark:text-slate-400 pb-3 pt-4 px-4 shrink-0" href="#">
+<p class="text-sm font-bold tracking-wide">Correlations</p>
+</a>
+<a class="flex flex-col items-center justify-center border-b-2 border-transparent text-slate-500 dark:text-slate-400 pb-3 pt-4 px-4 shrink-0" href="#">
+<p class="text-sm font-bold tracking-wide">Insights</p>
+</a>
+<a class="flex flex-col items-center justify-center border-b-2 border-transparent text-slate-500 dark:text-slate-400 pb-3 pt-4 px-4 shrink-0" href="#">
+<p class="text-sm font-bold tracking-wide">Biometrics</p>
+</a>
+</div>
+</nav>
+<main class="flex-1 p-4 space-y-6">
+<section class="rounded-xl bg-white dark:bg-obsidian-light p-6 border border-slate-200 dark:border-primary/10 shadow-sm">
+<div class="flex justify-between items-start mb-4">
+<div>
+<p class="text-slate-500 dark:text-primary/70 text-sm font-medium uppercase tracking-widest">Vitality Index</p>
+<h3 class="text-slate-900 dark:text-slate-100 text-3xl font-bold mt-1">84<span class="text-lg text-slate-400">/100</span></h3>
+</div>
+<div class="bg-primary/20 text-primary px-3 py-1 rounded-full text-xs font-bold flex items-center gap-1">
+<span class="material-symbols-outlined text-xs">trending_up</span> +12%
+                    </div>
+</div>
+<div class="h-[200px] w-full mt-6">
+<svg class="w-full h-full overflow-visible" viewbox="0 0 400 150">
+<defs>
+<lineargradient id="vitalityGradient" x1="0%" x2="0%" y1="0%" y2="100%">
+<stop offset="0%" stop-color="#ddff00" stop-opacity="0.3"></stop>
+<stop offset="100%" stop-color="#ddff00" stop-opacity="0"></stop>
+</lineargradient>
+</defs>
+<path d="M0,120 Q40,110 80,130 T160,90 T240,100 T320,40 T400,60 L400,150 L0,150 Z" fill="url(#vitalityGradient)"></path>
+<path d="M0,120 Q40,110 80,130 T160,90 T240,100 T320,40 T400,60" fill="none" stroke="#ddff00" stroke-linecap="round" stroke-width="3"></path>
+<circle cx="320" cy="40" fill="#ddff00" r="4"></circle>
+</svg>
+<div class="flex justify-between mt-2 text-[10px] text-slate-400 font-bold uppercase tracking-tighter">
+<span>Day 1</span>
+<span>Day 10</span>
+<span>Day 20</span>
+<span>Day 30</span>
+</div>
+</div>
+</section>
+<section class="grid grid-cols-1 md:grid-cols-2 gap-4">
+<div class="rounded-xl bg-white dark:bg-obsidian-light p-5 border border-slate-200 dark:border-primary/5">
+<h4 class="text-slate-900 dark:text-slate-100 text-sm font-bold mb-4 flex items-center gap-2">
+<span class="material-symbols-outlined text-primary text-sm">restaurant</span>
+                        Specific Correlation: Late Night Carbs
+                    </h4>
+<div class="space-y-4">
+<div>
+<div class="flex justify-between text-xs mb-1">
+<span class="text-slate-500">Sleep Quality Impact</span>
+<span class="text-red-400">-18%</span>
+</div>
+<div class="w-full bg-slate-100 dark:bg-slate-800 h-1.5 rounded-full">
+<div class="bg-red-400 h-full rounded-full w-[18%]"></div>
+</div>
+</div>
+<div>
+<div class="flex justify-between text-xs mb-1">
+<span class="text-slate-500">Next-Day Energy Score</span>
+<span class="text-orange-400">-24%</span>
+</div>
+<div class="w-full bg-slate-100 dark:bg-slate-800 h-1.5 rounded-full">
+<div class="bg-orange-400 h-full rounded-full w-[24%]"></div>
+</div>
+</div>
+</div>
+</div>
+<div class="rounded-xl bg-white dark:bg-obsidian-light p-5 border border-slate-200 dark:border-primary/5">
+<h4 class="text-slate-900 dark:text-slate-100 text-sm font-bold mb-4 flex items-center gap-2">
+<span class="material-symbols-outlined text-primary text-sm">analytics</span>
+                        Subjective vs Objective
+                    </h4>
+<div class="flex items-center justify-center h-24 gap-6">
+<div class="flex flex-col items-center">
+<div class="relative size-14 flex items-center justify-center">
+<svg class="size-full -rotate-90">
+<circle class="text-slate-200 dark:text-slate-800" cx="28" cy="28" fill="transparent" r="24" stroke="currentColor" stroke-width="4"></circle>
+<circle class="text-primary" cx="28" cy="28" fill="transparent" r="24" stroke="currentColor" stroke-dasharray="150" stroke-dashoffset="40" stroke-width="4"></circle>
+</svg>
+<span class="absolute text-[10px] font-bold">72%</span>
+</div>
+<span class="text-[9px] mt-2 uppercase text-slate-500">Subjective</span>
+</div>
+<div class="flex flex-col items-center">
+<div class="relative size-14 flex items-center justify-center">
+<svg class="size-full -rotate-90">
+<circle class="text-slate-200 dark:text-slate-800" cx="28" cy="28" fill="transparent" r="24" stroke="currentColor" stroke-width="4"></circle>
+<circle class="text-white" cx="28" cy="28" fill="transparent" r="24" stroke="currentColor" stroke-dasharray="150" stroke-dashoffset="15" stroke-width="4"></circle>
+</svg>
+<span class="absolute text-[10px] font-bold">89%</span>
+</div>
+<span class="text-[9px] mt-2 uppercase text-slate-500">Objective</span>
+</div>
+</div>
+</div>
+</section>
+<section class="space-y-3">
+<h3 class="text-slate-900 dark:text-slate-100 text-lg font-bold">Key Insights</h3>
+<div class="grid grid-cols-1 gap-3">
+<div class="flex items-start gap-4 p-4 rounded-xl bg-primary/5 border border-primary/10">
+<div class="size-10 rounded-full bg-primary flex items-center justify-center text-background-dark shrink-0">
+<span class="material-symbols-outlined">lightbulb</span>
+</div>
+<div>
+<p class="text-sm font-bold text-slate-900 dark:text-slate-100">Optimal Fasting Window</p>
+<p class="text-xs text-slate-500 dark:text-slate-400 mt-1">Your next-day energy peaks (+15%) when finishing dinner by 7:30 PM.</p>
+</div>
+</div>
+<div class="flex items-start gap-4 p-4 rounded-xl bg-white dark:bg-obsidian-light border border-slate-200 dark:border-primary/5">
+<div class="size-10 rounded-full bg-slate-100 dark:bg-slate-800 flex items-center justify-center text-slate-500 shrink-0">
+<span class="material-symbols-outlined">bedtime</span>
+</div>
+<div>
+<p class="text-sm font-bold text-slate-900 dark:text-slate-100">Carb Sensitivity</p>
+<p class="text-xs text-slate-500 dark:text-slate-400 mt-1">High glycemic intake after 9 PM correlates with 22m less REM sleep.</p>
+</div>
+</div>
+</div>
+</section>
+</main>
+<footer class="mt-auto border-t border-slate-200 dark:border-primary/10 bg-white dark:bg-background-dark/80 backdrop-blur-md pb-6 pt-2 sticky bottom-0">
+<div class="flex gap-2 px-4">
+<a class="flex flex-1 flex-col items-center justify-center gap-1 text-slate-400" href="#">
+<span class="material-symbols-outlined">calendar_today</span>
+<p class="text-[10px] font-bold uppercase tracking-widest">Today</p>
+</a>
+<a class="flex flex-1 flex-col items-center justify-center gap-1 text-primary" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1">monitoring</span>
+<p class="text-[10px] font-bold uppercase tracking-widest">Trends</p>
+</a>
+<a class="flex flex-1 flex-col items-center justify-center gap-1 text-slate-400" href="#">
+<div class="size-12 -mt-6 bg-primary rounded-full flex items-center justify-center text-background-dark shadow-lg shadow-primary/20">
+<span class="material-symbols-outlined text-3xl">add</span>
+</div>
+<p class="text-[10px] font-bold uppercase tracking-widest mt-1">Log</p>
+</a>
+<a class="flex flex-1 flex-col items-center justify-center gap-1 text-slate-400" href="#">
+<span class="material-symbols-outlined">fingerprint</span>
+<p class="text-[10px] font-bold uppercase tracking-widest">Labs</p>
+</a>
+<a class="flex flex-1 flex-col items-center justify-center gap-1 text-slate-400" href="#">
+<span class="material-symbols-outlined">person</span>
+<p class="text-[10px] font-bold uppercase tracking-widest">Profile</p>
+</a>
+</div>
+</footer>
+</div>
+</body></html>

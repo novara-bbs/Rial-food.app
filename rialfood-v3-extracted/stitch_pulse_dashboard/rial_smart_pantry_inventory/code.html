@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Smart Pantry - Rial Tech</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#25aff4",
+                        "background-light": "#f5f7f8",
+                        "background-dark": "#101c22",
+                    },
+                    fontFamily: {
+                        "display": ["Inter"]
+                    },
+                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>
+        body { font-family: 'Inter', sans-serif; }
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 min-h-screen pb-24">
+<!-- Top Navigation Bar -->
+<header class="sticky top-0 z-50 bg-background-light/80 dark:bg-background-dark/80 backdrop-blur-md border-b border-primary/10">
+<div class="flex items-center p-4 justify-between max-w-2xl mx-auto">
+<div class="flex items-center gap-3">
+<div class="bg-primary/10 p-2 rounded-lg">
+<span class="material-symbols-outlined text-primary text-2xl">inventory_2</span>
+</div>
+<div>
+<h1 class="text-xl font-extrabold tracking-tight leading-none">Smart Pantry</h1>
+<p class="text-[10px] uppercase tracking-widest text-primary font-bold">RIAL Tech Systems</p>
+</div>
+</div>
+<div class="flex gap-2">
+<button class="p-2 hover:bg-primary/10 rounded-full transition-colors">
+<span class="material-symbols-outlined text-slate-600 dark:text-slate-400">search</span>
+</button>
+<button class="p-2 hover:bg-primary/10 rounded-full transition-colors relative">
+<span class="material-symbols-outlined text-slate-600 dark:text-slate-400">notifications</span>
+<span class="absolute top-2 right-2 flex h-2 w-2 rounded-full bg-red-500"></span>
+</button>
+</div>
+</div>
+</header>
+<main class="max-w-2xl mx-auto px-4 pt-6 space-y-8">
+<!-- Action Section: Cook with what I have -->
+<section class="relative overflow-hidden rounded-xl bg-slate-900 text-white p-6 shadow-xl shadow-primary/10">
+<div class="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-4">
+<div class="space-y-1">
+<h2 class="text-lg font-bold">Intelligent Meal Planning</h2>
+<p class="text-slate-400 text-sm leading-relaxed max-w-xs">RIAL AI analyzes your current stock to suggest optimized recipes.</p>
+</div>
+<button class="bg-primary hover:bg-primary/90 text-white px-6 py-3 rounded-lg font-bold flex items-center justify-center gap-2 transition-transform active:scale-95 shadow-lg shadow-primary/20">
+<span class="material-symbols-outlined">auto_awesome</span>
+                    Cook with what I have
+                </button>
+</div>
+<div class="absolute top-0 right-0 w-64 h-64 bg-primary/20 blur-3xl rounded-full -mr-20 -mt-20"></div>
+</section>
+<!-- Category Tabs -->
+<nav class="flex border-b border-primary/10 gap-6 overflow-x-auto no-scrollbar">
+<button class="flex flex-col items-center pb-3 border-b-2 border-primary text-primary font-bold text-sm whitespace-nowrap">
+                Fridge <span class="text-[10px] opacity-60 font-medium">12 items</span>
+</button>
+<button class="flex flex-col items-center pb-3 border-b-2 border-transparent text-slate-500 hover:text-slate-700 dark:text-slate-400 font-bold text-sm whitespace-nowrap">
+                Pantry <span class="text-[10px] opacity-60 font-medium">45 items</span>
+</button>
+<button class="flex flex-col items-center pb-3 border-b-2 border-transparent text-slate-500 hover:text-slate-700 dark:text-slate-400 font-bold text-sm whitespace-nowrap">
+                Freezer <span class="text-[10px] opacity-60 font-medium">8 items</span>
+</button>
+<button class="flex flex-col items-center pb-3 border-b-2 border-transparent text-slate-500 hover:text-slate-700 dark:text-slate-400 font-bold text-sm whitespace-nowrap">
+                Spices <span class="text-[10px] opacity-60 font-medium">22 items</span>
+</button>
+</nav>
+<!-- Filters -->
+<div class="flex gap-2 overflow-x-auto no-scrollbar py-1">
+<button class="flex h-9 shrink-0 items-center justify-center gap-x-2 rounded-full bg-primary text-white px-4 text-xs font-bold uppercase tracking-wider">
+                All
+            </button>
+<button class="flex h-9 shrink-0 items-center justify-center gap-x-2 rounded-full bg-white dark:bg-slate-800 border border-primary/10 px-4 text-xs font-bold uppercase tracking-wider text-red-500">
+<span class="material-symbols-outlined text-sm">error</span>
+                Expiring Soon
+            </button>
+<button class="flex h-9 shrink-0 items-center justify-center gap-x-2 rounded-full bg-white dark:bg-slate-800 border border-primary/10 px-4 text-xs font-bold uppercase tracking-wider">
+<span class="material-symbols-outlined text-sm">trending_down</span>
+                Low Stock
+            </button>
+<button class="flex h-9 shrink-0 items-center justify-center gap-x-2 rounded-full bg-white dark:bg-slate-800 border border-primary/10 px-4 text-xs font-bold uppercase tracking-wider">
+                Recently Added
+            </button>
+</div>
+<!-- Expiration Alerts (Critical Section) -->
+<section class="space-y-4">
+<div class="flex items-center justify-between">
+<h3 class="text-sm font-black uppercase tracking-[0.2em] text-slate-400">Critical Alerts</h3>
+<span class="h-px flex-1 mx-4 bg-slate-200 dark:bg-slate-800"></span>
+</div>
+<div class="grid gap-3">
+<!-- Alert Card 1 -->
+<div class="bg-white dark:bg-slate-900 border-l-4 border-red-500 rounded-lg p-4 flex items-center gap-4 shadow-sm">
+<div class="size-14 rounded bg-slate-100 dark:bg-slate-800 flex items-center justify-center overflow-hidden">
+<img class="object-cover size-full" data-alt="Bottle of fresh whole milk" src="https://lh3.googleusercontent.com/aida-public/AB6AXuA2y2bSS0eGzLrI-Qtlp5Ba28Uilk6W7cLHthuVNN9Ln9ncdzknD9Vt6UQEDDDXobD_jHl8eIv_mGYQ_RJAhXjIPIMdk5_oRvL_zcn3KRGefqT4WR8G7n6huGCJqkpAgm_P8of5zvIu6gfy6HHbfxaYBKsuB-2kN5tcTS5ZN9jFzqLXLx5vUbjOUCOLdsyCtKk6wygAziVws_zwn0sJ_4wO4x8doh3r2tTDRsT79abl5_eifP81USbZ3hZ8KG1a1GyxIjW16CZs8pnM"/>
+</div>
+<div class="flex-1 min-w-0">
+<h4 class="font-bold text-sm truncate uppercase tracking-tight">Whole Milk (2L)</h4>
+<p class="text-xs text-red-500 font-bold mt-1 uppercase">Expires in 12 hours</p>
+</div>
+<button class="size-10 flex items-center justify-center rounded-lg bg-red-50 dark:bg-red-900/20 text-red-500">
+<span class="material-symbols-outlined">add_shopping_cart</span>
+</button>
+</div>
+<!-- Alert Card 2 -->
+<div class="bg-white dark:bg-slate-900 border-l-4 border-orange-400 rounded-lg p-4 flex items-center gap-4 shadow-sm">
+<div class="size-14 rounded bg-slate-100 dark:bg-slate-800 flex items-center justify-center overflow-hidden">
+<img class="object-cover size-full" data-alt="Bunch of fresh asparagus" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDsjIjfeecF6otoP8qPep8G1_MmnwBokDOSVW7mNZhMdaBOwFzrvJNHIdcqVHoWTKZDqyx7cZlYcr9X4kgjT4cs9aU7X_DeRaS6RWn8sLj0nxTEzkOEEi0tMfzdWqttR1xHbnbkT-JeYiAJKz3c3Sfahqpt7cm_oAiF2QcywKAREC9XN_JJS7AyvZR4yQV-w1euJyOo79hJTNSq_Upe-MnBmD61RJ_h-fSk5uxK4pI_d0riQFyUcAv_Sru8TNQ4ovr-c6cvzgpu-tlg"/>
+</div>
+<div class="flex-1 min-w-0">
+<h4 class="font-bold text-sm truncate uppercase tracking-tight">Fresh Asparagus</h4>
+<p class="text-xs text-orange-500 font-bold mt-1 uppercase">Expires in 2 days</p>
+</div>
+<button class="size-10 flex items-center justify-center rounded-lg bg-slate-100 dark:bg-slate-800 text-slate-400">
+<span class="material-symbols-outlined">restaurant</span>
+</button>
+</div>
+</div>
+</section>
+<!-- Current Stock Grid -->
+<section class="space-y-4">
+<div class="flex items-center justify-between">
+<h3 class="text-sm font-black uppercase tracking-[0.2em] text-slate-400">Inventory Status</h3>
+<span class="h-px flex-1 mx-4 bg-slate-200 dark:bg-slate-800"></span>
+</div>
+<div class="grid grid-cols-2 gap-4">
+<!-- Stock Item 1 -->
+<div class="bg-white dark:bg-slate-900 rounded-xl p-4 shadow-sm border border-primary/5">
+<div class="flex justify-between items-start mb-3">
+<div class="size-10 rounded bg-slate-100 dark:bg-slate-800 p-1">
+<img class="object-cover size-full rounded-sm" data-alt="Small blocks of cheddar cheese" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAv5rQY0JP2gxTe6l0s0y_kKlDr2HlrJUWam3g3SO0YwH4u6GA_bQbz8x7-iJc9LP_47Hxpudqas9m6ETObnUEIq_9slgqdJqR00qPyzK6ZJaMlFBlHTYuhuc7QCtGe640h6r6-ig1fBndqNCNuEYexqtc1bNPy2CHW8_a_2R4e2I3RE28xJx4V-he3tXECdSlnl6glkQPvgHeppO1cMbb9l4iIhKhMYjrXsDK4laO3W0imv3sUxN_ZZXFHL_dk5o8S_Jv_6UlFCqhl"/>
+</div>
+<span class="text-[10px] font-bold bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400 px-2 py-0.5 rounded uppercase">Fresh</span>
+</div>
+<h4 class="font-bold text-xs uppercase tracking-tight">Cheddar Cheese</h4>
+<div class="mt-4 w-full bg-slate-100 dark:bg-slate-800 h-1 rounded-full overflow-hidden">
+<div class="bg-primary h-full w-[80%]"></div>
+</div>
+<div class="flex justify-between mt-2 text-[10px] font-bold text-slate-400 uppercase">
+<span>800g</span>
+<span>80% Left</span>
+</div>
+</div>
+<!-- Stock Item 2 -->
+<div class="bg-white dark:bg-slate-900 rounded-xl p-4 shadow-sm border border-primary/5">
+<div class="flex justify-between items-start mb-3">
+<div class="size-10 rounded bg-slate-100 dark:bg-slate-800 p-1">
+<img class="object-cover size-full rounded-sm" data-alt="Red ripe beefsteak tomato" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBbT47fDyTxHWdNApKxAT6O34FOL3zBYOov-1C10jKxtBvykRcIactriYH8s0h92yX1sg4NB_PaKgtU9mufsDTlbmCvrl6b667x0cx1GKt7rUH-TXUBcl8kjJ0Jv3svztA7wPNg9FTAn48rRU3P-fc7xMssc67wo8h3y_v3CQooMDbns4rNxweZX8GnH2uTSJKT8XSxthDeKwEo13blqQ9ret13RKahJamXxw0VH9_BsVw3pJjKvYqUEcFpU-hbJi2JTkM4RYGQgE2J"/>
+</div>
+<span class="text-[10px] font-bold bg-primary/10 text-primary px-2 py-0.5 rounded uppercase">1 wk left</span>
+</div>
+<h4 class="font-bold text-xs uppercase tracking-tight">Beefsteak Tomatoes</h4>
+<div class="mt-4 w-full bg-slate-100 dark:bg-slate-800 h-1 rounded-full overflow-hidden">
+<div class="bg-orange-400 h-full w-[30%]"></div>
+</div>
+<div class="flex justify-between mt-2 text-[10px] font-bold text-slate-400 uppercase">
+<span>3 Units</span>
+<span>Low Stock</span>
+</div>
+</div>
+<!-- Stock Item 3 -->
+<div class="bg-white dark:bg-slate-900 rounded-xl p-4 shadow-sm border border-primary/5">
+<div class="flex justify-between items-start mb-3">
+<div class="size-10 rounded bg-slate-100 dark:bg-slate-800 p-1">
+<img class="object-cover size-full rounded-sm" data-alt="Greek yogurt in a white container" src="https://lh3.googleusercontent.com/aida-public/AB6AXuANVJt_YZKqw7XD2c6S4AThP8BDLFQ8ki-2h9cgzAHsMarqBaJIdtROVB51rWyVc49G9Brsdz87ks2mJTAdJG6L-APpsUMAGKgmmY4u0dYVSLPvqZGHjtgmqho2K7IM6TPNt5-o5Zo5amGYLOX0aFm9Dx7ndJa2OhQenq1Oz9IcvSsW-cqWRbc4-pten_u40SllD_ELr7R6QQMV1L4DEBSMWFdBptUyzHW-CI1mKeOFCM8VW5wc36Mk8UzE--6xGui-otDctq_9e1TT"/>
+</div>
+<span class="text-[10px] font-bold bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400 px-2 py-0.5 rounded uppercase">Fresh</span>
+</div>
+<h4 class="font-bold text-xs uppercase tracking-tight">Greek Yogurt</h4>
+<div class="mt-4 w-full bg-slate-100 dark:bg-slate-800 h-1 rounded-full overflow-hidden">
+<div class="bg-primary h-full w-[100%]"></div>
+</div>
+<div class="flex justify-between mt-2 text-[10px] font-bold text-slate-400 uppercase">
+<span>1kg</span>
+<span>Full</span>
+</div>
+</div>
+<!-- Stock Item 4 -->
+<div class="bg-white dark:bg-slate-900 rounded-xl p-4 shadow-sm border border-primary/5 opacity-60">
+<div class="flex justify-between items-start mb-3">
+<div class="size-10 rounded bg-slate-100 dark:bg-slate-800 p-1">
+<img class="object-cover size-full rounded-sm" data-alt="Brown eggs in a carton" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAErKb9POqMImzg8tbGuG2ELnVCnqR0HJbC31I45ZnRRGLbt5rrnhqF9HA7coi4HZDBk7AVbBcePNeYcNxcYge4QqmkHkqURfzqrNbzpeKTgL-Q7qE0Pih6FGZSszq4Vgss0vurm9ASNxWgYV372ZihhKNL0hx0h2K2ToKuYdGj_oVuMeuef_SS6UBVVcvW8r6YUPutMXxvyMToW8zh0xF-A9KvuLH2j2cUNCsWssgdNCNPuWzuHpx01TQToqjipfZBQMEQS4pGvDEc"/>
+</div>
+<span class="text-[10px] font-bold bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400 px-2 py-0.5 rounded uppercase">Empty</span>
+</div>
+<h4 class="font-bold text-xs uppercase tracking-tight">Organic Eggs</h4>
+<div class="mt-4 w-full bg-slate-100 dark:bg-slate-800 h-1 rounded-full overflow-hidden">
+<div class="bg-red-500 h-full w-[5%]"></div>
+</div>
+<div class="flex justify-between mt-2 text-[10px] font-bold text-slate-400 uppercase">
+<span>0 Units</span>
+<span>Restock</span>
+</div>
+</div>
+</div>
+</section>
+<!-- Technical Stats -->
+<section class="bg-slate-200 dark:bg-slate-800/50 rounded-lg p-4 grid grid-cols-3 gap-2 text-center">
+<div>
+<p class="text-[10px] font-bold uppercase text-slate-500">Inventory Value</p>
+<p class="text-lg font-black text-slate-800 dark:text-slate-100">$214.50</p>
+</div>
+<div class="border-x border-slate-300 dark:border-slate-700">
+<p class="text-[10px] font-bold uppercase text-slate-500">Waste Level</p>
+<p class="text-lg font-black text-red-500">3.2%</p>
+</div>
+<div>
+<p class="text-[10px] font-bold uppercase text-slate-500">Sync Status</p>
+<p class="text-lg font-black text-green-500 flex items-center justify-center gap-1">
+<span class="material-symbols-outlined text-sm">check_circle</span>
+                    LIVE
+                </p>
+</div>
+</section>
+</main>
+<!-- Bottom Navigation Bar -->
+<nav class="fixed bottom-0 left-0 right-0 z-50 bg-white dark:bg-slate-900 border-t border-primary/10 px-6 py-2 pb-6">
+<div class="max-w-2xl mx-auto flex items-center justify-between">
+<a class="flex flex-col items-center gap-1 text-primary" href="#">
+<span class="material-symbols-outlined font-bold">inventory_2</span>
+<p class="text-[10px] font-black uppercase tracking-widest">Pantry</p>
+</a>
+<a class="flex flex-col items-center gap-1 text-slate-400 hover:text-primary transition-colors" href="#">
+<span class="material-symbols-outlined">restaurant_menu</span>
+<p class="text-[10px] font-black uppercase tracking-widest">Recipes</p>
+</a>
+<div class="-mt-10">
+<button class="size-14 rounded-full bg-primary text-white shadow-xl shadow-primary/40 flex items-center justify-center transition-transform active:scale-90">
+<span class="material-symbols-outlined text-3xl">add</span>
+</button>
+</div>
+<a class="flex flex-col items-center gap-1 text-slate-400 hover:text-primary transition-colors" href="#">
+<span class="material-symbols-outlined">shopping_cart</span>
+<p class="text-[10px] font-black uppercase tracking-widest">Shopping</p>
+</a>
+<a class="flex flex-col items-center gap-1 text-slate-400 hover:text-primary transition-colors" href="#">
+<span class="material-symbols-outlined">account_circle</span>
+<p class="text-[10px] font-black uppercase tracking-widest">System</p>
+</a>
+</div>
+</nav>
+</body></html>

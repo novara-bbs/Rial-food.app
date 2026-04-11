@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#3fca43",
+                        "background-light": "#f6f8f6",
+                        "background-dark": "#131f14",
+                    },
+                    fontFamily: {
+                        "display": ["Inter"]
+                    },
+                    borderRadius: {"DEFAULT": "1rem", "lg": "2rem", "xl": "3rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>.linen-texture {
+    background-image: url(https://lh3.googleusercontent.com/aida-public/AB6AXuDrJ9V52olutqGo_rZA90nqjvblzvLYekzlGxlVRrUpT8Tq8aiybZ1IzewgLhqDLiLEGLyW1MYEDdNikj8qkIBAIEtSZUClr_Dop-1RRZKYZUUIqS1V9t1JwVgiw3Qa-Ja6lxNxft-Z8EtIPLV4pNEtSVJEXMPlCJ28r64rEwjxlh5QKbBYdbmjwrRL7m1IbDRnZ2KO8FH6Bxcx2sVxvS9MiTg1_AJTvoMhDqPZw8jocfyAuO_uHBNc2Z0XT-lUOZlWetw6Di5PQgQg);
+    background-blend-mode: overlay
+    }</style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark font-display text-slate-900 dark:text-slate-100 min-h-screen pb-24">
+<!-- Top Navigation & Profile -->
+<header class="p-6 flex items-center justify-between sticky top-0 bg-background-light/80 dark:bg-background-dark/80 backdrop-blur-md z-50">
+<div class="flex items-center gap-3">
+<div class="size-12 rounded-full border-2 border-primary p-0.5">
+<img alt="Profile image" class="rounded-full w-full h-full object-cover" data-alt="Close up portrait of a healthy smiling woman" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD1C7jdMdpbMsZy0kTtTd0Hg1heuw8QBoVb7p5ObUgd7iXN2VrQ3fLHQCePDtIPOlYmT6PR-zIm4WgpofOVYDuyVCASEzDh1xrAeeKl2vJaOkeuCCIaghIXsDppra0tTlVhqpG66NRa7JIiEtJdI0w-pMkgZzB_9uwOcjTnEn4m7mLrMnKNhuJsgeSYeCFaTz9CDtSvPOEvSQYD9NzFtrZasR2bCY9luWk7TA76-ftvOevLjGC60DoD1guHnhML1gwO5f8HChT-nnnl"/>
+</div>
+<div>
+<h1 class="text-xl font-bold tracking-tight">RIAL</h1>
+<div class="flex items-center gap-1.5">
+<span class="size-2 rounded-full bg-primary animate-pulse"></span>
+<span class="text-xs font-medium text-slate-500 dark:text-slate-400 uppercase tracking-widest">Pulse Active</span>
+</div>
+</div>
+</div>
+<div class="flex gap-2">
+<button class="size-10 flex items-center justify-center rounded-full bg-slate-200 dark:bg-white/5 text-slate-700 dark:text-slate-300">
+<span class="material-symbols-outlined">notifications</span>
+</button>
+<button class="size-10 flex items-center justify-center rounded-full bg-slate-200 dark:bg-white/5 text-slate-700 dark:text-slate-300">
+<span class="material-symbols-outlined">search</span>
+</button>
+</div>
+</header>
+<main class="max-w-md mx-auto px-6 space-y-8">
+<!-- Real Status Card -->
+<section class="relative overflow-hidden rounded-xl bg-white dark:bg-white/5 p-6 shadow-sm border border-slate-200/50 dark:border-white/10 linen-texture">
+<div class="flex justify-between items-start mb-6">
+<div>
+<h2 class="text-slate-500 dark:text-slate-400 text-sm font-medium uppercase tracking-wider">Real Status</h2>
+<p class="text-3xl font-bold mt-1">85% <span class="text-primary text-sm font-normal">Optimal</span></p>
+</div>
+<div class="bg-primary/20 text-primary p-2 rounded-lg">
+<span class="material-symbols-outlined">bolt</span>
+</div>
+</div>
+<div class="space-y-4">
+<div class="space-y-2">
+<div class="flex justify-between text-xs font-medium uppercase tracking-tighter">
+<span class="text-slate-400">Biometric Recovery</span>
+<span class="text-primary">High</span>
+</div>
+<div class="h-1.5 w-full bg-slate-100 dark:bg-white/5 rounded-full overflow-hidden">
+<div class="h-full bg-primary rounded-full w-[92%] shadow-[0_0_8px_rgba(63,202,67,0.5)]"></div>
+</div>
+</div>
+<div class="space-y-2">
+<div class="flex justify-between text-xs font-medium uppercase tracking-tighter">
+<span class="text-slate-400">Daily Fuel</span>
+<span class="text-primary">Balanced</span>
+</div>
+<div class="h-1.5 w-full bg-slate-100 dark:bg-white/5 rounded-full overflow-hidden">
+<div class="h-full bg-primary rounded-full w-[78%] shadow-[0_0_8px_rgba(63,202,67,0.5)]"></div>
+</div>
+</div>
+</div>
+</section>
+<!-- The Daily Plate -->
+<section class="space-y-4">
+<div class="flex justify-between items-end">
+<h2 class="text-xl font-bold tracking-tight">The Daily Plate</h2>
+<button class="text-primary text-sm font-semibold">Log Meal</button>
+</div>
+<div class="group relative rounded-xl bg-white dark:bg-white/5 border border-slate-200/50 dark:border-white/10 overflow-hidden shadow-lg">
+<div class="h-56 w-full relative">
+<img alt="Daily Plate" class="w-full h-full object-cover" data-alt="Beautifully plated vibrant salad with grilled protein" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCtnthW_OMVqIKWLDj7Azctgfo96Ox-ZwYIiUOCHJQNhGLFkPC3CnwFvJUYpykmmBOV-IhPIcgDuVVzmsenC67BODHSQSibNrqt0W2gqihu7jE1kJtE5TNgfK1MzndLb_xdh7b9m9yk7YZ7WbUecUK34xOxgHhaHvjNdnQ7ZvFGmY6xSNzlDiTecu-3I2CyIsiUD5L4F7_fHqWudO_45uePHpCWp36y69PtM5n6EWHklM8BDrY4y9tkwzViP1riXctnQ3n3iS467xve"/>
+<div class="absolute top-4 right-4 bg-background-dark/80 backdrop-blur-md px-3 py-1.5 rounded-full border border-white/10 flex items-center gap-2">
+<span class="text-primary text-xs font-bold">Match Score</span>
+<span class="text-white text-lg font-bold">92</span>
+</div>
+</div>
+<div class="p-6 linen-texture">
+<h3 class="text-lg font-bold mb-1">Quinoa Power Bowl</h3>
+<p class="text-slate-500 dark:text-slate-400 text-sm leading-relaxed mb-4">Matches your metabolic needs perfectly with roasted roots and high-density protein.</p>
+<div class="flex gap-2">
+<button class="flex-1 bg-primary text-background-dark font-bold py-3 rounded-full text-sm">View Breakdown</button>
+<button class="size-11 flex items-center justify-center rounded-full border border-slate-200 dark:border-white/10 text-slate-400">
+<span class="material-symbols-outlined">favorite</span>
+</button>
+</div>
+</div>
+</div>
+</section>
+<!-- Community Sparks -->
+<section class="space-y-4 pb-4">
+<div class="flex justify-between items-end">
+<h2 class="text-xl font-bold tracking-tight">Community Sparks</h2>
+<button class="text-primary text-sm font-semibold">See All</button>
+</div>
+<div class="flex gap-4 overflow-x-auto pb-4 no-scrollbar -mx-6 px-6 snap-x">
+<!-- Recipe Card 1 -->
+<div class="min-w-[280px] snap-start rounded-xl overflow-hidden bg-white dark:bg-white/5 border border-slate-200/50 dark:border-white/10 shadow-sm">
+<div class="h-40 relative">
+<img alt="Recipe" class="w-full h-full object-cover" data-alt="Healthy pasta with cherry tomatoes and basil" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAIy8RaKKyes-yO5fjK7YDUA6gAAmpqEFXpgrHage7COWLAqiofnlCtGCBadVE0CuBdGoUjFHAPI6IowBk7AQspC7c6XPrSxPNecdB4dMXchH_tpyTdz0gSilXHZqNR7E0xHTRzqoQIAnM_8H-ckTljXWQVgApmviaAlVkGtDikOEh6blxFrmKr1i8wlYUoP70iGNGyfFjyCVujPz4OClRh0ojyuyj5ETYZbQFZE8lWP82lwAp84B_BhJp8dYh4_Yf_1RQjbWkqROp1"/>
+<div class="absolute bottom-2 left-2 bg-black/50 backdrop-blur-sm rounded-full px-2 py-1 flex items-center gap-1">
+<img alt="User" class="size-5 rounded-full object-cover" data-alt="Small round portrait of a man" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBWs6zDuuDebnQPY4Oifpdoe0soAMQr4rhgub6L-_wvkeF39_qG6j7mc0aIMbbdo9BNQkwNgPmQVOcnQBb25bhMlRVAHxE2vXy6K0UXUXLSXw-qjnvqJaE2zYxZanxdxBXV_2EUJc_7oHVVCnSCNnqQnARAN4pS0GtYuy9vtI4Q7fH5v3fmwgCW8QBkHRSl8WzYtC09GeAtFmgNTFnp_JHPmkS5lVhJGJYwLibu9LX8DsKY9XqyQKD5GgT_pINsh9na8Y0lOFon8vYK"/>
+<span class="text-[10px] text-white font-medium">@alex_green</span>
+</div>
+</div>
+<div class="p-4">
+<h4 class="font-bold text-sm mb-2">Mediterranean Zest Bowl</h4>
+<div class="flex items-center gap-3 text-xs text-slate-500 dark:text-slate-400">
+<span class="flex items-center gap-1"><span class="material-symbols-outlined text-sm">schedule</span> 15m</span>
+<span class="flex items-center gap-1"><span class="material-symbols-outlined text-sm text-primary">local_fire_department</span> 420 kcal</span>
+</div>
+</div>
+</div>
+<!-- Recipe Card 2 -->
+<div class="min-w-[280px] snap-start rounded-xl overflow-hidden bg-white dark:bg-white/5 border border-slate-200/50 dark:border-white/10 shadow-sm">
+<div class="h-40 relative">
+<img alt="Recipe" class="w-full h-full object-cover" data-alt="Fresh vegetable and grain buddha bowl" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDlzexg-z9sdP64-kXx4Dyw-N46OZ8X0KIidfKLv8xl-5U-frQ4B6sntEPj0z7_2KIdC1Q2VNTVq6eUBftJ2tqPwFgwlV1mhw7B73bNrjO-AD7mryIeljhwqnGF54f9rcWngm3cvXVZRULKU62l9BcBBovj1pqU6eYOtKvbjfMoB-G54nkAi7bolnX-_p7A4SfKVQ29idGayN-gO6_vutBOwayAjt6N2kEPMLV9yWcOWeGtczC7wYgMfrmyfBN7pe0aT1sMgw08kBjj"/>
+<div class="absolute bottom-2 left-2 bg-black/50 backdrop-blur-sm rounded-full px-2 py-1 flex items-center gap-1">
+<img alt="User" class="size-5 rounded-full object-cover" data-alt="Small round portrait of a woman" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCJlucg4SmFidMvI2mpZ5D-xH1l9sinJLXOQCcTXStZ4pPeS21xPEYZhZ5NQGTDHfDDOIHd3gpSRQzKID4WY8c2OGWGRZNGT8RuenSpe8vCgoXMgnpNyLoe3FlqrAqjmJ2WkTeO6ipEZZG8DysOZweou161BbBZfFVgpKM9WxX5RydOzVhofd-BTvFfgBavv-Rbnfs_y54Aj0ndxTFW2CZjj8LTEbwHVdAkfGGkw_iYkKviDi_-C0sytlWoIdHNoFt0sEjZNwCKAWE3"/>
+<span class="text-[10px] text-white font-medium">@luna_vibes</span>
+</div>
+</div>
+<div class="p-4">
+<h4 class="font-bold text-sm mb-2">Forest Mushroom Risotto</h4>
+<div class="flex items-center gap-3 text-xs text-slate-500 dark:text-slate-400">
+<span class="flex items-center gap-1"><span class="material-symbols-outlined text-sm">schedule</span> 25m</span>
+<span class="flex items-center gap-1"><span class="material-symbols-outlined text-sm text-primary">local_fire_department</span> 380 kcal</span>
+</div>
+</div>
+</div>
+</div>
+</section>
+</main>
+<!-- Bottom Navigation -->
+<nav class="fixed bottom-0 left-0 right-0 bg-background-light/95 dark:bg-background-dark/95 backdrop-blur-lg border-t border-slate-200 dark:border-white/10 px-6 py-4 flex justify-between items-center z-50">
+<a class="flex flex-col items-center gap-1 text-primary" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1">pulse_alert</span>
+<span class="text-[10px] font-bold uppercase tracking-widest">Pulse</span>
+</a>
+<a class="flex flex-col items-center gap-1 text-slate-400" href="#">
+<span class="material-symbols-outlined">restaurant</span>
+<span class="text-[10px] font-bold uppercase tracking-widest">Kitchen</span>
+</a>
+<div class="relative -mt-12">
+<button class="size-14 bg-primary text-background-dark rounded-full shadow-lg shadow-primary/40 flex items-center justify-center">
+<span class="material-symbols-outlined text-3xl font-bold">add</span>
+</button>
+</div>
+<a class="flex flex-col items-center gap-1 text-slate-400" href="#">
+<span class="material-symbols-outlined">group</span>
+<span class="text-[10px] font-bold uppercase tracking-widest">Circle</span>
+</a>
+<a class="flex flex-col items-center gap-1 text-slate-400" href="#">
+<span class="material-symbols-outlined">account_circle</span>
+<span class="text-[10px] font-bold uppercase tracking-widest">Profile</span>
+</a>
+</nav>
+<style>
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+    </style>
+</body></html>

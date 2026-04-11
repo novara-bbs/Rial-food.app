@@ -1,0 +1,81 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@300;400;500;600;700&family=Quicksand:wght@400;500;600;700&family=Outfit:wght@300;400;500;600;700&family=DM+Sans:wght@400;500;700&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --color-primary: var(--theme-primary);
+  --color-primary-dark: var(--theme-primary-dark);
+  --color-background-light: var(--theme-bg-light);
+  --color-background-dark: var(--theme-bg-dark);
+  --color-surface-light: var(--theme-surface-light);
+  --color-surface-dark: var(--theme-surface-dark);
+  --color-surface-darker: var(--theme-surface-darker);
+  
+  --font-sans: var(--theme-font-sans);
+  --font-display: var(--theme-font-display);
+}
+
+@layer base {
+  :root {
+    /* Default Theme (Slate/Lime) - Electric Yellow */
+    --theme-primary: #d4ff00;
+    --theme-primary-dark: #bfe600;
+    --theme-bg-light: #f8fafc;
+    --theme-bg-dark: #0f172a;
+    --theme-surface-light: #ffffff;
+    --theme-surface-dark: #1e293b;
+    --theme-surface-darker: #020617;
+    --theme-font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+    --theme-font-display: "Space Grotesk", ui-sans-serif, system-ui, sans-serif;
+  }
+
+  [data-theme="blue"] {
+    /* Calm Modern Blue */
+    --theme-primary: #3b82f6;
+    --theme-primary-dark: #2563eb;
+    --theme-bg-light: #f1f5f9;
+    --theme-bg-dark: #0f172a;
+    --theme-surface-light: #ffffff;
+    --theme-surface-dark: #1e293b;
+    --theme-surface-darker: #020617;
+    --theme-font-sans: "Outfit", ui-sans-serif, system-ui, sans-serif;
+    --theme-font-display: "Outfit", ui-sans-serif, system-ui, sans-serif;
+  }
+
+  [data-theme="earth"] {
+    /* Earthy Orange */
+    --theme-primary: #e2725b;
+    --theme-primary-dark: #c85a46;
+    --theme-bg-light: #f4f1eb;
+    --theme-bg-dark: #2a2421;
+    --theme-surface-light: #ffffff;
+    --theme-surface-dark: #3a322d;
+    --theme-surface-darker: #1f1a17;
+    --theme-font-sans: "Quicksand", ui-sans-serif, system-ui, sans-serif;
+    --theme-font-display: "Quicksand", ui-sans-serif, system-ui, sans-serif;
+  }
+
+  [data-theme="nature"] {
+    /* Nature Green */
+    --theme-primary: #10b981;
+    --theme-primary-dark: #059669;
+    --theme-bg-light: #f0fdf4;
+    --theme-bg-dark: #064e3b;
+    --theme-surface-light: #ffffff;
+    --theme-surface-dark: #022c22;
+    --theme-surface-darker: #020617;
+    --theme-font-sans: "DM Sans", ui-sans-serif, system-ui, sans-serif;
+    --theme-font-display: "DM Sans", ui-sans-serif, system-ui, sans-serif;
+  }
+
+  body {
+    @apply bg-slate-50 dark:bg-background-dark text-slate-900 dark:text-slate-100 font-sans antialiased transition-colors duration-300;
+  }
+}
+
+.hide-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.hide-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}

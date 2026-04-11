@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Detailed Food Log - RIAL</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#25aff4",
+                        "background-light": "#f5f7f8",
+                        "background-dark": "#101c22",
+                    },
+                    fontFamily: {
+                        "display": ["Inter", "sans-serif"]
+                    },
+                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="font-display bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 antialiased">
+<div class="max-w-md mx-auto min-h-screen flex flex-col bg-white dark:bg-slate-900 shadow-2xl relative">
+<!-- Top Header -->
+<header class="sticky top-0 z-20 bg-white/80 dark:bg-slate-900/80 backdrop-blur-md border-b border-slate-100 dark:border-slate-800">
+<div class="flex items-center justify-between px-6 py-4">
+<button class="text-slate-600 dark:text-slate-400 hover:text-primary transition-colors">
+<span class="material-symbols-outlined">arrow_back</span>
+</button>
+<h1 class="text-xl font-extrabold tracking-tight uppercase italic text-slate-900 dark:text-white">Detailed Food Log</h1>
+<button class="text-slate-600 dark:text-slate-400">
+<span class="material-symbols-outlined">more_horiz</span>
+</button>
+</div>
+</header>
+<main class="flex-1 overflow-y-auto pb-32">
+<!-- Real-time Macro Tracking Hero -->
+<section class="px-6 py-8 bg-slate-50 dark:bg-slate-800/50">
+<div class="flex justify-between items-end mb-6">
+<div>
+<span class="text-[10px] font-bold uppercase tracking-[0.2em] text-primary mb-1 block">Live Tracking</span>
+<h2 class="text-4xl font-black leading-none">942 <span class="text-lg font-light text-slate-400">kcal</span></h2>
+</div>
+<div class="text-right">
+<span class="text-[10px] font-bold uppercase tracking-[0.2em] text-slate-400 mb-1 block">Goal</span>
+<p class="text-lg font-bold">2,400</p>
+</div>
+</div>
+<div class="grid grid-cols-3 gap-4">
+<div class="bg-white dark:bg-slate-800 p-4 rounded-xl border border-slate-100 dark:border-slate-700 shadow-sm">
+<p class="text-[10px] font-bold uppercase text-slate-400 mb-2">Protein</p>
+<div class="flex items-center gap-2">
+<div class="h-1 flex-1 bg-slate-100 dark:bg-slate-700 rounded-full overflow-hidden">
+<div class="h-full bg-primary w-[65%]"></div>
+</div>
+<span class="text-xs font-bold">65g</span>
+</div>
+</div>
+<div class="bg-white dark:bg-slate-800 p-4 rounded-xl border border-slate-100 dark:border-slate-700 shadow-sm">
+<p class="text-[10px] font-bold uppercase text-slate-400 mb-2">Carbs</p>
+<div class="flex items-center gap-2">
+<div class="h-1 flex-1 bg-slate-100 dark:bg-slate-700 rounded-full overflow-hidden">
+<div class="h-full bg-orange-400 w-[40%]"></div>
+</div>
+<span class="text-xs font-bold">112g</span>
+</div>
+</div>
+<div class="bg-white dark:bg-slate-800 p-4 rounded-xl border border-slate-100 dark:border-slate-700 shadow-sm">
+<p class="text-[10px] font-bold uppercase text-slate-400 mb-2">Fat</p>
+<div class="flex items-center gap-2">
+<div class="h-1 flex-1 bg-slate-100 dark:bg-slate-700 rounded-full overflow-hidden">
+<div class="h-full bg-emerald-400 w-[25%]"></div>
+</div>
+<span class="text-xs font-bold">28g</span>
+</div>
+</div>
+</div>
+</section>
+<!-- Search Bar Component -->
+<section class="px-6 py-6 sticky top-[72px] bg-white dark:bg-slate-900 z-10">
+<div class="flex items-center gap-3">
+<div class="relative flex-1">
+<span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-slate-400">search</span>
+<input class="w-full bg-slate-100 dark:bg-slate-800 border-none rounded-xl py-4 pl-12 pr-4 text-sm focus:ring-2 focus:ring-primary/50 transition-all placeholder:text-slate-400" placeholder="Search ingredients..." type="text"/>
+</div>
+<button class="bg-primary text-white p-4 rounded-xl shadow-lg shadow-primary/20 flex items-center justify-center">
+<span class="material-symbols-outlined">barcode_scanner</span>
+</button>
+</div>
+</section>
+<!-- Quick Actions -->
+<section class="px-6 py-2 overflow-x-auto no-scrollbar flex gap-4">
+<button class="flex flex-col items-center gap-2 shrink-0">
+<div class="size-14 rounded-full bg-primary/10 text-primary flex items-center justify-center">
+<span class="material-symbols-outlined">add</span>
+</div>
+<span class="text-[10px] font-bold uppercase tracking-wider">Manual</span>
+</button>
+<button class="flex flex-col items-center gap-2 shrink-0">
+<div class="size-14 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 flex items-center justify-center">
+<span class="material-symbols-outlined">history</span>
+</div>
+<span class="text-[10px] font-bold uppercase tracking-wider">Recent</span>
+</button>
+<button class="flex flex-col items-center gap-2 shrink-0">
+<div class="size-14 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 flex items-center justify-center">
+<span class="material-symbols-outlined">star</span>
+</div>
+<span class="text-[10px] font-bold uppercase tracking-wider">Frequent</span>
+</button>
+<button class="flex flex-col items-center gap-2 shrink-0">
+<div class="size-14 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 flex items-center justify-center">
+<span class="material-symbols-outlined">flatware</span>
+</div>
+<span class="text-[10px] font-bold uppercase tracking-wider">Recipes</span>
+</button>
+</section>
+<!-- Current Entry List -->
+<section class="px-6 py-8">
+<div class="flex justify-between items-center mb-6">
+<h3 class="text-sm font-bold uppercase tracking-widest text-slate-400">Current Session</h3>
+<span class="text-xs font-medium text-primary">3 items added</span>
+</div>
+<div class="space-y-4">
+<!-- Food Item Card -->
+<div class="flex items-center gap-4 p-4 rounded-2xl bg-white dark:bg-slate-800 border border-slate-100 dark:border-slate-700 group">
+<div class="size-16 rounded-xl overflow-hidden shrink-0">
+<img class="w-full h-full object-cover" data-alt="Close up of a fresh green salad" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDh5WdwlC50_G6sxHwm6Qjy4UXg5yCcPQkh1hxzJVVttqOV2VWv4WoHus1CVBPqgvwyRA6cC4OMf-EDUvL6r5ASIFkDXMZ4SAbKcbosN3uquYZrqeyBlxtMbSrA7Fty-ok5i5Gg0DMQG5BbRoZhFszWWSdBbfj9gnLdqYAzGo9lxCfRX-WRUwcvP85Mi4z6cc9fyGqmRLAVCpB4R0olf7KOWNXBvu_K6sKAWzORBCXXXz56bJ1WIa-P65XFLql2DiEoesIlc-1d7bev"/>
+</div>
+<div class="flex-1">
+<h4 class="font-bold text-slate-900 dark:text-white leading-tight">Greek Salad</h4>
+<p class="text-xs text-slate-400 mt-1">250g • 185 kcal</p>
+</div>
+<div class="text-right">
+<button class="text-slate-300 group-hover:text-red-500 transition-colors">
+<span class="material-symbols-outlined">close</span>
+</button>
+</div>
+</div>
+<div class="flex items-center gap-4 p-4 rounded-2xl bg-white dark:bg-slate-800 border border-slate-100 dark:border-slate-700 group">
+<div class="size-16 rounded-xl overflow-hidden shrink-0">
+<img class="w-full h-full object-cover" data-alt="A pieces of grilled chicken breast" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCpS7pPDsVUDWszRkrjaP_-X3V8sj3s1psNC5REMxFl2MmRdZaE9BMh2VpvaxR60veSkxwb3GL1Aqz8z5C8ppexeAbPVLnZ65BK96bpi3EWjNMkNcjfqvelAl9hcMV6Z2TIjFKT1zf44l8_w_SaZGet_JKUOodgNg73JNObcx9ommqsl_5qOVFY3Sxr0__pip1-nukPmoGaLBgnmOhqAf_s-Wu15h9GSmSL4V_1JSAsNORCndXJ9B2Kt8lN4IaUy9oZXtkG6Bv8J6Hg"/>
+</div>
+<div class="flex-1">
+<h4 class="font-bold text-slate-900 dark:text-white leading-tight">Grilled Chicken</h4>
+<p class="text-xs text-slate-400 mt-1">150g • 248 kcal</p>
+</div>
+<div class="text-right">
+<button class="text-slate-300 group-hover:text-red-500 transition-colors">
+<span class="material-symbols-outlined">close</span>
+</button>
+</div>
+</div>
+<div class="flex items-center gap-4 p-4 rounded-2xl bg-white dark:bg-slate-800 border border-slate-100 dark:border-slate-700 group">
+<div class="size-16 rounded-xl overflow-hidden shrink-0">
+<img class="w-full h-full object-cover" data-alt="Fresh avocado slices on a plate" src="https://lh3.googleusercontent.com/aida-public/AB6AXuARtaQa_3RHU4bEdM0F4n35S9_9G2VemicBloRs6L1pfBLM9hUJbAcU_Y2XkfifR77wYhtA4L1CYSXyVEGyxKkOysPND5TTE7BsZXKwTfzIiiS_LBQs6X1GvGkX5siK5V9_bxnt1aqkcVybPuIRR-VlLmRky54NMVsxXyNIoLGGmiVWUKJLv4RiNct7HJE3kZp9x87BFlMDlvfnI8_61EjDriH2RxGWP1Jao0lg17IWFOGfLBN6QsXSS0fplTorKwYtjOD7bRdcn__G"/>
+</div>
+<div class="flex-1">
+<h4 class="font-bold text-slate-900 dark:text-white leading-tight">Avocado Slices</h4>
+<p class="text-xs text-slate-400 mt-1">50g • 80 kcal</p>
+</div>
+<div class="text-right">
+<button class="text-slate-300 group-hover:text-red-500 transition-colors">
+<span class="material-symbols-outlined">close</span>
+</button>
+</div>
+</div>
+<!-- Manual Entry Trigger -->
+<button class="w-full border-2 border-dashed border-slate-200 dark:border-slate-700 rounded-2xl p-6 text-slate-400 hover:text-primary hover:border-primary transition-all flex flex-col items-center gap-2">
+<span class="material-symbols-outlined">post_add</span>
+<span class="text-xs font-bold uppercase tracking-widest">Manual Entry for Ingredients</span>
+</button>
+</div>
+</section>
+<!-- Detailed Micro Tracking -->
+<section class="px-6 py-6 mb-12">
+<h3 class="text-sm font-bold uppercase tracking-widest text-slate-400 mb-6">Micro Breakdown</h3>
+<div class="space-y-4">
+<div class="flex items-center justify-between">
+<span class="text-sm font-medium">Fiber</span>
+<div class="flex items-center gap-3 flex-1 px-8">
+<div class="h-1.5 w-full bg-slate-100 dark:bg-slate-800 rounded-full overflow-hidden">
+<div class="h-full bg-primary/60 w-[85%]"></div>
+</div>
+</div>
+<span class="text-xs font-bold w-10 text-right">12g</span>
+</div>
+<div class="flex items-center justify-between">
+<span class="text-sm font-medium">Sodium</span>
+<div class="flex items-center gap-3 flex-1 px-8">
+<div class="h-1.5 w-full bg-slate-100 dark:bg-slate-800 rounded-full overflow-hidden">
+<div class="h-full bg-orange-400/60 w-[45%]"></div>
+</div>
+</div>
+<span class="text-xs font-bold w-10 text-right">850mg</span>
+</div>
+<div class="flex items-center justify-between">
+<span class="text-sm font-medium">Sugar</span>
+<div class="flex items-center gap-3 flex-1 px-8">
+<div class="h-1.5 w-full bg-slate-100 dark:bg-slate-800 rounded-full overflow-hidden">
+<div class="h-full bg-pink-400/60 w-[15%]"></div>
+</div>
+</div>
+<span class="text-xs font-bold w-10 text-right">4g</span>
+</div>
+</div>
+</section>
+</main>
+<!-- Bottom Action Bar -->
+<div class="fixed bottom-0 left-1/2 -translate-x-1/2 w-full max-w-md bg-white dark:bg-slate-900 border-t border-slate-100 dark:border-slate-800 px-6 py-6 flex gap-4 z-30">
+<button class="flex-1 bg-primary text-white font-bold py-4 rounded-2xl shadow-xl shadow-primary/30 active:scale-[0.98] transition-all">
+            Log Meal
+        </button>
+</div>
+<!-- Navigation Bar -->
+<nav class="fixed bottom-24 left-1/2 -translate-x-1/2 w-4/5 bg-slate-900 dark:bg-slate-100 text-white dark:text-slate-900 rounded-full py-3 px-6 flex justify-between items-center shadow-2xl z-40">
+<a class="p-2 opacity-50 hover:opacity-100 transition-opacity" href="#">
+<span class="material-symbols-outlined">menu_book</span>
+</a>
+<a class="p-2 text-primary opacity-100" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1">add_circle</span>
+</a>
+<a class="p-2 opacity-50 hover:opacity-100 transition-opacity" href="#">
+<span class="material-symbols-outlined">insights</span>
+</a>
+<a class="p-2 opacity-50 hover:opacity-100 transition-opacity" href="#">
+<span class="material-symbols-outlined">person</span>
+</a>
+</nav>
+</div>
+</body></html>

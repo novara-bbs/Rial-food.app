@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Recipe Vault - Holistic Culinary Hub</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,200..800;1,6..72,200..800&amp;family=Satoshi:wght@400;500;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#4A5D23",
+                        "background-light": "#F9F8F6",
+                        "background-dark": "#1c2210",
+                        "surface": "#FFFFFF",
+                        "text-main": "#2B2927",
+                        "text-muted": "#A39F98",
+                        "accent": "#D47A43",
+                        "border-subtle": "#E5E3DF",
+                    },
+                    fontFamily: {
+                        "display": ["Newsreader", "serif"],
+                        "sans": ["Satoshi", "sans-serif"],
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0px",
+                        "sm": "0px",
+                        "md": "4px",
+                        "lg": "8px",
+                        "xl": "12px",
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
+<style>
+        body {
+            font-family: 'Satoshi', sans-serif;
+            background-color: var(--color-background-light);
+            color: var(--color-text-main);
+        }
+        .font-display {
+            font-family: 'Newsreader', serif;
+        }
+        
+        /* Custom Masonry Layout using CSS Columns */
+        .masonry-grid {
+            column-count: 1;
+            column-gap: 24px;
+        }
+        @media (min-width: 640px) {
+            .masonry-grid { column-count: 2; }
+        }
+        @media (min-width: 1024px) {
+            .masonry-grid { column-count: 3; }
+        }
+        @media (min-width: 1280px) {
+            .masonry-grid { column-count: 4; }
+        }
+        .masonry-item {
+            break-inside: avoid;
+            margin-bottom: 24px;
+        }
+
+        /* Recipe Card Hover Effects */
+        .recipe-card .recipe-image {
+            filter: grayscale(100%);
+            transition: all 0.3s ease;
+        }
+        .recipe-card:hover .recipe-image {
+            filter: grayscale(0%);
+            transform: scale(1.02);
+        }
+        
+        /* Hide scrollbar for filter bar */
+        .scrollbar-hide::-webkit-scrollbar {
+            display: none;
+        }
+        .scrollbar-hide {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark text-text-main dark:text-slate-100 flex min-h-screen">
+<!-- Sidebar Navigation (Reused & Adapted) -->
+<nav class="hidden md:flex flex-col w-64 border-r border-border-subtle bg-background-light dark:bg-background-dark fixed h-full z-10">
+<div class="flex flex-col h-full justify-between p-6">
+<div class="flex flex-col gap-8">
+<!-- User Profile -->
+<div class="flex items-center gap-4">
+<div class="bg-center bg-no-repeat bg-cover rounded-full h-12 w-12 border border-border-subtle" data-alt="User profile portrait" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuBb_NeznG6vObA3u1rBwaPuihLUoCm30on3AnmuJiIkqgA7dmigPH_v2axYtp-ogoKoeNWVpmu6hEo7byWTcUNSZt4RgIcxucNHFeBnu4akd4TiEss5peBjAsfLRqZEOfMWdFH55zKFVDEkZDIaNZaoTD9FBDZXCpXvZuaTlKLDSGodSd7BqXgPyhETFoTjjstKnvZREx2tXZymmxfEkNIHswf7VC8YV48FK3x9mn40TKNm4SITW1DZJ_SP-021f4aD2mifMERwGZU");'></div>
+<div class="flex flex-col">
+<h1 class="text-text-main dark:text-slate-100 text-lg font-display italic tracking-wide">Elena</h1>
+<p class="text-accent text-xs font-bold uppercase tracking-wider">Lvl 12 • Sous Chef</p>
+</div>
+</div>
+<!-- Nav Links -->
+<div class="flex flex-col gap-2">
+<a class="flex items-center gap-4 px-4 py-3 rounded-md text-text-muted hover:text-text-main hover:bg-border-subtle/30 transition-colors" href="#">
+<span class="material-symbols-outlined">home</span>
+<span class="text-sm font-medium">The Daily Hub</span>
+</a>
+<a class="flex items-center gap-4 px-4 py-3 rounded-md text-text-muted hover:text-text-main hover:bg-border-subtle/30 transition-colors" href="#">
+<span class="material-symbols-outlined">monitor_heart</span>
+<span class="text-sm font-medium">Vitals &amp; Diary</span>
+</a>
+<a class="flex items-center gap-4 px-4 py-3 rounded-md bg-primary/10 text-primary border border-primary/20 transition-colors" href="#">
+<span class="material-symbols-outlined">auto_stories</span>
+<span class="text-sm font-bold">Recipe Vault</span>
+</a>
+<a class="flex items-center gap-4 px-4 py-3 rounded-md text-text-muted hover:text-text-main hover:bg-border-subtle/30 transition-colors" href="#">
+<span class="material-symbols-outlined">calendar_month</span>
+<span class="text-sm font-medium">Weekly Planner</span>
+</a>
+<a class="flex items-center gap-4 px-4 py-3 rounded-md text-text-muted hover:text-text-main hover:bg-border-subtle/30 transition-colors" href="#">
+<span class="material-symbols-outlined">group</span>
+<span class="text-sm font-medium">Community Feed</span>
+</a>
+</div>
+</div>
+<!-- Bottom action -->
+<button class="w-full py-3 border-2 border-text-main text-text-main font-bold text-sm tracking-wide hover:bg-text-main hover:text-surface transition-colors rounded-md">
+                LOG MEAL
+            </button>
+</div>
+</nav>
+<!-- Main Content Area -->
+<main class="flex-1 md:ml-64 flex flex-col min-h-screen">
+<!-- Header Section -->
+<header class="sticky top-0 z-20 bg-background-light/95 dark:bg-background-dark/95 backdrop-blur-md border-b border-border-subtle pt-12 pb-6 px-8 lg:px-12">
+<div class="max-w-7xl mx-auto flex flex-col md:flex-row md:items-end justify-between gap-6">
+<div>
+<h2 class="font-display text-4xl md:text-5xl text-text-main dark:text-slate-100 tracking-tight">Recipe Vault</h2>
+<p class="text-text-muted mt-2 text-sm max-w-md">Curate your culinary inspiration. Paste links or browse your collection.</p>
+</div>
+<!-- Add Link Input -->
+<div class="w-full md:w-[400px] flex group relative">
+<span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-text-muted">link</span>
+<input class="w-full bg-surface dark:bg-slate-800 border-2 border-text-main/10 dark:border-slate-700 pl-12 pr-24 py-3 text-sm focus:outline-none focus:border-primary focus:ring-0 rounded-md transition-colors placeholder:text-text-muted" placeholder="Paste IG or YouTube link..." type="text"/>
+<button class="absolute right-1 top-1 bottom-1 bg-primary text-surface px-4 text-xs font-bold uppercase tracking-wider rounded-sm hover:bg-primary/90 transition-colors">
+                        Extract
+                    </button>
+</div>
+</div>
+<!-- Filter Bar -->
+<div class="max-w-7xl mx-auto mt-8 flex items-center gap-3 overflow-x-auto scrollbar-hide pb-2">
+<button class="whitespace-nowrap px-5 py-2 rounded-full border border-primary bg-primary text-surface text-xs font-bold tracking-wider uppercase">All Recipes</button>
+<button class="whitespace-nowrap px-5 py-2 rounded-full border border-border-subtle bg-surface text-text-muted hover:text-text-main hover:border-text-main/30 text-xs font-medium tracking-wider uppercase transition-colors">High Protein</button>
+<button class="whitespace-nowrap px-5 py-2 rounded-full border border-border-subtle bg-surface text-text-muted hover:text-text-main hover:border-text-main/30 text-xs font-medium tracking-wider uppercase transition-colors">Batch Cook</button>
+<button class="whitespace-nowrap px-5 py-2 rounded-full border border-border-subtle bg-surface text-text-muted hover:text-text-main hover:border-text-main/30 text-xs font-medium tracking-wider uppercase transition-colors">IG Saves</button>
+<button class="whitespace-nowrap px-5 py-2 rounded-full border border-border-subtle bg-surface text-text-muted hover:text-text-main hover:border-text-main/30 text-xs font-medium tracking-wider uppercase transition-colors">Under 30 Min</button>
+<button class="whitespace-nowrap px-5 py-2 rounded-full border border-border-subtle bg-surface text-text-muted hover:text-text-main hover:border-text-main/30 text-xs font-medium tracking-wider uppercase transition-colors">Desserts</button>
+<button class="whitespace-nowrap px-5 py-2 rounded-full border border-border-subtle bg-surface text-text-muted hover:text-text-main hover:border-text-main/30 text-xs font-medium tracking-wider uppercase transition-colors">Vegan</button>
+</div>
+</header>
+<!-- Masonry Grid Content -->
+<div class="flex-1 p-8 lg:px-12 max-w-7xl mx-auto w-full">
+<div class="masonry-grid">
+<!-- Recipe Card 1 -->
+<div class="masonry-item recipe-card group cursor-pointer relative bg-surface border border-border-subtle rounded-md overflow-hidden">
+<div class="relative aspect-[4/5] overflow-hidden bg-border-subtle">
+<div class="absolute top-3 left-3 z-10 bg-surface/90 backdrop-blur-sm p-1.5 rounded-sm flex items-center justify-center border border-border-subtle">
+<span class="material-symbols-outlined text-sm text-text-main">photo_camera</span> <!-- Represents IG/Visual source -->
+</div>
+<img alt="Lemon Herb Roasted Chicken" class="w-full h-full object-cover recipe-image" data-alt="Roasted chicken with herbs and lemon" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAdajtLifGNptB59cSkwBCD647oIUrCF-oz-c2ryOPCpOsourNsOwGu8R4kxR38NL6fcpsjDb2OMMlXMjB0aCtO3etVaC8Zz7Qlhbd1NmZti8QoloUy9IDyi1g_rawoGnah6tP3h8OTcshuahaL2oyFK6hiDc8AX9rcdny5fp9btsw_NKRKg5zLXL9pDboPM-r5P8a3SgnCFhtyICtG1fgrkvbMp_PfdjKDYAtjBBFM9XzAg2daB41kgBC9rAPFIhgoze0YWlYK_TA"/>
+</div>
+<div class="p-5 border-t border-border-subtle">
+<div class="flex gap-2 flex-wrap mb-3">
+<span class="px-2 py-1 border border-border-subtle rounded-sm text-[10px] font-bold uppercase tracking-widest text-text-muted">High Protein</span>
+<span class="px-2 py-1 border border-border-subtle rounded-sm text-[10px] font-bold uppercase tracking-widest text-text-muted">Dinner</span>
+</div>
+<h3 class="font-display text-xl text-text-main leading-tight mb-2 group-hover:text-primary transition-colors">Lemon Herb Roasted Chicken</h3>
+<p class="text-text-muted text-xs">Added 2 days ago • @chef_anna</p>
+</div>
+</div>
+<!-- Recipe Card 2 -->
+<div class="masonry-item recipe-card group cursor-pointer relative bg-surface border border-border-subtle rounded-md overflow-hidden">
+<div class="relative aspect-[4/5] overflow-hidden bg-border-subtle">
+<div class="absolute top-3 left-3 z-10 bg-surface/90 backdrop-blur-sm p-1.5 rounded-sm flex items-center justify-center border border-border-subtle">
+<span class="material-symbols-outlined text-sm text-text-main">play_circle</span> <!-- Represents YT/Video source -->
+</div>
+<div class="absolute top-3 right-3 z-10 bg-accent text-surface px-2 py-1 rounded-sm text-[10px] font-bold uppercase tracking-widest flex items-center gap-1">
+<span class="material-symbols-outlined text-[12px]">local_fire_department</span>
+                            Popular
+                        </div>
+<img alt="Overnight Oats with Berries" class="w-full h-full object-cover recipe-image" data-alt="Jar of overnight oats with fresh berries" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDFwhznTKV0ukN_iprqZQIQa7FUuEfSLZUo9l805xJ-lj4FcOrgTWDDFpLThDrSabDit53zyOR4L1iRIaCRnm-T-JMm2A2e0CsszLdN0G3oIL60ye7MIkaemagBeAJTiuB3nKOYE1moXoPnTYXeJiU0c-F1JnpC6Vke17ppI-2a2KgAsOiZhYUJQXcK7IYoK2Zq59Fw1vcnfqJt859HaoxxErOjp7epS14xUy1Z4NkRD2dntqtacQs6Dk5WxjbLEJiedAuHwDsMkAo"/>
+</div>
+<div class="p-5 border-t border-border-subtle">
+<div class="flex gap-2 flex-wrap mb-3">
+<span class="px-2 py-1 border border-border-subtle rounded-sm text-[10px] font-bold uppercase tracking-widest text-text-muted">Meal Prep</span>
+<span class="px-2 py-1 border border-border-subtle rounded-sm text-[10px] font-bold uppercase tracking-widest text-text-muted">Breakfast</span>
+</div>
+<h3 class="font-display text-xl text-text-main leading-tight mb-2 group-hover:text-primary transition-colors">Overnight Oats with Berries</h3>
+<p class="text-text-muted text-xs">Added 1 week ago • FitFoodie</p>
+</div>
+</div>
+<!-- Recipe Card 3 -->
+<div class="masonry-item recipe-card group cursor-pointer relative bg-surface border border-border-subtle rounded-md overflow-hidden">
+<div class="relative aspect-[4/5] overflow-hidden bg-border-subtle">
+<div class="absolute top-3 left-3 z-10 bg-surface/90 backdrop-blur-sm p-1.5 rounded-sm flex items-center justify-center border border-border-subtle">
+<span class="material-symbols-outlined text-sm text-text-main">edit_document</span> <!-- Original Recipe -->
+</div>
+<img alt="Avocado Toast Redefined" class="w-full h-full object-cover recipe-image" data-alt="Avocado toast on rustic bread with seeds" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCt6uPPW7G-5e4FKqz1qhCN5WF6EMxXc2TzeOkJEbnw4YpDNiZPozee-Q8V88YR3c1xhKlF1ajNS3_euZewxLbXVijpOwcNzlYUsPuUFImdslyenzDgo20_RdRuiOggh4nEVAKYnIZpMg_0So-R9b6WLw7czgboN7xYJZEnmqqP-t0EjzL2ta-VaiqLlD2vdxS-fN1SElrhWB5xIGQPx0DUPc3vyDk544hIBZSbfSdIWX_BnWNZzw64-ihwr933HeTLtlbkR_51BFE"/>
+</div>
+<div class="p-5 border-t border-border-subtle">
+<div class="flex gap-2 flex-wrap mb-3">
+<span class="px-2 py-1 border border-border-subtle rounded-sm text-[10px] font-bold uppercase tracking-widest text-text-muted">Quick &amp; Easy</span>
+</div>
+<h3 class="font-display text-xl text-text-main leading-tight mb-2 group-hover:text-primary transition-colors">Avocado Toast Redefined</h3>
+<p class="text-text-muted text-xs">Original Recipe • 15 mins</p>
+</div>
+</div>
+<!-- Recipe Card 4 -->
+<div class="masonry-item recipe-card group cursor-pointer relative bg-surface border border-border-subtle rounded-md overflow-hidden">
+<div class="relative aspect-[4/5] overflow-hidden bg-border-subtle">
+<div class="absolute top-3 left-3 z-10 bg-surface/90 backdrop-blur-sm p-1.5 rounded-sm flex items-center justify-center border border-border-subtle">
+<span class="material-symbols-outlined text-sm text-text-main">photo_camera</span>
+</div>
+<img alt="Creamy Tuscan Pasta" class="w-full h-full object-cover recipe-image" data-alt="Bowl of creamy pasta with spinach" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDp6A_VlX7r-xT9xNauunf0MCIAJ-UPxWxnGEUoAjGWxjJnh4mMfMDvRwhP6cibmthZVe2Cf_9_eQ3zCx5ax8Fz6wKfoK1OMdW5KJbaESbR0Wk3yPNjz5ISMhlh3F9uxDG9j6s41jJ5JxOfFHGULq8ZJq2pGETk86i4kWdRZOTS7XJ6QDMFNx7r5RnVf-QuZbk5DiPnoV0frP5zGTRePYMpxdG_CWY2JIAtU9kqK2u6Zo4dnjMfhgzV6qh5w_YDotdPGezPwJf4Ky4"/>
+</div>
+<div class="p-5 border-t border-border-subtle">
+<div class="flex gap-2 flex-wrap mb-3">
+<span class="px-2 py-1 border border-border-subtle rounded-sm text-[10px] font-bold uppercase tracking-widest text-text-muted">Batch Cook</span>
+<span class="px-2 py-1 border border-border-subtle rounded-sm text-[10px] font-bold uppercase tracking-widest text-text-muted">Comfort</span>
+</div>
+<h3 class="font-display text-xl text-text-main leading-tight mb-2 group-hover:text-primary transition-colors">Creamy Tuscan Pasta</h3>
+<p class="text-text-muted text-xs">Added 3 days ago • @pastalover</p>
+</div>
+</div>
+<!-- Recipe Card 5 (Taller aspect ratio representation in masonry) -->
+<div class="masonry-item recipe-card group cursor-pointer relative bg-surface border border-border-subtle rounded-md overflow-hidden">
+<div class="relative aspect-[3/4] overflow-hidden bg-border-subtle">
+<div class="absolute top-3 left-3 z-10 bg-surface/90 backdrop-blur-sm p-1.5 rounded-sm flex items-center justify-center border border-border-subtle">
+<span class="material-symbols-outlined text-sm text-text-main">play_circle</span>
+</div>
+<img alt="Green Goddess Salad" class="w-full h-full object-cover recipe-image" data-alt="Vibrant green salad in a large bowl" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCyZGdP7v9RgOKHlKXPo2jxfxIieULqFRbhsba0pEsVjGKVXpJ7ylNsW3nAJM3pPBmvwPvY7CdpeKNjPHvQRWZYh8AsbVgnUtDkGcaPqDx4UrgEyeIeQKZlyERBobtnBGGCBSbztNZk9Qo4-FoUoC-PjsTPlS7fgrJ9Yelp88xZpFCxnTo_a1bbu8eS9ngpgNye07cUq212dh8nPQ4on47B2Bj3WdQkNgoZVRr3Smuvx_QlfdFzTxka2BSztNTey08KQGkEQwUZN2A"/>
+</div>
+<div class="p-5 border-t border-border-subtle">
+<div class="flex gap-2 flex-wrap mb-3">
+<span class="px-2 py-1 border border-border-subtle rounded-sm text-[10px] font-bold uppercase tracking-widest text-text-muted">Vegan</span>
+<span class="px-2 py-1 border border-border-subtle rounded-sm text-[10px] font-bold uppercase tracking-widest text-text-muted">Sides</span>
+</div>
+<h3 class="font-display text-xl text-text-main leading-tight mb-2 group-hover:text-primary transition-colors">Green Goddess Salad</h3>
+<p class="text-text-muted text-xs">Added 2 weeks ago • HealthyEats</p>
+</div>
+</div>
+</div>
+<!-- Empty Space at bottom for scrolling comfort -->
+<div class="h-24"></div>
+</div>
+</main>
+</body></html>

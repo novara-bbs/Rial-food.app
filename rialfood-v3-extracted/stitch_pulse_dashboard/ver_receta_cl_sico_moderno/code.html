@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Recipe View - Modern Classic</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#ec5b13",
+                        "background-light": "#f8f6f6",
+                        "background-dark": "#221610",
+                    },
+                    fontFamily: {
+                        "display": ["Public Sans", "sans-serif"]
+                    },
+                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark font-display text-slate-900 dark:text-slate-100 min-h-screen">
+<!-- Top Navigation Bar -->
+<nav class="sticky top-0 z-50 bg-background-light/80 dark:bg-background-dark/80 backdrop-blur-md border-b border-primary/10 px-4 py-3 flex items-center justify-between">
+<button class="p-2 hover:bg-primary/10 rounded-full transition-colors">
+<span class="material-symbols-outlined text-primary">arrow_back</span>
+</button>
+<h1 class="text-lg font-bold tracking-tight">Recipe Details</h1>
+<div class="flex gap-2">
+<button class="p-2 hover:bg-primary/10 rounded-full transition-colors">
+<span class="material-symbols-outlined text-primary">share</span>
+</button>
+<button class="p-2 hover:bg-primary/10 rounded-full transition-colors">
+<span class="material-symbols-outlined text-primary">bookmark</span>
+</button>
+</div>
+</nav>
+<main class="max-w-2xl mx-auto pb-24">
+<!-- Hero Section -->
+<div class="relative w-full aspect-[4/3] overflow-hidden">
+<div class="absolute inset-0 bg-gradient-to-t from-background-light dark:from-background-dark via-transparent to-transparent z-10"></div>
+<img class="w-full h-full object-cover" data-alt="Glistening creamy Tuscan chicken with sun-dried tomatoes and spinach" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCTY8nSDtudIM9El3t80MV4_iZYmQ8K5J4zwivLpoZt9pvlAbhkvlUCeB63iyCTtrLoO3qR4NLsTKHgtICsZyyQmf9cjcbSQk5TjDbxYdQQKTjbk4W2_M4-YwePzUCno9vdAxlLNjzt2ABa4wu2Jd1qH7uenESR6GXjlMsbayGgvXDe53NMwy1tfTL2FnzTj3VIyaOe1IbZVMqRpLfV10-wXYfVHzK8SGzwu9C-enLbRrSZHNquUrSbUfWUkfVDBrJGnnvatYwyf4gs"/>
+</div>
+<!-- Title & Author Section -->
+<div class="px-4 -mt-16 relative z-20">
+<div class="bg-background-light dark:bg-background-dark p-6 rounded-xl shadow-xl border border-primary/5">
+<div class="flex justify-between items-start mb-2">
+<h2 class="text-3xl font-bold leading-tight">Creamy Tuscan Chicken</h2>
+<div class="bg-primary text-white text-xs font-bold px-2 py-1 rounded">PRO</div>
+</div>
+<p class="text-slate-600 dark:text-slate-400 mb-4">A modern classic for weeknight dinners featuring a rich garlic parmesan sauce.</p>
+<div class="flex items-center gap-3">
+<div class="size-10 rounded-full bg-primary/20 flex items-center justify-center overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="Portrait of the head chef master" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDxlcGHw1QjgTP_9K1ca814xvS56YbASkgrq6YOtH5ylvBIa5A5y-c2eOiy00ItG8NsxKIZKAUl4Ol8Vqt_-VEd-0KiJvSbzGJ-oUlcznichZ4sOuUQMiiuovBs92VvnZQpqNkpE86ejwS1hOJLj-nNcf0Ek6ERerw_HO2vDB8KID1YH1NWxnQPUXDfygBIJ-NRZoaY_q3dmKeZHNTu9NGHugTtSgwQzMg9uofjDD6LTW2KAOtMdNmsWuhd296vRAoEitA7jD7J_hmZ"/>
+</div>
+<div>
+<p class="text-sm font-semibold">By Culinary Master</p>
+<p class="text-xs text-primary">Verified Chef</p>
+</div>
+</div>
+</div>
+</div>
+<!-- Key Stats Grid -->
+<div class="px-4 mt-6">
+<div class="grid grid-cols-2 md:grid-cols-4 gap-3">
+<div class="bg-primary/10 border border-primary/20 rounded-xl p-4 flex flex-col items-center text-center">
+<span class="text-xs font-bold text-primary uppercase tracking-wider mb-1">Real Match</span>
+<span class="text-2xl font-bold text-primary">98%</span>
+</div>
+<div class="bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl p-4 flex flex-col items-center text-center">
+<span class="text-xs font-medium text-slate-500 uppercase tracking-wider mb-1">Calories</span>
+<span class="text-2xl font-bold">450 <span class="text-sm font-normal">kcal</span></span>
+</div>
+<div class="bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl p-4 flex flex-col items-center text-center">
+<span class="text-xs font-medium text-slate-500 uppercase tracking-wider mb-1">Protein</span>
+<span class="text-2xl font-bold">32g</span>
+</div>
+<div class="bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl p-4 flex flex-col items-center text-center">
+<span class="text-xs font-medium text-slate-500 uppercase tracking-wider mb-1">Fiber</span>
+<span class="text-2xl font-bold">6g</span>
+</div>
+</div>
+</div>
+<!-- Ingredients with Scaling Toggle -->
+<section class="mt-8 px-4">
+<div class="flex items-center justify-between mb-4">
+<h3 class="text-xl font-bold">Ingredients</h3>
+<div class="flex bg-slate-100 dark:bg-slate-800 p-1 rounded-full border border-slate-200 dark:border-slate-700">
+<button class="px-3 py-1 text-xs font-bold bg-primary text-white rounded-full">Family (4)</button>
+<button class="px-3 py-1 text-xs font-medium text-slate-500">Solo (1)</button>
+</div>
+</div>
+<div class="space-y-3">
+<label class="flex items-center gap-3 p-3 bg-white dark:bg-slate-900 rounded-lg border border-slate-200 dark:border-slate-800">
+<input class="w-5 h-5 rounded border-slate-300 text-primary focus:ring-primary" type="checkbox"/>
+<span class="flex-1">2 lbs Chicken Breast, sliced</span>
+<span class="text-slate-400 text-sm">Fresh</span>
+</label>
+<label class="flex items-center gap-3 p-3 bg-white dark:bg-slate-900 rounded-lg border border-slate-200 dark:border-slate-800">
+<input class="w-5 h-5 rounded border-slate-300 text-primary focus:ring-primary" type="checkbox"/>
+<span class="flex-1">1 cup Heavy Cream</span>
+<span class="text-slate-400 text-sm">Dairy</span>
+</label>
+<label class="flex items-center gap-3 p-3 bg-white dark:bg-slate-900 rounded-lg border border-slate-200 dark:border-slate-800">
+<input class="w-5 h-5 rounded border-slate-300 text-primary focus:ring-primary" type="checkbox"/>
+<span class="flex-1">1/2 cup Sun-dried Tomatoes</span>
+<span class="text-slate-400 text-sm">Pantry</span>
+</label>
+<label class="flex items-center gap-3 p-3 bg-white dark:bg-slate-900 rounded-lg border border-slate-200 dark:border-slate-800">
+<input class="w-5 h-5 rounded border-slate-300 text-primary focus:ring-primary" type="checkbox"/>
+<span class="flex-1">2 cups Baby Spinach</span>
+<span class="text-slate-400 text-sm">Produce</span>
+</label>
+</div>
+</section>
+<!-- Instructions -->
+<section class="mt-8 px-4">
+<h3 class="text-xl font-bold mb-4">Instructions</h3>
+<div class="space-y-6">
+<div class="flex gap-4">
+<div class="flex-none size-8 rounded-full bg-primary text-white flex items-center justify-center font-bold text-sm">1</div>
+<p class="pt-1 text-slate-700 dark:text-slate-300">Season chicken with salt and pepper. In a large skillet, heat oil over medium-high heat and cook chicken until golden brown, about 5-7 minutes per side.</p>
+</div>
+<div class="flex gap-4">
+<div class="flex-none size-8 rounded-full bg-primary text-white flex items-center justify-center font-bold text-sm">2</div>
+<p class="pt-1 text-slate-700 dark:text-slate-300">Remove chicken and set aside. In the same skillet, add garlic and sun-dried tomatoes. Sauté for 1-2 minutes until fragrant.</p>
+</div>
+<div class="flex gap-4">
+<div class="flex-none size-8 rounded-full bg-primary text-white flex items-center justify-center font-bold text-sm">3</div>
+<p class="pt-1 text-slate-700 dark:text-slate-300">Stir in heavy cream and parmesan cheese. Bring to a light simmer, then add spinach until wilted. Return chicken to the pan to coat.</p>
+</div>
+</div>
+</section>
+<!-- Leftover Logic -->
+<section class="mt-10 px-4">
+<div class="bg-primary/5 border-2 border-dashed border-primary/30 rounded-xl p-6">
+<div class="flex items-center gap-2 mb-3">
+<span class="material-symbols-outlined text-primary">eco</span>
+<h3 class="text-lg font-bold text-primary">Leftover Logic</h3>
+</div>
+<p class="text-sm text-slate-600 dark:text-slate-400 mb-4 leading-relaxed">Don't let the extra sauce go to waste! Here are three ways to transform your leftovers:</p>
+<ul class="space-y-3">
+<li class="flex items-start gap-3">
+<span class="material-symbols-outlined text-primary size-5 text-lg">restaurant</span>
+<div>
+<span class="font-bold text-sm block">Tuscan Pasta Bake</span>
+<span class="text-xs text-slate-500">Toss leftovers with cooked penne, top with mozzarella, and bake for 15 mins.</span>
+</div>
+</li>
+<li class="flex items-start gap-3">
+<span class="material-symbols-outlined text-primary size-5 text-lg">lunch_dining</span>
+<div>
+<span class="font-bold text-sm block">Creamy Chicken Panini</span>
+<span class="text-xs text-slate-500">Shred the cold chicken and use the sauce as a spread for a gourmet toasted sandwich.</span>
+</div>
+</li>
+</ul>
+</div>
+</section>
+</main>
+<!-- Bottom Navigation Bar -->
+<div class="fixed bottom-0 left-0 right-0 z-50">
+<div class="flex gap-2 border-t border-slate-200 dark:border-slate-800 bg-background-light dark:bg-background-dark px-4 pb-6 pt-3 shadow-2xl">
+<a class="flex flex-1 flex-col items-center justify-center gap-1 text-slate-400" href="#">
+<span class="material-symbols-outlined">home</span>
+<p class="text-[10px] font-medium leading-normal tracking-wide">Home</p>
+</a>
+<a class="flex flex-1 flex-col items-center justify-center gap-1 text-primary" href="#">
+<span class="material-symbols-outlined fill-1">restaurant_menu</span>
+<p class="text-[10px] font-medium leading-normal tracking-wide">Cook</p>
+</a>
+<a class="flex flex-1 flex-col items-center justify-center gap-1 text-slate-400" href="#">
+<span class="material-symbols-outlined">calendar_today</span>
+<p class="text-[10px] font-medium leading-normal tracking-wide">Plan</p>
+</a>
+<a class="flex flex-1 flex-col items-center justify-center gap-1 text-slate-400" href="#">
+<span class="material-symbols-outlined">shopping_basket</span>
+<p class="text-[10px] font-medium leading-normal tracking-wide">Groceries</p>
+</a>
+</div>
+</div>
+</body></html>

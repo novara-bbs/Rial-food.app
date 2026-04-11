@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>RIAL - Community &amp; Discovery</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#607AFB",
+                        "background-light": "#f5f6f8",
+                        "background-dark": "#0f1323",
+                    },
+                    fontFamily: {
+                        "display": ["Space Grotesk", "sans-serif"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.5rem",
+                        "lg": "1rem",
+                        "xl": "1.5rem",
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
+<style>
+        body {
+            font-family: 'Space Grotesk', sans-serif;
+        }
+        .editorial-frame {
+            position: relative;
+            overflow: hidden;
+        }
+        .editorial-frame::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(180deg, rgba(15, 19, 35, 0) 60%, rgba(15, 19, 35, 0.8) 100%);
+            pointer-events: none;
+        }
+        .technical-overlay {
+            background: rgba(96, 122, 251, 0.1);
+            backdrop-filter: blur(4px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 antialiased">
+<div class="relative flex min-h-screen w-full flex-col max-w-md mx-auto bg-white dark:bg-slate-950 shadow-2xl overflow-x-hidden pb-20">
+<!-- Top Navigation -->
+<div class="sticky top-0 z-50 flex items-center bg-white/80 dark:bg-slate-950/80 backdrop-blur-md p-4 justify-between border-b border-slate-100 dark:border-slate-800">
+<div class="text-primary flex size-10 shrink-0 items-center justify-center">
+<span class="material-symbols-outlined text-2xl">search</span>
+</div>
+<div class="flex flex-col items-center">
+<h2 class="text-slate-900 dark:text-white text-lg font-bold leading-tight tracking-tight">RIAL</h2>
+<span class="text-[10px] font-bold uppercase tracking-[0.2em] text-primary">Discovery</span>
+</div>
+<div class="flex size-10 items-center justify-end relative">
+<span class="material-symbols-outlined text-2xl text-slate-900 dark:text-white">notifications</span>
+<span class="absolute top-2 right-2 size-2 bg-primary rounded-full border-2 border-white dark:border-slate-950"></span>
+</div>
+</div>
+<!-- Feed Tabs -->
+<div class="bg-white dark:bg-slate-950 sticky top-[72px] z-40">
+<div class="flex border-b border-slate-100 dark:border-slate-800 px-6 gap-8">
+<a class="flex flex-col items-center justify-center border-b-2 border-primary text-slate-900 dark:text-white pb-3 pt-4" href="#">
+<p class="text-sm font-bold tracking-tight">For You</p>
+</a>
+<a class="flex flex-col items-center justify-center border-b-2 border-transparent text-slate-400 dark:text-slate-500 pb-3 pt-4 hover:text-primary transition-colors" href="#">
+<p class="text-sm font-bold tracking-tight">Social Pulse</p>
+</a>
+<a class="flex flex-col items-center justify-center border-b-2 border-transparent text-slate-400 dark:text-slate-500 pb-3 pt-4 hover:text-primary transition-colors" href="#">
+<p class="text-sm font-bold tracking-tight">Pro Series</p>
+</a>
+</div>
+</div>
+<!-- Stories / Creator Pulse -->
+<div class="flex w-full overflow-x-auto no-scrollbar px-4 py-6 gap-4">
+<div class="flex flex-col items-center gap-2 shrink-0">
+<div class="size-16 rounded-full p-0.5 bg-gradient-to-tr from-primary to-purple-500">
+<div class="w-full h-full rounded-full border-2 border-white dark:border-slate-950 bg-center bg-cover" data-alt="Professional chef profile headshot portrait" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuDpbq1TWXUCseijBHrrpqvMeq0FqGn0a7VneebH0js17lbsvF8qOopTCDl5MeJYFCjcafljRMGLhHC6tzrnJWooNKURb4dm9NNSPMklDPdIzCVs4VavyPtiDYb0U8Qv3bgRIHeOs_F66KKHzZ3aM5KDGpVurXqbQ3V7_tBJ02AYDjdd7DaVMFUsGHomziJ6t5HogC2lDJ_hu3SKtfagY9jnzzEJAwqfLD-iTH1Bf6U8QHLbV8N5Rq0g6B3usIb1FjNraRaSluQBRb1P");'></div>
+</div>
+<p class="text-slate-900 dark:text-slate-100 text-[11px] font-medium">Chef Leo</p>
+</div>
+<div class="flex flex-col items-center gap-2 shrink-0">
+<div class="size-16 rounded-full border-2 border-slate-200 dark:border-slate-800 p-0.5">
+<div class="w-full h-full rounded-full bg-center bg-cover grayscale" data-alt="Community member profile photo minimalist" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuA6_N3al5RnVlPUxJShhmngXI-rFoiHv4KacQWCd_tiWJQIycttGryhpngQHR7xTwZvFasyY1lzaw0jqQhb48CkRZ_PjukVFr_2VALpWFR51dnjYtm7YH5oWtLGunAeyz8rmq57-3hnVT1906zDdoEFFtYTiO7cdNQeeST66mDb5rKVYtVGWZ9euLYM4XFIo1b6aEIwkvOfQVMOzKczy1VgCH4hy2xO9cuzQNU1KJ0zn8RROirjUSiWSNXCzA1OcZnSEvhbb-eBWKaa");'></div>
+</div>
+<p class="text-slate-500 dark:text-slate-400 text-[11px] font-medium">@amy_k</p>
+</div>
+<div class="flex flex-col items-center gap-2 shrink-0">
+<div class="size-16 rounded-full p-0.5 bg-gradient-to-tr from-primary to-purple-500">
+<div class="w-full h-full rounded-full border-2 border-white dark:border-slate-950 bg-center bg-cover" data-alt="Fitness creator headshot smiling" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuAVy0qHLDozsVglkmjjW9S5_mTGPoVopECcI8_0ZACYbW4byVp3GdGNW8YURZBm9hr0AHSh2r9FAU_9pvmqQunUn1P5cOU2NNrH3_VvUPHRuQrjCQq2lJ0lSDgXYeaPm-wgdP2ME-sPf1I0nwt5atj0FbyUxm1Bu1X091OnEfCrtVfy8HMNiTmskp6W-LxMyl5RoxpiofpxGuzgYXfOJHhgFCGQzNtm4qDj_ySndRg9goI_9xPpfRMKnEaO4B9e5K0LS5dyLL-a__By");'></div>
+</div>
+<p class="text-slate-900 dark:text-slate-100 text-[11px] font-medium">Morning Fit</p>
+</div>
+<div class="flex flex-col items-center gap-2 shrink-0">
+<div class="size-16 rounded-full border-2 border-slate-200 dark:border-slate-800 p-0.5">
+<div class="w-full h-full rounded-full bg-center bg-cover" data-alt="Amateur cook sharing recipe" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuBWJSyc7ZVYZYjQsczZqWZSpa-YQst4oNA6yeciKEgHE0UqXjSbNpoi_noqNX0kzXTY1RKl-yGuLnzsybFOxU7dh45GY-loKc0bkaEajxhpLVv8JcvIv3xqjLwPdpiohfH_D5cK42kQGJLR7LBVPSbg-X6ot7VHH6BW05sLXK1gpYNhvgp03I9iPfh9nkrHgfEJOjqQs29YYs2JLXMchugeK8QYbFh8tfQE082SsSk6jY_1KHtM1M6O1-gNn44eCmHizqK_tdcUtum5");'></div>
+</div>
+<p class="text-slate-500 dark:text-slate-400 text-[11px] font-medium">Elena S.</p>
+</div>
+<div class="flex flex-col items-center gap-2 shrink-0">
+<div class="size-16 rounded-full border-2 border-slate-200 dark:border-slate-800 p-0.5 flex items-center justify-center">
+<span class="material-symbols-outlined text-slate-400">add</span>
+</div>
+<p class="text-slate-500 dark:text-slate-400 text-[11px] font-medium">Add Post</p>
+</div>
+</div>
+<!-- Featured Professional Content -->
+<div class="px-4 mb-8">
+<div class="editorial-frame rounded-xl bg-slate-900 aspect-[4/5] overflow-hidden group">
+<div class="absolute inset-0 bg-center bg-cover transition-transform duration-700 group-hover:scale-110" data-alt="Gourmet steak dish professional photography" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuAeCgNlPqrUBb2l4oVlmGickO5HChB6vuQmcPP4pqFgJHJuc6UEXYKczTb-uuHGyYaUuknqqysGUbDbtlcKS8Rci46BJaXgBuIdJU_nvMyXW5PO-xjjSFPjXkbrf1lK9DPfCIJw1OPp4keeXqfZctUEVpf4yHC0-e5MxVswP1pCAqySmR6ZbfGCaJGAQLg__r9dEK-xAA4hgxGITAGKefhnXrEF1J4oAPdu-VVAF6Hq3KLBK7dqwel-mFBkypxwvdl6ob9rR_-hgbtB");'></div>
+<div class="absolute top-4 left-4 z-10">
+<div class="technical-overlay px-3 py-1.5 rounded-full flex items-center gap-2 border border-white/30">
+<span class="size-2 rounded-full bg-red-500 animate-pulse"></span>
+<span class="text-[10px] font-bold text-white tracking-widest uppercase">RIAL PRO ROUTINE</span>
+</div>
+</div>
+<div class="absolute top-4 right-4 z-10">
+<div class="bg-primary/90 text-white px-3 py-1.5 rounded-lg flex flex-col items-center">
+<span class="text-[10px] font-bold leading-none">MATCH</span>
+<span class="text-lg font-black leading-none">98%</span>
+</div>
+</div>
+<div class="absolute bottom-0 left-0 right-0 p-6 z-10">
+<h3 class="text-white text-2xl font-bold mb-1">Aged Wagyu &amp; Chimichurri</h3>
+<p class="text-white/70 text-sm mb-4">By Master Chef Julian Vane</p>
+<div class="flex items-center gap-4">
+<button class="bg-white text-slate-900 px-6 py-2 rounded-lg font-bold text-sm">View Routine</button>
+<div class="flex -space-x-2">
+<div class="size-8 rounded-full border-2 border-slate-900 bg-cover bg-center" data-alt="User avatar small" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuDuvkBX4QMiqJLVx66QV4xrLG2jlefnZjcr5pz4OpQ3RWnm1U4iYD9umYyZfDczHc8h11ry5y-ofWJXTuRJpV20DiCGA7a0KF_RaENpSffkiEc68aARvLsfsnReUf51pZ3NhCdVaJ9qYonb2JtE5wpR9blZMhcjeJjErOgw2_xLBibeaQCJZuNfzYU5ybULlykrtXl2ZgBZuEDNIsWCoi38X2PmS2RnQRQaE8iND4YQUMNVsgPmBMTYlCvUEBhUNvLXsi57r5zIh5-U");'></div>
+<div class="size-8 rounded-full border-2 border-slate-900 bg-cover bg-center" data-alt="User avatar small" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuDzweFI5OyJTWlN19wGuEPrOs4fJwLsY0t6i5-4O-BeiyvI9z4RvGPcqr7XX701xaNUtMAnipXIKphBU1j1am9ihZFmMF88XnPf9EjbN2de2z7YYwjMR6Z9jW5C-ukyzrI43F0Akf01lHatgVZ4lQAqYMQq2AAPv9ntVlKyk2iGyTPgCEJtWapxlAKvCRHiNJmJKmO1qsL0L935WH7-EjJSZS1USTWVXsvjrZS_zuDYohKUZho1Bqj5hQMoW3tqoA2LFo-J-e-b73BA");'></div>
+<div class="size-8 rounded-full border-2 border-slate-900 bg-slate-800 flex items-center justify-center text-[10px] text-white font-bold">+12k</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Community Pulse Feed -->
+<div class="px-4">
+<h2 class="text-slate-900 dark:text-white text-xl font-bold mb-4 flex items-center gap-2">
+                Social Pulse 
+                <span class="inline-block size-2 rounded-full bg-primary"></span>
+</h2>
+<div class="grid grid-cols-2 gap-4">
+<!-- Community Card 1 -->
+<div class="flex flex-col gap-2 group">
+<div class="relative rounded-lg overflow-hidden aspect-square bg-slate-200">
+<div class="absolute inset-0 bg-center bg-cover" data-alt="Home made salad community post" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuBpEhq7gCzaF51ENGwEZBFmsN6siEUzpBTy6U0itF-FIcuYOg5A9olNHjGDWLVZNnNNC-aiqDWLkajKHOC9Nx_cy6Ylic2v0hC3_8s76GP-VMCk7l6bsSjuxSy-3U7eCL14EtVW34UEcyqZVX7XPffHLzLXK_q3Rzd0ODSVokxT3vZfZxnq89Mbbo2FHD4nGU_4GsgBMcqYyUAXguJgWw8Iz-9o2tUDvnPXB-MPLuppQWEYA3JhnpF-YfmltqdZyUC0JOwDy5HTbQlT");'></div>
+<div class="absolute inset-0 bg-primary/10 mix-blend-overlay"></div>
+<div class="absolute top-2 left-2 technical-overlay px-2 py-0.5 rounded text-[9px] font-bold text-white uppercase">84% Match</div>
+<div class="absolute bottom-2 right-2">
+<span class="material-symbols-outlined text-white text-lg drop-shadow-md">favorite</span>
+</div>
+</div>
+<div>
+<p class="text-[13px] font-bold leading-tight line-clamp-1">Quick Mediterranean</p>
+<p class="text-[11px] text-slate-500 font-medium">@jess_kitchen</p>
+</div>
+</div>
+<!-- Community Card 2 -->
+<div class="flex flex-col gap-2">
+<div class="relative rounded-lg overflow-hidden aspect-square bg-slate-200">
+<div class="absolute inset-0 bg-center bg-cover" data-alt="Grain bowl meal prep photo" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuCyTLLiapgp_dsxB7odVUyyMBfstoSvrgSp93Me80enW-04R4d1eoVBLmobpP8xHDzCo_FGfeKUchSGjUPiycrekcAnid8tVM4JlC2HWvT3wX02U3vKLwJlRoDS8jmh1BP90RrczMm569h87T4sZKMdyUtuBgvInCqS2bqvawauOcv3WYB_UWjO5UaxZNaHTtooq-hJ0ftryzgFvM2B2vmbraAKEbBkEzEqIkQRoPVL5SkTHO6w2W6KhwpO7IlqThzV6dz445PbRSyk");'></div>
+<div class="absolute inset-0 bg-slate-900/20 mix-blend-overlay"></div>
+<div class="absolute top-2 left-2 technical-overlay px-2 py-0.5 rounded text-[9px] font-bold text-white uppercase">91% Match</div>
+<div class="absolute bottom-2 right-2">
+<span class="material-symbols-outlined text-white text-lg drop-shadow-md">favorite</span>
+</div>
+</div>
+<div>
+<p class="text-[13px] font-bold leading-tight line-clamp-1">Power Grain Bowl</p>
+<p class="text-[11px] text-slate-500 font-medium">@health_hub</p>
+</div>
+</div>
+<!-- Community Card 3 (Vertical Stretch) -->
+<div class="col-span-2 flex flex-col gap-2 mt-2">
+<div class="relative rounded-xl overflow-hidden aspect-[16/9] bg-slate-900">
+<div class="absolute inset-0 bg-center bg-cover opacity-80" data-alt="Pizza making process shot" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuC-Cp1HYgfuNUm0gNXQ41t3-PwgcJ0lafOhlPnf3orvA3D1HaJOXIKGfR8z0tugGd4wFudvSLeU9wj3Fu01dr098ZPCdYrkKM7--V6CDBgyz7KIpWHdV0GGwoEkIvx_KXhphpxgwmC8vGC2IkduQ6P8GvKYQAThVkdbFEzRJQpb12628e8d-tCxndkybc6chlQmqz-G8ZMC5AWH8ZWAGFwJGyVSKK72wP6iA_qUykc_DksS4q9cT5e0sp_wKn2xPZwUnladmCMH-2vQ");'></div>
+<div class="absolute inset-0 bg-gradient-to-t from-slate-900 via-transparent to-transparent"></div>
+<div class="absolute top-4 left-4 flex gap-2">
+<div class="technical-overlay px-2 py-1 rounded text-[10px] font-bold text-white uppercase">67% Match</div>
+<div class="bg-red-500 text-white px-2 py-1 rounded text-[10px] font-bold uppercase">Trending</div>
+</div>
+<div class="absolute bottom-4 left-4 right-4 flex justify-between items-end">
+<div>
+<p class="text-white text-lg font-bold">Midnight Sourdough</p>
+<p class="text-white/60 text-xs font-medium">The 'Raw' Community Take</p>
+</div>
+<div class="flex items-center gap-1 text-white">
+<span class="material-symbols-outlined text-sm">visibility</span>
+<span class="text-[10px] font-bold uppercase tracking-tighter">1.4k</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Bottom Navigation Bar (Modified from Template) -->
+<div class="fixed bottom-0 left-0 right-0 max-w-md mx-auto z-50">
+<div class="flex gap-2 border-t border-slate-100 dark:border-slate-800 bg-white/90 dark:bg-slate-950/90 backdrop-blur-xl px-4 pb-6 pt-2">
+<a class="flex flex-1 flex-col items-center justify-center gap-1 text-slate-400 dark:text-slate-600" href="#">
+<span class="material-symbols-outlined">home</span>
+<p class="text-[10px] font-bold uppercase tracking-widest">Home</p>
+</a>
+<a class="flex flex-1 flex-col items-center justify-center gap-1 text-primary" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">explore</span>
+<p class="text-[10px] font-bold uppercase tracking-widest">Discover</p>
+</a>
+<a class="flex flex-1 flex-col items-center justify-center gap-1" href="#">
+<div class="size-12 bg-primary rounded-full flex items-center justify-center -mt-6 shadow-lg shadow-primary/40 border-4 border-white dark:border-slate-950">
+<span class="material-symbols-outlined text-white text-3xl">add</span>
+</div>
+</a>
+<a class="flex flex-1 flex-col items-center justify-center gap-1 text-slate-400 dark:text-slate-600" href="#">
+<span class="material-symbols-outlined">groups</span>
+<p class="text-[10px] font-bold uppercase tracking-widest">Pulse</p>
+</a>
+<a class="flex flex-1 flex-col items-center justify-center gap-1 text-slate-400 dark:text-slate-600" href="#">
+<span class="material-symbols-outlined">person</span>
+<p class="text-[10px] font-bold uppercase tracking-widest">Profile</p>
+</a>
+</div>
+</div>
+</div>
+</body></html>

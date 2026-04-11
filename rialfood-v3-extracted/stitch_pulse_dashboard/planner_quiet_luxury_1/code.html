@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#25aff4",
+                        "background-light": "#f5f7f8",
+                        "background-dark": "#101c22",
+                    },
+                    fontFamily: {
+                        "display": ["Inter", "sans-serif"]
+                    },
+                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<title>RIAL Family Planner - Batch Cooking</title>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark font-display text-slate-900 dark:text-slate-100 antialiased">
+<div class="max-w-md mx-auto min-h-screen flex flex-col bg-background-light dark:bg-background-dark border-x border-slate-200 dark:border-slate-800">
+<!-- Header Section -->
+<header class="p-6 pb-2">
+<div class="flex items-center justify-between mb-6">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary text-3xl">spa</span>
+<h1 class="text-xl font-semibold tracking-tight">RIAL Family</h1>
+</div>
+<div class="w-10 h-10 rounded-full overflow-hidden border-2 border-primary/20">
+<img class="w-full h-full object-cover" data-alt="Profile portrait of a smiling woman" src="https://lh3.googleusercontent.com/aida-public/AB6AXuC0FckXs1dMMTf5MXVfZ7CzULZ2DePFap4PLQzaDmOGA3CsLRVpTSLiAt_KFyGHvARpVMun9GPK2hDV1JzUYHIlT2RUFeXbQE4Iq-GxOBPrSNHx1bscf8vtTs0NL4JtXob3lU8aJo_MYfd3KXq-hZyscyX9O-8b2EAlNZE-AwUB_jYZDfWyeUrYAxs4SxyogrKYd6gUOzozuOxtgWQUCTquO7by46N3icVd7PYsnUnfaTiOSXe-vFUhPSrvnhYkANJ6hV1Xt7LUMszj"/>
+</div>
+</div>
+<div class="flex items-baseline gap-2">
+<h2 class="text-3xl font-light">Meal Prep</h2>
+<span class="text-primary font-medium">Batch Session</span>
+</div>
+<p class="text-slate-500 dark:text-slate-400 mt-1 text-sm">Sunday Afternoon • 2.5 hours planned</p>
+</header>
+<!-- Stats Overview -->
+<div class="px-6 py-4">
+<div class="grid grid-cols-3 gap-3">
+<div class="bg-white dark:bg-slate-800/50 p-4 rounded-xl border border-slate-200 dark:border-slate-700/50 flex flex-col items-center text-center">
+<span class="material-symbols-outlined text-primary mb-2">restaurant</span>
+<p class="text-[10px] uppercase tracking-wider text-slate-400 mb-1">Total Meals</p>
+<p class="text-xl font-bold">12</p>
+<p class="text-[10px] text-emerald-500 font-medium">+2 extra</p>
+</div>
+<div class="bg-white dark:bg-slate-800/50 p-4 rounded-xl border border-slate-200 dark:border-slate-700/50 flex flex-col items-center text-center">
+<span class="material-symbols-outlined text-primary mb-2">timer</span>
+<p class="text-[10px] uppercase tracking-wider text-slate-400 mb-1">Prep Time</p>
+<p class="text-xl font-bold">2.5h</p>
+<p class="text-[10px] text-slate-400 font-medium">15% faster</p>
+</div>
+<div class="bg-white dark:bg-slate-800/50 p-4 rounded-xl border border-slate-200 dark:border-slate-700/50 flex flex-col items-center text-center">
+<span class="material-symbols-outlined text-primary mb-2">kitchen</span>
+<p class="text-[10px] uppercase tracking-wider text-slate-400 mb-1">Portions</p>
+<p class="text-xl font-bold">48</p>
+<p class="text-[10px] text-emerald-500 font-medium">+4 yield</p>
+</div>
+</div>
+</div>
+<!-- Main Menu Section -->
+<main class="flex-1 px-6 pt-2 pb-24">
+<div class="flex items-center justify-between mb-4">
+<h3 class="text-lg font-semibold italic">Batch Cooking Menu</h3>
+<button class="text-primary text-sm font-medium">Adjust Scale</button>
+</div>
+<!-- Recipe Cards -->
+<div class="space-y-4">
+<!-- Card 1 -->
+<div class="group relative bg-white dark:bg-slate-800/40 rounded-2xl overflow-hidden border border-slate-200 dark:border-slate-700/50">
+<div class="flex h-32">
+<div class="w-1/3 h-full">
+<img class="w-full h-full object-cover" data-alt="Roasted seasonal vegetable medley in a tray" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDZvvfrTMd2TRcxehsn_N3ecT1kVsOis3Btef9aew04tE_pqoK_HhjRdiucT0HXhow6asvpGUmEDh-HrBjKZKkL6bav7z8kEEUF3cLsg23Q7I7LKF_IRDuXJ7fh_Nyg4GluL2oLKQ0kAZrcx1D43GDnODYHrDuKOu03NXBF0yfJp9dyjD80WClIilG7KJ1PDyS_C4HTir5bCxXcGEbzuRym8BHVOSjdlgF3gCqeQySO5974-BlX_rbsWRjMWwW2jCHkidG59r7mpB8t"/>
+</div>
+<div class="w-2/3 p-4 flex flex-col justify-between">
+<div>
+<div class="flex justify-between items-start">
+<h4 class="font-medium text-slate-900 dark:text-slate-100">Herb Roasted Roots</h4>
+<span class="text-[10px] px-2 py-0.5 bg-primary/10 text-primary rounded-full uppercase font-bold">Base</span>
+</div>
+<p class="text-xs text-slate-500 dark:text-slate-400 mt-1">Carrots, parsnips, sweet potato</p>
+</div>
+<div class="flex items-center justify-between text-xs text-slate-400">
+<span class="flex items-center gap-1"><span class="material-symbols-outlined text-sm">inventory_2</span> 8 Portions</span>
+<span class="flex items-center gap-1 text-primary"><span class="material-symbols-outlined text-sm">check_circle</span> Ready</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Card 2 -->
+<div class="group relative bg-white dark:bg-slate-800/40 rounded-2xl overflow-hidden border border-slate-200 dark:border-slate-700/50">
+<div class="flex h-32">
+<div class="w-1/3 h-full">
+<img class="w-full h-full object-cover" data-alt="Grilled lemon herb chicken breasts" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCeGwAHQbnZBO47bCYCw6vQ-KFO9BQ65J95VBg6KrOQW_oWZCIqhXTss5BgPCxmSrUUPpM7srpCmPys440rHJ6-3L2x0UJmCtNXA8HR3UQuO6WRKTLffv2CTV3jnQ0wl8Mg0G6yfSXBsPra9R4VZBRKOSdey-7DtbYY5CSC2dUHCN1gsRlvd9dlkblclZhPp3DjhiSfmETX2ic4k3RQWHQN3c47xZ1XakXGLwDuQysHe1jpiisI5D-NavWRnsQZJDZ86ghk_OImFXYX"/>
+</div>
+<div class="w-2/3 p-4 flex flex-col justify-between">
+<div>
+<div class="flex justify-between items-start">
+<h4 class="font-medium text-slate-900 dark:text-slate-100">Lemon Thyme Chicken</h4>
+<span class="text-[10px] px-2 py-0.5 bg-primary/10 text-primary rounded-full uppercase font-bold">Protein</span>
+</div>
+<p class="text-xs text-slate-500 dark:text-slate-400 mt-1">Sous-vide style tender breasts</p>
+</div>
+<div class="flex items-center justify-between text-xs">
+<span class="flex items-center gap-1 text-slate-400"><span class="material-symbols-outlined text-sm">inventory_2</span> 12 Portions</span>
+<span class="flex items-center gap-1 text-amber-500 font-medium"><span class="material-symbols-outlined text-sm">pending</span> Prepping</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Card 3 -->
+<div class="group relative bg-white dark:bg-slate-800/40 rounded-2xl overflow-hidden border border-slate-200 dark:border-slate-700/50">
+<div class="flex h-32">
+<div class="w-1/3 h-full">
+<img class="w-full h-full object-cover" data-alt="Fresh green garden salad in a glass bowl" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDlHUigS7mJUn5lvLSe5RTpjRsL6p0pp6qx9BaELMG0_drX8LwN6fuNkvoM-CIRqO82J8SuDZJIiH5-SWYMZE8USSnWy7heE5PvKkGTQHYZMt2rILZZQVecM6L07t-WMlnv_sN9IvLQAkz-CkfGfUc2Mtf_4ZAWKtTxxbtK5lCIw8eBHU5HcbLvfvRFveGxC4kuuZhDIpWaJB6WqNdocTFENVHNalQSxSD9tcQZvRXSapQAT3fs3FR9VE7OCIN1YnkGJDLXzYWW6SwU"/>
+</div>
+<div class="w-2/3 p-4 flex flex-col justify-between">
+<div>
+<div class="flex justify-between items-start">
+<h4 class="font-medium text-slate-900 dark:text-slate-100">Quinoa &amp; Kale Bowls</h4>
+<span class="text-[10px] px-2 py-0.5 bg-primary/10 text-primary rounded-full uppercase font-bold">Meal</span>
+</div>
+<p class="text-xs text-slate-500 dark:text-slate-400 mt-1">With tahini lemon dressing</p>
+</div>
+<div class="flex items-center justify-between text-xs">
+<span class="flex items-center gap-1 text-slate-400"><span class="material-symbols-outlined text-sm">inventory_2</span> 6 Portions</span>
+<span class="flex items-center gap-1 text-slate-400"><span class="material-symbols-outlined text-sm">schedule</span> Not Started</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Scaling Utility -->
+<div class="mt-8 bg-primary/5 rounded-2xl p-6 border border-primary/10">
+<div class="flex items-center gap-3 mb-4">
+<span class="material-symbols-outlined text-primary">scale</span>
+<h4 class="font-medium">Scaling Calculator</h4>
+</div>
+<div class="space-y-4">
+<div class="flex items-center justify-between bg-white dark:bg-background-dark/50 p-3 rounded-lg border border-slate-200 dark:border-slate-700">
+<span class="text-sm">Family Size</span>
+<div class="flex items-center gap-3">
+<button class="w-8 h-8 rounded-full border border-primary/30 flex items-center justify-center text-primary hover:bg-primary/10">
+<span class="material-symbols-outlined text-sm">remove</span>
+</button>
+<span class="font-bold w-4 text-center">4</span>
+<button class="w-8 h-8 rounded-full bg-primary flex items-center justify-center text-white">
+<span class="material-symbols-outlined text-sm">add</span>
+</button>
+</div>
+</div>
+<p class="text-[11px] text-slate-400 text-center italic leading-relaxed">Scaling automatically updates ingredient weights and cooking times across all recipes.</p>
+</div>
+</div>
+</main>
+<!-- Bottom Navigation Bar -->
+<nav class="fixed bottom-0 left-0 right-0 max-w-md mx-auto bg-white/80 dark:bg-slate-900/80 backdrop-blur-md border-t border-slate-200 dark:border-slate-800 px-6 pb-6 pt-3 flex justify-between items-center z-50">
+<a class="flex flex-col items-center gap-1 text-primary" href="#">
+<span class="material-symbols-outlined">calendar_today</span>
+<span class="text-[10px] font-medium">Planner</span>
+</a>
+<a class="flex flex-col items-center gap-1 text-slate-400 dark:text-slate-500" href="#">
+<span class="material-symbols-outlined">restaurant_menu</span>
+<span class="text-[10px] font-medium">Recipes</span>
+</a>
+<a class="flex flex-col items-center gap-1 text-slate-400 dark:text-slate-500" href="#">
+<span class="material-symbols-outlined">shopping_cart</span>
+<span class="text-[10px] font-medium">Groceries</span>
+</a>
+<a class="flex flex-col items-center gap-1 text-slate-400 dark:text-slate-500" href="#">
+<span class="material-symbols-outlined">monitoring</span>
+<span class="text-[10px] font-medium">Wellness</span>
+</a>
+</nav>
+</div>
+</body></html>

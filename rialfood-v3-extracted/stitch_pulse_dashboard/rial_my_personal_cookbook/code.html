@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Saved Recipes - Editorial Tech</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@300;400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#ec5b13",
+                        "background-light": "#f8f6f6",
+                        "background-dark": "#221610",
+                    },
+                    fontFamily: {
+                        "display": ["Public Sans", "sans-serif"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
+<style>
+        body {
+            font-family: 'Public Sans', sans-serif;
+        }
+        .recipe-grid-mask {
+            mask-image: linear-gradient(to bottom, black 80%, transparent 100%);
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 font-display transition-colors duration-300">
+<div class="relative flex min-h-screen w-full max-w-md mx-auto flex-col bg-background-light dark:bg-background-dark shadow-2xl">
+<!-- Header -->
+<header class="sticky top-0 z-20 bg-background-light/80 dark:bg-background-dark/80 backdrop-blur-md border-b border-primary/10 px-6 py-4">
+<div class="flex items-center justify-between mb-6">
+<span class="material-symbols-outlined text-slate-900 dark:text-slate-100 text-2xl">menu</span>
+<div class="flex gap-4">
+<button class="flex items-center justify-center size-10 rounded-full bg-primary/10 text-primary">
+<span class="material-symbols-outlined">search</span>
+</button>
+<div class="size-10 rounded-full bg-primary flex items-center justify-center text-white font-bold">JD</div>
+</div>
+</div>
+<div class="flex items-end justify-between">
+<div>
+<p class="text-primary text-xs font-bold uppercase tracking-widest mb-1">Personal Collection</p>
+<h1 class="text-4xl font-extrabold tracking-tight text-slate-900 dark:text-slate-100">Saved Recipes</h1>
+</div>
+<button class="bg-primary text-white size-14 rounded-xl flex items-center justify-center shadow-lg shadow-primary/30 hover:scale-105 active:scale-95 transition-transform">
+<span class="material-symbols-outlined text-3xl">add</span>
+</button>
+</div>
+</header>
+<!-- Category Folders / Tabs -->
+<div class="px-6 py-4">
+<div class="flex gap-4 overflow-x-auto pb-4 no-scrollbar">
+<a class="flex-none px-5 py-2 rounded-full bg-primary text-white font-bold text-sm shadow-md shadow-primary/20" href="#">All Items</a>
+<a class="flex-none px-5 py-2 rounded-full bg-slate-200 dark:bg-slate-800 text-slate-600 dark:text-slate-400 font-bold text-sm hover:bg-primary/10 hover:text-primary transition-colors" href="#">Quick Dinners</a>
+<a class="flex-none px-5 py-2 rounded-full bg-slate-200 dark:bg-slate-800 text-slate-600 dark:text-slate-400 font-bold text-sm hover:bg-primary/10 hover:text-primary transition-colors" href="#">High Protein</a>
+<a class="flex-none px-5 py-2 rounded-full bg-slate-200 dark:bg-slate-800 text-slate-600 dark:text-slate-400 font-bold text-sm hover:bg-primary/10 hover:text-primary transition-colors" href="#">Vegan</a>
+</div>
+</div>
+<!-- Featured Folders Grid -->
+<div class="grid grid-cols-2 gap-4 px-6 mb-8">
+<div class="group relative aspect-square rounded-xl overflow-hidden cursor-pointer">
+<div class="absolute inset-0 bg-gradient-to-t from-slate-900/80 via-transparent to-transparent z-10"></div>
+<div class="absolute inset-0 bg-cover bg-center transition-transform duration-500 group-hover:scale-110" data-alt="A colorful bowl of fresh healthy salad" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuDGyzhbGcn4Hlu-YewSXhuMNvHJxhf3DXhwItEg3YEEQX3-XMOtWS17jVdOn1ROnMWxOx9NAfTtihUEA6J4tit5Ejes9wW4VenxORAQvIbfpSzHR7l4EWbMf280-dIIMAd57m-kRn3fbqd4Rt8Oz-1rnJo7529-SNnX7HiL-gM8kuzcfnviMsAenAJ-AOfyoupGIWF2pexLwPiVIkpSSN5nJvPk8aasXk4FSuuyiN6lRHTgEiMqBaHSNJQ4kpI-n-SQWaOgHL70V2xK')"></div>
+<div class="absolute bottom-3 left-3 z-20">
+<p class="text-white text-sm font-bold leading-tight">Quick Dinners</p>
+<p class="text-white/70 text-[10px] uppercase font-medium">12 Recipes</p>
+</div>
+</div>
+<div class="group relative aspect-square rounded-xl overflow-hidden cursor-pointer">
+<div class="absolute inset-0 bg-gradient-to-t from-slate-900/80 via-transparent to-transparent z-10"></div>
+<div class="absolute inset-0 bg-cover bg-center transition-transform duration-500 group-hover:scale-110" data-alt="Close up of a protein rich steak dish" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuBhaBXvC3X0FEJ2ufCprkasOjZ-7cJbLF0HqwDfIMYbf1pbHu4gw4BAPLc_BYSD9VqS4fWnxqsHgPWr5DbJ2-nbW_uBUcLlG4zSIdkTEYV8CJBQy1ciqza_L_9gx0p3_p6WVGWVsnvTWKuhM5Mk8WeOZ9Xv1AICpgXg0YuPLbyi1PbioYtpwvJjZY7356EahF4g-gXEFJEfObec_P4JpREPy9eF7QLTPKw9na7g8kohbBkOlJ--N_5qlCLygUW-Tge-13RliJfff_Rr')"></div>
+<div class="absolute bottom-3 left-3 z-20">
+<p class="text-white text-sm font-bold leading-tight">High Protein</p>
+<p class="text-white/70 text-[10px] uppercase font-medium">8 Recipes</p>
+</div>
+</div>
+<div class="group relative aspect-square rounded-xl overflow-hidden cursor-pointer">
+<div class="absolute inset-0 bg-gradient-to-t from-slate-900/80 via-transparent to-transparent z-10"></div>
+<div class="absolute inset-0 bg-cover bg-center transition-transform duration-500 group-hover:scale-110" data-alt="Freshly baked artisan sourdough bread" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuDE-7NGuMTSN2ijOH2CCnLV6V9eoyA22NPkmwJoJto3x3WwWDMaYxj9o_riq5_8LU7OMr-yUfLTgoPfN-Rdyai0t55uTLc55Dh3A3s2DgKICRIWyTl7RMu2SXdfdy48RWRYDduSz59BtRnDPSxer1Dw0_cOl_Yk-y2a3C9vux8CEfzca6zoMfj8qOxctgoLys3uHHZS_EUWkidOEG8bFFEI3dbI1byvxJAWcY-2LhqqLxEmztY5oO5MwAi-gwOcrkQZdlGc7ceEVMtj')"></div>
+<div class="absolute bottom-3 left-3 z-20">
+<p class="text-white text-sm font-bold leading-tight">Weekend Bakes</p>
+<p class="text-white/70 text-[10px] uppercase font-medium">5 Recipes</p>
+</div>
+</div>
+<div class="group relative aspect-square rounded-xl overflow-hidden cursor-pointer">
+<div class="absolute inset-0 bg-gradient-to-t from-slate-900/80 via-transparent to-transparent z-10"></div>
+<div class="absolute inset-0 bg-cover bg-center transition-transform duration-500 group-hover:scale-110" data-alt="Selection of healthy vegan snack bars" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuAGbqMCrNUW-qi3hSoJe6XaI9stg1CDaoCql52G8be6IB4kj8p-wf00C46UEva3K6wf6_D-zCMMIekRoLAN7jduXfnJ-FbiVO6sm335PvH969bO58bfakrR4Wzowqg0XgfH88cFKrjM3YdfIiK8OGGWfXqK3tE_TnxMaNEZwM4wofpvxgYByx5tIuAPhy_b1mA2MIAQRqL1HjwmO7xq7bdck8nweRwf9IlXf8Tu01Jyk763dDQGKHey2F5Uag1UKa5NWqcrklOnt4qd')"></div>
+<div class="absolute bottom-3 left-3 z-20">
+<p class="text-white text-sm font-bold leading-tight">Healthy Snacks</p>
+<p class="text-white/70 text-[10px] uppercase font-medium">15 Recipes</p>
+</div>
+</div>
+</div>
+<!-- Recent Activity List -->
+<div class="px-6 mb-24">
+<div class="flex items-center justify-between mb-4">
+<h3 class="text-xl font-bold text-slate-900 dark:text-slate-100">Recently Added</h3>
+<a class="text-primary text-sm font-bold" href="#">View All</a>
+</div>
+<div class="space-y-4">
+<!-- Recipe Card 1 -->
+<div class="flex gap-4 bg-white dark:bg-slate-900/50 p-3 rounded-xl border border-primary/5 shadow-sm group">
+<div class="size-20 rounded-lg overflow-hidden shrink-0">
+<img class="size-full object-cover group-hover:scale-110 transition-transform" data-alt="Artisanal bowl of miso ramen soup" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDY3q2nwiB4jiZxdNJvQ3Uc8pkhHOpjggCiB9Jfb2m2n6_2V-HkRml-puX1BX92Y_I197rzSSUKBlXMKIzuQBgXpM6pfgE8vlXLjvtlq_wZvaRgWJh1sARYjOqXANuJ6LyjxvL7Mb63jOdVD3XUdvzvUjofYKYoIu6i7k5ZNABqq8Xpo28ffM4AyxGwyX-EvY41O8Uk68B2f02OB6XQNjDOaI1XsrZ7A2ZFp0mXyrAejjRxyERBHUaqp6Hv_5wB9G7_u3M6IQjA5ETI"/>
+</div>
+<div class="flex flex-col justify-center flex-1">
+<h4 class="font-bold text-slate-900 dark:text-slate-100 leading-snug">Homemade Miso Ramen</h4>
+<p class="text-slate-500 dark:text-slate-400 text-xs mt-1">Added 2 hours ago • 25 mins</p>
+<div class="flex gap-2 mt-2">
+<span class="px-2 py-0.5 rounded-md bg-primary/10 text-primary text-[10px] font-bold">Easy</span>
+<span class="px-2 py-0.5 rounded-md bg-slate-100 dark:bg-slate-800 text-slate-500 text-[10px] font-bold uppercase">Dinner</span>
+</div>
+</div>
+<button class="flex items-center justify-center self-start text-primary">
+<span class="material-symbols-outlined fill-1">heart_check</span>
+</button>
+</div>
+<!-- Recipe Card 2 -->
+<div class="flex gap-4 bg-white dark:bg-slate-900/50 p-3 rounded-xl border border-primary/5 shadow-sm group">
+<div class="size-20 rounded-lg overflow-hidden shrink-0">
+<img class="size-full object-cover group-hover:scale-110 transition-transform" data-alt="Avocado toast with poached eggs" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCQP2UmX8NqhZWfUlEs3NVira0IWIHnh1m31N3-dKTd9wdIslwtl1xC0wFEtSPeE7iKjEzXxfzSAGqrWrYgutwwqRzqDCSeml-6Yr8Pcj_-hznfWbXDn6t3fkw7xqn3-Qv5gGn66KZZM4OPZGX4cakSst2s-5fAvTgrgv63LWC5gXKvjFMArBytifobCR3sN53fL6rJGHNlpcwQ5_axQQJRNUMjJpN1ILPcbg8sXt3TDA0a4PxSqrilZA1ZZLZ0wUqlAM_eddBnHHYp"/>
+</div>
+<div class="flex flex-col justify-center flex-1">
+<h4 class="font-bold text-slate-900 dark:text-slate-100 leading-snug">Spiced Avocado Toast</h4>
+<p class="text-slate-500 dark:text-slate-400 text-xs mt-1">Added yesterday • 10 mins</p>
+<div class="flex gap-2 mt-2">
+<span class="px-2 py-0.5 rounded-md bg-primary/10 text-primary text-[10px] font-bold">Vegan</span>
+<span class="px-2 py-0.5 rounded-md bg-slate-100 dark:bg-slate-800 text-slate-500 text-[10px] font-bold uppercase">Breakfast</span>
+</div>
+</div>
+<button class="flex items-center justify-center self-start text-primary">
+<span class="material-symbols-outlined fill-1">heart_check</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Bottom Navigation Bar -->
+<nav class="fixed bottom-0 left-0 right-0 max-w-md mx-auto bg-white/90 dark:bg-background-dark/95 backdrop-blur-xl border-t border-primary/10 px-6 pb-6 pt-3 z-30">
+<div class="flex justify-between items-center">
+<a class="flex flex-col items-center gap-1 group" href="#">
+<div class="size-10 flex items-center justify-center rounded-xl group-hover:bg-primary/10 transition-colors">
+<span class="material-symbols-outlined text-slate-400 dark:text-slate-500 group-hover:text-primary transition-colors">book_4</span>
+</div>
+<span class="text-[10px] font-bold text-slate-400 dark:text-slate-500 group-hover:text-primary uppercase tracking-tighter">Journal</span>
+</a>
+<a class="flex flex-col items-center gap-1 group" href="#">
+<div class="size-10 flex items-center justify-center rounded-xl bg-primary/10">
+<span class="material-symbols-outlined text-primary fill-1">favorite</span>
+</div>
+<span class="text-[10px] font-bold text-primary uppercase tracking-tighter">Saved</span>
+</a>
+<a class="flex flex-col items-center gap-1 group" href="#">
+<div class="size-10 flex items-center justify-center rounded-xl group-hover:bg-primary/10 transition-colors">
+<span class="material-symbols-outlined text-slate-400 dark:text-slate-500 group-hover:text-primary transition-colors">explore</span>
+</div>
+<span class="text-[10px] font-bold text-slate-400 dark:text-slate-500 group-hover:text-primary uppercase tracking-tighter">Explorer</span>
+</a>
+<a class="flex flex-col items-center gap-1 group" href="#">
+<div class="size-10 flex items-center justify-center rounded-xl group-hover:bg-primary/10 transition-colors">
+<span class="material-symbols-outlined text-slate-400 dark:text-slate-500 group-hover:text-primary transition-colors">person</span>
+</div>
+<span class="text-[10px] font-bold text-slate-400 dark:text-slate-500 group-hover:text-primary uppercase tracking-tighter">Profile</span>
+</a>
+</div>
+</nav>
+</div>
+</body></html>

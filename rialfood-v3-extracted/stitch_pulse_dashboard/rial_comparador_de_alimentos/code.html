@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>RIAL Food Compare - Avocado vs Hummus</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@300;400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "primary": "#ec5b13",
+              "background-light": "#f8f6f6",
+              "background-dark": "#221610",
+            },
+            fontFamily: {
+              "display": ["Public Sans", "sans-serif"]
+            },
+            borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+          },
+        },
+      }
+    </script>
+<style>
+        body { font-family: 'Public Sans', sans-serif; }
+        .editorial-border { border-bottom: 1px solid rgba(236, 91, 19, 0.1); }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 antialiased">
+<!-- Header / Navigation -->
+<header class="sticky top-0 z-50 bg-background-light/80 dark:bg-background-dark/80 backdrop-blur-md border-b border-primary/10">
+<div class="max-w-4xl mx-auto flex items-center justify-between p-4">
+<button class="text-slate-900 dark:text-slate-100 hover:text-primary transition-colors">
+<span class="material-symbols-outlined">arrow_back</span>
+</button>
+<div class="flex flex-col items-center">
+<span class="text-[10px] uppercase tracking-[0.2em] font-bold text-primary">RIAL Editorial Tech</span>
+<h2 class="text-sm font-extrabold tracking-tighter uppercase">Food Compare</h2>
+</div>
+<button class="text-slate-900 dark:text-slate-100 hover:text-primary transition-colors">
+<span class="material-symbols-outlined">share</span>
+</button>
+</div>
+</header>
+<main class="max-w-4xl mx-auto pb-24">
+<!-- Hero Section -->
+<section class="px-4 py-12 text-center">
+<p class="text-primary text-xs font-bold tracking-[0.3em] uppercase mb-3">Nutrition Series • Issue 04</p>
+<h1 class="text-4xl md:text-6xl font-extrabold tracking-tight mb-4 italic">Avocado <span class="text-primary font-normal not-italic">vs.</span> Hummus</h1>
+<p class="text-slate-500 dark:text-slate-400 max-w-lg mx-auto text-sm leading-relaxed">
+                An in-depth analysis of two plant-based powerhouses. Which spread reigns supreme for your daily macro goals?
+            </p>
+</section>
+<!-- Comparison Grid -->
+<div class="grid grid-cols-2 gap-px bg-primary/10 border-y border-primary/10">
+<!-- Food Item 1: Avocado -->
+<div class="bg-background-light dark:bg-background-dark p-6 flex flex-col items-center text-center">
+<div class="relative mb-6">
+<div class="w-32 h-32 md:w-48 md:h-48 rounded-full overflow-hidden border-4 border-background-light dark:border-background-dark shadow-xl">
+<img class="w-full h-full object-cover" data-alt="A fresh sliced green avocado on a neutral background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAhqBclcef7WT0XaXyQtZ1pazgymNE8_IxIELfBSA-zYEfR3GOGoCQtrggfhr1tdWYKq8NOBUKVGCv8cW6aYMmWNsZrZtSlaRbMMs5pHjiF-U2Cuqh6v1r2vQa375-Coc5ExyEKTcft0oRGJkgSPXvhnJ3-8QVLoNavgHElZRERBmqjIljYJ89bWnxpzJjjYoxIwuhqXnynCijYVD97mNiipHAY5RCiXZxgMOduZFehvzrfxxh87QdtjEsug7zaLKtZ7WSrHTlyff-F"/>
+</div>
+<div class="absolute -bottom-2 -right-2 bg-primary text-white text-[10px] font-bold px-2 py-1 rounded-full uppercase tracking-wider">
+                        Real Match: 94
+                    </div>
+</div>
+<h3 class="text-xl font-bold mb-1">Hass Avocado</h3>
+<p class="text-xs text-slate-500 dark:text-slate-400 uppercase tracking-widest mb-4">Fresh &amp; Creamy</p>
+<div class="space-y-4 w-full">
+<div class="p-3 bg-primary/5 dark:bg-primary/10 rounded-xl">
+<span class="block text-2xl font-black text-primary">160</span>
+<span class="text-[10px] uppercase font-bold text-slate-500">Calories / 100g</span>
+</div>
+<div class="flex flex-wrap justify-center gap-2">
+<span class="px-2 py-1 bg-slate-100 dark:bg-slate-800 text-[10px] font-bold rounded uppercase">Healthy Fats</span>
+<span class="px-2 py-1 bg-slate-100 dark:bg-slate-800 text-[10px] font-bold rounded uppercase">High Fiber</span>
+<span class="px-2 py-1 bg-slate-100 dark:bg-slate-800 text-[10px] font-bold rounded uppercase">Potassium</span>
+</div>
+</div>
+</div>
+<!-- Food Item 2: Hummus -->
+<div class="bg-background-light dark:bg-background-dark p-6 flex flex-col items-center text-center">
+<div class="relative mb-6">
+<div class="w-32 h-32 md:w-48 md:h-48 rounded-full overflow-hidden border-4 border-background-light dark:border-background-dark shadow-xl">
+<img class="w-full h-full object-cover" data-alt="Creamy hummus in a bowl with olive oil and chickpeas" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDlwzcCWnEMevCpUAlIDEQPQqMsWVwcU83PIt7tA7PSUERsyoem3BtPYGVUR03nKXt26dGko8VPivXLBVNGRZDxpNrOu14SagdLmUCHiB2j5tapLyEUjOh3b4lFVeKdkK2MsqZA8X4qUPrbFB15Sp3-UfNr8MK4uq23xcECaGwA-E5-rvrsSWvUS--BwUUBy3AwcDPNgVx15eIlrCD1jkAcSe9j0uHDoifxpZ2JwCqDpYdBDKZVNSwQcBOIF3bpIgS-kFQTUt8JZv2A"/>
+</div>
+<div class="absolute -bottom-2 -right-2 bg-slate-900 dark:bg-slate-100 text-white dark:text-slate-900 text-[10px] font-bold px-2 py-1 rounded-full uppercase tracking-wider">
+                        Real Match: 88
+                    </div>
+</div>
+<h3 class="text-xl font-bold mb-1">Classic Hummus</h3>
+<p class="text-xs text-slate-500 dark:text-slate-400 uppercase tracking-widest mb-4">Chickpea Based</p>
+<div class="space-y-4 w-full">
+<div class="p-3 bg-slate-100 dark:bg-slate-800 rounded-xl">
+<span class="block text-2xl font-black text-slate-900 dark:text-slate-100">166</span>
+<span class="text-[10px] uppercase font-bold text-slate-500">Calories / 100g</span>
+</div>
+<div class="flex flex-wrap justify-center gap-2">
+<span class="px-2 py-1 bg-slate-100 dark:bg-slate-800 text-[10px] font-bold rounded uppercase">Plant Protein</span>
+<span class="px-2 py-1 bg-slate-100 dark:bg-slate-800 text-[10px] font-bold rounded uppercase">Iron Source</span>
+<span class="px-2 py-1 bg-slate-100 dark:bg-slate-800 text-[10px] font-bold rounded uppercase">Complex Carbs</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Detailed Comparison Section -->
+<section class="p-6">
+<div class="border-t-4 border-primary pt-8">
+<h4 class="text-xs font-black uppercase tracking-[0.4em] mb-8 text-center">Nutritional Breakdown</h4>
+<div class="space-y-8 max-w-md mx-auto">
+<!-- Stat Row -->
+<div class="flex items-center gap-4">
+<div class="flex-1 text-right font-bold text-primary">15g</div>
+<div class="text-[10px] font-black uppercase text-slate-400 w-24 text-center">Total Fat</div>
+<div class="flex-1 text-left font-bold">10g</div>
+</div>
+<div class="w-full bg-primary/10 h-1 rounded-full flex">
+<div class="bg-primary h-full rounded-full" style="width: 60%"></div>
+<div class="bg-slate-300 dark:bg-slate-600 h-full rounded-full ml-auto" style="width: 40%"></div>
+</div>
+<!-- Stat Row -->
+<div class="flex items-center gap-4">
+<div class="flex-1 text-right font-bold">2g</div>
+<div class="text-[10px] font-black uppercase text-slate-400 w-24 text-center">Protein</div>
+<div class="flex-1 text-left font-bold text-primary">8g</div>
+</div>
+<div class="w-full bg-primary/10 h-1 rounded-full flex">
+<div class="bg-slate-300 dark:bg-slate-600 h-full rounded-full" style="width: 20%"></div>
+<div class="bg-primary h-full rounded-full ml-auto" style="width: 80%"></div>
+</div>
+<!-- Stat Row -->
+<div class="flex items-center gap-4">
+<div class="flex-1 text-right font-bold text-primary">7g</div>
+<div class="text-[10px] font-black uppercase text-slate-400 w-24 text-center">Fiber</div>
+<div class="flex-1 text-left font-bold">6g</div>
+</div>
+<div class="w-full bg-primary/10 h-1 rounded-full flex">
+<div class="bg-primary h-full rounded-full" style="width: 55%"></div>
+<div class="bg-slate-300 dark:bg-slate-600 h-full rounded-full ml-auto" style="width: 45%"></div>
+</div>
+</div>
+</div>
+</section>
+<!-- Editorial Content -->
+<section class="p-6 mt-6 bg-primary/5 dark:bg-primary/10 rounded-xl mx-4">
+<h5 class="text-sm font-bold mb-2">The RIAL Verdict</h5>
+<p class="text-sm leading-relaxed text-slate-600 dark:text-slate-400">
+                While <span class="font-bold text-primary italic">Avocado</span> leads in heart-healthy monounsaturated fats and potassium, <span class="font-bold italic">Hummus</span> provides a superior protein profile for plant-based diets. Choose Avocado for lower glycemic impact, and Hummus for post-workout recovery.
+            </p>
+</section>
+</main>
+<!-- Bottom Navigation Bar -->
+<nav class="fixed bottom-0 left-0 right-0 z-50 border-t border-primary/10 bg-background-light dark:bg-background-dark pb-safe">
+<div class="flex justify-around items-center h-16 max-w-4xl mx-auto px-4">
+<a class="flex flex-col items-center gap-1 text-slate-400 hover:text-primary transition-colors" href="#">
+<span class="material-symbols-outlined">explore</span>
+<span class="text-[10px] font-bold uppercase tracking-tighter">Discover</span>
+</a>
+<a class="flex flex-col items-center gap-1 text-primary transition-colors" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1">compare_arrows</span>
+<span class="text-[10px] font-bold uppercase tracking-tighter">Compare</span>
+</a>
+<a class="flex flex-col items-center gap-1 text-slate-400 hover:text-primary transition-colors" href="#">
+<span class="material-symbols-outlined">menu_book</span>
+<span class="text-[10px] font-bold uppercase tracking-tighter">Journal</span>
+</a>
+<a class="flex flex-col items-center gap-1 text-slate-400 hover:text-primary transition-colors" href="#">
+<span class="material-symbols-outlined">person</span>
+<span class="text-[10px] font-bold uppercase tracking-tighter">Profile</span>
+</a>
+</div>
+</nav>
+</body></html>

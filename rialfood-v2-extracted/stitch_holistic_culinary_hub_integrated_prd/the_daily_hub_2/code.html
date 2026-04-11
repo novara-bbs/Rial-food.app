@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>The Daily Hub - Holistic Culinary Hub</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,600;1,6..72,400&amp;family=Satoshi:wght@400;500;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "primary": "#4A5D23",
+              "background-light": "#F9F8F6",
+              "background-dark": "#1c2210",
+              "surface": "#FFFFFF",
+              "text-main": "#2B2927",
+              "muted": "#A39F98",
+              "accent": "#D47A43",
+              "border-subtle": "#E5E3DF"
+            },
+            fontFamily: {
+              "display": ["Newsreader", "serif"],
+              "body": ["Satoshi", "sans-serif"]
+            },
+            borderRadius: {
+              "DEFAULT": "0px",
+              "sm": "0px",
+              "md": "4px",
+              "lg": "4px",
+              "xl": "4px",
+              "full": "9999px"
+            },
+          },
+        },
+      }
+    </script>
+<style>
+        body {
+            font-family: 'Satoshi', sans-serif;
+            color: theme('colors.text-main');
+            background-color: theme('colors.background-light');
+        }
+        h1, h2, h3, h4, h5, h6, .font-display {
+            font-family: 'Newsreader', serif;
+        }
+        .border-bold {
+            border: 2px solid theme('colors.text-main');
+        }
+    </style>
+</head>
+<body class="min-h-screen bg-background-light dark:bg-background-dark text-text-main antialiased selection:bg-primary/30">
+<div class="mx-auto max-w-[1440px] flex h-screen overflow-hidden">
+<!-- Left Navigation Sidebar -->
+<aside class="w-64 flex-shrink-0 flex flex-col border-r border-border-subtle bg-background-light py-8 px-6 overflow-y-auto">
+<div class="flex items-center gap-3 mb-12">
+<div class="bg-primary aspect-square rounded-full size-8 flex items-center justify-center text-surface material-symbols-outlined">restaurant</div>
+<h1 class="font-display font-semibold text-xl tracking-tight">Culinary Hub</h1>
+</div>
+<nav class="flex flex-col gap-2">
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-md bg-primary/10 text-primary font-bold" href="#">
+<span class="material-symbols-outlined text-[20px]">home</span>
+<span class="text-sm">The Daily Hub</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-md text-muted hover:text-text-main hover:bg-black/5 transition-colors" href="#">
+<span class="material-symbols-outlined text-[20px]">monitor_heart</span>
+<span class="text-sm font-medium">Vitals &amp; Diary</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-md text-muted hover:text-text-main hover:bg-black/5 transition-colors" href="#">
+<span class="material-symbols-outlined text-[20px]">bookmark</span>
+<span class="text-sm font-medium">Recipe Vault</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-md text-muted hover:text-text-main hover:bg-black/5 transition-colors" href="#">
+<span class="material-symbols-outlined text-[20px]">calendar_month</span>
+<span class="text-sm font-medium">Weekly Planner</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-md text-muted hover:text-text-main hover:bg-black/5 transition-colors" href="#">
+<span class="material-symbols-outlined text-[20px]">group</span>
+<span class="text-sm font-medium">Community Feed</span>
+</a>
+</nav>
+<div class="mt-auto pt-8 border-t border-border-subtle">
+<a class="flex items-center gap-3 px-3 py-2 rounded-md text-muted hover:text-text-main hover:bg-black/5 transition-colors" href="#">
+<span class="material-symbols-outlined text-[20px]">settings</span>
+<span class="text-sm font-medium">Settings</span>
+</a>
+</div>
+</aside>
+<!-- Main Feed (Center 60%) -->
+<main class="flex-1 overflow-y-auto py-8 px-10 xl:px-16 border-r border-border-subtle bg-surface">
+<!-- Header -->
+<header class="flex justify-between items-end mb-12 border-b-2 border-text-main pb-4">
+<div>
+<p class="text-sm font-medium text-muted uppercase tracking-wider mb-1">Thursday, Oct 24</p>
+<h2 class="font-display text-4xl font-semibold">Today's Overview</h2>
+</div>
+<button class="bg-primary hover:bg-[#3A4A1C] text-surface font-bold text-sm px-5 py-2.5 rounded-md transition-colors flex items-center gap-2">
+<span class="material-symbols-outlined text-[18px]">add</span>
+                Log Energy &amp; Meal
+            </button>
+</header>
+<!-- Vitality & Macros Summary -->
+<section class="grid grid-cols-3 gap-8 mb-12">
+<!-- Ring Placeholder -->
+<div class="col-span-1 flex flex-col items-center justify-center border border-border-subtle rounded-md p-6 bg-background-light">
+<div class="relative size-32 rounded-full border-[8px] border-primary flex items-center justify-center mb-3">
+<span class="font-display text-3xl font-semibold">85</span>
+<span class="text-sm text-muted absolute bottom-4">%</span>
+</div>
+<p class="font-display italic text-lg text-text-main">Vitality Score</p>
+<p class="text-xs text-muted mt-1">Sleep, Digestion, Macros</p>
+</div>
+<div class="col-span-2 grid grid-cols-3 gap-4 border border-border-subtle rounded-md p-6">
+<div class="flex flex-col justify-between">
+<span class="text-xs font-bold uppercase tracking-wider text-muted mb-2">Protein</span>
+<span class="font-display text-2xl mb-1">112g</span>
+<div class="w-full bg-border-subtle h-1 rounded-full overflow-hidden">
+<div class="bg-primary h-full w-[70%]"></div>
+</div>
+<span class="text-xs text-muted mt-2">70% of 160g</span>
+</div>
+<div class="flex flex-col justify-between border-l border-border-subtle pl-4">
+<span class="text-xs font-bold uppercase tracking-wider text-muted mb-2">Fat</span>
+<span class="font-display text-2xl mb-1">45g</span>
+<div class="w-full bg-border-subtle h-1 rounded-full overflow-hidden">
+<div class="bg-primary h-full w-[65%]"></div>
+</div>
+<span class="text-xs text-muted mt-2">65% of 70g</span>
+</div>
+<div class="flex flex-col justify-between border-l border-border-subtle pl-4">
+<span class="text-xs font-bold uppercase tracking-wider text-muted mb-2">Carbs</span>
+<span class="font-display text-2xl mb-1">180g</span>
+<div class="w-full bg-border-subtle h-1 rounded-full overflow-hidden">
+<div class="bg-primary h-full w-[85%]"></div>
+</div>
+<span class="text-xs text-muted mt-2">85% of 210g</span>
+</div>
+</div>
+</section>
+<!-- Itinerary -->
+<section>
+<h3 class="font-display text-2xl font-semibold mb-6">Today's Itinerary</h3>
+<div class="space-y-6 relative before:absolute before:inset-0 before:ml-5 before:-translate-x-px md:before:mx-auto md:before:translate-x-0 before:h-full before:w-0.5 before:bg-border-subtle">
+<!-- Breakfast (Logged) -->
+<div class="relative flex items-center justify-between md:justify-normal md:odd:flex-row-reverse group is-active">
+<div class="flex items-center justify-center w-10 h-10 rounded-full border-2 border-primary bg-surface text-primary shadow shrink-0 md:order-1 md:group-odd:-translate-x-1/2 md:group-even:translate-x-1/2 z-10">
+<span class="material-symbols-outlined text-[18px]">check</span>
+</div>
+<div class="w-[calc(100%-4rem)] md:w-[calc(50%-2.5rem)] p-4 rounded-md border border-border-subtle bg-surface hover:bg-background-light transition-colors cursor-pointer flex gap-4">
+<img alt="Oatmeal with berries" class="size-16 object-cover rounded-sm border border-border-subtle" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCpJe-zt4u6hmi3-cXmmgWwmG0cxv2lmrz6e-Dezy7LETEHsPxmRlPCHFAbGMMsYOEeCgM4EZL0W4uboBoqPgkfeIrwQ8fw-FunxMGkQCqO5pORnscJnZibjXxIhqBEhZcTUaSu1plygkUjYoGDKzW9QYSunt1NtHqR8PdWGXLWPkGtQrTppvl--XMgLiSTqLXMIZ0OQs3Yo7f-oAL15juffpxRBFo2JX800Ibu9k8lMCWcJq4SnVEOShQxwxXzgmBVIlVcZtx96mw"/>
+<div class="flex-1 flex flex-col justify-center">
+<div class="flex justify-between items-start mb-1">
+<h4 class="font-display text-lg font-semibold leading-tight">Overnight Oats &amp; Berries</h4>
+<span class="text-xs text-muted">08:30 AM</span>
+</div>
+<p class="text-sm text-muted">P: 20g • F: 12g • C: 45g</p>
+</div>
+</div>
+</div>
+<!-- Lunch (Logged) -->
+<div class="relative flex items-center justify-between md:justify-normal md:odd:flex-row-reverse group">
+<div class="flex items-center justify-center w-10 h-10 rounded-full border-2 border-primary bg-surface text-primary shadow shrink-0 md:order-1 md:group-odd:-translate-x-1/2 md:group-even:translate-x-1/2 z-10">
+<span class="material-symbols-outlined text-[18px]">check</span>
+</div>
+<div class="w-[calc(100%-4rem)] md:w-[calc(50%-2.5rem)] p-4 rounded-md border border-border-subtle bg-surface hover:bg-background-light transition-colors cursor-pointer flex gap-4">
+<img alt="Quinoa salad bowl" class="size-16 object-cover rounded-sm border border-border-subtle filter grayscale group-hover:grayscale-0 transition-all" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDgeuiLNkq3i83KHi2tGVyfnNSOnXlSlEUczcA_EgN3Z5gbDKSsju_bT04UIwYVq3pymloPvDsnbuOaETLXPF7ApnQ7KA9pNa3cYQ5w5VzmstlNxkIF-EzrR3Eo0YoBNKbFdjaQxo_gZhHPV1IAOSw_MkDRyCPsw4LwZ2uBCOOfmtry5Ix_cL7WmHUYbUQ-oDBiXG-xcHOOALTAnAXxPF07XmBUHDAvqtFBn3w9pqRVeK3_eKaxSMHgXB1ymx_P-kzwtuP55ZOwFw4"/>
+<div class="flex-1 flex flex-col justify-center">
+<div class="flex justify-between items-start mb-1">
+<h4 class="font-display text-lg font-semibold leading-tight">Mediterranean Quinoa Bowl</h4>
+<span class="text-xs text-muted">01:15 PM</span>
+</div>
+<p class="text-sm text-muted">P: 35g • F: 18g • C: 60g</p>
+</div>
+</div>
+</div>
+<!-- Dinner (Empty State) -->
+<div class="relative flex items-center justify-between md:justify-normal md:odd:flex-row-reverse group">
+<div class="flex items-center justify-center w-10 h-10 rounded-full border-2 border-border-subtle bg-background-light text-muted shrink-0 md:order-1 md:group-odd:-translate-x-1/2 md:group-even:translate-x-1/2 z-10">
+<span class="material-symbols-outlined text-[18px]">restaurant_menu</span>
+</div>
+<div class="w-[calc(100%-4rem)] md:w-[calc(50%-2.5rem)] p-4 rounded-md border border-dashed border-border-subtle bg-background-light flex flex-col items-center justify-center text-center py-6">
+<p class="text-sm text-muted mb-3 font-medium">No dinner logged yet.</p>
+<button class="border border-text-main text-text-main hover:bg-text-main hover:text-surface text-xs font-bold uppercase tracking-wider px-4 py-2 rounded-sm transition-colors">
+                            Plan Dinner
+                        </button>
+</div>
+</div>
+</div>
+</section>
+</main>
+<!-- Right Sidebar (Stats 20%) -->
+<aside class="w-72 flex-shrink-0 border-l border-border-subtle bg-background-light py-8 px-6 hidden lg:flex flex-col">
+<!-- User / Gamification -->
+<div class="flex flex-col items-center text-center mb-10 pb-8 border-b border-border-subtle">
+<img alt="User portrait profile" class="size-20 rounded-full object-cover mb-4 border-2 border-surface shadow-sm" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCl55HgKfisA0RPREtVkCeWf3kMkJisML222LAi_0eHF20aW1JD9ar0rmSnZeEkgFlPZtXxdjHJ9ZEGqkIkJBJR5ANtjjYo67p_gXe18UZ0ggEqNsSrXueZ1cNa7GaCjdTt_aA_aTy_7p0GMq-qQ4diWkHe3mUb34FgWzayrFVl9MlK7-EaALJ5ewyv7vYMxf4IWcAnItaxhs_werYQ_psVgqZrwea16BfZXN0OLWFxeAfDbeVwTTDhEndw1xeBLglWzcXd6X7FsMI"/>
+<h3 class="font-display text-xl font-semibold mb-1">Elena Rostova</h3>
+<div class="flex items-center gap-1.5 text-accent mb-4">
+<span class="material-symbols-outlined text-[16px]">military_tech</span>
+<span class="text-xs font-bold uppercase tracking-wider">Lvl 12 • Sous Chef</span>
+</div>
+<div class="w-full text-left">
+<div class="flex justify-between text-xs text-muted mb-1">
+<span>XP Progress</span>
+<span>1,240 / 2,000</span>
+</div>
+<div class="w-full bg-border-subtle h-1.5 rounded-full overflow-hidden">
+<div class="bg-accent h-full w-[62%]"></div>
+</div>
+</div>
+</div>
+<!-- Weekly Streak -->
+<div class="mb-8">
+<h4 class="font-display text-lg font-semibold mb-4">Weekly Streak</h4>
+<div class="flex justify-between">
+<div class="flex flex-col items-center gap-2">
+<span class="text-xs text-muted">M</span>
+<div class="size-6 rounded-full bg-primary text-surface flex items-center justify-center"><span class="material-symbols-outlined text-[12px]">check</span></div>
+</div>
+<div class="flex flex-col items-center gap-2">
+<span class="text-xs text-muted">T</span>
+<div class="size-6 rounded-full bg-primary text-surface flex items-center justify-center"><span class="material-symbols-outlined text-[12px]">check</span></div>
+</div>
+<div class="flex flex-col items-center gap-2">
+<span class="text-xs text-muted">W</span>
+<div class="size-6 rounded-full bg-primary text-surface flex items-center justify-center"><span class="material-symbols-outlined text-[12px]">check</span></div>
+</div>
+<div class="flex flex-col items-center gap-2">
+<span class="text-xs font-bold text-text-main">T</span>
+<div class="size-6 rounded-full border-2 border-primary text-primary flex items-center justify-center"><span class="size-2 bg-primary rounded-full"></span></div>
+</div>
+<div class="flex flex-col items-center gap-2">
+<span class="text-xs text-muted">F</span>
+<div class="size-6 rounded-full border border-border-subtle bg-surface"></div>
+</div>
+<div class="flex flex-col items-center gap-2">
+<span class="text-xs text-muted">S</span>
+<div class="size-6 rounded-full border border-border-subtle bg-surface"></div>
+</div>
+<div class="flex flex-col items-center gap-2">
+<span class="text-xs text-muted">S</span>
+<div class="size-6 rounded-full border border-border-subtle bg-surface"></div>
+</div>
+</div>
+</div>
+<!-- Mini Community Ping -->
+<div class="mt-auto border border-border-subtle bg-surface p-4 rounded-md">
+<div class="flex items-center gap-2 mb-2 text-primary">
+<span class="material-symbols-outlined text-[16px]">local_fire_department</span>
+<span class="text-xs font-bold uppercase tracking-wider">Trending</span>
+</div>
+<p class="text-sm leading-snug"><span class="font-display italic">Marcus</span> just logged a new PB on his 10k and cooked <span class="font-medium">Lemon Salmon</span>.</p>
+</div>
+</aside>
+</div>
+</body></html>

@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#ddff00",
+                        "background-light": "#f8f8f5",
+                        "background-dark": "#121408",
+                        "surface": "#1d210b",
+                        "border-muted": "#313617",
+                    },
+                    fontFamily: {
+                        "display": ["Space Grotesk"]
+                    },
+                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>
+        body { font-family: 'Space Grotesk', sans-serif; }
+        .hide-scrollbar::-webkit-scrollbar { display: none; }
+        .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 min-h-screen">
+<!-- Header -->
+<header class="sticky top-0 z-50 bg-background-light/80 dark:bg-background-dark/80 backdrop-blur-md border-b border-border-muted px-4 py-3 flex items-center justify-between">
+<div class="flex items-center gap-3">
+<div class="size-10 rounded-full bg-primary/20 flex items-center justify-center overflow-hidden border border-primary/30">
+<img class="w-full h-full object-cover" data-alt="User profile portrait smiling" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDH02oAvJF7LEF7iCOgBIKKsJ3yEnBvwKRV1QecAJZY8-qktZlshgN5ekAmbgXP9ytmi2ewfDz2ZqFX4Ci7tZ1_8kUSsBcg4nz8P7yfuSTQspFD5MKRck_lXHnR2opJqP8Z8-jWhlUNMFzNVxe0r1-tn6PEern4Hupl08EcqIf555rRlcD9QH5uuLK1mv_gZz9dA0D0gefT6_mjy0DefjYpwOAtGaaP4OZCPp-GcfCsTq31kaYLEdMxsP9LNBL3tk7vfjxRqyFUhHqg"/>
+</div>
+<div>
+<p class="text-[10px] uppercase tracking-widest text-primary font-bold">Member</p>
+<h1 class="text-sm font-bold tracking-tight">ALEX_RISE</h1>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<button class="relative p-2 text-slate-400 hover:text-primary transition-colors">
+<span class="material-symbols-outlined">notifications</span>
+<span class="absolute top-2 right-2 size-2 bg-primary rounded-full"></span>
+</button>
+<button class="p-2 text-slate-400 hover:text-primary transition-colors">
+<span class="material-symbols-outlined">menu</span>
+</button>
+</div>
+</header>
+<main class="max-w-xl mx-auto pb-24">
+<!-- Section: Your Path -->
+<section class="p-4">
+<div class="flex items-center justify-between mb-3">
+<h2 class="text-xs uppercase tracking-[0.2em] font-bold text-slate-500">Your Path</h2>
+<span class="text-[10px] font-bold text-primary bg-primary/10 px-2 py-0.5 rounded uppercase">Active Phase</span>
+</div>
+<div class="relative group overflow-hidden rounded-xl bg-surface border border-border-muted p-4">
+<div class="flex flex-col @container">
+<div class="flex flex-col @xl:flex-row gap-4">
+<div class="w-full @xl:w-1/3 aspect-video @xl:aspect-square rounded-lg bg-cover bg-center overflow-hidden border border-white/5" data-alt="Dumbbells and fitness equipment in a gym" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuClWMedc1fhL6bML0tl8KFatNeTcv1NxuDBfFmwRNuhsDpVd52ZTgVVQfFGQCP2PH50GKSl4rp0RsnnnPw8kszw_q7aXgEKjMITcfaKfQYVVbcEwD5RGvzZi57E-Ywf9dS8gwyuCLGEipqFTyqtOaR41eObxuZNgzbnfzWjTih1vJSJhmHLw4IZZy04Q3g5w_e88Z39xGaS4B5CKkarsK1aDkRXerxGW9FCI-ah-P2Y4y_p5aWxRUgr-FhvoFsLmOGImqdgAefsTj2D");'>
+<div class="w-full h-full bg-gradient-to-t from-black/60 to-transparent flex items-end p-3">
+<span class="text-[10px] font-bold text-primary">WEEK 4/12</span>
+</div>
+</div>
+<div class="flex-1 flex flex-col justify-between py-1">
+<div>
+<h3 class="text-xl font-bold tracking-tight text-slate-100">Muscle Definition</h3>
+<p class="text-sm text-slate-400 mt-1">Goal: <span class="text-slate-200">High Protein / 16:8 Fasting</span></p>
+</div>
+<div class="mt-4 space-y-2">
+<div class="flex justify-between items-center text-[11px] font-bold uppercase tracking-wider text-slate-500">
+<span>Protein Progress</span>
+<span class="text-primary">120g / 180g</span>
+</div>
+<div class="h-1.5 w-full bg-border-muted rounded-full overflow-hidden">
+<div class="h-full bg-primary rounded-full" style="width: 65%;"></div>
+</div>
+<p class="text-[10px] text-slate-500 italic">60g remaining to hit your target today</p>
+</div>
+</div>
+</div>
+<button class="mt-4 w-full bg-primary text-background-dark font-bold py-2.5 rounded-lg flex items-center justify-center gap-2 hover:opacity-90 transition-opacity">
+<span class="text-sm">View Roadmap</span>
+<span class="material-symbols-outlined text-sm">trending_up</span>
+</button>
+</div>
+</div>
+</section>
+<!-- Section: Community Feed -->
+<section class="mt-4">
+<div class="px-4 mb-4 flex items-center justify-between">
+<h2 class="text-xs uppercase tracking-[0.2em] font-bold text-slate-500">Community Kitchen</h2>
+<div class="flex gap-2">
+<button class="size-8 rounded-full bg-surface border border-border-muted flex items-center justify-center text-slate-400">
+<span class="material-symbols-outlined text-sm">tune</span>
+</button>
+</div>
+</div>
+<!-- Feed Item 1 -->
+<div class="mb-6 border-b border-border-muted pb-6">
+<div class="px-4 flex items-center justify-between mb-3">
+<div class="flex items-center gap-2">
+<div class="size-8 rounded-full bg-slate-800 overflow-hidden border border-border-muted">
+<img class="w-full h-full object-cover" data-alt="User profile avatar male" src="https://lh3.googleusercontent.com/aida-public/AB6AXuB_QQPV5FsL-UIcv3v4Z0tab4lTruH6GbHQDYIcgeWnCP_rSoPGfOVGYCxzsoArlqI6g6GtkJvE8oxq3nH8o-ws4gMfLM79QITGJFpNqBcXIu9kxz-aIpEjHebs0SA-2EIoEKgACbMbaj48feqyFlBoI-oaIvSzOL-uN3wtlSg_GY59fnf16BqIJ748Wi0NbSWLtPIMArllg-oJH1a4zsI4TMjzA-Jmg5e5DwgLh_z4vXg-hnhuQZaFZH2OfObKLm-s1Z4vh3QL17NU"/>
+</div>
+<span class="text-sm font-bold">Marcus_V</span>
+<span class="text-[10px] text-slate-500">• 2h ago</span>
+</div>
+<button class="text-slate-500"><span class="material-symbols-outlined text-sm">more_horiz</span></button>
+</div>
+<div class="relative px-4">
+<div class="relative aspect-square w-full rounded-2xl overflow-hidden bg-surface group">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" data-alt="Healthy salmon bowl with avocado and greens" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBTxpRSbxC-8jRPPUBhvc4hbZ-6uImoSQKlVLl_JrTqnKkpdpK8C0uOmYChbjWMWz0CjwWU5n9HkBB6KPS-6bUTkNbjc0Fq-eOshD7LxiuBTnAJrIaySFTZFO2lopxr8_sZzxT7q08F-RP7jD4YU4rBLaeR0XH04nKGDTgDaPwh8wK8_NPjLKtiTyMWP7GzygX2WdTr4qAhIi3N1fa3weSVIvJKAOXBkpiIzEI4cnkocIQs5Vb2DuckL9QinLuNr31JFmyRckXdOlVN"/>
+<!-- RIAL Technical Overlays -->
+<div class="absolute top-4 right-4 flex flex-col gap-2 items-end">
+<div class="bg-black/40 backdrop-blur-md border border-white/10 px-3 py-1.5 rounded-full flex items-center gap-2">
+<span class="material-symbols-outlined text-[16px] text-primary fill-1">bolt</span>
+<span class="text-[11px] font-bold text-white uppercase tracking-tighter">Energized</span>
+</div>
+<div class="bg-black/40 backdrop-blur-md border border-white/10 px-3 py-1.5 rounded-full flex items-center gap-2">
+<span class="material-symbols-outlined text-[16px] text-green-400 fill-1">sentiment_very_satisfied</span>
+<span class="text-[11px] font-bold text-white uppercase tracking-tighter">Satisfied</span>
+</div>
+</div>
+<div class="absolute bottom-4 left-4 right-4 flex justify-between items-end">
+<div class="bg-background-dark/80 backdrop-blur-xl border border-border-muted p-3 rounded-xl flex gap-4">
+<div class="text-center border-r border-border-muted pr-4">
+<p class="text-[9px] uppercase tracking-widest text-slate-500 mb-0.5">Protein</p>
+<p class="text-sm font-bold text-primary">42g</p>
+</div>
+<div class="text-center border-r border-border-muted pr-4">
+<p class="text-[9px] uppercase tracking-widest text-slate-500 mb-0.5">Carbs</p>
+<p class="text-sm font-bold text-slate-100">12g</p>
+</div>
+<div class="text-center">
+<p class="text-[9px] uppercase tracking-widest text-slate-500 mb-0.5">Kcal</p>
+<p class="text-sm font-bold text-slate-100">540</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="px-4 mt-4">
+<h4 class="font-bold text-slate-100 italic">"Post-workout recovery bowl. Exactly what I needed after that HIIT session."</h4>
+<div class="flex items-center gap-6 mt-4">
+<button class="flex items-center gap-1.5 text-slate-400 hover:text-primary group">
+<span class="material-symbols-outlined text-xl group-active:scale-125 transition-transform">favorite</span>
+<span class="text-xs font-bold">245</span>
+</button>
+<button class="flex items-center gap-1.5 text-slate-400 hover:text-primary">
+<span class="material-symbols-outlined text-xl">comment</span>
+<span class="text-xs font-bold">18</span>
+</button>
+<button class="flex items-center gap-1.5 text-slate-400 hover:text-primary">
+<span class="material-symbols-outlined text-xl">share</span>
+<span class="text-xs font-bold">Save</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Feed Item 2 -->
+<div class="mb-6 pb-6">
+<div class="px-4 flex items-center justify-between mb-3">
+<div class="flex items-center gap-2">
+<div class="size-8 rounded-full bg-slate-800 overflow-hidden border border-border-muted">
+<img class="w-full h-full object-cover" data-alt="User profile avatar female" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAPHyomdX97px7SEuwqQh9VYJv9t59Hj2Z8XxgkDD4T66Anu8rwT_LhFJlljsDl75C3g1LSW22GOwe2fgNsdkDZ_A-PepJaQcQFhrgGwkHUo0RWka0IysNt3iZgdjlen71uAT5F4ud8aJqxFdM5EiTwS8bl2StBmVXPn_DoNuU2nrvJQ44NluygurS7-gg4F8QLN46kpP7GBb2mJVnUBkBCcdO49v65KsENbZGXpGNeimLmbxELXBpoC8jqc_rgGnV_wBbDnsHGF5XR"/>
+</div>
+<span class="text-sm font-bold">Sarah_Fit</span>
+<span class="text-[10px] text-slate-500">• 5h ago</span>
+</div>
+<button class="text-slate-500"><span class="material-symbols-outlined text-sm">more_horiz</span></button>
+</div>
+<div class="relative px-4">
+<div class="relative aspect-video w-full rounded-2xl overflow-hidden bg-surface group">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" data-alt="Protein pancakes with blueberries" src="https://lh3.googleusercontent.com/aida-public/AB6AXuA8c6AAtENX1ey0DIVxAIwruLkFjlf4cAwZNCAdWNZsiz5RN-HrOjwDe4lE9nqzxFGziM-9hK9MigspZanlzZ85avAcByPBKl_Gf2TICr0lwT98mL4jw9r71ngF1rdl_4cBX22flqLgvZUo7EdmymCNyYBU_UkzILUsrvS2js9m32bdFYtIpEV0Bg-kEWZFfXaHCrPTFkZav5d09CfZQjvDDUlZuQUcmmuKkTHT9z9Ny3qX50I9RjZdCn9ltXZwYxuKBfIavquWcMNq"/>
+<div class="absolute top-4 right-4">
+<div class="bg-black/40 backdrop-blur-md border border-white/10 px-3 py-1.5 rounded-full flex items-center gap-2">
+<span class="material-symbols-outlined text-[16px] text-orange-400 fill-1">local_fire_department</span>
+<span class="text-[11px] font-bold text-white uppercase tracking-tighter">Satisfied</span>
+</div>
+</div>
+</div>
+</div>
+<div class="px-4 mt-4">
+<h4 class="font-bold text-slate-100">Low Carb Protein Stack 🥞</h4>
+<p class="text-xs text-slate-500 mt-1">Ingredients: Egg whites, isolate whey, oats, stevia.</p>
+<div class="flex items-center gap-6 mt-4">
+<button class="flex items-center gap-1.5 text-slate-400 hover:text-primary">
+<span class="material-symbols-outlined text-xl">favorite</span>
+<span class="text-xs font-bold">89</span>
+</button>
+<button class="flex items-center gap-1.5 text-slate-400 hover:text-primary">
+<span class="material-symbols-outlined text-xl">comment</span>
+<span class="text-xs font-bold">4</span>
+</button>
+</div>
+</div>
+</div>
+</section>
+</main>
+<!-- Navigation & Quick Log Bar -->
+<div class="fixed bottom-0 left-0 right-0 z-50">
+<!-- Quick Log Bar Overlay -->
+<div class="max-w-xl mx-auto px-4 mb-4">
+<div class="bg-primary shadow-[0_8px_32px_rgba(221,255,0,0.3)] rounded-2xl p-4 flex items-center justify-between">
+<div class="flex items-center gap-3">
+<div class="size-10 rounded-full bg-background-dark flex items-center justify-center text-primary">
+<span class="material-symbols-outlined">add_a_photo</span>
+</div>
+<div>
+<p class="text-[10px] font-black uppercase tracking-tighter text-background-dark/60 leading-none">Quick Log</p>
+<p class="text-sm font-bold text-background-dark">Capture your meal</p>
+</div>
+</div>
+<div class="flex items-center gap-2">
+<button class="bg-background-dark text-white text-[10px] font-bold py-1.5 px-3 rounded-full uppercase">Scan</button>
+<button class="bg-background-dark/20 text-background-dark p-2 rounded-full">
+<span class="material-symbols-outlined text-xl">mic</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Bottom Navbar -->
+<nav class="bg-surface/95 backdrop-blur-xl border-t border-border-muted px-6 pb-6 pt-3 flex justify-between items-center">
+<a class="flex flex-col items-center gap-1 text-primary" href="#">
+<span class="material-symbols-outlined text-[24px] fill-1">home</span>
+<p class="text-[10px] font-medium">Home</p>
+</a>
+<a class="flex flex-col items-center gap-1 text-slate-400 hover:text-slate-200" href="#">
+<span class="material-symbols-outlined text-[24px]">explore</span>
+<p class="text-[10px] font-medium">Explore</p>
+</a>
+<div class="relative -top-3">
+<div class="size-12 rounded-full bg-slate-800 border-4 border-background-dark flex items-center justify-center shadow-lg">
+<span class="material-symbols-outlined text-primary text-2xl">add</span>
+</div>
+</div>
+<a class="flex flex-col items-center gap-1 text-slate-400 hover:text-slate-200" href="#">
+<span class="material-symbols-outlined text-[24px]">group</span>
+<p class="text-[10px] font-medium">Social</p>
+</a>
+<a class="flex flex-col items-center gap-1 text-slate-400 hover:text-slate-200" href="#">
+<span class="material-symbols-outlined text-[24px]">person</span>
+<p class="text-[10px] font-medium">Profile</p>
+</a>
+</nav>
+</div>
+</body></html>

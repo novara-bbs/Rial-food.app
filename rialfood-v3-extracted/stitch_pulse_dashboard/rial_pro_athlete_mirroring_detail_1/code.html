@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Pro-Athlete Plan Detail</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              colors: {
+                "primary": "#607AFB",
+                "background-light": "#f5f6f8",
+                "background-dark": "#0f1323",
+              },
+              fontFamily: {
+                "display": ["Space Grotesk"]
+              },
+              borderRadius: {"DEFAULT": "0.5rem", "lg": "1rem", "xl": "1.5rem", "full": "9999px"},
+            },
+          },
+        }
+    </script>
+<style>
+        body {
+            font-family: 'Space Grotesk', sans-serif;
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .fill-icon {
+            font-variation-settings: 'FILL' 1;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 min-h-screen">
+<!-- Header Navigation -->
+<nav class="sticky top-0 z-50 bg-white/80 dark:bg-background-dark/80 backdrop-blur-md border-b border-slate-200 dark:border-slate-800 px-4 py-3">
+<div class="max-w-screen-xl mx-auto flex items-center justify-between">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-slate-900 dark:text-slate-100 cursor-pointer">arrow_back</span>
+<h1 class="text-xl font-bold tracking-tight">Pro-Athlete Plan</h1>
+</div>
+<div class="flex items-center gap-4">
+<span class="material-symbols-outlined text-slate-900 dark:text-slate-100 cursor-pointer">share</span>
+<span class="material-symbols-outlined text-slate-900 dark:text-slate-100 cursor-pointer">more_horiz</span>
+</div>
+</div>
+</nav>
+<main class="max-w-screen-xl mx-auto pb-24">
+<!-- Athlete Intro & Video Section -->
+<section class="p-4 md:p-6 grid grid-cols-1 lg:grid-cols-2 gap-6">
+<div class="space-y-6">
+<div class="flex items-center gap-4">
+<div class="w-20 h-20 rounded-full bg-cover bg-center border-4 border-primary/20" data-alt="Professional female athlete smiling in sports gear" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuBa3A4GeX1gYRoJcNOIsL18dF57IH0B02HDCHqDz_3xZYPdAvSmQ0NB0zdRhlUkngBS4-d2uBLjcxJgaDbDaJ4MzxGXDF8C0RfNgwr3wZ6kYLG5dpUHLIBsjEQEpcYRXUqYvXNbWuI6Jeq5ccjtdZjM4lht8_NxkaqDsNhpHd3uwfZ_2Vh5xO1GXkZexFfrrzvJwLHAqDExquigHJ_G1ak6I_fJsyQasz5dKiD23TlYR4QNmRbuXFRyvbIwD38mhMg0yDPId7IHAiFd')">
+</div>
+<div>
+<h2 class="text-3xl font-bold">Alex Rivera</h2>
+<p class="text-slate-500 dark:text-slate-400">Olympic Marathoner &amp; Nutrition Advocate</p>
+<div class="flex gap-2 mt-2">
+<span class="px-3 py-1 bg-primary/10 text-primary text-xs font-bold rounded-full">ELITE PLAN</span>
+<span class="px-3 py-1 bg-green-500/10 text-green-600 text-xs font-bold rounded-full">HIGH PROTEIN</span>
+</div>
+</div>
+</div>
+<p class="text-lg leading-relaxed text-slate-600 dark:text-slate-300">
+                    "This 7-day routine is exactly how I fuel for my 100-mile weeks. We focus on gut health, rapid recovery, and batch cooking to save time during peak training blocks."
+                </p>
+<div class="flex flex-wrap gap-4">
+<div class="flex-1 min-w-[140px] p-4 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl">
+<p class="text-slate-500 text-sm font-medium">Training Load</p>
+<p class="text-2xl font-bold">750 <span class="text-sm text-green-500 font-normal">+5%</span></p>
+</div>
+<div class="flex-1 min-w-[140px] p-4 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl">
+<p class="text-slate-500 text-sm font-medium">Recovery Score</p>
+<p class="text-2xl font-bold text-primary">92% <span class="text-sm text-red-500 font-normal">-2%</span></p>
+</div>
+</div>
+<div class="flex items-center justify-between p-4 bg-slate-100 dark:bg-slate-800/50 rounded-xl mb-4 border border-slate-200 dark:border-slate-700">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-full bg-primary/20 flex items-center justify-center text-primary">
+<span class="material-symbols-outlined">family_restroom</span>
+</div>
+<div>
+<p class="text-sm font-bold">Family Scaling</p>
+<p class="text-[10px] text-slate-500 uppercase tracking-wider">Automatic 4x adjustment</p>
+</div>
+</div>
+<div class="flex items-center gap-2">
+<span class="text-xs font-bold text-slate-400">1P</span>
+<div class="w-12 h-6 bg-primary rounded-full relative">
+<div class="absolute right-1 top-1 w-4 h-4 bg-white rounded-full shadow-sm"></div>
+</div>
+<span class="text-xs font-bold text-primary text-lg">4P</span>
+</div>
+</div><button class="w-full py-4 bg-primary text-white font-bold rounded-xl shadow-lg shadow-primary/20 flex items-center justify-center gap-2 hover:opacity-90 transition-opacity">
+<span class="material-symbols-outlined fill-icon">copy_all</span>
+                    Mirror This Plan
+                </button>
+</div>
+<!-- Video Player -->
+<div class="relative group aspect-video rounded-xl overflow-hidden bg-slate-900 shadow-2xl">
+<div class="absolute inset-0 bg-cover bg-center opacity-60" data-alt="Athlete preparing a meal in a modern kitchen" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuC3_jepCiKyRTEtDIuGiSVsIgi_VVCcxVxoshSHHQiYiw03aNxfnS626tQ1r22mi3WCUz94S9VPXovG5ne42ecmDh8zk34ubbVSk2Rr12k88eNgwD9WwLqHACPMi5ytANNsIlgDz17_sqvbpWWJNHtdKrO0sAyQDt9dhjTtFW8SbXDqJTvkZkpf188zT3_Hc21DOlNhS6h4iM5gTpehjeomqZfcaAzFPY7SDsDEkUSqlZAV6cPMg8fjqpIhmOsx57UIVi3gfzyqtF-P')">
+</div>
+<div class="absolute inset-0 flex items-center justify-center">
+<button class="w-20 h-20 bg-primary rounded-full flex items-center justify-center text-white shadow-xl hover:scale-110 transition-transform">
+<span class="material-symbols-outlined text-4xl fill-icon">play_arrow</span>
+</button>
+</div>
+<div class="absolute bottom-0 inset-x-0 p-4 bg-gradient-to-t from-black/80 to-transparent">
+<div class="flex items-center gap-3 text-white text-sm">
+<div class="h-1 flex-1 bg-white/30 rounded-full overflow-hidden">
+<div class="h-full bg-primary w-1/3"></div>
+</div>
+<span>0:37 / 2:23</span>
+<span class="material-symbols-outlined text-sm">fullscreen</span>
+</div>
+<p class="text-white font-medium mt-2">Intro: Why this plan works</p>
+</div>
+</div>
+</section>
+<!-- Weekly Schedule Section -->
+<section class="px-4 md:px-6 mt-8">
+<div class="flex items-center justify-between mb-6">
+<h3 class="text-2xl font-bold">Weekly Schedule</h3>
+<div class="flex gap-2">
+<button class="p-2 border border-slate-200 dark:border-slate-800 rounded-lg hover:bg-white dark:hover:bg-slate-900">
+<span class="material-symbols-outlined">filter_list</span>
+</button>
+</div>
+</div>
+<!-- Monday - Sunday Calendar -->
+<div class="grid grid-cols-1 md:grid-cols-7 gap-4">
+<!-- Monday (Batch Cooking Highlight) -->
+<div class="space-y-4">
+<div class="text-center pb-2 border-b-2 border-primary">
+<p class="text-xs font-bold text-primary">MON</p>
+<p class="text-lg font-bold">12</p>
+</div>
+<div class="p-3 bg-primary/10 border border-primary/20 rounded-lg space-y-2">
+<div class="flex items-center gap-1 text-primary">
+<span class="material-symbols-outlined text-xs">restaurant</span>
+<span class="text-[10px] font-bold uppercase">Batch Cook</span>
+</div>
+<p class="text-xs font-bold leading-tight">Meal Prep (x4): 4lb Chicken &amp; 4 cups Quinoa Bowls</p>
+</div>
+<div class="p-3 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-lg space-y-2">
+<p class="text-[10px] font-medium text-slate-400 uppercase">Dinner</p>
+<p class="text-xs font-bold leading-tight">4x Salmon Filets with 2lb Roasted Asparagus</p>
+</div>
+</div>
+<!-- Tuesday -->
+<div class="space-y-4">
+<div class="text-center pb-2 border-b-2 border-transparent text-slate-400">
+<p class="text-xs font-bold">TUE</p>
+<p class="text-lg font-bold">13</p>
+</div>
+<div class="p-3 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-lg space-y-2">
+<p class="text-[10px] font-medium text-slate-400 uppercase">Breakfast</p>
+<p class="text-xs font-bold leading-tight">Family-Size Overnight Oats with Mixed Berries</p>
+</div>
+<div class="p-3 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-lg space-y-2">
+<p class="text-[10px] font-medium text-slate-400 uppercase">Lunch</p>
+<p class="text-xs font-bold leading-tight">4x Prepped Quinoa Bowls (Grab &amp; Go)</p>
+</div>
+</div>
+<!-- Wednesday -->
+<div class="space-y-4">
+<div class="text-center pb-2 border-b-2 border-transparent text-slate-400">
+<p class="text-xs font-bold">WED</p>
+<p class="text-lg font-bold">14</p>
+</div>
+<div class="p-3 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-lg space-y-2">
+<p class="text-[10px] font-medium text-slate-400 uppercase">Lunch</p>
+<p class="text-xs font-bold leading-tight">Prepped Quinoa Bowl</p>
+</div>
+<div class="p-3 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-lg space-y-2">
+<p class="text-[10px] font-medium text-slate-400 uppercase">Dinner</p>
+<p class="text-xs font-bold leading-tight">Family Taco Night: 8 Large Sweet Potatoes</p>
+</div>
+</div>
+<!-- Thursday (Batch Cooking 2) -->
+<div class="space-y-4">
+<div class="text-center pb-2 border-b-2 border-transparent text-slate-400">
+<p class="text-xs font-bold">THU</p>
+<p class="text-lg font-bold">15</p>
+</div>
+<div class="p-3 bg-primary/10 border border-primary/20 rounded-lg space-y-2">
+<div class="flex items-center gap-1 text-primary">
+<span class="material-symbols-outlined text-xs">restaurant</span>
+<span class="text-[10px] font-bold uppercase">Batch Cook</span>
+</div>
+<p class="text-xs font-bold leading-tight">Post-Workout Smoothies: 2L High-Protein Blend</p>
+</div>
+<div class="p-3 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-lg space-y-2">
+<p class="text-[10px] font-medium text-slate-400 uppercase">Lunch</p>
+<p class="text-xs font-bold leading-tight">Turkey Avocado Wrap</p>
+</div>
+</div>
+<!-- Friday -->
+<div class="space-y-4">
+<div class="text-center pb-2 border-b-2 border-transparent text-slate-400">
+<p class="text-xs font-bold">FRI</p>
+<p class="text-lg font-bold">16</p>
+</div>
+<div class="p-3 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-lg space-y-2">
+<p class="text-[10px] font-medium text-slate-400 uppercase">Breakfast</p>
+<p class="text-xs font-bold leading-tight">Scrambled Eggs &amp; Toast</p>
+</div>
+<div class="p-3 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-lg space-y-2">
+<p class="text-[10px] font-medium text-slate-400 uppercase">Dinner</p>
+<p class="text-xs font-bold leading-tight">Whole Wheat Pasta</p>
+</div>
+</div>
+<!-- Saturday -->
+<div class="space-y-4">
+<div class="text-center pb-2 border-b-2 border-transparent text-slate-400">
+<p class="text-xs font-bold">SAT</p>
+<p class="text-lg font-bold">17</p>
+</div>
+<div class="p-3 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-lg space-y-2">
+<p class="text-[10px] font-medium text-slate-400 uppercase">Pre-Run</p>
+<p class="text-xs font-bold leading-tight">Banana &amp; Almond Butter</p>
+</div>
+<div class="p-3 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-lg space-y-2">
+<p class="text-[10px] font-medium text-slate-400 uppercase">Post-Run</p>
+<p class="text-xs font-bold leading-tight">Massive Poke Bowl</p>
+</div>
+</div>
+<!-- Sunday -->
+<div class="space-y-4">
+<div class="text-center pb-2 border-b-2 border-transparent text-slate-400">
+<p class="text-xs font-bold">SUN</p>
+<p class="text-lg font-bold">18</p>
+</div>
+<div class="p-3 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-lg space-y-2">
+<p class="text-[10px] font-medium text-slate-400 uppercase">All Day</p>
+<p class="text-xs font-bold leading-tight">Recovery Focused Fasting</p>
+</div>
+<div class="p-3 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-lg space-y-2">
+<p class="text-[10px] font-medium text-slate-400 uppercase">Dinner</p>
+<p class="text-xs font-bold leading-tight">4x 8oz Grass-Fed Steaks &amp; Large Family Salad</p>
+</div>
+</div>
+</div>
+</section>
+</main>
+<!-- Bottom Navigation Bar -->
+<div class="fixed bottom-0 left-0 right-0 bg-white dark:bg-slate-950 border-t border-slate-200 dark:border-slate-800 px-6 pb-6 pt-3 z-50">
+<div class="max-w-md mx-auto flex justify-between items-center">
+<a class="flex flex-col items-center gap-1 text-slate-400" href="#">
+<span class="material-symbols-outlined">home</span>
+<span class="text-[10px] font-medium">Feed</span>
+</a>
+<a class="flex flex-col items-center gap-1 text-slate-400" href="#">
+<span class="material-symbols-outlined">search</span>
+<span class="text-[10px] font-medium">Explore</span>
+</a>
+<a class="flex flex-col items-center gap-1 text-primary" href="#">
+<span class="material-symbols-outlined fill-icon">calendar_month</span>
+<span class="text-[10px] font-bold">Plans</span>
+</a>
+<a class="flex flex-col items-center gap-1 text-slate-400" href="#">
+<span class="material-symbols-outlined">leaderboard</span>
+<span class="text-[10px] font-medium">Stats</span>
+</a>
+<a class="flex flex-col items-center gap-1 text-slate-400" href="#">
+<span class="material-symbols-outlined">person</span>
+<span class="text-[10px] font-medium">Profile</span>
+</a>
+</div>
+</div>
+</body></html>

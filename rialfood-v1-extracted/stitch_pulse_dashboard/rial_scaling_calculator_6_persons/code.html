@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>RIAL - Batch Cooking Mode</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#25aff4",
+                        "background-light": "#f5f7f8",
+                        "background-dark": "#101c22",
+                    },
+                    fontFamily: {
+                        "display": ["Inter"]
+                    },
+                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark font-display text-slate-900 dark:text-slate-100">
+<div class="relative flex min-h-screen w-full flex-col max-w-md mx-auto bg-white dark:bg-slate-900 shadow-xl overflow-x-hidden">
+<!-- Header Section -->
+<header class="sticky top-0 z-10 bg-white/80 dark:bg-slate-900/80 backdrop-blur-md border-b border-slate-200 dark:border-slate-800">
+<div class="flex items-center p-4 justify-between">
+<div class="flex size-10 items-center justify-center rounded-full hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors cursor-pointer">
+<span class="material-symbols-outlined text-slate-600 dark:text-slate-400">arrow_back</span>
+</div>
+<div class="text-center">
+<h2 class="text-slate-900 dark:text-slate-100 text-lg font-bold leading-tight tracking-tight">Meal Prep Batch Session</h2>
+<p class="text-primary text-xs font-semibold uppercase tracking-wider mt-0.5">Sunday Afternoon • 2.5 hours planned</p>
+</div>
+<div class="flex size-10 items-center justify-center rounded-full bg-primary/10">
+<span class="material-symbols-outlined text-primary">timer</span>
+</div>
+</div>
+</header>
+<!-- Main Content -->
+<main class="flex-1 overflow-y-auto pb-24">
+<!-- Tactical Stats Cards -->
+<div class="flex gap-3 p-4 overflow-x-auto no-scrollbar">
+<div class="flex min-w-[140px] flex-1 flex-col gap-1 rounded-xl p-4 border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-800/50 shadow-sm">
+<p class="text-slate-500 dark:text-slate-400 text-xs font-medium">Total Meals</p>
+<p class="text-slate-900 dark:text-white text-2xl font-bold leading-tight">18</p>
+<div class="flex items-center gap-1 text-emerald-600 dark:text-emerald-400 text-[10px] font-bold">
+<span class="material-symbols-outlined text-[14px]">add_circle</span>
+<span>2 EXTRA</span>
+</div>
+</div>
+<div class="flex min-w-[140px] flex-1 flex-col gap-1 rounded-xl p-4 border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-800/50 shadow-sm">
+<p class="text-slate-500 dark:text-slate-400 text-xs font-medium">Prep Time</p>
+<p class="text-slate-900 dark:text-white text-2xl font-bold leading-tight">2.5h</p>
+<div class="flex items-center gap-1 text-primary text-[10px] font-bold">
+<span class="material-symbols-outlined text-[14px]">trending_down</span>
+<span>15% FASTER</span>
+</div>
+</div>
+<div class="flex min-w-[140px] flex-1 flex-col gap-1 rounded-xl p-4 border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-800/50 shadow-sm">
+<p class="text-slate-500 dark:text-slate-400 text-xs font-medium">Portions</p>
+<p class="text-slate-900 dark:text-white text-2xl font-bold leading-tight">72</p>
+<div class="flex items-center gap-1 text-emerald-600 dark:text-emerald-400 text-[10px] font-bold">
+<span class="material-symbols-outlined text-[14px]">restaurant</span>
+<span>+4 YIELD</span>
+</div>
+</div>
+</div>
+<!-- Scaling Calculator -->
+<div class="px-4 py-2">
+<div class="bg-primary/5 border border-primary/20 rounded-xl p-4">
+<div class="flex items-center justify-between mb-2">
+<div>
+<h3 class="text-slate-900 dark:text-white font-bold text-sm">Scaling Calculator</h3>
+<p class="text-slate-500 dark:text-slate-400 text-[11px] leading-relaxed">Updates ingredient weights and cook times automatically.</p>
+</div>
+<div class="flex items-center bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg p-1">
+<button class="size-8 flex items-center justify-center text-primary hover:bg-slate-50 dark:hover:bg-slate-700 rounded transition-colors">
+<span class="material-symbols-outlined text-sm">remove</span>
+</button>
+<div class="px-4 text-center">
+<p class="text-xs text-slate-400 uppercase font-bold text-[9px]">Family</p>
+<p class="text-sm font-bold text-slate-900 dark:text-white text-primary">6</p>
+</div>
+<button class="size-8 flex items-center justify-center text-primary hover:bg-slate-50 dark:hover:bg-slate-700 rounded transition-colors">
+<span class="material-symbols-outlined text-sm">add</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+<!-- Menu List -->
+<div class="px-4 pt-6 pb-2 flex items-center justify-between">
+<h2 class="text-slate-900 dark:text-white text-xl font-bold tracking-tight">Batch Cooking Menu</h2>
+<span class="text-[10px] font-bold bg-slate-100 dark:bg-slate-800 text-slate-500 px-2 py-1 rounded uppercase tracking-widest">3 Items</span>
+</div>
+<div class="px-4 space-y-3">
+<!-- Item 1: Ready -->
+<div class="flex items-center gap-4 p-4 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl">
+<div class="relative size-16 shrink-0 rounded-lg overflow-hidden border border-slate-100 dark:border-slate-700">
+<div class="absolute inset-0 bg-gradient-to-br from-orange-400 to-red-500 opacity-20"></div>
+<img class="w-full h-full object-cover" data-alt="Roasted root vegetables in a pan" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDlQAv-ItGSg0q9pnceNreCVx1vDz6glQ2e8Kb40FQ7H2z711wcN97EFfVrja05rlGi-GgxZ47MHMO904lybAGmzJLoWfo2FR0sgJtZW48EWIp82wzC81vjUHNBbWUt1ESb8a521F2HqvAQx4zBj9x24uWbD6s2UHir0y8_GULpD4t5TJ5H-uNvCk0pi9cy5mdl5NOiSvwZGFB7gzifla9UfyWhUeYqE_ZHdhxrHXNUmOyEz7QqW4QAgMapVaIohko3-jjupzZkk7JH"/>
+</div>
+<div class="flex-1 min-w-0">
+<div class="flex items-center gap-2 mb-0.5">
+<span class="text-[10px] font-bold text-primary uppercase tracking-tighter">Base</span>
+<span class="size-1 rounded-full bg-slate-300"></span>
+<span class="text-[10px] font-bold text-slate-400 uppercase tracking-tighter">12 Portions</span>
+</div>
+<h3 class="text-slate-900 dark:text-white font-bold text-sm truncate">Herb Roasted Roots</h3>
+<p class="text-slate-500 dark:text-slate-400 text-xs truncate">Carrots, parsnips, sweet potato</p>
+</div>
+<div class="flex flex-col items-end gap-1">
+<span class="px-2 py-0.5 rounded-full bg-emerald-100 dark:bg-emerald-900/30 text-emerald-600 dark:text-emerald-400 text-[10px] font-bold uppercase">Ready</span>
+<span class="material-symbols-outlined text-emerald-500">check_circle</span>
+</div>
+</div>
+<!-- Item 2: Prepping -->
+<div class="flex items-center gap-4 p-4 bg-white dark:bg-slate-800 border-2 border-primary rounded-xl ring-4 ring-primary/10">
+<div class="relative size-16 shrink-0 rounded-lg overflow-hidden border border-slate-100 dark:border-slate-700">
+<div class="absolute inset-0 bg-gradient-to-br from-blue-400 to-indigo-500 opacity-20"></div>
+<img class="w-full h-full object-cover" data-alt="Sliced lemon thyme chicken breast" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAQDWZq6_icogyzDZsJihEhaEth3e88OU40F3jOB8jI58isxb3WYfcvPgdTNnsr9WUSzuIBTQCu6kPHftsy4hDF_aowKwQAG1Wr6sUhZFPTmbWxhpSi2z-3f5OH4cEBgi51aWWcARnCKIUfeC9lCBdXozYue8OZ1LaCyTUfJWOkur24sYgOOEZg2slffzB090yJs1isINwXIWCOZ4I8xRdQl-N9yEn3gWEmh9T7OXaoWxCCaLc8Oywkmctbujw7WwkmcyRh8eFRPWBE"/>
+</div>
+<div class="flex-1 min-w-0">
+<div class="flex items-center gap-2 mb-0.5">
+<span class="text-[10px] font-bold text-primary uppercase tracking-tighter">Protein</span>
+<span class="size-1 rounded-full bg-slate-300"></span>
+<span class="text-[10px] font-bold text-slate-400 uppercase tracking-tighter">18 Portions</span>
+</div>
+<h3 class="text-slate-900 dark:text-white font-bold text-sm truncate">Lemon Thyme Chicken</h3>
+<p class="text-slate-500 dark:text-slate-400 text-xs truncate">Sous-vide style tender breasts</p>
+</div>
+<div class="flex flex-col items-end gap-1">
+<span class="px-2 py-0.5 rounded-full bg-primary/10 text-primary text-[10px] font-bold uppercase">Prepping</span>
+<div class="flex gap-0.5">
+<span class="size-1.5 rounded-full bg-primary animate-pulse"></span>
+<span class="size-1.5 rounded-full bg-primary/40"></span>
+<span class="size-1.5 rounded-full bg-primary/40"></span>
+</div>
+</div>
+</div>
+<!-- Item 3: Not Started -->
+<div class="flex items-center gap-4 p-4 bg-slate-50 dark:bg-slate-800/40 border border-slate-200 dark:border-slate-800 rounded-xl opacity-80">
+<div class="relative size-16 shrink-0 rounded-lg overflow-hidden border border-slate-100 dark:border-slate-700 grayscale">
+<div class="absolute inset-0 bg-gradient-to-br from-green-400 to-teal-500 opacity-20"></div>
+<img class="w-full h-full object-cover" data-alt="Healthy quinoa and kale salad bowl" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD2Mit-QYhnb4Vz_mMxQqnS5ocb1OFiynnNLPMw0DcaomALebEJruH5-hYn9fe_anqFFXtstfikYLFG6GBtaZ0_nxc1K3V-iJ5jpymxHGY6D9VIVIFhIFdGt_HZdZTtjzVAqfCMU8jGbgEo1u4ajWXxGp0FqEd8Zhr-lgDIcIX-rOE4zYAcGHnWH3A_HjSNF1z1Xsl5VVUmHjEMobGXhQwPY3poK6fQwIHjpBzTY9Im8jiqET5R_QS3U2cfma-8Q2DUmtrUG6jMbyvo"/>
+</div>
+<div class="flex-1 min-w-0">
+<div class="flex items-center gap-2 mb-0.5">
+<span class="text-[10px] font-bold text-primary uppercase tracking-tighter">Meal</span>
+<span class="size-1 rounded-full bg-slate-300"></span>
+<span class="text-[10px] font-bold text-slate-400 uppercase tracking-tighter">9 Portions</span>
+</div>
+<h3 class="text-slate-900 dark:text-white font-bold text-sm truncate">Quinoa &amp; Kale Bowls</h3>
+<p class="text-slate-500 dark:text-slate-400 text-xs truncate">With tahini lemon dressing</p>
+</div>
+<div class="flex flex-col items-end gap-1">
+<span class="px-2 py-0.5 rounded-full bg-slate-200 dark:bg-slate-700 text-slate-500 dark:text-slate-400 text-[10px] font-bold uppercase">Pending</span>
+<span class="material-symbols-outlined text-slate-300 dark:text-slate-600">radio_button_unchecked</span>
+</div>
+</div>
+</div>
+<!-- Tactical Action -->
+<div class="p-6">
+<button class="w-full bg-primary hover:bg-primary/90 text-white font-bold py-4 rounded-xl shadow-lg shadow-primary/25 flex items-center justify-center gap-2 transition-all active:scale-95">
+<span class="material-symbols-outlined">play_arrow</span>
+<span>Continue Batch Session</span>
+</button>
+</div>
+</main>
+<!-- Bottom Navigation -->
+<nav class="fixed bottom-0 left-0 right-0 max-w-md mx-auto bg-white/95 dark:bg-slate-900/95 backdrop-blur-lg border-t border-slate-200 dark:border-slate-800 px-6 py-3 pb-6 flex justify-between items-center">
+<a class="flex flex-col items-center gap-1 group" href="#">
+<span class="material-symbols-outlined text-primary" style="font-variation-settings: 'FILL' 1">calendar_today</span>
+<span class="text-[10px] font-bold text-primary tracking-tight">Planner</span>
+</a>
+<a class="flex flex-col items-center gap-1 group opacity-40 hover:opacity-100 transition-opacity" href="#">
+<span class="material-symbols-outlined text-slate-600 dark:text-slate-400">menu_book</span>
+<span class="text-[10px] font-bold text-slate-600 dark:text-slate-400 tracking-tight">Recipes</span>
+</a>
+<div class="relative -top-6">
+<div class="bg-primary size-14 rounded-full flex items-center justify-center shadow-lg shadow-primary/40 border-4 border-white dark:border-slate-900">
+<span class="material-symbols-outlined text-white text-3xl">add</span>
+</div>
+</div>
+<a class="flex flex-col items-center gap-1 group opacity-40 hover:opacity-100 transition-opacity" href="#">
+<span class="material-symbols-outlined text-slate-600 dark:text-slate-400">shopping_cart</span>
+<span class="text-[10px] font-bold text-slate-600 dark:text-slate-400 tracking-tight">Groceries</span>
+</a>
+<a class="flex flex-col items-center gap-1 group opacity-40 hover:opacity-100 transition-opacity" href="#">
+<span class="material-symbols-outlined text-slate-600 dark:text-slate-400">analytics</span>
+<span class="text-[10px] font-bold text-slate-600 dark:text-slate-400 tracking-tight">Wellness</span>
+</a>
+</nav>
+</div>
+<style>
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+    </style>
+</body></html>

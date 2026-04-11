@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport"/>
+<title>RIAL Personal Insights Report</title>
+<!-- Tailwind CSS v3 CDN -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- Google Fonts: Editorial and Clean sans-serif -->
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&amp;family=Inter:wght@300;400;600&amp;display=swap" rel="stylesheet"/>
+<script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            serif: ['Playfair Display', 'serif'],
+            sans: ['Inter', 'sans-serif'],
+          },
+          colors: {
+            wellness: {
+              beige: '#F9F7F2',
+              sage: '#8DAA91',
+              charcoal: '#2C2C2C',
+              sand: '#E5DED1',
+              accent: '#D4A373'
+            }
+          }
+        }
+      }
+    }
+  </script>
+<style data-purpose="custom-typography">
+    body {
+      background-color: #F9F7F2;
+      color: #2C2C2C;
+      -webkit-font-smoothing: antialiased;
+    }
+    .editorial-title {
+      line-height: 1.1;
+    }
+    .chart-container {
+      position: relative;
+      height: 200px;
+      width: 100%;
+    }
+  </style>
+</head>
+<body class="font-sans selection:bg-wellness-sage selection:text-white">
+<!-- BEGIN: MainHeader -->
+<header class="px-6 pt-12 pb-8 border-b border-wellness-sand bg-wellness-beige">
+<div class="flex justify-between items-end mb-6">
+<div>
+<span class="text-xs uppercase tracking-widest text-wellness-accent font-semibold">Monthly Edition</span>
+<h1 class="text-4xl font-serif editorial-title mt-2">Personal <br/>Insights Report</h1>
+</div>
+<div class="text-right">
+<p class="text-sm font-medium">RIAL Health</p>
+<p class="text-xs text-gray-500 italic">Oct 2023</p>
+</div>
+</div>
+<div class="h-px w-full bg-wellness-charcoal opacity-10"></div>
+</header>
+<!-- END: MainHeader -->
+<main class="pb-20">
+<!-- BEGIN: TrendVisualization -->
+<section class="px-6 py-8" data-purpose="data-visualization-section">
+<div class="mb-4">
+<h2 class="text-xl font-serif italic">Real Feel vs. Nutrition</h2>
+<p class="text-sm text-gray-600">A synchronized look at your subjective energy and objective data.</p>
+</div>
+<div class="bg-white p-4 rounded-xl shadow-sm border border-wellness-sand">
+<!-- Unified Chart Area -->
+<div class="chart-container flex items-end justify-between gap-1 mb-2" id="trendChart">
+<!-- Bars representing Nutrition Data, Lines (via SVG overlay) representing Real Feel -->
+<!-- Simplified Visual representation for mockup -->
+<div class="flex-1 bg-wellness-sand opacity-40 rounded-t-sm h-[60%]" data-purpose="data-bar"></div>
+<div class="flex-1 bg-wellness-sand opacity-40 rounded-t-sm h-[80%]" data-purpose="data-bar"></div>
+<div class="flex-1 bg-wellness-sage opacity-60 rounded-t-sm h-[40%]" data-purpose="data-bar"></div>
+<div class="flex-1 bg-wellness-sand opacity-40 rounded-t-sm h-[90%]" data-purpose="data-bar"></div>
+<div class="flex-1 bg-wellness-sand opacity-40 rounded-t-sm h-[70%]" data-purpose="data-bar"></div>
+<div class="flex-1 bg-wellness-sand opacity-40 rounded-t-sm h-[50%]" data-purpose="data-bar"></div>
+<div class="flex-1 bg-wellness-sage opacity-60 rounded-t-sm h-[85%]" data-purpose="data-bar"></div>
+<!-- Real Feel Line Overlay (Conceptual) -->
+<svg class="absolute inset-0 w-full h-full" preserveaspectratio="none" viewbox="0 0 100 100">
+<path d="M0,80 Q15,40 30,60 T60,20 T100,40" fill="none" stroke="#2C2C2C" stroke-width="1.5"></path>
+</svg>
+</div>
+<div class="flex justify-between text-[10px] uppercase tracking-tighter text-gray-400 font-bold border-t pt-2">
+<span>Mon</span>
+<span>Tue</span>
+<span>Wed</span>
+<span>Thu</span>
+<span>Fri</span>
+<span>Sat</span>
+<span>Sun</span>
+</div>
+<div class="mt-4 flex gap-4 text-xs">
+<div class="flex items-center gap-1">
+<span class="w-2 h-2 rounded-full bg-wellness-charcoal"></span>
+<span>Real Feel Index</span>
+</div>
+<div class="flex-1 flex items-center gap-1">
+<span class="w-2 h-2 rounded-full bg-wellness-sand"></span>
+<span>Nutrition Density</span>
+</div>
+</div>
+</div>
+</section>
+<!-- END: TrendVisualization -->
+<!-- BEGIN: CorrelationCards -->
+<section class="px-6 space-y-6" data-purpose="insights-grid">
+<h3 class="text-xs uppercase tracking-widest font-semibold text-gray-400">Key Correlations</h3>
+<!-- Card 1 -->
+<article class="bg-white p-6 rounded-2xl border border-wellness-sand" data-purpose="correlation-card">
+<div class="flex items-start gap-4">
+<div class="bg-wellness-beige p-3 rounded-full">
+<svg class="w-6 h-6 text-wellness-accent" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"></path></svg>
+</div>
+<div>
+<h4 class="font-serif text-lg leading-tight">Late night snacks vs. Morning Energy</h4>
+<p class="text-sm text-gray-600 mt-2 leading-relaxed">
+              We noticed your energy levels at 8:00 AM are consistently 20% higher on days following a 3-hour fast before sleep.
+            </p>
+</div>
+</div>
+</article>
+<!-- Card 2 -->
+<article class="bg-white p-6 rounded-2xl border border-wellness-sand" data-purpose="correlation-card">
+<div class="flex items-start gap-4">
+<div class="bg-wellness-beige p-3 rounded-full">
+<svg class="w-6 h-6 text-wellness-sage" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M13 10V3L4 14h7v7l9-11h-7z" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"></path></svg>
+</div>
+<div>
+<h4 class="font-serif text-lg leading-tight">Protein Timing &amp; Focus</h4>
+<p class="text-sm text-gray-600 mt-2 leading-relaxed">
+              Your "Real Feel" focus scores peak when your breakfast includes at least 25g of protein. This trend is strongest on Tuesdays and Thursdays.
+            </p>
+</div>
+</div>
+</article>
+</section>
+<!-- END: CorrelationCards -->
+<!-- BEGIN: SensitivityAlerts -->
+<section class="px-6 mt-10" data-purpose="sensitivity-alerts">
+<div class="bg-wellness-charcoal text-white p-6 rounded-3xl relative overflow-hidden">
+<!-- Decorative subtle pattern -->
+<div class="absolute top-0 right-0 -mr-8 -mt-8 w-32 h-32 bg-white/5 rounded-full blur-2xl"></div>
+<div class="relative z-10">
+<div class="flex items-center gap-2 mb-4">
+<span class="flex h-2 w-2 rounded-full bg-wellness-accent animate-pulse"></span>
+<h3 class="text-xs uppercase tracking-widest font-semibold">Gently Noted: Sensitivities</h3>
+</div>
+<p class="font-serif text-xl mb-6">Your system seems to prefer alternatives to <span class="italic underline decoration-wellness-accent decoration-2 underline-offset-4">refined gluten</span> during high-stress weeks.</p>
+<div class="space-y-4">
+<div class="flex items-center justify-between border-t border-white/10 pt-4">
+<span class="text-sm text-gray-300">Observation</span>
+<span class="text-sm italic text-wellness-sage">Mild Bloom</span>
+</div>
+<p class="text-xs text-gray-400 leading-relaxed">
+              We tracked a slight decrease in digestive comfort markers when bread-based items were logged twice in 24 hours. Consider sourdough or sprouted grains for a lighter experience.
+            </p>
+</div>
+</div>
+</div>
+</section>
+<!-- END: SensitivityAlerts -->
+<!-- BEGIN: Footer -->
+<footer class="mt-12 px-6 text-center">
+<div class="h-px bg-wellness-sand mb-6"></div>
+<p class="font-serif italic text-gray-400">Nurture your data, find your rhythm.</p>
+<div class="mt-8 flex justify-center gap-6">
+<button class="w-10 h-10 rounded-full border border-wellness-sand flex items-center justify-center text-gray-400">
+<svg class="w-5 h-5" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+</button>
+<button class="px-6 py-2 bg-wellness-charcoal text-white rounded-full text-sm font-semibold tracking-wide">
+          Full Export (PDF)
+        </button>
+</div>
+</footer>
+<!-- END: Footer -->
+</main>
+<!-- BEGIN: InteractionScripts -->
+<script data-purpose="simple-ui-interaction">
+    // Add subtle reveal effect for cards on scroll
+    document.addEventListener('DOMContentLoaded', () => {
+      const cards = document.querySelectorAll('[data-purpose="correlation-card"]');
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.style.opacity = '1';
+            entry.target.style.transform = 'translateY(0)';
+          }
+        });
+      }, { threshold: 0.1 });
+
+      cards.forEach(card => {
+        card.style.opacity = '0';
+        card.style.transform = 'translateY(10px)';
+        card.style.transition = 'all 0.6s ease-out';
+        observer.observe(card);
+      });
+    });
+  </script>
+<!-- END: InteractionScripts -->
+</body></html>

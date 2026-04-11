@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>RIAL - The Real Narrative</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#0df259",
+                        "background-light": "#f5f8f6",
+                        "background-dark": "#102216",
+                    },
+                    fontFamily: {
+                        "display": ["Space Grotesk"]
+                    },
+                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>
+        body {
+            font-family: 'Space Grotesk', sans-serif;
+        }
+        .organic-overlay {
+            background: linear-gradient(180deg, rgba(16, 34, 22, 0) 0%, rgba(16, 34, 22, 0.8) 100%);
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 min-h-screen pb-24">
+<!-- Top Navigation -->
+<header class="sticky top-0 z-50 bg-background-light/80 dark:bg-background-dark/80 backdrop-blur-md border-b border-primary/10 px-4 py-3 flex items-center justify-between">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary text-3xl">menu_book</span>
+<h1 class="text-xl font-bold tracking-tight uppercase">RIAL</h1>
+</div>
+<div class="flex items-center gap-4">
+<button class="p-2 rounded-full hover:bg-primary/10 transition-colors">
+<span class="material-symbols-outlined">search</span>
+</button>
+<div class="w-10 h-10 rounded-full border-2 border-primary overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="User profile picture of a female athlete" src="https://lh3.googleusercontent.com/aida-public/AB6AXuC78vBCwDScqgD9e7cNvBoR2RQvYTB2DONPTB0wwDOZDokbV_Mp1twmSRiDro_SfCj4ufYvpaIRJiMwMKHMsHnafLcz4dcCyF9MC6-Hg-T_JX--ejr5G8WVZzM7-6N3-cGz88EYaeD3SNseUJNahART9SvRZfIe683VxuODtTp6NA8HzFcVd2lXXbZzZnsKKeDM2jge_KpEU5i59Gz_oogcY3uD2P-B98WwkCBR-XvD3dR6_HBlioOY_EFBebM3tX-0rKtSx2N61a_S"/>
+</div>
+</div>
+</header>
+<main class="max-w-xl mx-auto px-4 py-6 space-y-10">
+<!-- Section: Personal Cookbook (Level 2 & 3) -->
+<section>
+<div class="flex items-end justify-between mb-4">
+<div>
+<span class="text-primary text-xs font-bold uppercase tracking-widest">Level 2 &amp; 3</span>
+<h2 class="text-2xl font-bold">Personal Cookbook</h2>
+</div>
+<button class="text-primary text-sm font-medium">View All</button>
+</div>
+<div class="grid grid-cols-2 gap-4">
+<div class="relative aspect-square rounded-xl overflow-hidden group cursor-pointer border border-primary/20">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" data-alt="Rustic soup bowl on wooden table" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAp-ciN4i1P09oNdawVj296UR3BHZEzEVn_sKacL7IQU0M6GjwR0AKhUmrGX0a2b-s9HOsdhkc7WjzdydEw29gcvBOhBTWgDYJvjWeDw7603yz5FG9F_o1VKHGlZHlh-OX-8mZrYSFNTBCW-yPpT4rfEwt2Y83whprRajopyES2jPvoA8jXhcKisUnuYz70262g2VIb6ByY_Lxub9L9DPZX7-ctBJcK-chwhW_iv-QVPX2VD_WMwK8uah4Tjsmo7JHlFuQHQ0Un2Joe"/>
+<div class="absolute inset-0 organic-overlay flex flex-col justify-end p-4">
+<span class="material-symbols-outlined text-primary mb-1">bookmark</span>
+<h3 class="font-bold text-lg leading-tight">My Saved</h3>
+<p class="text-xs text-slate-300">24 Recipes</p>
+</div>
+</div>
+<div class="grid grid-rows-2 gap-4">
+<div class="relative rounded-xl overflow-hidden group cursor-pointer border border-primary/20">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" data-alt="Home kitchen with fresh vegetables" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCyogfalfGU9_3mzQMMiRRuvvcYvAMKr5DlAM9YYPtLl6ZlYjDCopNLeHdO19gsIztX0vwY1dJ5keixg-9ElAs6P9Ca_go6qN-hkDMa2Ol3hkUEOhr3TMos9JwZ-OXTfdP-icxDtskw5jFIObbLV8MA7yz7pIZgYZmIXnC-hGIB_7wKQS7XC94krYKc7slrp9_qdVCbNyA3N8zsZfa3v2PYf1zwCndphxi1S4oiph1n2MW-CJSy9rnT8eZL4FkmvCs-0kTewZJpdK9Z"/>
+<div class="absolute inset-0 organic-overlay flex flex-col justify-end p-3">
+<h3 class="font-bold text-sm">Family Favorites</h3>
+</div>
+</div>
+<div class="relative rounded-xl overflow-hidden group cursor-pointer border border-primary/20">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" data-alt="Platter of colorful healthy appetizers" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCqYj6dhTCbayyTvv5TYXsbq05iH-rp9QC6uTGhQrBi3Ku4IN5WItz93bI7LC0VJ5jcDBMPhAVdI3ViAGjdrtAhxVKFlUMAvu5UK2ae3ubph4Ymre95ttDJaa93OxpbRdkekfdKa6ovAJHneQaglk1Nv6o43mZ2kweiReU2WvpWWJUqvZyNQS-gP3hZFjQZRb94KAw5OZsZdpgxQkIZWaG2YuU08Cei3rIe6ufxZ9i_n_gXBTxmGOLFSlHCKKKcYSXWgv8nZVtL6NDW"/>
+<div class="absolute inset-0 organic-overlay flex flex-col justify-end p-3">
+<h3 class="font-bold text-sm">Community Hits</h3>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Section: Trending Community Recipe (Level 4) -->
+<section>
+<div class="mb-4">
+<span class="text-primary text-xs font-bold uppercase tracking-widest">Trending Narrative</span>
+<h2 class="text-2xl font-bold">Pro Creator Spotlight</h2>
+</div>
+<div class="bg-slate-900/40 border border-primary/10 rounded-2xl overflow-hidden">
+<div class="relative aspect-video group cursor-pointer">
+<img class="w-full h-full object-cover opacity-80" data-alt="Professional chef plating a gourmet dish" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAxu0sYADjdtyX0nJUgzXTk2R63-PUeVv47D4xZ-xJy7dQGG1fdyNUm31Si_PGG4fJyQji3KsWRcxo7lscuGXdKMl_TfiCxtIjLinpXhno_KM78LBphyiL8DCX6pRulXq1ezvgRoJK8JRKg2tmAAqKEoh-NhkMDg_ug7Wjyo5af0KdQ6jBCMX_JxMv_ych-2ck6wl5GAe5JugPdxEw5YdP74veKu7ghcICWrrrNN99DQvM3gCu6N6DtUSMOpA8RimdAXlEbmS8EBcID"/>
+<div class="absolute inset-0 flex items-center justify-center">
+<div class="w-16 h-16 rounded-full bg-primary flex items-center justify-center text-background-dark shadow-xl shadow-primary/20 group-hover:scale-110 transition-transform">
+<span class="material-symbols-outlined text-4xl fill-1">play_arrow</span>
+</div>
+</div>
+<div class="absolute top-4 left-4 bg-background-dark/80 backdrop-blur px-3 py-1 rounded-full border border-primary/20 flex items-center gap-2">
+<div class="w-6 h-6 rounded-full bg-primary/20 flex items-center justify-center">
+<span class="material-symbols-outlined text-primary text-xs">verified</span>
+</div>
+<span class="text-xs font-bold uppercase tracking-wider">Chef Julian • Level 4</span>
+</div>
+</div>
+<div class="p-6">
+<h3 class="text-xl font-bold mb-2">The 'Real' Harvest Bowl</h3>
+<p class="text-slate-400 text-sm mb-6 leading-relaxed">A narrative of local seasonal roots, fermented greens, and regeneratively raised protein.</p>
+<div class="grid grid-cols-4 gap-2 mb-6">
+<div class="bg-primary/5 p-3 rounded-lg border border-primary/10 text-center">
+<span class="block text-primary font-bold text-lg">542</span>
+<span class="text-[10px] uppercase text-slate-500">Kcal</span>
+</div>
+<div class="bg-primary/5 p-3 rounded-lg border border-primary/10 text-center">
+<span class="block text-primary font-bold text-lg">38g</span>
+<span class="text-[10px] uppercase text-slate-500">Protein</span>
+</div>
+<div class="bg-primary/5 p-3 rounded-lg border border-primary/10 text-center">
+<span class="block text-primary font-bold text-lg">12g</span>
+<span class="text-[10px] uppercase text-slate-500">Fiber</span>
+</div>
+<div class="bg-primary/5 p-3 rounded-lg border border-primary/10 text-center">
+<span class="block text-primary font-bold text-lg">High</span>
+<span class="text-[10px] uppercase text-slate-500">Zinc</span>
+</div>
+</div>
+<div class="flex items-center justify-between border-t border-primary/10 pt-4">
+<div class="flex -space-x-2">
+<div class="w-8 h-8 rounded-full border-2 border-background-dark bg-slate-700 overflow-hidden"><img data-alt="Avatar of user 1" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBcyBns5nMlefmkQxyExeAtHUvkzl7osr8t8xMFpCBpsStj0OTsVpDFX6LS01CSgbdROxwVe5xwDpQf7gl85-19qKlsSaAbPrzd7D0lVYuxmpjr_gg_Rc8CJKFI-lf6j9EuAbyWEHX5XAACHmEmeCH3dgHPJMr2qUpgG-Eps22_JWUOfAa1BNQdw5dFu0ZZ3waJLnOa-uUe-_HV0m4XoJUOF5nq-i9IID71Ojx0aphViz5cTGiSKu-a_yXg8mNpf90Fv04Pt4hU_C4z"/></div>
+<div class="w-8 h-8 rounded-full border-2 border-background-dark bg-slate-700 overflow-hidden"><img data-alt="Avatar of user 2" src="https://lh3.googleusercontent.com/aida-public/AB6AXuATyvlCSu4yEP6qcYXTZSaMULzN0NLyvQ6VlQ4B_aTFnmFqn2d3ctDffRSYV1_RT7X7znrJl0K-Ua1sYOB9y4lKLGZY5Smh9WXkr4YyfvT7GB3op3AIWcsiE0n8PANpBvHRoyHUIWZ4wCwgrwGwCR65y0VAtFegs5Z8c0zI6L4RCag5GK695D3eXwptXHF0x1lrk7whpwLPzPkNznLRQGqV1XSS62O9tfaevJhEyhAq262l3uGWP4ALOyYl4X5psRwuQImdfXrcXlyr"/></div>
+<div class="w-8 h-8 rounded-full border-2 border-background-dark bg-slate-600 flex items-center justify-center text-[10px]">+128</div>
+</div>
+<button class="bg-primary text-background-dark font-bold px-6 py-2 rounded-lg text-sm uppercase tracking-wide">Cook This</button>
+</div>
+</div>
+</div>
+</section>
+<!-- Section: Daily Activity & Fuel (Level 1) -->
+<section class="bg-primary/5 border border-primary/20 rounded-2xl p-6">
+<div class="flex items-center justify-between mb-6">
+<div>
+<span class="text-primary text-xs font-bold uppercase tracking-widest">Level 1 Integration</span>
+<h2 class="text-2xl font-bold">Daily Activity &amp; Fuel</h2>
+</div>
+<div class="text-right">
+<p class="text-xs text-slate-500 uppercase">Intensity</p>
+<p class="text-primary font-bold">HIGH (Phase 4)</p>
+</div>
+</div>
+<div class="space-y-4">
+<div class="flex items-center gap-4 bg-background-dark/50 p-4 rounded-xl border border-primary/10">
+<div class="w-12 h-12 rounded-lg bg-primary/20 flex items-center justify-center">
+<span class="material-symbols-outlined text-primary">fitness_center</span>
+</div>
+<div class="flex-1">
+<p class="text-sm font-bold">Resistance Training</p>
+<p class="text-xs text-slate-500">60 mins • 420 kcal burned</p>
+</div>
+<div class="text-right">
+<span class="text-xs text-primary font-medium">+15g Protein Req.</span>
+</div>
+</div>
+<div class="relative pt-2">
+<div class="flex justify-between text-xs mb-2">
+<span class="text-slate-400">Current Fuel Intake</span>
+<span class="font-bold text-primary">72% Optimized</span>
+</div>
+<div class="w-full bg-slate-800 h-3 rounded-full overflow-hidden">
+<div class="bg-primary h-full w-[72%] rounded-full shadow-[0_0_10px_rgba(13,242,89,0.5)]"></div>
+</div>
+</div>
+<div class="flex gap-4 pt-2">
+<div class="flex-1 bg-background-dark/30 p-3 rounded-lg border border-primary/5">
+<p class="text-[10px] text-slate-500 uppercase">Pre-Workout</p>
+<p class="text-sm font-medium">Beetroot &amp; Amino</p>
+</div>
+<div class="flex-1 bg-background-dark/30 p-3 rounded-lg border border-primary/5">
+<p class="text-[10px] text-slate-500 uppercase">Post-Workout</p>
+<p class="text-sm font-medium">Whey &amp; Berry Narrative</p>
+</div>
+</div>
+</div>
+</section>
+</main>
+<!-- Bottom Navigation Bar -->
+<nav class="fixed bottom-0 left-0 right-0 z-50 bg-background-dark/90 backdrop-blur-xl border-t border-primary/10 px-6 py-4">
+<div class="max-w-xl mx-auto flex items-center justify-between">
+<a class="flex flex-col items-center gap-1 text-primary" href="#">
+<span class="material-symbols-outlined fill-1">menu_book</span>
+<span class="text-[10px] font-bold uppercase tracking-tighter">Cookbook</span>
+</a>
+<a class="flex flex-col items-center gap-1 text-slate-500" href="#">
+<span class="material-symbols-outlined">explore</span>
+<span class="text-[10px] font-bold uppercase tracking-tighter">Discover</span>
+</a>
+<div class="relative -top-8">
+<button class="w-14 h-14 bg-primary text-background-dark rounded-full shadow-lg shadow-primary/30 flex items-center justify-center">
+<span class="material-symbols-outlined text-3xl font-bold">add</span>
+</button>
+</div>
+<a class="flex flex-col items-center gap-1 text-slate-500" href="#">
+<span class="material-symbols-outlined">monitoring</span>
+<span class="text-[10px] font-bold uppercase tracking-tighter">Tracker</span>
+</a>
+<a class="flex flex-col items-center gap-1 text-slate-500" href="#">
+<span class="material-symbols-outlined">person</span>
+<span class="text-[10px] font-bold uppercase tracking-tighter">Profile</span>
+</a>
+</div>
+</nav>
+</body></html>

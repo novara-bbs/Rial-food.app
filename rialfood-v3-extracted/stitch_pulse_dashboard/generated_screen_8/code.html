@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>RIAL Family Planner &amp; Batch Cooking</title>
+<!-- Tailwind CSS v3 CDN with Plugins -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- Google Fonts for Premium Feel -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&amp;family=Playfair+Display:ital,wght@0,600;1,600&amp;display=swap" rel="stylesheet"/>
+<script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'sans-serif'],
+            serif: ['Playfair Display', 'serif'],
+          },
+          colors: {
+            brand: {
+              beige: '#F9F7F2',
+              sage: '#8A9A5B',
+              slate: '#2C3E50',
+              accent: '#D4AF37'
+            }
+          }
+        }
+      }
+    }
+  </script>
+<style data-purpose="custom-styling">
+    body {
+      background-color: #F9F7F2;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .planner-card {
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+      border: 1px solid rgba(0,0,0,0.03);
+    }
+    /* Custom Scrollbar for horizontal calendar */
+    .hide-scrollbar::-webkit-scrollbar {
+      display: none;
+    }
+    .hide-scrollbar {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
+  </style>
+</head>
+<body class="font-sans text-brand-slate antialiased pb-20">
+<!-- BEGIN: Header -->
+<header class="sticky top-0 z-50 bg-brand-beige/95 backdrop-blur-md px-6 py-4 flex justify-between items-center border-b border-stone-200">
+<div>
+<h1 class="font-serif text-2xl italic text-brand-slate">RIAL</h1>
+<p class="text-[10px] tracking-widest uppercase text-stone-500">Family Planner</p>
+</div>
+<!-- Scaling Toggle Container -->
+<div class="flex items-center space-x-3 bg-white px-3 py-2 rounded-full shadow-sm border border-stone-100" data-purpose="scaling-toggle">
+<span class="text-xs font-medium text-stone-600">Family of 4</span>
+<div class="w-10 h-5 bg-brand-sage rounded-full relative">
+<div class="absolute right-0.5 top-0.5 w-4 h-4 bg-white rounded-full shadow-sm"></div>
+</div>
+</div>
+</header>
+<!-- END: Header -->
+<main class="max-w-md mx-auto px-5 py-6 space-y-8">
+<!-- BEGIN: Batch Session Card -->
+<section data-purpose="batch-session-overview">
+<div class="relative overflow-hidden rounded-3xl planner-card bg-brand-slate text-white">
+<img alt="Fresh ingredients laid out" class="absolute inset-0 w-full h-full object-cover opacity-40" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD1gyWLk2hxwwuY1LPQ5IXGBuI28OhoHcfRnhpVz1W_6zO7KExUjcp3fIHJ1jGBR_ciyoUiiaXz8RutZNHud963SZyVaCD0yeM_7PalwT4D95Y8CpQAJs4H6iGgWRP_wgUcAqoidETeWTGoqfFAABuc6BxZjDja_4T3fA08X2ncXrxOEXTtX48nomwXuIzDujafZOvznlZz7NLwvltL-TpFPjOTmKUucIo8soljUCm-Z3xrPNzSX_a446Z3VZr09T8RNMM_1CtwdjL_"/>
+<div class="relative p-6 bg-gradient-to-t from-brand-slate via-brand-slate/60 to-transparent">
+<div class="flex justify-between items-start mb-4">
+<span class="px-3 py-1 bg-brand-accent/20 text-brand-accent border border-brand-accent/30 rounded-full text-[10px] font-bold uppercase tracking-wider">
+              Weekly Prep
+            </span>
+<span class="text-xs text-stone-300">Sunday • 90 mins</span>
+</div>
+<h2 class="font-serif text-2xl mb-2 italic">Batch Session</h2>
+<p class="text-stone-300 text-sm mb-4 leading-relaxed">Prepare the foundational blocks for 5 nutritious family dinners.</p>
+<div class="flex gap-2">
+<!-- Prep Item Tags -->
+<div class="px-2 py-1 bg-white/10 rounded-md text-[10px] border border-white/10">Slow-Cooked Pulled Pork</div>
+<div class="px-2 py-1 bg-white/10 rounded-md text-[10px] border border-white/10">Roasted Root Veg</div>
+<div class="px-2 py-1 bg-white/10 rounded-md text-[10px] border border-white/10">+3 more</div>
+</div>
+</div>
+</div>
+</section>
+<!-- END: Batch Session Card -->
+<!-- BEGIN: Weekly Calendar -->
+<section data-purpose="weekly-planner">
+<div class="flex justify-between items-end mb-4">
+<h3 class="font-serif text-xl italic">The Week Ahead</h3>
+<button class="text-xs text-brand-sage font-semibold border-b border-brand-sage/30">View Shopping List</button>
+</div>
+<!-- Horizontal Calendar Scroller -->
+<div class="flex gap-4 overflow-x-auto hide-scrollbar pb-4 -mx-1 px-1">
+<!-- Monday -->
+<div class="min-w-[280px] bg-white rounded-2xl p-5 planner-card border-l-4 border-brand-sage">
+<div class="flex justify-between items-center mb-3">
+<span class="text-xs font-bold text-stone-400 uppercase tracking-widest">Monday</span>
+<span class="text-[10px] px-2 py-0.5 bg-green-50 text-green-700 rounded-full">Low Effort</span>
+</div>
+<h4 class="font-semibold text-lg mb-1">Pulled Pork Soft Tacos</h4>
+<p class="text-xs text-stone-500 mb-4 italic">Fresh salsa &amp; pickled onions</p>
+<!-- Leftover Logic Indicator -->
+<div class="bg-stone-50 rounded-lg p-3 border border-stone-100 flex items-center gap-3">
+<div class="w-2 h-2 rounded-full bg-brand-accent animate-pulse"></div>
+<div class="text-[11px] leading-tight text-stone-600">
+<span class="font-bold">Leftover Logic:</span> Use 1/3 of Sunday's Pulled Pork. Save bones for Tuesday's broth.
+            </div>
+</div>
+</div>
+<!-- Tuesday -->
+<div class="min-w-[280px] bg-white rounded-2xl p-5 planner-card">
+<div class="flex justify-between items-center mb-3">
+<span class="text-xs font-bold text-stone-400 uppercase tracking-widest">Tuesday</span>
+<span class="text-[10px] px-2 py-0.5 bg-amber-50 text-amber-700 rounded-full">New Prep</span>
+</div>
+<h4 class="font-semibold text-lg mb-1">Hearty Bone Broth Ramen</h4>
+<p class="text-xs text-stone-500 mb-4 italic">With soft boiled eggs &amp; greens</p>
+<div class="bg-stone-50 rounded-lg p-3 border border-stone-100 flex items-center gap-3">
+<div class="w-2 h-2 rounded-full bg-brand-sage"></div>
+<div class="text-[11px] leading-tight text-stone-600">
+<span class="font-bold">Leftover Logic:</span> Utilize yesterday's bones + Pre-chopped mirepoix.
+            </div>
+</div>
+</div>
+<!-- Wednesday -->
+<div class="min-w-[280px] bg-white rounded-2xl p-5 planner-card border-l-4 border-brand-accent">
+<div class="flex justify-between items-center mb-3">
+<span class="text-xs font-bold text-stone-400 uppercase tracking-widest">Wednesday</span>
+<span class="text-[10px] px-2 py-0.5 bg-blue-50 text-blue-700 rounded-full">Assembly Only</span>
+</div>
+<h4 class="font-semibold text-lg mb-1">Roasted Veg Buddha Bowl</h4>
+<p class="text-xs text-stone-500 mb-4 italic">With tahini dressing &amp; quinoa</p>
+<div class="bg-stone-50 rounded-lg p-3 border border-stone-100 flex items-center gap-3">
+<div class="w-2 h-2 rounded-full bg-brand-accent"></div>
+<div class="text-[11px] leading-tight text-stone-600">
+<span class="font-bold">Leftover Logic:</span> Cold roasted root veg from Sunday's prep session.
+            </div>
+</div>
+</div>
+</div>
+</section>
+<!-- END: Weekly Calendar -->
+<!-- BEGIN: Lifestyle Visual -->
+<section class="space-y-4" data-purpose="lifestyle-visual">
+<div class="grid grid-cols-2 gap-4">
+<div class="h-48 rounded-2xl overflow-hidden shadow-sm">
+<img alt="Family eating dinner" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDPNZCrA1fzV3GBVNAPKxClYslMr-bVeErCyvG4aNLe4d0foCIkdsGkHJKG398FS_PG0kXU-Pl4UroLV0laZvmnC7nMaKQxAQK3BK1PPs5vWVg3GOUWVzxnMc_RsGgr4BQxtu7uL2OWq8FvLovaaTg8_lvdijM-cyX9M8_3dUiDJHLV9_vbX5Slne26fRbrtDdzM0_T_pGjbdJEVuBSeslxwzi73IWtH2Kr_EbuJjvjg4mrEGE0-1zLpGmzlgk3ykkaLFJfMGitmTg-"/>
+</div>
+<div class="space-y-4">
+<div class="h-22 bg-brand-sage/10 rounded-2xl p-4 flex flex-col justify-center">
+<span class="text-xs text-brand-sage font-bold uppercase tracking-widest">Time Saved</span>
+<span class="text-2xl font-serif text-brand-slate italic">4.5 hrs</span>
+</div>
+<div class="h-22 bg-white rounded-2xl p-4 border border-stone-100 flex flex-col justify-center shadow-sm">
+<span class="text-xs text-stone-400 font-bold uppercase tracking-widest">Food Waste</span>
+<span class="text-2xl font-serif text-brand-slate italic">-30%</span>
+</div>
+</div>
+</div>
+</section>
+<!-- END: Lifestyle Visual -->
+</main>
+<!-- BEGIN: Bottom Navigation -->
+<nav class="fixed bottom-0 left-0 right-0 bg-white/80 backdrop-blur-lg border-t border-stone-100 px-8 py-4 flex justify-between items-center z-50">
+<button class="flex flex-col items-center gap-1 group">
+<div class="w-6 h-6 flex items-center justify-center text-brand-sage">
+<svg class="w-6 h-6" fill="none" stroke="currentColor" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+<path d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+</svg>
+</div>
+<span class="text-[10px] font-bold uppercase tracking-tighter text-brand-sage">Planner</span>
+</button>
+<button class="flex flex-col items-center gap-1 group text-stone-400">
+<div class="w-6 h-6 flex items-center justify-center">
+<svg class="w-6 h-6" fill="none" stroke="currentColor" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+<path d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+</svg>
+</div>
+<span class="text-[10px] font-bold uppercase tracking-tighter">Kitchen</span>
+</button>
+<button class="flex flex-col items-center gap-1 group text-stone-400">
+<div class="w-6 h-6 flex items-center justify-center">
+<svg class="w-6 h-6" fill="none" stroke="currentColor" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+<path d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+</svg>
+</div>
+<span class="text-[10px] font-bold uppercase tracking-tighter">Family</span>
+</button>
+</nav>
+<!-- END: Bottom Navigation -->
+</body></html>

@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#607AFB",
+                        "background-light": "#f5f6f8",
+                        "background-dark": "#010414",
+                    },
+                    fontFamily: {
+                        "display": ["Space Grotesk"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.5rem",
+                        "lg": "1rem",
+                        "xl": "1.5rem",
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
+<title>RIAL Community &amp; Kitchen Hub</title>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark font-display text-slate-900 dark:text-slate-100 min-h-screen flex flex-col">
+<!-- Header -->
+<header class="sticky top-0 z-50 bg-white/80 dark:bg-background-dark/80 backdrop-blur-md border-b border-primary/10">
+<div class="flex items-center p-4 justify-between max-w-2xl mx-auto w-full">
+<div class="text-primary flex size-10 shrink-0 items-center justify-center bg-primary/10 rounded-lg">
+<span class="material-symbols-outlined text-2xl">cooking</span>
+</div>
+<h1 class="text-slate-900 dark:text-slate-100 text-xl font-bold tracking-tight flex-1 text-center">Kitchen Hub</h1>
+<div class="flex w-10 items-center justify-end">
+<button class="flex size-10 items-center justify-center rounded-full bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300">
+<span class="material-symbols-outlined text-2xl">notifications</span>
+</button>
+</div>
+</div>
+</header>
+<main class="flex-1 max-w-2xl mx-auto w-full pb-24">
+<!-- Search Bar -->
+<div class="px-4 py-4">
+<label class="flex flex-col w-full group">
+<div class="flex w-full items-stretch rounded-xl h-12 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 focus-within:border-primary transition-colors">
+<div class="text-slate-400 flex items-center justify-center pl-4">
+<span class="material-symbols-outlined">search</span>
+</div>
+<input class="w-full border-none bg-transparent focus:ring-0 text-slate-900 dark:text-slate-100 placeholder:text-slate-400 px-3 text-base font-normal" placeholder="Search recipes, creators, or plans"/>
+</div>
+</label>
+</div>
+<!-- Filter Chips -->
+<div class="flex gap-3 px-4 pb-6 overflow-x-auto no-scrollbar">
+<button class="flex h-10 shrink-0 items-center justify-center gap-x-2 rounded-xl bg-primary text-white px-4">
+<span class="text-sm font-semibold tracking-wide">Trending</span>
+<span class="material-symbols-outlined text-lg">expand_more</span>
+</button>
+<button class="flex h-10 shrink-0 items-center justify-center gap-x-2 rounded-xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 px-4">
+<span class="text-sm font-medium">Family-Size</span>
+<span class="material-symbols-outlined text-lg text-slate-400">groups</span>
+</button>
+<button class="flex h-10 shrink-0 items-center justify-center gap-x-2 rounded-xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 px-4">
+<span class="text-sm font-medium">Pro Creators</span>
+<span class="material-symbols-outlined text-lg text-slate-400">verified</span>
+</button>
+<button class="flex h-10 shrink-0 items-center justify-center gap-x-2 rounded-xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 px-4">
+<span class="text-sm font-medium">Quick Meals</span>
+<span class="material-symbols-outlined text-lg text-slate-400">timer</span>
+</button>
+</div>
+<!-- Community Favorites Section -->
+<section class="px-4 mb-8">
+<div class="flex items-center justify-between mb-4">
+<h2 class="text-xl font-bold tracking-tight">Community Favorites</h2>
+<a class="text-primary text-sm font-semibold" href="#">View All</a>
+</div>
+<div class="grid grid-cols-1 gap-4">
+<!-- Recipe Card 1 -->
+<div class="bg-white dark:bg-slate-800 rounded-xl overflow-hidden shadow-sm border border-slate-100 dark:border-slate-700">
+<div class="relative h-48 w-full bg-slate-200">
+<img class="w-full h-full object-cover" data-alt="Healthy colorful salad bowl with avocado and quinoa" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAabDio5z5DK5XsdFlDT8uJuJk_X8jvGWKisJW6Rf8eLwjT5tUhb-MsT3uvDmJmt6gXZImcnrNNeb2BKegyXUXfzT2zRFvtYyQszvKSVK04BWn6JECkI53yRp71T2CsO8JPm6yM0tUnoCnWoMi8XGJ_CGUcZeq_DljbZD1_MUHH8SDs2GWmk8v6Zbbmeyg2-dQGWxBqsvAv5M1J7G2ZNywR9qRM0wXbbTw9amqeigEeDlvFkiOJz8collt8osP8bWm5m5j9rsCUSYzt"/>
+<div class="absolute top-3 right-3 bg-white/90 dark:bg-slate-900/90 backdrop-blur px-2 py-1 rounded-lg flex items-center gap-1 shadow-sm">
+<span class="material-symbols-outlined text-primary text-sm fill-1">star</span>
+<span class="text-xs font-bold">4.9</span>
+</div>
+<div class="absolute bottom-3 left-3 flex gap-2">
+<span class="bg-primary text-white text-[10px] font-bold uppercase tracking-wider px-2 py-1 rounded-full">Pro Creator</span>
+<span class="bg-slate-900/60 text-white backdrop-blur text-[10px] font-bold uppercase tracking-wider px-2 py-1 rounded-full flex items-center gap-1">
+<span class="material-symbols-outlined text-xs">group</span> Family-Size
+                            </span>
+</div>
+</div>
+<div class="p-4">
+<div class="flex justify-between items-start mb-2">
+<h3 class="font-bold text-lg leading-tight">Mediterranean Power Bowl</h3>
+<button class="text-slate-400 hover:text-primary transition-colors">
+<span class="material-symbols-outlined">bookmark</span>
+</button>
+</div>
+<div class="flex items-center gap-3 text-sm text-slate-500 dark:text-slate-400 mb-4">
+<div class="flex items-center gap-1">
+<span class="material-symbols-outlined text-base">schedule</span>
+                                25 min
+                            </div>
+<div class="flex items-center gap-1">
+<span class="material-symbols-outlined text-base">restaurant</span>
+                                4-6 servings
+                            </div>
+</div>
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-2">
+<div class="size-8 rounded-full bg-primary/20 flex items-center justify-center">
+<span class="material-symbols-outlined text-primary text-lg">person</span>
+</div>
+<span class="text-sm font-medium">Chef Elena Russo</span>
+</div>
+<button class="bg-primary/10 hover:bg-primary text-primary hover:text-white px-4 py-2 rounded-lg text-sm font-bold transition-all">
+                                View Recipe
+                            </button>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Leftover Logic Preview -->
+<section class="px-4 mb-8">
+<div class="bg-gradient-to-br from-primary/5 to-primary/10 dark:from-primary/10 dark:to-primary/20 rounded-xl p-5 border border-primary/20">
+<div class="flex items-center gap-2 mb-3">
+<span class="material-symbols-outlined text-primary">auto_awesome</span>
+<h2 class="text-lg font-bold">Leftover Logic</h2>
+</div>
+<p class="text-sm text-slate-600 dark:text-slate-300 mb-4">You have ingredients from <span class="font-bold italic">Roast Chicken Sunday</span>. Here's a shared plan to use them up:</p>
+<div class="bg-white dark:bg-slate-900 rounded-lg p-3 flex gap-4 items-center mb-4">
+<div class="size-14 rounded-lg bg-slate-100 overflow-hidden flex-shrink-0">
+<img class="w-full h-full object-cover" data-alt="Creamy chicken and vegetable soup" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDXTlFO4XVzJqsTgK3Rjif8O7LFHcwZzOKacrE9Vd0JVfXJIsNRO28Zhf-wzq19TuG5rkL2LYy-xzk3Mus3xKGI0DypZWuwKwWPfOQdjWRQaG4rktfoifIzTwHuF8KKHJP1LV-fueyVuMcx5IV2rRdkZ2NGjgMCa-arOHcj8Jm_OKAMWxGTHDD75zYFmCyGGCwvt87Jspc4LTWyWcDqNBcYvw6Ro0yaTa1Nvmkshwk515VMRBGSdQP8IgGWxGqf7tuKxX7Lzsklq8vb"/>
+</div>
+<div class="flex-1">
+<h4 class="font-bold text-sm">Creamy Chicken &amp; Herb Soup</h4>
+<p class="text-xs text-slate-500">Uses 4 leftover items • 15 min</p>
+</div>
+<button class="text-primary">
+<span class="material-symbols-outlined">chevron_right</span>
+</button>
+</div>
+<div class="flex items-center justify-between text-xs font-medium text-slate-500">
+<div class="flex -space-x-2">
+<div class="size-6 rounded-full border-2 border-white dark:border-slate-900 bg-slate-300"></div>
+<div class="size-6 rounded-full border-2 border-white dark:border-slate-900 bg-slate-400"></div>
+<div class="size-6 rounded-full border-2 border-white dark:border-slate-900 bg-primary flex items-center justify-center text-[10px] text-white font-bold">+12</div>
+</div>
+<span>324 families planning this today</span>
+</div>
+</div>
+</section>
+<!-- Pro Creator Spotlights -->
+<section class="px-4 mb-8">
+<div class="flex items-center justify-between mb-4">
+<h2 class="text-xl font-bold tracking-tight">Pro Creator Stories</h2>
+<a class="text-primary text-sm font-semibold" href="#">Explore Creators</a>
+</div>
+<div class="flex gap-4 overflow-x-auto no-scrollbar pb-2">
+<!-- Creator Item -->
+<div class="flex-shrink-0 w-36 group cursor-pointer">
+<div class="relative aspect-[9/16] rounded-xl overflow-hidden mb-2 border-2 border-transparent group-hover:border-primary transition-all shadow-md">
+<img class="w-full h-full object-cover" data-alt="Chef plating a gourmet pasta dish" src="https://lh3.googleusercontent.com/aida-public/AB6AXuB05onuTQtcbiKGOA-rYX8geZBXdAmzJA86EVBw7-uUgnOI7CPAXoz5yk5RYnNmc_S6X7X1OhtDE7xqwRUlO51GLyENjvqeAndrviD48AXgv-lwBs9-MgEM47Cul08J8_GJk4PkfyvKYmkuu6OnmSdfAa-xw9y7LTOWC9TX2CtNzP5CT8PVYwhqTN8erqZY_p4Pkp9N8adFxiRh1bStmaok_Ycj8NXRu6kya49T8NZ9vJ_BvsN1Tz8o5J458DvQPxqwFXkVvUlRTE8P"/>
+<div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
+<div class="absolute bottom-2 left-2 right-2">
+<p class="text-[10px] font-bold text-white uppercase opacity-80">Pasta Week</p>
+</div>
+<div class="absolute top-2 right-2 size-6 rounded-full bg-primary/90 flex items-center justify-center">
+<span class="material-symbols-outlined text-white text-sm">play_arrow</span>
+</div>
+</div>
+<p class="text-sm font-bold truncate">Chef Marcus</p>
+<p class="text-[10px] text-slate-500">124k Followers</p>
+</div>
+<!-- Creator Item -->
+<div class="flex-shrink-0 w-36 group cursor-pointer">
+<div class="relative aspect-[9/16] rounded-xl overflow-hidden mb-2 border-2 border-transparent group-hover:border-primary transition-all shadow-md">
+<img class="w-full h-full object-cover" data-alt="Fresh vegetables being chopped on a wooden board" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBrLiFlssQr7v8r5hthq1c54y6bayuq2KCx9sWizUh2_wT7h5RoxPYek1Lk4i3gMeI7TSkxPtSunUum342ybOH8Wy1zAC40HzUdopr-d9ZbjlzWkM2n-wM8LfLzPYK8B6a_LrCTXgLARUnjAQ7w9Mhiv3UBN6iVZuRFQQ1adtkmIIzRpB1YuAGbXZXbVtvaA9nSCFVQu2V3_ZgOjiSVesnhTbSJQtc0U9R4FWFVzLXI3fnsge7fEu6c7P5zKLpxOOTfIvxnob3JEudL"/>
+<div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
+<div class="absolute bottom-2 left-2 right-2">
+<p class="text-[10px] font-bold text-white uppercase opacity-80">Meal Prep</p>
+</div>
+<div class="absolute top-2 right-2 size-6 rounded-full bg-primary/90 flex items-center justify-center">
+<span class="material-symbols-outlined text-white text-sm">play_arrow</span>
+</div>
+</div>
+<p class="text-sm font-bold truncate">Sarah's Kitchen</p>
+<p class="text-[10px] text-slate-500">89k Followers</p>
+</div>
+<!-- Creator Item -->
+<div class="flex-shrink-0 w-36 group cursor-pointer">
+<div class="relative aspect-[9/16] rounded-xl overflow-hidden mb-2 border-2 border-transparent group-hover:border-primary transition-all shadow-md">
+<img class="w-full h-full object-cover" data-alt="Sizzling steak on a grill" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDoXa7QH8UsoKwlhQzc_mvcySLPvlmXRnuDV_klWx36zp7bZmAYdhnrG6MN4Uf5XQEIrBxO4dmOjthLxqy9_VLHUaVi3vvSAVi5PKC-cZAJBTY_aOTqiBqDttPKaPAiS4SqBy-6s_ivcsnMBnQfbytcUkq5I3Nhb0Y6v0ja6RyD0UjcHdB5bsNy9bRlSMXAaPq-LMQyDVKW5qY_l14PM0A-X63lJUn2abjs-qpUKjA0e9sThEjCwj-BdPYBwLRRqSLYSvgjxj59iGIG"/>
+<div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
+<div class="absolute bottom-2 left-2 right-2">
+<p class="text-[10px] font-bold text-white uppercase opacity-80">Grill Master</p>
+</div>
+<div class="absolute top-2 right-2 size-6 rounded-full bg-primary/90 flex items-center justify-center">
+<span class="material-symbols-outlined text-white text-sm">play_arrow</span>
+</div>
+</div>
+<p class="text-sm font-bold truncate">Big Dave BBQ</p>
+<p class="text-[10px] text-slate-500">45k Followers</p>
+</div>
+</div>
+</section>
+<!-- Trending Tags -->
+<section class="px-4 mb-4">
+<h2 class="text-xl font-bold tracking-tight mb-4">Popular Tags</h2>
+<div class="flex flex-wrap gap-2">
+<span class="px-3 py-1 bg-slate-100 dark:bg-slate-800 rounded-full text-xs font-medium text-slate-600 dark:text-slate-400">#SchoolLunches</span>
+<span class="px-3 py-1 bg-slate-100 dark:bg-slate-800 rounded-full text-xs font-medium text-slate-600 dark:text-slate-400">#VeganFamily</span>
+<span class="px-3 py-1 bg-slate-100 dark:bg-slate-800 rounded-full text-xs font-medium text-slate-600 dark:text-slate-400">#QuickBake</span>
+<span class="px-3 py-1 bg-slate-100 dark:bg-slate-800 rounded-full text-xs font-medium text-slate-600 dark:text-slate-400">#BudgetFriendly</span>
+<span class="px-3 py-1 bg-slate-100 dark:bg-slate-800 rounded-full text-xs font-medium text-slate-600 dark:text-slate-400">#LowCarb</span>
+</div>
+</section>
+</main>
+<!-- Bottom Navigation Bar -->
+<nav class="fixed bottom-0 w-full bg-white dark:bg-background-dark border-t border-slate-200 dark:border-slate-800 z-50">
+<div class="max-w-2xl mx-auto flex items-center justify-around px-2 py-2">
+<a class="flex flex-col items-center gap-1 p-2 text-primary" href="#">
+<span class="material-symbols-outlined text-2xl fill-1">explore</span>
+<span class="text-[10px] font-bold">Explore</span>
+</a>
+<a class="flex flex-col items-center gap-1 p-2 text-slate-400 hover:text-primary transition-colors" href="#">
+<span class="material-symbols-outlined text-2xl">calendar_today</span>
+<span class="text-[10px] font-medium">Planner</span>
+</a>
+<a class="flex flex-col items-center gap-1 p-2 text-slate-400 hover:text-primary transition-colors" href="#">
+<span class="material-symbols-outlined text-2xl">shopping_cart</span>
+<span class="text-[10px] font-medium">Groceries</span>
+</a>
+<a class="flex flex-col items-center gap-1 p-2 text-slate-400 hover:text-primary transition-colors" href="#">
+<span class="material-symbols-outlined text-2xl">person</span>
+<span class="text-[10px] font-medium">Profile</span>
+</a>
+</div>
+</nav>
+<style>
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+        .fill-1 {
+            font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+    </style>
+</body></html>

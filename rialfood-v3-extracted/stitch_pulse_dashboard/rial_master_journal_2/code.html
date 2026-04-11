@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#ccff00",
+                        "background-light": "#f8f8f5",
+                        "background-dark": "#1f230f",
+                    },
+                    fontFamily: {
+                        "display": ["Space Grotesk", "sans-serif"]
+                    },
+                    borderRadius: {"DEFAULT": "0.5rem", "lg": "1rem", "xl": "1.5rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark font-display text-slate-900 dark:text-slate-100 min-h-screen pb-24">
+<!-- Header -->
+<header class="sticky top-0 z-50 bg-background-light/80 dark:bg-background-dark/80 backdrop-blur-md border-b border-slate-200 dark:border-white/10 px-4 py-4 flex items-center justify-between">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary text-3xl">blur_on</span>
+<h1 class="text-xl font-bold tracking-tight">RIAL Journal</h1>
+</div>
+<div class="flex items-center gap-4">
+<button class="p-2 rounded-full hover:bg-slate-200 dark:hover:bg-white/10 transition-colors">
+<span class="material-symbols-outlined">analytics</span>
+</button>
+<button class="p-2 rounded-full hover:bg-slate-200 dark:hover:bg-white/10 transition-colors">
+<span class="material-symbols-outlined">settings</span>
+</button>
+</div>
+</header>
+<main class="max-w-md mx-auto px-4 py-6 space-y-8">
+<!-- Real Feel Summary Section -->
+<section>
+<div class="flex items-center justify-between mb-4">
+<h2 class="text-lg font-bold">Real Feel Summary</h2>
+<span class="text-xs font-medium text-slate-500 dark:text-slate-400">LAST 24H</span>
+</div>
+<div class="grid grid-cols-2 gap-3">
+<div class="bg-white dark:bg-white/5 border border-slate-200 dark:border-white/10 rounded-xl p-4 flex flex-col justify-between aspect-square">
+<div>
+<span class="material-symbols-outlined text-primary mb-2">bolt</span>
+<p class="text-sm text-slate-500 dark:text-slate-400">Energy</p>
+</div>
+<div>
+<p class="text-2xl font-bold italic tracking-tight">High</p>
+<p class="text-xs text-primary font-bold">+12% vs avg</p>
+</div>
+</div>
+<div class="bg-white dark:bg-white/5 border border-slate-200 dark:border-white/10 rounded-xl p-4 flex flex-col justify-between aspect-square">
+<div>
+<span class="material-symbols-outlined text-primary mb-2">center_focus_strong</span>
+<p class="text-sm text-slate-500 dark:text-slate-400">Focus</p>
+</div>
+<div>
+<p class="text-2xl font-bold italic tracking-tight">Sharp</p>
+<p class="text-xs text-primary font-bold">+5% vs avg</p>
+</div>
+</div>
+<div class="bg-white dark:bg-white/5 border border-slate-200 dark:border-white/10 rounded-xl p-4 flex flex-col justify-between aspect-square">
+<div>
+<span class="material-symbols-outlined text-primary mb-2">air</span>
+<p class="text-sm text-slate-500 dark:text-slate-400">Digestion</p>
+</div>
+<div>
+<p class="text-2xl font-bold italic tracking-tight">Smooth</p>
+<p class="text-xs text-red-400 font-bold">-2% vs avg</p>
+</div>
+</div>
+<div class="bg-primary/10 border border-primary/20 rounded-xl p-4 flex flex-col justify-between aspect-square">
+<div>
+<span class="material-symbols-outlined text-primary mb-2">psychology</span>
+<p class="text-sm text-slate-600 dark:text-slate-300">Mood</p>
+</div>
+<div>
+<p class="text-2xl font-bold italic tracking-tight">Calm</p>
+<p class="text-xs text-primary font-bold">Steady</p>
+</div>
+</div>
+</div>
+</section>
+<!-- Timeline Section -->
+<section>
+<div class="flex items-center justify-between mb-6">
+<h2 class="text-lg font-bold">Today's Intake</h2>
+<button class="text-sm font-medium text-primary underline underline-offset-4">VIEW LOGS</button>
+</div>
+<div class="space-y-10 relative">
+<!-- Vertical Line -->
+<div class="absolute left-4 top-0 bottom-0 w-[1px] bg-slate-200 dark:bg-white/10"></div>
+<!-- Timeline Item 1 -->
+<div class="relative pl-10">
+<div class="absolute left-[13px] top-1.5 size-2 rounded-full bg-primary border-4 border-background-light dark:border-background-dark"></div>
+<div class="flex flex-col gap-4">
+<div class="flex justify-between items-start">
+<div>
+<h3 class="font-bold text-lg leading-none mb-1">Morning Greens</h3>
+<p class="text-sm text-slate-500 dark:text-slate-400">08:30 AM • Fasted State</p>
+</div>
+<span class="px-2 py-1 bg-primary/20 text-primary text-[10px] font-bold rounded uppercase tracking-widest">Anti-Inflam</span>
+</div>
+<div class="relative aspect-[4/3] rounded-xl overflow-hidden group">
+<img class="w-full h-full object-cover" data-alt="Close up minimalist photo of a green smoothie bowl" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDoPaAx-tks04slb5qZl_BVe0kdtWK9hslFw9B6Xsq5HCsjsAg7mxmEX_O5rgU0mgZdT2D_vzMUdUz0uIaZe9YTpcfq_6p8b-b5TvXAkkONWtFjJ9YTwo9tpt7uoMxK5DZ5qyX1x_yUlJNvs___lpXLG86vxkBenvHoOOOWNZYhahGqhHzmzJsUgU8nTcVwWp_s5NDTu3GcH4aFUjzYr6q3F8Jto8O1eiQzLASdZ4UVvWAsafophEefrPzO7lRplVkcxv3wb9jfhmWR"/>
+<div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-end p-4">
+<p class="text-white text-xs">Bio-marker match: High focus expected in 2h</p>
+</div>
+</div>
+</div>
+</div>
+<!-- Timeline Item 2 -->
+<div class="relative pl-10">
+<div class="absolute left-[13px] top-1.5 size-2 rounded-full bg-slate-400 dark:bg-white/20 border-4 border-background-light dark:border-background-dark"></div>
+<div class="flex flex-col gap-4">
+<div class="flex justify-between items-start">
+<div>
+<h3 class="font-bold text-lg leading-none mb-1">Precision Fuel</h3>
+<p class="text-sm text-slate-500 dark:text-slate-400">01:15 PM • Post-Flow State</p>
+</div>
+<span class="px-2 py-1 bg-slate-200 dark:bg-white/10 text-slate-600 dark:text-slate-400 text-[10px] font-bold rounded uppercase tracking-widest">Balanced</span>
+</div>
+<div class="relative aspect-[4/3] rounded-xl overflow-hidden group grayscale hover:grayscale-0 transition-all duration-500">
+<img class="w-full h-full object-cover" data-alt="Top down view of a healthy salad with seeds and avocado" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCGoHCbvZuvcevmdcnYXEJTTeeQBone911IFHlHrJscXdCr73plwCVV8etAv7o9wseB752rlK-qjHc-Vf3PXAtTcb-BbiGL_SRjb7Cqs3KaAQiWE20bJ6jOnd-bBD6QgfUtLY29FDKvSZDo2x6EiAFqVLImArCt9jL0bI0dYHDsqeQMOB6lEp138h2cufO1tlwIgfrcRVb7t1QjZjFFIhR4SZv5nFqK-lxomhCaiu5Ub5DvbnXjt2jISg3lVChYniXoGOKpfhRFRSVF"/>
+<div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-end p-4">
+<p class="text-white text-xs">High fiber correlation with tomorrow's digestion</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Subjective Correlations -->
+<section class="bg-primary/5 rounded-xl p-6 border border-primary/10">
+<h2 class="text-lg font-bold mb-4 flex items-center gap-2">
+<span class="material-symbols-outlined text-primary">insights</span>
+                Subjective Correlations
+            </h2>
+<div class="space-y-4">
+<div class="flex items-center gap-4">
+<div class="size-10 rounded-full bg-white dark:bg-white/5 flex items-center justify-center border border-slate-200 dark:border-white/10 shrink-0">
+<span class="material-symbols-outlined text-sm">coffee</span>
+</div>
+<p class="text-sm leading-relaxed text-slate-600 dark:text-slate-300">
+<span class="font-bold text-slate-900 dark:text-slate-100">Caffeine delay</span> (90min post-wake) is correlating with <span class="text-primary font-bold">20% longer focus sessions</span> in the afternoon.
+                    </p>
+</div>
+<div class="flex items-center gap-4">
+<div class="size-10 rounded-full bg-white dark:bg-white/5 flex items-center justify-center border border-slate-200 dark:border-white/10 shrink-0">
+<span class="material-symbols-outlined text-sm">nightlight</span>
+</div>
+<p class="text-sm leading-relaxed text-slate-600 dark:text-slate-300">
+                        Evening <span class="font-bold text-slate-900 dark:text-slate-100">Blue Light blocking</span> is showing a <span class="text-primary font-bold">35% reduction</span> in morning grogginess.
+                    </p>
+</div>
+</div>
+</section>
+</main>
+<!-- Floating Action Button -->
+<button class="fixed bottom-24 right-6 size-14 bg-primary text-background-dark rounded-full shadow-lg shadow-primary/20 flex items-center justify-center z-50 active:scale-95 transition-transform">
+<span class="material-symbols-outlined text-3xl font-bold">add</span>
+</button>
+<!-- Bottom Navigation Bar -->
+<nav class="fixed bottom-0 left-0 right-0 z-50 border-t border-slate-200 dark:border-white/10 bg-white/80 dark:bg-background-dark/80 backdrop-blur-md px-6 pb-8 pt-4">
+<div class="flex items-center justify-between max-w-md mx-auto">
+<a class="flex flex-col items-center gap-1 text-primary" href="#">
+<span class="material-symbols-outlined text-[28px] fill-1">book_2</span>
+<span class="text-[10px] font-bold uppercase tracking-widest">Journal</span>
+</a>
+<a class="flex flex-col items-center gap-1 text-slate-400 dark:text-slate-500" href="#">
+<span class="material-symbols-outlined text-[28px]">fingerprint</span>
+<span class="text-[10px] font-bold uppercase tracking-widest">Identity</span>
+</a>
+<a class="flex flex-col items-center gap-1 text-slate-400 dark:text-slate-500" href="#">
+<span class="material-symbols-outlined text-[28px]">group</span>
+<span class="text-[10px] font-bold uppercase tracking-widest">Circle</span>
+</a>
+<a class="flex flex-col items-center gap-1 text-slate-400 dark:text-slate-500" href="#">
+<span class="material-symbols-outlined text-[28px]">person</span>
+<span class="text-[10px] font-bold uppercase tracking-widest">Profile</span>
+</a>
+</div>
+</nav>
+</body></html>

@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#ddff00",
+                        "background-light": "#f8f8f5",
+                        "background-dark": "#121407",
+                        "neutral-light": "#e2e4d5",
+                        "neutral-dark": "#2a2d1a",
+                    },
+                    fontFamily: {
+                        "display": ["Space Grotesk", "sans-serif"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.5rem",
+                        "lg": "1rem",
+                        "xl": "1.5rem",
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
+<style>
+        body {
+            font-family: 'Space Grotesk', sans-serif;
+        }
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 min-h-screen">
+<!-- Header -->
+<header class="sticky top-0 z-50 bg-background-light/80 dark:bg-background-dark/80 backdrop-blur-md border-b border-neutral-light dark:border-neutral-dark px-4 py-4">
+<div class="flex items-center justify-between max-w-2xl mx-auto">
+<div class="flex items-center gap-2">
+<div class="bg-primary p-1.5 rounded-lg">
+<span class="material-symbols-outlined text-background-dark font-bold">bolt</span>
+</div>
+<h1 class="text-xl font-bold tracking-tight">RIAL EXPLORE</h1>
+</div>
+<button class="relative p-2 rounded-full hover:bg-neutral-light dark:hover:bg-neutral-dark transition-colors">
+<span class="material-symbols-outlined">notifications</span>
+<span class="absolute top-2 right-2 flex h-2 w-2 rounded-full bg-primary"></span>
+</button>
+</div>
+</header>
+<main class="max-w-2xl mx-auto pb-24">
+<!-- Search & Filter -->
+<section class="px-4 pt-6 space-y-4">
+<div class="relative group">
+<span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-primary transition-colors">search</span>
+<input class="w-full bg-neutral-light/50 dark:bg-neutral-dark/50 border-none rounded-xl py-4 pl-12 pr-4 focus:ring-2 focus:ring-primary placeholder:text-slate-500 text-sm" placeholder="Search recipes, athletes, or challenges" type="text"/>
+</div>
+<div class="flex gap-2 overflow-x-auto no-scrollbar pb-2">
+<button class="flex items-center gap-2 bg-primary text-background-dark px-4 py-2 rounded-full text-sm font-semibold whitespace-nowrap">
+                    All Categories
+                </button>
+<button class="flex items-center gap-2 bg-neutral-light dark:bg-neutral-dark px-4 py-2 rounded-full text-sm font-medium whitespace-nowrap border border-transparent hover:border-primary/50">
+                    Vegan <span class="material-symbols-outlined text-[18px]">expand_more</span>
+</button>
+<button class="flex items-center gap-2 bg-neutral-light dark:bg-neutral-dark px-4 py-2 rounded-full text-sm font-medium whitespace-nowrap border border-transparent hover:border-primary/50">
+                    Keto <span class="material-symbols-outlined text-[18px]">expand_more</span>
+</button>
+<button class="flex items-center gap-2 bg-neutral-light dark:bg-neutral-dark px-4 py-2 rounded-full text-sm font-medium whitespace-nowrap border border-transparent hover:border-primary/50">
+                    High Protein <span class="material-symbols-outlined text-[18px]">expand_more</span>
+</button>
+</div>
+</section>
+<!-- Global Challenges -->
+<section class="mt-8 px-4">
+<div class="flex items-center justify-between mb-4">
+<h2 class="text-lg font-bold">Global Challenges</h2>
+<a class="text-primary text-sm font-medium" href="#">See all</a>
+</div>
+<div class="relative overflow-hidden rounded-xl aspect-[16/9] group">
+<img alt="Athletic training" class="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" data-alt="Group of athletes during a high intensity outdoor workout" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDMOlcM8XXeREvos-q1WNDSYWq7DeU6yrx3m6Sbgx1X-d2-sykl2rFf6Uv8MGQYf0pCknQ8LXyEV_45mL_Luc81Vpq8ORN6j9O5a6mexfw7w7Kg3Z5NpvddikgLhDMzMxyU5za7WvKsBXK-p3psQF1fMLF1iG-AS_1dIOoG4Wz13Met1rJx27UTNuZyUp-_KpETli0CFqZyQpwgwH3xWr4kemICVehNvQpuYNA5vG98oZbhU50ak5EisNxqd8HabY9ttefHiLfKwgk0"/>
+<div class="absolute inset-0 bg-gradient-to-t from-background-dark/90 via-background-dark/20 to-transparent"></div>
+<div class="absolute bottom-0 left-0 p-6 w-full">
+<div class="inline-flex items-center gap-1 bg-primary text-background-dark px-2 py-1 rounded text-[10px] font-black uppercase tracking-wider mb-2">
+<span class="material-symbols-outlined text-[12px]">timer</span> Featured Challenge
+                    </div>
+<h3 class="text-2xl font-bold text-white mb-1">7-Day Real Food Sprint</h3>
+<p class="text-slate-300 text-sm mb-4">12.4k community members participating</p>
+<button class="w-full bg-primary text-background-dark font-bold py-3 rounded-lg hover:opacity-90 transition-opacity">
+                        Join Challenge
+                    </button>
+</div>
+</div>
+</section>
+<!-- Trending Now -->
+<section class="mt-10">
+<div class="px-4 flex items-center justify-between mb-4">
+<h2 class="text-lg font-bold">Trending Recipes</h2>
+<a class="text-slate-500 text-sm font-medium" href="#">View Top 50</a>
+</div>
+<div class="flex gap-4 overflow-x-auto no-scrollbar px-4">
+<!-- Recipe Card 1 -->
+<div class="flex-shrink-0 w-64">
+<div class="relative rounded-xl overflow-hidden aspect-square mb-3">
+<img alt="Healthy Bowl" class="w-full h-full object-cover" data-alt="Vibrant quinoa bowl with fresh vegetables and avocado" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCC2O9jU3_AlZxWIKnO1ML5T6KTAg6fWk7zTltNpIenir9o5_2VUQeqYzfborr0WLxyknqDxFcQUbEQlpXJ_FrDtBDqdBpQYmyzDkiWzgApRK5OAXKLY66sl6g-emivoYi4mHbg5ha8aE3XVkd55vWtrgMutMY90mAxHxJq6Jtr4Ya5KL5Vz49vRgvIIguFw-XGqpHt8c1wzG-a7o3E7RTREiRSW4p-9zEyv3SiVp-rahZgXkquoL9fzP8O-432E57Gwp6LhMWzllhl"/>
+<button class="absolute top-3 right-3 bg-white/20 backdrop-blur-md p-1.5 rounded-full text-white hover:bg-primary hover:text-background-dark transition-colors">
+<span class="material-symbols-outlined">favorite</span>
+</button>
+</div>
+<h4 class="font-bold leading-tight">Post-Workout Harvest Bowl</h4>
+<div class="flex items-center gap-2 mt-1">
+<span class="text-xs text-slate-500">24g Protein</span>
+<span class="text-primary text-[4px] font-black">●</span>
+<span class="text-xs text-slate-500">15 min</span>
+</div>
+</div>
+<!-- Recipe Card 2 -->
+<div class="flex-shrink-0 w-64">
+<div class="relative rounded-xl overflow-hidden aspect-square mb-3">
+<img alt="Protein Pancakes" class="w-full h-full object-cover" data-alt="Stack of protein pancakes with berries and maple syrup" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCiS0xMRsQjOChjp6BIdDwogVjiSGWymYscXn7DPeiuZn5iAvhMSD9gSQSHd_Qhi80Oh8F9ayPKwD44aMKvOaAWVCnzmcINxk5Ss6sOmzDOZjqJqumic0H_0j1VgbZeyYCboLgcCxucwfnIKZvDdfiNgOnoDHg2dQOlbnPfUoUsnldKZSt2HwQ91JKmgo6m1REh2i4st8uym-lJFCZ_DARu24IdlzAyYLbZ8Dl1kuwmm5SCuuAaBKnxFy2b42j37uynGy7PVt3BfXXt"/>
+<button class="absolute top-3 right-3 bg-white/20 backdrop-blur-md p-1.5 rounded-full text-white">
+<span class="material-symbols-outlined">favorite</span>
+</button>
+</div>
+<h4 class="font-bold leading-tight">Blueberry Power Stack</h4>
+<div class="flex items-center gap-2 mt-1">
+<span class="text-xs text-slate-500">32g Protein</span>
+<span class="text-primary text-[4px] font-black">●</span>
+<span class="text-xs text-slate-500">20 min</span>
+</div>
+</div>
+</div>
+</section>
+<!-- Pro Spotlight -->
+<section class="mt-10 px-4">
+<h2 class="text-lg font-bold mb-4">Pro Athlete Spotlight</h2>
+<div class="bg-neutral-dark rounded-2xl overflow-hidden p-1">
+<div class="relative rounded-xl overflow-hidden aspect-video">
+<img alt="Athlete" class="w-full h-full object-cover opacity-60" data-alt="Professional athlete preparing for a workout in a gym" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCPc8qi2B_r0Nq3jO_Wr3_HDrpOlenGi4peM2rUwNWRLfSDoD-qQ23ZtSL7uyWouHUQ3GJp8XgUTGDw9N9S5f-oky17-RxyofRSLAzPE5om5iMUi9-GY3PuEagr7IofVUd_613JGmBsIbtEcYmV2yvjiGlIfnreK63EhuncCql7kPLsWzbPPLbi0XNA8GvKO5pLlpXzUyGZTP5H3nVMlmJ4yxhoChocQh5NT7tEJD2FSmrV-HIbXipz8AnXkUvlrdVyLnh_Cy_EEmbk"/>
+<div class="absolute inset-0 flex items-center justify-center">
+<button class="w-16 h-16 bg-primary rounded-full flex items-center justify-center text-background-dark transition-transform hover:scale-110">
+<span class="material-symbols-outlined text-4xl leading-none pl-1">play_arrow</span>
+</button>
+</div>
+<div class="absolute top-4 left-4 bg-background-dark/60 backdrop-blur px-3 py-1 rounded-full flex items-center gap-2 border border-white/10">
+<div class="w-6 h-6 rounded-full overflow-hidden">
+<img alt="Marcus Reed" class="w-full h-full object-cover" data-alt="Headshot of a smiling professional athlete" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBeEr1NG2SFDOJRp2fgIMjPsouHL8wXGy1Ve3YcXs4bmx-NptpZZtDrSP_3Bomn6TfDSCIBrBb6bEzWfkanB-Mostn2z4C-KwqJ1ctRKj-l6DUdIF_e9YgX54tmHDAtgd6r1hxbe0Qn2be5vnbWLG9WCw1pu45E1PjRqdYSHPKU1W4WQlpd7bdXMHXe-HIpWgzgrkBFYrOgjBez04UfJAMSg7wCSXJ1Pvxb1ANMnhHZHEgPS2vcTItI3i31KX7yZImPbVXdUlH0nPQD"/>
+</div>
+<span class="text-xs font-bold text-white">Marcus Reed, IFBB Pro</span>
+</div>
+</div>
+<div class="p-5">
+<p class="text-slate-100 font-medium mb-3">"Fueling for Maximum Output: My exact pre-race breakfast routine for high endurance events."</p>
+<div class="flex items-center justify-between">
+<div class="flex -space-x-2">
+<div class="w-8 h-8 rounded-full border-2 border-neutral-dark bg-slate-400 overflow-hidden">
+<img alt="User" class="w-full h-full object-cover" data-alt="Female user avatar" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBjP89VDGfj7w8RmYL7sKSJrJ7HEHcztCnItDUBgikcSei7xL0ciK5DvNFJcDqDh-hS77auXmJn1wFF-3sM7qSngWGusqrqIys1Jpsl6q97B1v4DFVrexRGdfGqDtDRgigbVpZVzUGlOzTGE2RyvQq9Skd9NBQv_f4cbAHOR2BPo_-SfF6Jg5uWfPy2vHx1pWGWy2TSCn7rHIw9_qkBXIo9NatAEx_Bdyl7ioW_fM_y_gOOctDOlI8BmUGd353_0umr9rjUWcwNlHRb"/>
+</div>
+<div class="w-8 h-8 rounded-full border-2 border-neutral-dark bg-slate-500 overflow-hidden">
+<img alt="User" class="w-full h-full object-cover" data-alt="Male user avatar" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDhLOQr7wowIIegdJ9Lga4xcNmtOmeE3ijwgMYLrOHSoYX6Pjam0VbnXxNjDrvuHRD4zQVyF6ksiUaL0nVB7H2BfcJ6bFPUb56lAa4yL8EURvlWm-URujSI2LW5cU86AYO1HTLz10Jh8fH5wds4rLwDkSXhgGbyrs98j19o8nZwnCkUpYRFSL7nvQSxUErCRX5D8Ufqi3s6xZsajowRao9CZJFL7W0hOfIKtNXrq5OHVeM3AAZvB7J1zAjKDFOe27j3G_2tm_rI7nHt"/>
+</div>
+<div class="w-8 h-8 rounded-full border-2 border-neutral-dark bg-slate-600 flex items-center justify-center text-[10px] font-bold text-white">
+                                +4k
+                            </div>
+</div>
+<span class="text-xs text-slate-400">Watched by 4.2k today</span>
+</div>
+</div>
+</div>
+</section>
+<!-- Community Highlights -->
+<section class="mt-10 px-4">
+<h2 class="text-lg font-bold mb-4">Community Buzz</h2>
+<div class="grid grid-cols-2 gap-3">
+<div class="bg-neutral-light dark:bg-neutral-dark p-4 rounded-xl border border-transparent hover:border-primary/30 transition-all">
+<span class="material-symbols-outlined text-primary mb-2">forum</span>
+<h5 class="font-bold text-sm mb-1">Meal Prep Hacks</h5>
+<p class="text-xs text-slate-500">12 new discussions this hour</p>
+</div>
+<div class="bg-neutral-light dark:bg-neutral-dark p-4 rounded-xl border border-transparent hover:border-primary/30 transition-all">
+<span class="material-symbols-outlined text-primary mb-2">groups</span>
+<h5 class="font-bold text-sm mb-1">Local Groups</h5>
+<p class="text-xs text-slate-500">Find training partners near you</p>
+</div>
+</div>
+</section>
+</main>
+<!-- Bottom Navigation -->
+<nav class="fixed bottom-0 left-0 right-0 z-50 bg-white/95 dark:bg-background-dark/95 backdrop-blur-md border-t border-neutral-light dark:border-neutral-dark pb-6 pt-3 px-6">
+<div class="max-w-2xl mx-auto flex justify-between items-center">
+<a class="flex flex-col items-center gap-1 text-slate-400 hover:text-primary transition-colors" href="#">
+<span class="material-symbols-outlined">home</span>
+<span class="text-[10px] font-bold uppercase tracking-wider">Home</span>
+</a>
+<a class="flex flex-col items-center gap-1 text-primary" href="#">
+<span class="material-symbols-outlined font-variation-fill">explore</span>
+<span class="text-[10px] font-bold uppercase tracking-wider">Explore</span>
+</a>
+<div class="relative -top-8">
+<button class="w-14 h-14 bg-primary text-background-dark rounded-full shadow-lg shadow-primary/30 flex items-center justify-center">
+<span class="material-symbols-outlined text-3xl font-bold">add</span>
+</button>
+</div>
+<a class="flex flex-col items-center gap-1 text-slate-400 hover:text-primary transition-colors" href="#">
+<span class="material-symbols-outlined">trophy</span>
+<span class="text-[10px] font-bold uppercase tracking-wider">Compete</span>
+</a>
+<a class="flex flex-col items-center gap-1 text-slate-400 hover:text-primary transition-colors" href="#">
+<span class="material-symbols-outlined">person</span>
+<span class="text-[10px] font-bold uppercase tracking-wider">Profile</span>
+</a>
+</div>
+</nav>
+</body></html>
