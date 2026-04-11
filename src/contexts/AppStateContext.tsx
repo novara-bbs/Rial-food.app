@@ -125,6 +125,14 @@ interface AppStateContextType {
   setRecipeToEdit: (recipe: any) => void;
 }
 
+interface FamilyMember {
+  id: string;
+  name: string;
+  age: number;
+  goal: string;
+  activityLevel?: string;
+}
+
 interface UserProfile {
   name: string;
   age: number;
@@ -143,12 +151,16 @@ interface UserProfile {
   intolerances?: Allergen[];
   /** Short bio for creator profile */
   bio?: string;
-  /** Public display name */
-  displayName?: string;
   /** Social media links for creator profile */
   socialLinks?: SocialLinks;
   /** Target weight in kg — for goal tracking */
   targetWeight?: number;
+  /** Family members for meal scaling */
+  family?: FamilyMember[];
+  /** Dashboard display mode */
+  mode?: 'simple' | 'advanced';
+  /** Avatar URL */
+  avatar?: string;
 }
 
 interface DailyMacros {
@@ -208,7 +220,7 @@ export function AppStateProvider({ children }: { children: React.ReactNode }) {
     goal: 'maintain',
     activity: 'active',
     trains: false,
-    dietaryPreferences: ['Alta Proteína'],
+    dietaryPreferences: [],
   });
 
   const [dailyMacros, setDailyMacros] = useLocalStorageState<DailyMacros>('dailyMacros', {
@@ -305,14 +317,14 @@ export function AppStateProvider({ children }: { children: React.ReactNode }) {
   const handleDuplicateRecipe = createHandleDuplicateRecipe({ setSavedRecipes, navigateTo, t });
   const handleImportRecipe = createHandleImportRecipe({ setSavedRecipes, navigateTo, t });
   const [recipeToEdit, setRecipeToEdit] = useState<any>(null);
-  const handleCreatePost = createHandleCreatePost({ setCommunityPosts, navigateTo });
-  const handlePublishStory = createHandlePublishStory({ setCommunityStories, navigateTo });
+  const handleCreatePost = createHandleCreatePost({ setCommunityPosts, navigateTo, t });
+  const handlePublishStory = createHandlePublishStory({ setCommunityStories, navigateTo, t });
   const handleMarkStoryViewed = createHandleMarkStoryViewed({ setCommunityStories });
-  const handleAddComment = createHandleAddComment({ setCommunityPosts });
-  const handleAddToleranceLog = createHandleAddToleranceLog({ setToleranceLogs, navigateTo });
+  const handleAddComment = createHandleAddComment({ setCommunityPosts, t });
+  const handleAddToleranceLog = createHandleAddToleranceLog({ setToleranceLogs, navigateTo, t });
   const handleRealFeelLog = createHandleRealFeelLog({ setRealFeelLogs, getDailyLog: () => dailyLog });
   const handleCheckIn = createHandleCheckIn({ setCheckInStatus, navigateTo });
-  const handleCompleteCheckIn = createHandleCompleteCheckIn({ setCheckInStatus, navigateTo });
+  const handleCompleteCheckIn = createHandleCompleteCheckIn({ setCheckInStatus, navigateTo, t });
 
   // ─── Context value ──────────────────────────────────────────────────────────
 

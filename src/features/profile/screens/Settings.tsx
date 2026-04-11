@@ -9,6 +9,7 @@ import { useLocalStorageState } from '../../../hooks/useLocalStorageState';
 import { getNutritionHistory } from '../../../hooks/useDailyReset';
 import type { Allergen, Ingredient } from '../../../types';
 import { bodyWeightFromKg, bodyWeightToKg, heightFromCm, heightToCm, getBodyWeightUnit, getHeightUnit } from '../../food/utils/units';
+import { calculateDailyTargets, type Goal, type ActivityLevel, type Sex } from '../../food/utils/nutrition';
 import ConfirmDialog from '../../../components/ConfirmDialog';
 
 export default function Settings({ dailyMacros, setDailyMacros, isPro, setIsPro, showAIBot, setShowAIBot, userProfile, setUserProfile, dictionary = [] }: { dailyMacros?: any, setDailyMacros?: any, isPro?: boolean, setIsPro?: any, showAIBot?: boolean, setShowAIBot?: any, userProfile?: any, setUserProfile?: any, dictionary?: Ingredient[] }) {
@@ -18,7 +19,7 @@ export default function Settings({ dailyMacros, setDailyMacros, isPro, setIsPro,
   const [isAddingMember, setIsAddingMember] = useState(false);
   const [showDeleteAllConfirm, setShowDeleteAllConfirm] = useState(false);
   const [editingMemberId, setEditingMemberId] = useState<string | null>(null);
-  const [newMember, setNewMember] = useState({ name: '', age: 30, goal: 'maintain', activityLevel: 'moderate' });
+  const [newMember, setNewMember] = useState({ name: '', age: 30, goal: 'maintain', activityLevel: 'active' });
 
   const addFamilyMember = () => {
     if (!newMember.name) return;
@@ -26,7 +27,7 @@ export default function Settings({ dailyMacros, setDailyMacros, isPro, setIsPro,
       ...prev,
       family: [...(prev.family || []), { ...newMember, id: Date.now().toString() }]
     }));
-    setNewMember({ name: '', age: 30, goal: 'maintain', activityLevel: 'moderate' });
+    setNewMember({ name: '', age: 30, goal: 'maintain', activityLevel: 'active' });
     setIsAddingMember(false);
   };
 
@@ -93,18 +94,29 @@ export default function Settings({ dailyMacros, setDailyMacros, isPro, setIsPro,
 
   const updateBiometric = (key: string, value: any) => {
     if (!setUserProfile) return;
-    setUserProfile((prev: any) => ({ ...prev, [key]: value }));
+    setUserProfile((prev: any) => {
+      const updated = { ...prev, [key]: value };
+      if (['weight', 'height', 'age', 'gender', 'goal', 'activity'].includes(key) && setDailyMacros) {
+        const targets = calculateDailyTargets(
+          updated.weight || 78, updated.height || 175, updated.age || 32,
+          (updated.gender || 'female') as Sex,
+          (updated.activity || 'active') as ActivityLevel,
+          (updated.goal || 'maintain') as Goal,
+        );
+        setDailyMacros((prev: any) => ({ ...prev, target: targets }));
+      }
+      return updated;
+    });
   };
 
   const dietaryOptions = [
-    { key: 'Vegano', label: t.settings.dietVegan },
-    { key: 'Vegetariano', label: t.settings.dietVegetarian },
-    { key: 'Keto', label: t.settings.dietKeto },
-    { key: 'Alto en Proteína', label: t.settings.dietHighProtein },
-    { key: 'Sin Gluten', label: t.settings.dietGlutenFree },
-    { key: 'Sin Lácteos', label: t.settings.dietDairyFree },
-    { key: 'Paleo', label: t.settings.dietPaleo },
-    { key: 'Bajo en Carbohidratos', label: t.settings.dietLowCarb },
+    { key: 'vegan', label: t.settings.dietVegan },
+    { key: 'vegetarian', label: t.settings.dietVegetarian },
+    { key: 'keto', label: t.settings.dietKeto },
+    { key: 'glutenFree', label: t.settings.dietGlutenFree },
+    { key: 'lactoseFree', label: t.settings.dietDairyFree },
+    { key: 'paleo', label: t.settings.dietPaleo },
+    { key: 'mediterranean', label: t.settings.dietMediterranean },
   ];
 
   // Food dislikes search
@@ -181,10 +193,11 @@ export default function Settings({ dailyMacros, setDailyMacros, isPro, setIsPro,
   ];
 
   const goalLabels: Record<string, string> = {
-    lose: t.settings.goalLose,
+    muscle: t.settings.goalMuscle,
+    cut: t.settings.goalCut,
     maintain: t.settings.goalMaintain,
-    gain: t.settings.goalGain,
-    performance: t.settings.goalPerformance,
+    health: t.settings.goalHealth,
+    family: t.settings.goalFamily,
   };
 
   return (
@@ -197,7 +210,7 @@ export default function Settings({ dailyMacros, setDailyMacros, isPro, setIsPro,
         <div className="bg-surface-container-low p-6 rounded-sm border border-outline-variant/20 flex items-center gap-4">
           <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=150&q=80" alt={t.settings.profileAlt} className="w-16 h-16 rounded-full object-cover border-2 border-primary" referrerPolicy="no-referrer" />
           <div className="flex-1">
-            <h3 className="font-headline text-xl font-bold text-tertiary uppercase">Sarah Jenkins</h3>
+            <h3 className="font-headline text-xl font-bold text-tertiary uppercase">{userProfile?.name || 'User'}</h3>
             {isPro ? (
               <span className="bg-primary/10 text-primary text-[10px] px-2 py-0.5 rounded-sm font-label font-bold uppercase tracking-widest inline-block mt-1 flex items-center gap-1 w-fit">
                 <Crown className="w-3 h-3" /> {t.settings.proMember}
@@ -316,6 +329,15 @@ export default function Settings({ dailyMacros, setDailyMacros, isPro, setIsPro,
                 <option value="other">{t.settings.other}</option>
               </select>
             </div>
+            <div className="col-span-full">
+              <label className="block font-label text-[10px] tracking-widest uppercase text-on-surface-variant mb-2">{t.settings.name}</label>
+              <input
+                type="text"
+                value={userProfile?.name || ''}
+                onChange={(e) => updateBiometric('name', e.target.value)}
+                className="w-full bg-surface-container-low border border-outline-variant/20 rounded-sm py-2 px-3 text-tertiary text-sm focus:outline-none focus:border-primary"
+              />
+            </div>
           </div>
         </div>
 
@@ -387,10 +409,11 @@ export default function Settings({ dailyMacros, setDailyMacros, isPro, setIsPro,
                       onChange={(e) => setNewMember({ ...newMember, goal: e.target.value })}
                       className="w-full bg-surface-container-low border border-outline-variant/20 rounded-sm py-2 px-3 text-tertiary uppercase text-xs focus:outline-none focus:border-primary"
                     >
-                      <option value="lose">{t.settings.goalLose}</option>
+                      <option value="muscle">{t.settings.goalMuscle}</option>
+                      <option value="cut">{t.settings.goalCut}</option>
                       <option value="maintain">{t.settings.goalMaintain}</option>
-                      <option value="gain">{t.settings.goalGain}</option>
-                      <option value="performance">{t.settings.goalPerformance}</option>
+                      <option value="health">{t.settings.goalHealth}</option>
+                      <option value="family">{t.settings.goalFamily}</option>
                     </select>
                   </div>
                 </div>
@@ -427,25 +450,32 @@ export default function Settings({ dailyMacros, setDailyMacros, isPro, setIsPro,
                 onChange={(e) => updateBiometric('goal', e.target.value)}
                 className="w-full bg-surface-container-low border border-outline-variant/20 rounded-sm py-2 px-3 text-tertiary uppercase text-xs focus:outline-none focus:border-primary"
               >
-                <option value="lose">{t.settings.goalLose}</option>
+                <option value="muscle">{t.settings.goalMuscle}</option>
+                <option value="cut">{t.settings.goalCut}</option>
                 <option value="maintain">{t.settings.goalMaintain}</option>
-                <option value="gain">{t.settings.goalGain}</option>
-                <option value="performance">{t.settings.goalPerformance}</option>
+                <option value="health">{t.settings.goalHealth}</option>
+                <option value="family">{t.settings.goalFamily}</option>
               </select>
             </div>
             <div>
               <label className="block font-label text-[10px] tracking-widest uppercase text-on-surface-variant mb-2">{t.settings.activityLevel}</label>
               <select 
-                value={userProfile?.activityLevel || 'moderate'}
-                onChange={(e) => updateBiometric('activityLevel', e.target.value)}
+                value={userProfile?.activity || 'active'}
+                onChange={(e) => updateBiometric('activity', e.target.value)}
                 className="w-full bg-surface-container-low border border-outline-variant/20 rounded-sm py-2 px-3 text-tertiary uppercase text-xs focus:outline-none focus:border-primary"
               >
                 <option value="sedentary">{t.settings.actSedentary}</option>
                 <option value="light">{t.settings.actLight}</option>
-                <option value="moderate">{t.settings.actModerate}</option>
-                <option value="very">{t.settings.actVery}</option>
-                <option value="extra">{t.settings.actExtra}</option>
+                <option value="active">{t.settings.actActive}</option>
+                <option value="veryActive">{t.settings.actVeryActive}</option>
               </select>
+            </div>
+          <div className="col-span-full flex items-center justify-between p-4 bg-surface-container-highest rounded-sm border border-outline-variant/10 mt-4">
+              <div>
+                <h4 className="font-headline font-bold text-sm uppercase text-tertiary tracking-widest">{t.settings.trains}</h4>
+                <p className="text-xs text-on-surface-variant mt-1">{t.settings.trainsDesc}</p>
+              </div>
+              <Switch checked={userProfile?.trains || false} onCheckedChange={(v) => updateBiometric('trains', v)} />
             </div>
           </div>
         </div>

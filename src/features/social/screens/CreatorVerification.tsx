@@ -14,7 +14,7 @@ interface Requirement {
 
 export default function CreatorVerification({ onBack }: { onBack: () => void }) {
   const { t } = useI18n();
-  const { savedRecipes, communityPosts } = useAppState();
+  const { savedRecipes, communityPosts, userProfile, setUserProfile } = useAppState();
 
   const BADGES = [
     { id: 'chef', label: t.creator.badges.chef, icon: Utensils, desc: t.creator.badges.chefDesc },
@@ -23,7 +23,7 @@ export default function CreatorVerification({ onBack }: { onBack: () => void }) 
     { id: 'home-cook', label: t.creator.badges.homeCook, icon: Home, desc: t.creator.badges.homeCookDesc },
   ];
   const [selectedBadge, setSelectedBadge] = useState<string | null>(null);
-  const [bio, setBio] = useState('');
+  const [bio, setBio] = useState(userProfile?.bio || '');
   const [submitted, setSubmitted] = useState(false);
 
   const recipesCount = savedRecipes.length;
@@ -50,6 +50,7 @@ export default function CreatorVerification({ onBack }: { onBack: () => void }) 
       toast.error(t.creator.selectBadgeError);
       return;
     }
+    if (bio && userProfile) setUserProfile({ ...userProfile, bio });
     setSubmitted(true);
     toast.success(t.creator.applicationSent, { duration: 5000 });
   };
