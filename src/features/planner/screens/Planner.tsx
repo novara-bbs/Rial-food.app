@@ -3,6 +3,7 @@ import { useState } from 'react';
 import { toast } from 'sonner';
 import { useI18n } from '../../../i18n';
 import EmptyState from '../../../components/EmptyState';
+import ConfirmDialog from '../../../components/ConfirmDialog';
 import { analyzeBatchCooking } from '../utils/batch-cooking';
 import { detectLeftovers } from '../utils/meal-reuse';
 
@@ -64,6 +65,7 @@ export default function Planner({
   const adjustedDayIndex = currentDayIndex === 0 ? 6 : currentDayIndex - 1;
   const [activeDay, setActiveDay] = useState(adjustedDayIndex);
   const [showBatchInsights, setShowBatchInsights] = useState(false);
+  const [mealToDelete, setMealToDelete] = useState<any>(null);
 
   const dayLetters = [
     t.plan.days.mon, t.plan.days.tue, t.plan.days.wed, t.plan.days.thu,
@@ -393,7 +395,7 @@ export default function Planner({
 
                         {/* Delete from plan */}
                         <button type="button"
-                          onClick={() => deleteMeal(meal.id)}
+                          onClick={() => setMealToDelete(meal)}
                           className="flex items-center gap-1 text-[8px] font-bold uppercase tracking-wider text-on-surface-variant hover:text-error transition-colors"
                           title={t.planner.deleteMeal}
                         >
@@ -417,6 +419,17 @@ export default function Planner({
           </button>
         </div>
       </section>
+
+      <ConfirmDialog
+        open={!!mealToDelete}
+        onOpenChange={(v) => { if (!v) setMealToDelete(null); }}
+        title={t.confirm.deleteMeal}
+        description={t.confirm.deleteMealDesc}
+        confirmLabel={t.confirm.yes}
+        cancelLabel={t.confirm.cancel}
+        variant="destructive"
+        onConfirm={() => { if (mealToDelete) deleteMeal(mealToDelete.id); setMealToDelete(null); }}
+      />
     </div>
   );
 }

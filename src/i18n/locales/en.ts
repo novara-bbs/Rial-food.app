@@ -1294,6 +1294,18 @@ const en: Translations = {
     entries: 'entries',
     logWeight: 'Log weight',
   },
+  confirm: {
+    deleteMeal: 'Delete meal',
+    deleteMealDesc: 'Are you sure you want to remove this meal from the plan?',
+    clearShopping: 'Clear list',
+    clearShoppingDesc: 'Are you sure you want to clear the entire shopping list?',
+    clearCompleted: 'Clear completed',
+    clearCompletedDesc: 'Remove all purchased items?',
+    deleteRecipe: 'Delete recipe',
+    deleteRecipeDesc: 'Are you sure you want to delete this recipe? This action cannot be undone.',
+    yes: 'Yes, delete',
+    cancel: 'Cancel',
+  },
 };
 
 export default en;

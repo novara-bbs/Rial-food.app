@@ -1342,6 +1342,18 @@ const es = {
     entries: 'registros',
     logWeight: 'Registrar peso',
   },
+  confirm: {
+    deleteMeal: 'Eliminar comida',
+    deleteMealDesc: '¿Seguro que quieres eliminar esta comida del plan?',
+    clearShopping: 'Vaciar lista',
+    clearShoppingDesc: '¿Seguro que quieres vaciar toda la lista de compra?',
+    clearCompleted: 'Limpiar completados',
+    clearCompletedDesc: '¿Eliminar todos los artículos ya comprados?',
+    deleteRecipe: 'Eliminar receta',
+    deleteRecipeDesc: '¿Seguro que quieres eliminar esta receta? Esta acción no se puede deshacer.',
+    yes: 'Sí, eliminar',
+    cancel: 'Cancelar',
+  },
 };
 
 export default es;

@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import { toast } from 'sonner';
 import { useI18n } from '../../../i18n';
 import EmptyState from '../../../components/EmptyState';
+import ConfirmDialog from '../../../components/ConfirmDialog';
 import FilterRow from '../../../components/patterns/FilterRow';
 import { useLocalStorageState } from '../../../hooks/useLocalStorageState';
 import { aggregateShoppingItems, groupShoppingItems, formatShoppingListForShare, detectCategory, AISLE_CATEGORIES, markPantryItems, PantryItem } from '../utils/grocery';
@@ -12,6 +13,7 @@ export default function ShoppingList({ onBack, shoppingList = [], setShoppingLis
   const [isAdding, setIsAdding] = useState(false);
   const [newItemName, setNewItemName] = useState('');
   const [newItemCategory, setNewItemCategory] = useState<string>(AISLE_CATEGORIES.other);
+  const [pendingClearAction, setPendingClearAction] = useState<'all' | 'completed' | null>(null);
 
   const toggleItem = (id: number) => {
     if (!setShoppingList) return;
@@ -109,7 +111,7 @@ export default function ShoppingList({ onBack, shoppingList = [], setShoppingLis
           <button type="button" onClick={shareGeneric} disabled={!hasItems} aria-label={t.shopping.share} className="w-10 h-10 bg-surface-container-low rounded-full flex items-center justify-center text-on-surface-variant hover:text-primary transition-colors border border-outline-variant/20 disabled:opacity-30">
             <Share2 className="w-4 h-4" />
           </button>
-          <button type="button" onClick={clearAll} disabled={!hasItems} aria-label={t.shoppingList.clearAll} className="w-10 h-10 bg-surface-container-low rounded-full flex items-center justify-center text-on-surface-variant hover:text-error transition-colors border border-outline-variant/20 disabled:opacity-30">
+          <button type="button" onClick={() => setPendingClearAction('all')} disabled={!hasItems} aria-label={t.shoppingList.clearAll} className="w-10 h-10 bg-surface-container-low rounded-full flex items-center justify-center text-on-surface-variant hover:text-error transition-colors border border-outline-variant/20 disabled:opacity-30">
             <Trash2 className="w-4 h-4" />
           </button>
           <button type="button" onClick={() => setIsAdding(true)} aria-label={t.shoppingList.addItem} className="w-10 h-10 bg-primary text-on-primary rounded-full flex items-center justify-center hover:bg-primary-container transition-colors shadow-lg">
@@ -269,13 +271,28 @@ export default function ShoppingList({ onBack, shoppingList = [], setShoppingLis
       {completedCount > 0 && (
         <div className="fixed bottom-24 md:bottom-8 left-1/2 -translate-x-1/2 w-full max-w-md px-6 z-50">
           <button type="button"
-            onClick={clearCompleted}
+            onClick={() => setPendingClearAction('completed')}
             className="w-full bg-surface-container-highest text-error border border-error/20 py-4 rounded-full font-headline font-bold text-sm uppercase tracking-widest hover:bg-error/10 transition-colors flex items-center justify-center gap-2 shadow-xl backdrop-blur-md"
           >
             <Trash2 className="w-4 h-4" /> {t.shoppingList.clearCompleted}
           </button>
         </div>
       )}
+
+      <ConfirmDialog
+        open={!!pendingClearAction}
+        onOpenChange={(v) => { if (!v) setPendingClearAction(null); }}
+        title={pendingClearAction === 'all' ? t.confirm.clearShopping : t.confirm.clearCompleted}
+        description={pendingClearAction === 'all' ? t.confirm.clearShoppingDesc : t.confirm.clearCompletedDesc}
+        confirmLabel={t.confirm.yes}
+        cancelLabel={t.confirm.cancel}
+        variant="destructive"
+        onConfirm={() => {
+          if (pendingClearAction === 'all') clearAll();
+          else clearCompleted();
+          setPendingClearAction(null);
+        }}
+      />
     </div>
   );
 }
