@@ -2,6 +2,7 @@ import { User, Mail, Shield, CreditCard, LogOut, ChevronRight, Flame, Trophy, St
 import { useI18n } from '../../../i18n';
 import { BADGES, LEVELS, calculatePoints, getUserLevel, getEarnedBadges, getNextMilestone, type UserStats } from '../utils/gamification';
 import PageHeader from '../../../components/patterns/PageHeader';
+import { bodyWeightFromKg, getBodyWeightUnit, heightFromCm, getHeightUnit } from '../../food/utils/units';
 
 export default function Profile({ userProfile, onBack, realFeelLogs = [], savedRecipes = [], communityPosts = [] }: {
   userProfile: any;
@@ -129,8 +130,8 @@ export default function Profile({ userProfile, onBack, realFeelLogs = [], savedR
         <h3 className="font-headline text-sm font-bold uppercase tracking-widest text-tertiary mb-4">{t.profile.bodyData}</h3>
         <div className="grid grid-cols-2 gap-4 text-sm">
           {userProfile?.age && <div className="flex justify-between"><span className="text-on-surface-variant">{t.onboarding.age}</span><span className="font-bold text-tertiary">{userProfile.age}</span></div>}
-          {userProfile?.height && <div className="flex justify-between"><span className="text-on-surface-variant">{t.onboarding.height}</span><span className="font-bold text-tertiary">{userProfile.height} cm</span></div>}
-          {userProfile?.weight && <div className="flex justify-between"><span className="text-on-surface-variant">{t.onboarding.weight}</span><span className="font-bold text-tertiary">{userProfile.weight} kg</span></div>}
+          {userProfile?.height && <div className="flex justify-between"><span className="text-on-surface-variant">{t.onboarding.height}</span><span className="font-bold text-tertiary">{heightFromCm(userProfile.height, userProfile?.unitSystem ?? 'metric')} {getHeightUnit(userProfile?.unitSystem ?? 'metric')}</span></div>}
+          {userProfile?.weight && <div className="flex justify-between"><span className="text-on-surface-variant">{t.onboarding.weight}</span><span className="font-bold text-tertiary">{bodyWeightFromKg(userProfile.weight, userProfile?.unitSystem ?? 'metric')} {getBodyWeightUnit(userProfile?.unitSystem ?? 'metric')}</span></div>}
           {userProfile?.goal && <div className="flex justify-between"><span className="text-on-surface-variant">{t.profile.goal}</span><span className="font-bold text-primary uppercase text-xs">{userProfile.goal}</span></div>}
         </div>
         {userProfile?.dietaryPreferences?.length > 0 && (

@@ -5,12 +5,15 @@ import { useAppState } from '../../../contexts/AppStateContext';
 import { getLoggingStreak, type DailyArchive } from '../../../hooks/useDailyReset';
 import { calcVitality } from '../../home/utils/homeWidgets';
 import PageHeader from '../../../components/patterns/PageHeader';
+import { bodyWeightFromKg, bodyWeightToKg, getBodyWeightUnit } from '../../food/utils/units';
 
 interface WeightEntry { date: string; kg: number; note?: string }
 
 export default function Progress({ onBack }: { onBack: () => void }) {
   const { t } = useI18n();
-  const { nutritionHistory, weightHistory, setWeightHistory, dailyMacros, dailyLog, realFeelLogs, mealPlan } = useAppState();
+  const { nutritionHistory, weightHistory, setWeightHistory, dailyMacros, dailyLog, realFeelLogs, mealPlan, userProfile } = useAppState();
+  const unitSystem = userProfile?.unitSystem ?? 'metric';
+  const weightUnit = getBodyWeightUnit(unitSystem);
   const [isEditingWeight, setIsEditingWeight] = useState(false);
   const [weightInput, setWeightInput] = useState('');
 
@@ -24,8 +27,10 @@ export default function Progress({ onBack }: { onBack: () => void }) {
   // ─── Weight Logging ─────────────────────────────────────────────────────────
   const todayDate = new Date().toISOString().slice(0, 10);
   const handleLogWeight = () => {
-    const kg = parseFloat(weightInput);
-    if (isNaN(kg) || kg < 20 || kg > 300 || !setWeightHistory) return;
+    const val = parseFloat(weightInput);
+    if (isNaN(val) || !setWeightHistory) return;
+    const kg = bodyWeightToKg(val, unitSystem);
+    if (kg < 20 || kg > 300) return;
     setWeightHistory((prev: any[]) => {
       const filtered = prev.filter((w: any) => w.date !== todayDate);
       return [...filtered, { date: todayDate, kg }];
@@ -140,7 +145,7 @@ export default function Progress({ onBack }: { onBack: () => void }) {
           {weekDelta !== null && (
             <div className={`flex items-center gap-1 text-[10px] font-bold uppercase tracking-widest ${weekDelta > 0 ? 'text-brand-secondary' : weekDelta < 0 ? 'text-primary' : 'text-on-surface-variant'}`}>
               {weekDelta > 0 ? <TrendingUp className="w-3.5 h-3.5" /> : weekDelta < 0 ? <TrendingDown className="w-3.5 h-3.5" /> : null}
-              {weekDelta > 0 ? '+' : ''}{weekDelta.toFixed(1)} kg {p.thisWeek || 'esta semana'}
+              {weekDelta > 0 ? '+' : ''}{bodyWeightFromKg(Math.abs(weekDelta), unitSystem).toFixed(1)} {weightUnit} {p.thisWeek || 'esta semana'}
             </div>
           )}
         </div>
@@ -167,16 +172,16 @@ export default function Progress({ onBack }: { onBack: () => void }) {
         <div className="grid grid-cols-3 gap-4 pt-2 border-t border-outline-variant/10">
           <div className="text-center">
             <span className="font-label text-[9px] uppercase tracking-widest text-on-surface-variant block">{p.current || 'Actual'}</span>
-            <span className="font-headline font-black text-lg text-tertiary">{currentWeight ? `${currentWeight} kg` : '—'}</span>
+            <span className="font-headline font-black text-lg text-tertiary">{currentWeight ? `${bodyWeightFromKg(currentWeight, unitSystem)} ${weightUnit}` : '—'}</span>
           </div>
           <div className="text-center">
             <span className="font-label text-[9px] uppercase tracking-widest text-on-surface-variant block">{p.start || 'Inicio'}</span>
-            <span className="font-headline font-black text-lg text-on-surface-variant">{firstWeight ? `${firstWeight} kg` : '—'}</span>
+            <span className="font-headline font-black text-lg text-on-surface-variant">{firstWeight ? `${bodyWeightFromKg(firstWeight, unitSystem)} ${weightUnit}` : '—'}</span>
           </div>
           <div className="text-center">
             <span className="font-label text-[9px] uppercase tracking-widest text-on-surface-variant block">{p.change || 'Cambio'}</span>
             <span className={`font-headline font-black text-lg ${currentWeight && firstWeight ? (currentWeight - firstWeight > 0 ? 'text-brand-secondary' : 'text-primary') : 'text-on-surface-variant'}`}>
-              {currentWeight && firstWeight ? `${(currentWeight - firstWeight) > 0 ? '+' : ''}${(currentWeight - firstWeight).toFixed(1)} kg` : '—'}
+              {currentWeight && firstWeight ? `${(currentWeight - firstWeight) > 0 ? '+' : ''}${bodyWeightFromKg(Math.abs(currentWeight - firstWeight), unitSystem).toFixed(1)} ${weightUnit}` : '—'}
             </span>
           </div>
         </div>
@@ -194,10 +199,10 @@ export default function Progress({ onBack }: { onBack: () => void }) {
               onChange={e => setWeightInput(e.target.value)}
               onKeyDown={e => e.key === 'Enter' && handleLogWeight()}
               className="flex-1 bg-surface-container-highest border border-outline-variant/20 rounded-sm py-2 px-3 text-sm text-tertiary placeholder:text-on-surface-variant focus:outline-none focus:border-primary transition-colors"
-              placeholder={currentWeight ? String(currentWeight) : '72.5'}
+              placeholder={currentWeight ? String(bodyWeightFromKg(currentWeight, unitSystem)) : '72.5'}
               autoFocus
             />
-            <span className="text-sm font-bold text-on-surface-variant">kg</span>
+            <span className="text-sm font-bold text-on-surface-variant">{weightUnit}</span>
             <button type="button"
               onClick={handleLogWeight}
               className="w-9 h-9 flex items-center justify-center rounded-full bg-primary text-on-primary hover:opacity-90 transition-opacity"
@@ -207,7 +212,7 @@ export default function Progress({ onBack }: { onBack: () => void }) {
           </div>
         ) : (
           <button type="button"
-            onClick={() => { setIsEditingWeight(true); setWeightInput(currentWeight ? String(currentWeight) : ''); }}
+            onClick={() => { setIsEditingWeight(true); setWeightInput(currentWeight ? String(bodyWeightFromKg(currentWeight, unitSystem)) : ''); }}
             className="w-full pt-3 border-t border-outline-variant/10 text-center text-[10px] font-bold text-primary uppercase tracking-widest hover:underline flex items-center justify-center gap-1.5"
           >
             <Plus className="w-3.5 h-3.5" /> {p.logWeight}

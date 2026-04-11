@@ -173,13 +173,13 @@ export default function Onboarding({ isOpen, onClose, onComplete }: {
                 </div>
                 <div className="grid grid-cols-2 gap-3">
                   <div>
-                    <label className="block text-xs font-label uppercase tracking-widest text-on-surface-variant mb-1.5">{t.onboarding.weight}</label>
-                    <input type="number" value={data.weight} onChange={e => setData(d => ({ ...d, weight: +e.target.value }))}
+                    <label className="block text-xs font-label uppercase tracking-widest text-on-surface-variant mb-1.5">{t.onboarding.weight} (kg)</label>
+                    <input type="number" step="0.1" inputMode="decimal" value={data.weight} onChange={e => setData(d => ({ ...d, weight: +e.target.value }))}
                       className="w-full px-4 py-3 bg-surface-container-low border border-outline-variant/20 rounded-sm text-on-surface text-sm font-mono focus:outline-none focus:border-primary" />
                   </div>
                   <div>
-                    <label className="block text-xs font-label uppercase tracking-widest text-on-surface-variant mb-1.5">{t.onboarding.height}</label>
-                    <input type="number" value={data.height} onChange={e => setData(d => ({ ...d, height: +e.target.value }))}
+                    <label className="block text-xs font-label uppercase tracking-widest text-on-surface-variant mb-1.5">{t.onboarding.height} (cm)</label>
+                    <input type="number" step="0.1" inputMode="decimal" value={data.height} onChange={e => setData(d => ({ ...d, height: +e.target.value }))}
                       className="w-full px-4 py-3 bg-surface-container-low border border-outline-variant/20 rounded-sm text-on-surface text-sm font-mono focus:outline-none focus:border-primary" />
                   </div>
                 </div>

@@ -8,6 +8,7 @@ import { Button } from '@/components/ui/button';
 import { useLocalStorageState } from '../../../hooks/useLocalStorageState';
 import { getNutritionHistory } from '../../../hooks/useDailyReset';
 import type { Allergen, Ingredient } from '../../../types';
+import { bodyWeightFromKg, bodyWeightToKg, heightFromCm, heightToCm, getBodyWeightUnit, getHeightUnit } from '../../food/utils/units';
 
 export default function Settings({ dailyMacros, setDailyMacros, isPro, setIsPro, showAIBot, setShowAIBot, userProfile, setUserProfile, dictionary = [] }: { dailyMacros?: any, setDailyMacros?: any, isPro?: boolean, setIsPro?: any, showAIBot?: boolean, setShowAIBot?: any, userProfile?: any, setUserProfile?: any, dictionary?: Ingredient[] }) {
   const { theme, setTheme } = useTheme();
@@ -265,20 +266,24 @@ export default function Settings({ dailyMacros, setDailyMacros, isPro, setIsPro,
               />
             </div>
             <div>
-              <label className="block font-label text-[10px] tracking-widest uppercase text-on-surface-variant mb-2">{t.settings.heightLabel}</label>
+              <label className="block font-label text-[10px] tracking-widest uppercase text-on-surface-variant mb-2">{t.settings.heightLabel} ({getHeightUnit(userProfile?.unitSystem ?? 'metric')})</label>
               <input
                 type="number"
-                value={userProfile?.height || 175}
-                onChange={(e) => updateBiometric('height', parseInt(e.target.value))}
+                step="0.1"
+                inputMode="decimal"
+                value={heightFromCm(userProfile?.height || 175, userProfile?.unitSystem ?? 'metric')}
+                onChange={(e) => updateBiometric('height', heightToCm(parseFloat(e.target.value) || 0, userProfile?.unitSystem ?? 'metric'))}
                 className="w-full bg-surface-container-low border border-outline-variant/20 rounded-sm py-2 px-3 text-tertiary text-sm focus:outline-none focus:border-primary"
               />
             </div>
             <div>
-              <label className="block font-label text-[10px] tracking-widest uppercase text-on-surface-variant mb-2">{t.settings.weightLabel}</label>
+              <label className="block font-label text-[10px] tracking-widest uppercase text-on-surface-variant mb-2">{t.settings.weightLabel} ({getBodyWeightUnit(userProfile?.unitSystem ?? 'metric')})</label>
               <input
                 type="number"
-                value={userProfile?.weight || 78}
-                onChange={(e) => updateBiometric('weight', parseInt(e.target.value))}
+                step="0.1"
+                inputMode="decimal"
+                value={bodyWeightFromKg(userProfile?.weight || 78, userProfile?.unitSystem ?? 'metric')}
+                onChange={(e) => updateBiometric('weight', bodyWeightToKg(parseFloat(e.target.value) || 0, userProfile?.unitSystem ?? 'metric'))}
                 className="w-full bg-surface-container-low border border-outline-variant/20 rounded-sm py-2 px-3 text-tertiary text-sm focus:outline-none focus:border-primary"
               />
             </div>
