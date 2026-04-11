@@ -1,5 +1,5 @@
 import { useState, useMemo } from 'react';
-import { ChevronDown, ChevronUp, UtensilsCrossed, ShoppingCart, ThumbsUp, Minus, AlertTriangle } from 'lucide-react';
+import { ChevronDown, ChevronUp, UtensilsCrossed, ShoppingCart, ThumbsUp, Minus, AlertTriangle, X } from 'lucide-react';
 import SearchInput from '../../../components/patterns/SearchInput';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -7,9 +7,15 @@ import { useI18n } from '../../../i18n';
 import { INGREDIENT_DICTIONARY, INGREDIENT_CATEGORIES } from '../data/ingredients';
 import PortionSelector from '../components/PortionSelector';
 import { getFoodQuality } from '../utils/nutrition';
-import type { Ingredient, IngredientCategory } from '../../../types';
+import type { Ingredient, IngredientCategory, Allergen } from '../../../types';
 import { useAppState } from '../../../contexts/AppStateContext';
 import EmptyState from '../../../components/EmptyState';
+
+const ALL_ALLERGENS: Allergen[] = [
+  'gluten', 'dairy', 'eggs', 'nuts', 'peanuts',
+  'soy', 'fish', 'shellfish', 'sesame', 'celery',
+  'mustard', 'sulfites',
+];
 
 interface Props {
   navigateTo: (screen: string, data?: Record<string, unknown>) => void;
@@ -26,12 +32,25 @@ export default function FoodDictionary({ navigateTo }: Props) {
   const [query, setQuery] = useState('');
   const [activeCategory, setActiveCategory] = useState<IngredientCategory | null>(null);
   const [expandedId, setExpandedId] = useState<string | null>(null);
+  const [excludedAllergens, setExcludedAllergens] = useState<Set<Allergen>>(new Set());
+
+  const toggleAllergen = (a: Allergen) => {
+    setExcludedAllergens(prev => {
+      const next = new Set(prev);
+      if (next.has(a)) next.delete(a); else next.add(a);
+      return next;
+    });
+  };
 
   const filtered = useMemo(() => {
     let items = INGREDIENT_DICTIONARY;
 
     if (activeCategory) {
       items = items.filter(i => i.category === activeCategory);
+    }
+
+    if (excludedAllergens.size > 0) {
+      items = items.filter(i => !i.allergens.some(a => excludedAllergens.has(a)));
     }
 
     if (query.trim()) {
@@ -45,7 +64,7 @@ export default function FoodDictionary({ navigateTo }: Props) {
     }
 
     return items;
-  }, [query, activeCategory]);
+  }, [query, activeCategory, excludedAllergens]);
 
   // Group by category for display
   const grouped = useMemo(() => {
@@ -110,6 +129,33 @@ export default function FoodDictionary({ navigateTo }: Props) {
             </button>
           );
         })}
+      </div>
+
+      {/* Allergen exclusion chips */}
+      <div className="space-y-1.5">
+        <span className="text-[9px] font-label uppercase tracking-widest text-on-surface-variant">
+          {t.foodDictionary.allergenFilter}
+        </span>
+        <div className="flex gap-1.5 flex-wrap">
+          {ALL_ALLERGENS.map(a => {
+            const active = excludedAllergens.has(a);
+            return (
+              <button
+                type="button"
+                key={a}
+                onClick={() => toggleAllergen(a)}
+                className={`inline-flex items-center gap-1 px-2 py-1 rounded-sm text-[10px] font-headline font-bold uppercase tracking-widest transition-colors ${
+                  active
+                    ? 'bg-error/15 text-error border border-error/30'
+                    : 'bg-surface-container-highest text-on-surface-variant border border-transparent hover:bg-surface-container-high'
+                }`}
+              >
+                {active && <X className="w-3 h-3" />}
+                {a}
+              </button>
+            );
+          })}
+        </div>
       </div>
 
       {/* Results count */}

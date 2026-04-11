@@ -23,7 +23,7 @@ import ConfirmDialog from '../../../components/ConfirmDialog';
 export default function RecipeDetail({ recipe, onBack, onSaveRecipe, isSaved, onAddToPlan, onLogMealNow, onAddToShoppingList, dictionary = [], userProfile }: { recipe: any, onBack: () => void, onSaveRecipe?: (r: any) => void, isSaved?: boolean, onAddToPlan?: (recipe: any, dayIndex: number) => void, onLogMealNow?: (recipe: any, servings: number) => void, onAddToShoppingList?: (items: any[]) => void, dictionary?: any[], userProfile?: any }) {
   const { t } = useI18n();
   const { navigateTo } = useNavigation();
-  const { setSelectedCreatorId, communityPosts, savedRecipes, savedPosts, navigateToRecipe: navToRecipe, handleDeleteRecipe, setRecipeToEdit } = useAppState();
+  const { setSelectedCreatorId, communityPosts, savedRecipes, savedPosts, navigateToRecipe: navToRecipe, handleDeleteRecipe, setRecipeToEdit, handleCreateRecipeSubmit } = useAppState();
   const [followedCreators, setFollowedCreators] = useLocalStorageState<string[]>('followedCreators', []);
   const [checkedIngredients, setCheckedIngredients] = useState<string[]>([]);
   const [servings, setServings] = useState(1);
@@ -524,6 +524,13 @@ export default function RecipeDetail({ recipe, onBack, onSaveRecipe, isSaved, on
               </Button>
               <Button variant="outline" className="flex-1" onClick={() => setShowDaySelector(true)}>
                 {t.recipeDetail.addToPlan}
+              </Button>
+              <Button variant="outline" className="flex-1" onClick={() => {
+                const copy = { ...getModifiedRecipe(), title: `${t.recipeDetail.duplicatePrefix || 'Copia de'} ${data.title}` };
+                delete copy.id;
+                handleCreateRecipeSubmit(copy);
+              }}>
+                {t.recipeDetail.duplicate || 'Duplicar'}
               </Button>
             </div>
 

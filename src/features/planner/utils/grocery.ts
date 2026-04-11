@@ -148,6 +148,21 @@ export function markPantryItems(
   });
 }
 
+// Emoji per aisle category for WhatsApp share readability
+const CATEGORY_EMOJI: Record<string, string> = {
+  [AISLE_CATEGORIES.vegetables]: '🥬',
+  [AISLE_CATEGORIES.fruits]: '🍎',
+  [AISLE_CATEGORIES.meat]: '🥩',
+  [AISLE_CATEGORIES.dairy]: '🥛',
+  [AISLE_CATEGORIES.grains]: '🌾',
+  [AISLE_CATEGORIES.pantry]: '🏪',
+  [AISLE_CATEGORIES.spices]: '🧂',
+  [AISLE_CATEGORIES.frozen]: '🧊',
+  [AISLE_CATEGORIES.beverages]: '🥤',
+  [AISLE_CATEGORIES.other]: '📦',
+  [AISLE_CATEGORIES.planned]: '📋',
+};
+
 /**
  * Formats a WhatsApp-ready text export of the shopping list.
  */
@@ -158,7 +173,8 @@ export function formatShoppingListForShare(items: GroceryItem[]): string {
   for (const group of groups) {
     const unchecked = group.items.filter(i => !i.checked);
     if (!unchecked.length) continue;
-    lines.push(`\n*${group.category.toUpperCase()}*`);
+    const emoji = CATEGORY_EMOJI[group.category] || '📦';
+    lines.push(`\n${emoji} *${group.category.toUpperCase()}*`);
     for (const item of unchecked) {
       const qty = item.quantity ? ` (${item.quantity}${item.unit || ''})` : '';
       lines.push(`• ${item.name}${qty}`);
