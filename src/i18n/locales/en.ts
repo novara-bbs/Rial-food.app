@@ -866,6 +866,7 @@ const en: Translations = {
   },
   createRecipe: {
     title: 'Create Recipe',
+    editTitle: 'Edit Recipe',
     recipeName: 'Recipe name',
     namePlaceholder: 'e.g., Chicken & Quinoa Bowl',
     description: 'Description',
@@ -1069,6 +1070,9 @@ const en: Translations = {
     highlightedMicros: 'Key micronutrients',
   },
   recipeDetail: {
+    yourRecipe: 'Your Recipe',
+    edit: 'Edit',
+    delete: 'Delete',
     onlyMe: 'Just Me',
     person: 'person',
     people: 'people',

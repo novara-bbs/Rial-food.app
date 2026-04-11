@@ -72,7 +72,24 @@ export function createHandleAddToPlan(deps: RecipeHandlerDeps) {
 
 export function createHandleCreateRecipeSubmit(deps: Pick<RecipeHandlerDeps, 'setSavedRecipes' | 'navigateTo'>) {
   return (recipe: any) => {
-    deps.setSavedRecipes((prev: any[]) => [{ ...recipe, id: Date.now(), tag: 'MI RECETA', publishedBy: 'self' }, ...prev]);
+    if (recipe.id) {
+      // Update existing recipe — preserve publishedBy + tag
+      deps.setSavedRecipes((prev: any[]) => prev.map((r: any) =>
+        r.id === recipe.id ? { ...r, ...recipe } : r
+      ));
+      toast.success('Receta actualizada');
+    } else {
+      // Create new
+      deps.setSavedRecipes((prev: any[]) => [{ ...recipe, id: Date.now(), tag: 'MI RECETA', publishedBy: 'self' }, ...prev]);
+    }
+    deps.navigateTo('cocina');
+  };
+}
+
+export function createHandleDeleteRecipe(deps: Pick<RecipeHandlerDeps, 'setSavedRecipes' | 'navigateTo'>) {
+  return (recipeId: any) => {
+    deps.setSavedRecipes((prev: any[]) => prev.filter((r: any) => r.id !== recipeId));
+    toast.success('Receta eliminada');
     deps.navigateTo('cocina');
   };
 }

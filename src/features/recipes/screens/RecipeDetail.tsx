@@ -1,4 +1,4 @@
-import { ArrowLeft, Clock, Flame, Droplet, Activity, CheckCircle2, Circle, Minus, Plus, MessageSquare, Bookmark, X, Users, ShoppingCart, ChefHat, UtensilsCrossed, ThumbsUp, AlertTriangle, Target, Share2, ExternalLink } from 'lucide-react';
+import { ArrowLeft, Clock, Flame, Droplet, Activity, CheckCircle2, Circle, Minus, Plus, MessageSquare, Bookmark, X, Users, ShoppingCart, ChefHat, UtensilsCrossed, ThumbsUp, AlertTriangle, Target, Share2, ExternalLink, Pencil, Trash2 } from 'lucide-react';
 import SearchInput from '../../../components/patterns/SearchInput';
 import { useState, useMemo, useEffect } from 'react';
 import CookMode from '../components/CookMode';
@@ -18,11 +18,12 @@ import { useNavigation } from '../../../contexts/NavigationContext';
 import { useAppState } from '../../../contexts/AppStateContext';
 import { useLocalStorageState } from '../../../hooks/useLocalStorageState';
 import { useI18n } from '../../../i18n';
+import ConfirmDialog from '../../../components/ConfirmDialog';
 
 export default function RecipeDetail({ recipe, onBack, onSaveRecipe, isSaved, onAddToPlan, onLogMealNow, onAddToShoppingList, dictionary = [], userProfile }: { recipe: any, onBack: () => void, onSaveRecipe?: (r: any) => void, isSaved?: boolean, onAddToPlan?: (recipe: any, dayIndex: number) => void, onLogMealNow?: (recipe: any, servings: number) => void, onAddToShoppingList?: (items: any[]) => void, dictionary?: any[], userProfile?: any }) {
   const { t } = useI18n();
   const { navigateTo } = useNavigation();
-  const { setSelectedCreatorId, communityPosts, savedRecipes, savedPosts, navigateToRecipe: navToRecipe } = useAppState();
+  const { setSelectedCreatorId, communityPosts, savedRecipes, savedPosts, navigateToRecipe: navToRecipe, handleDeleteRecipe, setRecipeToEdit } = useAppState();
   const [followedCreators, setFollowedCreators] = useLocalStorageState<string[]>('followedCreators', []);
   const [checkedIngredients, setCheckedIngredients] = useState<string[]>([]);
   const [servings, setServings] = useState(1);
@@ -33,6 +34,7 @@ export default function RecipeDetail({ recipe, onBack, onSaveRecipe, isSaved, on
   const [isAddingIngredient, setIsAddingIngredient] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [showPublishSheet, setShowPublishSheet] = useState(false);
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
 
   // Track recipe view on mount
   useEffect(() => {
@@ -303,6 +305,36 @@ export default function RecipeDetail({ recipe, onBack, onSaveRecipe, isSaved, on
           </div>
         );
       })()}
+
+      {/* ══ Your Recipe badge + edit/delete ══ */}
+      {data.publishedBy === 'self' && (
+        <div className="px-6 max-w-4xl mx-auto mt-4">
+          <div className="flex items-center justify-between bg-primary/10 border border-primary/20 rounded-sm px-4 py-3">
+            <div className="flex items-center gap-2">
+              <ChefHat className="w-4 h-4 text-primary" />
+              <span className="font-headline font-bold text-xs text-primary uppercase tracking-widest">{t.recipeDetail.yourRecipe || 'Tu Receta'}</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <Button
+                variant="outline"
+                size="icon-sm"
+                onClick={() => { setRecipeToEdit(data); navigateTo('edit-recipe'); }}
+                aria-label={t.recipeDetail.edit || 'Editar'}
+              >
+                <Pencil className="w-3.5 h-3.5" />
+              </Button>
+              <Button
+                variant="destructive"
+                size="icon-sm"
+                onClick={() => setShowDeleteConfirm(true)}
+                aria-label={t.recipeDetail.delete || 'Eliminar'}
+              >
+                <Trash2 className="w-3.5 h-3.5" />
+              </Button>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* ══ Macro summary bar ══ */}
       <div className="px-6 max-w-4xl mx-auto">
@@ -809,6 +841,16 @@ export default function RecipeDetail({ recipe, onBack, onSaveRecipe, isSaved, on
         onClose={() => setShowPublishSheet(false)}
       />
     )}
+    <ConfirmDialog
+      open={showDeleteConfirm}
+      onOpenChange={setShowDeleteConfirm}
+      title={t.confirm.deleteRecipe}
+      description={t.confirm.deleteRecipeDesc}
+      confirmLabel={t.confirm.yes}
+      cancelLabel={t.confirm.cancel}
+      variant="destructive"
+      onConfirm={() => handleDeleteRecipe(data.id)}
+    />
     </>
   );
 }

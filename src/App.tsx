@@ -63,6 +63,7 @@ export default function App() {
     handleAddToleranceLog, handleCreateRecipeSubmit,
     handleRealFeelLog, handleImportRecipe, handleAddToPlan,
     handleCheckIn, handleCompleteCheckIn, navigateToRecipe,
+    recipeToEdit,
   } = useAppState();
 
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
@@ -120,6 +121,7 @@ export default function App() {
       case 'add-meal': return <AddMeal onBack={() => { setTargetPlanDay(null); navigateTo(previousScreen); }} onLogMeal={handleLogMeal} dailyMacros={dailyMacros} savedRecipes={savedRecipes} dictionary={dictionary} />;
       case 'add-tolerance': return <AddTolerance onBack={() => navigateTo(previousScreen)} onAddLog={handleAddToleranceLog} />;
       case 'create-recipe': return <CreateRecipe onBack={() => navigateTo(previousScreen)} onCreateRecipe={handleCreateRecipeSubmit} dictionary={dictionary} />;
+      case 'edit-recipe': return <CreateRecipe onBack={() => navigateTo(previousScreen)} onCreateRecipe={handleCreateRecipeSubmit} dictionary={dictionary} initialRecipe={recipeToEdit} />;
       case 'create-post': return <CreatePost onBack={() => navigateTo(previousScreen)} onCreatePost={handleCreatePost} />;
       case 'daily-check-in': return <DailyCheckIn initialStatus={checkInStatus?.status || null} onBack={() => navigateTo(previousScreen)} onComplete={handleCompleteCheckIn} />;
       case 'ai-coach': return <AICoach onBack={() => navigateTo(previousScreen)} isPro={isPro} memoryContext={aiCoachMemory} />;

@@ -59,35 +59,43 @@ export default function CreateRecipe({
   onBack,
   onCreateRecipe,
   dictionary = [],
+  initialRecipe,
 }: {
   onBack: () => void;
   onCreateRecipe?: (recipe: any) => void;
   dictionary?: Ingredient[];
+  initialRecipe?: any;
 }) {
   const { t, locale } = useI18n();
   const { userProfile } = useAppState();
   const unitSystem = userProfile.unitSystem ?? 'metric';
   const [step, setStep] = useState(1);
 
+  const isEditing = !!initialRecipe;
+
   // ── Step 1: Basics ──
-  const [title, setTitle] = useState('');
-  const [description, setDescription] = useState('');
-  const [prepTime, setPrepTime] = useState('');
-  const [cookTime, setCookTime] = useState('');
-  const [difficulty, setDifficulty] = useState<'Fácil' | 'Medio' | 'Difícil'>('Fácil');
-  const [servings, setServings] = useState(4);
-  const [sourceUrl, setSourceUrl] = useState('');
-  const [videoUrl, setVideoUrl] = useState('');
+  const [title, setTitle] = useState(initialRecipe?.title || '');
+  const [description, setDescription] = useState(initialRecipe?.description || '');
+  const [prepTime, setPrepTime] = useState(initialRecipe?.prepTime || '');
+  const [cookTime, setCookTime] = useState(initialRecipe?.cookTime || '');
+  const [difficulty, setDifficulty] = useState<'Fácil' | 'Medio' | 'Difícil'>(initialRecipe?.difficulty || 'Fácil');
+  const [servings, setServings] = useState(initialRecipe?.servings || 4);
+  const [sourceUrl, setSourceUrl] = useState(initialRecipe?.sourceUrl || '');
+  const [videoUrl, setVideoUrl] = useState(initialRecipe?.videoUrl || '');
 
   // ── Step 2: Ingredients ──
-  const [recipeIngredients, setRecipeIngredients] = useState<RecipeIngredient[]>([]);
+  const [recipeIngredients, setRecipeIngredients] = useState<RecipeIngredient[]>(initialRecipe?.recipeIngredients || []);
   const [searchQuery, setSearchQuery] = useState('');
   const [isSearching, setIsSearching] = useState(false);
   const [expandedIngId, setExpandedIngId] = useState<string | null>(null);
   const [pendingGrams, setPendingGrams] = useState(100);
 
   // ── Step 3: Instructions (with optional per-step photo) ──
-  const [steps, setSteps] = useState<RecipeStep[]>([{ text: '' }]);
+  const [steps, setSteps] = useState<RecipeStep[]>(
+    initialRecipe?.steps?.length ? initialRecipe.steps :
+    initialRecipe?.instructions?.length ? initialRecipe.instructions.map((text: string) => ({ text })) :
+    [{ text: '' }]
+  );
 
   // ── Computed totals ──
   const totals = useMemo(() => {
@@ -191,6 +199,7 @@ export default function CreateRecipe({
     if (!onCreateRecipe || !canSave) return;
     const cleanSteps = steps.filter(s => s.text.trim());
     onCreateRecipe({
+      ...(initialRecipe?.id ? { id: initialRecipe.id, tag: initialRecipe.tag, publishedBy: initialRecipe.publishedBy } : {}),
       title: title.trim(),
       description,
       prepTime: prepTime || '15M',
@@ -200,7 +209,7 @@ export default function CreateRecipe({
       macros: totals.macros,
       micros: totals.micros,
       tags: autoTags,
-      img: 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&w=800&q=80',
+      img: initialRecipe?.img || 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&w=800&q=80',
       sourceUrl: sourceUrl || undefined,
       videoUrl: videoUrl || undefined,
       sourceType: sourceUrl ? detectedSourceType : undefined,
@@ -218,7 +227,7 @@ export default function CreateRecipe({
       {/* Header */}
       <PageHeader
         onBack={step === 1 ? onBack : () => setStep(s => s - 1)}
-        label={t.createRecipe.stepProgress.replace('{step}', String(step)).replace('{total}', String(STEP_COUNT))}
+        label={isEditing ? (t.createRecipe.editTitle || 'Editar Receta') : t.createRecipe.stepProgress.replace('{step}', String(step)).replace('{total}', String(STEP_COUNT))}
         title={stepLabels[step - 1]}
       />
 

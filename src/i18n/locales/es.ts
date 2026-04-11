@@ -893,6 +893,7 @@ const es = {
   // CreateRecipe
   createRecipe: {
     title: 'Crear Receta',
+    editTitle: 'Editar Receta',
     recipeName: 'Nombre de la receta',
     namePlaceholder: 'ej., Bol de Pollo y Quinoa',
     description: 'Descripción',
@@ -1110,6 +1111,9 @@ const es = {
   },
   // RecipeDetail
   recipeDetail: {
+    yourRecipe: 'Tu Receta',
+    edit: 'Editar',
+    delete: 'Eliminar',
     onlyMe: 'Solo Yo',
     person: 'persona',
     people: 'personas',
