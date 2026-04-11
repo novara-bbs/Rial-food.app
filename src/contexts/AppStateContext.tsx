@@ -298,12 +298,12 @@ export function AppStateProvider({ children }: { children: React.ReactNode }) {
 
   const handleLogMeal = createHandleLogMeal({ targetPlanDay, setMealPlan, setShoppingList, setTargetPlanDay, setDailyMacros, setDailyLog, setFoodHistory, navigateTo, previousScreen, t });
   const handleLogMealNow = createHandleLogMealNow({ setDailyMacros, setDailyLog, setFoodHistory, navigateTo, t });
-  const handleSaveRecipe = createHandleSaveRecipe({ setSavedRecipes });
-  const handleAddToPlan = createHandleAddToPlan({ setSavedRecipes, setMealPlan, setShoppingList, navigateTo });
-  const handleCreateRecipeSubmit = createHandleCreateRecipeSubmit({ setSavedRecipes, navigateTo });
-  const handleDeleteRecipe = createHandleDeleteRecipe({ setSavedRecipes, navigateTo });
-  const handleDuplicateRecipe = createHandleDuplicateRecipe({ setSavedRecipes, navigateTo });
-  const handleImportRecipe = createHandleImportRecipe({ setSavedRecipes, navigateTo });
+  const handleSaveRecipe = createHandleSaveRecipe({ setSavedRecipes, t });
+  const handleAddToPlan = createHandleAddToPlan({ setSavedRecipes, setMealPlan, setShoppingList, navigateTo, t });
+  const handleCreateRecipeSubmit = createHandleCreateRecipeSubmit({ setSavedRecipes, navigateTo, t });
+  const handleDeleteRecipe = createHandleDeleteRecipe({ setSavedRecipes, navigateTo, t });
+  const handleDuplicateRecipe = createHandleDuplicateRecipe({ setSavedRecipes, navigateTo, t });
+  const handleImportRecipe = createHandleImportRecipe({ setSavedRecipes, navigateTo, t });
   const [recipeToEdit, setRecipeToEdit] = useState<any>(null);
   const handleCreatePost = createHandleCreatePost({ setCommunityPosts, navigateTo });
   const handlePublishStory = createHandlePublishStory({ setCommunityStories, navigateTo });

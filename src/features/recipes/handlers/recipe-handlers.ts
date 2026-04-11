@@ -12,17 +12,18 @@ interface RecipeHandlerDeps {
   setMealPlan: (fn: any) => void;
   setShoppingList: (fn: any) => void;
   navigateTo: (screen: string) => void;
+  t?: any;
 }
 
-export function createHandleSaveRecipe(deps: Pick<RecipeHandlerDeps, 'setSavedRecipes'>) {
+export function createHandleSaveRecipe(deps: Pick<RecipeHandlerDeps, 'setSavedRecipes' | 't'>) {
   return (recipe: any) => {
     deps.setSavedRecipes((prev: any[]) => {
       const exists = prev.find((r: any) => r.id === recipe.id);
       if (exists) {
-        toast.info('Receta eliminada de la Bóveda');
+        toast.info(deps.t?.toast?.recipeRemoved || 'Receta eliminada de la Bóveda');
         return prev.filter((r: any) => r.id !== recipe.id);
       }
-      toast.success('¡Receta guardada en la Bóveda!');
+      toast.success(deps.t?.toast?.recipeSaved || '¡Receta guardada en la Bóveda!');
       return [...prev, { ...recipe, tag: 'GUARDADO' }];
     });
   };
@@ -62,22 +63,22 @@ export function createHandleAddToPlan(deps: RecipeHandlerDeps) {
     } else {
       deps.setShoppingList((prev: ShoppingItem[]) => [
         ...prev,
-        { id: Date.now(), name: `Ingredientes de ${recipe.title}`, category: 'Comidas Planeadas', checked: false },
+        { id: Date.now(), name: `${deps.t?.toast?.ingredientsOf || 'Ingredientes de'} ${recipe.title}`, category: 'Comidas Planeadas', checked: false },
       ]);
     }
-    toast.success(`${recipe.title} añadido al plan!`);
+    toast.success(deps.t?.toast?.addedToPlan?.replace('{title}', recipe.title) || `${recipe.title} añadido al plan!`);
     deps.navigateTo('cocina');
   };
 }
 
-export function createHandleCreateRecipeSubmit(deps: Pick<RecipeHandlerDeps, 'setSavedRecipes' | 'navigateTo'>) {
+export function createHandleCreateRecipeSubmit(deps: Pick<RecipeHandlerDeps, 'setSavedRecipes' | 'navigateTo' | 't'>) {
   return (recipe: any) => {
     if (recipe.id) {
       // Update existing recipe — preserve publishedBy + tag
       deps.setSavedRecipes((prev: any[]) => prev.map((r: any) =>
         r.id === recipe.id ? { ...r, ...recipe } : r
       ));
-      toast.success('Receta actualizada');
+      toast.success(deps.t?.toast?.recipeUpdated || 'Receta actualizada');
     } else {
       // Create new
       deps.setSavedRecipes((prev: any[]) => [{ ...recipe, id: Date.now(), tag: 'MI RECETA', publishedBy: 'self' }, ...prev]);
@@ -86,15 +87,15 @@ export function createHandleCreateRecipeSubmit(deps: Pick<RecipeHandlerDeps, 'se
   };
 }
 
-export function createHandleDeleteRecipe(deps: Pick<RecipeHandlerDeps, 'setSavedRecipes' | 'navigateTo'>) {
+export function createHandleDeleteRecipe(deps: Pick<RecipeHandlerDeps, 'setSavedRecipes' | 'navigateTo' | 't'>) {
   return (recipeId: any) => {
     deps.setSavedRecipes((prev: any[]) => prev.filter((r: any) => r.id !== recipeId));
-    toast.success('Receta eliminada');
+    toast.success(deps.t?.toast?.recipeDeleted || 'Receta eliminada');
     deps.navigateTo('cocina');
   };
 }
 
-export function createHandleDuplicateRecipe(deps: Pick<RecipeHandlerDeps, 'setSavedRecipes' | 'navigateTo'>) {
+export function createHandleDuplicateRecipe(deps: Pick<RecipeHandlerDeps, 'setSavedRecipes' | 'navigateTo' | 't'>) {
   return (recipe: any) => {
     // Fork-the-original policy: if this recipe is itself a fork, trace back to the original
     const origin = recipe.forkedFrom || {
@@ -104,10 +105,11 @@ export function createHandleDuplicateRecipe(deps: Pick<RecipeHandlerDeps, 'setSa
       title: recipe.title,
     };
 
+    const prefix = deps.t?.recipeDetail?.duplicatePrefix || 'Copia de';
     const newRecipe = {
       ...recipe,
       id: Date.now(),
-      title: `Copia de ${origin.title}`,
+      title: `${prefix} ${origin.title}`,
       publishedBy: 'self',
       publishedByName: undefined,
       tag: 'MI RECETA',
@@ -124,15 +126,15 @@ export function createHandleDuplicateRecipe(deps: Pick<RecipeHandlerDeps, 'setSa
       );
       return [newRecipe, ...updated];
     });
-    toast.success('Receta duplicada');
+    toast.success(deps.t?.toast?.recipeDuplicated || 'Receta duplicada');
     deps.navigateTo('cocina');
   };
 }
 
-export function createHandleImportRecipe(deps: Pick<RecipeHandlerDeps, 'setSavedRecipes' | 'navigateTo'>) {
+export function createHandleImportRecipe(deps: Pick<RecipeHandlerDeps, 'setSavedRecipes' | 'navigateTo' | 't'>) {
   return (recipe: any) => {
     deps.setSavedRecipes((prev: any[]) => [{ ...recipe, id: Date.now(), tag: 'IMPORTADA', publishedBy: 'self' }, ...prev]);
-    toast.success('¡Receta importada!');
+    toast.success(deps.t?.toast?.recipeImported || '¡Receta importada!');
     deps.navigateTo('cocina');
   };
 }

@@ -13,28 +13,30 @@ export type MealExecutionStatus = 'planned' | 'prepped' | 'cooked' | 'logged';
 
 const STATUS_CYCLE: MealExecutionStatus[] = ['planned', 'prepped', 'cooked', 'logged'];
 
-const STATUS_CONFIG: Record<MealExecutionStatus, { label: string; color: string; icon: React.ReactNode }> = {
-  planned: {
-    label: 'PLANEADO',
-    color: 'bg-surface-container-highest text-on-surface-variant',
-    icon: <BookOpen className="w-3 h-3" />,
-  },
-  prepped: {
-    label: 'PREPARADO',
-    color: 'bg-primary/15 text-primary',
-    icon: <Clock className="w-3 h-3" />,
-  },
-  cooked: {
-    label: 'COCINADO',
-    color: 'bg-brand-secondary/15 text-brand-secondary',
-    icon: <Utensils className="w-3 h-3" />,
-  },
-  logged: {
-    label: 'REGISTRADO',
-    color: 'bg-primary/15 text-primary',
-    icon: <CheckCircle2 className="w-3 h-3" />,
-  },
-};
+function getStatusConfig(t: any): Record<MealExecutionStatus, { label: string; color: string; icon: React.ReactNode }> {
+  return {
+    planned: {
+      label: t.planner?.planned || 'PLANEADO',
+      color: 'bg-surface-container-highest text-on-surface-variant',
+      icon: <BookOpen className="w-3 h-3" />,
+    },
+    prepped: {
+      label: t.planner?.prepped || 'PREPARADO',
+      color: 'bg-primary/15 text-primary',
+      icon: <Clock className="w-3 h-3" />,
+    },
+    cooked: {
+      label: t.planner?.cooked || 'COCINADO',
+      color: 'bg-brand-secondary/15 text-brand-secondary',
+      icon: <Utensils className="w-3 h-3" />,
+    },
+    logged: {
+      label: t.planner?.logged || 'REGISTRADO',
+      color: 'bg-primary/15 text-primary',
+      icon: <CheckCircle2 className="w-3 h-3" />,
+    },
+  };
+}
 
 function nextStatus(current: MealExecutionStatus): MealExecutionStatus {
   const idx = STATUS_CYCLE.indexOf(current);
@@ -61,6 +63,7 @@ export default function Planner({
   setShoppingList,
 }: PlannerProps) {
   const { t } = useI18n();
+  const STATUS_CONFIG = getStatusConfig(t);
   const currentDayIndex = new Date().getDay();
   const adjustedDayIndex = currentDayIndex === 0 ? 6 : currentDayIndex - 1;
   const [activeDay, setActiveDay] = useState(adjustedDayIndex);

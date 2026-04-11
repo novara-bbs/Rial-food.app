@@ -1,5 +1,6 @@
 import { CheckCircle2, Calendar, ChefHat, Flame, Settings, UserPlus, UserCheck, Instagram, Youtube, Globe, Music2 } from 'lucide-react';
 import { useMemo } from 'react';
+import { toast } from 'sonner';
 import { useI18n } from '../../../i18n';
 import { useAppState } from '../../../contexts/AppStateContext';
 import { useNavigation } from '../../../contexts/NavigationContext';
@@ -41,9 +42,11 @@ export default function CreatorProfile({ onBack }: { onBack: () => void }) {
 
   const toggleFollow = (e: React.MouseEvent) => {
     e.stopPropagation();
+    const wasFollowing = followedCreators.includes(creator.id);
     setFollowedCreators((prev: string[]) =>
       prev.includes(creator.id) ? prev.filter(c => c !== creator.id) : [...prev, creator.id]
     );
+    toast.success(wasFollowing ? (t.social?.unfollowed || 'Dejaste de seguir') : (t.social?.followed || 'Siguiendo'));
   };
 
   const creatorPosts = useMemo(() => {
