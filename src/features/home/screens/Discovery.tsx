@@ -1,4 +1,5 @@
-import { Search, ChefHat, Sunrise, Sun, Moon, Cookie, Zap, Sparkles, ChevronRight } from 'lucide-react';
+import { ChefHat, Sunrise, Sun, Moon, Cookie, Zap, Sparkles, ChevronRight } from 'lucide-react';
+import SearchInput from '../../../components/patterns/SearchInput';
 import React, { useState, useMemo } from 'react';
 import { toast } from 'sonner';
 import { useI18n } from '../../../i18n';
@@ -172,16 +173,11 @@ export default function Discovery({ onNavigateToRecipe, savedRecipes = [], onSav
 
       {/* 1. Search bar */}
       <section className="px-6 pb-2">
-        <div className="relative">
-          <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-on-surface-variant w-5 h-5" />
-          <input
-            type="text"
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            placeholder={t.discovery.searchPlaceholder}
-            className="w-full bg-surface-container-low border border-outline-variant/30 py-3 pl-12 pr-4 text-sm font-label tracking-widest focus:outline-none focus:border-primary uppercase rounded-sm text-tertiary placeholder:text-on-surface-variant/50 transition-all"
-          />
-        </div>
+        <SearchInput
+          value={searchQuery}
+          onChange={setSearchQuery}
+          placeholder={t.discovery.searchPlaceholder}
+        />
       </section>
 
       {/* 2. Category icon row */}

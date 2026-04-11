@@ -1,4 +1,5 @@
-import { Search, CheckCircle2, Users, BookOpen, TrendingUp, Flame, MessageSquare, Compass, Activity, Check } from 'lucide-react';
+import { CheckCircle2, Users, BookOpen, TrendingUp, Flame, MessageSquare, Compass, Activity, Check } from 'lucide-react';
+import SearchInput from '../../../components/patterns/SearchInput';
 import { useState, useMemo } from 'react';
 import { useI18n } from '../../../i18n';
 import { useNavigation } from '../../../contexts/NavigationContext';
@@ -65,16 +66,12 @@ export default function Discover() {
         <h2 className="font-headline text-3xl md:text-5xl font-black tracking-tighter uppercase text-tertiary mt-1">{disc.title || 'Descubrir'}</h2>
 
         {/* Search */}
-        <div className="relative mt-6">
-          <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-on-surface-variant w-5 h-5" />
-          <input
-            type="text"
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            placeholder={disc.searchPlaceholder || 'Buscar creadores, retos...'}
-            className="w-full bg-surface-container-low border border-outline-variant/30 py-3.5 pl-12 pr-4 text-sm font-label tracking-widest focus:outline-none focus:border-primary uppercase rounded-sm text-tertiary placeholder:text-on-surface-variant/50 transition-all"
-          />
-        </div>
+        <SearchInput
+          value={searchQuery}
+          onChange={setSearchQuery}
+          placeholder={disc.searchPlaceholder || 'Buscar creadores, retos...'}
+          className="mt-6"
+        />
       </section>
 
       {/* Recommended Creators */}

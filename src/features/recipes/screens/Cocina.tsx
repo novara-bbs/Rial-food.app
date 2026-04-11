@@ -1,5 +1,6 @@
 import React, { useState, useMemo } from 'react';
-import { Search, Plus, Link, ShoppingCart, Sparkles, Sunrise, Sun, Moon, Cookie } from 'lucide-react';
+import { Plus, Link, ShoppingCart, Sparkles, Sunrise, Sun, Moon, Cookie } from 'lucide-react';
+import SearchInput from '../../../components/patterns/SearchInput';
 import { useI18n } from '../../../i18n';
 import { useAppState } from '../../../contexts/AppStateContext';
 import { calculateMatchScore } from '../utils/matchScore';
@@ -152,16 +153,12 @@ export default function Cocina({ onAddMeal, onCreateRecipe, onNavigateToRecipe, 
           <div className="px-6 max-w-5xl mx-auto space-y-4 pb-24">
             {/* Search + actions */}
             <div className="flex gap-3">
-              <div className="flex-1 relative">
-                <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-on-surface-variant" />
-                <input
-                  type="text"
-                  placeholder={t.recipes.search}
-                  value={searchQuery}
-                  onChange={e => setSearchQuery(e.target.value)}
-                  className="w-full pl-10 pr-4 py-3 bg-surface-container-low border border-outline-variant/20 rounded-sm text-on-surface placeholder:text-on-surface-variant text-sm font-body focus:outline-none focus:border-primary"
-                />
-              </div>
+              <SearchInput
+                value={searchQuery}
+                onChange={setSearchQuery}
+                placeholder={t.recipes.search}
+                className="flex-1"
+              />
               <button type="button" onClick={onCreateRecipe} className="p-3 bg-primary text-on-primary rounded-sm hover:opacity-90 transition-opacity" title={t.recipes.create}>
                 <Plus className="w-5 h-5" />
               </button>

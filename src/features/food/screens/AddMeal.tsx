@@ -1,5 +1,6 @@
 import React, { useState, useRef, useEffect, useMemo } from 'react';
-import { Search, Plus, Camera, Barcode, Loader2, BookOpen, Leaf, Globe, Star, Clock, CheckSquare, Square, X, Sparkles, Trash2 } from 'lucide-react';
+import { Plus, Camera, Barcode, Loader2, BookOpen, Leaf, Globe, Star, Clock, CheckSquare, Square, X, Sparkles, Trash2 } from 'lucide-react';
+import SearchInput from '../../../components/patterns/SearchInput';
 import { Ingredient, Recipe, ServingSize } from '../../../types';
 import { useI18n } from '../../../i18n';
 import { getFoodQuality, FOOD_QUALITY_EMOJI } from '../utils/nutrition';
@@ -390,16 +391,12 @@ export default function AddMeal({
 
         {/* Search + multi-add toggle */}
         <div className="flex gap-2">
-          <div className="relative flex-1">
-            <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-on-surface-variant w-5 h-5" />
-            <input
-              type="text"
-              value={searchQuery}
-              onChange={e => setSearchQuery(e.target.value)}
-              placeholder={t.common.search}
-              className="w-full bg-surface-container-low border border-outline-variant/30 py-3.5 pl-12 pr-4 text-sm font-label tracking-widest focus:outline-none focus:border-primary uppercase rounded-sm text-tertiary placeholder:text-on-surface-variant/50"
-            />
-          </div>
+          <SearchInput
+            value={searchQuery}
+            onChange={setSearchQuery}
+            placeholder={t.common.search}
+            className="flex-1"
+          />
           <button type="button"
             onClick={() => { setMultiMode(!multiMode); if (multiMode) setMultiQueue([]); }}
             className={`px-3 rounded-sm border font-label text-[9px] font-bold uppercase tracking-widest transition-colors flex items-center gap-1.5 shrink-0 ${

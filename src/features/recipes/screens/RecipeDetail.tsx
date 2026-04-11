@@ -1,4 +1,5 @@
-import { ArrowLeft, Clock, Flame, Droplet, Activity, CheckCircle2, Circle, Minus, Plus, MessageSquare, Bookmark, Search, X, Users, ShoppingCart, ChefHat, UtensilsCrossed, ThumbsUp, AlertTriangle, Target, Share2, ExternalLink } from 'lucide-react';
+import { ArrowLeft, Clock, Flame, Droplet, Activity, CheckCircle2, Circle, Minus, Plus, MessageSquare, Bookmark, X, Users, ShoppingCart, ChefHat, UtensilsCrossed, ThumbsUp, AlertTriangle, Target, Share2, ExternalLink } from 'lucide-react';
+import SearchInput from '../../../components/patterns/SearchInput';
 import { useState, useMemo, useEffect } from 'react';
 import CookMode from '../components/CookMode';
 import PublishRecipeSheet from '../../social/components/PublishRecipeSheet';
@@ -561,10 +562,13 @@ export default function RecipeDetail({ recipe, onBack, onSaveRecipe, isSaved, on
             {/* Add extra ingredient search */}
             {isAddingIngredient && (
               <div className="bg-surface-container-highest p-3 rounded-sm border border-outline-variant/20">
-                <div className="relative mb-3">
-                  <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-outline" />
-                  <input type="text" placeholder={t.recipeDetail.searchIngredients} value={searchQuery} onChange={e => setSearchQuery(e.target.value)} className="w-full bg-surface-container-low border border-outline-variant/20 rounded-sm py-2 pl-10 pr-4 text-sm text-tertiary placeholder:text-on-surface-variant focus:outline-none focus:border-primary" />
-                </div>
+                <SearchInput
+                  value={searchQuery}
+                  onChange={setSearchQuery}
+                  placeholder={t.recipeDetail.searchIngredients}
+                  size="sm"
+                  className="mb-3"
+                />
                 {searchQuery && (
                   <div className="max-h-48 overflow-y-auto space-y-1 bg-surface-container-low p-2 rounded-sm border border-outline-variant/10">
                     {filteredDictionary.length > 0 ? filteredDictionary.slice(0, 10).map(ing => (

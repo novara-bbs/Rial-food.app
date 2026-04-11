@@ -1,5 +1,6 @@
 import { useState, useMemo } from 'react';
-import { Search, ChevronDown, ChevronUp, X, UtensilsCrossed, ShoppingCart, ThumbsUp, Minus, AlertTriangle } from 'lucide-react';
+import { ChevronDown, ChevronUp, UtensilsCrossed, ShoppingCart, ThumbsUp, Minus, AlertTriangle } from 'lucide-react';
+import SearchInput from '../../../components/patterns/SearchInput';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { useI18n } from '../../../i18n';
@@ -72,21 +73,12 @@ export default function FoodDictionary({ navigateTo }: Props) {
       </h2>
 
       {/* Search bar */}
-      <div className="relative">
-        <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-on-surface-variant" />
-        <input
-          type="text"
-          value={query}
-          onChange={e => setQuery(e.target.value)}
-          placeholder={t.foodDictionary.searchPlaceholder}
-          className="w-full pl-10 pr-10 py-3 bg-surface-container-low border border-outline-variant/30 rounded-sm text-on-surface placeholder:text-on-surface-variant/60 focus:outline-none focus:border-primary transition-colors"
-        />
-        {query && (
-          <button type="button" onClick={() => setQuery('')} aria-label="Clear search" className="absolute right-3 top-1/2 -translate-y-1/2 text-on-surface-variant hover:text-on-surface">
-            <X className="w-4 h-4" />
-          </button>
-        )}
-      </div>
+      <SearchInput
+        value={query}
+        onChange={setQuery}
+        placeholder={t.foodDictionary.searchPlaceholder}
+        onClear={() => setQuery('')}
+      />
 
       {/* Category chips */}
       <div className="flex gap-2 overflow-x-auto pb-1 -mx-4 px-4 scrollbar-none">
