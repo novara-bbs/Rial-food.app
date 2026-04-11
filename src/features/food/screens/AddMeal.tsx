@@ -10,6 +10,8 @@ import MealSlotSelector, { MealSlot } from '../components/MealSlotSelector';
 import PortionSheet from '../components/PortionSheet';
 import { PortionResult } from '../components/PortionSelector';
 import EmptyState from '../../../components/EmptyState';
+import TabNav from '../../../components/patterns/TabNav';
+import FilterRow from '../../../components/patterns/FilterRow';
 import { useAppState } from '../../../contexts/AppStateContext';
 import { toast } from 'sonner';
 
@@ -420,46 +422,26 @@ export default function AddMeal({
           </button>
         </div>
 
-        {/* Tabs */}
-        <div className="flex border-b border-outline-variant/20">
-          {(['recipes', 'ingredients'] as const).map(tab => (
-            <button
-              key={tab}
-              onClick={() => { setActiveTab(tab); setSearchQuery(''); setApiResults([]); }}
-              className={`flex-1 py-3 font-headline text-sm font-bold tracking-widest uppercase transition-colors border-b-2 ${
-                activeTab === tab ? 'text-primary border-primary' : 'text-on-surface-variant border-transparent hover:text-tertiary'
-              }`}
-            >
-              <span className="flex items-center justify-center gap-2">
-                {tab === 'recipes' ? <BookOpen className="w-4 h-4" /> : <Leaf className="w-4 h-4" />}
-                {tab === 'recipes' ? t.nav.kitchen : t.recipes.ingredients}
-              </span>
-            </button>
-          ))}
-        </div>
+        <TabNav
+          tabs={[
+            { id: 'recipes', label: t.nav.kitchen, icon: BookOpen },
+            { id: 'ingredients', label: t.recipes.ingredients, icon: Leaf },
+          ]}
+          active={activeTab}
+          onChange={(id) => { setActiveTab(id as typeof activeTab); setSearchQuery(''); setApiResults([]); }}
+        />
 
-        {/* Browse mode tabs — shown when not searching */}
         {!isSearching && (
-          <div className="flex gap-2">
-            {([
-              { id: 'recents' as const, label: t.addMealScreen.recents, icon: Clock },
-              { id: 'favorites' as const, label: t.addMealScreen.favorites, icon: Star },
-              { id: 'all' as const, label: t.addMealScreen.allFoods, icon: null },
-            ]).map(mode => (
-              <button
-                key={mode.id}
-                onClick={() => setBrowseMode(mode.id)}
-                className={`flex items-center gap-1.5 px-3 py-2 rounded-full text-[10px] font-label font-bold tracking-widest uppercase transition-colors ${
-                  browseMode === mode.id
-                    ? 'bg-primary text-on-primary'
-                    : 'bg-surface-container-low text-on-surface-variant border border-outline-variant/20 hover:border-primary/50'
-                }`}
-              >
-                {mode.icon && <mode.icon className="w-3 h-3" />}
-                {mode.label}
-              </button>
-            ))}
-          </div>
+          <FilterRow
+            options={[
+              { id: 'recents', label: t.addMealScreen.recents, icon: Clock },
+              { id: 'favorites', label: t.addMealScreen.favorites, icon: Star },
+              { id: 'all', label: t.addMealScreen.allFoods },
+            ]}
+            active={browseMode}
+            onChange={(id) => setBrowseMode(id as typeof browseMode)}
+            variant="pill"
+          />
         )}
 
         {/* Food list */}

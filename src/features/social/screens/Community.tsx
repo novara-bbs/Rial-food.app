@@ -4,6 +4,7 @@ import { useI18n } from '../../../i18n';
 import { useNavigation } from '../../../contexts/NavigationContext';
 import { useAppState } from '../../../contexts/AppStateContext';
 import EmptyState from '../../../components/EmptyState';
+import FilterRow from '../../../components/patterns/FilterRow';
 import PostCard from '../components/PostCard';
 import StoryRingsRow from '../components/StoryRingsRow';
 import { rankFeed, getFollowingFeed, getTrendingFeed } from '../utils/feed-algorithm';
@@ -89,25 +90,16 @@ export default function Community({ communityPosts = [], onAddComment }: { commu
       </section>
 
       {/* Feed Mode Chips */}
-      <div className="flex gap-2">
-        {([
-          { id: 'forYou' as const, label: feed.forYou || 'Para Ti' },
-          { id: 'following' as const, label: feed.following || 'Siguiendo' },
-          { id: 'trending' as const, label: feed.trending || 'Trending' },
-        ]).map(mode => (
-          <button
-            key={mode.id}
-            onClick={() => setFeedMode(mode.id)}
-            className={`px-4 py-2 rounded-sm font-label text-[10px] font-bold tracking-widest uppercase transition-all ${
-              feedMode === mode.id
-                ? 'bg-primary text-on-primary'
-                : 'bg-surface-container-highest text-on-surface-variant hover:text-tertiary'
-            }`}
-          >
-            {mode.label}
-          </button>
-        ))}
-      </div>
+      <FilterRow
+        options={[
+          { id: 'forYou', label: feed.forYou || 'Para Ti' },
+          { id: 'following', label: feed.following || 'Siguiendo' },
+          { id: 'trending', label: feed.trending || 'Trending' },
+        ]}
+        active={feedMode}
+        onChange={(id) => setFeedMode(id as FeedMode)}
+        variant="pill"
+      />
 
       {/* Posts feed */}
       <section className="space-y-6">

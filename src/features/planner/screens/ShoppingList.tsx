@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import { toast } from 'sonner';
 import { useI18n } from '../../../i18n';
 import EmptyState from '../../../components/EmptyState';
+import FilterRow from '../../../components/patterns/FilterRow';
 import { useLocalStorageState } from '../../../hooks/useLocalStorageState';
 import { aggregateShoppingItems, groupShoppingItems, formatShoppingListForShare, detectCategory, AISLE_CATEGORIES, markPantryItems, PantryItem } from '../utils/grocery';
 
@@ -159,21 +160,12 @@ export default function ShoppingList({ onBack, shoppingList = [], setShoppingLis
               onChange={(e) => setNewItemName(e.target.value)}
               className="w-full bg-surface-container-low border border-outline-variant/30 p-3 rounded-sm text-tertiary placeholder:text-outline focus:outline-none focus:border-primary transition-colors"
             />
-            <div className="flex gap-2 overflow-x-auto pb-2 hide-scrollbar" role="group" aria-label={t.shopping.category}>
-              {CATEGORY_DISPLAY.map(cat => (
-                <button
-                  key={cat}
-                  type="button"
-                  onClick={() => setNewItemCategory(cat)}
-                  aria-pressed={newItemCategory === cat}
-                  className={`px-3 py-1.5 rounded-full text-[10px] font-bold uppercase tracking-widest whitespace-nowrap transition-colors ${
-                    newItemCategory === cat ? 'bg-primary text-on-primary' : 'bg-surface-container-highest text-on-surface-variant'
-                  }`}
-                >
-                  {cat}
-                </button>
-              ))}
-            </div>
+            <FilterRow
+              options={CATEGORY_DISPLAY.map(cat => ({ id: cat, label: cat }))}
+              active={newItemCategory}
+              onChange={(id) => setNewItemCategory(id)}
+              variant="pill"
+            />
             <button type="submit" disabled={!newItemName.trim()} className="w-full bg-primary text-on-primary py-3 rounded-sm font-headline font-bold text-xs uppercase tracking-widest hover:bg-primary-container transition-colors disabled:opacity-50">
               {t.shopping.add}
             </button>

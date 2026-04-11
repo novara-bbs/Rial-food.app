@@ -4,6 +4,8 @@ import { useI18n } from '../../../i18n';
 import { useAppState } from '../../../contexts/AppStateContext';
 import { calculateMatchScore } from '../utils/matchScore';
 import RecipeCard from '../../../components/patterns/RecipeCard';
+import FilterRow from '../../../components/patterns/FilterRow';
+import TabNav from '../../../components/patterns/TabNav';
 import { aggregateShoppingItems, detectCategory, AISLE_CATEGORIES } from '../../planner/utils/grocery';
 import Planner from '../../planner/screens/Planner';
 import ShoppingList from '../../planner/screens/ShoppingList';
@@ -141,20 +143,7 @@ export default function Cocina({ onAddMeal, onCreateRecipe, onNavigateToRecipe, 
 
   return (
     <div className="flex flex-col h-full">
-      {/* Sub-tabs */}
-      <div className="flex border-b border-outline-variant/20 px-6 pt-2 shrink-0">
-        {tabs.map(tab => (
-          <button
-            key={tab.id}
-            onClick={() => setActiveTab(tab.id)}
-            className={`flex-1 py-3 font-headline text-xs font-bold tracking-widest uppercase transition-colors border-b-2 ${
-              activeTab === tab.id ? 'text-primary border-primary' : 'text-on-surface-variant border-transparent hover:text-tertiary'
-            }`}
-          >
-            {tab.label}
-          </button>
-        ))}
-      </div>
+      <TabNav tabs={tabs} active={activeTab} onChange={(id) => setActiveTab(id as typeof activeTab)} />
 
       <div className="flex-1 overflow-y-auto pt-4">
         {/* RECIPES TAB */}
@@ -182,44 +171,9 @@ export default function Cocina({ onAddMeal, onCreateRecipe, onNavigateToRecipe, 
               )}
             </div>
 
-            {/* mealType icon row */}
-            <div className="flex gap-3 overflow-x-auto hide-scrollbar -mx-6 px-6">
-              {mealCategories.map(cat => {
-                const Icon = cat.icon;
-                const isActive = activeMealType === cat.id;
-                return (
-                  <button
-                    key={cat.id}
-                    onClick={() => setActiveMealType(cat.id)}
-                    className={`flex flex-col items-center gap-1.5 px-3 py-2 rounded-sm shrink-0 transition-colors ${
-                      isActive
-                        ? 'bg-primary text-on-primary'
-                        : 'bg-surface-container-high text-on-surface-variant border border-outline-variant/20 hover:bg-surface-container-highest'
-                    }`}
-                  >
-                    <Icon className="w-5 h-5" />
-                    <span className="text-[9px] font-black tracking-widest uppercase">{cat.label}</span>
-                  </button>
-                );
-              })}
-            </div>
+            <FilterRow options={mealCategories} active={activeMealType} onChange={setActiveMealType} variant="icon" className="-mx-6 px-6" />
 
-            {/* Collection pills */}
-            <div className="flex gap-2 overflow-x-auto hide-scrollbar -mx-6 px-6">
-              {collections.map(col => (
-                <button
-                  key={col.id}
-                  onClick={() => setActiveCollection(col.id)}
-                  className={`shrink-0 px-4 py-2 rounded-full text-xs font-bold uppercase tracking-wider transition-all ${
-                    activeCollection === col.id
-                      ? 'bg-primary text-on-primary'
-                      : 'bg-surface-container-low border border-outline-variant/20 text-on-surface-variant hover:border-primary/50'
-                  }`}
-                >
-                  {col.label} ({col.count})
-                </button>
-              ))}
-            </div>
+            <FilterRow options={collections} active={activeCollection} onChange={setActiveCollection} variant="pill" className="-mx-6 px-6" />
 
             {/* Recipe count */}
             {!isPro && (

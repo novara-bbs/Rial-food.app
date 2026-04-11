@@ -5,6 +5,7 @@ import { useI18n } from '../../../i18n';
 import EmptyState from '../../../components/EmptyState';
 import RecipeCard from '../../../components/patterns/RecipeCard';
 import Swimlane from '../../../components/patterns/Swimlane';
+import FilterRow from '../../../components/patterns/FilterRow';
 import { useAppState } from '../../../contexts/AppStateContext';
 import { calculateMatchScore } from '../../recipes/utils/matchScore';
 
@@ -178,26 +179,7 @@ export default function Discovery({ onNavigateToRecipe, savedRecipes = [], onSav
 
       {/* 2. Category icon row */}
       <section className="px-6 pb-4">
-        <div className="flex gap-3 overflow-x-auto hide-scrollbar">
-          {categories.map(cat => {
-            const Icon = cat.icon;
-            const isActive = activeCategory === cat.id;
-            return (
-              <button
-                key={cat.id}
-                onClick={() => setActiveCategory(cat.id)}
-                className={`flex flex-col items-center gap-1.5 px-3 py-2 rounded-sm shrink-0 transition-colors ${
-                  isActive
-                    ? 'bg-primary text-on-primary'
-                    : 'bg-surface-container-high text-on-surface-variant border border-outline-variant/20 hover:bg-surface-container-highest'
-                }`}
-              >
-                <Icon className="w-5 h-5" />
-                <span className="text-[9px] font-black tracking-widest uppercase">{cat.label}</span>
-              </button>
-            );
-          })}
-        </div>
+        <FilterRow options={categories} active={activeCategory} onChange={setActiveCategory} variant="icon" />
       </section>
 
       {/* 3. Hero compacto — best match */}

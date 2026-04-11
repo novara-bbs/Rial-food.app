@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useI18n } from '../../../i18n';
+import TabNav from '../../../components/patterns/TabNav';
 import Discovery from './Discovery';
 import Community from '../../social/screens/Community';
 import Discover from './Discover';
@@ -16,19 +17,7 @@ export default function Explore({ onNavigateToRecipe, savedRecipes, onSaveRecipe
 
   return (
     <div className="flex flex-col h-full">
-      <div className="flex border-b border-outline-variant/20 px-6 pt-2 shrink-0">
-        {tabs.map(tab => (
-          <button
-            key={tab.id}
-            onClick={() => setActiveTab(tab.id)}
-            className={`flex-1 py-3 font-headline text-xs font-bold tracking-widest uppercase transition-colors border-b-2 ${
-              activeTab === tab.id ? 'text-primary border-primary' : 'text-on-surface-variant border-transparent hover:text-tertiary'
-            }`}
-          >
-            {tab.label}
-          </button>
-        ))}
-      </div>
+      <TabNav tabs={tabs} active={activeTab} onChange={(id) => setActiveTab(id as typeof activeTab)} />
       <div className="flex-1 overflow-y-auto pt-4">
         {activeTab === 'recipes' && <Discovery onNavigateToRecipe={onNavigateToRecipe} savedRecipes={savedRecipes} onSaveRecipe={onSaveRecipe} />}
         {activeTab === 'feed' && <Community communityPosts={communityPosts} onAddComment={onAddComment} />}
