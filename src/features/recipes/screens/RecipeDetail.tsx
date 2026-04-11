@@ -55,7 +55,7 @@ export default function RecipeDetail({ recipe, onBack, onSaveRecipe, isSaved, on
   // ── Early return if no recipe ────────────────
   if (!recipe) {
     return (
-      <div className="px-6 max-w-2xl mx-auto pt-8 space-y-4">
+      <div className="px-6 max-w-2xl mx-auto pt-8 pb-24 space-y-4">
         <button type="button" onClick={onBack} className="p-2 hover:bg-surface-container-highest rounded-sm transition-colors" aria-label={t.common?.back || 'Back'}>
           <ArrowLeft className="w-5 h-5" />
         </button>
@@ -231,6 +231,7 @@ export default function RecipeDetail({ recipe, onBack, onSaveRecipe, isSaved, on
   const cookIngredients = allIngredientsToDisplay.map(i => ({ name: i.name, amount: Number(i.amount), unit: i.unit }));
   const cookSteps = data.steps?.length ? data.steps : instructions;
   const hasCreator = !!(data.publishedBy && data.publishedBy !== 'self' && CREATORS_MAP[data.publishedBy]);
+  const hasAttribution = hasCreator || data.publishedBy === 'self' || !!data.forkedFrom;
 
   return (
     <>
@@ -362,7 +363,7 @@ export default function RecipeDetail({ recipe, onBack, onSaveRecipe, isSaved, on
 
       {/* ══ Macro summary bar ══ */}
       <div className="px-6 max-w-4xl mx-auto">
-        <div className={`grid grid-cols-4 gap-2 ${hasCreator ? 'mt-3' : '-mt-4'} relative z-10`}>
+        <div className={`grid grid-cols-4 gap-2 ${hasAttribution ? 'mt-3' : 'mt-4'} relative z-10`}>
           {[
             { label: 'kcal', value: Math.round(calculatedTotals.cal * s), color: 'text-primary', icon: Flame },
             { label: 'pro', value: `${Math.round(calculatedTotals.pro * s)}g`, color: 'text-macro-protein', icon: Activity },

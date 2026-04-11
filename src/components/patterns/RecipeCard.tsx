@@ -203,8 +203,9 @@ export default function RecipeCard({
             </span>
           )}
           {recipe.forkedFrom && (
-            <span className={`font-label ${creatorSz} text-on-surface-variant/80 tracking-widest uppercase flex items-center gap-1 mb-1`}>
-              <GitFork className="w-3 h-3 text-primary/60" /> {recipe.forkedFrom.creatorName} · {recipe.forkedFrom.title}
+            <span className={`font-label ${creatorSz} text-on-surface-variant/80 tracking-widest uppercase flex items-center gap-1 mb-1 min-w-0`}>
+              <GitFork className="w-3 h-3 text-primary/60 shrink-0" />
+              <span className="truncate">{recipe.forkedFrom.creatorName} · {recipe.forkedFrom.title}</span>
             </span>
           )}
           <div className={`flex items-center gap-1.5 ${variant === 'grid' ? 'flex-wrap' : ''}`}>
