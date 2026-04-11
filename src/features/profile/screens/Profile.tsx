@@ -1,8 +1,10 @@
-import { User, Mail, Shield, CreditCard, LogOut, ChevronRight, Flame, Trophy, Star } from 'lucide-react';
+import { User, Mail, Shield, CreditCard, LogOut, ChevronRight, Flame, Trophy, Star, Pencil } from 'lucide-react';
 import { useI18n } from '../../../i18n';
-import { BADGES, LEVELS, calculatePoints, getUserLevel, getEarnedBadges, getNextMilestone, type UserStats } from '../utils/gamification';
+import { BADGES, LEVELS, calculatePoints, getUserLevel, getEarnedBadges, getNextMilestone, calculateStreak, type UserStats } from '../utils/gamification';
 import PageHeader from '../../../components/patterns/PageHeader';
 import { bodyWeightFromKg, getBodyWeightUnit, heightFromCm, getHeightUnit } from '../../food/utils/units';
+import { useNavigation } from '../../../contexts/NavigationContext';
+import { Button } from '@/components/ui/button';
 
 export default function Profile({ userProfile, onBack, realFeelLogs = [], savedRecipes = [], communityPosts = [] }: {
   userProfile: any;
@@ -12,6 +14,10 @@ export default function Profile({ userProfile, onBack, realFeelLogs = [], savedR
   communityPosts?: any[];
 }) {
   const { t } = useI18n();
+  const { navigateTo } = useNavigation();
+
+  // Calculate real streak from realFeelLogs
+  const streakDays = calculateStreak((realFeelLogs || []).map((l: any) => l.date).filter(Boolean));
 
   // Build user stats for gamification
   const stats: UserStats = {
@@ -27,7 +33,7 @@ export default function Profile({ userProfile, onBack, realFeelLogs = [], savedR
     trainingDayUsed: 0,
     challengesCompleted: 0,
     isVerifiedCreator: false,
-    streakDays: 0,
+    streakDays,
   };
 
   const points = calculatePoints(stats);
@@ -40,12 +46,27 @@ export default function Profile({ userProfile, onBack, realFeelLogs = [], savedR
 
   return (
     <div className="px-6 max-w-2xl mx-auto space-y-8 pb-24">
-      <PageHeader onBack={onBack} label="" title={t.profile.title} />
+      <PageHeader
+        onBack={onBack}
+        label=""
+        title={t.profile.title}
+        rightAction={
+          <Button variant="ghost" size="icon-sm" onClick={() => navigateTo('settings')} aria-label={t.profile.editProfile || 'Editar perfil'}>
+            <Pencil className="w-4 h-4" />
+          </Button>
+        }
+      />
 
       {/* Avatar + name */}
       <div className="flex items-center gap-6">
-        <div className="w-20 h-20 rounded-full bg-surface-container-highest border-2 border-primary overflow-hidden">
-          <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=200&q=80" alt="" className="w-full h-full object-cover" referrerPolicy="no-referrer" />
+        <div className="w-20 h-20 rounded-full bg-primary/10 border-2 border-primary flex items-center justify-center overflow-hidden">
+          {userProfile?.avatar ? (
+            <img src={userProfile.avatar} alt="" className="w-full h-full object-cover" referrerPolicy="no-referrer" />
+          ) : (
+            <span className="font-headline text-3xl font-black text-primary uppercase">
+              {(userProfile?.name || 'U').charAt(0)}
+            </span>
+          )}
         </div>
         <div>
           <h2 className="font-headline text-2xl font-black text-tertiary uppercase tracking-tight">{userProfile?.name || 'User'}</h2>
@@ -146,11 +167,11 @@ export default function Profile({ userProfile, onBack, realFeelLogs = [], savedR
       {/* Menu items */}
       <div className="space-y-3">
         {[
-          { label: t.settings.notifications, icon: Mail },
-          { label: t.settings.privacy, icon: Shield },
-          { label: t.settings.export, icon: CreditCard },
+          { label: t.settings.notifications, icon: Mail, action: () => navigateTo('notifications') },
+          { label: t.settings.privacy, icon: Shield, action: () => navigateTo('settings') },
+          { label: t.settings.export, icon: CreditCard, action: () => navigateTo('settings') },
         ].map((item, idx) => (
-          <button type="button" key={idx} className="w-full flex items-center justify-between p-4 bg-surface-container-low border border-outline-variant/20 rounded-sm hover:border-primary/50 transition-all group text-left">
+          <button type="button" key={idx} onClick={item.action} className="w-full flex items-center justify-between p-4 bg-surface-container-low border border-outline-variant/20 rounded-sm hover:border-primary/50 transition-all group text-left">
             <div className="flex items-center gap-4">
               <item.icon className="w-5 h-5 text-on-surface-variant group-hover:text-primary transition-colors" />
               <span className="font-headline font-bold text-sm text-tertiary uppercase tracking-widest">{item.label}</span>
@@ -159,6 +180,19 @@ export default function Profile({ userProfile, onBack, realFeelLogs = [], savedR
           </button>
         ))}
       </div>
+
+      {/* Logout */}
+      <Button
+        variant="outline"
+        className="w-full"
+        onClick={() => {
+          localStorage.clear();
+          window.location.reload();
+        }}
+      >
+        <LogOut className="w-4 h-4 mr-2" />
+        {t.profile.logout || 'Cerrar sesión'}
+      </Button>
     </div>
   );
 }

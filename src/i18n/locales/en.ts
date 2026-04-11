@@ -556,6 +556,8 @@ const en: Translations = {
   },
   profile: {
     title: 'Profile',
+    editProfile: 'Edit profile',
+    logout: 'Log out',
     goal: 'Goal',
     bodyData: 'Body data',
     restrictions: 'Restrictions',

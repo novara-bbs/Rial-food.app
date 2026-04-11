@@ -574,6 +574,8 @@ const es = {
   // Profile
   profile: {
     title: 'Perfil',
+    editProfile: 'Editar perfil',
+    logout: 'Cerrar sesión',
     goal: 'Objetivo',
     bodyData: 'Datos corporales',
     restrictions: 'Restricciones',
