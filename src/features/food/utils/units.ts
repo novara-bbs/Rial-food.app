@@ -91,3 +91,51 @@ export function getQuickWeights(unitSystem: UnitSystem, baseUnit: string = 'g'):
 export function getWeightStep(unitSystem: UnitSystem): number {
   return unitSystem === 'imperial' ? 1 : 10; // ±1 oz or ±10g
 }
+
+// ─── Body weight / height conversions ──────────────────────────────────────
+// Internal storage is ALWAYS metric (kg / cm). Conversion happens on display.
+
+const KG_PER_LB = 0.453592;
+const CM_PER_INCH = 2.54;
+
+/** Format body weight for display: "72.5 kg" or "159.8 lb" */
+export function formatBodyWeight(kg: number, unitSystem: UnitSystem): string {
+  if (unitSystem === 'imperial') {
+    return `${+(kg / KG_PER_LB).toFixed(1)} lb`;
+  }
+  return `${+kg.toFixed(1)} kg`;
+}
+
+/** Convert display value → kg for storage */
+export function bodyWeightToKg(displayValue: number, unitSystem: UnitSystem): number {
+  if (unitSystem === 'imperial') return +(displayValue * KG_PER_LB).toFixed(2);
+  return displayValue;
+}
+
+/** Convert stored kg → display value */
+export function bodyWeightFromKg(kg: number, unitSystem: UnitSystem): number {
+  if (unitSystem === 'imperial') return +(kg / KG_PER_LB).toFixed(1);
+  return kg;
+}
+
+/** Convert display height → cm for storage */
+export function heightToCm(displayValue: number, unitSystem: UnitSystem): number {
+  if (unitSystem === 'imperial') return +(displayValue * CM_PER_INCH).toFixed(1);
+  return displayValue;
+}
+
+/** Convert stored cm → display value */
+export function heightFromCm(cm: number, unitSystem: UnitSystem): number {
+  if (unitSystem === 'imperial') return +(cm / CM_PER_INCH).toFixed(1);
+  return cm;
+}
+
+/** Unit label for body weight: "kg" | "lb" */
+export function getBodyWeightUnit(unitSystem: UnitSystem): string {
+  return unitSystem === 'imperial' ? 'lb' : 'kg';
+}
+
+/** Unit label for height: "cm" | "in" */
+export function getHeightUnit(unitSystem: UnitSystem): string {
+  return unitSystem === 'imperial' ? 'in' : 'cm';
+}
