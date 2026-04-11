@@ -1372,6 +1372,8 @@ const es = {
     deleteRecipeDesc: '¿Seguro que quieres eliminar esta receta? Esta acción no se puede deshacer.',
     yes: 'Sí, eliminar',
     cancel: 'Cancelar',
+    deleteRealFeel: 'Eliminar registro',
+    deleteRealFeelDesc: '¿Eliminar este registro de Real Feel?',
   },
 };
 

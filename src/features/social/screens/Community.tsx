@@ -1,5 +1,6 @@
 import { useMemo, useState } from 'react';
 import { Plus } from 'lucide-react';
+import ConfirmDialog from '../../../components/ConfirmDialog';
 import { useI18n } from '../../../i18n';
 import { useNavigation } from '../../../contexts/NavigationContext';
 import { useAppState } from '../../../contexts/AppStateContext';
@@ -17,9 +18,14 @@ export default function Community({ communityPosts = [], onAddComment }: { commu
   const { userProfile, setCommunityPosts, setSelectedCreatorId, setSelectedPostId, likedPosts, toggleLikePost, savedPosts, toggleSavePost, savedRecipes, navigateToRecipe } = useAppState();
   const [feedMode, setFeedMode] = useState<FeedMode>('forYou');
 
+  const [pendingDeletePostId, setPendingDeletePostId] = useState<number | null>(null);
   const deletePost = (postId: number) => {
-    if (confirm(t.community.deleteConfirm)) {
-      setCommunityPosts((prev: any[]) => prev.filter(p => p.id !== postId));
+    setPendingDeletePostId(postId);
+  };
+  const confirmDeletePost = () => {
+    if (pendingDeletePostId !== null) {
+      setCommunityPosts((prev: any[]) => prev.filter(p => p.id !== pendingDeletePostId));
+      setPendingDeletePostId(null);
     }
   };
 
@@ -112,6 +118,15 @@ export default function Community({ communityPosts = [], onAddComment }: { commu
         )}
         {activeFeed.map(renderPost)}
       </section>
+
+      <ConfirmDialog
+        open={pendingDeletePostId !== null}
+        onOpenChange={(open) => { if (!open) setPendingDeletePostId(null); }}
+        title={t.community.deletePost || 'Eliminar publicación'}
+        description={t.community.deleteConfirm}
+        variant="destructive"
+        onConfirm={confirmDeletePost}
+      />
     </div>
   );
 }

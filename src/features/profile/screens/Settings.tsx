@@ -9,12 +9,15 @@ import { useLocalStorageState } from '../../../hooks/useLocalStorageState';
 import { getNutritionHistory } from '../../../hooks/useDailyReset';
 import type { Allergen, Ingredient } from '../../../types';
 import { bodyWeightFromKg, bodyWeightToKg, heightFromCm, heightToCm, getBodyWeightUnit, getHeightUnit } from '../../food/utils/units';
+import ConfirmDialog from '../../../components/ConfirmDialog';
 
 export default function Settings({ dailyMacros, setDailyMacros, isPro, setIsPro, showAIBot, setShowAIBot, userProfile, setUserProfile, dictionary = [] }: { dailyMacros?: any, setDailyMacros?: any, isPro?: boolean, setIsPro?: any, showAIBot?: boolean, setShowAIBot?: any, userProfile?: any, setUserProfile?: any, dictionary?: Ingredient[] }) {
   const { theme, setTheme } = useTheme();
   const { t, locale, setLocale } = useI18n();
 
   const [isAddingMember, setIsAddingMember] = useState(false);
+  const [showDeleteAllConfirm, setShowDeleteAllConfirm] = useState(false);
+  const [editingMemberId, setEditingMemberId] = useState<string | null>(null);
   const [newMember, setNewMember] = useState({ name: '', age: 30, goal: 'maintain', activityLevel: 'moderate' });
 
   const addFamilyMember = () => {
@@ -57,7 +60,6 @@ export default function Settings({ dailyMacros, setDailyMacros, isPro, setIsPro,
   };
 
   const deleteAllData = () => {
-    if (!confirm(t.settings.deleteConfirm)) return;
     const keysToKeep = ['rial_lastActiveDate'];
     const allKeys = Object.keys(localStorage).filter(k => !keysToKeep.includes(k));
     allKeys.forEach(k => localStorage.removeItem(k));
@@ -879,7 +881,7 @@ export default function Settings({ dailyMacros, setDailyMacros, isPro, setIsPro,
           </button>
           <Button
             variant="destructive"
-            onClick={deleteAllData}
+            onClick={() => setShowDeleteAllConfirm(true)}
             className="w-full"
           >
             <AlertTriangle className="w-4 h-4" /> {t.settings.deleteData}
@@ -891,6 +893,15 @@ export default function Settings({ dailyMacros, setDailyMacros, isPro, setIsPro,
           <LogOut className="w-5 h-5" /> {t.settings.logout}
         </Button>
       </section>
+
+      <ConfirmDialog
+        open={showDeleteAllConfirm}
+        onOpenChange={setShowDeleteAllConfirm}
+        title={t.settings.deleteData}
+        description={t.settings.deleteConfirm}
+        variant="destructive"
+        onConfirm={deleteAllData}
+      />
     </div>
   );
 }

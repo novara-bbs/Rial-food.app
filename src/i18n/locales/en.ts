@@ -1324,6 +1324,8 @@ const en: Translations = {
     deleteRecipeDesc: 'Are you sure you want to delete this recipe? This action cannot be undone.',
     yes: 'Yes, delete',
     cancel: 'Cancel',
+    deleteRealFeel: 'Delete entry',
+    deleteRealFeelDesc: 'Delete this Real Feel entry?',
   },
 };
 

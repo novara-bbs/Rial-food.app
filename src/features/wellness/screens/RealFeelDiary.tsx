@@ -1,4 +1,6 @@
-import { TrendingUp, TrendingDown, Minus, Zap, Leaf, Brain, UtensilsCrossed } from 'lucide-react';
+import { useState } from 'react';
+import { TrendingUp, TrendingDown, Minus, Zap, Leaf, Brain, UtensilsCrossed, Trash2 } from 'lucide-react';
+import ConfirmDialog from '../../../components/ConfirmDialog';
 import { useI18n } from '../../../i18n';
 import { useAppState } from '../../../contexts/AppStateContext';
 import { getCorrelations, getFoodInsights } from '../utils/correlations';
@@ -87,7 +89,8 @@ function getWeeklyPatterns(logs: any[]) {
 
 export default function RealFeelDiary({ realFeelLogs = [], onBack }: { realFeelLogs: any[]; onBack: () => void }) {
   const { t } = useI18n();
-  const { dictionary } = useAppState();
+  const { dictionary, setRealFeelLogs } = useAppState();
+  const [pendingDeleteLog, setPendingDeleteLog] = useState<any>(null);
   const ENERGY_LABELS = getEnergyLabels(t);
   const DIGESTION_LABELS = getDigestionLabels(t);
   const MINDSET_LABELS = getMindsetLabels(t);
@@ -289,9 +292,19 @@ export default function RealFeelDiary({ realFeelLogs = [], onBack }: { realFeelL
                 </div>
                 {log.note && <p className="text-xs text-on-surface-variant mt-1 truncate">{log.note}</p>}
               </div>
-              <span className="text-[10px] text-on-surface-variant shrink-0">
-                {log.date ? new Date(log.date).toLocaleDateString() : ''}
-              </span>
+              <div className="flex flex-col items-end gap-1 shrink-0">
+                <span className="text-[10px] text-on-surface-variant">
+                  {log.date ? new Date(log.date).toLocaleDateString() : ''}
+                </span>
+                <button
+                  type="button"
+                  onClick={() => setPendingDeleteLog(log)}
+                  className="p-1 text-on-surface-variant/40 hover:text-error transition-colors"
+                  aria-label={t.confirm?.yes || 'Delete'}
+                >
+                  <Trash2 className="w-3.5 h-3.5" />
+                </button>
+              </div>
             </div>
           ))}
           {realFeelLogs.length === 0 && (
@@ -302,6 +315,20 @@ export default function RealFeelDiary({ realFeelLogs = [], onBack }: { realFeelL
           )}
         </div>
       </div>
+
+      <ConfirmDialog
+        open={pendingDeleteLog !== null}
+        onOpenChange={(open) => { if (!open) setPendingDeleteLog(null); }}
+        title={t.confirm?.deleteRealFeel || 'Eliminar registro'}
+        description={t.confirm?.deleteRealFeelDesc || '¿Eliminar este registro de Real Feel?'}
+        variant="destructive"
+        onConfirm={() => {
+          if (pendingDeleteLog) {
+            setRealFeelLogs((prev: any[]) => prev.filter((l: any) => (l.id || l.date) !== (pendingDeleteLog.id || pendingDeleteLog.date)));
+            setPendingDeleteLog(null);
+          }
+        }}
+      />
     </div>
   );
 }
