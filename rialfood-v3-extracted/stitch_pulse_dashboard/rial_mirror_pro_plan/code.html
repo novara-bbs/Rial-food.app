@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#ccff00", /* Vitality Lime */
+                        "background-light": "#f5f7f8",
+                        "background-dark": "#0f1923",
+                        "surface": "#1a242d",
+                        "surface-light": "#27303a"
+                    },
+                    fontFamily: {
+                        "display": ["Space Grotesk", "sans-serif"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.5rem",
+                        "lg": "1rem",
+                        "xl": "1.5rem",
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
+<style>
+        body {
+            font-family: 'Space Grotesk', sans-serif;
+        }
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 font-display min-h-screen pb-24">
+<!-- Header -->
+<header class="sticky top-0 z-50 bg-background-light/80 dark:bg-background-dark/80 backdrop-blur-md border-b border-slate-200 dark:border-slate-800">
+<div class="flex items-center p-4 justify-between max-w-2xl mx-auto">
+<div class="flex items-center gap-3">
+<button class="text-slate-900 dark:text-slate-100 p-1">
+<span class="material-symbols-outlined">arrow_back</span>
+</button>
+<h2 class="text-lg font-bold tracking-tight">Pro-Creator Mirror</h2>
+</div>
+<button class="p-2 rounded-full bg-slate-100 dark:bg-surface-light">
+<span class="material-symbols-outlined text-slate-900 dark:text-slate-100">share</span>
+</button>
+</div>
+</header>
+<main class="max-w-2xl mx-auto">
+<!-- Hero Section -->
+<div class="p-4 @container">
+<div class="relative overflow-hidden rounded-xl aspect-[16/10] group">
+<div class="absolute inset-0 bg-gradient-to-t from-background-dark via-background-dark/20 to-transparent z-10"></div>
+<img alt="Pro athlete training in high-performance gym" class="absolute inset-0 w-full h-full object-cover" data-alt="Pro athlete training in high-performance gym" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBdWRnv7rBcFMf0wVISeEm7JHDRx6yKF-7tcgYJXlCLlrPup1ToGiIhGvg8KOJk1o_rtWzy7yK9IbQzyTth7QzzFrMob1kfaZWVzo61Ois_qTBIKi1i1qWKYMiaOPDqbzlThMb0Y2kvMlmNi16gYp39K33lQbUcIt76nhGsQsUuabqg8xsVUtwH7h0kCJ71PtUE5ochz8cZi11pX5LCSOddboqdUroiWROmVq6bE3JfqhbMp8LZRXqn0jK8yjLHS74vBfBY585-bF2l"/>
+<div class="absolute bottom-0 left-0 p-6 z-20 w-full">
+<span class="px-3 py-1 bg-primary text-background-dark text-xs font-bold rounded-full uppercase tracking-widest mb-3 inline-block">Elite Tier</span>
+<h1 class="text-3xl font-bold leading-tight text-white mb-1">Peak Performance Week</h1>
+<p class="text-slate-300 text-sm">Curated by Marcus Thorne</p>
+</div>
+</div>
+</div>
+<!-- Athlete Profile & Stats -->
+<div class="px-4 flex flex-col gap-4">
+<div class="flex items-center justify-between p-4 bg-slate-100 dark:bg-surface rounded-xl border border-slate-200 dark:border-slate-800">
+<div class="flex items-center gap-4">
+<img alt="Marcus Thorne portrait" class="size-14 rounded-full object-cover ring-2 ring-primary/50" data-alt="Professional athlete Marcus Thorne headshot" src="https://lh3.googleusercontent.com/aida-public/AB6AXuA5I0jEToxKIsdmNLkKdVgTp0IbLTHaXO2jg2z3syfpmIBkMD8p74Zkkjsbln50q_hcFfF5jD_JAaZsD9uVNSU0fVAtsg5Oa05C1P6wDYbbHpugsOu601thGpf1xsWxwqE0SlTlWlpFMsOzNGlpPCxsNSa_9ML0G2bH2ld8ovMZIs7krqeM5R8taQaDyZFEBySym4-LnEaHe6sOmH7YUaW_RL8aomFnwMft2B5SsUG1T-ejI5cRFxQC6vSE3c-zNAaWQBV_wvqln8DH"/>
+<div>
+<p class="font-bold text-lg">Marcus Thorne</p>
+<p class="text-slate-500 dark:text-slate-400 text-sm">Pro-Athlete &amp; RIAL Creator</p>
+</div>
+</div>
+<button class="bg-primary text-background-dark font-bold px-6 py-2 rounded-lg text-sm hover:opacity-90 transition-opacity">
+                    Follow
+                </button>
+</div>
+<!-- Match Score Card -->
+<div class="grid grid-cols-2 gap-4">
+<div class="p-5 bg-primary/10 dark:bg-primary/5 border border-primary/20 rounded-xl">
+<p class="text-sm font-medium text-slate-600 dark:text-slate-400 mb-1">Real Match Score</p>
+<div class="flex items-baseline gap-2">
+<span class="text-3xl font-bold text-primary">94%</span>
+<span class="text-xs font-bold text-green-500">+5% Match</span>
+</div>
+<p class="text-[10px] text-slate-500 dark:text-slate-500 mt-2 uppercase tracking-wider font-semibold">Optimized for your goals</p>
+</div>
+<div class="p-5 bg-slate-100 dark:bg-surface border border-slate-200 dark:border-slate-800 rounded-xl">
+<p class="text-sm font-medium text-slate-600 dark:text-slate-400 mb-1">Plan Duration</p>
+<div class="flex items-baseline gap-2">
+<span class="text-3xl font-bold">07</span>
+<span class="text-sm font-medium text-slate-500">Days</span>
+</div>
+<p class="text-[10px] text-slate-500 dark:text-slate-500 mt-2 uppercase tracking-wider font-semibold">High Intensity cycle</p>
+</div>
+</div>
+</div>
+<!-- Action Button -->
+<div class="p-4">
+<button class="w-full bg-primary py-4 rounded-xl flex items-center justify-center gap-3 group">
+<span class="material-symbols-outlined text-background-dark font-bold">content_copy</span>
+<span class="text-background-dark font-extrabold text-lg uppercase tracking-tight">Mirror This Plan</span>
+</button>
+</div>
+<!-- Weekly Schedule -->
+<div class="p-4">
+<div class="flex items-center justify-between mb-4">
+<h3 class="text-xl font-bold tracking-tight">Daily Breakdown</h3>
+<div class="flex gap-1">
+<span class="px-3 py-1 bg-surface-light rounded-full text-xs font-medium">Week 1</span>
+</div>
+</div>
+<div class="space-y-4">
+<!-- Day 1 -->
+<div class="bg-slate-100 dark:bg-surface border border-slate-200 dark:border-slate-800 rounded-xl overflow-hidden">
+<div class="p-4 border-b border-slate-200 dark:border-slate-800 bg-slate-200/50 dark:bg-slate-800/30 flex justify-between items-center">
+<span class="font-bold">Monday: Strength Foundation</span>
+<span class="text-xs text-primary font-bold">DAY 01</span>
+</div>
+<div class="p-4 space-y-4">
+<!-- Workout -->
+<div class="flex gap-4">
+<div class="size-12 rounded-lg bg-primary/20 flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-primary">fitness_center</span>
+</div>
+<div>
+<p class="font-bold text-sm">Hypertrophy Session</p>
+<p class="text-xs text-slate-500 dark:text-slate-400">90 mins • Upper Body Focus</p>
+</div>
+</div>
+<!-- Meal -->
+<div class="flex gap-4">
+<div class="size-12 rounded-lg bg-blue-500/20 flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-blue-500">restaurant</span>
+</div>
+<div>
+<p class="font-bold text-sm">Post-Workout Fuel</p>
+<p class="text-xs text-slate-500 dark:text-slate-400">Grilled Salmon, Quinoa, Asparagus</p>
+</div>
+</div>
+</div>
+</div>
+<!-- Day 2 -->
+<div class="bg-slate-100 dark:bg-surface border border-slate-200 dark:border-slate-800 rounded-xl overflow-hidden opacity-60">
+<div class="p-4 border-b border-slate-200 dark:border-slate-800 bg-slate-200/50 dark:bg-slate-800/30 flex justify-between items-center">
+<span class="font-bold">Tuesday: Metabolic Conditioning</span>
+<span class="text-xs text-slate-500 font-bold uppercase tracking-widest">Day 02</span>
+</div>
+<div class="p-4 flex gap-4 items-center justify-center italic text-xs text-slate-500">
+                        View full plan to unlock details
+                    </div>
+</div>
+<!-- Day 3 -->
+<div class="bg-slate-100 dark:bg-surface border border-slate-200 dark:border-slate-800 rounded-xl overflow-hidden opacity-60">
+<div class="p-4 border-b border-slate-200 dark:border-slate-800 bg-slate-200/50 dark:bg-slate-800/30 flex justify-between items-center">
+<span class="font-bold">Wednesday: Active Recovery</span>
+<span class="text-xs text-slate-500 font-bold uppercase tracking-widest">Day 03</span>
+</div>
+</div>
+</div>
+</div>
+</main>
+<!-- Bottom Navigation Bar -->
+<nav class="fixed bottom-0 left-0 right-0 z-50 bg-background-light dark:bg-background-dark border-t border-slate-200 dark:border-slate-800 px-4 pb-6 pt-2">
+<div class="max-w-2xl mx-auto flex justify-between items-center">
+<a class="flex flex-col items-center gap-1 text-slate-400 dark:text-slate-500 flex-1" href="#">
+<span class="material-symbols-outlined">home</span>
+<span class="text-[10px] font-medium">Home</span>
+</a>
+<a class="flex flex-col items-center gap-1 text-slate-400 dark:text-slate-500 flex-1" href="#">
+<span class="material-symbols-outlined">calendar_today</span>
+<span class="text-[10px] font-medium">Plans</span>
+</a>
+<a class="flex flex-col items-center gap-1 text-primary flex-1" href="#">
+<div class="bg-primary/20 p-2 -mt-4 rounded-full border-4 border-background-light dark:border-background-dark">
+<span class="material-symbols-outlined text-primary scale-125">content_copy</span>
+</div>
+<span class="text-[10px] font-bold text-primary">Mirror</span>
+</a>
+<a class="flex flex-col items-center gap-1 text-slate-400 dark:text-slate-500 flex-1" href="#">
+<span class="material-symbols-outlined">bar_chart</span>
+<span class="text-[10px] font-medium">Stats</span>
+</a>
+<a class="flex flex-col items-center gap-1 text-slate-400 dark:text-slate-500 flex-1" href="#">
+<span class="material-symbols-outlined">person</span>
+<span class="text-[10px] font-medium">Profile</span>
+</a>
+</div>
+</nav>
+</body></html>

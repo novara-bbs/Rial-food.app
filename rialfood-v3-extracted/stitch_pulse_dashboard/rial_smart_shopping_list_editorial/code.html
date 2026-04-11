@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Editorial Tech - Smart Grocery List</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Playfair+Display:ital,wght@0,700;1,700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#25aff4",
+                        "background-light": "#f5f7f8",
+                        "background-dark": "#101c22",
+                    },
+                    fontFamily: {
+                        "display": ["Inter", "sans-serif"],
+                        "serif": ["Playfair Display", "serif"]
+                    },
+                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>
+        .serif-title { font-family: 'Playfair Display', serif; }
+        .custom-checkbox:checked {
+            background-color: #25aff4;
+            border-color: #25aff4;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark font-display text-slate-900 dark:text-slate-100 min-h-screen">
+<div class="max-w-2xl mx-auto bg-white dark:bg-slate-900 shadow-xl min-h-screen flex flex-col">
+<!-- Header Navigation -->
+<div class="flex items-center bg-white dark:bg-slate-900 p-4 pb-2 justify-between border-b border-slate-100 dark:border-slate-800 sticky top-0 z-10">
+<div class="text-slate-900 dark:text-slate-100 flex size-12 shrink-0 items-center">
+<span class="material-symbols-outlined">menu</span>
+</div>
+<h2 class="text-slate-900 dark:text-slate-100 text-sm font-bold uppercase tracking-widest flex-1 text-center">Editorial Tech</h2>
+<div class="flex w-12 items-center justify-end">
+<button class="flex cursor-pointer items-center justify-center rounded-lg h-12 bg-transparent text-slate-900 dark:text-slate-100 p-0">
+<span class="material-symbols-outlined">search</span>
+</button>
+</div>
+</div>
+<!-- Hero Section -->
+<header class="px-6 pt-10 pb-6 border-b-4 border-slate-900 dark:border-primary">
+<div class="flex justify-between items-baseline mb-2">
+<p class="text-primary text-xs font-bold uppercase tracking-[0.2em]">Issue No. 14 • Batch Prep Week</p>
+<p class="text-slate-400 text-xs font-medium">OCTOBER 2023</p>
+</div>
+<h1 class="serif-title text-5xl md:text-6xl font-bold leading-tight mb-4 italic">Smart Grocery List</h1>
+<p class="text-slate-600 dark:text-slate-400 text-lg leading-relaxed max-w-md italic">
+                A curated selection for the modern kitchen, optimized for Sunday's high-efficiency batch session.
+            </p>
+</header>
+<!-- Main Content: List Sections -->
+<main class="flex-1 px-6 py-8">
+<!-- Section: Produce -->
+<section class="mb-10">
+<div class="flex items-center gap-4 mb-6">
+<h2 class="serif-title text-3xl font-bold">Produce</h2>
+<div class="h-[1px] flex-1 bg-slate-200 dark:bg-slate-800 mt-2"></div>
+</div>
+<div class="space-y-4">
+<div class="flex items-start gap-4 group">
+<input class="mt-1 w-5 h-5 rounded border-slate-300 text-primary focus:ring-primary dark:bg-slate-800 dark:border-slate-700" type="checkbox"/>
+<div class="flex-1 border-b border-slate-100 dark:border-slate-800 pb-3">
+<div class="flex justify-between items-center">
+<p class="font-semibold text-lg">Organic Tuscan Kale</p>
+<span class="text-[10px] px-2 py-0.5 rounded-full bg-primary/10 text-primary font-bold uppercase tracking-tighter">Meal A: Grain Bowls</span>
+</div>
+<p class="text-slate-500 text-sm italic">3 Bunches • Trim and wash during prep</p>
+</div>
+</div>
+<div class="flex items-start gap-4 group">
+<input class="mt-1 w-5 h-5 rounded border-slate-300 text-primary focus:ring-primary dark:bg-slate-800 dark:border-slate-700" type="checkbox"/>
+<div class="flex-1 border-b border-slate-100 dark:border-slate-800 pb-3">
+<div class="flex justify-between items-center">
+<p class="font-semibold text-lg">Heirloom Carrots</p>
+<span class="text-[10px] px-2 py-0.5 rounded-full bg-primary/10 text-primary font-bold uppercase tracking-tighter">Meal B: Roasted Medley</span>
+</div>
+<p class="text-slate-500 text-sm italic">2 lbs • Rainbow variety preferred</p>
+</div>
+</div>
+<div class="flex items-start gap-4 group">
+<input class="mt-1 w-5 h-5 rounded border-slate-300 text-primary focus:ring-primary dark:bg-slate-800 dark:border-slate-700" type="checkbox"/>
+<div class="flex-1 border-b border-slate-100 dark:border-slate-800 pb-3">
+<div class="flex justify-between items-center">
+<p class="font-semibold text-lg">Shallots &amp; Garlic</p>
+<span class="text-[10px] px-2 py-0.5 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-500 font-bold uppercase tracking-tighter">Base Aromatics</span>
+</div>
+<p class="text-slate-500 text-sm italic">4 Shallots, 2 Heads • Essential staples</p>
+</div>
+</div>
+</div>
+</section>
+<!-- Section: Proteins -->
+<section class="mb-10">
+<div class="flex items-center gap-4 mb-6">
+<h2 class="serif-title text-3xl font-bold">Proteins</h2>
+<div class="h-[1px] flex-1 bg-slate-200 dark:bg-slate-800 mt-2"></div>
+</div>
+<div class="space-y-4">
+<div class="flex items-start gap-4 group">
+<input class="mt-1 w-5 h-5 rounded border-slate-300 text-primary focus:ring-primary dark:bg-slate-800 dark:border-slate-700" type="checkbox"/>
+<div class="flex-1 border-b border-slate-100 dark:border-slate-800 pb-3">
+<div class="flex justify-between items-center">
+<p class="font-semibold text-lg">Wild-Caught Salmon</p>
+<span class="text-[10px] px-2 py-0.5 rounded-full bg-primary/10 text-primary font-bold uppercase tracking-tighter">Meal C: Tuesday Dinner</span>
+</div>
+<p class="text-slate-500 text-sm italic">4 Fillets • Center cut</p>
+</div>
+</div>
+<div class="flex items-start gap-4 group">
+<input class="mt-1 w-5 h-5 rounded border-slate-300 text-primary focus:ring-primary dark:bg-slate-800 dark:border-slate-700" type="checkbox"/>
+<div class="flex-1 border-b border-slate-100 dark:border-slate-800 pb-3">
+<div class="flex justify-between items-center">
+<p class="font-semibold text-lg">Grass-Fed Ground Beef</p>
+<span class="text-[10px] px-2 py-0.5 rounded-full bg-primary/10 text-primary font-bold uppercase tracking-tighter">Meal D: Ragu Batch</span>
+</div>
+<p class="text-slate-500 text-sm italic">1.5 lbs • 85/15 blend</p>
+</div>
+</div>
+</div>
+</section>
+<!-- Section: Pantry & Bulk -->
+<section class="mb-10">
+<div class="flex items-center gap-4 mb-6">
+<h2 class="serif-title text-3xl font-bold">Pantry &amp; Bulk</h2>
+<div class="h-[1px] flex-1 bg-slate-200 dark:bg-slate-800 mt-2"></div>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+<div class="p-4 rounded-xl bg-slate-50 dark:bg-slate-800/50 border border-slate-100 dark:border-slate-800">
+<div class="flex items-center gap-3 mb-3">
+<input class="w-4 h-4 rounded border-slate-300 text-primary" type="checkbox"/>
+<p class="font-bold text-sm uppercase tracking-wider">French Lentils</p>
+</div>
+<p class="text-xs text-slate-500 italic mb-2">Bulk Section • 500g</p>
+<span class="text-[9px] px-2 py-0.5 rounded bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 text-slate-400 font-bold uppercase tracking-widest">Base Prep</span>
+</div>
+<div class="p-4 rounded-xl bg-slate-50 dark:bg-slate-800/50 border border-slate-100 dark:border-slate-800">
+<div class="flex items-center gap-3 mb-3">
+<input class="w-4 h-4 rounded border-slate-300 text-primary" type="checkbox"/>
+<p class="font-bold text-sm uppercase tracking-wider">Tahini Paste</p>
+</div>
+<p class="text-xs text-slate-500 italic mb-2">Aisle 4 • Stone ground</p>
+<span class="text-[9px] px-2 py-0.5 rounded bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 text-slate-400 font-bold uppercase tracking-widest">Sauce Session</span>
+</div>
+<div class="p-4 rounded-xl bg-slate-50 dark:bg-slate-800/50 border border-slate-100 dark:border-slate-800">
+<div class="flex items-center gap-3 mb-3">
+<input class="w-4 h-4 rounded border-slate-300 text-primary" type="checkbox"/>
+<p class="font-bold text-sm uppercase tracking-wider">Quinoa Blend</p>
+</div>
+<p class="text-xs text-slate-500 italic mb-2">Bulk Section • 1kg</p>
+<span class="text-[9px] px-2 py-0.5 rounded bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 text-slate-400 font-bold uppercase tracking-widest">Meal A &amp; E</span>
+</div>
+</div>
+</section>
+<!-- Bottom Ad/Featurette Card -->
+<div class="relative rounded-2xl overflow-hidden mt-12 mb-6 aspect-[21/9]">
+<div class="absolute inset-0 bg-gradient-to-r from-black/80 to-transparent z-10"></div>
+<img alt="Artisanal kitchen tools on a marble countertop" class="absolute inset-0 w-full h-full object-cover" data-alt="Close up of high end kitchen tools and ingredients" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBsnoRp4bngEd6iUgQb9oZbNRd5BEiTJ2ulUg6-_zPpdnOsht5ZdyCLeqyoTFzUt57kPoSLh-5F6qNiMitfqh3gG3ip7EF1zFPE_fD4iVPF1GtZqjB2z9EfNtEgZH4Ohn7J9ERmfTGX3F8cWSsm-MEea6OIjCFw7N5X5sm5k2lSeERhojorZjjaNCs_eWh8nyILqZbo6EwRFuWWrmT8yrYt-PZSyuYAv4Xgv8Tk8sD-ofTu48P9Mnrnwn3cPopQ4ebjCGAo97VHQoaq"/>
+<div class="relative z-20 h-full flex flex-col justify-center px-8">
+<p class="text-primary text-[10px] font-bold uppercase tracking-widest mb-1">Editor's Choice</p>
+<h3 class="serif-title text-white text-2xl font-bold">The Prep Master Kit</h3>
+<p class="text-white/70 text-sm mt-1 max-w-[200px]">Upgrade your Sunday routine with our signature tools.</p>
+</div>
+</div>
+</main>
+<!-- Bottom Navigation Bar -->
+<nav class="sticky bottom-0 bg-white dark:bg-slate-900 border-t border-slate-100 dark:border-slate-800 px-4 pb-6 pt-3 flex justify-around items-center">
+<a class="flex flex-col items-center gap-1 group text-primary" href="#">
+<span class="material-symbols-outlined fill-1">format_list_bulleted</span>
+<span class="text-[10px] font-bold uppercase tracking-tighter">List</span>
+</a>
+<a class="flex flex-col items-center gap-1 group text-slate-400 dark:text-slate-500" href="#">
+<span class="material-symbols-outlined">inventory_2</span>
+<span class="text-[10px] font-bold uppercase tracking-tighter">Pantry</span>
+</a>
+<a class="flex flex-col items-center gap-1 group text-slate-400 dark:text-slate-500" href="#">
+<span class="material-symbols-outlined">menu_book</span>
+<span class="text-[10px] font-bold uppercase tracking-tighter">Recipes</span>
+</a>
+<a class="flex flex-col items-center gap-1 group text-slate-400 dark:text-slate-500" href="#">
+<span class="material-symbols-outlined">settings</span>
+<span class="text-[10px] font-bold uppercase tracking-tighter">Settings</span>
+</a>
+</nav>
+</div>
+</body></html>

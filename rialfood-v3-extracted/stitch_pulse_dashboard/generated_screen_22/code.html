@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Dietary &amp; Fasting Configuration</title>
+<!-- BEGIN: Tailwind CSS & Config -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            editorial: {
+              gold: '#D4AF37',
+              dark: '#1A1A1A',
+              gray: '#F5F5F7',
+              accent: '#34C759'
+            }
+          },
+          fontFamily: {
+            serif: ['Georgia', 'serif'],
+            sans: ['-apple-system', 'BlinkMacSystemFont', 'Inter', 'sans-serif']
+          }
+        }
+      }
+    }
+  </script>
+<!-- END: Tailwind CSS & Config -->
+<!-- BEGIN: Custom Typography Styles -->
+<style data-purpose="typography">
+    .text-balance { text-wrap: balance; }
+    .heading-serif { font-family: 'Georgia', serif; font-weight: 700; }
+    .status-badge { font-size: 0.65rem; letter-spacing: 0.05em; font-weight: 700; }
+  </style>
+<!-- END: Custom Typography Styles -->
+<!-- BEGIN: Layout and Animation Styles -->
+<style data-purpose="layout-ui">
+    .ios-blur { backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); }
+    .toggle-switch:checked + .toggle-bg { background-color: #34C759; }
+    .toggle-switch:checked + .toggle-bg .toggle-dot { transform: translateX(100%); }
+    
+    /* Progress Ring Animation */
+    .progress-ring__circle {
+      transition: stroke-dashoffset 0.35s;
+      transform: rotate(-90deg);
+      transform-origin: 50% 50%;
+    }
+  </style>
+<!-- END: Layout and Animation Styles -->
+</head>
+<body class="bg-editorial-gray text-editorial-dark font-sans antialiased min-h-screen">
+<!-- BEGIN: Main Container -->
+<main class="max-w-md mx-auto min-h-screen bg-white shadow-xl relative pb-24 overflow-x-hidden" data-purpose="mobile-ios-container">
+<!-- BEGIN: Header -->
+<header class="sticky top-0 z-50 bg-white/80 ios-blur px-6 py-4 flex items-center justify-between border-b border-gray-100">
+<div class="flex items-center gap-3">
+<button class="p-2 -ml-2 hover:bg-gray-50 rounded-full transition-colors">
+<svg fill="none" height="20" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="20" xmlns="http://www.w3.org/2000/svg"><path d="m15 18-6-6 6-6"></path></svg>
+</button>
+<h1 class="text-lg font-semibold">Dietary Profile</h1>
+</div>
+<span class="text-editorial-gold text-xs font-bold uppercase tracking-widest">Premium</span>
+</header>
+<!-- END: Header -->
+<!-- BEGIN: Scrollable Content -->
+<div class="px-6 py-8 space-y-10">
+<!-- BEGIN: Fasting Timer Section -->
+<section class="relative" data-purpose="fasting-timer-module">
+<div class="flex flex-col items-center">
+<div class="relative w-64 h-64 flex items-center justify-center">
+<!-- Progress Ring -->
+<svg class="w-full h-full">
+<circle class="text-gray-100" cx="128" cy="128" fill="transparent" r="110" stroke="currentColor" stroke-width="6"></circle>
+<circle class="text-editorial-dark progress-ring__circle" cx="128" cy="128" fill="transparent" r="110" stroke="currentColor" stroke-dasharray="691.15" stroke-dashoffset="200" stroke-linecap="round" stroke-width="8"></circle>
+</svg>
+<!-- Inner Timer Display -->
+<div class="absolute inset-0 flex flex-col items-center justify-center text-center">
+<span class="status-badge uppercase text-gray-400 mb-1">Current Fasting</span>
+<span class="heading-serif text-5xl mb-1">14:22</span>
+<span class="text-xs text-gray-500 font-medium">Protocol: 16:8</span>
+</div>
+</div>
+<div class="mt-6 flex gap-4 w-full">
+<button class="flex-1 py-3 px-4 rounded-xl border border-gray-200 text-sm font-semibold hover:bg-gray-50 transition-all">Adjust Plan</button>
+<button class="flex-1 py-3 px-4 rounded-xl bg-editorial-dark text-white text-sm font-semibold hover:opacity-90 transition-all">End Fast</button>
+</div>
+</div>
+</section>
+<!-- END: Fasting Timer Section -->
+<!-- BEGIN: Dietary Protocols -->
+<section data-purpose="dietary-protocols">
+<h2 class="heading-serif text-2xl mb-6">Protocols</h2>
+<div class="space-y-4">
+<!-- Protocol Item: Keto -->
+<div class="flex items-center justify-between p-5 bg-gray-50 rounded-2xl border border-gray-100 transition-all hover:border-editorial-gold/30">
+<div class="flex items-center gap-4">
+<div class="w-12 h-12 bg-white rounded-xl flex items-center justify-center shadow-sm text-editorial-gold">
+<svg fill="none" height="24" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M12 2v10"></path><path d="M18.4 6.9a9 9 0 1 1-12.8 0"></path></svg>
+</div>
+<div>
+<h3 class="font-bold text-sm">Ketogenic</h3>
+<p class="text-xs text-gray-500">Low carb, high fat</p>
+</div>
+</div>
+<label class="relative inline-flex items-center cursor-pointer">
+<input checked="" class="sr-only toggle-switch" type="checkbox"/>
+<div class="w-12 h-7 bg-gray-200 rounded-full transition-colors toggle-bg">
+<div class="absolute left-1 top-1 bg-white w-5 h-5 rounded-full shadow-md transition-transform toggle-dot"></div>
+</div>
+</label>
+</div>
+<!-- Protocol Item: Vegan -->
+<div class="flex items-center justify-between p-5 bg-gray-50 rounded-2xl border border-gray-100 transition-all hover:border-editorial-gold/30">
+<div class="flex items-center gap-4">
+<div class="w-12 h-12 bg-white rounded-xl flex items-center justify-center shadow-sm text-editorial-accent">
+<svg fill="none" height="24" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8 0 5.5-4.78 10-10 10Z"></path><path d="M2 21c0-3 1.85-5.36 5.08-6C9.5 14.52 12 13 13 12"></path></svg>
+</div>
+<div>
+<h3 class="font-bold text-sm">Plant-Based</h3>
+<p class="text-xs text-gray-500">Vegan friendly</p>
+</div>
+</div>
+<label class="relative inline-flex items-center cursor-pointer">
+<input class="sr-only toggle-switch" type="checkbox"/>
+<div class="w-12 h-7 bg-gray-200 rounded-full transition-colors toggle-bg">
+<div class="absolute left-1 top-1 bg-white w-5 h-5 rounded-full shadow-md transition-transform toggle-dot"></div>
+</div>
+</label>
+</div>
+<!-- Protocol Item: Intermittent -->
+<div class="flex items-center justify-between p-5 bg-gray-50 rounded-2xl border border-gray-100 transition-all hover:border-editorial-gold/30">
+<div class="flex items-center gap-4">
+<div class="w-12 h-12 bg-white rounded-xl flex items-center justify-center shadow-sm text-editorial-dark">
+<svg fill="none" height="24" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+</div>
+<div>
+<h3 class="font-bold text-sm">Intermittent Fasting</h3>
+<p class="text-xs text-gray-500">16:8 Window</p>
+</div>
+</div>
+<label class="relative inline-flex items-center cursor-pointer">
+<input checked="" class="sr-only toggle-switch" type="checkbox"/>
+<div class="w-12 h-7 bg-gray-200 rounded-full transition-colors toggle-bg">
+<div class="absolute left-1 top-1 bg-white w-5 h-5 rounded-full shadow-md transition-transform toggle-dot"></div>
+</div>
+</label>
+</div>
+</div>
+</section>
+<!-- END: Dietary Protocols -->
+<!-- BEGIN: Real Match Impact Score -->
+<section class="pt-4" data-purpose="match-impact">
+<div class="p-6 bg-editorial-dark text-white rounded-3xl relative overflow-hidden">
+<!-- Background accent -->
+<div class="absolute top-0 right-0 w-32 h-32 bg-editorial-gold opacity-10 rounded-full -mr-16 -mt-16"></div>
+<div class="relative z-10">
+<div class="flex justify-between items-start mb-6">
+<div>
+<h3 class="heading-serif text-xl">Real Match Score</h3>
+<p class="text-gray-400 text-xs mt-1">Impact of current filters</p>
+</div>
+<span class="text-3xl font-bold text-editorial-gold">88%</span>
+</div>
+<!-- Breakdown -->
+<div class="space-y-4">
+<div class="space-y-2">
+<div class="flex justify-between text-[10px] uppercase tracking-wider font-bold">
+<span>Keto Strictness</span>
+<span class="text-editorial-gold">+42%</span>
+</div>
+<div class="h-1 bg-white/10 rounded-full">
+<div class="h-full bg-editorial-gold w-[85%] rounded-full"></div>
+</div>
+</div>
+<div class="space-y-2">
+<div class="flex justify-between text-[10px] uppercase tracking-wider font-bold">
+<span>Fasting Window Align</span>
+<span class="text-editorial-gold">+26%</span>
+</div>
+<div class="h-1 bg-white/10 rounded-full">
+<div class="h-full bg-editorial-gold w-[60%] rounded-full"></div>
+</div>
+</div>
+<div class="space-y-2">
+<div class="flex justify-between text-[10px] uppercase tracking-wider font-bold">
+<span>Nutritional Accuracy</span>
+<span class="text-editorial-gold">+20%</span>
+</div>
+<div class="h-1 bg-white/10 rounded-full">
+<div class="h-full bg-editorial-gold w-[40%] rounded-full"></div>
+</div>
+</div>
+</div>
+<p class="mt-6 text-[11px] leading-relaxed text-gray-400">
+              *Your Real Match score calculates the compatibility of restaurant menus and recipes based on your biological metabolic window.
+            </p>
+</div>
+</div>
+</section>
+<!-- END: Real Match Impact Score -->
+</div>
+<!-- END: Scrollable Content -->
+<!-- BEGIN: Floating Action Button -->
+<div class="fixed bottom-8 left-1/2 -translate-x-1/2 w-full max-w-md px-6 z-50">
+<button class="w-full bg-editorial-dark text-white py-4 rounded-2xl font-bold shadow-2xl active:scale-[0.98] transition-all flex items-center justify-center gap-2">
+        Save Configuration
+        <svg fill="none" height="18" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="18" xmlns="http://www.w3.org/2000/svg"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg>
+</button>
+</div>
+<!-- END: Floating Action Button -->
+</main>
+<!-- END: Main Container -->
+</body></html>

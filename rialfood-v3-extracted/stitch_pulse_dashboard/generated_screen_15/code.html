@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="es"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>RIAL - Movimiento Real</title>
+<!-- Tailwind CSS v3 CDN -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            'rial-black': '#0A0A0A',
+            'rial-lime': '#D9FF00', // Vitality Lime
+            'rial-gray': '#1C1C1E',
+            'rial-muted': '#8E8E93',
+          },
+          fontFamily: {
+            'editorial': ['Times New Roman', 'serif'],
+            'tech': ['Inter', 'sans-serif'],
+          }
+        }
+      }
+    }
+  </script>
+<style data-purpose="typography">
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;700;900&display=swap');
+    
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: #0A0A0A;
+      color: #FFFFFF;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .editorial-title {
+      font-family: 'Inter', sans-serif;
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: -0.05em;
+      line-height: 0.85;
+    }
+
+    .serif-italic {
+      font-family: 'Times New Roman', serif;
+      font-style: italic;
+    }
+
+    /* Elegant grain overlay for editorial feel */
+    .grain-overlay {
+      position: fixed;
+      top: 0; left: 0; width: 100%; height: 100%;
+      background: url('https://grainy-gradients.vercel.app/noise.svg');
+      opacity: 0.05;
+      pointer-events: none;
+      z-index: 50;
+    }
+  </style>
+<style data-purpose="layout">
+    .status-bar-height { height: 44px; }
+    .bottom-nav-height { height: 84px; }
+    .safe-area-bottom { padding-bottom: 34px; }
+    
+    .glass-card {
+      background: rgba(28, 28, 30, 0.7);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+  </style>
+</head>
+<body class="bg-rial-black text-white overflow-hidden">
+<div class="grain-overlay"></div>
+<!-- BEGIN: Main Container -->
+<main class="relative h-screen flex flex-col max-w-md mx-auto overflow-hidden border-x border-white/10">
+<!-- BEGIN: Header -->
+<header class="pt-12 px-6 pb-4 flex justify-between items-end z-10">
+<div data-purpose="header-title">
+<p class="text-[10px] tracking-[0.3em] uppercase text-rial-muted mb-1 font-bold">Metrics / Vol. 04</p>
+<h1 class="editorial-title text-4xl">Movimiento<br/><span class="text-rial-lime italic serif-italic normal-case tracking-normal">Real</span></h1>
+</div>
+<div class="w-12 h-12 rounded-full border border-white/20 flex items-center justify-center overflow-hidden">
+<img alt="Profile" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD7hSKByRlkcLl6jj6OUZV6V1C3Xv6vAepzog_t2Wxc8CI0yZXq_4umALAxWcpgxG1S6c-ObTwnvn-sZgYcAqdxl3KU_GD0QdOp_jPoBbUtqea2m5OW7HPuHLwL9D__AmKpQqF5-bKoLriLfO59LKlFuasyFBApO9j8De5blSan5uCSOcpn14yuJOR6mkGHyj_MxU_R1heUc9iMNDEthuAGljqTZGMEhTa3XfWljqSiFqe8gIfJwZaw29ICCJ618eFpkhezYIadmMpU"/>
+</div>
+</header>
+<!-- END: Header -->
+<!-- BEGIN: Content Scroll Area -->
+<section class="flex-1 overflow-y-auto px-6 pb-32">
+<!-- BEGIN: Hero Image & Main Metric -->
+<div class="relative mt-4 mb-8">
+<!-- Editorial Action Shot Frame -->
+<div class="aspect-[4/5] w-full rounded-2xl overflow-hidden relative border border-white/10 shadow-2xl">
+<img alt="Action Shot" class="w-full h-full object-cover grayscale contrast-125 opacity-80" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCnMXqApqagoWqIjNLZoltwzNtnj84gsxiYRw9XFOWqWYrKwORNHyzaBH5r0XkiYmHZXm1pLNVhYEKeTpXsuIhrIg0V4W6huDVlN6-LsxIkHHfZP3-KZwaxJrxhjsj5CQv1R015K46PI_k2q-F5iF2az6zz9RkDEN8KQVlOyeI84qGOCy-_srnG1ZoghnrG4HsqVMnngx1mvnBbNsUs6b_BiRaWGO-hOFdfv4oK5XCOTGMTpZbda6_HhG3tAoPjb8VRaEtqgnuYdPFo"/>
+<!-- Gradient Overlay for Legibility -->
+<div class="absolute inset-0 bg-gradient-to-t from-rial-black via-transparent to-transparent"></div>
+<!-- Step Counter Floating -->
+<div class="absolute bottom-6 left-6 right-6">
+<div class="flex flex-col">
+<span class="text-[12px] uppercase tracking-widest text-rial-lime font-black mb-1">Steps Today</span>
+<div class="flex items-baseline gap-2">
+<span class="editorial-title text-7xl text-white">12,482</span>
+<span class="text-rial-muted font-light text-xl">/ 15k</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- END: Hero Image & Main Metric -->
+<!-- BEGIN: Quick Metrics Grid -->
+<div class="grid grid-cols-2 gap-4 mb-8">
+<div class="glass-card p-5 rounded-2xl">
+<p class="text-[10px] uppercase tracking-widest text-rial-muted mb-2">Distance</p>
+<p class="text-3xl font-bold italic serif-italic">8.42<span class="text-sm not-italic font-tech ml-1">km</span></p>
+</div>
+<div class="glass-card p-5 rounded-2xl border-l-2 border-l-rial-lime">
+<p class="text-[10px] uppercase tracking-widest text-rial-muted mb-2">Energy</p>
+<p class="text-3xl font-bold italic serif-italic">642<span class="text-sm not-italic font-tech ml-1">kcal</span></p>
+</div>
+</div>
+<!-- END: Quick Metrics Grid -->
+<!-- BEGIN: Activity Narrative -->
+<div class="mb-8" data-purpose="narrative-section">
+<div class="flex items-center gap-2 mb-4">
+<div class="h-[1px] flex-1 bg-white/20"></div>
+<span class="text-[10px] uppercase tracking-[0.2em] font-bold">Activity Narrative</span>
+<div class="h-[1px] flex-1 bg-white/20"></div>
+</div>
+<article class="space-y-4">
+<h2 class="text-xl font-light leading-snug">
+            Your movement today is <span class="text-rial-lime font-bold">14% higher</span> than your seasonal average. 
+          </h2>
+<p class="text-rial-muted leading-relaxed text-sm">
+            This consistent intensity has pushed your metabolic readiness into the <span class="text-white">"Optimal Zone"</span>. By maintaining this pace for 20 more minutes, you will achieve peak cardiovascular efficiency for the current cycle.
+          </p>
+<div class="pt-2">
+<button class="w-full py-4 border border-white/10 rounded-full text-[11px] uppercase tracking-[0.3em] font-bold hover:bg-white hover:text-black transition-all duration-300">
+              View Detailed Insight
+            </button>
+</div>
+</article>
+</div>
+<!-- END: Activity Narrative -->
+</section>
+<!-- END: Content Scroll Area -->
+<!-- BEGIN: Bottom Navigation -->
+<nav class="absolute bottom-0 left-0 right-0 bg-rial-black/90 backdrop-blur-md border-t border-white/10 safe-area-bottom z-40">
+<div class="flex justify-around items-center h-16 px-6">
+<button class="text-rial-lime" data-purpose="nav-item">
+<svg fill="none" height="24" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
+</button>
+<button class="text-rial-muted" data-purpose="nav-item">
+<svg fill="none" height="24" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline></svg>
+</button>
+<button class="text-rial-muted" data-purpose="nav-item">
+<svg fill="none" height="24" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="12" r="10"></circle><line x1="12" x2="12" y1="8" y2="12"></line><line x1="12" x2="12.01" y1="16" y2="16"></line></svg>
+</button>
+<button class="text-rial-muted" data-purpose="nav-item">
+<svg fill="none" height="24" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+</button>
+</div>
+</nav>
+<!-- END: Bottom Navigation -->
+</main>
+<!-- END: Main Container -->
+</body></html>

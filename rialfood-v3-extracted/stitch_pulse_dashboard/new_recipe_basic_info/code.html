@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Playfair+Display:ital,wght@0,400;0,700;1,400&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              colors: {
+                "primary": "#25aff4",
+                "background-light": "#f5f7f8",
+                "background-dark": "#101c22",
+              },
+              fontFamily: {
+                "display": ["Inter", "sans-serif"],
+                "serif": ["Playfair Display", "serif"]
+              },
+              borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+            },
+          },
+        }
+    </script>
+<title>New Recipe - Editorial Tech</title>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark font-display text-slate-900 dark:text-slate-100">
+<div class="relative flex h-auto min-h-screen w-full flex-col bg-background-light dark:bg-background-dark overflow-x-hidden">
+<header class="flex items-center bg-background-light dark:bg-background-dark p-6 justify-between border-b border-slate-200 dark:border-slate-800">
+<div class="text-slate-900 dark:text-slate-100 flex size-10 shrink-0 items-center justify-center cursor-pointer" data-icon="close">
+<span class="material-symbols-outlined text-2xl">close</span>
+</div>
+<div class="flex flex-col items-center">
+<span class="text-[10px] uppercase tracking-[0.2em] font-bold text-primary mb-1">Creation Suite</span>
+<h2 class="text-slate-900 dark:text-slate-100 text-sm font-serif italic leading-tight tracking-tight">New Recipe</h2>
+</div>
+<div class="flex w-10 items-center justify-end">
+<p class="text-slate-400 dark:text-slate-500 text-xs font-bold uppercase tracking-widest shrink-0 cursor-pointer hover:text-primary transition-colors">Cancel</p>
+</div>
+</header>
+<nav class="flex w-full flex-row items-center justify-center gap-2 py-8">
+<div class="h-1 w-8 rounded-full bg-primary"></div>
+<div class="h-1 w-8 rounded-full bg-slate-200 dark:bg-slate-800"></div>
+<div class="h-1 w-8 rounded-full bg-slate-200 dark:bg-slate-800"></div>
+<div class="h-1 w-8 rounded-full bg-slate-200 dark:bg-slate-800"></div>
+</nav>
+<main class="max-w-2xl mx-auto w-full px-6 pb-24">
+<div class="mb-10 text-center">
+<p class="text-primary text-xs font-bold uppercase tracking-[0.3em] mb-4">Step One</p>
+<h1 class="font-serif text-5xl md:text-6xl text-slate-900 dark:text-slate-100 leading-tight">Foundation &amp; <br/><span class="italic">Visuals</span></h1>
+</div>
+<section class="space-y-12">
+<div class="@container">
+<div class="relative group">
+<div class="w-full bg-slate-200 dark:bg-slate-800 rounded-xl overflow-hidden aspect-[4/3] flex flex-col items-center justify-center border-2 border-dashed border-slate-300 dark:border-slate-700 hover:border-primary transition-all cursor-pointer relative" data-alt="Gourmet food flatlay with rustic textures" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuD2JXQGJv1q_l3vh4DnTrchrIAMhpsIzS1V07w2qqER7QH0kCkmP6-EY4wUWoBmbKizkLLIRkgoANXrQ0WH1ps_w02YM8ScuFGbwooPE94-r2s2wGeh7gnT8NXZH-7xmcjIcY3fi-2H52j2_LFTcnJSYlJrI_UrRyVXbAsAJwKKTZjBxNFO6wxBvGfWBxvdXeZf4Z3DLIFs0cUU4PlKS8F3gZ70rBL-o10dTGwGJCOihhFUinKMxFiRr-90Ogz1ymzXaK2JWXzS4-gs"); background-size: cover; background-position: center;'>
+<div class="absolute inset-0 bg-black/40 flex flex-col items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity backdrop-blur-sm">
+<span class="material-symbols-outlined text-white text-4xl mb-2">photo_camera</span>
+<span class="text-white font-bold uppercase tracking-widest text-xs">Update Cover Photo</span>
+</div>
+<div class="absolute bottom-4 right-4 bg-white/90 dark:bg-slate-900/90 p-3 rounded-lg backdrop-blur shadow-xl">
+<span class="material-symbols-outlined text-slate-900 dark:text-slate-100">add_a_photo</span>
+</div>
+</div>
+<p class="mt-3 text-[10px] text-slate-500 uppercase tracking-widest text-center">Visual representation of your culinary masterpiece</p>
+</div>
+</div>
+<div class="space-y-8">
+<div class="flex flex-col gap-2">
+<label class="text-[10px] uppercase tracking-[0.2em] font-bold text-slate-400 dark:text-slate-600">Recipe Title</label>
+<input class="w-full bg-transparent border-0 border-b border-slate-200 dark:border-slate-800 focus:ring-0 focus:border-primary text-3xl font-serif text-slate-900 dark:text-slate-100 placeholder:text-slate-300 dark:placeholder:text-slate-700 py-4 transition-all" placeholder="e.g. Wild Mushroom Risotto" type="text"/>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+<div class="flex flex-col gap-2">
+<label class="text-[10px] uppercase tracking-[0.2em] font-bold text-slate-400 dark:text-slate-600">Preparation Time</label>
+<div class="relative">
+<span class="absolute left-0 top-1/2 -translate-y-1/2 material-symbols-outlined text-primary">schedule</span>
+<input class="w-full bg-transparent border-0 border-b border-slate-200 dark:border-slate-800 focus:ring-0 focus:border-primary pl-8 py-3 text-slate-900 dark:text-slate-100" placeholder="e.g. 45 Minutes" type="text"/>
+</div>
+</div>
+<div class="flex flex-col gap-2">
+<label class="text-[10px] uppercase tracking-[0.2em] font-bold text-slate-400 dark:text-slate-600">Difficulty Level</label>
+<div class="relative">
+<span class="absolute left-0 top-1/2 -translate-y-1/2 material-symbols-outlined text-primary">equalizer</span>
+<select class="w-full bg-transparent border-0 border-b border-slate-200 dark:border-slate-800 focus:ring-0 focus:border-primary pl-8 py-3 text-slate-900 dark:text-slate-100 appearance-none">
+<option>Beginner</option>
+<option>Intermediate</option>
+<option>Advanced Chef</option>
+</select>
+</div>
+</div>
+</div>
+<div class="flex flex-col gap-4">
+<label class="text-[10px] uppercase tracking-[0.2em] font-bold text-slate-400 dark:text-slate-600">Cuisine Tags</label>
+<div class="flex flex-wrap gap-2">
+<span class="px-4 py-2 rounded-full bg-primary text-white text-xs font-bold flex items-center gap-2">Italian <span class="material-symbols-outlined text-sm">close</span></span>
+<span class="px-4 py-2 rounded-full bg-primary/10 text-primary text-xs font-bold flex items-center gap-2 border border-primary/20">Dinner</span>
+<button class="px-4 py-2 rounded-full border border-slate-200 dark:border-slate-800 text-slate-400 dark:text-slate-600 text-xs font-bold hover:border-primary hover:text-primary transition-colors flex items-center gap-1">
+<span class="material-symbols-outlined text-sm">add</span> Add Tag
+                            </button>
+</div>
+</div>
+</div>
+</section>
+</main>
+<footer class="fixed bottom-0 left-0 right-0 p-6 bg-background-light/80 dark:bg-background-dark/80 backdrop-blur-lg border-t border-slate-200 dark:border-slate-800 flex justify-between items-center z-50">
+<div class="flex flex-col">
+<span class="text-[10px] uppercase tracking-[0.1em] text-slate-500 font-bold">Progress</span>
+<span class="text-xs text-slate-900 dark:text-slate-100 font-serif italic">25% Complete</span>
+</div>
+<button class="bg-primary hover:bg-primary/90 text-white px-10 py-4 rounded-lg font-bold uppercase tracking-[0.2em] text-xs transition-all shadow-lg shadow-primary/20 flex items-center gap-3">
+                Next Step
+                <span class="material-symbols-outlined text-sm">arrow_forward</span>
+</button>
+</footer>
+</div>
+</body></html>

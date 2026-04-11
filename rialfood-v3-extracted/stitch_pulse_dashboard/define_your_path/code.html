@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>RIAL - Goal Setting</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#007dff",
+                        "background-light": "#f5f7f8",
+                        "background-dark": "#0f1923",
+                    },
+                    fontFamily: {
+                        "display": ["Space Grotesk"]
+                    },
+                    borderRadius: {"DEFAULT": "0.5rem", "lg": "1rem", "xl": "1.5rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+        .goal-card-active {
+            border: 2px solid #007dff;
+            background: rgba(0, 125, 255, 0.1);
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark font-display text-slate-900 dark:text-slate-100 min-h-screen flex flex-col">
+<!-- Header Navigation -->
+<header class="flex items-center justify-between p-4 bg-background-light dark:bg-background-dark border-b border-slate-200 dark:border-slate-800">
+<button class="w-10 h-10 flex items-center justify-center rounded-full hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">
+<span class="material-symbols-outlined">arrow_back</span>
+</button>
+<h1 class="text-lg font-bold tracking-tight">Goal Setting</h1>
+<div class="w-10"></div> <!-- Spacer for symmetry -->
+</header>
+<!-- Progress Section -->
+<div class="p-6 flex flex-col gap-3">
+<div class="flex justify-between items-end">
+<div>
+<span class="text-xs font-bold uppercase tracking-widest text-primary">Onboarding</span>
+<p class="text-sm text-slate-500 dark:text-slate-400">Human-Centric Precision</p>
+</div>
+<p class="text-sm font-medium">Step 3 of 5</p>
+</div>
+<div class="h-1.5 w-full bg-slate-200 dark:bg-slate-800 rounded-full overflow-hidden">
+<div class="h-full bg-primary rounded-full" style="width: 60%;"></div>
+</div>
+</div>
+<!-- Main Content -->
+<main class="flex-1 px-6 pb-24">
+<div class="text-center mb-10">
+<h2 class="text-3xl font-bold leading-tight mb-3">What is your primary focus?</h2>
+<p class="text-slate-500 dark:text-slate-400 max-w-xs mx-auto">Select the path that best aligns with your current physical and mental objectives.</p>
+</div>
+<!-- Goal Selection Cards -->
+<div class="grid gap-4">
+<!-- Option 1: Volume -->
+<button class="flex items-center gap-4 p-5 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900/50 hover:border-primary transition-all text-left group">
+<div class="w-12 h-12 rounded-lg bg-primary/10 flex items-center justify-center text-primary group-hover:bg-primary group-hover:text-white transition-colors">
+<span class="material-symbols-outlined text-2xl">fitness_center</span>
+</div>
+<div class="flex-1">
+<h3 class="font-bold text-lg">Hypertrophy &amp; Volume</h3>
+<p class="text-sm text-slate-500 dark:text-slate-400">Increase muscle mass and structural strength.</p>
+</div>
+<span class="material-symbols-outlined text-slate-300 dark:text-slate-700">chevron_right</span>
+</button>
+<!-- Option 2: Definition -->
+<button class="flex items-center gap-4 p-5 rounded-xl border-2 border-primary bg-primary/5 dark:bg-primary/10 text-left group">
+<div class="w-12 h-12 rounded-lg bg-primary flex items-center justify-center text-white">
+<span class="material-symbols-outlined text-2xl">body_fat</span>
+</div>
+<div class="flex-1">
+<h3 class="font-bold text-lg">Lean Definition</h3>
+<p class="text-sm text-slate-500 dark:text-slate-400">Optimize body composition and metabolic health.</p>
+</div>
+<span class="material-symbols-outlined text-primary">check_circle</span>
+</button>
+<!-- Option 3: Maintenance -->
+<button class="flex items-center gap-4 p-5 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900/50 hover:border-primary transition-all text-left group">
+<div class="w-12 h-12 rounded-lg bg-primary/10 flex items-center justify-center text-primary group-hover:bg-primary group-hover:text-white transition-colors">
+<span class="material-symbols-outlined text-2xl">balance</span>
+</div>
+<div class="flex-1">
+<h3 class="font-bold text-lg">Sustainable Maintenance</h3>
+<p class="text-sm text-slate-500 dark:text-slate-400">Consistent performance and balanced vitality.</p>
+</div>
+<span class="material-symbols-outlined text-slate-300 dark:text-slate-700">chevron_right</span>
+</button>
+<!-- Option 4: Family Health -->
+<button class="flex items-center gap-4 p-5 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900/50 hover:border-primary transition-all text-left group">
+<div class="w-12 h-12 rounded-lg bg-primary/10 flex items-center justify-center text-primary group-hover:bg-primary group-hover:text-white transition-colors">
+<span class="material-symbols-outlined text-2xl">family_restroom</span>
+</div>
+<div class="flex-1">
+<h3 class="font-bold text-lg">Family Longevity</h3>
+<p class="text-sm text-slate-500 dark:text-slate-400">Holistic well-being for you and your loved ones.</p>
+</div>
+<span class="material-symbols-outlined text-slate-300 dark:text-slate-700">chevron_right</span>
+</button>
+</div>
+<div class="mt-10 mb-6">
+<button class="w-full py-4 bg-primary text-white font-bold rounded-xl shadow-lg shadow-primary/20 hover:opacity-90 transition-opacity">
+                Refine Selection
+            </button>
+</div>
+</main>
+<!-- Bottom Navigation -->
+<nav class="fixed bottom-0 left-0 right-0 bg-white/80 dark:bg-background-dark/80 backdrop-blur-md border-t border-slate-200 dark:border-slate-800 px-6 py-3 flex justify-between items-center z-50">
+<a class="flex flex-col items-center gap-1 text-slate-400" href="#">
+<span class="material-symbols-outlined">home</span>
+</a>
+<a class="flex flex-col items-center gap-1 text-primary" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1">track_changes</span>
+</a>
+<a class="flex flex-col items-center gap-1 text-slate-400" href="#">
+<span class="material-symbols-outlined">bar_chart</span>
+</a>
+<a class="flex flex-col items-center gap-1 text-slate-400" href="#">
+<span class="material-symbols-outlined">person</span>
+</a>
+</nav>
+<!-- Background Decorative Element -->
+<div class="fixed top-0 right-0 -z-10 w-full h-full opacity-10 pointer-events-none overflow-hidden">
+<div class="absolute top-[-10%] right-[-10%] w-[500px] h-[500px] bg-primary rounded-full blur-[120px]"></div>
+<div class="absolute bottom-[-10%] left-[-10%] w-[300px] h-[300px] bg-primary rounded-full blur-[100px]"></div>
+</div>
+</body></html>

@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>RIAL - Master Journal</title>
+<!-- Tailwind CSS v3 with plugins -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            charcoal: '#121212',
+            cream: '#F5F5F0',
+            lime: '#D4FF3F',
+            softGray: '#2A2A2A'
+          },
+          fontFamily: {
+            serif: ['Georgia', 'serif'],
+            sans: ['Inter', 'sans-serif']
+          }
+        }
+      }
+    }
+  </script>
+<!-- BEGIN: Custom Typography Styles -->
+<style data-purpose="typography">
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap');
+    
+    body {
+      font-family: 'Inter', sans-serif;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .editorial-title {
+      font-family: 'Georgia', serif;
+      letter-spacing: -0.02em;
+    }
+  </style>
+<!-- END: Custom Typography Styles -->
+</head>
+<body class="bg-charcoal text-cream min-h-screen pb-20">
+<!-- BEGIN: Header Navigation -->
+<header class="p-6 flex justify-between items-center" data-purpose="main-header">
+<div class="text-2xl font-bold tracking-tighter editorial-title">RIAL</div>
+<div class="flex gap-4 items-center">
+<div class="w-8 h-8 rounded-full bg-lime/20 flex items-center justify-center border border-lime/30">
+<div class="w-2 h-2 rounded-full bg-lime"></div>
+</div>
+<button class="p-2 bg-softGray rounded-full">
+<svg class="h-5 w-5" fill="none" stroke="currentColor" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+<path d="M4 6h16M4 12h16m-7 6h7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+</svg>
+</button>
+</div>
+</header>
+<!-- END: Header Navigation -->
+<main class="px-6 space-y-8">
+<!-- BEGIN: Hero Section - Featured Meal -->
+<section class="relative group" data-purpose="hero-meal-display">
+<div class="aspect-[4/5] overflow-hidden rounded-3xl relative">
+<img alt="High-quality gourmet salad bowl" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCVCFSHuz4ArWMohTej8xyNlr3pZv0weY2DXMO3WA2llKx4iR6S4GmaP00rtIlRiEdvYedO5WapeJE7oPrYtVbMNuiahRBYfJGeoK70FB_ccgdaMi9Ect1X2aW59x224b1xBz55bSkr3PsjLCNO768r_qmirNpijfSTHEBEAKIrKzN_LK-_RUBuUa9z86Z9sy7_IzsESwZ3Ss5INqrp5pHfgakEge3AjewZMRGhPQaMqlE8_Gm-m_iJ-wSCUchkIay22KpZmec_wFRu"/>
+<!-- Gradient Overlay for legibility -->
+<div class="absolute inset-0 bg-gradient-to-t from-charcoal/80 via-transparent to-transparent"></div>
+<!-- Real Match Overlay -->
+<div class="absolute top-4 right-4 bg-lime text-charcoal px-4 py-2 rounded-full flex items-center gap-2 shadow-xl">
+<span class="text-xs font-bold uppercase tracking-widest">Real Match</span>
+<span class="text-xl font-bold editorial-title">94%</span>
+</div>
+<div class="absolute bottom-6 left-6 right-6">
+<p class="text-lime text-xs font-semibold tracking-widest uppercase mb-1">Dinner Recommendation</p>
+<h2 class="text-3xl font-medium editorial-title leading-tight">Harvest Quinoa &amp; <br/>Charred Halloumi</h2>
+</div>
+</div>
+</section>
+<!-- END: Hero Section -->
+<!-- BEGIN: Real Feel Section -->
+<section data-purpose="biometric-insights">
+<h3 class="text-sm font-semibold text-gray-400 uppercase tracking-widest mb-4">Real Feel</h3>
+<div class="grid grid-cols-2 gap-4">
+<!-- Energy Insight -->
+<div class="bg-softGray p-5 rounded-2xl flex flex-col gap-3">
+<div class="flex justify-between items-start">
+<div class="p-2 bg-lime/10 rounded-lg text-lime">
+<svg class="h-6 w-6" fill="none" stroke="currentColor" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+<path d="M13 10V3L4 14h7v7l9-11h-7z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+</svg>
+</div>
+<span class="text-xs text-lime">+12%</span>
+</div>
+<div>
+<p class="text-xs text-gray-400">Energy Level</p>
+<p class="text-lg font-medium">Sustained</p>
+</div>
+</div>
+<!-- Digestion Insight -->
+<div class="bg-softGray p-5 rounded-2xl flex flex-col gap-3">
+<div class="flex justify-between items-start">
+<div class="p-2 bg-lime/10 rounded-lg text-lime">
+<svg class="h-6 w-6" fill="none" stroke="currentColor" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+<path d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+</svg>
+</div>
+<span class="text-xs text-lime">Optimal</span>
+</div>
+<div>
+<p class="text-xs text-gray-400">Digestion</p>
+<p class="text-lg font-medium">Light</p>
+</div>
+</div>
+</div>
+</section>
+<!-- END: Real Feel Section -->
+<!-- BEGIN: Community Feed Section -->
+<section data-purpose="social-feed">
+<div class="flex justify-between items-center mb-4">
+<h3 class="text-sm font-semibold text-gray-400 uppercase tracking-widest">Community</h3>
+<button class="text-xs text-lime font-medium uppercase tracking-wider">View All</button>
+</div>
+<!-- Feed Card -->
+<article class="bg-softGray rounded-3xl p-4 flex gap-4 items-center" data-purpose="feed-card">
+<div class="relative flex-shrink-0">
+<img alt="Friend's breakfast" class="w-20 h-20 rounded-2xl object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDDbjTbPKVith5vBPk6JMxDqCHOjuH87cTUnRseCT51UJaMiZDsL8aCuzBJMW5pMwrx6M3RWpjCkBVzLLQ0pjWdQX-wJjDaP58DAwEngJfNV0eLZEbHpiNj6I_7-vvkIHaserd4d0Ao8JNF9OMZsgyASmD72KRTqsYIDxyzzv2TOJ4S-bkcroRVD9DJy-LrymQp-aI0pFReQbwt_Tdtz0k_VeBZd2oEC_jKTIFtxwWNZpb3jb7YAyc5gaPYNcgZ8AFqG4WZYidntHYT"/>
+<div class="absolute -bottom-1 -right-1 bg-lime text-charcoal text-[10px] px-1.5 py-0.5 rounded font-bold uppercase">
+            Data
+          </div>
+</div>
+<div class="flex-grow">
+<div class="flex items-center gap-2 mb-1">
+<div class="w-5 h-5 rounded-full bg-gray-600"></div>
+<span class="text-xs font-semibold">Julian R.</span>
+</div>
+<h4 class="text-sm font-medium mb-1">Pre-Workout Berry Bowl</h4>
+<div class="flex gap-3 items-center">
+<span class="text-[10px] text-gray-400">High Fiber</span>
+<span class="text-[10px] text-gray-400">Clean Fuel</span>
+</div>
+</div>
+<button class="p-2">
+<svg class="h-5 w-5 text-gray-500" fill="none" stroke="currentColor" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+<path d="M12 4v16m8-8H4" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+</svg>
+</button>
+</article>
+</section>
+<!-- END: Community Feed Section -->
+</main>
+<!-- BEGIN: Bottom Navigation -->
+<nav class="fixed bottom-0 left-0 right-0 bg-charcoal/90 backdrop-blur-md border-t border-white/5 px-8 py-4 flex justify-between items-center z-50">
+<button class="text-lime">
+<svg class="h-6 w-6" fill="currentColor" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+<path d="M3 13h1v7c0 1.103.897 2 2 2h12c1.103 0 2-.897 2-2v-7h1a1 1 0 00.707-1.707l-9-9a.999.999 0 00-1.414 0l-9 9A1 1 0 003 13zm7 7v-5h4v5h-4z"></path>
+</svg>
+</button>
+<button class="text-gray-500">
+<svg class="h-6 w-6" fill="none" stroke="currentColor" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+<path d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+</svg>
+</button>
+<div class="relative -top-8">
+<button class="bg-lime w-14 h-14 rounded-full flex items-center justify-center text-charcoal shadow-2xl shadow-lime/20 border-4 border-charcoal">
+<svg class="h-8 w-8" fill="none" stroke="currentColor" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+<path d="M12 6v6m0 0v6m0-6h6m-6 0H6" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+</svg>
+</button>
+</div>
+<button class="text-gray-500">
+<svg class="h-6 w-6" fill="none" stroke="currentColor" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+<path d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+</svg>
+</button>
+<button class="text-gray-500">
+<svg class="h-6 w-6" fill="none" stroke="currentColor" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+<path d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+<path d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+</svg>
+</button>
+</nav>
+<!-- END: Bottom Navigation -->
+</body></html>

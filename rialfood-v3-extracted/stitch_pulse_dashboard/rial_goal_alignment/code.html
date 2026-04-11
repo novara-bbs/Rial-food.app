@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>RIAL - Advanced Goal Setting</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Space+Grotesk:wght@500;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              colors: {
+                "primary": "#25aff4",
+                "vitality-lime": "#d4ff00",
+                "background-light": "#f5f7f8",
+                "background-dark": "#101c22",
+              },
+              fontFamily: {
+                "display": ["Inter", "sans-serif"],
+                "heading": ["Space Grotesk", "sans-serif"]
+              },
+              borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+            },
+          },
+        }
+    </script>
+<style>
+        .vitality-accent {
+            background-color: #d4ff00;
+        }
+        .text-vitality {
+            color: #b5db00;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark font-display text-slate-900 dark:text-slate-100 antialiased">
+<div class="relative flex min-h-screen w-full max-w-[480px] mx-auto flex-col bg-white dark:bg-background-dark overflow-x-hidden shadow-2xl">
+<!-- Header -->
+<div class="flex items-center bg-white dark:bg-background-dark p-4 pb-2 justify-between">
+<button class="text-slate-900 dark:text-slate-100 flex size-12 shrink-0 items-center justify-center rounded-full hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">
+<span class="material-symbols-outlined">arrow_back</span>
+</button>
+<h2 class="font-heading text-slate-900 dark:text-slate-100 text-xl font-bold leading-tight tracking-tight flex-1 text-center pr-12">RIAL</h2>
+</div>
+<!-- Progress Section -->
+<div class="flex flex-col gap-3 p-6">
+<div class="flex gap-6 justify-between items-end">
+<p class="text-slate-900 dark:text-slate-100 text-sm font-semibold uppercase tracking-wider font-heading">Step 3 of 5</p>
+<p class="text-slate-500 dark:text-slate-400 text-xs font-medium">60% Complete</p>
+</div>
+<div class="h-1.5 w-full rounded-full bg-slate-100 dark:bg-slate-800 overflow-hidden">
+<div class="h-full rounded-full bg-primary" style="width: 60%;"></div>
+</div>
+</div>
+<!-- Hero Title -->
+<div class="px-6 pt-8 pb-4">
+<h1 class="font-heading text-slate-900 dark:text-slate-100 text-3xl font-bold leading-tight text-center">
+                What is your <span class="relative">Real Goal<span class="absolute -bottom-1 left-0 w-full h-2 bg-vitality-lime/40 -z-10"></span></span> today?
+            </h1>
+<p class="text-slate-500 dark:text-slate-400 text-base font-normal leading-relaxed mt-4 text-center max-w-[280px] mx-auto">
+                Select a focus to tailor your RIAL experience to your specific lifestyle needs.
+            </p>
+</div>
+<!-- Options List -->
+<div class="flex flex-col gap-4 p-6 flex-1">
+<!-- Option 1: Performance -->
+<button class="group relative flex items-center gap-4 p-5 rounded-xl border-2 border-slate-100 dark:border-slate-800 hover:border-primary transition-all text-left bg-white dark:bg-slate-900 shadow-sm hover:shadow-md">
+<div class="flex h-14 w-14 shrink-0 items-center justify-center rounded-lg bg-primary/10 text-primary group-hover:bg-primary group-hover:text-white transition-colors">
+<span class="material-symbols-outlined !text-3xl">sports_score</span>
+</div>
+<div class="flex flex-col">
+<span class="text-slate-900 dark:text-slate-100 font-heading font-bold text-lg">High-Performance Athlete</span>
+<span class="text-slate-500 dark:text-slate-400 text-sm">Performance focus for elite results</span>
+</div>
+<div class="ml-auto opacity-0 group-hover:opacity-100 transition-opacity">
+<span class="material-symbols-outlined text-primary">check_circle</span>
+</div>
+</button>
+<!-- Option 2: Family -->
+<button class="group relative flex items-center gap-4 p-5 rounded-xl border-2 border-slate-100 dark:border-slate-800 hover:border-primary transition-all text-left bg-white dark:bg-slate-900 shadow-sm hover:shadow-md">
+<div class="flex h-14 w-14 shrink-0 items-center justify-center rounded-lg bg-primary/10 text-primary group-hover:bg-primary group-hover:text-white transition-colors">
+<span class="material-symbols-outlined !text-3xl">family_restroom</span>
+</div>
+<div class="flex flex-col">
+<span class="text-slate-900 dark:text-slate-100 font-heading font-bold text-lg">Family Wellness</span>
+<span class="text-slate-500 dark:text-slate-400 text-sm">Efficiency focus for busy households</span>
+</div>
+<div class="ml-auto opacity-0 group-hover:opacity-100 transition-opacity">
+<span class="material-symbols-outlined text-primary">check_circle</span>
+</div>
+</button>
+<!-- Option 3: Longevity -->
+<button class="group relative flex items-center gap-4 p-5 rounded-xl border-2 border-slate-100 dark:border-slate-800 hover:border-primary transition-all text-left bg-white dark:bg-slate-900 shadow-sm hover:shadow-md">
+<div class="flex h-14 w-14 shrink-0 items-center justify-center rounded-lg bg-primary/10 text-primary group-hover:bg-primary group-hover:text-white transition-colors">
+<span class="material-symbols-outlined !text-3xl">auto_awesome</span>
+</div>
+<div class="flex flex-col">
+<span class="text-slate-900 dark:text-slate-100 font-heading font-bold text-lg">Longevity &amp; Health</span>
+<span class="text-slate-500 dark:text-slate-400 text-sm">Correlation focus for lifelong vitality</span>
+</div>
+<div class="ml-auto opacity-0 group-hover:opacity-100 transition-opacity">
+<span class="material-symbols-outlined text-primary">check_circle</span>
+</div>
+</button>
+</div>
+<!-- Sticky Footer Action -->
+<div class="p-6 pt-2 pb-10">
+<button class="w-full vitality-accent py-4 rounded-xl font-heading font-bold text-slate-900 hover:brightness-95 transition-all shadow-lg shadow-vitality-lime/20 flex items-center justify-center gap-2">
+                Continue
+                <span class="material-symbols-outlined">arrow_forward</span>
+</button>
+<p class="text-center text-slate-400 text-xs mt-4">You can change your goal anytime in settings.</p>
+</div>
+<!-- Bottom Navigation -->
+<div class="mt-auto flex gap-2 border-t border-slate-100 dark:border-slate-800 bg-white dark:bg-background-dark px-4 pb-6 pt-3">
+<a class="flex flex-1 flex-col items-center justify-center gap-1 text-slate-400 hover:text-primary transition-colors" href="#">
+<span class="material-symbols-outlined">home</span>
+</a>
+<a class="flex flex-1 flex-col items-center justify-center gap-1 text-primary" href="#">
+<span class="material-symbols-outlined">track_changes</span>
+</a>
+<a class="flex flex-1 flex-col items-center justify-center gap-1 text-slate-400 hover:text-primary transition-colors" href="#">
+<span class="material-symbols-outlined">bar_chart</span>
+</a>
+<a class="flex flex-1 flex-col items-center justify-center gap-1 text-slate-400 hover:text-primary transition-colors" href="#">
+<span class="material-symbols-outlined">person</span>
+</a>
+</div>
+</div>
+</body></html>

@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>RIAL - Smart Kitchen Inventory</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#607AFB",
+                        "background-light": "#f5f6f8",
+                        "background-dark": "#0f1323",
+                    },
+                    fontFamily: {
+                        "display": ["Space Grotesk"]
+                    },
+                    borderRadius: {"DEFAULT": "0.5rem", "lg": "1rem", "xl": "1.5rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark font-display text-slate-900 dark:text-slate-100">
+<div class="relative flex min-h-screen w-full flex-col bg-background-light dark:bg-background-dark max-w-md mx-auto shadow-2xl overflow-x-hidden">
+<!-- Header -->
+<header class="flex items-center bg-white dark:bg-slate-900 p-4 sticky top-0 z-10 border-b border-slate-200 dark:border-slate-800 justify-between">
+<div class="text-primary flex size-10 shrink-0 items-center justify-center bg-primary/10 rounded-lg">
+<span class="material-symbols-outlined text-2xl">kitchen</span>
+</div>
+<h1 class="text-slate-900 dark:text-slate-100 text-xl font-bold leading-tight tracking-tight flex-1 ml-3">Kitchen Hub</h1>
+<div class="flex gap-2">
+<button class="flex size-10 items-center justify-center rounded-lg bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300">
+<span class="material-symbols-outlined">search</span>
+</button>
+<button class="flex size-10 items-center justify-center rounded-lg bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 relative">
+<span class="material-symbols-outlined">notifications</span>
+<span class="absolute top-2 right-2 flex h-2 w-2 rounded-full bg-red-500"></span>
+</button>
+</div>
+</header>
+<!-- Navigation Tabs -->
+<nav class="bg-white dark:bg-slate-900">
+<div class="flex border-b border-slate-200 dark:border-slate-800 px-4 gap-6 overflow-x-auto no-scrollbar">
+<a class="flex flex-col items-center justify-center border-b-2 border-primary text-primary pb-3 pt-4" href="#">
+<p class="text-sm font-bold">Fridge</p>
+</a>
+<a class="flex flex-col items-center justify-center border-b-2 border-transparent text-slate-500 dark:text-slate-400 pb-3 pt-4" href="#">
+<p class="text-sm font-bold">Pantry</p>
+</a>
+<a class="flex flex-col items-center justify-center border-b-2 border-transparent text-slate-500 dark:text-slate-400 pb-3 pt-4" href="#">
+<p class="text-sm font-bold">Freezer</p>
+</a>
+<a class="flex flex-col items-center justify-center border-b-2 border-transparent text-slate-500 dark:text-slate-400 pb-3 pt-4" href="#">
+<p class="text-sm font-bold">All</p>
+</a>
+</div>
+</nav>
+<main class="flex-1 overflow-y-auto pb-24">
+<!-- Critical Status Banner -->
+<div class="p-4">
+<div class="bg-primary/10 border border-primary/20 rounded-xl p-4 flex items-center justify-between">
+<div class="flex items-center gap-3">
+<div class="bg-primary text-white size-10 rounded-full flex items-center justify-center">
+<span class="material-symbols-outlined">shopping_cart_checkout</span>
+</div>
+<div>
+<p class="text-sm font-bold text-slate-900 dark:text-slate-100">4 items low in stock</p>
+<p class="text-xs text-slate-600 dark:text-slate-400">Added to Smart Shopping List</p>
+</div>
+</div>
+<button class="text-primary text-sm font-bold px-3 py-1 hover:bg-primary/5 rounded-lg">View List</button>
+</div>
+</div>
+<!-- Freshness Scores -->
+<section>
+<div class="flex items-center justify-between px-4 pt-4 pb-2">
+<h2 class="text-slate-900 dark:text-slate-100 text-lg font-bold">Freshness Alerts</h2>
+<span class="text-xs text-primary font-medium">Updated 5m ago</span>
+</div>
+<div class="grid grid-cols-2 gap-3 p-4">
+<div class="flex flex-col gap-3 p-3 bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800">
+<div class="w-full aspect-square bg-slate-100 dark:bg-slate-800 rounded-lg relative overflow-hidden">
+<img class="object-cover w-full h-full" data-alt="Close up photo of fresh strawberries" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCPhN7VaLnZzLeIXdD5j7rdMKl7D7BZwB-a7zFkIKGYEHzUa_iIjUK373Tnzka4BaMyGiK4lTi38_hyxhtNGwmDK4c_2zylvlmiDZEPjCjn2LItfa79fBA_IkFE8-brWrKeRMjQLk2LosVa8xmVU6ooB1xT5kfla1BwXghvZMqOpWAJB1NbxvIYngH97-29k66DnUIWY78N5IMBBEqlbZsK2Ovm2frlGFvwDKNEffeQ5nI2uupAS6zvV0o2msjuTyxFDcukye3VBJkD"/>
+<div class="absolute top-2 right-2 bg-yellow-500 text-white text-[10px] font-bold px-1.5 py-0.5 rounded uppercase">2 Days Left</div>
+</div>
+<div>
+<p class="text-slate-900 dark:text-slate-100 text-sm font-bold">Organic Strawberries</p>
+<div class="mt-2 h-1.5 w-full bg-slate-100 dark:bg-slate-800 rounded-full overflow-hidden">
+<div class="bg-yellow-500 h-full w-[40%] rounded-full"></div>
+</div>
+<p class="text-slate-500 dark:text-slate-400 text-[11px] mt-1 font-medium">Freshness Score: 40%</p>
+</div>
+</div>
+<div class="flex flex-col gap-3 p-3 bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800">
+<div class="w-full aspect-square bg-slate-100 dark:bg-slate-800 rounded-lg relative overflow-hidden">
+<img class="object-cover w-full h-full" data-alt="Close up photo of fresh green spinach" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDfa0CGeEGSOd1ERi1uwAnif2i2f-B6oqOtVBuVe1d6owlNzjWnN_4VkAy9gMUnaNZfWOfMMf3D9isd7kwUEdjhIWa4jm-3JFtjmkjc2bGCfQPPEFVI_Wo-ma5ngWG0XFC9pyf1nUeBXmSVUuYiCiBX1GVQIrGEE0xlXOzHQGsUW3g3jdV3bvwoAlsWdlD3OJtsZnzokgb-lugbWFlap86XZWWXtgXU6jODw886KkODeB5O7ddln-qN1gF9FHFGCvkS97RW7Sw-cie2"/>
+<div class="absolute top-2 right-2 bg-red-500 text-white text-[10px] font-bold px-1.5 py-0.5 rounded uppercase">Expires Today</div>
+</div>
+<div>
+<p class="text-slate-900 dark:text-slate-100 text-sm font-bold">Baby Spinach</p>
+<div class="mt-2 h-1.5 w-full bg-slate-100 dark:bg-slate-800 rounded-full overflow-hidden">
+<div class="bg-red-500 h-full w-[15%] rounded-full"></div>
+</div>
+<p class="text-slate-500 dark:text-slate-400 text-[11px] mt-1 font-medium">Freshness Score: 15%</p>
+</div>
+</div>
+</div>
+</section>
+<!-- Stock Levels -->
+<section class="mt-4">
+<div class="flex items-center justify-between px-4 pb-3">
+<h2 class="text-slate-900 dark:text-slate-100 text-lg font-bold">Stock Levels</h2>
+<button class="text-primary text-sm font-bold">Manage</button>
+</div>
+<div class="px-4 space-y-3">
+<!-- Milk -->
+<div class="flex items-center gap-4 p-4 bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800">
+<div class="size-12 bg-blue-50 dark:bg-blue-900/20 text-blue-500 flex items-center justify-center rounded-lg">
+<span class="material-symbols-outlined">opacity</span>
+</div>
+<div class="flex-1">
+<div class="flex justify-between items-center mb-1">
+<p class="text-slate-900 dark:text-slate-100 text-sm font-bold">Whole Milk</p>
+<p class="text-slate-500 dark:text-slate-400 text-xs font-medium">25% Left</p>
+</div>
+<div class="h-2 w-full bg-slate-100 dark:bg-slate-800 rounded-full overflow-hidden">
+<div class="bg-primary h-full w-1/4 rounded-full"></div>
+</div>
+</div>
+<div class="flex flex-col items-center">
+<span class="material-symbols-outlined text-red-500">add_shopping_cart</span>
+<span class="text-[10px] text-red-500 font-bold">REORDER</span>
+</div>
+</div>
+<!-- Greek Yogurt -->
+<div class="flex items-center gap-4 p-4 bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800">
+<div class="size-12 bg-slate-50 dark:bg-slate-800 text-slate-400 flex items-center justify-center rounded-lg">
+<span class="material-symbols-outlined">set_meal</span>
+</div>
+<div class="flex-1">
+<div class="flex justify-between items-center mb-1">
+<p class="text-slate-900 dark:text-slate-100 text-sm font-bold">Greek Yogurt</p>
+<p class="text-slate-500 dark:text-slate-400 text-xs font-medium">80% Left</p>
+</div>
+<div class="h-2 w-full bg-slate-100 dark:bg-slate-800 rounded-full overflow-hidden">
+<div class="bg-green-500 h-full w-4/5 rounded-full"></div>
+</div>
+</div>
+<div class="flex flex-col items-center text-slate-300">
+<span class="material-symbols-outlined">check_circle</span>
+<span class="text-[10px] font-bold">STOCKED</span>
+</div>
+</div>
+<!-- Eggs -->
+<div class="flex items-center gap-4 p-4 bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800">
+<div class="size-12 bg-yellow-50 dark:bg-yellow-900/20 text-yellow-600 flex items-center justify-center rounded-lg">
+<span class="material-symbols-outlined">egg</span>
+</div>
+<div class="flex-1">
+<div class="flex justify-between items-center mb-1">
+<p class="text-slate-900 dark:text-slate-100 text-sm font-bold">Cage-Free Eggs</p>
+<p class="text-slate-500 dark:text-slate-400 text-xs font-medium">2/12 Remaining</p>
+</div>
+<div class="h-2 w-full bg-slate-100 dark:bg-slate-800 rounded-full overflow-hidden">
+<div class="bg-red-500 h-full w-[16%] rounded-full"></div>
+</div>
+</div>
+<div class="flex flex-col items-center">
+<span class="material-symbols-outlined text-red-500">add_shopping_cart</span>
+<span class="text-[10px] text-red-500 font-bold">REORDER</span>
+</div>
+</div>
+</div>
+</section>
+</main>
+<!-- Bottom Navigation Bar -->
+<div class="fixed bottom-0 left-1/2 -translate-x-1/2 w-full max-w-md bg-white dark:bg-slate-900 border-t border-slate-200 dark:border-slate-800 px-4 pb-6 pt-2 flex justify-between items-center">
+<a class="flex flex-1 flex-col items-center gap-1 text-primary" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1">warehouse</span>
+<p class="text-[10px] font-bold uppercase tracking-wider">Inventory</p>
+</a>
+<a class="flex flex-1 flex-col items-center gap-1 text-slate-400 hover:text-primary transition-colors" href="#">
+<span class="material-symbols-outlined">shopping_basket</span>
+<p class="text-[10px] font-bold uppercase tracking-wider">Shopping</p>
+</a>
+<div class="flex-1 flex justify-center -mt-8">
+<button class="size-12 bg-primary text-white rounded-full shadow-lg flex items-center justify-center border-4 border-background-light dark:border-background-dark">
+<span class="material-symbols-outlined">add</span>
+</button>
+</div>
+<a class="flex flex-1 flex-col items-center gap-1 text-slate-400 hover:text-primary transition-colors" href="#">
+<span class="material-symbols-outlined">menu_book</span>
+<p class="text-[10px] font-bold uppercase tracking-wider">Recipes</p>
+</a>
+<a class="flex flex-1 flex-col items-center gap-1 text-slate-400 hover:text-primary transition-colors" href="#">
+<span class="material-symbols-outlined">settings</span>
+<p class="text-[10px] font-bold uppercase tracking-wider">Settings</p>
+</a>
+</div>
+</div>
+</body></html>

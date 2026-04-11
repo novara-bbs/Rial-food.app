@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>My Personal Cookbook</title>
+<!-- Google Fonts: Space Grotesk -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS v3 with Plugins -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            primary: '#607AFB',
+            surface: '#FDFDFD',
+          },
+          fontFamily: {
+            sans: ['Space Grotesk', 'sans-serif'],
+          },
+          borderRadius: {
+            'custom': '12px',
+          }
+        }
+      }
+    }
+  </script>
+<style data-purpose="editorial-refinements">
+    body {
+      background-color: #F8F9FA;
+      color: #1A1A1A;
+      -webkit-font-smoothing: antialiased;
+    }
+    /* Elegant soft shadows for high-end magazine feel */
+    .recipe-card {
+      box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.05);
+      transition: transform 0.2s ease-out;
+    }
+    .recipe-card:active {
+      transform: scale(0.98);
+    }
+    /* Frame for user photos */
+    .photo-frame {
+      position: relative;
+      overflow: hidden;
+      aspect-ratio: 4 / 5;
+    }
+    .photo-frame::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      border: 1px solid rgba(0,0,0,0.04);
+      pointer-events: none;
+    }
+  </style>
+</head>
+<body class="font-sans">
+<!-- BEGIN: MainHeader -->
+<header class="sticky top-0 z-50 bg-surface/80 backdrop-blur-md border-b border-gray-100 px-6 py-4">
+<div class="flex items-center justify-between max-w-2xl mx-auto">
+<div>
+<span class="text-[10px] uppercase tracking-[0.2em] font-bold text-primary block mb-1">Editorial Kitchen</span>
+<h1 class="text-2xl font-bold tracking-tight">Cookbook</h1>
+</div>
+<button aria-label="Add New Recipe" class="w-10 h-10 flex items-center justify-center bg-gray-100 rounded-full">
+<svg fill="none" height="20" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" viewbox="0 0 24 24" width="20" xmlns="http://www.w3.org/2000/svg"><line x1="12" x2="12" y1="5" y2="19"></line><line x1="5" x2="19" y1="12" y2="12"></line></svg>
+</button>
+</div>
+</header>
+<!-- END: MainHeader -->
+<main class="max-w-2xl mx-auto pb-24">
+<!-- BEGIN: FolderNavigation -->
+<nav class="px-6 py-6 overflow-x-auto no-scrollbar" data-purpose="category-scroller">
+<div class="flex gap-3 min-w-max">
+<button class="px-5 py-2.5 bg-primary text-white text-sm font-semibold rounded-custom shadow-lg shadow-primary/20">All Recipes</button>
+<button class="px-5 py-2.5 bg-white text-gray-500 text-sm font-semibold border border-gray-100 rounded-custom hover:bg-gray-50 transition-colors">Sunday Batch Prep</button>
+<button class="px-5 py-2.5 bg-white text-gray-500 text-sm font-semibold border border-gray-100 rounded-custom hover:bg-gray-50 transition-colors">Quick Dinners</button>
+<button class="px-5 py-2.5 bg-white text-gray-500 text-sm font-semibold border border-gray-100 rounded-custom hover:bg-gray-50 transition-colors">High Protein</button>
+</div>
+</nav>
+<!-- END: FolderNavigation -->
+<!-- BEGIN: RecipeGrid -->
+<section class="px-6 grid grid-cols-2 gap-x-4 gap-y-8" id="recipe-library">
+<!-- Recipe Item 1 -->
+<article class="recipe-card group" data-purpose="recipe-item">
+<div class="photo-frame rounded-custom mb-3 bg-gray-200">
+<img alt="High protein oats bowl" class="w-full h-full object-cover grayscale-[0.2] contrast-[1.1]" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCOZaQiJj3s4MtpJd90wPw_i6Ze1liYwwnKsgXscPd9Xs2NBukdTbIVXByTXVBtkGcL5fnT_4xXtSMv_FqHC4cCf7dx_iliG96wE56UZYmWgAqq62acnZR30FzTho3KTH4OOi_plfrAFRtBOQCvS4fygJOytBcptrm7cPAMs7BPDWK3FilIFE3ae997nvhJfjoLFmvJ8dsU60jbeXgv-f03zXDPrjfOuw-KEfurTrfpQNIV7yg_7j-X5kWNxvsvLDH00kWWTay3N1fG"/>
+<div class="absolute top-2 right-2 px-2 py-1 bg-white/90 backdrop-blur-sm rounded text-[10px] font-bold uppercase tracking-wider">15m</div>
+</div>
+<div class="px-1">
+<span class="text-[9px] uppercase tracking-widest text-primary font-bold mb-1 block">High Protein</span>
+<h3 class="text-sm font-bold leading-snug">Blueberry Overnight Protein Oats</h3>
+<p class="text-[11px] text-gray-400 mt-1">Saved 2 days ago</p>
+</div>
+</article>
+<!-- Recipe Item 2 -->
+<article class="recipe-card group" data-purpose="recipe-item">
+<div class="photo-frame rounded-custom mb-3 bg-gray-200">
+<img alt="Quick chicken stir fry" class="w-full h-full object-cover grayscale-[0.2] contrast-[1.1]" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBOEitvtQFbx9WKCnW5u1y6se8N74OCO_-7nR-Z3hGjiqSNN0L0nwz2KQXTKzoTXrsvV1AQsLSNWUI1au3-gc5LTAbObxQhkL-l3fqWqJZhvfcDNLzNIwNBMjk9hf5i4Gu8sJuSmidet2yjIs6EWRFeBlObY6UC4ODCc6ZdDSO6dFx5D8PFb-mi7TjQ02X9AE6P9351Oft5rkZ456ti9OvelZNF6JhOmfGKZnC4lH4oL4GeSVvM_7OtMCzKVVotpEIc91XZdGC2Fsr3"/>
+<div class="absolute top-2 right-2 px-2 py-1 bg-white/90 backdrop-blur-sm rounded text-[10px] font-bold uppercase tracking-wider">20m</div>
+</div>
+<div class="px-1">
+<span class="text-[9px] uppercase tracking-widest text-primary font-bold mb-1 block">Quick Dinners</span>
+<h3 class="text-sm font-bold leading-snug">Spicy Sesame Chicken Stir Fry</h3>
+<p class="text-[11px] text-gray-400 mt-1">From: Kitchen Stories</p>
+</div>
+</article>
+<!-- Recipe Item 3 -->
+<article class="recipe-card group" data-purpose="recipe-item">
+<div class="photo-frame rounded-custom mb-3 bg-gray-200">
+<img alt="Batch prep meatballs" class="w-full h-full object-cover grayscale-[0.2] contrast-[1.1]" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCe2nA7jHpLrDQPaOFsnxbVBESmjtuoedoWasUS-hf_h8q26edLxBxgRq5TvjkAWHruSSR-rEL67ibXwhQ0HY6Hw2Cg-zbMlLSzbdsl0738wRQf6FYLuPBRHjQrU_5zg3iHHeJRoQQYPxW_o2sB2r5CixqwAx2QmBO9Nj6t-5HFv-CnJH6b3bXfn6goj6wvwxg5_Wj4yjulQkb4q2r5RNjkDvHMaJIy-RdkLj2a4VdaoDaULomNP6f-A4Z1Zbms83F_wEA6OeyU20U8"/>
+<div class="absolute top-2 right-2 px-2 py-1 bg-white/90 backdrop-blur-sm rounded text-[10px] font-bold uppercase tracking-wider">45m</div>
+</div>
+<div class="px-1">
+<span class="text-[9px] uppercase tracking-widest text-primary font-bold mb-1 block">Sunday Batch Prep</span>
+<h3 class="text-sm font-bold leading-snug">Herby Turkey Meatballs</h3>
+<p class="text-[11px] text-gray-400 mt-1">Yields 12 servings</p>
+</div>
+</article>
+<!-- Recipe Item 4 -->
+<article class="recipe-card group" data-purpose="recipe-item">
+<div class="photo-frame rounded-custom mb-3 bg-gray-200">
+<img alt="Honey glazed salmon" class="w-full h-full object-cover grayscale-[0.2] contrast-[1.1]" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBCBKdpgtnsxbT8UVyvr-EQ4mxwME5HJi3C3Y2DVgOTJH4CHGH-RiMbtnavOrnRQUli0YFONoCLzL0qxuu6B_JYarrLD7wNZqYYHJde-Rcn06f_O6jnW1fQ1GShcOIE-VrJ73w2Ek0X05VwPdS2SHfHt3Od9KeaUpQKgXKth-kBcoYL79eYQPDOftjxyWOG3-_Zxxpr4TPWt3FJTF1UAEeOq2QkULuwttUmYylEtmRoP7becmqvrFgoSlPlbUy3aGkJYsE_MvQQxfed"/>
+<div class="absolute top-2 right-2 px-2 py-1 bg-white/90 backdrop-blur-sm rounded text-[10px] font-bold uppercase tracking-wider">12m</div>
+</div>
+<div class="px-1">
+<span class="text-[9px] uppercase tracking-widest text-primary font-bold mb-1 block">Quick Dinners</span>
+<h3 class="text-sm font-bold leading-snug">Honey Glazed Air Fryer Salmon</h3>
+<p class="text-[11px] text-gray-400 mt-1">Starred ★</p>
+</div>
+</article>
+</section>
+<!-- END: RecipeGrid -->
+<!-- BEGIN: EmptyStateHint -->
+<div class="mt-12 text-center px-10">
+<div class="w-12 h-[1px] bg-gray-200 mx-auto mb-6"></div>
+<p class="text-sm text-gray-400 font-medium italic">"The secret of a good meal is in the curation."</p>
+</div>
+<!-- END: EmptyStateHint -->
+</main>
+<!-- BEGIN: BottomNavigation -->
+<footer class="fixed bottom-0 inset-x-0 bg-surface/95 backdrop-blur-xl border-t border-gray-100 pb-safe shadow-[0_-10px_30px_-15px_rgba(0,0,0,0.1)]">
+<div class="flex items-center justify-around h-16 max-w-2xl mx-auto">
+<a class="flex flex-col items-center gap-1 text-primary" href="#">
+<svg fill="none" height="22" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="22" xmlns="http://www.w3.org/2000/svg"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
+<span class="text-[10px] font-bold uppercase">Feed</span>
+</a>
+<a class="flex flex-col items-center gap-1 text-gray-400" href="#">
+<svg fill="none" height="22" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="22" xmlns="http://www.w3.org/2000/svg"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" x2="8" y1="13" y2="13"></line><line x1="16" x2="8" y1="17" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+<span class="text-[10px] font-bold uppercase">Library</span>
+</a>
+<a class="flex flex-col items-center gap-1 text-gray-400" href="#">
+<svg fill="none" height="22" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="22" xmlns="http://www.w3.org/2000/svg"><circle cx="11" cy="11" r="8"></circle><line x1="21" x2="16.65" y1="21" y2="16.65"></line></svg>
+<span class="text-[10px] font-bold uppercase">Search</span>
+</a>
+<a class="flex flex-col items-center gap-1 text-gray-400" href="#">
+<svg fill="none" height="22" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="22" xmlns="http://www.w3.org/2000/svg"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+<span class="text-[10px] font-bold uppercase">Profile</span>
+</a>
+</div>
+</footer>
+<!-- END: BottomNavigation -->
+<style data-purpose="utility">
+    .no-scrollbar::-webkit-scrollbar {
+      display: none;
+    }
+    .no-scrollbar {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
+    .pb-safe {
+      padding-bottom: env(safe-area-inset-bottom);
+    }
+  </style>
+</body></html>

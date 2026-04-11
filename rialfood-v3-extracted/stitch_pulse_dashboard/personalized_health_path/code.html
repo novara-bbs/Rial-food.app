@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#ccff00",
+                        "background-light": "#f8f8f5",
+                        "background-dark": "#1f230f",
+                    },
+                    fontFamily: {
+                        "display": ["Space Grotesk", "sans-serif"]
+                    },
+                    borderRadius: {"DEFAULT": "0.5rem", "lg": "1rem", "xl": "1.5rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>
+        body {
+            font-family: 'Space Grotesk', sans-serif;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 min-h-screen flex flex-col items-center">
+<div class="relative flex h-auto min-h-screen w-full max-w-md flex-col bg-background-light dark:bg-background-dark overflow-x-hidden">
+<!-- Top App Bar -->
+<div class="flex items-center p-4 pb-2 justify-between sticky top-0 bg-background-light/80 dark:bg-background-dark/80 backdrop-blur-md z-10">
+<button class="text-slate-900 dark:text-slate-100 flex size-12 shrink-0 items-center justify-center hover:bg-primary/10 rounded-full transition-colors">
+<span class="material-symbols-outlined">arrow_back</span>
+</button>
+<h2 class="text-slate-900 dark:text-slate-100 text-lg font-bold leading-tight tracking-tight flex-1 text-center pr-12">Goal Setup</h2>
+</div>
+<!-- Progress Indicator -->
+<div class="flex flex-col gap-3 p-6">
+<div class="flex gap-6 justify-between items-end">
+<div class="flex flex-col">
+<span class="text-primary text-xs font-bold uppercase tracking-widest">Step 1 of 4</span>
+<p class="text-slate-900 dark:text-slate-100 text-xl font-bold leading-normal">Defining your path</p>
+</div>
+<p class="text-slate-500 dark:text-slate-400 text-sm font-medium">25% Complete</p>
+</div>
+<div class="rounded-full bg-slate-200 dark:bg-white/10 h-3 overflow-hidden">
+<div class="h-full rounded-full bg-primary" style="width: 25%;"></div>
+</div>
+</div>
+<!-- Hero Guidance Text -->
+<div class="px-6 pt-4 pb-6 text-center">
+<h2 class="text-slate-900 dark:text-slate-100 tracking-tight text-3xl font-bold leading-tight">What's your primary health focus?</h2>
+<p class="text-slate-600 dark:text-slate-400 text-base font-medium leading-relaxed mt-4">
+                Think of NutriPulse as your personal coach. Choose the path that feels right for your life today, and we'll handle the science.
+            </p>
+</div>
+<!-- Goal Selection Grid -->
+<div class="grid grid-cols-1 gap-4 p-6">
+<!-- Goal Card 1 -->
+<button class="relative group overflow-hidden rounded-xl border-2 border-transparent hover:border-primary transition-all duration-300 bg-slate-100 dark:bg-white/5 flex items-center p-4 gap-4 text-left">
+<div class="size-16 shrink-0 rounded-lg bg-cover bg-center" data-alt="Healthy organic home cooked family meal" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuBDanbNLeqmXnKE7mO1mtVZbVCyM-jfgaDQYLpVCevJHjLNPpUNimzDNGOUk6PYETfm9lsuk69Uar5Yjv3Le29THW85TCUlSZTBRElMg2WAau0Er8HLTZ7I-QKNh9AuANKMq6uIdRj8ocn8U5T-C0kszTsy8L5oKk9hodYsiTxv70Hxruq3_hDF_t_iTdAXUHqCtRMJzW3YZt9HISe1uewJ5iXaGZoLlATwZXP9B_pev4zhOsya8E03JiD5MfLegvXqjThHBmXQrpLf");'>
+</div>
+<div class="flex-1">
+<h3 class="text-slate-900 dark:text-slate-100 text-lg font-bold">Healthy Family Meals</h3>
+<p class="text-slate-500 dark:text-slate-400 text-sm">Nutritious recipes everyone will love.</p>
+</div>
+<span class="material-symbols-outlined text-slate-300 dark:text-slate-700 group-hover:text-primary">chevron_right</span>
+</button>
+<!-- Goal Card 2 -->
+<button class="relative group overflow-hidden rounded-xl border-2 border-primary bg-primary/10 dark:bg-primary/5 flex items-center p-4 gap-4 text-left">
+<div class="size-16 shrink-0 rounded-lg bg-cover bg-center" data-alt="Person lifting weights in a gym" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuAmd2t-vjM3fHiJw8P6t60ZtNPBLqj0QjtqeIALRLpuo0jjyMrpuP5k7cmpHxauayWhQkYlWHY0BjHAe8mqlP1pGQ86kwV7_KXQp2uIP1LiZey9HHr0cWyt-d__H4BG4iWV1OR0fNtiVcgxvWxSfHAbyQf5BnR61ju_bEgVZHA-UPsVL1s138lApugxLVrLc7K5yJgGuoBM32YqlN26XUuHn8nhx2NPzj3abLSqeu9wENVbYsuMPcaTEsj4Ip1YDn1JzlZerW-ocO4g");'>
+</div>
+<div class="flex-1">
+<div class="flex items-center gap-2">
+<h3 class="text-slate-900 dark:text-slate-100 text-lg font-bold">Muscle Gain</h3>
+<span class="bg-primary text-background-dark text-[10px] font-bold px-2 py-0.5 rounded-full uppercase">Selected</span>
+</div>
+<p class="text-slate-500 dark:text-slate-400 text-sm">Fuel your strength and recovery.</p>
+</div>
+<span class="material-symbols-outlined text-primary">check_circle</span>
+</button>
+<!-- Goal Card 3 -->
+<button class="relative group overflow-hidden rounded-xl border-2 border-transparent hover:border-primary transition-all duration-300 bg-slate-100 dark:bg-white/5 flex items-center p-4 gap-4 text-left">
+<div class="size-16 shrink-0 rounded-lg bg-cover bg-center" data-alt="Calm person sleeping peacefully" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuCPscPCF3qFT8bctpD1hFQBvga7rUJVjvVAgtT6-fjAXQgLxWjCLSEBc4YToGgXIHufQpqxeYcUMeg1aKdD10QAt62z0u5gceET06MqGECLRFioT_1iJ9xYqzXw8SjeKMnGsRTzaC9ilg77M90_d5gPrstdMK6nSrnNLKnvl_P4Nn2ftVFo6ef_YaLT-QpaD_aCcNoy36ypeoivGz8LOc1i3WCGlfnRV5J_Oc2f86AIOgLTbGTgkHxpaOzdWhY3W3XkkCNx5UtOF2P0");'>
+</div>
+<div class="flex-1">
+<h3 class="text-slate-900 dark:text-slate-100 text-lg font-bold">Better Sleep</h3>
+<p class="text-slate-500 dark:text-slate-400 text-sm">Foods that help you rest deeper.</p>
+</div>
+<span class="material-symbols-outlined text-slate-300 dark:text-slate-700 group-hover:text-primary">chevron_right</span>
+</button>
+<!-- Goal Card 4 -->
+<button class="relative group overflow-hidden rounded-xl border-2 border-transparent hover:border-primary transition-all duration-300 bg-slate-100 dark:bg-white/5 flex items-center p-4 gap-4 text-left">
+<div class="size-16 shrink-0 rounded-lg bg-cover bg-center" data-alt="Balanced salad bowl with fresh greens" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuBiINrcUR_jwhlrBKUVI1RHZRP_aPJp1y6lBwbphbxn7DP17PZv-WLrhXsFsIyzC5kJ9Pc5U375oElq1Q13cPUdUFiZYKoMDTzwT5DT0FE-Y80ANkLLpi7N4ToVvAHRKl_3e8XJi1TTUG_nSDG7uDEjLaj65EqoeNNCTwFqUnIha8E-y-2DoXQJTy8HXDIeoixOtUlfcnfhJOaK_1w9lnjOEpH3ljZoiqvr93kYTTNmwcQfrDI_61TNM8M55ACamHOH1oFC8BJsPDvC");'>
+</div>
+<div class="flex-1">
+<h3 class="text-slate-900 dark:text-slate-100 text-lg font-bold">Weight Management</h3>
+<p class="text-slate-500 dark:text-slate-400 text-sm">Sustainable habits, no crash diets.</p>
+</div>
+<span class="material-symbols-outlined text-slate-300 dark:text-slate-700 group-hover:text-primary">chevron_right</span>
+</button>
+</div>
+<!-- Coaching Tip Section -->
+<div class="mx-6 mb-8 p-5 bg-primary/20 dark:bg-primary/10 rounded-xl border border-primary/30 flex gap-4 items-start">
+<span class="material-symbols-outlined text-primary shrink-0">lightbulb</span>
+<div>
+<p class="text-slate-900 dark:text-slate-100 text-sm font-bold mb-1">Coach's Tip</p>
+<p class="text-slate-700 dark:text-slate-300 text-sm leading-relaxed">
+                    Don't worry about being perfect. Most members start with one focus and evolve as they feel better!
+                </p>
+</div>
+</div>
+<!-- Sticky Bottom Navigation -->
+<div class="mt-auto p-6 bg-background-light dark:bg-background-dark border-t border-slate-200 dark:border-white/10">
+<button class="w-full bg-primary hover:bg-primary/90 text-background-dark font-bold py-4 rounded-xl text-lg shadow-lg shadow-primary/20 transition-transform active:scale-[0.98]">
+                Continue to Nutrition Preferences
+            </button>
+<p class="text-center text-slate-500 dark:text-slate-400 text-xs mt-4">
+                You can change your focus at any time in settings.
+            </p>
+</div>
+<div class="h-6"></div>
+</div>
+</body></html>

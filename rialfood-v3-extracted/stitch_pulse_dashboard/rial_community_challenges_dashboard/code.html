@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#25aff4",
+                        "background-light": "#f5f7f8",
+                        "background-dark": "#101c22",
+                    },
+                    fontFamily: {
+                        "display": ["Inter", "sans-serif"]
+                    },
+                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>
+        body { font-family: 'Inter', sans-serif; }
+        .tech-overlay {
+            background: linear-gradient(to top, rgba(16, 28, 34, 0.8) 0%, rgba(16, 28, 34, 0) 100%);
+        }
+        .editorial-border {
+            border-left: 4px solid #25aff4;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark font-display text-slate-900 dark:text-slate-100">
+<div class="relative flex min-h-screen flex-col mx-auto max-w-md bg-white dark:bg-background-dark shadow-2xl">
+<!-- Header / Navigation -->
+<header class="flex items-center justify-between p-6 border-b border-primary/10">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary text-3xl">grid_view</span>
+<h1 class="text-xl font-extrabold tracking-tighter uppercase italic">RIAL <span class="text-primary">Tech</span></h1>
+</div>
+<div class="flex items-center gap-4">
+<span class="material-symbols-outlined text-slate-400">notifications</span>
+<div class="size-8 rounded-full bg-primary/20 border border-primary/40 flex items-center justify-center">
+<span class="material-symbols-outlined text-primary text-sm">person</span>
+</div>
+</div>
+</header>
+<!-- Hero Section: Featured Challenge -->
+<section class="p-6">
+<div class="relative w-full aspect-[16/10] rounded-xl overflow-hidden shadow-lg group">
+<div class="absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover:scale-105" data-alt="High-end food photography featuring fresh vegetables and grains" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuDw5d4i2AoJksebMOJJHc_7ARvuY5qci3s-XVqJwiRryLf5cB3wmxTy_fNx_tq7q8i56Of-IUyVy_Ukwk23eUAkm_zkOqHC4XvUPoigretpR2cXwiWJyaRBhPWR0u1vFuAOT4kOewjRtb5sLMWU94RpjY4nYp5rAijCAIyhYPSppRTBM8cM9qYc5GnRdo9RZnOl2vVTmoYzlDpUS77eo4nj10ku2t_E4acvzABuRQtAuObyTcmzEGAueva043_lZ1u-WVr-Z9E6rO57')"></div>
+<div class="absolute inset-0 tech-overlay flex flex-col justify-end p-6">
+<span class="text-[10px] font-bold tracking-[0.2em] text-primary uppercase mb-2 block">Featured Tech Sprint</span>
+<h2 class="text-white text-3xl font-black leading-none mb-2 italic">7-DAY REAL FOOD<br/>SPRINT</h2>
+<div class="flex items-center gap-3">
+<div class="flex -space-x-2">
+<div class="size-6 rounded-full border-2 border-background-dark bg-slate-400"></div>
+<div class="size-6 rounded-full border-2 border-background-dark bg-slate-500"></div>
+<div class="size-6 rounded-full border-2 border-background-dark bg-slate-600"></div>
+</div>
+<p class="text-white/70 text-[11px] font-medium">+14.2k Active Now</p>
+</div>
+</div>
+<div class="absolute top-4 right-4 bg-primary text-white text-[10px] font-black px-2 py-1 rounded-sm uppercase">
+                    Level 04
+                </div>
+</div>
+</section>
+<!-- Categories Scroller -->
+<div class="flex w-full overflow-hidden px-6 py-2">
+<div class="flex flex-row items-start justify-start gap-4 overflow-x-auto no-scrollbar">
+<div class="flex flex-col items-center gap-2 min-w-[70px]">
+<div class="w-16 h-16 rounded-full border-2 border-primary flex items-center justify-center bg-primary/5">
+<span class="material-symbols-outlined text-primary">restaurant</span>
+</div>
+<p class="text-[10px] font-bold uppercase tracking-wider text-slate-500">Nutrition</p>
+</div>
+<div class="flex flex-col items-center gap-2 min-w-[70px]">
+<div class="w-16 h-16 rounded-full border border-slate-200 flex items-center justify-center">
+<span class="material-symbols-outlined text-slate-400">psychology</span>
+</div>
+<p class="text-[10px] font-bold uppercase tracking-wider text-slate-400">Mindset</p>
+</div>
+<div class="flex flex-col items-center gap-2 min-w-[70px]">
+<div class="w-16 h-16 rounded-full border border-slate-200 flex items-center justify-center">
+<span class="material-symbols-outlined text-slate-400">fitness_center</span>
+</div>
+<p class="text-[10px] font-bold uppercase tracking-wider text-slate-400">Training</p>
+</div>
+<div class="flex flex-col items-center gap-2 min-w-[70px]">
+<div class="w-16 h-16 rounded-full border border-slate-200 flex items-center justify-center">
+<span class="material-symbols-outlined text-slate-400">bedtime</span>
+</div>
+<p class="text-[10px] font-bold uppercase tracking-wider text-slate-400">Recovery</p>
+</div>
+</div>
+</div>
+<!-- My Progress Section -->
+<section class="p-6 bg-slate-50 dark:bg-slate-900/20 border-y border-slate-100 dark:border-slate-800">
+<div class="flex justify-between items-center mb-4">
+<h3 class="text-sm font-black uppercase tracking-widest text-slate-400 italic">Progress Metrics</h3>
+<span class="text-[10px] font-bold text-primary underline">VIEW ALL</span>
+</div>
+<div class="grid grid-cols-2 gap-4">
+<div class="bg-white dark:bg-background-dark p-4 rounded-xl shadow-sm border border-slate-100 dark:border-slate-800 editorial-border">
+<p class="text-[10px] font-bold text-slate-400 uppercase">Macro Accuracy</p>
+<div class="flex items-end gap-1 mt-1">
+<p class="text-2xl font-black italic">94%</p>
+<span class="material-symbols-outlined text-green-500 text-sm mb-1">trending_up</span>
+</div>
+<div class="w-full bg-slate-100 h-1 mt-2 rounded-full overflow-hidden">
+<div class="bg-primary h-full w-[94%]"></div>
+</div>
+</div>
+<div class="bg-white dark:bg-background-dark p-4 rounded-xl shadow-sm border border-slate-100 dark:border-slate-800 editorial-border">
+<p class="text-[10px] font-bold text-slate-400 uppercase">Streak</p>
+<div class="flex items-end gap-1 mt-1">
+<p class="text-2xl font-black italic">12d</p>
+<span class="material-symbols-outlined text-orange-500 text-sm mb-1">local_fire_department</span>
+</div>
+<div class="w-full bg-slate-100 h-1 mt-2 rounded-full overflow-hidden">
+<div class="bg-primary h-full w-2/3"></div>
+</div>
+</div>
+</div>
+</section>
+<!-- Active Challenges List -->
+<section class="p-6">
+<h3 class="text-lg font-black italic uppercase mb-4 border-l-4 border-primary pl-3">Active Challenges</h3>
+<div class="space-y-4">
+<!-- Challenge Card 1 -->
+<div class="flex gap-4 p-3 rounded-xl border border-slate-100 dark:border-slate-800 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors group">
+<div class="size-20 shrink-0 rounded-lg overflow-hidden relative">
+<div class="absolute inset-0 bg-cover bg-center" data-alt="Technical macro bowl overhead view" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuBM1nf26n-rRtY4QSD8rqw443i5njUC-nSk90qwOIgW5pL4lCb6Fw1DFLf0TVmHMX5K1XJEsYLrgdwLJUDx5060QC1EeIU8dBalVTtPn_moeDdfEXqeZA-HBm3sOt9SQ9Rt8sIz1bB4f4IqYFDV9GkXPgr4XD616fZ-0qE-RpBFax2yye-7f5ftNXvTK0mgq1vFhkgKIXkd2MO3ztLUxf8vcOVbCPWzVqi-v4Y20VolYIO849Oc6fPZ8tC55D9wytIyVAV_13NmnI6W')"></div>
+<div class="absolute inset-0 bg-primary/20 mix-blend-multiply"></div>
+</div>
+<div class="flex flex-col justify-center flex-1">
+<span class="text-[9px] font-bold text-primary uppercase">Elite Tier</span>
+<h4 class="font-bold text-slate-900 dark:text-slate-100 leading-tight">Macro Masterclass v2.0</h4>
+<p class="text-[11px] text-slate-500 mt-1">Day 14 of 30 • 2.4k competitors</p>
+</div>
+<div class="flex items-center">
+<button class="size-8 rounded-full bg-primary/10 text-primary flex items-center justify-center group-hover:bg-primary group-hover:text-white transition-all">
+<span class="material-symbols-outlined text-lg">chevron_right</span>
+</button>
+</div>
+</div>
+<!-- Challenge Card 2 -->
+<div class="flex gap-4 p-3 rounded-xl border border-slate-100 dark:border-slate-800 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors group">
+<div class="size-20 shrink-0 rounded-lg overflow-hidden relative">
+<div class="absolute inset-0 bg-cover bg-center" data-alt="Close up of weight plates in a gym" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCQ3fb_7lJbf6556prlNYA3A_L82VJOw_W7e_Uvx6S9LOgkl2Adr-6ILi3x6VMreu6OupoqFA3eHF313mZwUc-iAzA5Gik1CZ67W7J9FI-F754jqvp1Q97ZjGmsjvTof2OpXg6_DIzYyVH762K27pJTVoK8a_aWXgdmCiOmrYXbIczqe8mMj0DWpnCouu3QGldR8Ykslry8H-JCLUfes-b78BldA-6eXmAKP5Ss4FCaqtBjh4TicJIA_-zlDf7OUPBTLZ48IncNGjro')"></div>
+<div class="absolute inset-0 bg-primary/20 mix-blend-multiply"></div>
+</div>
+<div class="flex flex-col justify-center flex-1">
+<span class="text-[9px] font-bold text-primary uppercase">Technical Training</span>
+<h4 class="font-bold text-slate-900 dark:text-slate-100 leading-tight">Functional Power Peak</h4>
+<p class="text-[11px] text-slate-500 mt-1">Starting in 2h • 850 registered</p>
+</div>
+<div class="flex items-center">
+<button class="size-8 rounded-full bg-primary/10 text-primary flex items-center justify-center group-hover:bg-primary group-hover:text-white transition-all">
+<span class="material-symbols-outlined text-lg">chevron_right</span>
+</button>
+</div>
+</div>
+</div>
+</section>
+<!-- Global Leaderboard -->
+<section class="p-6 mb-20">
+<div class="bg-background-dark text-white rounded-2xl p-6 relative overflow-hidden">
+<!-- Subtle grid background for tech feel -->
+<div class="absolute inset-0 opacity-10" style="background-image: radial-gradient(#25aff4 1px, transparent 1px); background-size: 10px 10px;"></div>
+<div class="relative z-10">
+<div class="flex justify-between items-center mb-6">
+<h3 class="text-sm font-black uppercase tracking-widest italic">Global Leaderboard</h3>
+<span class="text-[10px] font-bold py-1 px-2 border border-primary text-primary rounded-full">LIVE</span>
+</div>
+<div class="space-y-4">
+<div class="flex items-center justify-between py-2 border-b border-white/10">
+<div class="flex items-center gap-3">
+<span class="text-xs font-black italic text-primary/60">01</span>
+<div class="size-8 rounded-full bg-slate-700" data-alt="User avatar 1"></div>
+<p class="text-xs font-bold">Alex Rivera</p>
+</div>
+<p class="text-xs font-black italic">14,290 XP</p>
+</div>
+<div class="flex items-center justify-between py-2 border-b border-white/10">
+<div class="flex items-center gap-3">
+<span class="text-xs font-black italic text-primary/60">02</span>
+<div class="size-8 rounded-full bg-slate-700" data-alt="User avatar 2"></div>
+<p class="text-xs font-bold">Sarah Jenkins</p>
+</div>
+<p class="text-xs font-black italic">13,850 XP</p>
+</div>
+<div class="flex items-center justify-between py-2 border-primary bg-primary/10 px-2 rounded">
+<div class="flex items-center gap-3">
+<span class="text-xs font-black italic text-primary">42</span>
+<div class="size-8 rounded-full bg-primary/40 flex items-center justify-center border border-primary/60">
+<span class="material-symbols-outlined text-xs">person</span>
+</div>
+<p class="text-xs font-bold text-primary uppercase">You (This Week)</p>
+</div>
+<p class="text-xs font-black italic text-primary">8,100 XP</p>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Bottom Navigation Bar -->
+<nav class="fixed bottom-0 left-1/2 -translate-x-1/2 w-full max-w-md border-t border-slate-100 dark:border-slate-800 bg-white/95 dark:bg-background-dark/95 backdrop-blur-md px-6 py-3 flex justify-between items-center z-50">
+<a class="flex flex-col items-center gap-1 text-primary" href="#">
+<span class="material-symbols-outlined fill-1">explore</span>
+<span class="text-[10px] font-bold uppercase tracking-tighter">Explore</span>
+</a>
+<a class="flex flex-col items-center gap-1 text-slate-400" href="#">
+<span class="material-symbols-outlined">trophy</span>
+<span class="text-[10px] font-bold uppercase tracking-tighter">Challenges</span>
+</a>
+<div class="relative -mt-12">
+<button class="size-14 rounded-full bg-primary shadow-lg shadow-primary/40 flex items-center justify-center text-white border-4 border-white dark:border-background-dark">
+<span class="material-symbols-outlined text-3xl">add</span>
+</button>
+</div>
+<a class="flex flex-col items-center gap-1 text-slate-400" href="#">
+<span class="material-symbols-outlined">bar_chart</span>
+<span class="text-[10px] font-bold uppercase tracking-tighter">Progress</span>
+</a>
+<a class="flex flex-col items-center gap-1 text-slate-400" href="#">
+<span class="material-symbols-outlined">person</span>
+<span class="text-[10px] font-bold uppercase tracking-tighter">Profile</span>
+</a>
+</nav>
+</div>
+</body></html>

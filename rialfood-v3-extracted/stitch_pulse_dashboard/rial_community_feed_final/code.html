@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>RIAL Community - Human-Centric Precision</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#ec5b13",
+                        "background-light": "#f8f6f6",
+                        "background-dark": "#221610",
+                    },
+                    fontFamily: {
+                        "display": ["Public Sans"]
+                    },
+                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>
+        body { font-family: 'Public Sans', sans-serif; }
+        .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+        .fill-icon { font-variation-settings: 'FILL' 1; }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 antialiased">
+<div class="relative flex min-h-screen w-full flex-col overflow-x-hidden max-w-md mx-auto border-x border-slate-200 dark:border-slate-800 bg-background-light dark:bg-background-dark">
+<!-- Header -->
+<header class="sticky top-0 z-50 flex items-center bg-background-light/80 dark:bg-background-dark/80 backdrop-blur-md p-4 justify-between border-b border-slate-200 dark:border-slate-800">
+<div class="flex size-10 shrink-0 items-center justify-center text-slate-700 dark:text-slate-300">
+<span class="material-symbols-outlined">menu</span>
+</div>
+<div class="flex flex-col items-center">
+<h1 class="text-primary text-xl font-bold leading-tight tracking-tight">RIAL</h1>
+<p class="text-[10px] uppercase tracking-[0.2em] font-medium text-slate-500">Precision Feed</p>
+</div>
+<div class="flex size-10 items-center justify-end relative">
+<span class="material-symbols-outlined text-slate-700 dark:text-slate-300">notifications</span>
+<span class="absolute top-2 right-1 flex h-2 w-2 rounded-full bg-primary"></span>
+</div>
+</header>
+<!-- Stories / Active Users -->
+<div class="flex w-full overflow-x-auto no-scrollbar px-4 py-6 gap-5 bg-white dark:bg-slate-900/50">
+<div class="flex flex-col items-center gap-2 shrink-0">
+<div class="relative p-[2px] rounded-full bg-gradient-to-tr from-primary to-orange-300">
+<div class="size-14 bg-center bg-cover rounded-full border-2 border-white dark:border-slate-900" data-alt="Portrait of a young creator smiling" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuADFj3q8vt0Xl4Mw1sKChSk8fMzbwjenuEeOft-RiLh2XsuZ55Hni8ySIaqF3WIKA55bEC4-Fmp41uv21j_Z0CzUQ-sihgw2UUviXdQclGaGXPPe_1cYTlcMQfRyUcAxzIbZrzJECb-gNOQyJ0iEcOOz5UqT1Wr_YPCn8rrjz2Ciq6IIDn56ktNHkS1lHY9UPg26DV0oax9Aps7EuIZBT6Bw1C_QrHkWhpT7PeQsagUNS3yKijaueMpiAjoBR3mFsPVH4XbZOfbq2tq");'></div>
+</div>
+<p class="text-[11px] font-semibold text-slate-600 dark:text-slate-400">My Routine</p>
+</div>
+<div class="flex flex-col items-center gap-2 shrink-0">
+<div class="size-14 bg-center bg-cover rounded-full grayscale opacity-70" data-alt="Profile of a male professional chef" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuBghoBiWU8YswcR30UcN-83nRvPaVRe27lrw2w7oN_8F0oZlguoLOYK5Edf4Dnx0BKLCJutlNkuL2F5DODffCyJ8yqTPucMWhI6Jjj3YKn_q9-yaWEIUgKKzZw42seDRWFM2lT2rcU3RlSAg3PRrGyn2X5zOb1VmdjU7kkJfkSsUJraCNrY5c2PoALHLv27ztlhs8Oxc0nYVwShcdlYI31mRZ226oMvtAcwHjLS0xIDXH3htntpSrTEK_4d8u22OLCXeFB7Cs4Q7bur");'></div>
+<p class="text-[11px] font-medium text-slate-500">Chef Marco</p>
+</div>
+<div class="flex flex-col items-center gap-2 shrink-0">
+<div class="size-14 bg-center bg-cover rounded-full" data-alt="Active female runner profile photo" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuDQfhaycLu0B5u6yYWwcFr8ofajLAPnI96FWW2zuSwGPcVJmpkH7q3kn79A15PKkLxHK1Qn8mmEoUDlH8lFbI2IXm-J6z_fmmyTcuRZYSM_NbWO4TUhccO9eElTDl18LUxq0pq8JaPnbtmailfmKHcmYSx60QIkrOWddcAKVpMuvch49k4rGDfRk4Zsmi9Hf9JWvGco9LIqE0yxiPEA5ajF1w-LKSUmHsyLpfyC4UMrqgS9VaQ1_w5F1WyNMoDfyT9N2hulyJtzFxjQ");'></div>
+<p class="text-[11px] font-medium text-slate-500">Elena V.</p>
+</div>
+<div class="flex flex-col items-center gap-2 shrink-0">
+<div class="size-14 bg-center bg-cover rounded-full" data-alt="Outdoor enthusiast profile photo" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuCvGaMWMxuMkwR8gX70Vm_Wa3wWmwUwGUeJuJyfS4c_7Ynp1zHV04Ef91_8VC1UWnWdKVAXktbUZMjX-dbXzenGD6dpTMziz8qsUsXbuaZxrKX_psN6IaHwE9PPLYtNbYYLFUrbRC5E3X4MTqbCCJKsfodIO3E3TvdDpM-rAiRslBBCgDYod4ovvQJazRBJiQHx5XPysOYzgV-6ljDxtTc1A6GCpjecBJu5_iwHyRd0riXpCBOaKJIwILgQwi5u3kh-CMEVVPHv82rs");'></div>
+<p class="text-[11px] font-medium text-slate-500">Jordan K.</p>
+</div>
+<div class="flex flex-col items-center gap-2 shrink-0">
+<div class="size-14 bg-center bg-cover rounded-full" data-alt="Young woman profile photo" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuCHRDutgdNrRqYSnIFgb9AmLbZCwoXOB4bBNSr_HhZ9e87cEgIzPoLgYrnN8nlsAvmRWddqExGxppv-bnFtj4gO_ozO5pAUttWtfUjRQRMev_dKeMse7v9WzNJ3lJerj0sopvgAG2QKraOW44M8HWzM5wF0xDd1wGGNCeDn3xrbBqznyHeGHULnwq2CsV0vrtKquCNlsB7fFhzk6jmMaGv-vk30-JIrNsKsT7dAfeLJ8O_VwNe6QubhQyFm3dFo6qJAzqHCZ6rFV4-W");'></div>
+<p class="text-[11px] font-medium text-slate-500">Sam R.</p>
+</div>
+</div>
+<!-- Navigation Tabs -->
+<div class="bg-white dark:bg-slate-900/50">
+<div class="flex border-b border-slate-200 dark:border-slate-800 px-4 gap-8">
+<a class="flex flex-col items-center justify-center border-b-2 border-primary text-slate-900 dark:text-white pb-3 pt-4" href="#">
+<p class="text-sm font-bold leading-normal">For You</p>
+</a>
+<a class="flex flex-col items-center justify-center border-b-2 border-transparent text-slate-500 pb-3 pt-4" href="#">
+<p class="text-sm font-medium leading-normal">Following</p>
+</a>
+<a class="flex flex-col items-center justify-center border-b-2 border-transparent text-slate-500 pb-3 pt-4" href="#">
+<p class="text-sm font-medium leading-normal">Global</p>
+</a>
+</div>
+</div>
+<!-- Main Feed Content -->
+<main class="p-4 space-y-6 pb-24">
+<!-- Pro Creator Post -->
+<div class="flex flex-col rounded-xl overflow-hidden bg-white dark:bg-slate-900 shadow-sm border border-slate-100 dark:border-slate-800">
+<div class="p-4 flex items-center justify-between">
+<div class="flex items-center gap-3">
+<div class="size-8 rounded-full bg-slate-200 bg-cover bg-center" data-alt="Profile of Chef Marco" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuBlOh3DTlPK8SvV6giO5FMuiWtz69uSqReIaGo0Ua5N8g65P516H1l3xTKl_krMJH1H7knzFL0xQzClhd53NvMbSdzEQCa-do-OBnuCUXBFJXMQfS2Tw8JGOIzZYnwzX3qvTCajQ8_o5E590vRr845QX82XaAw6cdvNV2eD-9VEj76HOAOCPWsw0-VjV6oQHA1PLTYNIOOtcB3m7x4Y7V7EQ3eUrlrMGjAOQjVBDuyQtnz2Lq4fnZY1gfUmorLBJtJ1ySy7bZVUdA8-");'></div>
+<div>
+<p class="text-sm font-bold flex items-center gap-1">Chef Marco <span class="material-symbols-outlined text-primary text-[14px] fill-icon">verified</span></p>
+<p class="text-[10px] text-slate-500 uppercase tracking-wider">Mastering Nutrition • 2h ago</p>
+</div>
+</div>
+<button class="text-slate-400"><span class="material-symbols-outlined">more_horiz</span></button>
+</div>
+<div class="relative aspect-square w-full bg-slate-100 group">
+<div class="absolute inset-0 bg-cover bg-center" data-alt="High precision overhead photo of a healthy salmon bowl" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuBFNPw5xbMYGF4R2wS89jEEMSlA7RlFoJ5ynFkcb9ujI9o8XoxvmkMxbcA-J_nc3h-Q-pFZduDLZ6pB58pZ0LRoAs4_yIR753TwMz7SBIA0M41VjaNnWSwG6u3pHjsKL1koGt45IhDGGKZqFiPapZA719wZi-TVec3r_gwvqSv0lkMnNUftCiccklU7bVxQJK6xOeACP0g_PPzg5E-SaBUIxZmtoR63fSBwQeF19fZHpeNOvhPWSGCTVEEsRMQUwVLOKFetteTHToK-");'></div>
+<!-- HUD Overlays -->
+<div class="absolute inset-0 p-4 flex flex-col justify-between pointer-events-none">
+<div class="flex justify-between items-start">
+<div class="bg-black/60 backdrop-blur-md rounded-lg p-2 text-white border border-white/20">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary text-sm">precision_manufacturing</span>
+<p class="text-[10px] font-bold tracking-tighter uppercase">Real Match</p>
+</div>
+<p class="text-lg font-bold leading-tight">98.4<span class="text-xs ml-0.5">%</span></p>
+</div>
+<div class="bg-black/60 backdrop-blur-md rounded-lg p-2 text-white border border-white/20">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary text-sm">monitoring</span>
+<p class="text-[10px] font-bold tracking-tighter uppercase">Real Feel</p>
+</div>
+<p class="text-lg font-bold leading-tight">OPTIMAL</p>
+</div>
+</div>
+<div class="flex justify-center">
+<div class="bg-primary px-3 py-1.5 rounded-full flex items-center gap-2 pointer-events-auto cursor-pointer shadow-lg active:scale-95 transition-transform">
+<span class="material-symbols-outlined text-white text-[18px]">content_copy</span>
+<span class="text-white text-xs font-bold">Mirror Routine</span>
+</div>
+</div>
+</div>
+</div>
+<div class="p-4">
+<div class="flex items-center gap-4 mb-3">
+<button class="flex items-center gap-1 text-slate-700 dark:text-slate-300">
+<span class="material-symbols-outlined">favorite</span>
+<span class="text-xs font-bold">1.2k</span>
+</button>
+<button class="flex items-center gap-1 text-slate-700 dark:text-slate-300">
+<span class="material-symbols-outlined">chat_bubble</span>
+<span class="text-xs font-bold">42</span>
+</button>
+<button class="flex items-center gap-1 text-slate-700 dark:text-slate-300 ml-auto">
+<span class="material-symbols-outlined">share</span>
+</button>
+</div>
+<p class="text-sm font-medium leading-relaxed">
+<span class="font-bold">Chef Marco</span> The "Precision Salmon Bowl" isn't just about the ingredients, it's the timing of the sear. 98% match on your macros.
+                    </p>
+<p class="text-xs text-primary font-semibold mt-2">#PrecisionEating #RealMatch #Fuel</p>
+</div>
+</div>
+<!-- Standard User Post -->
+<div class="flex flex-col rounded-xl overflow-hidden bg-white dark:bg-slate-900 shadow-sm border border-slate-100 dark:border-slate-800">
+<div class="p-4 flex items-center justify-between">
+<div class="flex items-center gap-3">
+<div class="size-8 rounded-full bg-slate-200 bg-cover bg-center" data-alt="Profile of Elena V." style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuCIfsGVaRSV-BFEr5y6LDEIHktLeJsygqYHB-wc7Hy_wApk--Z5C3XHTdpMg9f1o_QEDv5qqMYjlH7kciFBEkDoM2HMyY4Psb75dwf56xeAPntoZdkWKZklB7J4OOvHvZ0opNL8ZITXIhbqHHN-c5X3Vm8FrCrzBi0ZPmjtAVCj3SZeIA2Ao5nmeHP3MsHck81JqYzDTVdlYVk3awMg2WDNBW2SdJr16tgnqEZwFliPqQPvxSBE1qCRrrk956PJptwQ1vKiIHhvyo0J");'></div>
+<div>
+<p class="text-sm font-bold">Elena V.</p>
+<p class="text-[10px] text-slate-500 uppercase tracking-wider">Pre-Workout Fuel • 4h ago</p>
+</div>
+</div>
+</div>
+<div class="relative aspect-square w-full bg-slate-100">
+<div class="absolute inset-0 bg-cover bg-center" data-alt="Vibrant healthy salad bowl with avocado" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuBn_BTMVMywj1QTYf7SJFe87tgSemqG9loZfPyuYHIHnJyf-8_bbxK7pY1FfEMC9jTFZTQHpAq9sjYmlbQK1l70Dr72aNzXGc0bWWVyIGQIJ52ObshZPWEzXnMEVaUZViH2EZ4zQaoln6z28UqIVTmEcaQcQAlGBgELwB3eeX3qoz91veVAhYY5qYz0aTovJuuAW4WWvHRHBA-hJWV-kkQXnUYZgN6k27cv3LKwtt-oNJjDDsVUKiuDtYt0YQT8it9KPWBMfs_qKzWd");'></div>
+<div class="absolute inset-0 p-4 flex flex-col justify-start pointer-events-none">
+<div class="bg-black/60 backdrop-blur-md rounded-lg p-2 text-white border border-white/20 self-start">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary text-sm">target</span>
+<p class="text-[10px] font-bold tracking-tighter uppercase">Real Match</p>
+</div>
+<p class="text-lg font-bold leading-tight">72.0<span class="text-xs ml-0.5">%</span></p>
+</div>
+</div>
+</div>
+<div class="p-4">
+<p class="text-sm font-medium leading-relaxed">
+<span class="font-bold">Elena V.</span> Trying to match Marco's routine today. Getting there!
+                    </p>
+</div>
+</div>
+</main>
+<!-- Bottom Navigation Bar -->
+<nav class="fixed bottom-0 left-0 right-0 z-50 max-w-md mx-auto bg-white/90 dark:bg-background-dark/90 backdrop-blur-xl border-t border-slate-200 dark:border-slate-800 px-6 pb-6 pt-3">
+<div class="flex justify-between items-center">
+<a class="flex flex-col items-center gap-1 text-primary" href="#">
+<span class="material-symbols-outlined fill-icon">home</span>
+<p class="text-[10px] font-bold uppercase tracking-widest">Feed</p>
+</a>
+<a class="flex flex-col items-center gap-1 text-slate-400" href="#">
+<span class="material-symbols-outlined">explore</span>
+<p class="text-[10px] font-bold uppercase tracking-widest">Explore</p>
+</a>
+<div class="relative -top-8">
+<button class="bg-primary text-white size-14 rounded-full flex items-center justify-center shadow-xl shadow-primary/40 ring-4 ring-background-light dark:ring-background-dark">
+<span class="material-symbols-outlined text-3xl">photo_camera</span>
+</button>
+</div>
+<a class="flex flex-col items-center gap-1 text-slate-400" href="#">
+<span class="material-symbols-outlined">analytics</span>
+<p class="text-[10px] font-bold uppercase tracking-widest">Stats</p>
+</a>
+<a class="flex flex-col items-center gap-1 text-slate-400" href="#">
+<span class="material-symbols-outlined">person</span>
+<p class="text-[10px] font-bold uppercase tracking-widest">Profile</p>
+</a>
+</div>
+</nav>
+</div>
+</body></html>

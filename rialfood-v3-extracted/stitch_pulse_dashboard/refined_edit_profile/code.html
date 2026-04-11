@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#d4ff00", // Vitality Lime
+                        "background-light": "#f5f7f8",
+                        "background-dark": "#0a0c0e",
+                        "surface": "#161b22",
+                        "border-subtle": "#2d333b"
+                    },
+                    fontFamily: {
+                        "display": ["Space Grotesk", "sans-serif"]
+                    },
+                    borderRadius: {"DEFAULT": "0.5rem", "lg": "1rem", "xl": "1.5rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>
+        body {
+            background-color: #0a0c0e;
+            color: #f1f5f9;
+        }
+        .glass-card {
+            background: rgba(22, 27, 34, 0.8);
+            backdrop-filter: blur(12px);
+            border: 1px solid #2d333b;
+        }
+        .input-precision {
+            background: #0a0c0e;
+            border: 1px solid #2d333b;
+            transition: all 0.2s ease;
+        }
+        .input-precision:focus {
+            border-color: #d4ff00;
+            box-shadow: 0 0 0 1px #d4ff00;
+            outline: none;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="font-display antialiased text-slate-100 bg-background-light dark:bg-background-dark min-h-screen">
+<!-- Top Navigation Bar -->
+<header class="sticky top-0 z-50 flex items-center justify-between p-4 bg-background-dark/80 backdrop-blur-md border-b border-border-subtle">
+<div class="flex items-center gap-3">
+<button class="flex items-center justify-center size-10 rounded-full hover:bg-white/10 transition-colors">
+<span class="material-symbols-outlined text-slate-100">arrow_back</span>
+</button>
+<h1 class="text-lg font-bold tracking-tight">EDIT PROFILE</h1>
+</div>
+<button class="bg-primary text-black px-5 py-1.5 rounded-full text-sm font-bold hover:opacity-90 transition-opacity">
+            SAVE CHANGES
+        </button>
+</header>
+<main class="max-w-2xl mx-auto p-4 space-y-8 pb-20">
+<!-- Section 1: Profile Identity -->
+<section class="flex flex-col items-center gap-6 py-4">
+<div class="relative group">
+<div class="size-32 rounded-full overflow-hidden border-2 border-primary/30 p-1">
+<div class="size-full rounded-full bg-cover bg-center" data-alt="Athletic male profile portrait in dark gym setting" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuALLgStTwFQuzNp-_DSShdvUoGmhnJcChM8fkESLh5W_AdcbiilykBgQIc-OTvtgr530GfH9ZnB1svJNIubtmJDBSu9j9mIvVygzzB9PflGrcWetLR_7cQtr4Yk2kM4tTxw1vCC9rrI86mfhIwZyYHU76tmJ0MyUd8dMx30QYVzrb3EWKrgEiWqodnP5gwm2A9Zwo7ToiDAwdttAZP_N3P-E4k1hwyOs6N1XeSOEVCFvscbZka5QN6auDKg50iEBxtSMuE7UKqmJwdP')"></div>
+</div>
+<button class="absolute bottom-1 right-1 bg-primary text-black size-8 rounded-full flex items-center justify-center border-2 border-background-dark">
+<span class="material-symbols-outlined text-sm">photo_camera</span>
+</button>
+</div>
+<div class="w-full space-y-4">
+<div class="flex flex-col gap-1.5">
+<label class="text-[10px] font-bold tracking-widest text-slate-500 uppercase px-1">Display Name</label>
+<input class="input-precision w-full h-12 rounded-lg px-4 text-slate-100 font-medium" type="text" value="Alex Rivers"/>
+</div>
+<p class="text-center text-xs text-primary/60 font-medium uppercase tracking-tighter">RIAL Member ID: #882-004-X</p>
+</div>
+</section>
+<!-- Section 2: Personal Bio-Data (Precision Stats) -->
+<section class="space-y-4">
+<div class="flex items-center gap-2 px-1">
+<span class="material-symbols-outlined text-primary text-sm">analytics</span>
+<h3 class="text-sm font-bold tracking-widest text-slate-400 uppercase">Biometric Data</h3>
+</div>
+<div class="grid grid-cols-3 gap-3">
+<div class="glass-card p-4 rounded-xl space-y-2">
+<label class="text-[10px] font-bold text-slate-500 uppercase block">Weight (kg)</label>
+<input class="bg-transparent border-none p-0 w-full text-xl font-bold text-slate-100 focus:ring-0" type="number" value="82.4"/>
+</div>
+<div class="glass-card p-4 rounded-xl space-y-2">
+<label class="text-[10px] font-bold text-slate-500 uppercase block">Height (cm)</label>
+<input class="bg-transparent border-none p-0 w-full text-xl font-bold text-slate-100 focus:ring-0" type="number" value="184"/>
+</div>
+<div class="glass-card p-4 rounded-xl space-y-2">
+<label class="text-[10px] font-bold text-slate-500 uppercase block">Age</label>
+<input class="bg-transparent border-none p-0 w-full text-xl font-bold text-slate-100 focus:ring-0" type="number" value="28"/>
+</div>
+</div>
+</section>
+<!-- Section 3: Performance Goals -->
+<section class="space-y-4">
+<div class="flex items-center gap-2 px-1">
+<span class="material-symbols-outlined text-primary text-sm">target</span>
+<h3 class="text-sm font-bold tracking-widest text-slate-400 uppercase">Primary Goal</h3>
+</div>
+<div class="grid grid-cols-2 gap-3">
+<label class="relative cursor-pointer">
+<input checked="" class="peer sr-only" name="goal" type="radio"/>
+<div class="glass-card p-4 rounded-xl border-primary/0 peer-checked:border-primary peer-checked:bg-primary/5 transition-all">
+<p class="text-sm font-bold">VOLUME</p>
+<p class="text-[10px] text-slate-500 uppercase">Hypertrophy focus</p>
+</div>
+</label>
+<label class="relative cursor-pointer">
+<input class="peer sr-only" name="goal" type="radio"/>
+<div class="glass-card p-4 rounded-xl border-primary/0 peer-checked:border-primary peer-checked:bg-primary/5 transition-all">
+<p class="text-sm font-bold">DEFINITION</p>
+<p class="text-[10px] text-slate-500 uppercase">Fat loss &amp; cut</p>
+</div>
+</label>
+<label class="relative cursor-pointer">
+<input class="peer sr-only" name="goal" type="radio"/>
+<div class="glass-card p-4 rounded-xl border-primary/0 peer-checked:border-primary peer-checked:bg-primary/5 transition-all">
+<p class="text-sm font-bold">MAINTENANCE</p>
+<p class="text-[10px] text-slate-500 uppercase">Steady state</p>
+</div>
+</label>
+<label class="relative cursor-pointer">
+<input class="peer sr-only" name="goal" type="radio"/>
+<div class="glass-card p-4 rounded-xl border-primary/0 peer-checked:border-primary peer-checked:bg-primary/5 transition-all">
+<p class="text-sm font-bold">FAMILY HEALTH</p>
+<p class="text-[10px] text-slate-500 uppercase">Longevity focus</p>
+</div>
+</label>
+</div>
+</section>
+<!-- Section 4: Community Visibility -->
+<section class="glass-card p-5 rounded-2xl flex items-center justify-between">
+<div class="space-y-0.5">
+<h3 class="text-sm font-bold uppercase tracking-wide">Community Visibility</h3>
+<p class="text-xs text-slate-500">Allow others to see your training progress</p>
+</div>
+<label class="relative inline-flex items-center cursor-pointer">
+<input checked="" class="sr-only peer" type="checkbox" value=""/>
+<div class="w-11 h-6 bg-slate-700 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
+</label>
+</section>
+<!-- Section 5: Creator Social Links -->
+<section class="space-y-4">
+<div class="flex items-center gap-2 px-1">
+<span class="material-symbols-outlined text-primary text-sm">hub</span>
+<h3 class="text-sm font-bold tracking-widest text-slate-400 uppercase">Social Connectivity</h3>
+</div>
+<div class="space-y-3">
+<div class="flex items-center gap-3 glass-card px-4 py-3 rounded-xl">
+<div class="size-8 rounded bg-red-600/20 flex items-center justify-center">
+<span class="material-symbols-outlined text-red-500 text-lg">play_circle</span>
+</div>
+<div class="flex-1">
+<input class="bg-transparent border-none p-0 w-full text-sm font-medium focus:ring-0 placeholder:text-slate-600" placeholder="YouTube Channel Link" type="text"/>
+</div>
+</div>
+<div class="flex items-center gap-3 glass-card px-4 py-3 rounded-xl">
+<div class="size-8 rounded bg-gradient-to-tr from-yellow-500 via-red-500 to-purple-500 flex items-center justify-center opacity-80">
+<span class="material-symbols-outlined text-white text-lg">photo_camera</span>
+</div>
+<div class="flex-1">
+<input class="bg-transparent border-none p-0 w-full text-sm font-medium focus:ring-0 placeholder:text-slate-600" placeholder="Instagram Username" type="text"/>
+</div>
+</div>
+</div>
+</section>
+<!-- Footer Note -->
+<p class="text-center text-[10px] text-slate-600 uppercase tracking-[0.2em] font-medium pt-4">
+            Precision data ensures maximum performance results.
+        </p>
+</main>
+</body></html>

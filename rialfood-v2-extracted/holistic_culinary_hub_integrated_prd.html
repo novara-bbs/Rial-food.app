@@ -1,0 +1,228 @@
+# Holistic Culinary Hub (Integrated)
+
+## Product Overview
+
+**The Pitch:** A unified culinary platform combining nutritional tracking, recipe curation, and biometric-style journaling into a gamified editorial experience. It solves engagement drop-off by bridging the gap between what you eat, how you feel, and the community you share it with.
+
+**For:** Fitness enthusiasts tracking macros, meticulous meal planners, and food creators looking to monetize and engage their audience.
+
+**Device:** desktop
+
+**Design Direction:** Notion meets Kinfolk magazine. Editorial, clean, minimalist, featuring earth tones, deliberate whitespace, and elegant serif typography.
+
+**Inspired by:** Notion, Strava, Oura/Whoop (for data visualization).
+
+---
+
+## Screens
+
+- **The Daily Hub (Dashboard):** High-level view of today's meals, energy scores, and quick logging.
+- **Vitals & Food Diary:** Granular logging of meals paired with emotional and physical states.
+- **Recipe Vault:** Visual, Pinterest-style repository for scraped IG/YouTube links and original recipes.
+- **Smart Weekly Planner:** Drag-and-drop meal calendar integrated with an automated grocery list.
+- **Community Feed:** Strava-style timeline showing friends' culinary achievements and creator content.
+
+---
+
+## Key Flows
+
+**Logging a Meal & Vitals:** Connect food intake with physical well-being.
+1. User is on The Daily Hub -> sees **Log Today's Energy & Meal** CTA.
+2. User clicks CTA -> opens side-panel with slider for energy/digestion and search for recipe/ingredients.
+3. Form submits -> Updates daily 'Vitality Score' and awards 50 EXP points.
+
+**Saving and Planning a Recipe:** Curate external content and plan for the week.
+1. User is on Recipe Vault -> clicks **Paste Link**.
+2. User pastes an Instagram URL -> system extracts thumbnail, title, and tags.
+3. User drags the new recipe card into the **Smart Weekly Planner** -> Auto-generates missing ingredients in the grocery list.
+
+---
+
+<details>
+<summary>Design System</summary>
+
+## Color Palette
+
+- **Primary:** `#4A5D23` - Olive green for primary buttons, active states, progress bars.
+- **Background:** `#F9F8F6` - Warm oat, entirely replacing stark white for the main canvas.
+- **Surface:** `#FFFFFF` - Cards, modals, floating menus.
+- **Text:** `#2B2927` - Deep espresso for maximum readability without harshness.
+- **Muted:** `#A39F98` - Warm gray for secondary text, subtle borders, inactive states.
+- **Accent:** `#D47A43` - Terracotta for alerts, badges, notifications, and 'Chef Pro' highlights.
+
+## Typography
+
+Choose fonts that are **distinctive and characterful**, bringing an editorial, print-like quality.
+
+- **Headings:** `Newsreader`, 400 italic / 600, 24-48px (Serif, elegant, literary)
+- **Body:** `Satoshi`, 400, 16px (Clean, geometric sans-serif, high legibility)
+- **Small text:** `Satoshi`, 500, 13px, uppercase tracking
+- **Buttons:** `Satoshi`, 700, 14px
+
+**Style notes:** 0px border radius on internal elements, 4px on main containers. 1px solid borders (`#E5E3DF`) instead of drop shadows. Layout relies heavily on structural grids, thick dividing lines (2px), and deliberate negative space.
+
+## Design Tokens
+
+```css
+:root {
+  --color-primary: #4A5D23;
+  --color-background: #F9F8F6;
+  --color-surface: #FFFFFF;
+  --color-text: #2B2927;
+  --color-muted: #A39F98;
+  --color-accent: #D47A43;
+  --font-heading: 'Newsreader', serif;
+  --font-body: 'Satoshi', sans-serif;
+  --radius-sm: 0px;
+  --radius-md: 4px;
+  --spacing-base: 8px;
+  --border-subtle: 1px solid #E5E3DF;
+  --border-bold: 2px solid #2B2927;
+}
+```
+
+</details>
+
+---
+
+<details>
+<summary>Screen Specifications</summary>
+
+### The Daily Hub
+
+**Purpose:** Command center detailing the day's nutritional roadmap and biometric readiness.
+
+**Layout:** 3-column split. Left: Navigation. Center (60%): Today's Meals & Vitals. Right (20%): Gamification & Stats.
+
+**Key Elements:**
+- **Vitality Score Ring:** `200px` circular chart, `#4A5D23` fill, merging sleep, digestion, and macro completion.
+- **Today's Itinerary:** Vertical timeline of Breakfast, Lunch, Dinner, Snacks.
+- **Creator Badge:** Top right corner, displaying current level (e.g., `Lvl 12 • Sous Chef`).
+
+**States:**
+- **Empty:** "No meals logged yet. Start your day off right." with a stark, outline-only CTA.
+- **Loading:** Skeleton lines matching exact typography line-heights.
+- **Error:** Subtle inline text `#D47A43`, "Unable to sync vitals."
+
+**Components:**
+- **Meal Card:** `100% width`, `Surface`, `Border-subtle`, containing thumbnail, title, macros, and `Edit` icon.
+- **Log Button:** `Primary` background, `Surface` text, flat design, no shadow.
+
+**Interactions:**
+- **Click [Meal Card]:** Expands in-place to reveal recipe details and ingredient checklist.
+- **Hover [Log Button]:** Background shifts to `#3A4A1C`.
+
+**Responsive:**
+- **Desktop:** 3-column grid layout.
+- **Tablet:** 2 columns (Stats move below Center content).
+- **Mobile:** Single column, stacked.
+
+### Vitals & Food Diary
+
+**Purpose:** Connect physiological data to culinary intake.
+
+**Layout:** Two-pane split. Left: List of logged days. Right: Detailed journal entry for the selected day.
+
+**Key Elements:**
+- **Biometric Sliders:** Minimalist horizontal track (`#E5E3DF`) with a square thumb (`#4A5D23`) for Energy, Digestion, Mood.
+- **Macro Table:** Editorial-style table with bold top border (`2px solid #2B2927`) detailing Proteins, Fats, Carbs.
+- **Workout Linker:** Dropdown to select the day's physical activity (e.g., "Leg Day", "10k Run").
+
+**States:**
+- **Empty:** Faded placeholder text encouraging reflection.
+- **Loading:** Fading pulse on the entire right pane.
+
+**Components:**
+- **Slider Input:** `100% width`, 24px height.
+- **Table Row:** `16px` padding, 1px bottom border.
+
+**Interactions:**
+- **Drag [Slider]:** Real-time numeric update above the thumb.
+- **Hover [Table Row]:** Background shifts to `#F5F4F1`.
+
+### Recipe Vault
+
+**Purpose:** Organize, filter, and view saved and original recipes visually.
+
+**Layout:** Masonry grid with a sticky top filter bar.
+
+**Key Elements:**
+- **Filter Bar:** Horizontal scroll of tags (e.g., `High Protein`, `Batch Cook`, `IG Saves`).
+- **Recipe Card:** Image-heavy, tall aspect ratio (4:5), title in `Newsreader`, source icon (IG/YT) in top-left corner.
+- **Add Link Input:** `400px` wide input field in header with a `Extract` button.
+
+**States:**
+- **Empty:** Illustration of an empty recipe box, "Paste a link to begin your collection."
+- **Loading:** Blurred gray rectangles matching card dimensions.
+
+**Components:**
+- **Tag Pill:** `Border-subtle`, `Radius-sm`, `Satoshi 13px` text.
+- **Recipe Thumbnail:** 100% width, sharp corners, monochrome filter applied until hover.
+
+**Interactions:**
+- **Hover [Recipe Card]:** Monochrome filter drops, image slightly scales up (1.02x) over 0.3s.
+- **Click [Extract]:** Input field transforms into a progress bar, then animates a new card falling into the grid.
+
+### Smart Weekly Planner
+
+**Purpose:** Orchestrate weekly meals and auto-generate grocery needs.
+
+**Layout:** 7-column calendar grid (top 60%) + Grocery List drawer (bottom 40%).
+
+**Key Elements:**
+- **Day Column:** Header with day and date, drop zone for Recipe Cards.
+- **Batch Cooking Badge:** `#D47A43` pill indicating recipes yielding >4 servings.
+- **Leftover Warning:** Diagonal striped background on slots automatically filled by a previous day's batch cook.
+
+**States:**
+- **Empty:** Empty drop zones with subtle dashed borders.
+- **Loading:** Spinner in the center of the calendar.
+
+**Components:**
+- **Mini Recipe Card:** Draggable, `100% width`, `60px height`, text only.
+- **Grocery Item:** Checkbox + Label + Aisle category tag.
+
+**Interactions:**
+- **Drag & Drop [Mini Card]:** Snaps to Day Column, instantly updates Grocery List drawer below.
+- **Click [Checkbox]:** Text gets a strikethrough, color shifts to `Muted`.
+
+### Community Feed
+
+**Purpose:** Social validation, inspiration, and gamification mechanics.
+
+**Layout:** Single central column (600px max-width), aligned left.
+
+**Key Elements:**
+- **Feed Item:** User avatar, action text ("*Elena* logged a 10k run & cooked *Lemon Salmon*"), large photo, like/comment buttons.
+- **Leaderboard Sidebar:** Sticky left sidebar ranking friends by XP earned this week.
+- **Chef Pro Badge:** Gold/Terracotta shield icon next to verified creator names.
+
+**States:**
+- **Empty:** "Find friends or creators to follow."
+- **Loading:** 3 skeleton feed items.
+
+**Components:**
+- **Action Text:** `Newsreader` for user names and recipe titles, `Satoshi` for verbs.
+- **Like Button:** Flame icon, shifts to `#D47A43` when active.
+
+**Interactions:**
+- **Click [Like]:** Icon pops (1.2x scale) and particles emit.
+- **Click [Recipe Title]:** Opens modal to instantly save that recipe to user's Recipe Vault.
+
+</details>
+
+---
+
+<details>
+<summary>Build Guide</summary>
+
+**Stack:** HTML + Tailwind CSS v3
+
+**Build Order:**
+1. **The Daily Hub** - Establishes the core layout, background colors, and the critical `Newsreader`/`Satoshi` typographic pairing.
+2. **Recipe Vault** - Introduces the masonry grid and image treatment rules (monochrome hover states).
+3. **Smart Weekly Planner** - Implements complex drag-and-drop interactions and layout splits.
+4. **Vitals & Food Diary** - Adds form controls, sliders, and editorial table designs.
+5. **Community Feed** - Reuses components from previous screens to build the social timeline and leaderboards.
+
+</details>

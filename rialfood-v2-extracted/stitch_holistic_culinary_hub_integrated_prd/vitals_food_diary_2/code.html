@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Vitals &amp; Food Diary - Holistic Culinary Hub</title>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,200..800;1,6..72,200..800&amp;family=Satoshi:wght@400;500;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#4A5D23",
+                        "background-light": "#F9F8F6",
+                        "background-dark": "#1c2210",
+                        "surface": "#FFFFFF",
+                        "text-main": "#2B2927",
+                        "muted": "#A39F98",
+                        "accent": "#D47A43",
+                        "subtle": "#E5E3DF",
+                        "hover-bg": "#F5F4F1"
+                    },
+                    fontFamily: {
+                        "display": ["Newsreader", "serif"],
+                        "body": ["Satoshi", "sans-serif"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "4px",
+                        "sm": "0px",
+                        "md": "4px",
+                        "lg": "8px",
+                        "xl": "12px",
+                        "full": "9999px"
+                    },
+                    borderWidth: {
+                        "subtle": "1px",
+                        "bold": "2px"
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        body {
+            font-family: 'Satoshi', sans-serif;
+            color: #2B2927;
+        }
+        h1, h2, h3, h4, h5, h6, .font-display {
+            font-family: 'Newsreader', serif;
+        }
+        
+        /* Custom Biometric Slider Styles */
+        input[type=range].biometric-slider {
+            -webkit-appearance: none;
+            width: 100%;
+            background: transparent;
+            height: 24px;
+        }
+        input[type=range].biometric-slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            height: 16px;
+            width: 16px;
+            background: #4A5D23;
+            cursor: pointer;
+            margin-top: -6px;
+            border-radius: 0; /* Square thumb */
+        }
+        input[type=range].biometric-slider::-webkit-slider-runnable-track {
+            width: 100%;
+            height: 4px;
+            cursor: pointer;
+            background: #E5E3DF;
+            border-radius: 0px;
+        }
+        input[type=range].biometric-slider:focus {
+            outline: none;
+        }
+        
+        /* Editorial Table Styles */
+        .editorial-table th {
+            border-bottom: 2px solid #2B2927;
+            padding-bottom: 12px;
+            text-align: left;
+            font-weight: 600;
+            font-size: 13px;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: #A39F98;
+        }
+        .editorial-table td {
+            padding: 16px 0;
+            border-bottom: 1px solid #E5E3DF;
+        }
+        .editorial-table tr:hover td {
+            background-color: #F5F4F1;
+            transition: background-color 0.2s ease;
+        }
+        
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #E5E3DF;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #A39F98;
+        }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark min-h-screen flex flex-col antialiased">
+<!-- Top Navigation Bar -->
+<header class="flex items-center justify-between border-b border-subtle bg-surface px-8 py-4 sticky top-0 z-50">
+<div class="flex items-center gap-4 text-text-main">
+<div class="size-6 text-primary">
+<span class="material-symbols-outlined text-[24px]">restaurant</span>
+</div>
+<h1 class="text-text-main text-2xl font-display font-semibold italic tracking-tight">Holistic Culinary Hub</h1>
+</div>
+<nav class="hidden md:flex flex-1 justify-end gap-8 items-center">
+<a class="text-text-main text-sm font-medium hover:text-primary transition-colors" href="#">The Daily Hub</a>
+<a class="text-primary text-sm font-bold border-b-2 border-primary pb-1" href="#">Vitals &amp; Diary</a>
+<a class="text-text-main text-sm font-medium hover:text-primary transition-colors" href="#">Recipe Vault</a>
+<a class="text-text-main text-sm font-medium hover:text-primary transition-colors" href="#">Planner</a>
+<a class="text-text-main text-sm font-medium hover:text-primary transition-colors" href="#">Community</a>
+<div class="h-8 w-px bg-subtle mx-2"></div>
+<div class="bg-subtle aspect-square bg-cover rounded-full size-9 cursor-pointer border border-subtle hover:border-primary transition-colors" data-alt="User Avatar Profile Picture" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuAen-4T1eZ-hLNKpYGSyunpJXR0hcLk8LbUVIXcirQDsHFmGHDscZYF7iHdojm0oiVFAFBwkytNetLKQOThYfC_hDF-gXnw_5kzaU4En7PY9jW-aiwUh8AufQib7J6VXtYaOPNswgKsN6IaBx2PR0-audJX-X2ffkyY46ui2C5UNJdhIv93tL2oakTW9EO2nx_2qnOAO3few2rYEYtV2cNkrwP8ligfq7ZfB-ygTc0--dL3OmIamFRCUQ9G7i-am2uElLfQrUYQ8C0");'></div>
+</nav>
+<button class="md:hidden text-text-main">
+<span class="material-symbols-outlined">menu</span>
+</button>
+</header>
+<!-- Main Layout Container -->
+<main class="flex-1 flex overflow-hidden flex-col md:flex-row max-w-[1440px] mx-auto w-full">
+<!-- Left Pane: Logged Days List -->
+<aside class="w-full md:w-80 border-r border-subtle bg-surface flex flex-col h-[30vh] md:h-[calc(100vh-73px)] shrink-0 overflow-y-auto">
+<div class="p-6 pb-2 sticky top-0 bg-surface/95 backdrop-blur z-10">
+<h2 class="font-display text-xl font-semibold mb-4 text-text-main">Journal Entries</h2>
+<div class="relative">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-muted text-[20px]">search</span>
+<input class="w-full pl-10 pr-4 py-2 bg-background-light border border-subtle rounded-md text-sm focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-colors placeholder:text-muted" placeholder="Search by date or mood..." type="text"/>
+</div>
+</div>
+<div class="flex flex-col p-4 gap-2">
+<!-- Active Day -->
+<button class="flex items-center gap-4 px-4 py-3 rounded-md bg-primary/10 border border-primary text-left transition-colors relative group">
+<div class="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-8 bg-primary rounded-r-md"></div>
+<div class="flex flex-col justify-center flex-1">
+<p class="text-text-main text-base font-semibold font-display">Today</p>
+<p class="text-primary text-sm font-medium">Vitality: 85</p>
+</div>
+<span class="material-symbols-outlined text-primary text-[20px]">chevron_right</span>
+</button>
+<!-- Past Day -->
+<button class="flex items-center gap-4 px-4 py-3 rounded-md hover:bg-hover-bg border border-transparent text-left transition-colors group">
+<div class="flex flex-col justify-center flex-1">
+<p class="text-text-main text-base font-medium font-display">Yesterday</p>
+<p class="text-muted text-sm group-hover:text-text-main transition-colors">Vitality: 72</p>
+</div>
+</button>
+<!-- Past Day -->
+<button class="flex items-center gap-4 px-4 py-3 rounded-md hover:bg-hover-bg border border-transparent text-left transition-colors group">
+<div class="flex flex-col justify-center flex-1">
+<p class="text-text-main text-base font-medium font-display">Oct 24, 2023</p>
+<p class="text-muted text-sm group-hover:text-text-main transition-colors">Vitality: 90</p>
+</div>
+</button>
+<!-- Past Day -->
+<button class="flex items-center gap-4 px-4 py-3 rounded-md hover:bg-hover-bg border border-transparent text-left transition-colors group">
+<div class="flex flex-col justify-center flex-1">
+<p class="text-text-main text-base font-medium font-display">Oct 23, 2023</p>
+<p class="text-muted text-sm group-hover:text-text-main transition-colors">Vitality: 65</p>
+</div>
+</button>
+<div class="mt-4 p-4 border border-dashed border-subtle rounded-md text-center">
+<p class="text-muted text-sm italic font-display">End of recent logs.</p>
+</div>
+</div>
+</aside>
+<!-- Right Pane: Detailed Journal Entry -->
+<section class="flex-1 bg-background-light overflow-y-auto h-[70vh] md:h-[calc(100vh-73px)]">
+<div class="max-w-4xl mx-auto p-8 md:p-12 lg:p-16">
+<!-- Entry Header -->
+<div class="flex flex-col md:flex-row md:items-end justify-between mb-12 border-b border-bold pb-6">
+<div>
+<p class="text-accent text-sm font-bold uppercase tracking-widest mb-2 flex items-center gap-1">
+<span class="material-symbols-outlined text-[16px]">calendar_today</span>
+                            Wednesday
+                        </p>
+<h2 class="font-display text-4xl md:text-5xl font-normal italic text-text-main">Today's Log</h2>
+</div>
+<div class="mt-4 md:mt-0 text-right">
+<p class="text-muted text-sm uppercase tracking-wider mb-1">Daily Vitality</p>
+<div class="inline-flex items-baseline gap-1">
+<span class="font-display text-4xl font-semibold text-primary">85</span>
+<span class="text-muted text-lg">/100</span>
+</div>
+</div>
+</div>
+<!-- Biometrics Section -->
+<div class="mb-16">
+<div class="flex items-center justify-between mb-8">
+<h3 class="font-display text-2xl font-semibold text-text-main">Physiological Vitals</h3>
+<button class="text-sm font-bold text-primary hover:text-text-main transition-colors flex items-center gap-1">
+<span class="material-symbols-outlined text-[18px]">sync</span>
+                            Sync Oura Ring
+                        </button>
+</div>
+<div class="bg-surface border border-subtle rounded-md p-8 shadow-sm">
+<!-- Energy Slider -->
+<div class="mb-8 relative">
+<div class="flex justify-between items-end mb-2">
+<label class="text-sm font-semibold text-text-main uppercase tracking-wider">Energy Levels</label>
+<span class="font-display text-xl text-primary font-medium">8/10</span>
+</div>
+<input class="biometric-slider" max="10" min="1" type="range" value="8"/>
+<div class="flex justify-between text-xs text-muted mt-2">
+<span>Sluggish</span>
+<span>Radiant</span>
+</div>
+</div>
+<!-- Digestion Slider -->
+<div class="mb-8 relative">
+<div class="flex justify-between items-end mb-2">
+<label class="text-sm font-semibold text-text-main uppercase tracking-wider">Digestion</label>
+<span class="font-display text-xl text-primary font-medium">9/10</span>
+</div>
+<input class="biometric-slider" max="10" min="1" type="range" value="9"/>
+<div class="flex justify-between text-xs text-muted mt-2">
+<span>Bloated/Heavy</span>
+<span>Light/Optimal</span>
+</div>
+</div>
+<!-- Mood Slider -->
+<div class="relative">
+<div class="flex justify-between items-end mb-2">
+<label class="text-sm font-semibold text-text-main uppercase tracking-wider">Mental Clarity</label>
+<span class="font-display text-xl text-primary font-medium">7/10</span>
+</div>
+<input class="biometric-slider" max="10" min="1" type="range" value="7"/>
+<div class="flex justify-between text-xs text-muted mt-2">
+<span>Foggy</span>
+<span>Sharp</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Nutrition Section (Editorial Table) -->
+<div class="mb-16">
+<div class="flex items-center justify-between mb-8">
+<h3 class="font-display text-2xl font-semibold text-text-main">Culinary Intake</h3>
+<button class="bg-primary text-surface px-4 py-2 rounded-md text-sm font-bold hover:bg-[#3A4A1C] transition-colors flex items-center gap-2">
+<span class="material-symbols-outlined text-[18px]">add</span>
+                            Log Meal
+                        </button>
+</div>
+<div class="bg-surface border border-subtle rounded-md overflow-hidden shadow-sm">
+<table class="w-full editorial-table border-collapse">
+<thead>
+<tr>
+<th class="pl-6 w-1/3">Meal &amp; Source</th>
+<th class="w-1/6">Protein</th>
+<th class="w-1/6">Fats</th>
+<th class="w-1/6">Carbs</th>
+<th class="w-1/6 pr-6 text-right">Cals</th>
+</tr>
+</thead>
+<tbody>
+<!-- Breakfast Row -->
+<tr class="group cursor-pointer">
+<td class="pl-6">
+<p class="font-display font-semibold text-lg text-text-main">Overnight Steel Cut Oats</p>
+<p class="text-xs text-muted mt-1 flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">schedule</span> 08:30 AM
+                                        </p>
+</td>
+<td><span class="font-display text-lg">15g</span></td>
+<td><span class="font-display text-lg">12g</span></td>
+<td><span class="font-display text-lg">45g</span></td>
+<td class="pr-6 text-right"><span class="font-display text-lg font-semibold text-primary">340</span></td>
+</tr>
+<!-- Lunch Row -->
+<tr class="group cursor-pointer">
+<td class="pl-6">
+<p class="font-display font-semibold text-lg text-text-main">Grilled Salmon Bowl</p>
+<div class="inline-flex mt-1 items-center gap-1 px-2 py-0.5 rounded-sm bg-accent/10 border border-accent/20">
+<span class="text-[10px] font-bold text-accent uppercase tracking-wider">Batch Cook</span>
+</div>
+</td>
+<td><span class="font-display text-lg">42g</span></td>
+<td><span class="font-display text-lg">22g</span></td>
+<td><span class="font-display text-lg">35g</span></td>
+<td class="pr-6 text-right"><span class="font-display text-lg font-semibold text-primary">510</span></td>
+</tr>
+<!-- Dinner Row -->
+<tr class="group cursor-pointer">
+<td class="pl-6">
+<p class="font-display font-semibold text-lg text-text-main italic text-muted">Pending Entry...</p>
+</td>
+<td><span class="font-display text-lg text-muted">-</span></td>
+<td><span class="font-display text-lg text-muted">-</span></td>
+<td><span class="font-display text-lg text-muted">-</span></td>
+<td class="pr-6 text-right"><span class="font-display text-lg font-semibold text-muted">-</span></td>
+</tr>
+</tbody>
+<tfoot class="bg-background-light border-t border-bold">
+<tr>
+<td class="pl-6 py-4 font-bold text-sm uppercase tracking-wider">Daily Totals</td>
+<td class="py-4"><span class="font-display text-lg font-semibold text-text-main">57g</span></td>
+<td class="py-4"><span class="font-display text-lg font-semibold text-text-main">34g</span></td>
+<td class="py-4"><span class="font-display text-lg font-semibold text-text-main">80g</span></td>
+<td class="pr-6 py-4 text-right"><span class="font-display text-xl font-bold text-text-main">850</span></td>
+</tr>
+</tfoot>
+</table>
+</div>
+</div>
+<!-- Activity & Notes Section -->
+<div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
+<!-- Workout Linker -->
+<div>
+<h3 class="font-display text-2xl font-semibold text-text-main mb-6">Activity</h3>
+<div class="bg-surface border border-subtle rounded-md p-6 shadow-sm">
+<label class="block text-sm font-semibold text-text-main uppercase tracking-wider mb-3">Linked Workout</label>
+<div class="relative">
+<select class="w-full appearance-none bg-background-light border border-subtle text-text-main py-3 pl-4 pr-10 rounded-md focus:outline-none focus:ring-1 focus:ring-primary focus:border-primary font-medium cursor-pointer">
+<option disabled="" value="">Select Activity</option>
+<option selected="" value="run">Morning 10k Run - Zone 2</option>
+<option value="lift">Leg Day Strength Training</option>
+<option value="yoga">Vinyasa Flow (45m)</option>
+<option value="rest">Active Recovery Day</option>
+</select>
+<div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-4 text-text-main">
+<span class="material-symbols-outlined text-[20px]">expand_more</span>
+</div>
+</div>
+<div class="mt-4 flex items-center gap-2 text-sm text-primary font-medium">
+<span class="material-symbols-outlined text-[18px]">local_fire_department</span>
+                                Burned approx. 620 kcal
+                            </div>
+</div>
+</div>
+<!-- Journal Notes -->
+<div>
+<h3 class="font-display text-2xl font-semibold text-text-main mb-6">Reflections</h3>
+<div class="bg-surface border border-subtle rounded-md p-0 shadow-sm overflow-hidden flex flex-col h-full">
+<textarea class="w-full h-full min-h-[140px] p-6 resize-none bg-transparent border-none focus:ring-0 text-text-main font-display text-lg italic leading-relaxed placeholder:text-muted" placeholder="How did today's fuel impact your performance? Notice any patterns?">Felt incredibly light during the morning run, likely due to a lighter dinner last night. The salmon bowl provided sustained energy without the mid-afternoon crash.</textarea>
+<div class="bg-background-light border-t border-subtle px-4 py-2 flex justify-end">
+<span class="text-xs text-muted uppercase tracking-wider font-semibold">Auto-saved</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+</main>
+</body></html>

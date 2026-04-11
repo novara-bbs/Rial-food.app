@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#25aff4",
+                        "vitality-lime": "#d4ff00",
+                        "background-light": "#f5f7f8",
+                        "background-dark": "#101c22",
+                    },
+                    fontFamily: {
+                        "display": ["Inter", "sans-serif"]
+                    },
+                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>
+        body { font-family: 'Inter', sans-serif; }
+        .hide-scrollbar::-webkit-scrollbar { display: none; }
+        .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 antialiased">
+<!-- Main Container -->
+<div class="max-w-md mx-auto min-h-screen bg-white dark:bg-slate-950 flex flex-col shadow-2xl relative">
+<!-- Header -->
+<header class="flex items-center bg-white dark:bg-slate-900 p-4 sticky top-0 z-50 border-b border-slate-100 dark:border-slate-800 justify-between">
+<div class="text-slate-900 dark:text-slate-100 flex size-10 items-center justify-center cursor-pointer hover:bg-slate-100 dark:hover:bg-slate-800 rounded-full transition-colors">
+<span class="material-symbols-outlined">arrow_back</span>
+</div>
+<h2 class="text-slate-900 dark:text-slate-100 text-lg font-bold leading-tight tracking-tight flex-1 text-center">Pro Creator</h2>
+<div class="flex w-10 items-center justify-end">
+<button class="flex size-10 items-center justify-center rounded-full hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">
+<span class="material-symbols-outlined text-slate-900 dark:text-slate-100">share</span>
+</button>
+</div>
+</header>
+<!-- Profile Hero Section -->
+<div class="flex p-6 flex-col items-center bg-gradient-to-b from-white to-background-light dark:from-slate-950 dark:to-background-dark">
+<div class="relative mb-4">
+<div class="bg-center bg-no-repeat aspect-square bg-cover rounded-full h-32 w-32 ring-4 ring-vitality-lime/30" data-alt="Close up portrait of elite athlete Alex Rivera" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuDwImGPtc7KOVHwdz4lBus0fL992Lng9Z58fdbXs8zdBjMo9LdWqgT_e6ic1fzJK-4mM58lGNPr0fTMwxt3cOwypzeOUQVQKCgQnmk0atH2ZjVAsp-1iwA1olycZ2d4bDoMcnqm9kqW8aDMGR0SqSnSGg0yncSUHlWWfKyc4ElpNLyD7d9rtY2_gang7_7OdV8pLak6wvO6FFqcapG9H0BGrpsEQyii3TOKCO2_lKonP0R6eddfctIEOjj1OmbuMP4owgpEHxDKiADk");'></div>
+<div class="absolute bottom-1 right-1 bg-primary text-white p-1 rounded-full border-2 border-white dark:border-slate-900">
+<span class="material-symbols-outlined text-[14px] font-bold">verified</span>
+</div>
+</div>
+<div class="flex flex-col items-center justify-center text-center mb-6">
+<h1 class="text-slate-900 dark:text-slate-100 text-2xl font-extrabold tracking-tight">Alex Rivera</h1>
+<p class="text-primary font-semibold text-sm uppercase tracking-widest mt-1">Pro Endurance Athlete</p>
+<div class="flex items-center gap-1 mt-2 text-slate-500 dark:text-slate-400">
+<span class="material-symbols-outlined text-sm">location_on</span>
+<span class="text-sm font-medium">Chamonix, France</span>
+</div>
+</div>
+<div class="flex w-full gap-3">
+<button class="flex-1 flex items-center justify-center rounded-xl h-12 bg-slate-900 text-white dark:bg-white dark:text-slate-900 text-sm font-bold transition-transform active:scale-95 shadow-lg">
+                    Follow
+                </button>
+<button class="flex-1 flex items-center justify-center rounded-xl h-12 bg-vitality-lime text-slate-900 text-sm font-bold transition-transform active:scale-95 shadow-lg">
+                    Mirror Plan
+                </button>
+</div>
+</div>
+<!-- Human Edge Stats -->
+<div class="px-4 py-2">
+<h3 class="text-slate-900 dark:text-slate-100 text-xs font-black uppercase tracking-[0.2em] mb-4 opacity-50 px-2">Human Edge Intelligence</h3>
+<div class="grid grid-cols-3 gap-3">
+<div class="flex flex-col gap-1 rounded-2xl bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 p-4 shadow-sm hover:border-primary/30 transition-colors">
+<p class="text-slate-900 dark:text-slate-100 text-2xl font-black italic">68.2</p>
+<p class="text-slate-500 dark:text-slate-400 text-[10px] font-bold uppercase tracking-wider">VO2 Max</p>
+<div class="w-full h-1 bg-slate-100 dark:bg-slate-800 rounded-full mt-1 overflow-hidden">
+<div class="h-full bg-vitality-lime w-[85%]"></div>
+</div>
+</div>
+<div class="flex flex-col gap-1 rounded-2xl bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 p-4 shadow-sm hover:border-primary/30 transition-colors">
+<p class="text-slate-900 dark:text-slate-100 text-2xl font-black italic">1420</p>
+<p class="text-slate-500 dark:text-slate-400 text-[10px] font-bold uppercase tracking-wider">T-Load</p>
+<div class="w-full h-1 bg-slate-100 dark:bg-slate-800 rounded-full mt-1 overflow-hidden">
+<div class="h-full bg-primary w-[70%]"></div>
+</div>
+</div>
+<div class="flex flex-col gap-1 rounded-2xl bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 p-4 shadow-sm hover:border-primary/30 transition-colors">
+<p class="text-slate-900 dark:text-slate-100 text-2xl font-black italic">12.4k</p>
+<p class="text-slate-500 dark:text-slate-400 text-[10px] font-bold uppercase tracking-wider">Circle</p>
+<div class="w-full h-1 bg-slate-100 dark:bg-slate-800 rounded-full mt-1 overflow-hidden">
+<div class="h-full bg-slate-400 w-[40%]"></div>
+</div>
+</div>
+</div>
+</div>
+<!-- Featured Video Section -->
+<div class="px-4 py-6">
+<h3 class="text-slate-900 dark:text-slate-100 text-xs font-black uppercase tracking-[0.2em] mb-4 opacity-50 px-2">Featured Performance Brief</h3>
+<div class="relative group cursor-pointer overflow-hidden rounded-2xl shadow-xl aspect-video bg-slate-200 dark:bg-slate-800">
+<div class="absolute inset-0 bg-center bg-cover transition-transform duration-500 group-hover:scale-105" data-alt="Athlete training in a modern minimalist gym facility" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuC1YspZXa1o144crkQul6m2MJC9nUIBrO9gH8JKyJGqD8xZfK03ATp3nRGLkc19hF3tTiYgmt3f7lrD56o8H54w_4jKUc9zXKlbfFj3MhbzETuFF-3zzO_4cHDHeLSiEbKbs9UKRXN_yq92-hqqxsb5BHznYU_-7kbkMZcWlQP_qxvX59BLIXCHs7wDxIjlXFJCxpMbb7HT_FVEKJgPUdbblX9Gx--UhrdjBAvEA8g-KnHRF_X9z7M4XW99N3FfpQVeq-OSQopIYp39");'></div>
+<div class="absolute inset-0 bg-black/30 group-hover:bg-black/20 transition-colors"></div>
+<div class="absolute inset-0 flex items-center justify-center">
+<div class="size-16 bg-vitality-lime rounded-full flex items-center justify-center shadow-2xl group-hover:scale-110 transition-transform">
+<span class="material-symbols-outlined text-slate-950 text-4xl filled">play_arrow</span>
+</div>
+</div>
+<div class="absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-black/80 to-transparent">
+<p class="text-white font-bold text-lg">My 4AM Performance Routine</p>
+<p class="text-white/70 text-sm italic">Mastering the Human Edge Protocol</p>
+</div>
+</div>
+</div>
+<!-- Signature Recipes -->
+<div class="px-4 py-6 bg-slate-50 dark:bg-slate-900/50">
+<div class="flex items-center justify-between mb-4 px-2">
+<h3 class="text-slate-900 dark:text-slate-100 text-xs font-black uppercase tracking-[0.2em] opacity-50">Signature Fuel</h3>
+<a class="text-primary text-xs font-bold uppercase tracking-wider" href="#">View All</a>
+</div>
+<div class="flex gap-4 overflow-x-auto hide-scrollbar pb-4 -mx-4 px-4">
+<!-- Recipe Card 1 -->
+<div class="min-w-[220px] bg-white dark:bg-slate-800 rounded-2xl overflow-hidden shadow-sm border border-slate-100 dark:border-slate-700">
+<div class="h-32 bg-center bg-cover" data-alt="Vibrant green smoothie bowl with berries and nuts" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuBVajaqH43BdbL9W5hHKimLQGylnzBhAZXzE3YdqS-hhGAUG00_kY_w7JZNYEsqzGecd2pjwh_ZWz95nyL6lxSHHVstfTlajYuewcCcTLWYQMluX1gAg6qC6yMT_tgcXruAesIQB3n51AMJ0mciYhMDUM26lya-xv0R1iaNPUBkufrpWk2qDVJJXv5r4THshM7aU9BAWAXQuGJJ3sm3f4dhZjWAmRAVustRQmGPlfjH8OcCHHilIKDbSah_3v29c_L_98_VJ3EO2QRP");'></div>
+<div class="p-3">
+<p class="text-xs font-bold text-primary mb-1">RECOVERY</p>
+<h4 class="text-slate-900 dark:text-slate-100 font-bold text-sm mb-2">Nitrogen Recovery Bowl</h4>
+<div class="flex items-center gap-2 text-slate-500 text-[10px]">
+<span class="flex items-center gap-1"><span class="material-symbols-outlined text-xs">timer</span> 12m</span>
+<span class="flex items-center gap-1"><span class="material-symbols-outlined text-xs">bolt</span> 420 kcal</span>
+</div>
+</div>
+</div>
+<!-- Recipe Card 2 -->
+<div class="min-w-[220px] bg-white dark:bg-slate-800 rounded-2xl overflow-hidden shadow-sm border border-slate-100 dark:border-slate-700">
+<div class="h-32 bg-center bg-cover" data-alt="Nutritious power salad with avocado and quinoa" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuAJtZRGPrn3Uzrw3XmcvphLHSCgm4AasMmQju4sNrshk6e9_bZnk2Y-Tx9ra30NiQnv7oPqdK-FuS_U94JRYxi8MKIHp4medIVLuLsVtk56Lfnee84xqrtd6BhbFD2uGXPtX5AfJOh2el1Ezj7VQm1zsoZXufOZmHkIK3LaTLsFoFyAkNyYZEgn_6Z0HNYXHCLMIer8HA432nnGnlmwMK3cv6v_xeg8VFeHJegxsM7cJqm64K06t5cE-mUGn5mwq2Oc63cBcPfDko53");'></div>
+<div class="p-3">
+<p class="text-xs font-bold text-primary mb-1">ENDURANCE</p>
+<h4 class="text-slate-900 dark:text-slate-100 font-bold text-sm mb-2">VO2 Max Power Salad</h4>
+<div class="flex items-center gap-2 text-slate-500 text-[10px]">
+<span class="flex items-center gap-1"><span class="material-symbols-outlined text-xs">timer</span> 18m</span>
+<span class="flex items-center gap-1"><span class="material-symbols-outlined text-xs">bolt</span> 510 kcal</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Footer Padding -->
+<div class="h-24"></div>
+<!-- Bottom Navigation Bar -->
+<nav class="fixed bottom-0 left-0 right-0 max-w-md mx-auto bg-white/90 dark:bg-slate-900/90 backdrop-blur-md border-t border-slate-100 dark:border-slate-800 z-[60]">
+<div class="flex gap-2 px-4 pb-6 pt-3">
+<a class="flex flex-1 flex-col items-center justify-end gap-1 text-slate-400 dark:text-slate-500" href="#">
+<div class="flex h-8 items-center justify-center">
+<span class="material-symbols-outlined">explore</span>
+</div>
+<p class="text-[10px] font-bold uppercase tracking-widest leading-none">Explore</p>
+</a>
+<a class="flex flex-1 flex-col items-center justify-end gap-1 text-slate-400 dark:text-slate-500" href="#">
+<div class="flex h-8 items-center justify-center">
+<span class="material-symbols-outlined">fitness_center</span>
+</div>
+<p class="text-[10px] font-bold uppercase tracking-widest leading-none">Train</p>
+</a>
+<a class="flex flex-1 flex-col items-center justify-end gap-1 text-slate-400 dark:text-slate-500" href="#">
+<div class="flex h-8 items-center justify-center">
+<span class="material-symbols-outlined">restaurant</span>
+</div>
+<p class="text-[10px] font-bold uppercase tracking-widest leading-none">Fuel</p>
+</a>
+<a class="flex flex-1 flex-col items-center justify-end gap-1 text-primary" href="#">
+<div class="flex h-8 items-center justify-center">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1">account_circle</span>
+</div>
+<p class="text-[10px] font-bold uppercase tracking-widest leading-none">Profile</p>
+</a>
+</div>
+</nav>
+</div>
+</body></html>

@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>RIAL Daily Nutrition Dashboard</title>
+<!-- Load Space Grotesk font as specified in THEME_48 -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS v3 with plugins -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- BEGIN: Tailwind Configuration -->
+<script data-purpose="tailwind-config">
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            primary: '#007dff',
+            surface: {
+              50: '#1a1a1a',
+              100: '#242424',
+              200: '#2d2d2d',
+            }
+          },
+          fontFamily: {
+            sans: ['Space Grotesk', 'sans-serif'],
+          },
+          borderRadius: {
+            'custom': '12px', // MATCHES ROUND_TWELVE
+          }
+        }
+      }
+    }
+  </script>
+<!-- END: Tailwind Configuration -->
+<style data-purpose="base-typography">
+    body {
+      background-color: #0f0f0f; /* Deep dark editorial background */
+      color: #ffffff;
+      font-family: 'Space Grotesk', sans-serif;
+      -webkit-font-smoothing: antialiased;
+    }
+    .editorial-border {
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    .accent-glow {
+      box-shadow: 0 0 20px rgba(0, 125, 255, 0.15);
+    }
+  </style>
+</head>
+<body class="p-4 pb-24">
+<!-- BEGIN: Header -->
+<header class="mb-8 pt-6" data-purpose="dashboard-header">
+<div class="flex justify-between items-end">
+<div>
+<h2 class="text-xs uppercase tracking-[0.2em] text-gray-500 font-semibold mb-1">Nutrition Report</h2>
+<h1 class="text-3xl font-bold">Today.</h1>
+</div>
+<div class="text-right">
+<p class="text-xs text-gray-400">Oct 24, 2023</p>
+<span class="inline-block px-2 py-1 rounded-custom bg-primary/10 text-primary text-[10px] font-bold mt-1">PREMIUM PLAN</span>
+</div>
+</div>
+</header>
+<!-- END: Header -->
+<!-- BEGIN: Main Calorie Display -->
+<section class="mb-8" data-purpose="calorie-summary">
+<div class="relative overflow-hidden bg-surface-100 rounded-custom p-6 editorial-border accent-glow">
+<div class="relative z-10 flex flex-col items-center">
+<span class="text-xs uppercase tracking-widest text-gray-400 mb-2">Remaining Calories</span>
+<div class="flex items-baseline gap-2">
+<span class="text-6xl font-bold tracking-tighter">1,240</span>
+<span class="text-primary font-bold text-xl italic">kcal</span>
+</div>
+<div class="w-full mt-6 flex justify-between text-[10px] text-gray-500 border-t border-white/5 pt-4">
+<div class="text-center">
+<p class="font-medium text-white">2,500</p>
+<p>GOAL</p>
+</div>
+<div class="text-center">
+<p class="font-medium text-white text-primary">1,410</p>
+<p>FOOD</p>
+</div>
+<div class="text-center">
+<p class="font-medium text-white">150</p>
+<p>EXERCISE</p>
+</div>
+</div>
+</div>
+<!-- Decorative background element -->
+<div class="absolute -right-10 -top-10 w-40 h-40 bg-primary/5 rounded-full blur-3xl"></div>
+</div>
+</section>
+<!-- END: Main Calorie Display -->
+<!-- BEGIN: Macro Nutrients -->
+<section class="mb-8" data-purpose="macro-nutrients">
+<h3 class="text-[10px] uppercase tracking-widest text-gray-500 font-bold mb-4">Macronutrients</h3>
+<div class="grid grid-cols-1 gap-4">
+<!-- Protein -->
+<div class="bg-surface-100 p-4 rounded-custom editorial-border">
+<div class="flex justify-between items-end mb-2">
+<span class="font-medium">Protein</span>
+<span class="text-xs text-gray-400"><span class="text-white">125g</span> / 180g</span>
+</div>
+<div class="w-full h-1.5 bg-surface-200 rounded-full overflow-hidden">
+<div class="h-full bg-primary" style="width: 70%;"></div>
+</div>
+</div>
+<!-- Carbs -->
+<div class="bg-surface-100 p-4 rounded-custom editorial-border">
+<div class="flex justify-between items-end mb-2">
+<span class="font-medium">Carbohydrates</span>
+<span class="text-xs text-gray-400"><span class="text-white">142g</span> / 250g</span>
+</div>
+<div class="w-full h-1.5 bg-surface-200 rounded-full overflow-hidden">
+<div class="h-full bg-white" style="width: 56%;"></div>
+</div>
+</div>
+<!-- Fats -->
+<div class="bg-surface-100 p-4 rounded-custom editorial-border">
+<div class="flex justify-between items-end mb-2">
+<span class="font-medium">Fats</span>
+<span class="text-xs text-gray-400"><span class="text-white">45g</span> / 85g</span>
+</div>
+<div class="w-full h-1.5 bg-surface-200 rounded-full overflow-hidden">
+<div class="h-full bg-gray-500" style="width: 53%;"></div>
+</div>
+</div>
+</div>
+</section>
+<!-- END: Macro Nutrients -->
+<!-- BEGIN: Micro Nutrients -->
+<section class="mb-8" data-purpose="micro-nutrients">
+<div class="flex justify-between items-center mb-4">
+<h3 class="text-[10px] uppercase tracking-widest text-gray-500 font-bold">Vitamins &amp; Minerals</h3>
+<button class="text-[10px] text-primary font-bold">VIEW ALL</button>
+</div>
+<div class="grid grid-cols-2 gap-3">
+<!-- Vitamin D -->
+<div class="bg-surface-50 p-4 rounded-custom editorial-border">
+<p class="text-[10px] text-gray-400 uppercase mb-1">Vitamin D</p>
+<p class="text-lg font-bold mb-3">85%</p>
+<div class="w-full h-1 bg-surface-200 rounded-full">
+<div class="h-full bg-primary" style="width: 85%;"></div>
+</div>
+</div>
+<!-- Magnesium -->
+<div class="bg-surface-50 p-4 rounded-custom editorial-border">
+<p class="text-[10px] text-gray-400 uppercase mb-1">Magnesium</p>
+<p class="text-lg font-bold mb-3">42%</p>
+<div class="w-full h-1 bg-surface-200 rounded-full">
+<div class="h-full bg-gray-600" style="width: 42%;"></div>
+</div>
+</div>
+<!-- Iron -->
+<div class="bg-surface-50 p-4 rounded-custom editorial-border">
+<p class="text-[10px] text-gray-400 uppercase mb-1">Iron</p>
+<p class="text-lg font-bold mb-3">60%</p>
+<div class="w-full h-1 bg-surface-200 rounded-full">
+<div class="h-full bg-primary" style="width: 60%;"></div>
+</div>
+</div>
+<!-- Zinc -->
+<div class="bg-surface-50 p-4 rounded-custom editorial-border">
+<p class="text-[10px] text-gray-400 uppercase mb-1">Zinc</p>
+<p class="text-lg font-bold mb-3">110%</p>
+<div class="w-full h-1 bg-green-500 rounded-full">
+<div class="h-full bg-green-500" style="width: 100%;"></div>
+</div>
+</div>
+</div>
+</section>
+<!-- END: Micro Nutrients -->
+<!-- BEGIN: Bottom Navigation -->
+<nav class="fixed bottom-0 left-0 right-0 bg-surface-100/80 backdrop-blur-lg border-t border-white/10 px-6 py-4 flex justify-between items-center z-50" data-purpose="mobile-nav">
+<button class="flex flex-col items-center gap-1 group">
+<div class="w-6 h-6 flex items-center justify-center">
+<svg class="w-5 h-5 text-primary" fill="currentColor" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"></path></svg>
+</div>
+<span class="text-[9px] font-bold text-primary tracking-tighter">SUMMARY</span>
+</button>
+<button class="flex flex-col items-center gap-1 opacity-40 group">
+<div class="w-6 h-6 flex items-center justify-center">
+<svg class="w-5 h-5" fill="currentColor" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14h-4v-4h4v4zm0-6h-4V7h4v4z"></path></svg>
+</div>
+<span class="text-[9px] font-bold tracking-tighter">DIARY</span>
+</button>
+<button class="w-12 h-12 bg-primary rounded-full flex items-center justify-center -translate-y-4 shadow-lg shadow-primary/40">
+<svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="3" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><line x1="12" x2="12" y1="5" y2="19"></line><line x1="5" x2="19" y1="12" y2="12"></line></svg>
+</button>
+<button class="flex flex-col items-center gap-1 opacity-40 group">
+<div class="w-6 h-6 flex items-center justify-center">
+<svg class="w-5 h-5" fill="currentColor" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1.41 16.09V20h-2.82v-1.91c-2.47-.56-4.18-2.32-4.24-4.88h2.52c.05 1.38.93 2.56 2.11 2.96v-3.13l-3.07-.73c-2.05-.49-3.36-1.63-3.36-3.72 0-2.12 1.55-3.77 3.91-4.22V2h2.82v1.91c2.06.47 3.53 1.84 3.73 3.9h-2.45c-.18-1.01-.73-1.87-1.74-2.14v3l3.05.77c1.89.48 3.29 1.56 3.29 3.74 0 2.25-1.57 3.94-4.07 4.54z"></path></svg>
+</div>
+<span class="text-[9px] font-bold tracking-tighter">RECIPES</span>
+</button>
+<button class="flex flex-col items-center gap-1 opacity-40 group">
+<div class="w-6 h-6 flex items-center justify-center">
+<svg class="w-5 h-5" fill="currentColor" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"></path></svg>
+</div>
+<span class="text-[9px] font-bold tracking-tighter">PROFILE</span>
+</button>
+</nav>
+<!-- END: Bottom Navigation -->
+</body></html>

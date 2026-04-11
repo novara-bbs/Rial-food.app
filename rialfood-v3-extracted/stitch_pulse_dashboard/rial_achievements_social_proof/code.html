@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>RIAL Achievement Wall</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#25aff4",
+                        "background-light": "#f5f7f8",
+                        "background-dark": "#101c22",
+                    },
+                    fontFamily: {
+                        "display": ["Inter"]
+                    },
+                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>
+        body { font-family: 'Inter', sans-serif; }
+        .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+        .filled-icon { font-variation-settings: 'FILL' 1; }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 antialiased">
+<div class="relative mx-auto max-w-md min-h-screen bg-white dark:bg-slate-900 shadow-xl flex flex-col">
+<!-- Header -->
+<header class="flex items-center bg-white dark:bg-slate-900 p-4 sticky top-0 z-10 border-b border-slate-100 dark:border-slate-800">
+<div class="text-slate-900 dark:text-slate-100 flex size-10 shrink-0 items-center justify-center cursor-pointer hover:bg-slate-50 dark:hover:bg-slate-800 rounded-full transition-colors">
+<span class="material-symbols-outlined">arrow_back</span>
+</div>
+<h2 class="text-slate-900 dark:text-slate-100 text-lg font-bold leading-tight tracking-tight flex-1 text-center font-display">Achievement Wall</h2>
+<div class="flex size-10 items-center justify-end">
+<button class="flex items-center justify-center rounded-full size-10 bg-transparent text-slate-900 dark:text-slate-100 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors">
+<span class="material-symbols-outlined">settings</span>
+</button>
+</div>
+</header>
+<!-- Profile Section -->
+<section class="flex p-6 flex-col items-center">
+<div class="relative mb-4">
+<div class="bg-center bg-no-repeat aspect-square bg-cover rounded-full h-28 w-28 ring-4 ring-primary/10" data-alt="Professional portrait of Alex Rivera smiling" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuBPA1qdmdgBhiGQtz5AMXq4xA5QI0Cv7vIH8-11RHFv9RtGwRSD6O8_8VA_omiZMwYH4uDIq1PlTwQo9iyzTIOttG621eyUH1cX8A4kWeNO0fkvEzjaTAJ_W7EwM_YOAfDwiqr2Hg_NBhlQiUUKpUYNd4FX4tlXeJ2wvvJPwjnyf9HlK52XWulvHWPk2ORh5ERqCUuvazVf2Q3yeBf7zQl8aro87K44NM32BL6bjtRRlDWM054TfaP-_u8N86VutgeNC6sLo-6yy2du");'>
+</div>
+<div class="absolute bottom-0 right-0 bg-primary text-white p-1 rounded-full border-2 border-white dark:border-slate-900">
+<span class="material-symbols-outlined text-sm filled-icon">verified</span>
+</div>
+</div>
+<div class="flex flex-col items-center text-center">
+<p class="text-slate-900 dark:text-slate-100 text-2xl font-bold font-display">Alex Rivera</p>
+<p class="text-primary font-semibold text-sm mb-1 uppercase tracking-wider">Community Impact Leader</p>
+<p class="text-slate-500 dark:text-slate-400 text-sm font-normal">Member since Jan 2023 • Seattle, WA</p>
+</div>
+</section>
+<!-- Stats Row -->
+<section class="flex gap-3 px-4 py-2">
+<div class="flex flex-1 flex-col gap-1 rounded-xl bg-slate-50 dark:bg-slate-800 p-4 items-center text-center transition-all border border-slate-100 dark:border-slate-700">
+<p class="text-slate-900 dark:text-slate-100 text-xl font-bold font-display">128</p>
+<p class="text-slate-500 dark:text-slate-400 text-xs font-medium uppercase tracking-tight">Shared</p>
+</div>
+<div class="flex flex-1 flex-col gap-1 rounded-xl bg-slate-50 dark:bg-slate-800 p-4 items-center text-center transition-all border border-slate-100 dark:border-slate-700">
+<p class="text-slate-900 dark:text-slate-100 text-xl font-bold font-display">1.2k</p>
+<p class="text-slate-500 dark:text-slate-400 text-xs font-medium uppercase tracking-tight">Adopted</p>
+</div>
+<div class="flex flex-1 flex-col gap-1 rounded-xl bg-slate-50 dark:bg-slate-800 p-4 items-center text-center transition-all border border-slate-100 dark:border-slate-700">
+<p class="text-slate-900 dark:text-slate-100 text-xl font-bold font-display">45</p>
+<p class="text-slate-500 dark:text-slate-400 text-xs font-medium uppercase tracking-tight">Badges</p>
+</div>
+</section>
+<!-- Badges Section -->
+<section class="px-4 pt-8 pb-4">
+<div class="flex justify-between items-end mb-4 px-1">
+<h3 class="text-slate-900 dark:text-slate-100 text-xl font-bold font-display">Elite Milestones</h3>
+<span class="text-primary text-sm font-semibold cursor-pointer">View All</span>
+</div>
+<div class="grid grid-cols-3 gap-4">
+<div class="flex flex-col items-center gap-2 group">
+<div class="size-20 rounded-full bg-orange-100 dark:bg-orange-900/30 flex items-center justify-center text-orange-600 dark:text-orange-400 shadow-inner group-hover:scale-105 transition-transform">
+<span class="material-symbols-outlined text-4xl filled-icon">restaurant</span>
+</div>
+<p class="text-[11px] font-bold text-slate-800 dark:text-slate-200 text-center leading-tight">Master Batch Cooker</p>
+</div>
+<div class="flex flex-col items-center gap-2 group">
+<div class="size-20 rounded-full bg-blue-100 dark:bg-blue-900/30 flex items-center justify-center text-blue-600 dark:text-blue-400 shadow-inner group-hover:scale-105 transition-transform">
+<span class="material-symbols-outlined text-4xl filled-icon">groups</span>
+</div>
+<p class="text-[11px] font-bold text-slate-800 dark:text-slate-200 text-center leading-tight">Top Contributor</p>
+</div>
+<div class="flex flex-col items-center gap-2 group">
+<div class="size-20 rounded-full bg-emerald-100 dark:bg-emerald-900/30 flex items-center justify-center text-emerald-600 dark:text-emerald-400 shadow-inner group-hover:scale-105 transition-transform">
+<span class="material-symbols-outlined text-4xl filled-icon">workspace_premium</span>
+</div>
+<p class="text-[11px] font-bold text-slate-800 dark:text-slate-200 text-center leading-tight">Consistency King</p>
+</div>
+</div>
+</section>
+<!-- Adopted Recipes Section -->
+<section class="px-4 py-6 bg-slate-50/50 dark:bg-slate-800/20 mt-4 rounded-t-3xl flex-1">
+<h3 class="text-slate-900 dark:text-slate-100 text-xl font-bold font-display mb-4 px-1">Trending Creations</h3>
+<div class="space-y-4">
+<!-- Recipe Card 1 -->
+<div class="flex bg-white dark:bg-slate-800 p-3 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-700 items-center gap-4">
+<div class="size-20 rounded-xl bg-cover bg-center shrink-0" data-alt="Close up of a vibrant healthy buddha bowl" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuAy4bERIpTG0vthszDfxVo8wEvx-RViWya3YU6rxiOs4jLToUIEzHBXBcThnJKcb2sAGsmkfWn4eTbuU0eWhpR7lnapC_xEVfripI-ELv395-qTlmdjj6pc_xDNllsjsbzlUpBptyW45nndtpx9Gs8ZpVtoyHkV2dcM18lm4q8INEOSbNq_5r1WW8eWhuE4DKuqFat1CxzEVD5YV-nIxuYV6Xm7Bh91kn7gLk0YVXFZKPLSBbJc6Pn7gFuI4PUc09N9R336RS3SnFyr');"></div>
+<div class="flex-1 min-w-0">
+<p class="text-slate-900 dark:text-slate-100 font-bold text-base truncate">Rainbow Harvest Bowl</p>
+<div class="flex items-center gap-1 mt-1 text-slate-500 dark:text-slate-400">
+<span class="material-symbols-outlined text-sm filled-icon text-primary">favorite</span>
+<span class="text-xs font-medium tracking-wide">482 People cooked this week</span>
+</div>
+</div>
+<div class="pr-2">
+<span class="material-symbols-outlined text-slate-300">chevron_right</span>
+</div>
+</div>
+<!-- Recipe Card 2 -->
+<div class="flex bg-white dark:bg-slate-800 p-3 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-700 items-center gap-4">
+<div class="size-20 rounded-xl bg-cover bg-center shrink-0" data-alt="A slice of delicious pepperoni pizza with melted cheese" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuD7qitcadVBcA-ObsQ5_XW2HCbIGZ0kBPoWDumnQ7aQfBdUkLv04pUm2fdQjEZKQ0V12XvJfWkRZYtqxnhtlCyq__XHZpGIOkWVUL8BoJG6sbI3B_TCiUwNUi6yS_BJ-oux851M1k0IqWLjJs98AErZY_ckNplKqHcfGFRqpAGkT1uv1Emo4IM6bTH8QK_3qjlxpa_YFuz3fZAU4Zrq0jKkbtca9b_Mf2KmWRTV1g7bw5t4aOkYYWu_qrdVpNQ9mmPEejf2VT-wfiPh');"></div>
+<div class="flex-1 min-w-0">
+<p class="text-slate-900 dark:text-slate-100 font-bold text-base truncate">Low-Carb Cloud Pizza</p>
+<div class="flex items-center gap-1 mt-1 text-slate-500 dark:text-slate-400">
+<span class="material-symbols-outlined text-sm filled-icon text-primary">favorite</span>
+<span class="text-xs font-medium tracking-wide">315 Adoptions</span>
+</div>
+</div>
+<div class="pr-2">
+<span class="material-symbols-outlined text-slate-300">chevron_right</span>
+</div>
+</div>
+<!-- Recipe Card 3 -->
+<div class="flex bg-white dark:bg-slate-800 p-3 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-700 items-center gap-4">
+<div class="size-20 rounded-xl bg-cover bg-center shrink-0" data-alt="Creamy tomato soup in a bowl with herbs" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCwDuKOdvUqC7HZmnVjabY25j978H2hoSdKMy28-Qf01ysIad8_2rKsJcwivOfTUGTFqmfwGs5Kp2GzqrfOIieeJmIYhx84p_b-Nu_7KR0JSKnyYK2u4rAjQ5IJUAHQKPuoD6edF1IxeCgSiu4_XoiUaqL_ArebXhaf5mgPRhOjQ-BtEh8QnKU1UupxoUYXgjpS6gIqJjwL13XY38E3_CXlh7XiBbi8cB9ju0oSOmr1jw1hzXRTGWICKK14CYzCJS9TYBjSF_n1-VJR');"></div>
+<div class="flex-1 min-w-0">
+<p class="text-slate-900 dark:text-slate-100 font-bold text-base truncate">Spicy Ginger Tomato Soup</p>
+<div class="flex items-center gap-1 mt-1 text-slate-500 dark:text-slate-400">
+<span class="material-symbols-outlined text-sm filled-icon text-primary">favorite</span>
+<span class="text-xs font-medium tracking-wide">198 Adoptions</span>
+</div>
+</div>
+<div class="pr-2">
+<span class="material-symbols-outlined text-slate-300">chevron_right</span>
+</div>
+</div>
+</div>
+</section>
+<!-- Bottom Nav Bar -->
+<nav class="sticky bottom-0 border-t border-slate-100 dark:border-slate-800 bg-white/95 dark:bg-slate-900/95 backdrop-blur-md px-4 pb-6 pt-3 flex justify-between">
+<a class="flex flex-1 flex-col items-center gap-1 text-slate-400 dark:text-slate-500" href="#">
+<span class="material-symbols-outlined">home</span>
+<p class="text-[10px] font-bold uppercase tracking-widest">Home</p>
+</a>
+<a class="flex flex-1 flex-col items-center gap-1 text-slate-400 dark:text-slate-500" href="#">
+<span class="material-symbols-outlined">skillet</span>
+<p class="text-[10px] font-bold uppercase tracking-widest">Cook</p>
+</a>
+<a class="flex flex-1 flex-col items-center gap-1 text-slate-400 dark:text-slate-500" href="#">
+<span class="material-symbols-outlined">groups</span>
+<p class="text-[10px] font-bold uppercase tracking-widest">Social</p>
+</a>
+<a class="flex flex-1 flex-col items-center gap-1 text-primary" href="#">
+<span class="material-symbols-outlined filled-icon">account_circle</span>
+<p class="text-[10px] font-bold uppercase tracking-widest">Profile</p>
+</a>
+</nav>
+</div>
+</body></html>

@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#ccff00",
+                        "background-light": "#f8f8f5",
+                        "background-dark": "#1f230f",
+                    },
+                    fontFamily: {
+                        "display": ["Space Grotesk"]
+                    },
+                    borderRadius: {"DEFAULT": "0.5rem", "lg": "1rem", "xl": "1.5rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<title>NutriPulse - Log Food</title>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark font-display text-slate-900 dark:text-slate-100 antialiased">
+<div class="relative flex min-h-screen w-full flex-col max-w-md mx-auto border-x border-slate-200 dark:border-slate-800 shadow-2xl">
+<!-- Header -->
+<header class="flex items-center justify-between p-4 sticky top-0 bg-background-light/80 dark:bg-background-dark/80 backdrop-blur-md z-20">
+<button class="flex size-10 items-center justify-center rounded-full hover:bg-slate-200 dark:hover:bg-slate-800 transition-colors">
+<span class="material-symbols-outlined">arrow_back</span>
+</button>
+<h1 class="text-lg font-bold tracking-tight">Log Food</h1>
+<button class="flex size-10 items-center justify-center rounded-full bg-primary/10 text-primary hover:bg-primary/20 transition-colors">
+<span class="material-symbols-outlined">barcode_scanner</span>
+</button>
+</header>
+<!-- Search Bar -->
+<div class="px-4 py-2">
+<div class="relative flex items-center">
+<span class="material-symbols-outlined absolute left-4 text-slate-400">search</span>
+<input class="w-full h-14 pl-12 pr-4 bg-slate-100 dark:bg-slate-800/50 border-none rounded-xl focus:ring-2 focus:ring-primary text-base placeholder:text-slate-500" placeholder="Search for food or brands" type="text"/>
+</div>
+</div>
+<!-- Navigation Tabs -->
+<div class="px-4 mt-4">
+<div class="flex border-b border-slate-200 dark:border-slate-800 overflow-x-auto no-scrollbar">
+<a class="flex flex-col items-center px-4 py-3 border-b-2 border-primary text-primary" href="#">
+<span class="text-sm font-bold">Search</span>
+</a>
+<a class="flex flex-col items-center px-4 py-3 border-b-2 border-transparent text-slate-500 hover:text-slate-700 dark:hover:text-slate-300" href="#">
+<span class="text-sm font-bold whitespace-nowrap">My Recipes</span>
+</a>
+<a class="flex flex-col items-center px-4 py-3 border-b-2 border-transparent text-slate-500 hover:text-slate-700 dark:hover:text-slate-300" href="#">
+<span class="text-sm font-bold">Favorites</span>
+</a>
+</div>
+</div>
+<!-- Content -->
+<main class="flex-1 overflow-y-auto pb-24">
+<!-- Frequent Meals Carousel -->
+<section class="mt-8">
+<div class="flex items-center justify-between px-4 mb-4">
+<h2 class="text-lg font-bold">Frequent Meals</h2>
+<button class="text-primary text-sm font-semibold">See all</button>
+</div>
+<div class="flex gap-4 px-4 overflow-x-auto no-scrollbar pb-2">
+<div class="flex-none w-40 bg-slate-100 dark:bg-slate-800/40 rounded-xl p-3 border border-slate-200 dark:border-slate-800">
+<div class="w-full h-24 rounded-lg bg-slate-200 dark:bg-slate-700 mb-3 overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="Healthy salad bowl with avocado" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBb6swxGRK7Zsq2E4LgXjz7EpG6nRqcotNIJiid54U9wfc_Nfujz4hsn1wLI8CRKPlVxWxvDWG-5m43a1MtooRbahYCr6y7MW197AI1VQQfAzUsyBQvGT7bDKMpqHj1zXG0Xu_96Aj32BCEOTiBLrHP7lIdRY-dIg2y5AsBnDTtpMMhpYD0I7oxBZ0wp8m-Xx-RcnoOl8HuHjozdi7zdsqdOcO5BH0p7Cr-RKIH8QJibVlRZraUeeFR5VASthSSUE8cmalAg2sBvuQg"/>
+</div>
+<h3 class="font-bold text-sm truncate">Avocado Salad</h3>
+<p class="text-primary text-xs font-medium mt-1">340 kcal</p>
+</div>
+<div class="flex-none w-40 bg-slate-100 dark:bg-slate-800/40 rounded-xl p-3 border border-slate-200 dark:border-slate-800">
+<div class="w-full h-24 rounded-lg bg-slate-200 dark:bg-slate-700 mb-3 overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="Quinoa and vegetable bowl" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDTwrG1nQgirVuNrNivETFQrqVEXLLuVWmk151-cRwTGp8kLyz9NN_TJTbQr-snrwSAfNF-jQyVzqnItUO1_lGRBhNRe-kUOomzeJpysRBGHfYExcT2IJkcjAn2TQbn1kLHdriyQpen7alOCyqa2trEBo0OH2Kmm0myzs9BluYv644996uOiIgl2y864YuA4k3IdJATVS_xlkco78iaL7EbUhidnUUaUW8HxIe9qAw4Hc4Mq-f2feloHOFC9ZciaWWszl8Y34Mx1lci"/>
+</div>
+<h3 class="font-bold text-sm truncate">Quinoa Bowl</h3>
+<p class="text-primary text-xs font-medium mt-1">420 kcal</p>
+</div>
+<div class="flex-none w-40 bg-slate-100 dark:bg-slate-800/40 rounded-xl p-3 border border-slate-200 dark:border-slate-800">
+<div class="w-full h-24 rounded-lg bg-slate-200 dark:bg-slate-700 mb-3 overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="Margherita pizza slice" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDw7Bvmndg_AJMDp83x7FFL4FD7xgkOVYsb-sDFHEnIdEePGNLj6IUpE_p7n2Uk_wXbHNB2SgmgTgLEbymKFbWWbCPd6wpUjAq1xN4b_ruLYRURmRX4Acn0GqKuEMYjXrFD4QvCl5RgfozqFWITNxImLgn5q0CLS8DJ9X86uhU0fAPByccnuRNE_ZH62bX5pG9M4WtxZl4ytLNY3KAGS4LRJxKoAECaoZuG4jIn8EAgW2V8aq5s_0LiNzWLMs8J2FSX2RVNjSyILuuT"/>
+</div>
+<h3 class="font-bold text-sm truncate">Veggie Pizza</h3>
+<p class="text-primary text-xs font-medium mt-1">280 kcal</p>
+</div>
+</div>
+</section>
+<!-- Recently Logged Section -->
+<section class="mt-8 px-4">
+<h2 class="text-lg font-bold mb-4">Recently Logged</h2>
+<div class="space-y-3">
+<!-- Item 1 -->
+<div class="flex items-center justify-between p-4 bg-slate-100 dark:bg-slate-800/40 rounded-xl border border-slate-200 dark:border-slate-800 group hover:border-primary/50 transition-colors">
+<div class="flex items-center gap-4">
+<div class="size-12 rounded-lg bg-slate-200 dark:bg-slate-700 flex items-center justify-center">
+<span class="material-symbols-outlined text-slate-500">restaurant</span>
+</div>
+<div>
+<h4 class="font-bold text-sm">Greek Yogurt with Honey</h4>
+<p class="text-xs text-slate-500">1 cup (245g)</p>
+</div>
+</div>
+<div class="text-right">
+<p class="font-bold text-sm">150 kcal</p>
+<button class="size-8 rounded-full bg-primary/10 text-primary flex items-center justify-center mt-1 group-hover:bg-primary group-hover:text-slate-900 transition-all">
+<span class="material-symbols-outlined text-sm">add</span>
+</button>
+</div>
+</div>
+<!-- Item 2 -->
+<div class="flex items-center justify-between p-4 bg-slate-100 dark:bg-slate-800/40 rounded-xl border border-slate-200 dark:border-slate-800 group hover:border-primary/50 transition-colors">
+<div class="flex items-center gap-4">
+<div class="size-12 rounded-lg bg-slate-200 dark:bg-slate-700 flex items-center justify-center">
+<span class="material-symbols-outlined text-slate-500">local_cafe</span>
+</div>
+<div>
+<h4 class="font-bold text-sm">Oat Milk Latte</h4>
+<p class="text-xs text-slate-500">Large (473ml)</p>
+</div>
+</div>
+<div class="text-right">
+<p class="font-bold text-sm">120 kcal</p>
+<button class="size-8 rounded-full bg-primary/10 text-primary flex items-center justify-center mt-1 group-hover:bg-primary group-hover:text-slate-900 transition-all">
+<span class="material-symbols-outlined text-sm">add</span>
+</button>
+</div>
+</div>
+<!-- Item 3 -->
+<div class="flex items-center justify-between p-4 bg-slate-100 dark:bg-slate-800/40 rounded-xl border border-slate-200 dark:border-slate-800 group hover:border-primary/50 transition-colors">
+<div class="flex items-center gap-4">
+<div class="size-12 rounded-lg bg-slate-200 dark:bg-slate-700 flex items-center justify-center">
+<span class="material-symbols-outlined text-slate-500">egg</span>
+</div>
+<div>
+<h4 class="font-bold text-sm">Boiled Eggs</h4>
+<p class="text-xs text-slate-500">2 large eggs</p>
+</div>
+</div>
+<div class="text-right">
+<p class="font-bold text-sm">156 kcal</p>
+<button class="size-8 rounded-full bg-primary/10 text-primary flex items-center justify-center mt-1 group-hover:bg-primary group-hover:text-slate-900 transition-all">
+<span class="material-symbols-outlined text-sm">add</span>
+</button>
+</div>
+</div>
+</div>
+</section>
+</main>
+<!-- Bottom Navigation Bar -->
+<nav class="fixed bottom-0 left-1/2 -translate-x-1/2 w-full max-w-md bg-background-light dark:bg-background-dark border-t border-slate-200 dark:border-slate-800 px-6 py-3 flex justify-between items-center z-30">
+<a class="flex flex-col items-center gap-1 text-slate-400" href="#">
+<span class="material-symbols-outlined">calendar_today</span>
+<span class="text-[10px] font-medium">Diary</span>
+</a>
+<a class="flex flex-col items-center gap-1 text-primary" href="#">
+<span class="material-symbols-outlined font-fill">add_circle</span>
+<span class="text-[10px] font-medium">Log</span>
+</a>
+<a class="flex flex-col items-center gap-1 text-slate-400" href="#">
+<span class="material-symbols-outlined">show_chart</span>
+<span class="text-[10px] font-medium">Trends</span>
+</a>
+<a class="flex flex-col items-center gap-1 text-slate-400" href="#">
+<span class="material-symbols-outlined">person</span>
+<span class="text-[10px] font-medium">Profile</span>
+</a>
+</nav>
+</div>
+<style>
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+        .font-fill {
+            font-variation-settings: 'FILL' 1;
+        }
+    </style>
+</body></html>

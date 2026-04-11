@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Editorial Tech - Advanced Settings</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@300;400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#ec5b13",
+                        "background-light": "#f8f6f6",
+                        "background-dark": "#221610",
+                    },
+                    fontFamily: {
+                        "display": ["Public Sans", "sans-serif"]
+                    },
+                    borderRadius: { "DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px" },
+                },
+            },
+        }
+    </script>
+<style>
+        body {
+            font-family: 'Public Sans', sans-serif;
+        }
+        .editorial-shadow {
+            box-shadow: 0 4px 20px -2px rgba(236, 91, 19, 0.1);
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 transition-colors duration-200">
+<div class="relative flex min-h-screen w-full flex-col max-w-md mx-auto bg-background-light dark:bg-background-dark overflow-x-hidden border-x border-slate-200 dark:border-slate-800">
+<!-- Header -->
+<header class="sticky top-0 z-10 flex items-center bg-background-light/80 dark:bg-background-dark/80 backdrop-blur-md p-4 pb-4 border-b border-slate-200 dark:border-slate-800 justify-between">
+<div class="text-slate-900 dark:text-slate-100 flex size-10 shrink-0 items-center justify-center rounded-full hover:bg-slate-200 dark:hover:bg-slate-800 cursor-pointer">
+<span class="material-symbols-outlined">arrow_back</span>
+</div>
+<h1 class="text-slate-900 dark:text-slate-100 text-xl font-extrabold leading-tight tracking-tight flex-1 text-center">Settings</h1>
+<div class="flex w-10 items-center justify-end">
+<button class="flex cursor-pointer items-center justify-center rounded-full size-10 hover:bg-slate-200 dark:hover:bg-slate-800 transition-colors">
+<span class="material-symbols-outlined">more_vert</span>
+</button>
+</div>
+</header>
+<main class="flex-1 overflow-y-auto pb-24">
+<!-- Profile Section -->
+<section class="flex p-6 @container">
+<div class="flex w-full flex-col gap-6 items-center">
+<div class="relative">
+<div class="bg-center bg-no-repeat aspect-square bg-cover rounded-full min-h-32 w-32 ring-4 ring-primary/10" data-alt="Portrait of a professional editorial director" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuCleBiRl7m1BQK1m6FYKAgReUwfzbjFObQ1Fs2a3YWMF33fDCXaUQq_1gFyfeIdKj4KX81yHDqUqdEXx8TsS6iVepuCeTrJKh4IIIMdJk4dylfP3jUmq8csHxzlz0aNc37wlXGDuHmwM6bRhOrD9U7fchv_ARhbAQFqn8maAJtchgE9F9-4X2OZQlnBO7jrKuC1XRnMa7wBw_xXLBOeEcHLdQn-HfOcLr8F0JuH4K8FCD5DtDOSmThQ803aTgcK5jIEubwmCSLFWyA7");'></div>
+<div class="absolute bottom-0 right-0 bg-primary text-white p-2 rounded-full border-4 border-background-light dark:border-background-dark">
+<span class="material-symbols-outlined text-sm">edit</span>
+</div>
+</div>
+<div class="flex flex-col items-center">
+<h2 class="text-slate-900 dark:text-slate-100 text-2xl font-black leading-tight tracking-tighter text-center italic">ALEX STERLING</h2>
+<p class="text-primary text-sm font-bold uppercase tracking-[0.2em] mt-1 text-center">Editorial Director</p>
+<p class="text-slate-500 dark:text-slate-400 text-xs font-medium leading-normal text-center mt-2">Member since Oct 2021 • Pro Plan</p>
+</div>
+</div>
+</section>
+<!-- Subscription Banner (Pro) -->
+<section class="px-4 py-2">
+<div class="bg-gradient-to-br from-primary to-[#ff8c42] rounded-xl p-5 text-white shadow-lg overflow-hidden relative">
+<div class="relative z-10 flex justify-between items-center">
+<div>
+<p class="text-xs font-bold uppercase tracking-widest opacity-80">Subscription</p>
+<h3 class="text-xl font-bold mt-1">Pro Membership</h3>
+<p class="text-sm opacity-90 mt-1">Renews on Nov 12, 2024</p>
+</div>
+<span class="material-symbols-outlined text-4xl opacity-50">workspace_premium</span>
+</div>
+<button class="mt-4 w-full bg-white/20 hover:bg-white/30 backdrop-blur-md text-white py-2 rounded-lg font-bold text-sm transition-all border border-white/30">
+                        Manage Plan
+                    </button>
+</div>
+</section>
+<!-- Personal Bio-Data -->
+<section class="mt-8">
+<div class="px-4 mb-3 flex items-center justify-between">
+<h2 class="text-slate-900 dark:text-slate-100 text-xs font-black uppercase tracking-[0.2em]">Personal Bio-Data</h2>
+</div>
+<div class="divide-y divide-slate-100 dark:divide-slate-800 border-y border-slate-100 dark:border-slate-800">
+<div class="flex items-center gap-4 bg-background-light dark:bg-background-dark px-4 py-4 hover:bg-slate-50 dark:hover:bg-slate-800/50 cursor-pointer transition-colors group">
+<div class="text-primary flex items-center justify-center rounded-lg bg-primary/10 shrink-0 size-10">
+<span class="material-symbols-outlined">person</span>
+</div>
+<div class="flex flex-col flex-1">
+<p class="text-slate-400 text-[10px] font-bold uppercase tracking-wider">Display Name</p>
+<p class="text-slate-900 dark:text-slate-100 text-base font-semibold">Alex Sterling</p>
+</div>
+<span class="material-symbols-outlined text-slate-400 group-hover:text-primary transition-colors">chevron_right</span>
+</div>
+<div class="flex items-center gap-4 bg-background-light dark:bg-background-dark px-4 py-4 hover:bg-slate-50 dark:hover:bg-slate-800/50 cursor-pointer transition-colors group">
+<div class="text-primary flex items-center justify-center rounded-lg bg-primary/10 shrink-0 size-10">
+<span class="material-symbols-outlined">mail</span>
+</div>
+<div class="flex flex-col flex-1">
+<p class="text-slate-400 text-[10px] font-bold uppercase tracking-wider">Email Address</p>
+<p class="text-slate-900 dark:text-slate-100 text-base font-semibold">sterling.a@editorial.tech</p>
+</div>
+<span class="material-symbols-outlined text-slate-400 group-hover:text-primary transition-colors">chevron_right</span>
+</div>
+</div>
+</section>
+<!-- Integration Hub -->
+<section class="mt-8">
+<div class="px-4 mb-3 flex items-center justify-between">
+<h2 class="text-slate-900 dark:text-slate-100 text-xs font-black uppercase tracking-[0.2em]">Integration Hub</h2>
+<span class="text-[10px] font-bold bg-green-100 text-green-700 px-2 py-0.5 rounded-full dark:bg-green-900/30 dark:text-green-400">2 ACTIVE</span>
+</div>
+<div class="px-4 space-y-3">
+<div class="flex items-center gap-4 p-4 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-background-dark/50">
+<div class="bg-red-50 dark:bg-red-900/20 p-2 rounded-lg">
+<span class="material-symbols-outlined text-red-500">favorite</span>
+</div>
+<div class="flex-1">
+<p class="text-slate-900 dark:text-slate-100 font-bold text-sm">Apple Health</p>
+<p class="text-slate-500 dark:text-slate-400 text-xs italic">Last synced: 2 mins ago</p>
+</div>
+<div class="relative inline-flex h-6 w-11 items-center rounded-full bg-primary">
+<span class="inline-block h-4 w-4 translate-x-6 rounded-full bg-white transition"></span>
+</div>
+</div>
+<div class="flex items-center gap-4 p-4 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-background-dark/50">
+<div class="bg-blue-50 dark:bg-blue-900/20 p-2 rounded-lg">
+<span class="material-symbols-outlined text-blue-500">fitness_center</span>
+</div>
+<div class="flex-1">
+<p class="text-slate-900 dark:text-slate-100 font-bold text-sm">Google Fit</p>
+<p class="text-slate-500 dark:text-slate-400 text-xs">Disconnected</p>
+</div>
+<div class="relative inline-flex h-6 w-11 items-center rounded-full bg-slate-300 dark:bg-slate-700">
+<span class="inline-block h-4 w-4 translate-x-1 rounded-full bg-white transition"></span>
+</div>
+</div>
+</div>
+</section>
+<!-- Privacy Settings -->
+<section class="mt-8 px-4">
+<div class="mb-3">
+<h2 class="text-slate-900 dark:text-slate-100 text-xs font-black uppercase tracking-[0.2em]">Privacy Settings</h2>
+</div>
+<div class="bg-slate-100/50 dark:bg-slate-800/30 rounded-2xl p-2">
+<div class="flex items-center justify-between p-3">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-slate-500 text-xl">visibility_off</span>
+<span class="text-sm font-semibold">Private Profile</span>
+</div>
+<div class="relative inline-flex h-5 w-10 items-center rounded-full bg-slate-300 dark:bg-slate-700">
+<span class="inline-block h-3 w-3 translate-x-1 rounded-full bg-white"></span>
+</div>
+</div>
+<div class="flex items-center justify-between p-3">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-slate-500 text-xl">analytics</span>
+<span class="text-sm font-semibold">Usage Analytics</span>
+</div>
+<div class="relative inline-flex h-5 w-10 items-center rounded-full bg-primary">
+<span class="inline-block h-3 w-3 translate-x-6 rounded-full bg-white"></span>
+</div>
+</div>
+<div class="flex items-center justify-between p-3">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-slate-500 text-xl">security</span>
+<span class="text-sm font-semibold">Two-Factor Auth</span>
+</div>
+<span class="text-[10px] font-bold text-primary uppercase tracking-wider">Enable</span>
+</div>
+</div>
+</section>
+<!-- Danger Zone -->
+<section class="mt-10 px-4 mb-8">
+<button class="w-full py-4 rounded-xl border border-red-200 dark:border-red-900/30 text-red-500 font-bold text-xs uppercase tracking-[0.3em] hover:bg-red-50 dark:hover:bg-red-900/10 transition-colors">
+                    Delete Account Permanently
+                </button>
+</section>
+</main>
+<!-- Bottom NavBar -->
+<nav class="fixed bottom-0 left-1/2 -translate-x-1/2 w-full max-w-md flex gap-2 border-t border-slate-200 dark:border-slate-800 bg-background-light/95 dark:bg-background-dark/95 backdrop-blur-md px-4 pb-6 pt-3 z-20">
+<a class="flex flex-1 flex-col items-center justify-center gap-1 text-slate-400 hover:text-primary transition-colors" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+<p class="text-[10px] font-bold uppercase tracking-wider">Feed</p>
+</a>
+<a class="flex flex-1 flex-col items-center justify-center gap-1 text-slate-400 hover:text-primary transition-colors" href="#">
+<span class="material-symbols-outlined">explore</span>
+<p class="text-[10px] font-bold uppercase tracking-wider">Explore</p>
+</a>
+<a class="flex flex-1 flex-col items-center justify-center gap-1 text-slate-400 hover:text-primary transition-colors" href="#">
+<span class="material-symbols-outlined">analytics</span>
+<p class="text-[10px] font-bold uppercase tracking-wider">Insights</p>
+</a>
+<a class="flex flex-1 flex-col items-center justify-center gap-1 text-primary" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">settings</span>
+<p class="text-[10px] font-bold uppercase tracking-wider">Settings</p>
+</a>
+</nav>
+</div>
+</body></html>

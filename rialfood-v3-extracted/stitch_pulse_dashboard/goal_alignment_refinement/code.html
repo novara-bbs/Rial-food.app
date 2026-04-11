@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>RIAL - Goal Alignment</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#d4ff00", // Vitality Lime accent
+                        "background-light": "#f5f7f8",
+                        "background-dark": "#0a0c0e",
+                        "card-dark": "#161b22",
+                    },
+                    fontFamily: {
+                        "display": ["Space Grotesk", "sans-serif"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.5rem",
+                        "lg": "1rem",
+                        "xl": "1.5rem",
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
+<style>
+        body {
+            font-family: 'Space Grotesk', sans-serif;
+        }
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .active-ring {
+            box-shadow: 0 0 0 2px #d4ff00;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 min-h-screen flex flex-col">
+<!-- Top Navigation / Header -->
+<header class="sticky top-0 z-50 bg-background-light/80 dark:bg-background-dark/80 backdrop-blur-md border-b border-slate-200 dark:border-slate-800">
+<div class="max-w-xl mx-auto px-4 py-4 flex items-center justify-between">
+<button class="p-2 hover:bg-slate-200 dark:hover:bg-slate-800 rounded-full transition-colors">
+<span class="material-symbols-outlined block">arrow_back</span>
+</button>
+<div class="flex flex-col items-center">
+<span class="text-[10px] uppercase tracking-[0.2em] text-slate-500 font-bold">RIAL Onboarding</span>
+<h1 class="text-sm font-bold">Goal Alignment</h1>
+</div>
+<div class="w-10"></div> <!-- Spacer for symmetry -->
+</div>
+</header>
+<main class="flex-1 max-w-xl mx-auto w-full px-4 pt-8 pb-32">
+<!-- Progress Indicator -->
+<div class="mb-10">
+<div class="flex justify-between items-end mb-3">
+<span class="text-xs font-bold text-primary uppercase tracking-widest">Step 02 of 05</span>
+<span class="text-xs text-slate-500">Tailoring your experience</span>
+</div>
+<div class="h-1.5 w-full bg-slate-200 dark:bg-slate-800 rounded-full overflow-hidden">
+<div class="h-full bg-primary w-2/5 rounded-full"></div>
+</div>
+</div>
+<!-- Hero Section -->
+<div class="mb-10 text-center">
+<h2 class="text-3xl font-bold leading-tight mb-4 text-slate-900 dark:text-white">Choose your path</h2>
+<p class="text-slate-500 dark:text-slate-400 text-base leading-relaxed">Select the profile that best describes your current lifestyle. We'll calibrate the RIAL engine to match your specific needs.</p>
+</div>
+<!-- ICP Cards Grid -->
+<div class="grid gap-4">
+<!-- 1. Fitness Enthusiast -->
+<button class="group relative flex items-start gap-4 p-5 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-card-dark text-left transition-all hover:border-primary/50 hover:bg-primary/5 active:scale-[0.98]">
+<div class="flex h-12 w-12 shrink-0 items-center justify-center rounded-lg bg-primary/10 text-primary group-hover:bg-primary group-hover:text-black transition-colors">
+<span class="material-symbols-outlined">fitness_center</span>
+</div>
+<div class="flex-1">
+<h3 class="font-bold text-lg dark:text-white">Fitness Enthusiast</h3>
+<p class="text-sm text-slate-500 dark:text-slate-400 mt-1 leading-snug">Focus on volume, definition, and high-performance macro tracking.</p>
+</div>
+<div class="material-symbols-outlined text-slate-300 dark:text-slate-700">chevron_right</div>
+</button>
+<!-- 2. Wellness/Nutrition -->
+<button class="group relative flex items-start gap-4 p-5 rounded-xl border border-primary bg-white dark:bg-card-dark text-left transition-all active:ring-2 active:ring-primary shadow-lg shadow-primary/10">
+<div class="flex h-12 w-12 shrink-0 items-center justify-center rounded-lg bg-primary text-black">
+<span class="material-symbols-outlined">nutrition</span>
+</div>
+<div class="flex-1">
+<div class="flex items-center gap-2">
+<h3 class="font-bold text-lg dark:text-white">Wellness &amp; Nutrition</h3>
+<span class="text-[10px] bg-primary/20 text-primary px-2 py-0.5 rounded-full font-bold uppercase tracking-tighter">Recommended</span>
+</div>
+<p class="text-sm text-slate-500 dark:text-slate-400 mt-1 leading-snug">Clean eating, mindful habits, and metabolic health optimization.</p>
+</div>
+<div class="material-symbols-outlined text-primary">check_circle</div>
+</button>
+<!-- 3. Family Manager -->
+<button class="group relative flex items-start gap-4 p-5 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-card-dark text-left transition-all hover:border-primary/50 hover:bg-primary/5 active:scale-[0.98]">
+<div class="flex h-12 w-12 shrink-0 items-center justify-center rounded-lg bg-primary/10 text-primary group-hover:bg-primary group-hover:text-black transition-colors">
+<span class="material-symbols-outlined">family_restroom</span>
+</div>
+<div class="flex-1">
+<h3 class="font-bold text-lg dark:text-white">Family Manager</h3>
+<p class="text-sm text-slate-500 dark:text-slate-400 mt-1 leading-snug">Efficient batch cooking, scaling recipes, and budget-friendly planning.</p>
+</div>
+<div class="material-symbols-outlined text-slate-300 dark:text-slate-700">chevron_right</div>
+</button>
+<!-- 4. Pro Creator -->
+<button class="group relative flex items-start gap-4 p-5 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-card-dark text-left transition-all hover:border-primary/50 hover:bg-primary/5 active:scale-[0.98]">
+<div class="flex h-12 w-12 shrink-0 items-center justify-center rounded-lg bg-primary/10 text-primary group-hover:bg-primary group-hover:text-black transition-colors">
+<span class="material-symbols-outlined">hub</span>
+</div>
+<div class="flex-1">
+<h3 class="font-bold text-lg dark:text-white">Pro Creator</h3>
+<p class="text-sm text-slate-500 dark:text-slate-400 mt-1 leading-snug">Community growth, routine sharing, and professional content tools.</p>
+</div>
+<div class="material-symbols-outlined text-slate-300 dark:text-slate-700">chevron_right</div>
+</button>
+</div>
+<div class="mt-12">
+<button class="w-full bg-primary text-black font-bold py-4 rounded-xl text-lg hover:opacity-90 transition-opacity">
+                Confirm Profile Path
+            </button>
+<p class="text-center text-xs text-slate-500 mt-6">You can change your profile path at any time in settings.</p>
+</div>
+</main>
+<!-- Bottom Navbar -->
+<nav class="fixed bottom-0 left-0 right-0 bg-white/80 dark:bg-background-dark/80 backdrop-blur-xl border-t border-slate-200 dark:border-slate-800 px-6 pb-8 pt-3 z-50">
+<div class="max-w-xl mx-auto flex justify-between items-center">
+<a class="flex flex-col items-center gap-1 text-slate-400" href="#">
+<span class="material-symbols-outlined">home</span>
+<span class="text-[10px] font-bold uppercase tracking-widest">Home</span>
+</a>
+<a class="flex flex-col items-center gap-1 text-primary" href="#">
+<span class="material-symbols-outlined fill-1">target</span>
+<span class="text-[10px] font-bold uppercase tracking-widest">Goals</span>
+</a>
+<div class="flex items-center justify-center -mt-10">
+<button class="bg-primary text-black h-14 w-14 rounded-full shadow-lg shadow-primary/20 flex items-center justify-center border-4 border-background-light dark:border-background-dark">
+<span class="material-symbols-outlined text-2xl font-bold">add</span>
+</button>
+</div>
+<a class="flex flex-col items-center gap-1 text-slate-400" href="#">
+<span class="material-symbols-outlined">groups</span>
+<span class="text-[10px] font-bold uppercase tracking-widest">Social</span>
+</a>
+<a class="flex flex-col items-center gap-1 text-slate-400" href="#">
+<span class="material-symbols-outlined">account_circle</span>
+<span class="text-[10px] font-bold uppercase tracking-widest">Profile</span>
+</a>
+</div>
+</nav>
+<!-- Background Decorative Elements -->
+<div class="fixed top-0 left-0 w-full h-full pointer-events-none -z-10 overflow-hidden">
+<div class="absolute top-[-10%] right-[-10%] w-[40%] h-[40%] bg-primary/5 rounded-full blur-[120px]"></div>
+<div class="absolute bottom-[-10%] left-[-10%] w-[40%] h-[40%] bg-primary/5 rounded-full blur-[120px]"></div>
+</div>
+</body></html>

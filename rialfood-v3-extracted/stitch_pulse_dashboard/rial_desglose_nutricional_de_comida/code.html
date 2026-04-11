@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@300;400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "primary": "#ec5b13",
+              "background-light": "#f8f6f6",
+              "background-dark": "#221610",
+            },
+            fontFamily: {
+              "display": ["Public Sans", "sans-serif"]
+            },
+            borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+          },
+        },
+      }
+    </script>
+<style>
+      .material-symbols-outlined {
+        font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+      }
+      .macro-ring {
+        transition: stroke-dashoffset 0.35s;
+        transform: rotate(-90deg);
+        transform-origin: 50% 50%;
+      }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark font-display text-slate-900 dark:text-slate-100 antialiased">
+<div class="relative flex min-h-screen w-full flex-col overflow-x-hidden max-w-md mx-auto border-x border-slate-200 dark:border-primary/10">
+<header class="flex items-center bg-background-light dark:bg-background-dark p-4 sticky top-0 z-10 border-b border-slate-200 dark:border-primary/10">
+<button class="flex size-10 shrink-0 items-center justify-center rounded-full hover:bg-slate-100 dark:hover:bg-primary/10 transition-colors">
+<span class="material-symbols-outlined text-slate-900 dark:text-slate-100">arrow_back</span>
+</button>
+<div class="flex-1 text-center">
+<p class="text-[10px] uppercase tracking-[0.2em] text-primary font-bold">Nutrient Profile</p>
+<h2 class="text-slate-900 dark:text-slate-100 text-lg font-extrabold leading-tight">Meal Analysis</h2>
+</div>
+<button class="flex size-10 shrink-0 items-center justify-center rounded-full hover:bg-slate-100 dark:hover:bg-primary/10 transition-colors">
+<span class="material-symbols-outlined text-slate-900 dark:text-slate-100">share</span>
+</button>
+</header>
+<main class="flex-1 pb-24">
+<div class="@container">
+<div class="p-4">
+<div class="relative h-64 w-full overflow-hidden rounded-xl bg-slate-200 dark:bg-primary/5">
+<div class="absolute inset-0 bg-cover bg-center" data-alt="High-end plated gourmet salmon with microgreens" style='background-image: linear-gradient(180deg, rgba(34, 22, 16, 0) 40%, rgba(34, 22, 16, 0.9) 100%), url("https://lh3.googleusercontent.com/aida-public/AB6AXuAqyyBoNnhPkLxGiTt_foclgXFUGzR61S38ub9u1C5jqBEdeX8lm9yOY5zySg1pOH6-wyD9ot-JTfD89HrAJOZtQtc25trYe8B93ARvnz_ZGVE2FgiOdaWmtfXPuxqo34PslMw5n7Z18WvOhZ3-yZiGB595RGe0rAuQ9zVjdjfaVvZcxx7Loz-hyaXs5bTAJ733BBpLPwtSgv0pUY7jmyYdYviI_0pcy-xjeRi4q0b8p5Mmn-TtuK_ZfthU8a2crkIbJUlJgAomNqbN");'></div>
+<div class="absolute bottom-4 left-4 right-4">
+<h1 class="text-white text-3xl font-extrabold tracking-tight">Charred Salmon &amp; Umami Grains</h1>
+<div class="flex gap-2 mt-2">
+<span class="bg-primary/90 text-white text-[10px] font-bold px-2 py-0.5 rounded-full uppercase">Keto Friendly</span>
+<span class="bg-white/20 text-white text-[10px] font-bold px-2 py-0.5 rounded-full uppercase backdrop-blur-sm">High Protein</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="grid grid-cols-3 gap-4 px-4 py-6">
+<div class="flex flex-col items-center gap-3">
+<div class="relative size-20">
+<svg class="size-full" viewbox="0 0 100 100">
+<circle class="text-primary/10 stroke-current" cx="50" cy="50" fill="transparent" r="40" stroke-width="8"></circle>
+<circle class="text-primary stroke-current macro-ring" cx="50" cy="50" fill="transparent" r="40" stroke-linecap="round" stroke-width="8" style="stroke-dasharray: 251.2; stroke-dashoffset: 60;"></circle>
+</svg>
+<div class="absolute inset-0 flex items-center justify-center">
+<span class="text-sm font-bold">42g</span>
+</div>
+</div>
+<p class="text-[10px] uppercase tracking-wider font-bold text-slate-500 dark:text-slate-400">Protein</p>
+</div>
+<div class="flex flex-col items-center gap-3">
+<div class="relative size-20">
+<svg class="size-full" viewbox="0 0 100 100">
+<circle class="text-slate-200 dark:text-primary/10 stroke-current" cx="50" cy="50" fill="transparent" r="40" stroke-width="8"></circle>
+<circle class="text-slate-400 dark:text-slate-500 stroke-current macro-ring" cx="50" cy="50" fill="transparent" r="40" stroke-linecap="round" stroke-width="8" style="stroke-dasharray: 251.2; stroke-dashoffset: 160;"></circle>
+</svg>
+<div class="absolute inset-0 flex items-center justify-center">
+<span class="text-sm font-bold">12g</span>
+</div>
+</div>
+<p class="text-[10px] uppercase tracking-wider font-bold text-slate-500 dark:text-slate-400">Carbs</p>
+</div>
+<div class="flex flex-col items-center gap-3">
+<div class="relative size-20">
+<svg class="size-full" viewbox="0 0 100 100">
+<circle class="text-slate-200 dark:text-primary/10 stroke-current" cx="50" cy="50" fill="transparent" r="40" stroke-width="8"></circle>
+<circle class="text-amber-600 stroke-current macro-ring" cx="50" cy="50" fill="transparent" r="40" stroke-linecap="round" stroke-width="8" style="stroke-dasharray: 251.2; stroke-dashoffset: 120;"></circle>
+</svg>
+<div class="absolute inset-0 flex items-center justify-center">
+<span class="text-sm font-bold">28g</span>
+</div>
+</div>
+<p class="text-[10px] uppercase tracking-wider font-bold text-slate-500 dark:text-slate-400">Fats</p>
+</div>
+</div>
+<div class="mx-4 mb-6 p-5 rounded-xl bg-primary/10 border border-primary/20 relative overflow-hidden">
+<div class="absolute top-0 right-0 p-2">
+<span class="material-symbols-outlined text-primary text-4xl opacity-20">bolt</span>
+</div>
+<div class="relative z-10">
+<div class="flex items-center gap-2 mb-1">
+<span class="material-symbols-outlined text-primary text-sm">psychology</span>
+<p class="text-[10px] font-bold uppercase tracking-widest text-primary">Real Feel Prediction</p>
+</div>
+<h3 class="text-lg font-bold text-slate-900 dark:text-slate-100">Sustained Clarity</h3>
+<p class="text-sm text-slate-600 dark:text-slate-400 mt-2 leading-relaxed">
+                        Expected 4-hour energy plateau. Low glycemic response suggests no post-meal slump. High Omega-3 content will likely boost cognitive focus.
+                    </p>
+</div>
+</div>
+<section class="px-4">
+<div class="flex items-end justify-between mb-4 border-b border-slate-200 dark:border-primary/10 pb-2">
+<h3 class="text-xs font-black uppercase tracking-widest text-slate-900 dark:text-slate-100">Micronutrients</h3>
+<span class="text-[10px] text-primary font-bold">Detailed Scan</span>
+</div>
+<div class="space-y-4">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-3">
+<div class="size-8 rounded-lg bg-slate-100 dark:bg-primary/5 flex items-center justify-center">
+<span class="text-[10px] font-bold text-primary">A</span>
+</div>
+<div>
+<p class="text-sm font-bold">Vitamin A</p>
+<p class="text-[10px] text-slate-500 uppercase tracking-tighter">Retinol Equiv.</p>
+</div>
+</div>
+<div class="text-right">
+<p class="text-sm font-bold">842mcg</p>
+<div class="w-24 h-1 bg-slate-200 dark:bg-primary/10 rounded-full mt-1 overflow-hidden">
+<div class="bg-primary h-full w-[94%]"></div>
+</div>
+</div>
+</div>
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-3">
+<div class="size-8 rounded-lg bg-slate-100 dark:bg-primary/5 flex items-center justify-center">
+<span class="text-[10px] font-bold text-primary">Mg</span>
+</div>
+<div>
+<p class="text-sm font-bold">Magnesium</p>
+<p class="text-[10px] text-slate-500 uppercase tracking-tighter">Muscular Recovery</p>
+</div>
+</div>
+<div class="text-right">
+<p class="text-sm font-bold">120mg</p>
+<div class="w-24 h-1 bg-slate-200 dark:bg-primary/10 rounded-full mt-1 overflow-hidden">
+<div class="bg-primary h-full w-[35%]"></div>
+</div>
+</div>
+</div>
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-3">
+<div class="size-8 rounded-lg bg-slate-100 dark:bg-primary/5 flex items-center justify-center">
+<span class="text-[10px] font-bold text-primary">Fe</span>
+</div>
+<div>
+<p class="text-sm font-bold">Iron</p>
+<p class="text-[10px] text-slate-500 uppercase tracking-tighter">Oxygen Transport</p>
+</div>
+</div>
+<div class="text-right">
+<p class="text-sm font-bold">2.4mg</p>
+<div class="w-24 h-1 bg-slate-200 dark:bg-primary/10 rounded-full mt-1 overflow-hidden">
+<div class="bg-primary h-full w-[18%]"></div>
+</div>
+</div>
+</div>
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-3">
+<div class="size-8 rounded-lg bg-slate-100 dark:bg-primary/5 flex items-center justify-center">
+<span class="text-[10px] font-bold text-primary">B12</span>
+</div>
+<div>
+<p class="text-sm font-bold">Vitamin B12</p>
+<p class="text-[10px] text-slate-500 uppercase tracking-tighter">Energy metabolism</p>
+</div>
+</div>
+<div class="text-right">
+<p class="text-sm font-bold">4.8mcg</p>
+<div class="w-24 h-1 bg-slate-200 dark:bg-primary/10 rounded-full mt-1 overflow-hidden">
+<div class="bg-primary h-full w-[100%]"></div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<div class="px-4 mt-8">
+<button class="w-full bg-primary text-white font-bold py-4 rounded-xl flex items-center justify-center gap-2 hover:opacity-90 transition-opacity">
+<span class="material-symbols-outlined">add_task</span>
+<span>LOG TO DAILY TOTAL</span>
+</button>
+</div>
+</main>
+<nav class="fixed bottom-0 left-0 right-0 z-20 max-w-md mx-auto bg-background-light dark:bg-background-dark/95 backdrop-blur-md border-t border-slate-200 dark:border-primary/10 px-4 pb-4 pt-2">
+<div class="flex justify-around items-center">
+<a class="flex flex-col items-center gap-1 group" href="#">
+<span class="material-symbols-outlined text-slate-400 group-hover:text-primary transition-colors">restaurant</span>
+<p class="text-[10px] font-bold text-slate-400 group-hover:text-primary uppercase tracking-tighter">Meals</p>
+</a>
+<a class="flex flex-col items-center gap-1 group" href="#">
+<span class="material-symbols-outlined text-primary">donut_large</span>
+<p class="text-[10px] font-bold text-primary uppercase tracking-tighter">Insights</p>
+</a>
+<div class="relative -top-6">
+<button class="size-14 bg-primary rounded-full shadow-lg shadow-primary/30 flex items-center justify-center border-4 border-background-light dark:border-background-dark">
+<span class="material-symbols-outlined text-white text-3xl">add</span>
+</button>
+</div>
+<a class="flex flex-col items-center gap-1 group" href="#">
+<span class="material-symbols-outlined text-slate-400 group-hover:text-primary transition-colors">calendar_month</span>
+<p class="text-[10px] font-bold text-slate-400 group-hover:text-primary uppercase tracking-tighter">Plan</p>
+</a>
+<a class="flex flex-col items-center gap-1 group" href="#">
+<span class="material-symbols-outlined text-slate-400 group-hover:text-primary transition-colors">person</span>
+<p class="text-[10px] font-bold text-slate-400 group-hover:text-primary uppercase tracking-tighter">Profile</p>
+</a>
+</div>
+</nav>
+</div>
+</body></html>

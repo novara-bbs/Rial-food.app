@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#ec5b13",
+                        "background-light": "#f8f6f6",
+                        "background-dark": "#221610",
+                    },
+                    fontFamily: {
+                        "display": ["Public Sans", "sans-serif"]
+                    },
+                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<title>RIAL Community Hub</title>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark font-display text-slate-900 dark:text-slate-100 antialiased">
+<div class="relative flex min-h-screen w-full flex-col max-w-md mx-auto bg-background-light dark:bg-background-dark border-x border-slate-200 dark:border-slate-800 shadow-2xl overflow-x-hidden">
+<!-- Header -->
+<header class="sticky top-0 z-20 bg-background-light/80 dark:bg-background-dark/80 backdrop-blur-md border-b border-slate-200 dark:border-slate-800">
+<div class="flex items-center p-4 justify-between">
+<div class="flex size-12 items-center justify-center text-primary">
+<span class="material-symbols-outlined text-3xl">grid_view</span>
+</div>
+<h1 class="text-xl font-bold tracking-tight text-slate-900 dark:text-white">RIAL Hub</h1>
+<div class="flex w-12 items-center justify-end">
+<button class="flex items-center justify-center rounded-xl size-10 bg-primary/10 text-primary">
+<span class="material-symbols-outlined">notifications</span>
+</button>
+</div>
+</div>
+<!-- Segmented Control for ICP Levels -->
+<div class="px-4 pb-3">
+<div class="flex bg-slate-200/50 dark:bg-slate-800/50 p-1 rounded-xl">
+<button class="flex-1 py-1.5 text-xs font-bold rounded-lg bg-white dark:bg-primary text-primary dark:text-white shadow-sm">All</button>
+<button class="flex-1 py-1.5 text-xs font-medium text-slate-500 dark:text-slate-400">Essential</button>
+<button class="flex-1 py-1.5 text-xs font-medium text-slate-500 dark:text-slate-400">Advanced</button>
+<button class="flex-1 py-1.5 text-xs font-medium text-slate-500 dark:text-slate-400">Elite</button>
+</div>
+</div>
+</header>
+<main class="flex-1 pb-24">
+<!-- Pro-Creator Spotlight Section -->
+<section class="p-4">
+<div class="flex items-center justify-between mb-4">
+<h2 class="text-lg font-bold">Pro-Creator Spotlight</h2>
+<span class="text-primary text-sm font-semibold">Live Now</span>
+</div>
+<div class="relative group aspect-video rounded-xl overflow-hidden shadow-lg border border-slate-200 dark:border-slate-800 bg-slate-100 dark:bg-slate-900">
+<div class="absolute inset-0 bg-cover bg-center" data-alt="Professional chef preparing a vibrant organic meal in a modern kitchen" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCeT3pQdc4LgB_xVVQNNTbWvlJ-umm1sQVT584XpULtWaeTNEShrz55moMDHzf3Rwv3GUItUncYPGism-ov45MtksXut3FXerL2BcUEZhRGsQ1ajI1-MhuywXyDy0hIC6tFgUw-sEvaO7DhWO3VRH4rt83jdLGcbRxAjBHxly8hj10Lbu-YnKf21MtDcWtfC5Rboro_f5wYpHbQqntvxjWxh-Y85KpilelfGtxl5awHWFp2IjVwAceYLYpzQ51RDNPRrG0Wz_8-r_8n')"></div>
+<div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent"></div>
+<button class="absolute inset-0 flex items-center justify-center group-hover:scale-110 transition-transform">
+<div class="size-16 flex items-center justify-center rounded-full bg-primary text-white shadow-xl">
+<span class="material-symbols-outlined text-4xl fill-1">play_arrow</span>
+</div>
+</button>
+<div class="absolute bottom-0 inset-x-0 p-4">
+<div class="flex items-center gap-2 mb-2">
+<span class="px-2 py-0.5 bg-primary rounded text-[10px] font-bold text-white uppercase tracking-wider">Tutorial</span>
+<span class="text-white/80 text-xs">2.4k watching</span>
+</div>
+<h3 class="text-white font-bold text-lg leading-tight">Organic Tech: Mastering Sous Vide at Home</h3>
+</div>
+</div>
+</section>
+<!-- Real Match Filter & Recipes -->
+<section class="bg-primary/5 py-6">
+<div class="px-4 mb-4 flex items-center justify-between">
+<div>
+<h2 class="text-lg font-bold">Recipe Feed</h2>
+<p class="text-xs text-slate-500">Curated for your profile</p>
+</div>
+<button class="flex items-center gap-2 px-3 py-1.5 bg-white dark:bg-slate-800 rounded-full border border-primary/20 shadow-sm text-primary text-sm font-bold">
+<span class="material-symbols-outlined text-lg">tune</span>
+                        Real Match
+                    </button>
+</div>
+<div class="flex gap-4 overflow-x-auto px-4 no-scrollbar">
+<!-- Recipe Card 1 -->
+<div class="flex-none w-64 bg-white dark:bg-slate-800 rounded-xl overflow-hidden shadow-md border border-slate-200 dark:border-slate-700">
+<div class="h-40 bg-cover bg-center relative" data-alt="Close up of a fresh Mediterranean Buddha bowl" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuBugK_5wypmj8eJ3mYuXneM-PRJxQoFeKWuzZKaPBx6tJgSv3o5flozMH47tJvyD8JRFXSURbqnBnZLpFlMrC-i-bqKyQPdeuB-hMLKe3hdb6uEslkidf-UsLD1efB51rhgPbRv7kfVX4AGKiHoHqoOkowihC1FYJ2xW8MfpdCya5wZLRshoZWgS1bJ9lYzKtxXu9iqhXKw2ADsfLePSIus11ChARoaV7ZZJdgYtIayarVx88vWHYF7tYNIipQ13frT75lEpwMHGXB8')">
+<div class="absolute top-2 right-2 bg-white/90 dark:bg-slate-900/90 p-1.5 rounded-full text-primary">
+<span class="material-symbols-outlined text-sm font-bold">favorite</span>
+</div>
+<div class="absolute bottom-2 left-2 bg-primary px-2 py-1 rounded text-[10px] font-bold text-white">98% Match</div>
+</div>
+<div class="p-3">
+<h4 class="font-bold text-sm mb-1 line-clamp-1">Harvest Buddha Bowl</h4>
+<div class="flex items-center gap-3 text-slate-500 dark:text-slate-400 text-[10px]">
+<span class="flex items-center gap-1"><span class="material-symbols-outlined text-xs">schedule</span> 15m</span>
+<span class="flex items-center gap-1"><span class="material-symbols-outlined text-xs">local_fire_department</span> 450 kcal</span>
+</div>
+</div>
+</div>
+<!-- Recipe Card 2 -->
+<div class="flex-none w-64 bg-white dark:bg-slate-800 rounded-xl overflow-hidden shadow-md border border-slate-200 dark:border-slate-700">
+<div class="h-40 bg-cover bg-center relative" data-alt="Grilled salmon with asparagus and quinoa" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCjTjYUlieBIk2A3TPpL6qoqIoo4XWcOb3lYT8jKNjjoUmBk3UlriCcMtQYzkJmnF8SOky9HBa72PqoC3P9LNfwY6NTlAt9lu6qTtgh3HpGkKW8qk68vzSwYUDPIxuPEtVrqMpAnH4AJyLJf3OeaHOSDwQR2ghKaHRVQEyXCHjHr8QMb81jKim7qFexkUCylZbpmT-Gop2YeLbtR82-VlZtt8y87OrrzavMaIjMDT85WRgaNyvPDfXZ5nPO68pDO-QUYdaRF7FtuNUm')">
+<div class="absolute top-2 right-2 bg-white/90 dark:bg-slate-900/90 p-1.5 rounded-full text-slate-400">
+<span class="material-symbols-outlined text-sm">favorite</span>
+</div>
+<div class="absolute bottom-2 left-2 bg-primary px-2 py-1 rounded text-[10px] font-bold text-white">92% Match</div>
+</div>
+<div class="p-3">
+<h4 class="font-bold text-sm mb-1 line-clamp-1">Omega-3 Power Plate</h4>
+<div class="flex items-center gap-3 text-slate-500 dark:text-slate-400 text-[10px]">
+<span class="flex items-center gap-1"><span class="material-symbols-outlined text-xs">schedule</span> 25m</span>
+<span class="flex items-center gap-1"><span class="material-symbols-outlined text-xs">local_fire_department</span> 520 kcal</span>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Local Wellness Challenges -->
+<section class="p-4">
+<h2 class="text-lg font-bold mb-4">Local Challenges</h2>
+<div class="space-y-3">
+<div class="flex items-center gap-4 p-4 bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm">
+<div class="size-12 rounded-lg bg-primary/10 flex items-center justify-center text-primary">
+<span class="material-symbols-outlined text-2xl">directions_run</span>
+</div>
+<div class="flex-1">
+<h4 class="font-bold text-sm">Downtown Step-Up</h4>
+<p class="text-[10px] text-slate-500 dark:text-slate-400">Austin, TX • 342 Joined</p>
+<div class="w-full bg-slate-200 dark:bg-slate-700 h-1.5 rounded-full mt-2 overflow-hidden">
+<div class="bg-primary h-full rounded-full" style="width: 65%"></div>
+</div>
+</div>
+<div class="text-right">
+<p class="text-xs font-bold text-primary">Top 10%</p>
+<span class="text-[10px] text-slate-400">Rank #28</span>
+</div>
+</div>
+<div class="flex items-center gap-4 p-4 bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm">
+<div class="size-12 rounded-lg bg-green-500/10 flex items-center justify-center text-green-600">
+<span class="material-symbols-outlined text-2xl">eco</span>
+</div>
+<div class="flex-1">
+<h4 class="font-bold text-sm">Zero Waste Week</h4>
+<p class="text-[10px] text-slate-500 dark:text-slate-400">Global • 1.2k Joined</p>
+<div class="w-full bg-slate-200 dark:bg-slate-700 h-1.5 rounded-full mt-2 overflow-hidden">
+<div class="bg-green-500 h-full rounded-full" style="width: 20%"></div>
+</div>
+</div>
+<div class="text-right">
+<button class="text-xs font-bold text-primary bg-primary/10 px-3 py-1 rounded-full">Join</button>
+</div>
+</div>
+</div>
+</section>
+</main>
+<!-- Bottom Navigation Bar -->
+<nav class="fixed bottom-0 left-1/2 -translate-x-1/2 w-full max-w-md bg-white/90 dark:bg-background-dark/90 backdrop-blur-lg border-t border-slate-200 dark:border-slate-800 px-6 py-3 pb-6">
+<div class="flex items-center justify-between">
+<a class="flex flex-col items-center gap-1 text-primary" href="#">
+<span class="material-symbols-outlined fill-1">home</span>
+<span class="text-[10px] font-bold">Home</span>
+</a>
+<a class="flex flex-col items-center gap-1 text-slate-400 hover:text-primary transition-colors" href="#">
+<span class="material-symbols-outlined">explore</span>
+<span class="text-[10px] font-medium">Feed</span>
+</a>
+<a class="flex flex-col items-center gap-1 text-slate-400 hover:text-primary transition-colors" href="#">
+<span class="material-symbols-outlined">cooking</span>
+<span class="text-[10px] font-medium">Match</span>
+</a>
+<a class="flex flex-col items-center gap-1 text-slate-400 hover:text-primary transition-colors" href="#">
+<span class="material-symbols-outlined">school</span>
+<span class="text-[10px] font-medium">Learn</span>
+</a>
+<a class="flex flex-col items-center gap-1 text-slate-400 hover:text-primary transition-colors" href="#">
+<span class="material-symbols-outlined">person</span>
+<span class="text-[10px] font-medium">Profile</span>
+</a>
+</div>
+</nav>
+</div>
+</body></html>

@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#0ea5e9", // Electric blue for high-performance lab aesthetic
+                        "background-light": "#f8fafc",
+                        "background-dark": "#020617",
+                    },
+                    fontFamily: {
+                        "display": ["Public Sans", "sans-serif"]
+                    },
+                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>
+        .scan-overlay {
+            background: linear-gradient(to bottom, transparent 49%, #0ea5e9 50%, #0ea5e9 52%, transparent 53%);
+            background-size: 100% 200%;
+        }
+        .holographic-grid {
+            background-image: linear-gradient(rgba(14, 165, 233, 0.1) 1px, transparent 1px), linear-gradient(90deg, rgba(14, 165, 233, 0.1) 1px, transparent 1px);
+            background-size: 20px 20px;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-dark font-display text-slate-100">
+<div class="relative flex h-screen w-full flex-col bg-background-dark overflow-hidden max-w-md mx-auto border-x border-slate-800">
+<!-- Header -->
+<div class="flex items-center bg-background-dark/80 backdrop-blur-md p-4 sticky top-0 z-50 justify-between border-b border-slate-800">
+<div class="text-slate-100 flex size-10 shrink-0 items-center justify-center rounded-full bg-slate-800/50">
+<span class="material-symbols-outlined">arrow_back</span>
+</div>
+<div class="flex flex-col items-center">
+<h2 class="text-slate-100 text-lg font-bold leading-tight tracking-tight">Real Match</h2>
+<span class="text-primary text-[10px] uppercase tracking-[0.2em] font-bold">System Active</span>
+</div>
+<div class="flex w-10 items-center justify-end">
+<button class="flex items-center justify-center rounded-full size-10 bg-slate-800/50 text-slate-100">
+<span class="material-symbols-outlined">info</span>
+</button>
+</div>
+</div>
+<!-- Progress Indicator -->
+<div class="px-6 py-4">
+<div class="flex justify-between items-center mb-2">
+<h4 class="text-primary text-xs font-bold uppercase tracking-widest">Step 1: The Scan</h4>
+<span class="text-slate-500 text-xs font-medium">84% Complete</span>
+</div>
+<div class="w-full bg-slate-800 h-1.5 rounded-full overflow-hidden">
+<div class="bg-primary h-full w-[84%] shadow-[0_0_10px_rgba(14,165,233,0.5)]"></div>
+</div>
+</div>
+<!-- Main Scanning Viewport -->
+<div class="flex-1 relative px-4 py-2 flex flex-col items-center justify-center">
+<div class="relative w-full aspect-[4/5] rounded-3xl overflow-hidden border border-primary/30 shadow-2xl shadow-primary/10">
+<!-- Recipe Image -->
+<div class="absolute inset-0 bg-center bg-cover" data-alt="Modern healthy grain bowl with avocado and egg" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuA_0y_h57UcA3IkPzkA4wZ3G2maSY-wYWVvCGQzXytrKZeOjGnjcwvePxAG6u3whCYvJzGM7GkGcDEPIfZbvmtWqwwspw1Hfx4Zzr2LsGKr6_K0OOR5uFRMdL3aNAwDaYvf5NcAdXcpYlFxo9DTATeX-TxQwaZQX9tY3O7QUoXi4wBAphah1IlsiCxAR6v-z_mA7AZ_RM3yF49wUJ1TzdNWN3XRR3CC6wIX74vDp6E62pccRheoUgyk5CUPSTee4g_Rfz2wKdaIZ60K");'>
+</div>
+<!-- Holographic Grid Overlay -->
+<div class="absolute inset-0 holographic-grid opacity-40"></div>
+<!-- Scanning Line -->
+<div class="absolute inset-0 scan-overlay opacity-80"></div>
+<!-- HUD Elements -->
+<div class="absolute top-4 left-4 border-l-2 border-t-2 border-primary w-8 h-8 opacity-60"></div>
+<div class="absolute top-4 right-4 border-r-2 border-t-2 border-primary w-8 h-8 opacity-60"></div>
+<div class="absolute bottom-4 left-4 border-l-2 border-b-2 border-primary w-8 h-8 opacity-60"></div>
+<div class="absolute bottom-4 right-4 border-r-2 border-b-2 border-primary w-8 h-8 opacity-60"></div>
+<!-- Floating Data Points -->
+<div class="absolute top-1/4 left-10 bg-background-dark/60 backdrop-blur-md border border-primary/40 rounded-lg p-2 flex items-center gap-2">
+<div class="size-2 rounded-full bg-primary animate-pulse"></div>
+<span class="text-[10px] font-mono text-primary uppercase">Protein Detect: High</span>
+</div>
+<div class="absolute bottom-1/3 right-8 bg-background-dark/60 backdrop-blur-md border border-primary/40 rounded-lg p-2 flex items-center gap-2">
+<div class="size-2 rounded-full bg-primary animate-pulse"></div>
+<span class="text-[10px] font-mono text-primary uppercase">Fiber: 12g (Est)</span>
+</div>
+</div>
+</div>
+<!-- Status Messaging -->
+<div class="px-6 py-8 text-center space-y-3">
+<h3 class="text-slate-100 text-2xl font-bold tracking-tight">Analyzing Biometric Alignment...</h3>
+<p class="text-slate-400 text-sm leading-relaxed">
+                Scanning Recipe Nutrients and synchronizing with your current metabolic window.
+            </p>
+<div class="flex items-center justify-center gap-4 pt-4">
+<div class="flex flex-col items-center gap-1">
+<div class="size-10 rounded-xl bg-primary/10 border border-primary/20 flex items-center justify-center">
+<span class="material-symbols-outlined text-primary">biotech</span>
+</div>
+<span class="text-[10px] text-slate-500 uppercase font-bold">Lab Sync</span>
+</div>
+<div class="w-8 h-px bg-slate-800"></div>
+<div class="flex flex-col items-center gap-1">
+<div class="size-10 rounded-xl bg-primary/10 border border-primary/20 flex items-center justify-center">
+<span class="material-symbols-outlined text-primary">nutrition</span>
+</div>
+<span class="text-[10px] text-slate-500 uppercase font-bold">Nutrients</span>
+</div>
+<div class="w-8 h-px bg-slate-800"></div>
+<div class="flex flex-col items-center gap-1">
+<div class="size-10 rounded-xl bg-primary/10 border border-primary/20 flex items-center justify-center">
+<span class="material-symbols-outlined text-primary">genetics</span>
+</div>
+<span class="text-[10px] text-slate-500 uppercase font-bold">Match</span>
+</div>
+</div>
+</div>
+<!-- Bottom Navigation -->
+<div class="mt-auto border-t border-slate-800 bg-background-dark/95 backdrop-blur-md px-4 pb-8 pt-4">
+<div class="flex gap-2 justify-around">
+<a class="flex flex-1 flex-col items-center gap-1 text-slate-500" href="#">
+<span class="material-symbols-outlined">home</span>
+<span class="text-[10px] font-medium">Home</span>
+</a>
+<a class="flex flex-1 flex-col items-center gap-1 text-primary" href="#">
+<div class="relative">
+<span class="material-symbols-outlined text-3xl">center_focus_strong</span>
+<div class="absolute -top-1 -right-1 size-2 bg-primary rounded-full shadow-[0_0_5px_#0ea5e9]"></div>
+</div>
+<span class="text-[10px] font-bold">Scan</span>
+</a>
+<a class="flex flex-1 flex-col items-center gap-1 text-slate-500" href="#">
+<span class="material-symbols-outlined">history</span>
+<span class="text-[10px] font-medium">History</span>
+</a>
+<a class="flex flex-1 flex-col items-center gap-1 text-slate-500" href="#">
+<span class="material-symbols-outlined">person</span>
+<span class="text-[10px] font-medium">Profile</span>
+</a>
+</div>
+</div>
+</div>
+</body></html>

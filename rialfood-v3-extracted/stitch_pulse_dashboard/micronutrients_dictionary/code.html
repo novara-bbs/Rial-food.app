@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>NutriPulse | Micronutrient Dashboard</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#ccff00",
+                        "background-light": "#f8f8f5",
+                        "background-dark": "#1f230f",
+                    },
+                    fontFamily: {
+                        "display": ["Space Grotesk"]
+                    },
+                    borderRadius: {"DEFAULT": "0.5rem", "lg": "1rem", "xl": "1.5rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>
+        body {
+            font-family: 'Space Grotesk', sans-serif;
+        }
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 4px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: rgba(204, 255, 0, 0.05);
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: rgba(204, 255, 0, 0.3);
+            border-radius: 10px;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 min-h-screen flex flex-col">
+<!-- Header Navigation -->
+<header class="sticky top-0 z-50 bg-background-light/80 dark:bg-background-dark/80 backdrop-blur-md border-b border-primary/10">
+<div class="flex items-center justify-between p-4 max-w-5xl mx-auto w-full">
+<div class="flex items-center gap-3">
+<div class="p-2 bg-primary/20 rounded-lg text-primary">
+<span class="material-symbols-outlined leading-none">health_metrics</span>
+</div>
+<h1 class="text-xl font-bold tracking-tight">NutriPulse <span class="text-primary font-light">Bio-Metrics</span></h1>
+</div>
+<div class="flex gap-2">
+<button class="p-2 rounded-full hover:bg-primary/10 text-slate-400">
+<span class="material-symbols-outlined">notifications</span>
+</button>
+<button class="p-2 rounded-full hover:bg-primary/10 text-slate-400">
+<span class="material-symbols-outlined">settings_heart</span>
+</button>
+</div>
+</div>
+</header>
+<main class="flex-1 w-full max-w-5xl mx-auto p-4 space-y-8">
+<!-- Micronutrient Status Section -->
+<section>
+<div class="flex items-end justify-between mb-6">
+<div>
+<h2 class="text-2xl font-bold">Micronutrient Status</h2>
+<p class="text-slate-500 dark:text-slate-400 text-sm">Real-time physiological saturation levels</p>
+</div>
+<div class="flex gap-2 bg-primary/5 p-1 rounded-lg border border-primary/10">
+<button class="px-3 py-1 text-xs font-bold bg-primary text-background-dark rounded">24H</button>
+<button class="px-3 py-1 text-xs font-medium text-slate-400">7D</button>
+<button class="px-3 py-1 text-xs font-medium text-slate-400">30D</button>
+</div>
+</div>
+<!-- Dashboard Grid -->
+<div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+<!-- Summary Card -->
+<div class="md:col-span-2 bg-white/5 dark:bg-primary/5 rounded-xl border border-primary/20 p-6 flex flex-col justify-between relative overflow-hidden">
+<div class="absolute top-0 right-0 p-8 opacity-10">
+<span class="material-symbols-outlined text-8xl">analytics</span>
+</div>
+<div>
+<p class="text-primary text-xs font-bold uppercase tracking-widest mb-1">Current Vitality</p>
+<h3 class="text-5xl font-bold mb-4">84<span class="text-xl text-primary/60">%</span></h3>
+<div class="flex items-center gap-2 text-emerald-400 text-sm font-medium mb-8">
+<span class="material-symbols-outlined text-sm">trending_up</span>
+<span>+4.2% since yesterday</span>
+</div>
+</div>
+<div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
+<div class="space-y-1">
+<p class="text-slate-500 text-xs">Vitamins</p>
+<p class="font-bold">Optimal</p>
+<div class="w-full bg-primary/10 h-1 rounded-full overflow-hidden">
+<div class="bg-primary h-full" style="width: 85%"></div>
+</div>
+</div>
+<div class="space-y-1">
+<p class="text-slate-500 text-xs">Minerals</p>
+<p class="font-bold">Stable</p>
+<div class="w-full bg-primary/10 h-1 rounded-full overflow-hidden">
+<div class="bg-primary h-full" style="width: 72%"></div>
+</div>
+</div>
+<div class="space-y-1">
+<p class="text-slate-500 text-xs">Electrolytes</p>
+<p class="font-bold">Critical</p>
+<div class="w-full bg-red-500/10 h-1 rounded-full overflow-hidden">
+<div class="bg-red-500 h-full" style="width: 32%"></div>
+</div>
+</div>
+<div class="space-y-1">
+<p class="text-slate-500 text-xs">Antioxidants</p>
+<p class="font-bold">High</p>
+<div class="w-full bg-primary/10 h-1 rounded-full overflow-hidden">
+<div class="bg-primary h-full" style="width: 94%"></div>
+</div>
+</div>
+</div>
+</div>
+<!-- Status Sidebar -->
+<div class="bg-white/5 dark:bg-primary/5 rounded-xl border border-primary/10 p-4 space-y-4">
+<h4 class="text-sm font-bold flex items-center gap-2">
+<span class="material-symbols-outlined text-primary text-lg">warning</span>
+                        Alerts &amp; Optimization
+                    </h4>
+<div class="space-y-3">
+<div class="p-3 bg-red-500/10 border border-red-500/20 rounded-lg">
+<p class="text-[10px] font-bold text-red-400 uppercase tracking-tighter">Deficiency Warning</p>
+<p class="text-xs font-medium">Iron levels dropped to 45% (Critical)</p>
+</div>
+<div class="p-3 bg-primary/10 border border-primary/20 rounded-lg">
+<p class="text-[10px] font-bold text-primary uppercase tracking-tighter">Optimization Goal</p>
+<p class="text-xs font-medium">Vitamin D +5% needed for Peak Bone Density</p>
+</div>
+</div>
+</div>
+</div>
+<!-- Detailed Bar Chart Section -->
+<div class="mt-6 bg-white/5 dark:bg-primary/5 rounded-xl border border-primary/10 p-6">
+<div class="grid grid-cols-1 gap-y-4">
+<div class="grid grid-cols-[80px_1fr_60px] items-center gap-4">
+<span class="text-xs font-bold text-slate-400">VIT A</span>
+<div class="h-6 bg-primary/5 rounded border border-primary/10 relative overflow-hidden group">
+<div class="h-full bg-primary/40 group-hover:bg-primary/60 transition-all border-r-2 border-primary" style="width: 85%"></div>
+</div>
+<span class="text-xs font-mono text-primary text-right">85%</span>
+</div>
+<div class="grid grid-cols-[80px_1fr_60px] items-center gap-4">
+<span class="text-xs font-bold text-slate-400">VIT B12</span>
+<div class="h-6 bg-primary/5 rounded border border-primary/10 relative overflow-hidden group">
+<div class="h-full bg-primary/40 group-hover:bg-primary/60 transition-all border-r-2 border-primary" style="width: 62%"></div>
+</div>
+<span class="text-xs font-mono text-primary text-right">62%</span>
+</div>
+<div class="grid grid-cols-[80px_1fr_60px] items-center gap-4">
+<span class="text-xs font-bold text-slate-400">VIT C</span>
+<div class="h-6 bg-primary/5 rounded border border-primary/10 relative overflow-hidden group">
+<div class="h-full bg-primary/40 group-hover:bg-primary/60 transition-all border-r-2 border-primary" style="width: 98%"></div>
+</div>
+<span class="text-xs font-mono text-primary text-right">98%</span>
+</div>
+<div class="grid grid-cols-[80px_1fr_60px] items-center gap-4">
+<span class="text-xs font-bold text-slate-400">VIT D</span>
+<div class="h-6 bg-primary/5 rounded border border-primary/10 relative overflow-hidden group">
+<div class="h-full bg-primary/40 group-hover:bg-primary/60 transition-all border-r-2 border-primary" style="width: 42%"></div>
+</div>
+<span class="text-xs font-mono text-red-400 text-right">42%</span>
+</div>
+<div class="grid grid-cols-[80px_1fr_60px] items-center gap-4">
+<span class="text-xs font-bold text-slate-400">IRON</span>
+<div class="h-6 bg-primary/5 rounded border border-primary/10 relative overflow-hidden group">
+<div class="h-full bg-red-500/30 group-hover:bg-red-500/40 transition-all border-r-2 border-red-500" style="width: 18%"></div>
+</div>
+<span class="text-xs font-mono text-red-500 text-right">18%</span>
+</div>
+<div class="grid grid-cols-[80px_1fr_60px] items-center gap-4">
+<span class="text-xs font-bold text-slate-400">MAGN</span>
+<div class="h-6 bg-primary/5 rounded border border-primary/10 relative overflow-hidden group">
+<div class="h-full bg-primary/40 group-hover:bg-primary/60 transition-all border-r-2 border-primary" style="width: 76%"></div>
+</div>
+<span class="text-xs font-mono text-primary text-right">76%</span>
+</div>
+</div>
+</div>
+</section>
+<!-- Ingredient Dictionary Section -->
+<section class="pb-24">
+<div class="flex items-end justify-between mb-6">
+<div>
+<h2 class="text-2xl font-bold">Ingredient Dictionary</h2>
+<p class="text-slate-500 dark:text-slate-400 text-sm">Bio-active properties database</p>
+</div>
+<div class="relative w-64">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-500 text-sm">search</span>
+<input class="w-full bg-white/5 border border-primary/20 rounded-lg pl-10 pr-4 py-2 text-sm focus:ring-1 focus:ring-primary focus:border-primary outline-none transition-all" placeholder="Search ingredient..." type="text"/>
+</div>
+</div>
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+<!-- Card 1 -->
+<div class="bg-white/5 dark:bg-primary/5 rounded-xl border border-primary/10 hover:border-primary/40 transition-all group overflow-hidden">
+<div class="h-32 w-full bg-slate-800 relative">
+<img class="w-full h-full object-cover opacity-60 group-hover:opacity-80 transition-opacity" data-alt="Close up of fresh green spinach leaves" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDgp0ZHeGDdaWaAAQnKLSjgDkhxxpn39Zc77AEokc3LO-TfGbWnAQIT3U3raV284n4nbHoB0rtQN7R2FgSINwguoGRm6LPhTnP2aGaQiucsDetLtcOZPu_U-v6LfkUt9zGSH2wQ96VZwAmlHB2-xb3x2gg6NwuG9plZFRgwCtm3jFVY9_1-81g6k3d76tqDFZPaqXJDIGRfEkFXYmQZTx5VMaE-VgfPGxczRUu8jpdVGc6SVXExYIrH0H6hkbYSjQZHdN4TeKNISCTX"/>
+<div class="absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-background-dark to-transparent">
+<h4 class="font-bold text-lg">Fresh Spinach</h4>
+</div>
+</div>
+<div class="p-4 space-y-3">
+<div class="flex flex-wrap gap-2">
+<span class="px-2 py-0.5 rounded-full bg-primary/10 text-primary text-[10px] font-bold uppercase">Vitamin K</span>
+<span class="px-2 py-0.5 rounded-full bg-primary/10 text-primary text-[10px] font-bold uppercase">Magnesium</span>
+<span class="px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-400 text-[10px] font-bold uppercase">Alkalizing</span>
+</div>
+<p class="text-xs text-slate-400 leading-relaxed">
+                            Potent source of leafy greens. High absorption rate for magnesium. Supports cardiovascular health and bone density.
+                        </p>
+</div>
+</div>
+<!-- Card 2 -->
+<div class="bg-white/5 dark:bg-primary/5 rounded-xl border border-primary/10 hover:border-primary/40 transition-all group overflow-hidden">
+<div class="h-32 w-full bg-slate-800 relative">
+<img class="w-full h-full object-cover opacity-60 group-hover:opacity-80 transition-opacity" data-alt="Sliced avocado on a dark background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCSLqaz6SxQqHxNsZTmYpozu0EmxJviRz2sM0BQSyA-QAM9HlqFcylQhbao0_Z7kOTetWIi4rR8-ZLGv6Kv4yE-ukxfgJje_JTsunl8mYaVQOYxNOCniI_EFlVcLb34w2oc2CUHlhJGpVrcqnpEHPLz0_SbrV37WqIUIpyJBJWThF8FxgPrLmFCg5xSN6xQSw_3r7CwdGRfIB7DodYF2VNFDFqxlzTHHubBPRrEhacUeK_D-xozbVGLIAKJeCCpu1d8oohFLSNn_elz"/>
+<div class="absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-background-dark to-transparent">
+<h4 class="font-bold text-lg">Avocado</h4>
+</div>
+</div>
+<div class="p-4 space-y-3">
+<div class="flex flex-wrap gap-2">
+<span class="px-2 py-0.5 rounded-full bg-primary/10 text-primary text-[10px] font-bold uppercase">Vitamin E</span>
+<span class="px-2 py-0.5 rounded-full bg-primary/10 text-primary text-[10px] font-bold uppercase">Potassium</span>
+<span class="px-2 py-0.5 rounded-full bg-blue-500/10 text-blue-400 text-[10px] font-bold uppercase">Healthy Fats</span>
+</div>
+<p class="text-xs text-slate-400 leading-relaxed">
+                            Rich in monounsaturated fats. Enhances absorption of fat-soluble vitamins (A, D, E, K) from other foods.
+                        </p>
+</div>
+</div>
+<!-- Card 3 -->
+<div class="bg-white/5 dark:bg-primary/5 rounded-xl border border-primary/10 hover:border-primary/40 transition-all group overflow-hidden">
+<div class="h-32 w-full bg-slate-800 relative">
+<img class="w-full h-full object-cover opacity-60 group-hover:opacity-80 transition-opacity" data-alt="High quality fresh Atlantic salmon fillet" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAPpEmguOFgZ-TQ_7kZNO9jPyxBaiPyYElunCukW8HkvMl7kvJ5CvV9KI_8XsKfzj6db4GEuPLH8-iELAVk_84OFsaYO4N3gbbRBtdhQO5Uc3XtTK_jSIKI7N2POkbDh9guGDGtA9V0dBLs0QJxfvO8R_8UFKH-46e1oF4MzaaTDapMA1ThryAECWIWQgx2-MLzmBXne3JJRkBHP98veu_z53gW9ID6iw9tO3B-OB_vC434Y2EIC0wPBvS41KuxYROUepiMxuPa8VUV"/>
+<div class="absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-background-dark to-transparent">
+<h4 class="font-bold text-lg">Wild Salmon</h4>
+</div>
+</div>
+<div class="p-4 space-y-3">
+<div class="flex flex-wrap gap-2">
+<span class="px-2 py-0.5 rounded-full bg-primary/10 text-primary text-[10px] font-bold uppercase">Vitamin D</span>
+<span class="px-2 py-0.5 rounded-full bg-primary/10 text-primary text-[10px] font-bold uppercase">B12</span>
+<span class="px-2 py-0.5 rounded-full bg-purple-500/10 text-purple-400 text-[10px] font-bold uppercase">Omega-3</span>
+</div>
+<p class="text-xs text-slate-400 leading-relaxed">
+                            Critical for cognitive health. One of the few natural food sources of high-concentration Vitamin D3.
+                        </p>
+</div>
+</div>
+<!-- Card 4 -->
+<div class="bg-white/5 dark:bg-primary/5 rounded-xl border border-primary/10 hover:border-primary/40 transition-all group overflow-hidden">
+<div class="h-32 w-full bg-slate-800 relative">
+<img class="w-full h-full object-cover opacity-60 group-hover:opacity-80 transition-opacity" data-alt="Blueberries in a wooden bowl" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDsKUpez2GXnFV9x4u1cPTOAD8wG4tg8qeNQWYjXg2PGA-b3JXNECdPuZsi05w_lOmyaOnUxSb3q6-kU_gPeHUD09A2J8yfipc4lVJtVb-xHzawfggpTFCeGeJTejH4pNfbpy05sXYUbfr3aSt_ySm5-vDtQMNRtLWsaG-lvhh4QBdl1VSxUx1N3zwpbH3hevAmfDsNfwZEvOH3azgUAINiTg2-IUngKFSrAh11G-6L5dXb4bwhTusJmHU1CkpkDptoHDTB2s5sgfvG"/>
+<div class="absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-background-dark to-transparent">
+<h4 class="font-bold text-lg">Blueberries</h4>
+</div>
+</div>
+<div class="p-4 space-y-3">
+<div class="flex flex-wrap gap-2">
+<span class="px-2 py-0.5 rounded-full bg-primary/10 text-primary text-[10px] font-bold uppercase">Vitamin C</span>
+<span class="px-2 py-0.5 rounded-full bg-primary/10 text-primary text-[10px] font-bold uppercase">Manganese</span>
+<span class="px-2 py-0.5 rounded-full bg-pink-500/10 text-pink-400 text-[10px] font-bold uppercase">Antioxidant</span>
+</div>
+<p class="text-xs text-slate-400 leading-relaxed">
+                            High in anthocyanins. Prevents oxidative stress and improves glycemic response when eaten with meals.
+                        </p>
+</div>
+</div>
+<!-- Card 5 -->
+<div class="bg-white/5 dark:bg-primary/5 rounded-xl border border-primary/10 hover:border-primary/40 transition-all group overflow-hidden">
+<div class="h-32 w-full bg-slate-800 relative">
+<img class="w-full h-full object-cover opacity-60 group-hover:opacity-80 transition-opacity" data-alt="Raw whole almonds on a dark surface" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBFi9LHsJTyjx98wh_PmIPP8pplRxrTKHJBCDXq5enpKqtse0d-zOf7JPAvSWnVnuIm06sOrhyNHPqwfeuN1EodymXYDm_CHPYKpXvsQAa8R4U5pRW_X3yl3zbwVKv-jwbpVKRviWu-2KNfHLDg6kEvUoiMyR8PgAI_UVz_b_WnWs5IeO7g0asFIJKqbanzc0rGRUvgg80zTA4nVUnxIBuw2Q82RbjAB-B_HmwNbCAKE6qK1FecWvsTWcBAkJY8_4mB39uDhIB0qRx0"/>
+<div class="absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-background-dark to-transparent">
+<h4 class="font-bold text-lg">Almonds</h4>
+</div>
+</div>
+<div class="p-4 space-y-3">
+<div class="flex flex-wrap gap-2">
+<span class="px-2 py-0.5 rounded-full bg-primary/10 text-primary text-[10px] font-bold uppercase">Vitamin E</span>
+<span class="px-2 py-0.5 rounded-full bg-primary/10 text-primary text-[10px] font-bold uppercase">Zinc</span>
+<span class="px-2 py-0.5 rounded-full bg-orange-500/10 text-orange-400 text-[10px] font-bold uppercase">Metabolic</span>
+</div>
+<p class="text-xs text-slate-400 leading-relaxed">
+                            Excellent source of bioavailable zinc. Supports immune function and cellular repair mechanisms.
+                        </p>
+</div>
+</div>
+<!-- Card 6 (Empty/Add State) -->
+<div class="bg-dashed bg-white/5 dark:bg-primary/5 rounded-xl border-2 border-dashed border-primary/20 flex flex-col items-center justify-center p-8 gap-4 group hover:bg-primary/10 transition-all cursor-pointer">
+<div class="size-12 rounded-full border border-primary/40 flex items-center justify-center group-hover:scale-110 transition-transform">
+<span class="material-symbols-outlined text-primary">add</span>
+</div>
+<p class="text-xs font-bold text-primary tracking-widest uppercase">Request Ingredient</p>
+</div>
+</div>
+</section>
+</main>
+<!-- Bottom Navigation Bar -->
+<nav class="fixed bottom-0 left-0 right-0 z-50 bg-background-light dark:bg-background-dark border-t border-primary/10 pb-safe">
+<div class="max-w-md mx-auto flex justify-around p-2">
+<a class="flex flex-col items-center p-2 text-slate-500" href="#">
+<span class="material-symbols-outlined">pulse_alert</span>
+<span class="text-[10px] font-medium mt-1 uppercase">Pulse</span>
+</a>
+<a class="flex flex-col items-center p-2 text-primary" href="#">
+<span class="material-symbols-outlined fill-1">bar_chart</span>
+<span class="text-[10px] font-bold mt-1 uppercase">Metrics</span>
+</a>
+<a class="flex flex-col items-center p-2 text-slate-500" href="#">
+<span class="material-symbols-outlined">menu_book</span>
+<span class="text-[10px] font-medium mt-1 uppercase">Dictionary</span>
+</a>
+<a class="flex flex-col items-center p-2 text-slate-500" href="#">
+<span class="material-symbols-outlined">person</span>
+<span class="text-[10px] font-medium mt-1 uppercase">Profile</span>
+</a>
+</div>
+</nav>
+</body></html>

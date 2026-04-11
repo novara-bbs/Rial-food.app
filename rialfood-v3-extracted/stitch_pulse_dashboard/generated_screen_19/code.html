@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Personal Insights Report - RIAL Health</title>
+<!-- Tailwind CSS CDN -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- Custom Font Configuration for Editorial Tech style -->
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&amp;family=Inter:wght@300;400;500;600&amp;display=swap" rel="stylesheet"/>
+<script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            serif: ['"Playfair Display"', 'serif'],
+            sans: ['Inter', 'sans-serif'],
+          },
+          colors: {
+            'rial-cream': '#F9F8F4',
+            'rial-dark': '#2D2D2D',
+            'rial-gold': '#C5A059',
+            'rial-accent-green': '#B6C4B6',
+          }
+        }
+      }
+    }
+  </script>
+<style data-purpose="editorial-typography">
+    body {
+      background-color: #F9F8F4;
+      color: #2D2D2D;
+      -webkit-font-smoothing: antialiased;
+    }
+    .serif-italic { font-style: italic; }
+    .underlined-gold {
+      text-decoration: underline;
+      text-decoration-color: #C5A059;
+      text-underline-offset: 4px;
+    }
+  </style>
+</head>
+<body class="font-sans pb-12">
+<!-- BEGIN: MainHeader -->
+<header class="px-6 pt-12 pb-8 bg-rial-cream border-b border-gray-200">
+<div class="flex justify-between items-end">
+<div data-purpose="title-block">
+<p class="text-[10px] tracking-[0.2em] uppercase text-rial-gold font-semibold mb-2">Monthly Edition</p>
+<h1 class="font-serif text-4xl leading-tight">Personal<br/>Insights Report</h1>
+</div>
+<div class="text-right" data-purpose="branding-date">
+<p class="text-sm font-semibold">RIAL Health</p>
+<p class="text-xs text-gray-500 serif-italic italic">Oct 2023</p>
+</div>
+</div>
+</header>
+<!-- END: MainHeader -->
+<main class="px-6 py-8">
+<!-- BEGIN: RealFeelSection -->
+<section class="mb-10" data-purpose="data-visualization">
+<div class="mb-6">
+<h2 class="font-serif text-2xl serif-italic mb-1 italic">Real Feel vs. Nutrition</h2>
+<p class="text-sm text-gray-600 leading-relaxed">A synchronized look at your subjective energy and objective data.</p>
+</div>
+<div class="bg-white rounded-xl p-6 shadow-sm border border-gray-100" data-purpose="chart-container">
+<!-- Chart Visualization (Simulated with SVG) -->
+<div class="relative h-48 w-full mb-6">
+<svg class="w-full h-full" viewbox="0 0 400 200">
+<!-- Nutrition Density Bars -->
+<rect fill="#F3F1ED" height="80" rx="2" width="30" x="10" y="80"></rect>
+<rect fill="#F3F1ED" height="110" rx="2" width="30" x="65" y="50"></rect>
+<rect fill="#B6C4B6" height="70" rx="2" width="30" x="120" y="90"></rect> <!-- Highlighted Day -->
+<rect fill="#F3F1ED" height="120" rx="2" width="30" x="175" y="40"></rect>
+<rect fill="#F3F1ED" height="100" rx="2" width="30" x="230" y="60"></rect>
+<rect fill="#F3F1ED" height="75" rx="2" width="30" x="285" y="85"></rect>
+<rect fill="#B6C4B6" height="115" rx="2" width="30" x="340" y="45"></rect> <!-- Highlighted Day -->
+<!-- Real Feel Index Line -->
+<path d="M10,150 Q50,110 90,125 T170,130 T250,40 T330,40 T400,100" fill="none" stroke="#2D2D2D" stroke-linecap="round" stroke-width="3"></path>
+</svg>
+<!-- X-Axis Labels -->
+<div class="flex justify-between mt-2 px-1 text-[10px] font-bold text-gray-400 uppercase tracking-wider">
+<span>Mon</span>
+<span>Tue</span>
+<span>Wed</span>
+<span>Thu</span>
+<span>Fri</span>
+<span>Sat</span>
+<span>Sun</span>
+</div>
+</div>
+<!-- Legend -->
+<div class="flex gap-4 text-[10px] font-medium uppercase tracking-tighter">
+<div class="flex items-center">
+<span class="w-2 h-2 rounded-full bg-rial-dark mr-2"></span>
+            Real Feel Index
+          </div>
+<div class="flex items-center">
+<span class="w-2 h-2 rounded-full bg-[#E5E2DA] mr-2 border border-gray-200"></span>
+            Nutrition Density
+          </div>
+</div>
+</div>
+</section>
+<!-- END: RealFeelSection -->
+<!-- BEGIN: KeyCorrelations -->
+<section class="mb-10">
+<h3 class="text-[11px] font-bold uppercase tracking-[0.15em] text-gray-400 mb-4">Key Correlations</h3>
+<!-- Correlation Card 1 -->
+<div class="bg-white rounded-2xl p-6 mb-4 shadow-sm border border-gray-100 flex gap-4" data-purpose="insight-card">
+<div class="flex-shrink-0">
+<div class="w-12 h-12 bg-orange-50 rounded-full flex items-center justify-center">
+<!-- Moon Icon -->
+<svg class="w-6 h-6 text-orange-400" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+<path d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"></path>
+</svg>
+</div>
+</div>
+<div>
+<h4 class="font-serif text-lg leading-snug mb-2">Late night snacks vs.<br/>Morning Energy</h4>
+<p class="text-sm text-gray-600 leading-relaxed">We noticed your energy levels at 8:00 AM are consistently 20% higher on days following a 3-hour fast before sleep.</p>
+</div>
+</div>
+<!-- Correlation Card 2 -->
+<div class="bg-white rounded-2xl p-6 mb-4 shadow-sm border border-gray-100 flex gap-4" data-purpose="insight-card">
+<div class="flex-shrink-0">
+<div class="w-12 h-12 bg-green-50 rounded-full flex items-center justify-center">
+<!-- Bolt/Focus Icon -->
+<svg class="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+<path d="M13 10V3L4 14h7v7l9-11h-7z" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"></path>
+</svg>
+</div>
+</div>
+<div>
+<h4 class="font-serif text-lg leading-snug mb-2">Protein Timing &amp; Focus</h4>
+<p class="text-sm text-gray-600 leading-relaxed">Your "Real Feel" focus scores peak when your breakfast includes at least 25g of protein. This trend is strongest on Tuesdays and Thursdays.</p>
+</div>
+</div>
+</section>
+<!-- END: KeyCorrelations -->
+<!-- BEGIN: SensitivityAlert -->
+<section class="bg-rial-dark rounded-3xl p-8 text-white mb-12 shadow-xl" data-purpose="critical-insight">
+<div class="flex items-center gap-2 mb-6">
+<span class="w-2 h-2 rounded-full bg-rial-gold"></span>
+<p class="text-[10px] font-bold uppercase tracking-[0.2em] text-gray-300">Gently Noted: Sensitivities</p>
+</div>
+<h3 class="font-serif text-2xl leading-tight mb-8">
+        Your system seems to prefer alternatives to <span class="underlined-gold serif-italic">refined gluten</span> during high-stress weeks.
+      </h3>
+<div class="border-t border-gray-700 pt-6">
+<div class="flex justify-between items-baseline mb-4">
+<p class="text-xs uppercase tracking-widest text-gray-400">Observation</p>
+<p class="text-xs italic serif-italic text-rial-accent-green">Mild Bloom</p>
+</div>
+<p class="text-xs leading-relaxed text-gray-400">
+          We tracked a slight decrease in digestive comfort markers when bread-based items were logged twice in 24 hours. Consider sourdough or sprouted grains for a lighter experience.
+        </p>
+</div>
+</section>
+<!-- END: SensitivityAlert -->
+<!-- BEGIN: FooterActions -->
+<footer class="text-center pt-4 border-t border-gray-200">
+<p class="font-serif italic serif-italic text-gray-400 text-lg mb-8">Nurture your data, find your rhythm.</p>
+<div class="flex items-center justify-center gap-4">
+<button aria-label="Share" class="w-12 h-12 rounded-full border border-gray-300 flex items-center justify-center hover:bg-gray-50 transition-colors">
+<svg class="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+<path d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+</svg>
+</button>
+<button class="bg-rial-dark text-white px-8 h-12 rounded-full font-bold text-sm tracking-wide hover:bg-black transition-colors">
+          Full Export (PDF)
+        </button>
+</div>
+</footer>
+<!-- END: FooterActions -->
+</main>
+</body></html>

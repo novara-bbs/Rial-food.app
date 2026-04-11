@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>RIAL - Goal &amp; Lifestyle Selector</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#3fca43",
+                        "background-light": "#f6f8f6",
+                        "background-dark": "#131f14",
+                    },
+                    fontFamily: {
+                        "display": ["Inter", "sans-serif"]
+                    },
+                    borderRadius: {"DEFAULT": "1rem", "lg": "2rem", "xl": "3rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark font-display text-slate-900 dark:text-slate-100 antialiased">
+<div class="relative flex h-auto min-h-screen w-full flex-col bg-background-light dark:bg-background-dark overflow-x-hidden max-w-md mx-auto">
+<!-- Header -->
+<div class="flex items-center bg-transparent p-4 pb-2 justify-between">
+<div class="text-slate-900 dark:text-slate-100 flex size-12 shrink-0 items-center justify-start cursor-pointer">
+<span class="material-symbols-outlined text-3xl">arrow_back</span>
+</div>
+<h2 class="text-slate-900 dark:text-slate-100 text-lg font-bold leading-tight tracking-tight flex-1 text-center pr-12">Choose Your Path</h2>
+</div>
+<!-- Title Section -->
+<div class="px-6 pt-8 pb-4 text-center">
+<h1 class="text-slate-900 dark:text-slate-100 tracking-tight text-3xl font-extrabold leading-tight mb-3">What's your goal?</h1>
+<p class="text-slate-600 dark:text-slate-400 text-base font-normal leading-relaxed">Select a lifestyle that fits your current needs and long-term health goals.</p>
+</div>
+<!-- Options List -->
+<div class="flex flex-col gap-4 p-4 pb-12">
+<!-- Option 1: Bulking & Strength -->
+<div class="flex items-stretch justify-between gap-4 rounded-xl bg-white dark:bg-primary/5 border border-slate-200 dark:border-primary/10 p-4 shadow-sm hover:border-primary transition-colors cursor-pointer group">
+<div class="flex flex-[2_2_0px] flex-col justify-between gap-4">
+<div class="flex flex-col gap-1">
+<p class="text-slate-900 dark:text-white text-lg font-bold leading-tight">Bulking &amp; Strength</p>
+<p class="text-slate-600 dark:text-slate-400 text-sm font-normal leading-normal">Optimize your portions for muscle gain while cooking for the family.</p>
+</div>
+<button class="flex min-w-[100px] cursor-pointer items-center justify-center overflow-hidden rounded-full h-9 px-4 bg-primary text-background-dark text-sm font-semibold leading-normal w-fit group-hover:bg-primary/90">
+<span>Select</span>
+</button>
+</div>
+<div class="w-32 h-32 bg-center bg-no-repeat bg-cover rounded-xl shrink-0" data-alt="Athletic man lifting weights in a gym" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuA1a-oatXLA5cuS3hZy2OMhddoLHAZ0MCE7x1N9k0yLajfuRo3kuWY4pt-BCV-88bTWh2Q-rgYpv9LeJI61OlcbGacNJNPjy_9bpFtGML3AvQp5-Tkq7xJyiJxqNQiJbefqCeCRBorIEfwx_Lh_R18yBJobx8JzDDx5G-Jcdtl6xO6VO5IYEAyqzXSeJAspwUsv1u6_eP0QO4TuJPiaEKLuRts666Kj5WsiWKIhyc5iMiN2LUkMVo6ilq75I9MWfCGoLa_9RdjF7Yli");'></div>
+</div>
+<!-- Option 2: Definition & Cut -->
+<div class="flex items-stretch justify-between gap-4 rounded-xl bg-white dark:bg-primary/5 border border-slate-200 dark:border-primary/10 p-4 shadow-sm hover:border-primary transition-colors cursor-pointer group">
+<div class="flex flex-[2_2_0px] flex-col justify-between gap-4">
+<div class="flex flex-col gap-1">
+<p class="text-slate-900 dark:text-white text-lg font-bold leading-tight">Definition &amp; Cut</p>
+<p class="text-slate-600 dark:text-slate-400 text-sm font-normal leading-normal">Precision nutrition designed to reveal lean muscle and shed fat effectively.</p>
+</div>
+<button class="flex min-w-[100px] cursor-pointer items-center justify-center overflow-hidden rounded-full h-9 px-4 bg-primary text-background-dark text-sm font-semibold leading-normal w-fit group-hover:bg-primary/90">
+<span>Select</span>
+</button>
+</div>
+<div class="w-32 h-32 bg-center bg-no-repeat bg-cover rounded-xl shrink-0" data-alt="Fit athletic woman doing core workout" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuDvzQOhLUg7Ikyxn3mapXaMCg7Dkg-3Ym11CGjugJU8R4oqV4qpW7MSQDrN4XJgVqFx7w7yu9lr1gqpJo4oE11F9KIQnJ0KzG4GhEkfQuhyteuIHx4nySKFGSJH6NvZH3rGWugq0Cq6QsCT1kEvVQMmj_NdT2wpFUskuJiDrJZ3folaveAUVlzt4YiWpVosleUsQc-d8mQlbIkZAM2Dt1CNXkbwxWmM_rOVfHmTV9tjKMcQbKFDnH6u-Q2-bJX-6l-4QuF6WXReKFau");'></div>
+</div>
+<!-- Option 3: Intermittent Fasting -->
+<div class="flex items-stretch justify-between gap-4 rounded-xl bg-white dark:bg-primary/5 border border-slate-200 dark:border-primary/10 p-4 shadow-sm hover:border-primary transition-colors cursor-pointer group">
+<div class="flex flex-[2_2_0px] flex-col justify-between gap-4">
+<div class="flex flex-col gap-1">
+<p class="text-slate-900 dark:text-white text-lg font-bold leading-tight">Intermittent Fasting</p>
+<p class="text-slate-600 dark:text-slate-400 text-sm font-normal leading-normal">Boost metabolic health and mental clarity with timed eating windows.</p>
+</div>
+<button class="flex min-w-[100px] cursor-pointer items-center justify-center overflow-hidden rounded-full h-9 px-4 bg-primary text-background-dark text-sm font-semibold leading-normal w-fit group-hover:bg-primary/90">
+<span>Select</span>
+</button>
+</div>
+<div class="w-32 h-32 bg-center bg-no-repeat bg-cover rounded-xl shrink-0" data-alt="Clock next to a healthy green salad bowl" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuCLUQIQAcyMS_oBKx3rXIleP2eRBXFyAgFadAI6cdH_i6OSNUrMisFut5T6Yy2w2dZtdP6czndqTvAzulGw6U19BL11RxQdR9DSJqjBolSJPPI6TrV16Hf1vXuzpJeRpbD1052dRLX75JiuKJXEf0F9eWm1SjLIddCebJEWVmn1mHFxPOBV12qBz4auGgLaKDl5ifcOkP1ZkYdowt9Jt3OMmUEMiiTY9uOhfkGIDrM_-Y5QKjRlMaKzOWSlhInBTJnEW138XJFw70P7");'></div>
+</div>
+<!-- Option 4: Healthy Family -->
+<div class="flex items-stretch justify-between gap-4 rounded-xl bg-white dark:bg-primary/5 border border-slate-200 dark:border-primary/10 p-4 shadow-sm hover:border-primary transition-colors cursor-pointer group">
+<div class="flex flex-[2_2_0px] flex-col justify-between gap-4">
+<div class="flex flex-col gap-1">
+<p class="text-slate-900 dark:text-white text-lg font-bold leading-tight">Healthy Family</p>
+<p class="text-slate-600 dark:text-slate-400 text-sm font-normal leading-normal">Nutritious meals that everyone will love, focusing on whole food wellness.</p>
+</div>
+<button class="flex min-w-[100px] cursor-pointer items-center justify-center overflow-hidden rounded-full h-9 px-4 bg-primary text-background-dark text-sm font-semibold leading-normal w-fit group-hover:bg-primary/90">
+<span>Select</span>
+</button>
+</div>
+<div class="w-32 h-32 bg-center bg-no-repeat bg-cover rounded-xl shrink-0" data-alt="Happy parents and children eating healthy dinner" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuC14vvX7hZ-77sz82o3GWXOt6e_TugvZPrmHcu_WsE2VwkI1GhiYvptEOupvlsz0M7lAF8AAlo9xmeH6plNqSgDB2w3GaaLIN5t_fyQTHqGvSOv3RfwIs_84iHdJzMPxWGrhgsyezAla3Iu5bftxDzwY9OKvMQzTjGjnZaucAo-Xg9tE01dpVw4lnoMsmX_D7HBNui0vh-nandjN0WO61pWaghlZhmIpUOkit_6PW-n2QwDQJJosaYiSYarStUxNeeOYyk_yGEABPuS");'></div>
+</div>
+</div>
+<!-- Progress Indicator -->
+<div class="mt-auto px-6 py-8">
+<div class="flex justify-between items-center text-xs text-slate-500 dark:text-slate-400 uppercase tracking-widest font-bold">
+<span>Step 1 of 4</span>
+<div class="flex gap-1">
+<div class="w-8 h-1 rounded-full bg-primary"></div>
+<div class="w-8 h-1 rounded-full bg-slate-200 dark:bg-slate-700"></div>
+<div class="w-8 h-1 rounded-full bg-slate-200 dark:bg-slate-700"></div>
+<div class="w-8 h-1 rounded-full bg-slate-200 dark:bg-slate-700"></div>
+</div>
+</div>
+</div>
+</div>
+</body></html>

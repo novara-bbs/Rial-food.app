@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>RIAL - Review &amp; Publish Recipe</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&amp;family=Playfair+Display:ital,wght@0,700;0,900;1,700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#25aff4",
+                        "background-light": "#fcfdfd",
+                        "background-dark": "#0a0f12",
+                    },
+                    fontFamily: {
+                        "display": ["Inter", "sans-serif"],
+                        "serif": ["Playfair Display", "serif"]
+                    },
+                    borderRadius: {"DEFAULT": "0.125rem", "lg": "0.5rem", "xl": "1rem", "2xl": "1.5rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>
+        body {
+            min-height: max(884px, 100dvh);
+            -webkit-font-smoothing: antialiased;
+        }
+        .serif-italic { font-style: italic; }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark font-display text-slate-900 dark:text-slate-100 min-h-screen">
+<div class="max-w-md mx-auto bg-white dark:bg-slate-950 min-h-screen flex flex-col shadow-2xl relative">
+<!-- Header -->
+<div class="flex items-center bg-white/80 dark:bg-slate-950/80 backdrop-blur-md p-4 sticky top-0 z-30 border-b border-slate-100 dark:border-slate-800/50">
+<div class="text-slate-900 dark:text-slate-100 flex size-10 shrink-0 items-center justify-center cursor-pointer">
+<span class="material-symbols-outlined">arrow_back</span>
+</div>
+<div class="flex-1 px-2">
+<p class="text-[10px] font-black uppercase tracking-[0.2em] text-primary">Step 3 of 3</p>
+<h2 class="text-slate-900 dark:text-slate-100 text-xl font-black leading-tight tracking-tight">Review &amp; Publish</h2>
+</div>
+<div class="text-slate-400 flex size-10 shrink-0 items-center justify-center">
+<span class="material-symbols-outlined">more_vert</span>
+</div>
+</div>
+<!-- Recipe Hero Preview -->
+<div class="p-4 pt-2">
+<div class="relative group">
+<div class="bg-cover bg-center flex flex-col justify-end overflow-hidden rounded-2xl min-h-[420px] shadow-2xl shadow-black/20" data-alt="Slow-roasted heritage carrots on a ceramic plate" style='background-image: linear-gradient(to top, rgba(0, 0, 0, 0.9) 0%, rgba(0, 0, 0, 0.4) 40%, rgba(0, 0, 0, 0) 100%), url("https://lh3.googleusercontent.com/aida-public/AB6AXuC9vPGsQqP8sWRooKfaSzTaML3qgAvhgSsR9rBlZPqhF20Sq1jwoLD_usRMrLCkN6-W1UyiFADkkdftnr1zTYZDn7I6714QnbQFQ_FH8FdVLDXhkI7pPR7Uqo2iJBqjouLM7efO0RpiN-TFni3WA0_bx4kVaBPTz6FH72oOWMjGktxjCKIv7o2fZ8XwKwWxu9NjjX4AxiGjSxXZZjFxM8qutdY-iPhce-agda051TMi5f4VyJcXObCJoKabvch0qOWXyGYtklFLU15t");'>
+<div class="p-6 pb-8">
+<div class="inline-flex items-center gap-1.5 bg-white/10 backdrop-blur-md border border-white/20 text-white text-[10px] font-black px-2.5 py-1 rounded-full mb-3 uppercase tracking-widest">
+<span class="size-1.5 bg-primary rounded-full animate-pulse"></span>
+                            Editorial Choice
+                        </div>
+<h1 class="text-white text-4xl font-serif font-black leading-[1.1] tracking-tight">Slow-Roasted <br/><span class="serif-italic font-bold">Heritage Carrots</span></h1>
+<p class="text-white/70 text-sm mt-3 font-medium tracking-wide">With wild honey, thyme, and toasted hazelnuts</p>
+</div>
+</div>
+<button class="absolute top-4 right-4 bg-white/10 hover:bg-white/20 backdrop-blur-xl text-white size-12 flex items-center justify-center rounded-full border border-white/20 transition-all active:scale-90">
+<span class="material-symbols-outlined text-xl">edit_square</span>
+</button>
+</div>
+</div>
+<!-- Real Match Score & Logic -->
+<div class="px-6 py-4">
+<div class="flex items-center justify-between mb-4">
+<div>
+<h3 class="text-slate-900 dark:text-slate-100 text-xs font-black uppercase tracking-[0.2em]">Real Match &amp; Scaling</h3>
+</div>
+<button class="text-primary text-xs font-black uppercase tracking-widest hover:underline decoration-2 underline-offset-4">Adjust</button>
+</div>
+<!-- Score Card -->
+<div class="mb-4 bg-primary/5 dark:bg-primary/10 rounded-2xl p-4 border border-primary/10 flex items-center gap-4">
+<div class="size-14 rounded-full border-4 border-primary flex items-center justify-center shrink-0">
+<span class="text-primary font-black text-xl">98</span>
+</div>
+<div class="flex-1">
+<p class="text-slate-900 dark:text-slate-100 text-sm font-bold">Perfect fit for your kitchen</p>
+<p class="text-slate-500 dark:text-slate-400 text-[11px] leading-relaxed">This recipe uses your available heritage root veg and matches your 30-min active prep preference.</p>
+</div>
+</div>
+<div class="bg-slate-50 dark:bg-slate-900/50 rounded-2xl border border-slate-100 dark:border-slate-800 divide-y divide-slate-100 dark:divide-slate-800">
+<div class="flex items-center gap-4 p-4 cursor-pointer hover:bg-slate-100/50 dark:hover:bg-slate-800/50 transition-colors">
+<div class="bg-white dark:bg-slate-800 shadow-sm border border-slate-100 dark:border-slate-700 text-primary flex items-center justify-center rounded-xl shrink-0 size-12">
+<span class="material-symbols-outlined">groups</span>
+</div>
+<div class="flex-1">
+<p class="text-slate-900 dark:text-slate-100 text-sm font-bold tracking-tight">Family Scaling</p>
+<p class="text-slate-500 dark:text-slate-400 text-xs">Optimized for 4 adults, 2 children</p>
+</div>
+<span class="material-symbols-outlined text-slate-300">chevron_right</span>
+</div>
+<div class="flex items-center gap-4 p-4 cursor-pointer hover:bg-slate-100/50 dark:hover:bg-slate-800/50 transition-colors">
+<div class="bg-white dark:bg-slate-800 shadow-sm border border-slate-100 dark:border-slate-700 text-primary flex items-center justify-center rounded-xl shrink-0 size-12">
+<span class="material-symbols-outlined">rebase_edit</span>
+</div>
+<div class="flex-1">
+<p class="text-slate-900 dark:text-slate-100 text-sm font-bold tracking-tight">Leftover Logic</p>
+<p class="text-slate-500 dark:text-slate-400 text-xs">Smart repurpose: <span class="text-primary font-medium">Carrot &amp; Ginger soup</span></p>
+</div>
+<span class="material-symbols-outlined text-slate-300">chevron_right</span>
+</div>
+</div>
+</div>
+<!-- Publishing Settings -->
+<div class="px-6 py-4 space-y-4">
+<h3 class="text-slate-900 dark:text-slate-100 text-xs font-black uppercase tracking-[0.2em]">Privacy Settings</h3>
+<div class="grid grid-cols-2 gap-3">
+<label class="relative cursor-pointer group">
+<input checked="" class="peer sr-only" name="privacy" type="radio"/>
+<div class="p-4 border-2 border-slate-100 dark:border-slate-800 rounded-2xl peer-checked:border-primary peer-checked:bg-primary/5 transition-all bg-white dark:bg-slate-900">
+<span class="material-symbols-outlined text-slate-400 group-hover:text-primary peer-checked:text-primary mb-2 transition-colors">public</span>
+<p class="font-bold text-sm block">Community</p>
+<p class="text-[10px] text-slate-500 leading-tight mt-1">Visible to all RIAL members</p>
+</div>
+</label>
+<label class="relative cursor-pointer group">
+<input class="peer sr-only" name="privacy" type="radio"/>
+<div class="p-4 border-2 border-slate-100 dark:border-slate-800 rounded-2xl peer-checked:border-primary peer-checked:bg-primary/5 transition-all bg-white dark:bg-slate-900">
+<span class="material-symbols-outlined text-slate-400 group-hover:text-primary peer-checked:text-primary mb-2 transition-colors">lock</span>
+<p class="font-bold text-sm block">Private</p>
+<p class="text-[10px] text-slate-500 leading-tight mt-1">Only you can view this recipe</p>
+</div>
+</label>
+</div>
+</div>
+<!-- Tags & Categories -->
+<div class="px-6 pb-12">
+<div class="flex flex-wrap gap-2">
+<span class="bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 px-4 py-1.5 rounded-full text-[11px] font-bold tracking-tight border border-slate-200 dark:border-slate-700">#Vegetarian</span>
+<span class="bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 px-4 py-1.5 rounded-full text-[11px] font-bold tracking-tight border border-slate-200 dark:border-slate-700">#HeritageCarrots</span>
+<span class="bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 px-4 py-1.5 rounded-full text-[11px] font-bold tracking-tight border border-slate-200 dark:border-slate-700">#SlowRoasted</span>
+<button class="text-primary px-4 py-1.5 rounded-full text-[11px] font-black uppercase tracking-widest border border-primary/20 hover:bg-primary/5 transition-colors">+ Add Tag</button>
+</div>
+</div>
+<!-- Bottom Actions -->
+<div class="mt-auto p-6 pt-4 bg-white dark:bg-slate-950 border-t border-slate-100 dark:border-slate-800/50">
+<div class="flex gap-4">
+<button class="flex-1 py-4 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-slate-100 font-black text-sm uppercase tracking-widest rounded-2xl border border-slate-200 dark:border-slate-800 transition-all hover:bg-slate-100 active:scale-95">
+                    Save Draft
+                </button>
+<button class="flex-[1.5] py-4 bg-primary text-white font-black text-sm uppercase tracking-widest rounded-2xl shadow-[0_10px_30px_-10px_rgba(37,175,244,0.5)] transition-all hover:shadow-[0_15px_35px_-10px_rgba(37,175,244,0.6)] active:scale-95">
+                    Publish to RIAL
+                </button>
+</div>
+</div>
+<!-- Navigation Bar -->
+<div class="flex gap-2 border-t border-slate-100 dark:border-slate-800 bg-white dark:bg-slate-950 px-4 pb-8 pt-4 sticky bottom-0 z-30">
+<a class="flex flex-1 flex-col items-center justify-center gap-1.5 text-slate-400 dark:text-slate-600 group" href="#">
+<span class="material-symbols-outlined transition-colors group-hover:text-primary">home</span>
+<p class="text-[9px] font-black uppercase tracking-[0.15em]">Home</p>
+</a>
+<a class="flex flex-1 flex-col items-center justify-center gap-1.5 text-slate-400 dark:text-slate-600 group" href="#">
+<span class="material-symbols-outlined transition-colors group-hover:text-primary">explore</span>
+<p class="text-[9px] font-black uppercase tracking-[0.15em]">Explore</p>
+</a>
+<a class="flex flex-1 flex-col items-center justify-center gap-1.5 text-primary" href="#">
+<div class="bg-primary/10 rounded-full p-2 -mt-6 shadow-lg shadow-primary/20 border border-primary/20">
+<span class="material-symbols-outlined text-2xl block" style="font-variation-settings: 'FILL' 1;">add</span>
+</div>
+<p class="text-[9px] font-black uppercase tracking-[0.15em]">Create</p>
+</a>
+<a class="flex flex-1 flex-col items-center justify-center gap-1.5 text-slate-400 dark:text-slate-600 group" href="#">
+<span class="material-symbols-outlined transition-colors group-hover:text-primary">restaurant</span>
+<p class="text-[9px] font-black uppercase tracking-[0.15em]">Kitchen</p>
+</a>
+<a class="flex flex-1 flex-col items-center justify-center gap-1.5 text-slate-400 dark:text-slate-600 group" href="#">
+<span class="material-symbols-outlined transition-colors group-hover:text-primary">account_circle</span>
+<p class="text-[9px] font-black uppercase tracking-[0.15em]">Profile</p>
+</a>
+</div>
+</div>
+</body></html>

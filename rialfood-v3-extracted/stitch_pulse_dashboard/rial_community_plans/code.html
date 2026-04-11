@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#ddff00",
+                        "background-light": "#f8f8f5",
+                        "background-dark": "#20230f",
+                    },
+                    fontFamily: {
+                        "display": ["Space Grotesk", "sans-serif"]
+                    },
+                    borderRadius: {"DEFAULT": "0.5rem", "lg": "1rem", "xl": "1.5rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<title>RIAL - Plan Discovery</title>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark font-display text-slate-900 dark:text-slate-100">
+<div class="relative flex min-h-screen w-full flex-col max-w-md mx-auto bg-white dark:bg-slate-950 shadow-2xl overflow-x-hidden">
+<!-- Header -->
+<header class="sticky top-0 z-20 bg-white/80 dark:bg-slate-950/80 backdrop-blur-md border-b border-slate-200 dark:border-slate-800">
+<div class="flex items-center p-4 justify-between">
+<div class="flex items-center gap-3">
+<div class="bg-primary p-2 rounded-lg">
+<span class="material-symbols-outlined text-background-dark font-bold">search</span>
+</div>
+<div>
+<h1 class="text-xl font-bold tracking-tight">Discover Plans</h1>
+<p class="text-xs text-slate-500 dark:text-slate-400 font-medium uppercase tracking-wider">RIAL Community Feed</p>
+</div>
+</div>
+<button class="size-10 flex items-center justify-center rounded-full bg-slate-100 dark:bg-slate-800">
+<span class="material-symbols-outlined text-slate-700 dark:text-slate-300">tune</span>
+</button>
+</div>
+<!-- Categories -->
+<div class="flex gap-2 px-4 pb-4 overflow-x-auto no-scrollbar">
+<button class="flex h-9 shrink-0 items-center justify-center gap-x-2 rounded-full bg-primary px-4 text-background-dark text-sm font-bold border border-primary">
+                    All Plans
+                </button>
+<button class="flex h-9 shrink-0 items-center justify-center gap-x-2 rounded-full bg-slate-100 dark:bg-slate-800 px-4 text-slate-700 dark:text-slate-300 text-sm font-medium border border-transparent">
+                    Weight Loss
+                    <span class="material-symbols-outlined text-sm">keyboard_arrow_down</span>
+</button>
+<button class="flex h-9 shrink-0 items-center justify-center gap-x-2 rounded-full bg-slate-100 dark:bg-slate-800 px-4 text-slate-700 dark:text-slate-300 text-sm font-medium border border-transparent">
+                    Vegan
+                    <span class="material-symbols-outlined text-sm">keyboard_arrow_down</span>
+</button>
+<button class="flex h-9 shrink-0 items-center justify-center gap-x-2 rounded-full bg-slate-100 dark:bg-slate-800 px-4 text-slate-700 dark:text-slate-300 text-sm font-medium border border-transparent">
+                    Budget
+                    <span class="material-symbols-outlined text-sm">keyboard_arrow_down</span>
+</button>
+</div>
+</header>
+<!-- Main Feed -->
+<main class="flex-1 overflow-y-auto p-4 space-y-6 pb-24">
+<!-- Plan Card 1 -->
+<div class="group relative flex flex-col overflow-hidden rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 shadow-sm">
+<div class="relative aspect-[16/10] w-full overflow-hidden">
+<div class="absolute inset-0 bg-cover bg-center" data-alt="Vibrant healthy bowl with roasted vegetables and grains" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuC2otL-cr6ggdtIXUmEKI1ADJmP8bVX60ZujVE9GBq9Dg_QJwmrHhVWjmvwetGawvGZ4wXIECOnDQhbNlv4o3P-3ObRwfxC0uun7EOftV4Sjblyaj7eSo8oRNmf7ehUfwaXMGkZXMTTRXqyhTzDak55ofeAaEdFJjsg2wSwzChefJ7420HmuGZlkZqVKKquZhu5h4aO_a33q_HYJ_wdb4M52dkXliNkMcbmpRrQyX_lFO2jGSC48vkFu-rDNu0Tx8QzfEC4SboFNXFu')"></div>
+<div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent"></div>
+<!-- Technical Data Overlays -->
+<div class="absolute top-3 left-3 flex gap-2">
+<div class="flex items-center gap-1 rounded-lg bg-black/40 backdrop-blur-md px-2.5 py-1 text-[10px] font-bold text-white border border-white/20">
+<span class="material-symbols-outlined text-[14px] text-primary">analytics</span>
+                            REAL MATCH: 94%
+                        </div>
+<div class="flex items-center gap-1 rounded-lg bg-black/40 backdrop-blur-md px-2.5 py-1 text-[10px] font-bold text-white border border-white/20">
+<span class="material-symbols-outlined text-[14px] text-primary">groups</span>
+                            88% SUCCESS
+                        </div>
+</div>
+<div class="absolute bottom-3 left-3 right-3">
+<h2 class="text-2xl font-bold text-white leading-tight">4-Week Shred</h2>
+<div class="flex items-center gap-2 mt-1">
+<span class="text-primary text-xs font-bold uppercase tracking-widest">High Intensity</span>
+<span class="text-white/60 text-xs tracking-widest uppercase">|</span>
+<span class="text-white/80 text-xs font-medium uppercase tracking-widest">28 Days Routine</span>
+</div>
+</div>
+</div>
+<div class="p-4 space-y-4">
+<div class="bg-primary/5 dark:bg-primary/10 rounded-lg p-3 border-l-4 border-primary">
+<div class="flex items-center gap-2 mb-1">
+<span class="material-symbols-outlined text-primary text-sm font-bold">recycling</span>
+<span class="text-[10px] font-bold text-slate-900 dark:text-slate-100 uppercase tracking-widest">Leftover Logic</span>
+</div>
+<p class="text-sm text-slate-600 dark:text-slate-400 leading-relaxed italic">
+                            "Turn Tuesday's roasted lemon chicken into Wednesday's Mediterranean pesto wraps."
+                        </p>
+</div>
+<div class="flex items-center justify-between pt-2">
+<div class="flex -space-x-2">
+<div class="size-8 rounded-full border-2 border-white dark:border-slate-900 bg-slate-200 overflow-hidden">
+<img alt="Avatar" class="size-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCupB5nZTnmmRgsz24iFmW2VAYMGU2HR6an60Hf8Xi8OKsG_wIgzIpxdM5Z4cgjg4aNgqoa8YRy62ZJcDvoIzeKk6QuL9RfblX5SRqYVdF_xL4uGzNcyJXISWLHamvGeF-mAA9NGWU1zbS_enEjD2iO8j8DMCHCW3e97EJ1UT8CgEFxlnGGq36zCBJW8fFjYc1aVyzW9AENhxIy____QiWuybnAjHkaJWB4eis8H6tV4v6GY5ZY-ueZSPbQV18gvMpVjqWCJNgEHoTF"/>
+</div>
+<div class="size-8 rounded-full border-2 border-white dark:border-slate-900 bg-slate-200 overflow-hidden">
+<img alt="Avatar" class="size-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCwG6ip2TCd0yX4fxcUQHY7zFjFbvMAD1VUHQg6xbAumMqFTOjpe6MQWeym28njGh78XmEMOPfOZ65TjGB1k3sfxLyQMFUVXnyyxLVZhXduPtnu6ob310cJFLWwiBCTT8dfS0se5vEb7gu5T-X2XO3fUCWYkZ0WW2KXBIrqMSm-k_pUDV4oIlX0RbEO7EIKF5zX8cZwokOs27O26RDGjyR32Is-oNe9E75oUhKIxoyWPu8xF1TQLAMhQ9W3MP7UDpNItmrOhy80jv5q"/>
+</div>
+<div class="size-8 rounded-full border-2 border-white dark:border-slate-900 bg-slate-200 overflow-hidden">
+<img alt="Avatar" class="size-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAOcscTsf-789kmDi_6OrUgZZ-X8WETU4zqU99YtqkmRc5lu8x0RwaaQsvIg4X8BKSZfJ3t10CEvoXp3V0rMP1OovyF5nHnDPlgM4Xsl2c9B-k1T2tBgFh2CO5xgLu8tR4EwC9Q6ujRTyg5JbtOTJy4lbIvlGAe72w53Ulnc9EOWpaZO3CT5hnAoNwc08ZURrn0hi0MJ3IFUwO87JESvssfOeKdc6QGM-AF5CDGfJMpUzmiZs2vEt_duxpmtK9DR1JS7oB8y5qFM8Va"/>
+</div>
+<div class="flex size-8 items-center justify-center rounded-full border-2 border-white dark:border-slate-900 bg-slate-100 dark:bg-slate-800 text-[10px] font-bold">
+                                +42
+                            </div>
+</div>
+<button class="h-10 rounded-xl bg-primary px-6 text-sm font-bold text-background-dark shadow-lg shadow-primary/20 hover:scale-105 active:scale-95 transition-transform">
+                            Adopt Plan
+                        </button>
+</div>
+</div>
+</div>
+<!-- Plan Card 2 -->
+<div class="group relative flex flex-col overflow-hidden rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 shadow-sm">
+<div class="relative aspect-[16/10] w-full overflow-hidden">
+<div class="absolute inset-0 bg-cover bg-center" data-alt="Fresh vegetable salad bowl with avocado and chickpeas" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCjKXt7W_GvBrEuOGL5_aqh-GK6e93CO5hE-AAJD8LF7v4euEo02_DJBkbnTPdkjBewvbulCYOYtqIaMvMxw-46Y62_s5XCwhEu3JEJ5S3XXVyMx_rzjpFn3l46tAm3red2C5e_oofJ4f5TkMLsxUI-wZdoZi3pcZyDDEYc8nRkpFo91cKrmI0AnY2_YBwxsXEV3NqETpCPeXOgp2vnQFjIGqO3_StNZmX2KzE6eZevWRwjZyBUkVGFyILPAhBHtMfg5n76vQ7r_B6y')"></div>
+<div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent"></div>
+<div class="absolute top-3 left-3 flex gap-2">
+<div class="flex items-center gap-1 rounded-lg bg-black/40 backdrop-blur-md px-2.5 py-1 text-[10px] font-bold text-white border border-white/20">
+<span class="material-symbols-outlined text-[14px] text-primary">analytics</span>
+                            REAL MATCH: 82%
+                        </div>
+<div class="flex items-center gap-1 rounded-lg bg-black/40 backdrop-blur-md px-2.5 py-1 text-[10px] font-bold text-white border border-white/20">
+<span class="material-symbols-outlined text-[14px] text-primary">groups</span>
+                            91% SUCCESS
+                        </div>
+</div>
+<div class="absolute bottom-3 left-3 right-3">
+<h2 class="text-2xl font-bold text-white leading-tight">Vegan Family Prep</h2>
+<div class="flex items-center gap-2 mt-1">
+<span class="text-primary text-xs font-bold uppercase tracking-widest">Plant Based</span>
+<span class="text-white/60 text-xs tracking-widest uppercase">|</span>
+<span class="text-white/80 text-xs font-medium uppercase tracking-widest">7 Days Batch Cook</span>
+</div>
+</div>
+</div>
+<div class="p-4 space-y-4">
+<div class="bg-primary/5 dark:bg-primary/10 rounded-lg p-3 border-l-4 border-primary">
+<div class="flex items-center gap-2 mb-1">
+<span class="material-symbols-outlined text-primary text-sm font-bold">recycling</span>
+<span class="text-[10px] font-bold text-slate-900 dark:text-slate-100 uppercase tracking-widest">Leftover Logic</span>
+</div>
+<p class="text-sm text-slate-600 dark:text-slate-400 leading-relaxed italic">
+                            "Use extra quinoa base from Monday for Thursday's nourish bowls with fresh tahini."
+                        </p>
+</div>
+<div class="flex items-center justify-between pt-2">
+<div class="flex -space-x-2">
+<div class="size-8 rounded-full border-2 border-white dark:border-slate-900 bg-slate-200 overflow-hidden">
+<img alt="Avatar" class="size-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCA7QlkqSZBBcOqTvUZdp9tq6En08QBe-h4rOvO59cHbqujXBWaZcQF6ScTl4JwwkeBeb8Wd7fgcWkJY0Nt9fY7oQ9KLf3BnOf-9KLWzSEK4RJMGuS8a7muYdtffiexHULBRKQ04fWT9Bzaqqx-UBLk--07XTDI7DDW2PB5sMM52wK9YUrYS0he_QvWTMH804JktzWDIfDa8PA8KUWhpKUxFvcRZ8bO7jesAShuNCOSqT2H7dYY3MpJU26Zrqap5FKHNUN3h9sqUuzi"/>
+</div>
+<div class="size-8 rounded-full border-2 border-white dark:border-slate-900 bg-slate-200 overflow-hidden">
+<img alt="Avatar" class="size-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDesgflp4XvLKYA936uqe-ipJmXoRr7kml1AqOi9FtW9ISPy__oYOBmWT8BsSQXIuloVvQuVFEbVASLiJ_WfknOKSgCHPseQqrDDPIcjHndLaV5eTd_sDxRDWO1iI8DX59SZttAAjsVqm6FDilOUsOX0irRHDqC2aeviLfq8KlEHG6odbWWEizFfK0sQ7EOp5Xe_eNvtGUHruNakMIi6PACY6KUU1PBvsFJFrsdIlr-YvOYEJKwWCSFc-1ct_yIIYOf6h5TXes1ub6Y"/>
+</div>
+<div class="flex size-8 items-center justify-center rounded-full border-2 border-white dark:border-slate-900 bg-slate-100 dark:bg-slate-800 text-[10px] font-bold">
+                                +114
+                            </div>
+</div>
+<button class="h-10 rounded-xl bg-primary px-6 text-sm font-bold text-background-dark shadow-lg shadow-primary/20 hover:scale-105 active:scale-95 transition-transform">
+                            Adopt Plan
+                        </button>
+</div>
+</div>
+</div>
+<!-- Plan Card 3 -->
+<div class="group relative flex flex-col overflow-hidden rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 shadow-sm opacity-80">
+<div class="relative aspect-[16/10] w-full overflow-hidden">
+<div class="absolute inset-0 bg-cover bg-center" data-alt="Gourmet salad with salmon and greens" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuC_CIJUs2KeaMWr3lL7Yu4EerCfGO33gOJvKLNSsM65M3M607qQqlKSEgYoiB7pPoZnMwrC4gZOMUT3lc3Fjq6eIkaoh_19NWk71PWYce7Wp5AYc1ZctGM5jybHjPxKPD3BR7LE3hg9ONj-elo7tT_QQtxx2e2C_JS-AKpNr2aaqDA2Qjd2p8tZBIMfDafBcKMQ41cDKTBB7z5WYU2qdEF2q_whmXFwKrf-i7bwAtbHzfM6dYx1rXrYnhBUsr2dUT4IIO5OctYW7SkF')"></div>
+<div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent"></div>
+<div class="absolute top-3 left-3 flex gap-2">
+<div class="flex items-center gap-1 rounded-lg bg-black/40 backdrop-blur-md px-2.5 py-1 text-[10px] font-bold text-white border border-white/20">
+<span class="material-symbols-outlined text-[14px] text-primary">analytics</span>
+                            REAL MATCH: 78%
+                        </div>
+</div>
+<div class="absolute bottom-3 left-3 right-3">
+<h2 class="text-2xl font-bold text-white leading-tight">Omega-3 Boost</h2>
+<div class="flex items-center gap-2 mt-1">
+<span class="text-primary text-xs font-bold uppercase tracking-widest">Brain Health</span>
+<span class="text-white/60 text-xs tracking-widest uppercase">|</span>
+<span class="text-white/80 text-xs font-medium uppercase tracking-widest">14 Days Plan</span>
+</div>
+</div>
+</div>
+<div class="p-4 space-y-4">
+<div class="bg-primary/5 dark:bg-primary/10 rounded-lg p-3 border-l-4 border-primary">
+<div class="flex items-center gap-2 mb-1">
+<span class="material-symbols-outlined text-primary text-sm font-bold">recycling</span>
+<span class="text-[10px] font-bold text-slate-900 dark:text-slate-100 uppercase tracking-widest">Leftover Logic</span>
+</div>
+<p class="text-sm text-slate-600 dark:text-slate-400 leading-relaxed italic">
+                            "Flake roasted salmon into Sunday morning's protein scramble."
+                        </p>
+</div>
+<div class="flex items-center justify-between pt-2">
+<div class="flex -space-x-2">
+<div class="size-8 rounded-full border-2 border-white dark:border-slate-900 bg-slate-200 overflow-hidden">
+<img alt="Avatar" class="size-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAChUFRMCeYVFwMiPiDa9u3BOXGUevc68lg8QE1PgR9Toe8rpB17vgZR5Z0KgSNkcQFQYl6Nihi4BNzx22PSFq7iKFOLgxQ-2QfTUI8T36F2fVQWJArcMHSOp9o-EDJ0-nmOLCp-AffrmNeerKCMDUO0xu_iiYYcCYFmAdDLIV7joRgyK9WAfXzbGt70OL0EWx3DqSdCUZC68doS6t-lHZ0ZCRPKK5Bxqc6d-zkZosqoowBucpZ8FvtT4SFCmwP83ZI-ktQ-tpnrhDO"/>
+</div>
+<div class="flex size-8 items-center justify-center rounded-full border-2 border-white dark:border-slate-900 bg-slate-100 dark:bg-slate-800 text-[10px] font-bold">
+                                +12
+                            </div>
+</div>
+<button class="h-10 rounded-xl bg-primary px-6 text-sm font-bold text-background-dark shadow-lg shadow-primary/20 hover:scale-105 active:scale-95 transition-transform">
+                            Adopt Plan
+                        </button>
+</div>
+</div>
+</div>
+</main>
+<!-- Bottom Navigation -->
+<nav class="fixed bottom-0 left-1/2 -translate-x-1/2 w-full max-w-md bg-white/90 dark:bg-slate-950/90 backdrop-blur-lg border-t border-slate-200 dark:border-slate-800 px-6 py-3">
+<div class="flex items-center justify-between">
+<a class="flex flex-col items-center gap-1 text-slate-400" href="#">
+<span class="material-symbols-outlined">explore</span>
+<span class="text-[10px] font-medium uppercase tracking-wider">Explore</span>
+</a>
+<a class="flex flex-col items-center gap-1 text-primary" href="#">
+<span class="material-symbols-outlined fill-1">layers</span>
+<span class="text-[10px] font-bold uppercase tracking-wider">Plans</span>
+</a>
+<a class="flex flex-col items-center gap-1 text-slate-400 relative" href="#">
+<div class="bg-primary size-12 rounded-full absolute -top-10 shadow-lg flex items-center justify-center text-background-dark border-4 border-white dark:border-slate-950">
+<span class="material-symbols-outlined font-bold">add</span>
+</div>
+<span class="mt-4 text-[10px] font-medium uppercase tracking-wider">Add</span>
+</a>
+<a class="flex flex-col items-center gap-1 text-slate-400" href="#">
+<span class="material-symbols-outlined">group</span>
+<span class="text-[10px] font-medium uppercase tracking-wider">Community</span>
+</a>
+<a class="flex flex-col items-center gap-1 text-slate-400" href="#">
+<span class="material-symbols-outlined">person</span>
+<span class="text-[10px] font-medium uppercase tracking-wider">Profile</span>
+</a>
+</div>
+</nav>
+</div>
+</body></html>

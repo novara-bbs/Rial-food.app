@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>RIAL Weekly Family Meal Planner</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#25aff4",
+                        "background-light": "#f5f7f8",
+                        "background-dark": "#101c22",
+                    },
+                    fontFamily: {
+                        "display": ["Inter", "sans-serif"]
+                    },
+                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>
+        .leftover-line {
+            position: absolute;
+            border-left: 2px dashed #25aff4;
+            border-bottom: 2px dashed #25aff4;
+            border-bottom-left-radius: 12px;
+            pointer-events: none;
+        }
+        .drag-handle {
+            cursor: grab;
+        }
+        .drag-handle:active {
+            cursor: grabbing;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark font-display text-slate-900 dark:text-slate-100 min-h-screen">
+<div class="max-w-7xl mx-auto bg-white dark:bg-slate-900 shadow-xl min-h-screen flex flex-col">
+<!-- Header Section -->
+<header class="border-b border-slate-100 dark:border-slate-800 p-6 flex items-center justify-between">
+<div class="flex items-center gap-4">
+<div class="bg-primary/10 p-2 rounded-lg text-primary">
+<span class="material-symbols-outlined text-3xl">restaurant_menu</span>
+</div>
+<div>
+<h1 class="text-2xl font-800 tracking-tight">RIAL <span class="text-primary">PLANNER</span></h1>
+<p class="text-xs text-slate-500 font-medium uppercase tracking-widest">Editorial Tech Edition</p>
+</div>
+</div>
+<div class="flex items-center gap-6">
+<!-- View Toggle -->
+<div class="bg-slate-100 dark:bg-slate-800 p-1 rounded-xl flex">
+<button class="px-4 py-2 text-sm font-bold text-slate-500 hover:text-slate-700 transition-colors">Individual</button>
+<button class="px-4 py-2 text-sm font-bold bg-white dark:bg-slate-700 shadow-sm rounded-lg text-primary">Family (4P)</button>
+</div>
+<div class="flex items-center gap-3">
+<button class="w-10 h-10 flex items-center justify-center rounded-full hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">
+<span class="material-symbols-outlined">notifications</span>
+</button>
+<div class="w-10 h-10 rounded-full overflow-hidden border-2 border-primary">
+<img alt="Profile" data-alt="User profile portrait" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAHI3FnrTb9u8AjmPGfJCStVEW4ztN3rxt2xkb3Kg3AJtzJgjLOXKFlvKfmmjr2rfZPNa5xGxeBw5ooOOBdEyL3gTGR-ui75f5pVsbm7cwMCp_M8l-KamgO0Xcz7pPOCGl7bHfVDWK0c_0aeYllWHUearT2C8ZDORnNsFrWBe5v8N_R-q-tWRWMa-FbuCxErSNNATJJzxvqusO_jsEBqDJ_ZNbL9Up6vFm8wnkhWYcNCosxOb-h_u0U7gsiGE5_eQcWzyxzrOVwH_Co"/>
+</div>
+</div>
+</div>
+</header>
+<!-- Main Content -->
+<main class="flex-1 p-6 overflow-x-hidden">
+<!-- Week Navigation & Stats -->
+<div class="flex flex-col md:flex-row md:items-end justify-between mb-8 gap-6">
+<div>
+<div class="flex items-center gap-2 text-slate-400 mb-1">
+<span class="material-symbols-outlined text-sm">calendar_today</span>
+<span class="text-xs font-bold uppercase tracking-wider">Current Schedule</span>
+</div>
+<div class="flex items-center gap-4">
+<button class="p-1 hover:text-primary transition-colors"><span class="material-symbols-outlined">chevron_left</span></button>
+<h2 class="text-3xl font-bold tracking-tight">October 23 – 29</h2>
+<button class="p-1 hover:text-primary transition-colors"><span class="material-symbols-outlined">chevron_right</span></button>
+</div>
+</div>
+<!-- Stats Summary -->
+<div class="flex gap-4">
+<div class="bg-primary/5 border border-primary/10 rounded-xl p-4 flex items-center gap-4">
+<div class="bg-primary text-white p-2 rounded-lg">
+<span class="material-symbols-outlined">timer</span>
+</div>
+<div>
+<p class="text-[10px] uppercase font-bold text-primary tracking-wider">Time Saved</p>
+<p class="text-xl font-bold">4.5 hrs</p>
+</div>
+</div>
+<div class="bg-green-50 border border-green-100 rounded-xl p-4 flex items-center gap-4">
+<div class="bg-green-500 text-white p-2 rounded-lg">
+<span class="material-symbols-outlined">nutrition</span>
+</div>
+<div>
+<p class="text-[10px] uppercase font-bold text-green-600 tracking-wider">Balance Score</p>
+<p class="text-xl font-bold">92%</p>
+</div>
+</div>
+</div>
+</div>
+<!-- Meal Grid -->
+<div class="relative grid grid-cols-1 lg:grid-cols-8 gap-4 pb-12">
+<!-- Sunday Batch Prep (The Source) -->
+<div class="lg:col-span-1 flex flex-col gap-4">
+<div class="text-center py-2 border-b-2 border-primary">
+<p class="text-xs font-bold uppercase text-slate-400">Sun</p>
+<p class="text-xl font-bold">22</p>
+</div>
+<div class="bg-primary rounded-xl p-4 text-white shadow-lg relative z-10">
+<div class="flex justify-between items-start mb-4">
+<span class="material-symbols-outlined text-white/50">kitchen</span>
+<span class="material-symbols-outlined text-sm opacity-50 drag-handle">drag_indicator</span>
+</div>
+<p class="text-[10px] font-bold uppercase tracking-widest mb-1 opacity-80">Batch Prep Session</p>
+<h3 class="font-bold leading-tight mb-3">Roasted Root Veg &amp; Grains</h3>
+<div class="flex -space-x-2 mb-4">
+<div class="w-6 h-6 rounded-full border-2 border-primary overflow-hidden">
+<img alt="s1" data-alt="Small salad photo" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCQtVIMlNOx792LV6P4drLlpe1sSZ_3PnWGoWZ7I-npLagULNlhScPDDX6K74l-sWPcxeEapYNHurpDoUX3ivIJlSqOFuALMeJekbK6JqE8O6RdbcVyVLiC5OCk_hRq-YKPvMl10nnQ2OkjIofUn_gl3PDhaCw8y1FlKybsoMohmsoPLCDet6OqfpNqhmIwltFDKa6LjYNz0XNfaJhZblh24KZcepKVipQSUD3rnMUAaEZYxJPi9rEisRsrHLRL59-NNJs3tmRvk9Ad"/>
+</div>
+<div class="w-6 h-6 rounded-full border-2 border-primary overflow-hidden">
+<img alt="s2" data-alt="Vegetable bowl photo" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDwmm0UP1jYogxt-a7UTMb6za1CmqYDa4zNS9r77ao3O4gbB4_VZs2Qea8x2BVD_b32WLh4EcKWFuQlu4NMooM6GBHCpSAi0LA1PXElvlpMq05NZ_BeVvV6lJZDcntC7ulU3_vOrpif4bRjpjUWKZi0nr8Iz29IJX3W-MHiEmH0NlKxD_SR2hizjtCFI0Xl3fPy3OrYLH_Z7t_mRSKU7UM8_PW6AFyqb4KXlrIKmgjB6mHXK6ZyR724aGLjK68noGSkLPYVQZDdCp-z"/>
+</div>
+</div>
+<span class="text-[10px] bg-white/20 px-2 py-1 rounded-full font-bold">Yield: 12 Servings</span>
+</div>
+</div>
+<!-- Monday - Saturday -->
+<div class="lg:col-span-7 grid grid-cols-1 md:grid-cols-3 lg:grid-cols-6 gap-4">
+<!-- Monday (Target 1) -->
+<div class="flex flex-col gap-4 relative">
+<div class="text-center py-2 border-b border-slate-100">
+<p class="text-xs font-bold uppercase text-slate-400">Mon</p>
+<p class="text-xl font-bold">23</p>
+</div>
+<!-- Leftover Logic Line -->
+<div class="hidden lg:block leftover-line" style="width: 100%; height: 80px; top: -40px; left: -50%;"></div>
+<div class="group relative bg-white dark:bg-slate-800 rounded-xl overflow-hidden border border-slate-100 dark:border-slate-700 shadow-sm hover:shadow-md transition-all">
+<div class="h-32 overflow-hidden relative">
+<img alt="Meal" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" data-alt="Plated healthy salmon meal" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAtAAu1c0N9U2Mb8O6IRQrO73PTZCbAk5uRU7Unvq-Z9aU4ZzKOnvFeTvlKGjqwbPVEWD2cv0s-Iuqcs5_1cYMKv4eFYSfFZd6tqGcvPxdWKc-4xszWSxO5B41NokFLwG--Fm3nErAJyRDDPsEN5IhMmqY4IaJorxwClbGGbGB7KDuT731ncPNX6N06E0Xi0btte5KHzFiPvLDXdI1yT4eZCBvLSIUnswNNaRRnSNEX9ak0OvzPxZUVOtJhEK_j3LjOxxGFDEjVzPXF"/>
+<div class="absolute top-2 left-2 bg-primary text-white text-[10px] font-bold px-2 py-1 rounded-lg flex items-center gap-1">
+<span class="material-symbols-outlined text-[12px]">replay</span> Leftover
+                                </div>
+</div>
+<div class="p-3">
+<p class="text-[10px] font-bold text-primary uppercase mb-1">Dinner</p>
+<h4 class="font-bold text-sm leading-tight mb-2">Lemon Herb Salmon w/ Prep Veg</h4>
+<div class="flex items-center gap-2 text-slate-400">
+<span class="material-symbols-outlined text-xs">schedule</span>
+<span class="text-[10px] font-medium">15 mins active</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Tuesday (Target 2) -->
+<div class="flex flex-col gap-4">
+<div class="text-center py-2 border-b border-slate-100">
+<p class="text-xs font-bold uppercase text-slate-400">Tue</p>
+<p class="text-xl font-bold">24</p>
+</div>
+<div class="group relative bg-white dark:bg-slate-800 rounded-xl overflow-hidden border border-slate-100 dark:border-slate-700 shadow-sm hover:shadow-md transition-all">
+<div class="h-32 overflow-hidden relative">
+<img alt="Meal" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" data-alt="Quinoa salad bowl" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBoWtzO3YR90KZqclhclYNZOCzXyW_-a_DShYgbUIJx74FMpX2jo2_ML-bMdbBI-r8Mpj5zfPi7TdhjSwNh3cVQ4d_IxKQcILXGxsL8WEaNMHrzBraWcNvd6Dp1YkVzYVxVKw8au5_KHs-9AR8vYSj5RoL3urvMzcRuqTky1etbc3h5gU_CPMJiquValKjCbSn7rYoqcWe1CmykSHPUGxlHyvdQC7h4bAfls3GG-XFjTbiYX-_OG1siin0Tj8lfbw7POy3OV88MNo-n"/>
+<div class="absolute top-2 left-2 bg-primary text-white text-[10px] font-bold px-2 py-1 rounded-lg flex items-center gap-1">
+<span class="material-symbols-outlined text-[12px]">replay</span> Leftover
+                                </div>
+</div>
+<div class="p-3">
+<p class="text-[10px] font-bold text-primary uppercase mb-1">Lunch</p>
+<h4 class="font-bold text-sm leading-tight mb-2">Mediterranean Buddha Bowl</h4>
+<div class="flex items-center gap-2 text-slate-400">
+<span class="material-symbols-outlined text-xs">schedule</span>
+<span class="text-[10px] font-medium">5 mins active</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Wednesday -->
+<div class="flex flex-col gap-4">
+<div class="text-center py-2 border-b border-slate-100">
+<p class="text-xs font-bold uppercase text-slate-400">Wed</p>
+<p class="text-xl font-bold">25</p>
+</div>
+<div class="group relative bg-white dark:bg-slate-800 rounded-xl overflow-hidden border border-slate-200 dark:border-slate-700 border-dashed p-4 h-full flex flex-col items-center justify-center text-slate-300 hover:text-primary hover:border-primary transition-all cursor-pointer">
+<span class="material-symbols-outlined text-3xl mb-2">add_circle</span>
+<p class="text-[10px] font-bold uppercase">Add Meal</p>
+</div>
+</div>
+<!-- Thursday -->
+<div class="flex flex-col gap-4">
+<div class="text-center py-2 border-b border-slate-100">
+<p class="text-xs font-bold uppercase text-slate-400">Thu</p>
+<p class="text-xl font-bold">26</p>
+</div>
+<div class="group relative bg-white dark:bg-slate-800 rounded-xl overflow-hidden border border-slate-100 dark:border-slate-700 shadow-sm hover:shadow-md transition-all">
+<div class="h-32 overflow-hidden">
+<img alt="Meal" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" data-alt="Fresh vegetable pizza" src="https://lh3.googleusercontent.com/aida-public/AB6AXuB4ttlJMyjuTQuQtHHIoQ9wXMjNBCgETNrN844_MqfdUl7LD8NojMN9tagSfT-a_deupr6JQ_cw-f1-TFTV_lubmCzJTlQ5HuV61nC_8LEFwQYlg_-MFpsIvMbKaY9MXuqemlo1N5pMysHl6ANdf6EiTBx9d8BBo-ERHUZjgsjdjaZdwWcWXpTBY0iqykolf-s4kG_ia-xWhTKB3_PhfZwRRHjexvcGbHRwES8-RBcMxVFHQr3WVDBP2WZiaNNmFwahh_NmyBqL7QFz"/>
+</div>
+<div class="p-3">
+<p class="text-[10px] font-bold text-orange-500 uppercase mb-1">Dinner</p>
+<h4 class="font-bold text-sm leading-tight mb-2">Garden Flatbread Pizzas</h4>
+<div class="flex items-center gap-2 text-slate-400">
+<span class="material-symbols-outlined text-xs">schedule</span>
+<span class="text-[10px] font-medium">25 mins active</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Friday -->
+<div class="flex flex-col gap-4">
+<div class="text-center py-2 border-b border-slate-100">
+<p class="text-xs font-bold uppercase text-slate-400">Fri</p>
+<p class="text-xl font-bold">27</p>
+</div>
+<div class="group relative bg-white dark:bg-slate-800 rounded-xl overflow-hidden border border-slate-100 dark:border-slate-700 shadow-sm hover:shadow-md transition-all">
+<div class="h-32 overflow-hidden">
+<img alt="Meal" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" data-alt="Stir fry vegetables" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDa0SGm1_EZEWvTMm4yE-dSgxo7Af2mLmOA-rrtujaKLGMjJfxwCweQ1_VaO853gp4YtZ57dCxTUaVJwIRMIabCVzt1GpynuztwieWJiAndUNEPXx7B3Lmc0pc4NNdasPpH332nffan34OBvGFPyhx5ZmEQDI7hf-5qp7cfrZ67JZNn_vf5uXuprq0Mp27IrgHjyhcWU6uu4a1M_vzdTvAnBfQDHwENxblwKBHCd3v9n0DteBmlRwGL_cP0PTvwkww3Xe1DIG7lmmTG"/>
+</div>
+<div class="p-3">
+<p class="text-[10px] font-bold text-green-500 uppercase mb-1">Dinner</p>
+<h4 class="font-bold text-sm leading-tight mb-2">Ginger Tofu Stir-fry</h4>
+<div class="flex items-center gap-2 text-slate-400">
+<span class="material-symbols-outlined text-xs">schedule</span>
+<span class="text-[10px] font-medium">20 mins active</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Saturday -->
+<div class="flex flex-col gap-4">
+<div class="text-center py-2 border-b border-slate-100">
+<p class="text-xs font-bold uppercase text-slate-400">Sat</p>
+<p class="text-xl font-bold">28</p>
+</div>
+<div class="bg-slate-50 dark:bg-slate-800/50 rounded-xl p-4 flex flex-col items-center justify-center border border-slate-100 dark:border-slate-700 text-slate-400">
+<span class="material-symbols-outlined text-2xl mb-1">restaurant</span>
+<p class="text-[10px] font-bold uppercase">Dining Out</p>
+</div>
+</div>
+</div>
+</div>
+<!-- Grocery Summary Sidebar/Bottom -->
+<div class="mt-12 grid grid-cols-1 lg:grid-cols-3 gap-8">
+<div class="lg:col-span-2">
+<h3 class="text-xl font-bold mb-6 flex items-center gap-2">
+<span class="material-symbols-outlined text-primary">shopping_cart</span>
+                        Smart Grocery List
+                    </h3>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+<div class="bg-background-light dark:bg-slate-800/40 p-4 rounded-xl flex items-center justify-between group">
+<div class="flex items-center gap-3">
+<div class="w-4 h-4 rounded border-2 border-primary"></div>
+<span class="text-sm font-medium">Bulk Sweet Potatoes (3kg)</span>
+</div>
+<span class="text-[10px] font-bold text-primary opacity-0 group-hover:opacity-100 transition-opacity">Used in 3 meals</span>
+</div>
+<div class="bg-background-light dark:bg-slate-800/40 p-4 rounded-xl flex items-center justify-between group">
+<div class="flex items-center gap-3">
+<div class="w-4 h-4 rounded border-2 border-primary"></div>
+<span class="text-sm font-medium">Organic Salmon Fillets (800g)</span>
+</div>
+<span class="text-[10px] font-bold text-primary opacity-0 group-hover:opacity-100 transition-opacity">Fresh Mon</span>
+</div>
+<div class="bg-background-light dark:bg-slate-800/40 p-4 rounded-xl flex items-center justify-between group">
+<div class="flex items-center gap-3">
+<div class="w-4 h-4 rounded border-2 border-primary bg-primary flex items-center justify-center">
+<span class="material-symbols-outlined text-white text-xs">check</span>
+</div>
+<span class="text-sm font-medium text-slate-400 line-through">Organic Quinoa (1kg)</span>
+</div>
+<span class="text-[10px] font-bold text-slate-400">In Pantry</span>
+</div>
+<div class="bg-background-light dark:bg-slate-800/40 p-4 rounded-xl flex items-center justify-between group">
+<div class="flex items-center gap-3">
+<div class="w-4 h-4 rounded border-2 border-primary"></div>
+<span class="text-sm font-medium">Spinach Large Bag</span>
+</div>
+<span class="text-[10px] font-bold text-primary opacity-0 group-hover:opacity-100 transition-opacity">Used in 4 meals</span>
+</div>
+</div>
+</div>
+<!-- Nutrients & Balance -->
+<div class="bg-slate-900 text-white rounded-2xl p-6 shadow-2xl relative overflow-hidden">
+<div class="absolute top-0 right-0 p-8 opacity-10">
+<span class="material-symbols-outlined text-8xl">analytics</span>
+</div>
+<h3 class="text-lg font-bold mb-6">Weekly Nutritional Goal</h3>
+<div class="space-y-6 relative z-10">
+<div>
+<div class="flex justify-between text-xs font-bold uppercase tracking-widest mb-2">
+<span class="text-slate-400">Protein</span>
+<span>85%</span>
+</div>
+<div class="h-1.5 w-full bg-slate-700 rounded-full overflow-hidden">
+<div class="h-full bg-primary" style="width: 85%"></div>
+</div>
+</div>
+<div>
+<div class="flex justify-between text-xs font-bold uppercase tracking-widest mb-2">
+<span class="text-slate-400">Vegetables</span>
+<span class="text-green-400">100%</span>
+</div>
+<div class="h-1.5 w-full bg-slate-700 rounded-full overflow-hidden">
+<div class="h-full bg-green-400" style="width: 100%"></div>
+</div>
+</div>
+<div>
+<div class="flex justify-between text-xs font-bold uppercase tracking-widest mb-2">
+<span class="text-slate-400">Whole Grains</span>
+<span>65%</span>
+</div>
+<div class="h-1.5 w-full bg-slate-700 rounded-full overflow-hidden">
+<div class="h-full bg-yellow-400" style="width: 65%"></div>
+</div>
+</div>
+<div class="pt-4 border-t border-slate-800 mt-4">
+<p class="text-xs text-slate-400 leading-relaxed italic">
+                                "Your plan for this week reduces food waste by <span class="text-white font-bold">18%</span> compared to your previous average."
+                            </p>
+</div>
+</div>
+</div>
+</div>
+</main>
+<!-- Bottom Navigation Bar -->
+<nav class="sticky bottom-0 border-t border-slate-100 bg-white/95 backdrop-blur-sm px-6 py-3 flex justify-between items-center z-50">
+<a class="flex flex-col items-center gap-1 text-primary" href="#">
+<span class="material-symbols-outlined fill-1">calendar_month</span>
+<span class="text-[10px] font-bold uppercase tracking-tighter">Planner</span>
+</a>
+<a class="flex flex-col items-center gap-1 text-slate-400 hover:text-primary transition-colors" href="#">
+<span class="material-symbols-outlined">menu_book</span>
+<span class="text-[10px] font-bold uppercase tracking-tighter">Recipes</span>
+</a>
+<a class="bg-primary -mt-10 w-14 h-14 rounded-full flex items-center justify-center text-white shadow-lg border-4 border-white dark:border-slate-900" href="#">
+<span class="material-symbols-outlined text-3xl">add</span>
+</a>
+<a class="flex flex-col items-center gap-1 text-slate-400 hover:text-primary transition-colors" href="#">
+<span class="material-symbols-outlined">shopping_bag</span>
+<span class="text-[10px] font-bold uppercase tracking-tighter">Grocery</span>
+</a>
+<a class="flex flex-col items-center gap-1 text-slate-400 hover:text-primary transition-colors" href="#">
+<span class="material-symbols-outlined">settings</span>
+<span class="text-[10px] font-bold uppercase tracking-tighter">Settings</span>
+</a>
+</nav>
+</div>
+</body></html>

@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>RIAL Meal Prep Scheduler</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#ec5b13", // Vitality Orange (modified from Lime to match instruction requirements for primary while keeping vitality feel)
+                        "vitality": "#a3e635", // Custom Vitality Lime for accents
+                        "background-light": "#f8f6f6",
+                        "background-dark": "#0a0a0a", // Deep Obsidian
+                        "obsidian-soft": "#1a1a1a",
+                        "obsidian-card": "#262626",
+                    },
+                    fontFamily: {
+                        "display": ["Public Sans"]
+                    },
+                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>
+        body { font-family: 'Public Sans', sans-serif; }
+        .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+        .filled-icon { font-variation-settings: 'FILL' 1; }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 min-h-screen">
+<div class="max-w-md mx-auto bg-white dark:bg-background-dark min-h-screen shadow-2xl flex flex-col">
+<!-- Header -->
+<header class="flex items-center bg-white dark:bg-background-dark p-4 pb-2 justify-between sticky top-0 z-10 border-b border-slate-200 dark:border-obsidian-soft">
+<div class="text-primary flex size-12 shrink-0 items-center justify-center">
+<span class="material-symbols-outlined text-3xl">rebase_edit</span>
+</div>
+<h2 class="text-slate-900 dark:text-slate-100 text-lg font-bold leading-tight tracking-tight flex-1 ml-2">RIAL Precision</h2>
+<div class="flex w-12 items-center justify-end">
+<button class="flex size-10 cursor-pointer items-center justify-center overflow-hidden rounded-full bg-slate-100 dark:bg-obsidian-soft text-slate-900 dark:text-slate-100">
+<span class="material-symbols-outlined">account_circle</span>
+</button>
+</div>
+</header>
+<main class="flex-1 overflow-y-auto pb-24">
+<!-- Efficiency Metrics -->
+<div class="flex flex-wrap gap-4 p-4">
+<div class="flex min-w-[158px] flex-1 flex-col gap-2 rounded-xl p-5 bg-slate-50 dark:bg-obsidian-soft border border-slate-200 dark:border-obsidian-card">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-vitality text-xl">avg_time</span>
+<p class="text-slate-600 dark:text-slate-400 text-sm font-medium">Time Saved</p>
+</div>
+<p class="text-slate-900 dark:text-slate-100 tracking-tight text-2xl font-bold">4.5 hrs</p>
+<p class="text-vitality text-xs font-bold leading-normal flex items-center gap-1">
+<span class="material-symbols-outlined text-xs">trending_up</span> +12% Efficiency
+                    </p>
+</div>
+<div class="flex min-w-[158px] flex-1 flex-col gap-2 rounded-xl p-5 bg-slate-50 dark:bg-obsidian-soft border border-slate-200 dark:border-obsidian-card">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary text-xl">bolt</span>
+<p class="text-slate-600 dark:text-slate-400 text-sm font-medium">Logic Score</p>
+</div>
+<p class="text-slate-900 dark:text-slate-100 tracking-tight text-2xl font-bold">92%</p>
+<p class="text-vitality text-xs font-bold leading-normal flex items-center gap-1">
+<span class="material-symbols-outlined text-xs">verified</span> Optimized
+                    </p>
+</div>
+</div>
+<!-- Batch Session Banner -->
+<div class="px-4 mb-6">
+<div class="relative overflow-hidden rounded-xl bg-primary p-5 text-white shadow-lg shadow-primary/20">
+<div class="relative z-10 flex justify-between items-center">
+<div>
+<p class="text-xs font-bold uppercase tracking-widest opacity-80">Next Batch Session</p>
+<h3 class="text-xl font-bold mt-1">Sunday Afternoon</h3>
+<p class="text-sm opacity-90 mt-1 flex items-center gap-1">
+<span class="material-symbols-outlined text-sm">schedule</span> 14:00 - 15:30 (90 min)
+                            </p>
+</div>
+<span class="material-symbols-outlined text-4xl opacity-50">layers</span>
+</div>
+<div class="absolute -right-4 -bottom-4 bg-white/10 w-24 h-24 rounded-full"></div>
+</div>
+</div>
+<!-- Weekly Calendar View -->
+<div class="px-4">
+<div class="flex items-center justify-between mb-4">
+<h2 class="text-slate-900 dark:text-slate-100 text-xl font-bold tracking-tight">Weekly Schedule</h2>
+<div class="flex gap-1">
+<button class="p-1 rounded bg-slate-100 dark:bg-obsidian-soft">
+<span class="material-symbols-outlined text-sm">chevron_left</span>
+</button>
+<button class="p-1 rounded bg-slate-100 dark:bg-obsidian-soft text-primary">
+<span class="material-symbols-outlined text-sm">chevron_right</span>
+</button>
+</div>
+</div>
+<!-- Calendar Strip -->
+<div class="flex justify-between mb-6 bg-slate-50 dark:bg-obsidian-soft p-2 rounded-xl">
+<div class="flex flex-col items-center gap-1 flex-1">
+<span class="text-[10px] uppercase font-bold text-slate-400">Mon</span>
+<div class="size-8 flex items-center justify-center rounded-full text-sm font-bold">2</div>
+</div>
+<div class="flex flex-col items-center gap-1 flex-1">
+<span class="text-[10px] uppercase font-bold text-slate-400">Tue</span>
+<div class="size-8 flex items-center justify-center rounded-full text-sm font-bold">3</div>
+</div>
+<div class="flex flex-col items-center gap-1 flex-1">
+<span class="text-[10px] uppercase font-bold text-primary">Wed</span>
+<div class="size-8 flex items-center justify-center rounded-full bg-primary text-white text-sm font-bold">4</div>
+</div>
+<div class="flex flex-col items-center gap-1 flex-1">
+<span class="text-[10px] uppercase font-bold text-slate-400">Thu</span>
+<div class="size-8 flex items-center justify-center rounded-full text-sm font-bold">5</div>
+</div>
+<div class="flex flex-col items-center gap-1 flex-1">
+<span class="text-[10px] uppercase font-bold text-slate-400">Fri</span>
+<div class="size-8 flex items-center justify-center rounded-full text-sm font-bold border border-primary/30">6</div>
+</div>
+<div class="flex flex-col items-center gap-1 flex-1">
+<span class="text-[10px] uppercase font-bold text-slate-400">Sat</span>
+<div class="size-8 flex items-center justify-center rounded-full text-sm font-bold">7</div>
+</div>
+</div>
+<!-- Daily Meal Slots & Leftover Logic -->
+<div class="space-y-4">
+<div class="flex gap-4">
+<div class="flex flex-col items-center w-12 pt-2">
+<span class="text-xs font-bold text-slate-400">08:00</span>
+<div class="w-px h-full bg-slate-200 dark:bg-obsidian-card my-2"></div>
+</div>
+<div class="flex-1 bg-slate-50 dark:bg-obsidian-card p-4 rounded-xl border-l-4 border-vitality">
+<div class="flex justify-between items-start">
+<div>
+<h4 class="font-bold text-sm">Overnight Power Oats</h4>
+<p class="text-xs text-slate-500 mt-1">Batch Component: Prep A</p>
+</div>
+<span class="bg-vitality/20 text-vitality text-[10px] px-2 py-0.5 rounded-full font-bold">PREPPED</span>
+</div>
+</div>
+</div>
+<div class="flex gap-4">
+<div class="flex flex-col items-center w-12 pt-2">
+<span class="text-xs font-bold text-slate-400">13:00</span>
+<div class="w-px h-full bg-slate-200 dark:bg-obsidian-card my-2"></div>
+</div>
+<div class="flex-1 bg-white dark:bg-obsidian-card p-4 rounded-xl border border-primary/20 shadow-sm relative overflow-hidden">
+<div class="absolute top-0 right-0 p-1">
+<span class="material-symbols-outlined text-primary/30 text-lg">cyclone</span>
+</div>
+<div class="flex justify-between items-start">
+<div>
+<h4 class="font-bold text-sm">Roasted Root Salad</h4>
+<div class="flex items-center gap-2 mt-2">
+<span class="material-symbols-outlined text-primary text-sm">sync</span>
+<p class="text-[10px] font-bold text-primary uppercase">Leftover Logic</p>
+</div>
+<p class="text-xs text-slate-500 mt-1 italic">"Uses remaining Roasted Sweet Potatoes from Monday Dinner"</p>
+</div>
+</div>
+</div>
+</div>
+<div class="flex gap-4">
+<div class="flex flex-col items-center w-12 pt-2">
+<span class="text-xs font-bold text-slate-400">19:30</span>
+</div>
+<div class="flex-1 bg-slate-50 dark:bg-obsidian-card p-4 rounded-xl border-l-4 border-slate-300 dark:border-obsidian-soft">
+<div class="flex justify-between items-start">
+<div>
+<h4 class="font-bold text-sm">Lemon Herb Salmon</h4>
+<p class="text-xs text-slate-500 mt-1">Fresh Component: Cook on-site</p>
+</div>
+<span class="bg-slate-200 dark:bg-obsidian-soft text-slate-500 text-[10px] px-2 py-0.5 rounded-full font-bold">FRESH</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Leftover Logic Key Components -->
+<div class="p-4 mt-4">
+<h3 class="text-sm font-bold uppercase tracking-widest text-slate-400 mb-3">Batch Logic Visualizer</h3>
+<div class="flex flex-col gap-2">
+<div class="flex items-center justify-between bg-slate-50 dark:bg-obsidian-soft p-3 rounded-lg">
+<div class="flex items-center gap-3">
+<div class="size-10 rounded-lg bg-vitality/20 flex items-center justify-center text-vitality">
+<span class="material-symbols-outlined">restaurant</span>
+</div>
+<div>
+<p class="text-xs font-bold">Base Grains (Quinoa)</p>
+<p class="text-[10px] text-slate-500">Used in: 4 meals</p>
+</div>
+</div>
+<div class="flex gap-1">
+<div class="size-2 rounded-full bg-vitality"></div>
+<div class="size-2 rounded-full bg-vitality"></div>
+<div class="size-2 rounded-full bg-vitality"></div>
+<div class="size-2 rounded-full bg-slate-300 dark:bg-obsidian-card"></div>
+</div>
+</div>
+<div class="flex items-center justify-between bg-slate-50 dark:bg-obsidian-soft p-3 rounded-lg">
+<div class="flex items-center gap-3">
+<div class="size-10 rounded-lg bg-primary/20 flex items-center justify-center text-primary">
+<span class="material-symbols-outlined">skillet</span>
+</div>
+<div>
+<p class="text-xs font-bold">Braised Protein</p>
+<p class="text-[10px] text-slate-500">Used in: 3 meals</p>
+</div>
+</div>
+<div class="flex gap-1">
+<div class="size-2 rounded-full bg-primary"></div>
+<div class="size-2 rounded-full bg-primary"></div>
+<div class="size-2 rounded-full bg-slate-300 dark:bg-obsidian-card"></div>
+<div class="size-2 rounded-full bg-slate-300 dark:bg-obsidian-card"></div>
+</div>
+</div>
+</div>
+</div>
+</main>
+<!-- Bottom NavBar -->
+<nav class="fixed bottom-0 w-full max-w-md border-t border-slate-200 dark:border-obsidian-soft bg-white dark:bg-background-dark px-4 pb-6 pt-2 flex gap-2 z-20">
+<a class="flex flex-1 flex-col items-center justify-end gap-1 text-primary" href="#">
+<span class="material-symbols-outlined filled-icon">calendar_month</span>
+<p class="text-xs font-medium">Schedule</p>
+</a>
+<a class="flex flex-1 flex-col items-center justify-end gap-1 text-slate-400 dark:text-slate-500" href="#">
+<span class="material-symbols-outlined">menu_book</span>
+<p class="text-xs font-medium">Recipes</p>
+</a>
+<a class="flex flex-1 flex-col items-center justify-end gap-1 text-slate-400 dark:text-slate-500" href="#">
+<span class="material-symbols-outlined">inventory_2</span>
+<p class="text-xs font-medium">Inventory</p>
+</a>
+<a class="flex flex-1 flex-col items-center justify-end gap-1 text-slate-400 dark:text-slate-500" href="#">
+<span class="material-symbols-outlined">settings</span>
+<p class="text-xs font-medium">Settings</p>
+</a>
+</nav>
+</div>
+</body></html>

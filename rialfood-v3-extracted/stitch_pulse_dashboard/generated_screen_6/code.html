@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>RIAL Editorial Tech - Food Log Entry</title>
+<!-- Tailwind CSS CDN with plugins -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- Google Fonts: Playfair Display for Serif, Inter for Sans -->
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&amp;family=Playfair+Display:ital,wght@0,400;0,700;1,400&amp;display=swap" rel="stylesheet"/>
+<script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            serif: ['"Playfair Display"', 'serif'],
+            sans: ['Inter', 'sans-serif'],
+          },
+          colors: {
+            'rial-gold': '#C5A059',
+            'rial-dark': '#0A0A0A',
+            'rial-gray': '#1C1C1E',
+          }
+        }
+      }
+    }
+  </script>
+<style data-purpose="custom-typography">
+    body {
+      background-color: #0A0A0A;
+      color: #F4F4F4;
+      -webkit-font-smoothing: antialiased;
+    }
+    .serif-italic { font-style: italic; }
+    .tracking-widest-lg { letter-spacing: 0.2em; }
+  </style>
+<style data-purpose="ui-elements">
+    /* Glassmorphism for the overlay score */
+    .glass-card {
+      background: rgba(255, 255, 255, 0.05);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    /* Custom Scrollbar for a clean look */
+    ::-webkit-scrollbar {
+      width: 4px;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #333;
+      border-radius: 10px;
+    }
+  </style>
+</head>
+<body class="font-sans">
+<!-- BEGIN: Mobile Container -->
+<main class="max-w-[430px] mx-auto min-h-screen bg-rial-dark pb-12 overflow-x-hidden">
+<!-- BEGIN: Hero Image Section -->
+<section class="relative h-[60vh] w-full overflow-hidden">
+<!-- Main Food Photo -->
+<img alt="Gourmet Buddha Bowl" class="w-full h-full object-cover" data-purpose="hero-food-photo" src="https://lh3.googleusercontent.com/aida-public/AB6AXuC3UZAAGXFZDUGWjUCHK0TNRBfB1ZcLnuH6LSdKzXo18Qydi8NXMUPsk77ecopm9P4Q1xaCRCYEK-8cd0sg-Npd_8O9jDbD67YI6wtuiVRGPTpRlVxD5U8m1Woz_r0fv58F_xoEV05c8fgzVFXtwH727P0URSyDe6Xg4q35omTK8ktAc98bqHin_Z0CtEX8gSFkD42WqIBlRP3VqhdPPgdrjol2MXx152qk3dS8IgpCI9nipzQL71_j8sHI9OOaQiIheyQ8nzwT7Zb-"/>
+<!-- Gradient Overlay for readability -->
+<div class="absolute inset-0 bg-gradient-to-t from-rial-dark via-transparent to-transparent opacity-80"></div>
+<!-- Header Navigation Overlay -->
+<div class="absolute top-0 left-0 w-full p-6 flex justify-between items-center">
+<button class="w-10 h-10 flex items-center justify-center rounded-full bg-black/30 backdrop-blur-md">
+<svg class="h-6 w-6" fill="none" stroke="currentColor" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+<path d="M15 19l-7-7 7-7" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"></path>
+</svg>
+</button>
+<div class="text-[10px] uppercase tracking-widest-lg font-medium text-rial-gold">Editorial Tech v.2.4</div>
+<button class="w-10 h-10 flex items-center justify-center rounded-full bg-black/30 backdrop-blur-md">
+<svg class="h-5 w-5" fill="none" stroke="currentColor" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+<path d="M12 5v.01M12 12v.01M12 19v.01M12 6a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2z" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"></path>
+</svg>
+</button>
+</div>
+<!-- Real Match Overlay Score -->
+<div class="absolute bottom-8 left-6">
+<div class="glass-card px-4 py-3 rounded-2xl flex items-center gap-4">
+<div class="relative w-14 h-14 flex items-center justify-center">
+<!-- Circular Progress SVG -->
+<svg class="w-full h-full transform -rotate-90">
+<circle class="text-white/10" cx="28" cy="28" fill="transparent" r="24" stroke="currentColor" stroke-width="3"></circle>
+<circle cx="28" cy="28" fill="transparent" r="24" stroke="#C5A059" stroke-dasharray="150" stroke-dashoffset="15" stroke-linecap="round" stroke-width="3"></circle>
+</svg>
+<span class="absolute text-sm font-bold">92%</span>
+</div>
+<div>
+<div class="text-[10px] uppercase tracking-widest text-white/60">Real Match</div>
+<div class="font-serif italic text-lg leading-tight">Energizing Match</div>
+</div>
+</div>
+</div>
+</section>
+<!-- END: Hero Image Section -->
+<!-- BEGIN: Entry Header -->
+<section class="px-6 -mt-4 relative z-10">
+<div class="space-y-1">
+<span class="text-[11px] uppercase tracking-widest text-rial-gold font-semibold">Logged: 12:42 PM Today</span>
+<h1 class="font-serif text-4xl leading-tight">Atlantic Miso Salmon &amp; Ancient Grains</h1>
+<p class="text-white/50 text-sm leading-relaxed max-w-[90%]">A nutrient-dense restorative bowl featuring wild-caught salmon, black rice, and organic micro-greens.</p>
+</div>
+</section>
+<!-- END: Entry Header -->
+<!-- BEGIN: Quick Stats Grid -->
+<section class="px-6 mt-8 grid grid-cols-4 gap-2">
+<div class="bg-rial-gray p-3 rounded-xl flex flex-col items-center">
+<span class="text-[9px] uppercase tracking-wider text-white/40 mb-1">Calories</span>
+<span class="text-lg font-medium">542</span>
+</div>
+<div class="bg-rial-gray p-3 rounded-xl flex flex-col items-center border-b-2 border-rial-gold/30">
+<span class="text-[9px] uppercase tracking-wider text-white/40 mb-1">Protein</span>
+<span class="text-lg font-medium">42<span class="text-xs text-white/30 ml-0.5">g</span></span>
+</div>
+<div class="bg-rial-gray p-3 rounded-xl flex flex-col items-center">
+<span class="text-[9px] uppercase tracking-wider text-white/40 mb-1">Carbs</span>
+<span class="text-lg font-medium">38<span class="text-xs text-white/30 ml-0.5">g</span></span>
+</div>
+<div class="bg-rial-gray p-3 rounded-xl flex flex-col items-center">
+<span class="text-[9px] uppercase tracking-wider text-white/40 mb-1">Fats</span>
+<span class="text-lg font-medium">24<span class="text-xs text-white/30 ml-0.5">g</span></span>
+</div>
+</section>
+<!-- END: Quick Stats Grid -->
+<!-- BEGIN: Ingredient Breakdown -->
+<section class="px-6 mt-10">
+<div class="flex items-end justify-between mb-6">
+<h3 class="font-serif text-2xl">Ingredient Logic</h3>
+<button class="text-xs text-rial-gold underline underline-offset-4 tracking-wide uppercase">Edit Portions</button>
+</div>
+<div class="space-y-6">
+<!-- Ingredient Item 1 -->
+<div class="flex gap-4 items-start" data-purpose="ingredient-item">
+<div class="w-12 h-12 rounded-full bg-rial-gray overflow-hidden flex-shrink-0">
+<img alt="Salmon" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAo0eJ9qrvfWn-p3758-hC2LTRARFDAD4LgVtbkmlNBheCqamthEzaiGfHssNNpmrQ-qb73wpXFzlWu6I92m_ednfSc8lKUy-xPlvfuQ9SNq4s5PT1rqyYe6sewiBrpvUdoxGqAWC0Z4-ILFC50wAf8LOsdl3gejy0NM93qbzpeXQ76XDvrnR5ao2AnvuZP3uNUc6vv0sOth14PD9AmGDl0mE2r7JAGQjBHl0kKblVUwyYDCQDzri9CPP5Ez0d0HndzZbj9eoudVD67"/>
+</div>
+<div class="flex-grow border-b border-white/5 pb-4">
+<div class="flex justify-between items-start mb-1">
+<h4 class="font-medium text-sm">Wild Atlantic Salmon</h4>
+<span class="text-xs text-white/40">180g</span>
+</div>
+<div class="flex gap-3 text-[10px] text-white/40 uppercase tracking-tighter">
+<span>P: 36g</span>
+<span>F: 22g</span>
+<span class="text-rial-gold">Omega-3: 1.8g</span>
+</div>
+</div>
+</div>
+<!-- Ingredient Item 2 -->
+<div class="flex gap-4 items-start" data-purpose="ingredient-item">
+<div class="w-12 h-12 rounded-full bg-rial-gray overflow-hidden flex-shrink-0">
+<img alt="Black Rice" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCp_0tXu9_n8-SJgiHrO2UXQJfXpNJdG9rZN59wLf4S02-_zytDu7CR5V6LaqKiZynHHoxx7lny5LsPZz5YmiDTc5SIhvSshWT5kVFUUrVKXibdZs94lZmrviAmirdRMC4HfEvK5h3q-QykZwQSFoFFdf8QFTjvlLqt2nw98RgEM7IU4vPnTMEsjeYsCXrbfqNEEf8UDJpvUMgUPSnXjDHsBV4hBR5AlQDLcBs0FLXMAJ8hnbfOQI-yzAl8F3X8kyCeSWyTVf9mLqyE"/>
+</div>
+<div class="flex-grow border-b border-white/5 pb-4">
+<div class="flex justify-between items-start mb-1">
+<h4 class="font-medium text-sm">Forbidden Black Rice</h4>
+<span class="text-xs text-white/40">120g</span>
+</div>
+<div class="flex gap-3 text-[10px] text-white/40 uppercase tracking-tighter">
+<span>C: 32g</span>
+<span>Fiber: 4g</span>
+<span class="text-rial-gold">Antioxidant: High</span>
+</div>
+</div>
+</div>
+<!-- Ingredient Item 3 -->
+<div class="flex gap-4 items-start" data-purpose="ingredient-item">
+<div class="w-12 h-12 rounded-full bg-rial-gray overflow-hidden flex-shrink-0">
+<img alt="Mixed Greens" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuB1yL61e4K7sFg8a_zLG8348dT91Wht08R6oS0KtOmO_0LO9YBdy4gpzZ4y6iAiVQUEosNYyuVsZrOUB5iSLIqoIoBWny31WumnGPCPTuBeIflOwsvWXsjIBSBakuIwrhLfuX7I8n7iN18KK28KPA-_UGaabKNJQLpRIFMdbmDAYNMVGNTaE4K0IP7wKBHsBWPO5SQ07ZJdObvo_pLw4gd_8fZTQt9y0sLFgmb6Qt64bM1XoZTyzEk7X7CJkgPZlKAdSwwh89F-h66x"/>
+</div>
+<div class="flex-grow border-b border-white/5 pb-4">
+<div class="flex justify-between items-start mb-1">
+<h4 class="font-medium text-sm">Organic Micro-Greens</h4>
+<span class="text-xs text-white/40">50g</span>
+</div>
+<div class="flex gap-3 text-[10px] text-white/40 uppercase tracking-tighter">
+<span>Vit K: 120%</span>
+<span>Vit A: 45%</span>
+<span class="text-rial-gold">Chlorophyll: Trace</span>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- END: Ingredient Breakdown -->
+<!-- BEGIN: Full Nutritional Summary -->
+<section class="px-6 mt-12 bg-rial-gray/30 py-8 rounded-t-[40px] border-t border-white/5">
+<h3 class="font-serif text-2xl mb-6">Nutritional Profile</h3>
+<div class="grid grid-cols-2 gap-y-6 gap-x-12">
+<div class="flex flex-col">
+<span class="text-[10px] uppercase tracking-widest text-white/30 mb-1">Dietary Fiber</span>
+<span class="text-lg">8.2<span class="text-xs text-white/30 ml-1">g</span></span>
+<div class="w-full bg-white/5 h-1 mt-2 rounded-full overflow-hidden">
+<div class="bg-rial-gold h-full w-[65%]"></div>
+</div>
+</div>
+<div class="flex flex-col">
+<span class="text-[10px] uppercase tracking-widest text-white/30 mb-1">Sodium</span>
+<span class="text-lg">340<span class="text-xs text-white/30 ml-1">mg</span></span>
+<div class="w-full bg-white/5 h-1 mt-2 rounded-full overflow-hidden">
+<div class="bg-green-500/50 h-full w-[20%]"></div>
+</div>
+</div>
+<div class="flex flex-col">
+<span class="text-[10px] uppercase tracking-widest text-white/30 mb-1">Magnesium</span>
+<span class="text-lg">110<span class="text-xs text-white/30 ml-1">mg</span></span>
+<div class="w-full bg-white/5 h-1 mt-2 rounded-full overflow-hidden">
+<div class="bg-rial-gold h-full w-[40%]"></div>
+</div>
+</div>
+<div class="flex flex-col">
+<span class="text-[10px] uppercase tracking-widest text-white/30 mb-1">Vit B12</span>
+<span class="text-lg">4.8<span class="text-xs text-white/30 ml-1">mcg</span></span>
+<div class="w-full bg-white/5 h-1 mt-2 rounded-full overflow-hidden">
+<div class="bg-rial-gold h-full w-[85%]"></div>
+</div>
+</div>
+</div>
+<div class="mt-10">
+<a class="block text-center text-[10px] uppercase tracking-[0.3em] font-medium text-white/40 hover:text-rial-gold transition-colors" href="#">
+          View Full Recipe Logic &amp; Alchemy
+        </a>
+</div>
+</section>
+<!-- END: Full Nutritional Summary -->
+<!-- BEGIN: Sticky Footer Action -->
+<div class="fixed bottom-0 left-0 right-0 max-w-[430px] mx-auto p-6 pointer-events-none">
+<button class="pointer-events-auto w-full bg-white text-black font-semibold py-4 rounded-full shadow-2xl flex items-center justify-center gap-2 hover:bg-rial-gold transition-all transform active:scale-95">
+<span class="text-sm tracking-widest uppercase">Confirm Entry</span>
+<svg class="h-4 w-4" fill="none" stroke="currentColor" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+<path d="M5 13l4 4L19 7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+</svg>
+</button>
+</div>
+<!-- END: Sticky Footer Action -->
+</main>
+<!-- END: Mobile Container -->
+</body></html>

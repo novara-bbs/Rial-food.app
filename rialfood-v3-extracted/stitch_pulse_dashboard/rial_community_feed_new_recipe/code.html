@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              colors: {
+                "primary": "#25aff4",
+                "background-light": "#f5f7f8",
+                "background-dark": "#101c22",
+              },
+              fontFamily: {
+                "display": ["Inter", "sans-serif"]
+              },
+              borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+            },
+          },
+        }
+      </script>
+<title>RIAL Community Feed</title>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark font-display text-slate-900 dark:text-slate-100 min-h-screen">
+<div class="max-w-md mx-auto bg-white dark:bg-slate-900 shadow-xl min-h-screen flex flex-col">
+<!-- Header -->
+<header class="sticky top-0 z-10 bg-white/80 dark:bg-slate-900/80 backdrop-blur-md border-b border-slate-200 dark:border-slate-800">
+<div class="flex items-center p-4 justify-between">
+<div class="flex size-10 shrink-0 items-center justify-center rounded-full hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors cursor-pointer">
+<span class="material-symbols-outlined text-slate-700 dark:text-slate-300">menu</span>
+</div>
+<h1 class="text-lg font-bold tracking-tight text-slate-900 dark:text-slate-100">RIAL Community</h1>
+<div class="flex size-10 items-center justify-end">
+<button class="relative flex items-center justify-center p-2 rounded-full hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">
+<span class="material-symbols-outlined text-slate-700 dark:text-slate-300">notifications</span>
+<span class="absolute top-2 right-2 flex h-2 w-2 rounded-full bg-primary"></span>
+</button>
+</div>
+</div>
+<!-- Tabs -->
+<div class="flex px-4 gap-8">
+<a class="flex flex-col items-center justify-center border-b-2 border-primary text-slate-900 dark:text-slate-100 pb-3 pt-2" href="#">
+<p class="text-sm font-bold tracking-wide">Feed</p>
+</a>
+<a class="flex flex-col items-center justify-center border-b-2 border-transparent text-slate-500 dark:text-slate-400 pb-3 pt-2 hover:text-primary transition-colors" href="#">
+<p class="text-sm font-bold tracking-wide">Explore</p>
+</a>
+<a class="flex flex-col items-center justify-center border-b-2 border-transparent text-slate-500 dark:text-slate-400 pb-3 pt-2 hover:text-primary transition-colors" href="#">
+<p class="text-sm font-bold tracking-wide">Challenges</p>
+</a>
+</div>
+</header>
+<main class="flex-1 overflow-y-auto">
+<!-- Author Section -->
+<div class="p-4 flex items-center justify-between">
+<div class="flex items-center gap-3">
+<div class="relative">
+<img alt="Elena Vance Profile" class="size-12 rounded-full object-cover border-2 border-primary/20" data-alt="Close up portrait of Elena Vance smiling" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD9SXgnAQz_M8VGCf6EXvq88QzWWresSb9AODnsIka-weKgrKiaoYvusaiTsj3b1G9BY4wHeg384AkODr2hpESOMn6cuhbPiW3RtFXkBp5sJOP-irOC6LP1Y45F6uQ3knMBWpUK0xDJlBW3PkvoU0TEODu7Fkv5DKxisKTRsOtf11SfCpSet3f_ZQIrkK3ivIWoPhNTxoYqvIAuHYspio9etqFNzMMjT5kOnXyzIMkmcDZ8Z79J1Df-yP7CAbmc54-c4nvdDEMGWsNX"/>
+<div class="absolute -bottom-1 -right-1 bg-primary text-white rounded-full p-0.5 border-2 border-white dark:border-slate-900">
+<span class="material-symbols-outlined text-[12px] block font-bold">check</span>
+</div>
+</div>
+<div>
+<h3 class="text-base font-bold leading-tight text-slate-900 dark:text-slate-100">Elena Vance</h3>
+<p class="text-xs text-slate-500 dark:text-slate-400">Nutritionist &amp; Food Stylist • 2h ago</p>
+</div>
+</div>
+<button class="px-4 py-1.5 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-900 dark:text-slate-100 text-xs font-bold hover:bg-primary hover:text-white transition-all duration-200">
+                    Follow
+                </button>
+</div>
+<!-- Recipe Post -->
+<article class="px-4 pb-6">
+<!-- Image Container -->
+<div class="relative group cursor-pointer overflow-hidden rounded-xl bg-slate-100 dark:bg-slate-800 aspect-[4/5]">
+<img alt="Slow-Roasted Heritage Carrots" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" data-alt="Beautifully arranged slow-roasted colorful heritage carrots on a ceramic plate" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBnGWNC9zpq-FG3s8RmLKUW9y6aek-utxUrctabS4O5JOeXZl4S3k47c0-g_tDtTx4DFXLeA3tJ4uuhWmasPYdlmXXNvuYzxhHB1Zt_ZsL96dmRddGkxx44-oKPzzEjooywLpwi29CVW-O3lE00AQGCfTZEhEz5JS7yWfanfBcCcv5WiEWtWs8BUuFKzqHM8NQpMbsRwkTDFZgG3rki-iOEy0DV3onVeuWb00ZgAQIByJnfHxBM8wH6XT50KunyEB-EHnXdpXn2VW3L"/>
+<!-- Real Match Badge -->
+<div class="absolute top-4 right-4 bg-white/90 dark:bg-slate-900/90 backdrop-blur-md px-3 py-2 rounded-lg shadow-lg flex items-center gap-2 border border-primary/20">
+<div class="flex flex-col items-end">
+<span class="text-[10px] uppercase tracking-widest font-bold text-primary">Real Match</span>
+<span class="text-lg font-black leading-none text-slate-900 dark:text-white">98%</span>
+</div>
+<span class="material-symbols-outlined text-primary">bolt</span>
+</div>
+<!-- Post Info Overlay -->
+<div class="absolute bottom-0 left-0 right-0 p-6 bg-gradient-to-t from-black/80 via-black/40 to-transparent text-white">
+<div class="flex gap-2 mb-3">
+<span class="px-2 py-1 rounded-md bg-white/20 backdrop-blur-md text-[10px] font-bold uppercase tracking-wider">Heritage Carrots</span>
+<span class="px-2 py-1 rounded-md bg-white/20 backdrop-blur-md text-[10px] font-bold uppercase tracking-wider">Slow Roasted</span>
+</div>
+<h2 class="text-2xl font-bold leading-tight mb-2 italic serif">Slow-Roasted Heritage Carrots</h2>
+<p class="text-sm text-slate-200 line-clamp-2 font-medium">A masterclass in simple, vibrant flavors. Finished with whipped tahini and toasted dukkah for the ultimate texture.</p>
+</div>
+</div>
+<!-- Action Bar -->
+<div class="flex items-center justify-between py-4 border-b border-slate-100 dark:border-slate-800">
+<div class="flex items-center gap-4">
+<button class="flex items-center gap-1 text-slate-600 dark:text-slate-400 hover:text-primary transition-colors">
+<span class="material-symbols-outlined">favorite</span>
+<span class="text-xs font-bold">1.2k</span>
+</button>
+<button class="flex items-center gap-1 text-slate-600 dark:text-slate-400 hover:text-primary transition-colors">
+<span class="material-symbols-outlined">chat_bubble</span>
+<span class="text-xs font-bold">48</span>
+</button>
+<button class="flex items-center gap-1 text-slate-600 dark:text-slate-400 hover:text-primary transition-colors">
+<span class="material-symbols-outlined">share</span>
+</button>
+</div>
+<div class="flex items-center gap-2">
+<button class="flex items-center gap-2 px-4 py-2 rounded-lg bg-primary/10 dark:bg-primary/20 text-primary hover:bg-primary hover:text-white transition-all duration-200">
+<span class="material-symbols-outlined text-sm">bookmark</span>
+<span class="text-xs font-bold">Save</span>
+</button>
+<button class="flex items-center gap-2 px-4 py-2 rounded-lg bg-primary text-white shadow-md shadow-primary/20 hover:brightness-110 transition-all duration-200">
+<span class="material-symbols-outlined text-sm">calendar_add_on</span>
+<span class="text-xs font-bold">Add to Plan</span>
+</button>
+</div>
+</div>
+</article>
+<!-- Second Post Hint -->
+<div class="px-4 opacity-50">
+<div class="flex items-center gap-3 mb-3">
+<div class="size-8 rounded-full bg-slate-200 dark:bg-slate-800 animate-pulse"></div>
+<div class="h-4 w-24 bg-slate-200 dark:bg-slate-800 rounded animate-pulse"></div>
+</div>
+<div class="w-full aspect-video bg-slate-200 dark:bg-slate-800 rounded-xl animate-pulse"></div>
+</div>
+</main>
+<!-- Navigation -->
+<nav class="bg-white dark:bg-slate-900 border-t border-slate-200 dark:border-slate-800 px-4 py-2 flex items-center justify-between">
+<a class="flex flex-1 flex-col items-center gap-1 text-slate-400" href="#">
+<span class="material-symbols-outlined">home</span>
+<span class="text-[10px] font-medium">Home</span>
+</a>
+<a class="flex flex-1 flex-col items-center gap-1 text-slate-400" href="#">
+<span class="material-symbols-outlined">restaurant_menu</span>
+<span class="text-[10px] font-medium">Recipes</span>
+</a>
+<a class="flex flex-1 flex-col items-center gap-1 text-slate-400" href="#">
+<span class="material-symbols-outlined">calendar_today</span>
+<span class="text-[10px] font-medium">Plan</span>
+</a>
+<a class="flex flex-1 flex-col items-center gap-1 text-primary" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1">group</span>
+<span class="text-[10px] font-bold">Community</span>
+</a>
+<a class="flex flex-1 flex-col items-center gap-1 text-slate-400" href="#">
+<span class="material-symbols-outlined">person</span>
+<span class="text-[10px] font-medium">Profile</span>
+</a>
+</nav>
+</div>
+</body></html>

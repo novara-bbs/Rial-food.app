@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>RIAL - Human-Centric Precision</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#007dff",
+                        "background-light": "#f5f7f8",
+                        "background-dark": "#0f1923",
+                    },
+                    fontFamily: {
+                        "display": ["Space Grotesk", "sans-serif"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.5rem",
+                        "lg": "1rem",
+                        "xl": "1.5rem",
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
+<style>
+        body {
+            font-family: 'Space Grotesk', sans-serif;
+        }
+        .radio-custom:checked {
+            background-image: url("data:image/svg+xml,%3csvg viewBox='0 0 16 16' fill='white' xmlns='http://www.w3.org/2000/svg'%3e%3ccircle cx='8' cy='8' r='3'/%3e%3c/svg%3e");
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 antialiased font-display">
+<div class="relative flex min-h-screen w-full flex-col overflow-x-hidden max-w-md mx-auto border-x border-slate-200 dark:border-slate-800 shadow-2xl">
+<!-- Header -->
+<div class="flex items-center p-6 justify-between">
+<div class="text-slate-900 dark:text-white flex size-10 shrink-0 items-center justify-center rounded-full bg-slate-100 dark:bg-slate-800">
+<span class="material-symbols-outlined text-2xl">close</span>
+</div>
+<div class="flex flex-col items-center flex-1">
+<span class="text-xs font-bold tracking-[0.2em] text-primary uppercase">Identity Selection</span>
+</div>
+<div class="size-10"></div> <!-- Spacer for symmetry -->
+</div>
+<!-- Hero Section -->
+<div class="@container px-6">
+<div class="relative w-full aspect-[4/3] rounded-xl overflow-hidden bg-slate-200 dark:bg-slate-800">
+<div class="absolute inset-0 bg-gradient-to-t from-background-dark/80 to-transparent z-10"></div>
+<div class="w-full h-full bg-center bg-no-repeat bg-cover" data-alt="Modern fitness athlete focusing in a dark premium gym environment" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuCrF-30uKD5zOf95vIino92zIDLpX2ZlkZoUest1CYzTCdPG_vlCVKnsQvs7YfeOGmevB9QtiThu6i1ygqO7fECjGHgVcWS0IyfQ8sgdgDBA7K3GaPUiVu9bslE8NyIWhxlmnAdBnPOinogEYuStQOPqlsndh95Mm878fyizRjMHkrO7CqReR9TSu1vOtf1FepImnTlh7S-jUXHQvpk1aL5Ibf45O-clNpLkfKQRnxbBTff3YzQeIOlloXUBhHS5RO2YDsyUvRexwsS");'>
+</div>
+<div class="absolute bottom-6 left-6 z-20">
+<div class="flex items-center gap-2 mb-2">
+<div class="h-1 w-8 bg-primary rounded-full"></div>
+<div class="h-1 w-2 bg-slate-400 rounded-full"></div>
+<div class="h-1 w-2 bg-slate-400 rounded-full"></div>
+</div>
+</div>
+</div>
+</div>
+<!-- Content -->
+<div class="px-6 pt-8 pb-4">
+<h1 class="text-slate-900 dark:text-white text-3xl font-bold leading-tight tracking-tight">Human-Centric Precision</h1>
+<p class="text-slate-600 dark:text-slate-400 text-lg font-normal leading-relaxed mt-3">
+                Select your current focus within the RIAL ecosystem to tailor your biometric journey.
+            </p>
+</div>
+<!-- Identity Selection -->
+<div class="flex flex-col gap-3 px-6 pb-24">
+<!-- Fitness Enthusiast -->
+<label class="group flex items-center gap-4 rounded-xl border-2 border-slate-200 dark:border-slate-800 p-4 transition-all hover:border-primary cursor-pointer has-[:checked]:border-primary has-[:checked]:bg-primary/5">
+<div class="flex grow flex-col">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary text-xl">fitness_center</span>
+<p class="text-slate-900 dark:text-white text-base font-bold">Fitness Enthusiast</p>
+</div>
+<p class="text-slate-500 dark:text-slate-400 text-sm mt-1">Optimizing physical performance and recovery metrics.</p>
+</div>
+<input checked="" class="radio-custom h-6 w-6 border-2 border-slate-300 dark:border-slate-700 bg-transparent text-primary focus:ring-primary focus:ring-offset-0 checked:border-primary rounded-full transition-all" name="identity" type="radio"/>
+</label>
+<!-- Health Explorer -->
+<label class="group flex items-center gap-4 rounded-xl border-2 border-slate-200 dark:border-slate-800 p-4 transition-all hover:border-primary cursor-pointer has-[:checked]:border-primary has-[:checked]:bg-primary/5">
+<div class="flex grow flex-col">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary text-xl">explore</span>
+<p class="text-slate-900 dark:text-white text-base font-bold">Health Explorer</p>
+</div>
+<p class="text-slate-500 dark:text-slate-400 text-sm mt-1">Discovering holistic wellness and longevity protocols.</p>
+</div>
+<input class="radio-custom h-6 w-6 border-2 border-slate-300 dark:border-slate-700 bg-transparent text-primary focus:ring-primary focus:ring-offset-0 checked:border-primary rounded-full transition-all" name="identity" type="radio"/>
+</label>
+<!-- Family Manager -->
+<label class="group flex items-center gap-4 rounded-xl border-2 border-slate-200 dark:border-slate-800 p-4 transition-all hover:border-primary cursor-pointer has-[:checked]:border-primary has-[:checked]:bg-primary/5">
+<div class="flex grow flex-col">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary text-xl">family_restroom</span>
+<p class="text-slate-900 dark:text-white text-base font-bold">Family Manager</p>
+</div>
+<p class="text-slate-500 dark:text-slate-400 text-sm mt-1">Orchestrating collective health for the household.</p>
+</div>
+<input class="radio-custom h-6 w-6 border-2 border-slate-300 dark:border-slate-700 bg-transparent text-primary focus:ring-primary focus:ring-offset-0 checked:border-primary rounded-full transition-all" name="identity" type="radio"/>
+</label>
+<!-- Pro Creator -->
+<label class="group flex items-center gap-4 rounded-xl border-2 border-slate-200 dark:border-slate-800 p-4 transition-all hover:border-primary cursor-pointer has-[:checked]:border-primary has-[:checked]:bg-primary/5">
+<div class="flex grow flex-col">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary text-xl">bolt</span>
+<p class="text-slate-900 dark:text-white text-base font-bold">Pro Creator</p>
+</div>
+<p class="text-slate-500 dark:text-slate-400 text-sm mt-1">Building and sharing advanced bio-hacking protocols.</p>
+</div>
+<input class="radio-custom h-6 w-6 border-2 border-slate-300 dark:border-slate-700 bg-transparent text-primary focus:ring-primary focus:ring-offset-0 checked:border-primary rounded-full transition-all" name="identity" type="radio"/>
+</label>
+</div>
+<!-- Sticky Bottom Action -->
+<div class="fixed bottom-0 w-full max-w-md bg-white/80 dark:bg-background-dark/80 backdrop-blur-md border-t border-slate-200 dark:border-slate-800 p-6 z-30">
+<button class="w-full bg-primary hover:bg-primary/90 text-white font-bold py-4 rounded-xl shadow-lg shadow-primary/20 transition-all active:scale-[0.98]">
+                Confirm Identity
+            </button>
+<p class="text-center text-slate-400 text-xs mt-4 tracking-wider uppercase font-medium">Step 1 of 4</p>
+</div>
+</div>
+</body></html>

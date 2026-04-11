@@ -1,0 +1,482 @@
+<!DOCTYPE html>
+<html class="light" lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>RIAL Holistic App Prototype</title>
+    
+    <!-- Fonts & Icons -->
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#ddff00",
+                        "background-light": "#f8f8f5",
+                        "background-dark": "#20230f",
+                        "surface": "#1a242d",
+                        "surface-light": "#27303a",
+                        "neutral-light": "#eaeaeb",
+                        "neutral-dark": "#2a2d1a",
+                        "text-main": "#171810",
+                        "text-muted": "#6b7280"
+                    },
+                    fontFamily: {
+                        "display": ["Space Grotesk", "sans-serif"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.5rem",
+                        "lg": "1rem",
+                        "xl": "1.5rem",
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
+    
+    <style>
+        body {
+            font-family: 'Space Grotesk', sans-serif;
+            min-height: max(884px, 100dvh);
+        }
+        .hide-scrollbar::-webkit-scrollbar, .no-scrollbar::-webkit-scrollbar, .custom-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .hide-scrollbar, .no-scrollbar, .custom-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+    </style>
+
+    <!-- React & React Router Dependencies -->
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <script crossorigin src="https://unpkg.com/history@5/umd/history.development.js"></script>
+    <script crossorigin src="https://unpkg.com/react-router@6.3.0/umd/react-router.development.js"></script>
+    <script crossorigin src="https://unpkg.com/react-router-dom@6.3.0/umd/react-router-dom.development.js"></script>
+    <script crossorigin src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 min-h-screen">
+    <div id="root"></div>
+
+    <script type="text/babel">
+        const { useState, useEffect } = React;
+        const { createRoot } = ReactDOM;
+        const { MemoryRouter, Routes, Route, Link, useNavigate, useLocation } = ReactRouterDOM;
+
+        // --- Common Components ---
+        const BottomNav = ({ active }) => (
+            <nav className="fixed bottom-0 left-1/2 -translate-x-1/2 w-full max-w-md bg-white/95 dark:bg-slate-900/95 backdrop-blur-md border-t border-slate-100 dark:border-slate-800 px-6 py-3 pb-6 flex justify-between items-center z-50">
+                <Link to="/" className={`flex flex-col items-center gap-1 group ${active === 'home' ? 'text-slate-900 dark:text-white' : 'text-slate-400 hover:text-primary'}`}>
+                    <span className="material-symbols-outlined" style={active === 'home' ? {fontVariationSettings: "'FILL' 1"} : {}}>home</span>
+                    <span className="text-[10px] font-bold uppercase tracking-wider">Home</span>
+                </Link>
+                <Link to="/discover" className={`flex flex-col items-center gap-1 group ${active === 'discover' ? 'text-primary' : 'text-slate-400 hover:text-primary'}`}>
+                    <span className="material-symbols-outlined" style={active === 'discover' ? {fontVariationSettings: "'FILL' 1"} : {}}>explore</span>
+                    <span className="text-[10px] font-bold uppercase tracking-wider">Discover</span>
+                </Link>
+                <div className="relative -top-6">
+                    <button className="size-14 bg-primary rounded-full flex items-center justify-center shadow-xl shadow-primary/30 border-4 border-white dark:border-slate-900 text-slate-900 font-bold text-3xl">
+                        <span className="material-symbols-outlined">add</span>
+                    </button>
+                </div>
+                <Link to="/insights" className={`flex flex-col items-center gap-1 group ${active === 'insights' ? 'text-primary' : 'text-slate-400 hover:text-primary'}`}>
+                    <span className="material-symbols-outlined" style={active === 'insights' ? {fontVariationSettings: "'FILL' 1"} : {}}>insights</span>
+                    <span className="text-[10px] font-bold uppercase tracking-wider">Insights</span>
+                </Link>
+                <Link to="/profile" className={`flex flex-col items-center gap-1 group ${active === 'profile' ? 'text-primary' : 'text-slate-400 hover:text-primary'}`}>
+                    <span className="material-symbols-outlined" style={active === 'profile' ? {fontVariationSettings: "'FILL' 1"} : {}}>person</span>
+                    <span className="text-[10px] font-bold uppercase tracking-wider">Profile</span>
+                </Link>
+            </nav>
+        );
+
+        // --- Screens ---
+
+        const Home = () => {
+            return (
+                <div className="max-w-md mx-auto bg-white dark:bg-slate-900 min-h-screen flex flex-col shadow-xl">
+                    <header className="flex items-center justify-between p-6 pb-2">
+                        <div className="flex items-center gap-3">
+                            <div className="size-12 rounded-full border-2 border-primary overflow-hidden">
+                                <img alt="User Profile" className="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAWF7KSUsXu32Hm4OAZMrJ7betjEbN6cNC_nY_S_mB48U_dcA9Aw4GwrmECoVuc7lja8r6Lo5g-fRjNAFX01f4uaj0F_gAyd3y7oDiKbe__OaVDLeR8OYJsF48elhXo7L2-PUJl6QiL7cd4SFg0yCmuZrdxYaJDb8K8YFpdX1pPSjak1KPOTWEKyiQkQIjMtelnKESMAzOurTkC8IaeCEalX7k8xJ5TbWast6nGMkCF_O1tnGS9U-_aEmmTxbrTrYu2N6sXpOV2SUJd"/>
+                            </div>
+                            <div>
+                                <p className="text-xs text-slate-500 uppercase tracking-widest font-bold">Good Morning</p>
+                                <h1 className="text-xl font-bold font-display">RIAL Holistic</h1>
+                            </div>
+                        </div>
+                        <button className="size-10 flex items-center justify-center rounded-full bg-slate-100 dark:bg-slate-800">
+                            <span className="material-symbols-outlined text-slate-700 dark:text-slate-200">notifications</span>
+                        </button>
+                    </header>
+                    <main className="flex-1 overflow-y-auto px-6 py-4 space-y-8 pb-24">
+                        <section>
+                            <div className="flex items-end justify-between mb-4">
+                                <h2 className="text-2xl font-bold font-display leading-none">Today's Real Feel</h2>
+                                <span className="text-xs font-medium text-slate-400">Monday, Oct 24</span>
+                            </div>
+                            <div className="grid grid-cols-3 gap-3">
+                                <Link to="/journal" className="block">
+                                    <div className="bg-slate-50 dark:bg-slate-800 p-4 rounded-xl flex flex-col items-center text-center border border-slate-100 dark:border-slate-700">
+                                        <span className="material-symbols-outlined text-primary text-3xl mb-2" style={{fontVariationSettings: "'FILL' 1"}}>psychology</span>
+                                        <p className="text-xs text-slate-500 mb-1">Mindset</p>
+                                        <p className="font-bold text-sm">Calm</p>
+                                    </div>
+                                </Link>
+                                <Link to="/journal" className="block">
+                                    <div className="bg-primary p-4 rounded-xl flex flex-col items-center text-center shadow-lg shadow-primary/20">
+                                        <span className="material-symbols-outlined text-slate-900 text-3xl mb-2" style={{fontVariationSettings: "'FILL' 1"}}>bolt</span>
+                                        <p className="text-xs text-slate-900/60 mb-1">Energy</p>
+                                        <p className="font-bold text-sm text-slate-900">High</p>
+                                    </div>
+                                </Link>
+                                <Link to="/journal" className="block">
+                                    <div className="bg-slate-50 dark:bg-slate-800 p-4 rounded-xl flex flex-col items-center text-center border border-slate-100 dark:border-slate-700">
+                                        <span className="material-symbols-outlined text-primary text-3xl mb-2" style={{fontVariationSettings: "'FILL' 1"}}>target</span>
+                                        <p className="text-xs text-slate-500 mb-1">Focus</p>
+                                        <p className="font-bold text-sm">Sharp</p>
+                                    </div>
+                                </Link>
+                            </div>
+                        </section>
+                        <section>
+                            <div className="flex items-center justify-between mb-4">
+                                <h2 className="text-2xl font-bold font-display">Family Meal Prep</h2>
+                                <Link to="/family-planner" className="text-primary font-bold text-sm bg-slate-900 px-3 py-1 rounded-full">Week 4</Link>
+                            </div>
+                            <Link to="/batch-cooking" className="block relative overflow-hidden rounded-xl bg-slate-100 aspect-[16/10] group">
+                                <img alt="Healthy meal prep bowls" className="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBQ2Tn6MVPhNEwMVBnihJC5YX9m64P0NYvuHYOPeo2iF_znnJrwlQfj28uh4wUbJdqxkQkftO2O1vY_FURZDIr6sopa9HvYCD22PcbKwLBGw9acxy5jBJC_M0iloVCvvdhzzwPXYJQpfWgOSHE35EHWJkBqaCV7M7wdyd3geiY-XwnG0jMUmmGJH7miSBTeWmlhCswyntpcoR4lFNB4CztIdcwifL1hPCLlE72nYq2QVi2CdpcrGAsK0HUPj3y7qP6vuLUAHy6KL4re"/>
+                                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent flex flex-col justify-end p-5">
+                                    <div className="flex items-center justify-between mb-2">
+                                        <span className="text-white text-sm font-medium">Batch Progress</span>
+                                        <span className="text-primary text-sm font-bold">75%</span>
+                                    </div>
+                                    <div className="w-full bg-white/20 rounded-full h-2 overflow-hidden">
+                                        <div className="bg-primary h-full rounded-full" style={{width: '75%'}}></div>
+                                    </div>
+                                    <p className="text-white/80 text-xs mt-3">3 of 4 meals prepped for the busy week ahead.</p>
+                                </div>
+                            </Link>
+                        </section>
+                        <section>
+                            <h2 className="text-2xl font-bold font-display mb-4">Creator Spotlight</h2>
+                            <Link to="/pro-creator" className="block bg-slate-900 rounded-xl overflow-hidden relative border border-slate-800">
+                                <div className="aspect-video relative">
+                                    <img alt="Creator Video Thumbnail" className="w-full h-full object-cover opacity-70" src="https://lh3.googleusercontent.com/aida-public/AB6AXuATH1ovvvakar8B-HLZPx77YHYezwUGzB54QnQ3Y4Z2MyvmGjLyhG2ui4pLQhX_nTPzCwF-toiPLnQ-t4-GI8egy7WYgU_PHTmPS0fGCYOrdCmyynWmn8jl2P_GFurqO_-3y41-E37Ed_rFgpEhHts0jq00Q8A-0NS_rgdAvJ_KZXxklxUrzVILTs1Di_w70bV__Bx5K4d1uHC_5taRsmtvLZAnY6nNxhIynp6mBwWUaEbh4KJkG0crhOUi6pSjRcdjm463zJmNiS7i"/>
+                                    <div className="absolute inset-0 flex items-center justify-center">
+                                        <button className="size-16 rounded-full bg-primary flex items-center justify-center shadow-2xl transition-transform hover:scale-105">
+                                            <span className="material-symbols-outlined text-slate-900 text-4xl" style={{fontVariationSettings: "'FILL' 1"}}>play_arrow</span>
+                                        </button>
+                                    </div>
+                                    <div className="absolute bottom-4 left-4 flex items-center gap-2">
+                                        <div className="size-8 rounded-full border-2 border-primary overflow-hidden">
+                                            <img alt="Creator Avatar" className="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuB3p7XtfRx9Csnbva1B50cT7ntYqLw_EqqdoLCZt5zoP0dciV0A7D79jEvECa6dvOWPPkVQ6Esw0SW-57X2kzLh-s7UKVvH7HLio9MNdStQ0RPlZ6NyhlHv8m2bsPTbH6DfjvxV3r7OVaSO45aAOedxXpq0qlV1GiNA-NcoNTvBCo1NGqnQ5lxynwbC2GVK6XblzDK5tK_k6XcSCxt_789bIOyF2k98J_JoOGGaL0aE5-nh-U0qnl1OfuDjD9ppXrsDegOr_DI7qLNt"/>
+                                        </div>
+                                        <span className="text-white font-medium text-sm">Maya Jensen • Morning Flow</span>
+                                    </div>
+                                </div>
+                                <div className="p-4 bg-slate-800/50 backdrop-blur-sm">
+                                    <p className="text-white font-bold leading-tight">Mastering 5-Minute Mindfulness for Parents</p>
+                                    <p className="text-slate-400 text-xs mt-1">Exclusive series for the RIAL community</p>
+                                </div>
+                            </Link>
+                        </section>
+                    </main>
+                    <BottomNav active="home" />
+                </div>
+            );
+        };
+
+        const Discover = () => {
+            return (
+                <div className="relative flex h-auto min-h-screen w-full max-w-md mx-auto flex-col bg-white dark:bg-background-dark shadow-2xl overflow-x-hidden pb-24">
+                    <header className="flex items-center bg-white dark:bg-background-dark p-4 pb-2 justify-between sticky top-0 z-10">
+                        <div className="text-slate-900 dark:text-slate-100 flex size-12 shrink-0 items-center justify-start">
+                            <span className="material-symbols-outlined text-2xl">menu</span>
+                        </div>
+                        <h2 className="text-slate-900 dark:text-slate-100 text-lg font-bold leading-tight tracking-tight flex-1 text-center font-display">Discover Recipes</h2>
+                        <div className="flex w-12 items-center justify-end">
+                            <button className="flex items-center justify-center rounded-xl h-10 w-10 bg-slate-100 dark:bg-slate-800 text-slate-900 dark:text-slate-100">
+                                <span className="material-symbols-outlined text-2xl">notifications</span>
+                            </button>
+                        </div>
+                    </header>
+                    <div className="px-4 py-3">
+                        <label className="flex flex-col min-w-40 h-14 w-full">
+                            <div className="flex w-full flex-1 items-stretch rounded-xl h-full border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 shadow-sm overflow-hidden">
+                                <div className="text-slate-400 flex items-center justify-center pl-4">
+                                    <span className="material-symbols-outlined">search</span>
+                                </div>
+                                <input className="form-input flex w-full min-w-0 flex-1 border-none bg-transparent focus:ring-0 h-full placeholder:text-slate-400 px-4 text-base font-normal" placeholder="Search recipes or ingredients"/>
+                                <div className="flex items-center pr-4">
+                                    <span className="material-symbols-outlined text-slate-400">tune</span>
+                                </div>
+                            </div>
+                        </label>
+                    </div>
+                    <div className="flex gap-3 px-4 py-2 overflow-x-auto hide-scrollbar">
+                        <button className="flex h-10 shrink-0 items-center justify-center gap-x-2 rounded-full bg-primary px-5 shadow-sm">
+                            <p className="text-slate-900 text-sm font-bold">Family Friendly</p>
+                        </button>
+                        <button className="flex h-10 shrink-0 items-center justify-center gap-x-2 rounded-full bg-slate-100 dark:bg-slate-800 px-5">
+                            <p className="text-slate-700 dark:text-slate-300 text-sm font-medium">Batch Cooking</p>
+                        </button>
+                        <button className="flex h-10 shrink-0 items-center justify-center gap-x-2 rounded-full bg-slate-100 dark:bg-slate-800 px-5">
+                            <p className="text-slate-700 dark:text-slate-300 text-sm font-medium">High Protein</p>
+                        </button>
+                    </div>
+                    <div className="px-4 pt-6 pb-2 flex justify-between items-end">
+                        <h2 className="text-slate-900 dark:text-slate-100 text-2xl font-bold font-display">Top Matches</h2>
+                        <span className="text-primary font-bold text-sm">See all</span>
+                    </div>
+                    <div className="grid grid-cols-1 gap-6 p-4">
+                        <Link to="/real-match" className="relative flex flex-col gap-3 rounded-xl overflow-hidden group">
+                            <div className="relative aspect-[16/10] w-full overflow-hidden rounded-xl shadow-lg">
+                                <img className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDbjTPQlNs_MBBOcDcN3GzLgoXvqTMDEtMJxI2qH0TF3PLbDNECipPhjnXvLHaaA54ZoVRtzFq3itlub19xQhbv7tB32QvmM2VfQ7YYpCnuI9zgzIGx0_YEMHawNgulOH8n6PyQ5hKo7rQmUpKiptPghdjG6KTUeitkcsXMN_LA4R8fNdCc4C9Jaab10Tpf-qeNgVlZR2G8Qb_msXrm5t2PUcq5yNNhMlG8oIGSLnLfSykbMnwt7uk_lp__AXUBrNpZKuqaWCrG-kKa"/>
+                                <div className="absolute top-3 left-3 flex gap-2">
+                                    <div className="bg-primary px-3 py-1 rounded-full flex items-center gap-1 shadow-md">
+                                        <span className="material-symbols-outlined text-xs font-bold text-slate-900">bolt</span>
+                                        <span className="text-slate-900 text-xs font-bold uppercase tracking-wider">98% Match</span>
+                                    </div>
+                                    <div className="bg-white/90 dark:bg-slate-900/90 px-3 py-1 rounded-full flex items-center gap-1 shadow-md">
+                                        <span className="material-symbols-outlined text-xs text-slate-900 dark:text-slate-100">verified</span>
+                                        <span className="text-slate-900 dark:text-slate-100 text-xs font-bold uppercase tracking-wider">Pro Creator</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div className="flex flex-col gap-1 px-1">
+                                <div className="flex justify-between items-start">
+                                    <h3 className="text-lg font-bold text-slate-900 dark:text-slate-100 font-display">Grilled Salmon & Avocado Bowl</h3>
+                                    <div className="flex items-center gap-1 text-slate-500 text-sm font-medium">
+                                        <span className="material-symbols-outlined text-base">schedule</span>
+                                        <span>20 min</span>
+                                    </div>
+                                </div>
+                                <p className="text-sm text-slate-500 dark:text-slate-400 line-clamp-1">High-omega superfood bowl optimized for your metabolic recovery.</p>
+                            </div>
+                        </Link>
+                         <Link to="/ingredient" className="relative flex flex-col gap-3 rounded-xl overflow-hidden group">
+                            <div className="relative aspect-[16/10] w-full overflow-hidden rounded-xl shadow-lg">
+                                <img className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDaiJfY6JSpSwREpTL96EwAFrjxJTIY0oCwkyXPbvqV9e01DeX-lzzJVex95t8dje8bqa-IPRkkIYmKrEi9ymgo4d09oJTewMBn_Wj05ioeo9RnV5DsR12M7xuIgLgogGISGHBShSfL0_LHeiw0NA5DmynLNHCLptNjr5kPwDHgglkaXFygOS32VEJdTYYqBCwos9Ms_gP-XB-vzPz6wjW3TKsh9_VYkSdOg4OB4EX_jM-57Kck_YepI4-1OTJWbsX6NAMdw4hGrQXV"/>
+                                <div className="absolute top-3 left-3 flex gap-2">
+                                    <div className="bg-primary px-3 py-1 rounded-full flex items-center gap-1 shadow-md">
+                                        <span className="material-symbols-outlined text-xs font-bold text-slate-900">bolt</span>
+                                        <span className="text-slate-900 text-xs font-bold uppercase tracking-wider">82% Match</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div className="flex flex-col gap-1 px-1">
+                                <div className="flex justify-between items-start">
+                                    <h3 className="text-lg font-bold text-slate-900 dark:text-slate-100 font-display">Mediterranean Power Bowl</h3>
+                                    <div className="flex items-center gap-1 text-slate-500 text-sm font-medium">
+                                        <span className="material-symbols-outlined text-base">schedule</span>
+                                        <span>15 min</span>
+                                    </div>
+                                </div>
+                                <p className="text-sm text-slate-500 dark:text-slate-400 line-clamp-1">Rich in complex carbs and plant-based proteins for sustained energy.</p>
+                            </div>
+                        </Link>
+                    </div>
+                    <BottomNav active="discover" />
+                </div>
+            );
+        };
+
+        const Insights = () => {
+            return (
+                <div className="max-w-2xl mx-auto pb-24">
+                    <header className="sticky top-0 z-50 bg-background-light/80 backdrop-blur-md border-b border-slate-200 dark:border-slate-800 px-4 py-4">
+                        <div className="flex items-center justify-between max-w-2xl mx-auto">
+                            <button className="flex items-center justify-center size-10 rounded-full hover:bg-slate-100 transition-colors">
+                                <span className="material-symbols-outlined">arrow_back</span>
+                            </button>
+                            <h1 className="text-lg font-bold tracking-tight">Real Feel Insights</h1>
+                            <button className="flex items-center justify-center size-10 rounded-full hover:bg-slate-100 transition-colors">
+                                <span className="material-symbols-outlined">share</span>
+                            </button>
+                        </div>
+                    </header>
+                    <nav className="flex border-b border-slate-200 px-4 mb-6">
+                        <a className="flex-1 py-4 text-center border-b-2 border-primary text-slate-900 font-bold text-sm" href="#">Overview</a>
+                        <a className="flex-1 py-4 text-center border-b-2 border-transparent text-slate-500 font-bold text-sm" href="#">Correlations</a>
+                    </nav>
+                    <section className="px-4 mb-8">
+                        <h2 className="text-xl font-bold mb-4">Vitality Score Trend</h2>
+                        <div className="bg-white dark:bg-slate-900 p-6 rounded-xl border border-slate-100 shadow-sm">
+                            <div className="flex justify-between items-start mb-6">
+                                <div>
+                                    <p className="text-slate-500 text-sm font-medium">Weekly Vitality Index</p>
+                                    <div className="flex items-baseline gap-2">
+                                        <span className="text-4xl font-bold">84</span>
+                                        <span className="text-emerald-600 text-sm font-bold flex items-center gap-0.5">
+                                            <span className="material-symbols-outlined text-sm">trending_up</span>
+                                            12%
+                                        </span>
+                                    </div>
+                                </div>
+                                <span className="bg-primary/20 text-slate-900 px-3 py-1 rounded-full text-xs font-bold">Last 7 Days</span>
+                            </div>
+                            <div className="relative h-48 w-full bg-slate-50 dark:bg-slate-800 rounded-lg flex items-center justify-center text-slate-400">Chart Visualization</div>
+                        </div>
+                    </section>
+                     <section className="px-4 mb-8">
+                        <h2 className="text-xl font-bold mb-4">Food & Mood Correlations</h2>
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div className="bg-primary/10 p-5 rounded-xl border border-primary/20">
+                                <div className="flex items-center gap-2 mb-4">
+                                    <span className="material-symbols-outlined text-slate-900">bolt</span>
+                                    <h3 className="font-bold text-slate-900">High Performance</h3>
+                                </div>
+                                <ul className="space-y-3">
+                                    <li className="flex items-center justify-between">
+                                        <span className="text-sm font-medium">Blueberries</span>
+                                        <span className="text-xs font-bold bg-white/50 px-2 py-1 rounded">+18% Focus</span>
+                                    </li>
+                                    <li className="flex items-center justify-between">
+                                        <span className="text-sm font-medium">Walnuts</span>
+                                        <span className="text-xs font-bold bg-white/50 px-2 py-1 rounded">+12% Calm</span>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </section>
+                    <BottomNav active="insights" />
+                </div>
+            )
+        }
+
+        const Profile = () => {
+            return (
+                 <div className="relative flex min-h-screen w-full flex-col max-w-md mx-auto bg-white dark:bg-background-dark shadow-2xl overflow-x-hidden pb-24">
+                    <div className="flex items-center bg-white dark:bg-background-dark p-4 pb-2 justify-between sticky top-0 z-10 border-b border-slate-100 dark:border-slate-800">
+                        <div className="text-slate-900 dark:text-slate-100 flex size-12 shrink-0 items-center justify-center">
+                            <span className="material-symbols-outlined">settings</span>
+                        </div>
+                        <h2 className="text-slate-900 dark:text-slate-100 text-lg font-bold leading-tight tracking-[-0.015em] flex-1 text-center font-display">Profile</h2>
+                        <div className="flex w-12 items-center justify-end">
+                            <button className="flex items-center justify-center rounded-xl h-12 bg-transparent text-slate-900 dark:text-slate-100">
+                                <span className="material-symbols-outlined">share</span>
+                            </button>
+                        </div>
+                    </div>
+                    <div className="flex p-6 @container">
+                        <div className="flex w-full flex-col gap-6 items-center">
+                            <div className="flex gap-4 flex-col items-center">
+                                <div className="relative">
+                                    <div className="bg-center bg-no-repeat aspect-square bg-cover rounded-full min-h-32 w-32 border-4 border-primary shadow-lg" style={{backgroundImage: 'url("https://lh3.googleusercontent.com/aida-public/AB6AXuAHv58XPp2tMUr6SVe4mb9kpcHdaHZeAau2hWRDK_Bpier8Jej5iBPVzxXkRXlvWPSe3on9snxV6_vc2RqxDm4I2tMVNdZXKg5M6zWbEBLEp5EHIFR4Q0gR3FoEtVQmWP-OeDNt87UoHL-Msh7Uo_4KiEcH0vjEonaLyvOqfTclDEj4egDs238jtQSdTV1E_EDuetCJs9rdRwSCf0BdfX9UE6DfslVd3vStDAWn810vH-oncl6VLbvpoERhRuypNW-cK7-vOQqlUT2a")'}}></div>
+                                    <div className="absolute bottom-1 right-1 bg-primary text-slate-900 text-[10px] font-bold px-2 py-1 rounded-full border-2 border-white dark:border-background-dark">LVL 4</div>
+                                </div>
+                                <div className="flex flex-col items-center justify-center text-center">
+                                    <p className="text-slate-900 dark:text-slate-100 text-2xl font-bold leading-tight tracking-tight font-display">Alex Sterling</p>
+                                    <p className="text-slate-500 dark:text-slate-400 text-sm font-medium mt-1">Bio-Active Specialist • Precision Curator</p>
+                                </div>
+                            </div>
+                             <div className="flex w-full gap-3">
+                                <Link to="/goals" className="flex flex-1 items-center justify-center rounded-xl h-11 bg-slate-100 dark:bg-slate-800 text-slate-900 dark:text-slate-100 text-sm font-bold font-display transition-colors hover:bg-slate-200">
+                                    Set Goals
+                                </Link>
+                                <Link to="/bio-sync" className="flex flex-1 items-center justify-center rounded-xl h-11 bg-primary text-slate-900 text-sm font-bold font-display transition-transform shadow-md">
+                                    <span className="material-symbols-outlined text-lg mr-2">sync</span>
+                                    Bio-Sync
+                                </Link>
+                            </div>
+                        </div>
+                    </div>
+                     <div className="px-4 py-2">
+                        <h3 className="text-slate-900 dark:text-slate-100 text-sm font-bold uppercase tracking-widest mb-4 px-2 font-display">Bio-Active Stats</h3>
+                        <div className="flex gap-4">
+                            <div className="flex flex-1 flex-col gap-2 rounded-2xl p-5 bg-slate-50 dark:bg-slate-800/50 border border-slate-100 dark:border-slate-800">
+                                <div className="flex items-center gap-2 text-slate-500 dark:text-slate-400">
+                                    <span className="material-symbols-outlined text-sm">target</span>
+                                    <p className="text-xs font-medium uppercase tracking-tighter">Current Goal</p>
+                                </div>
+                                <p className="text-slate-900 dark:text-slate-100 text-xl font-bold font-display">Volume</p>
+                            </div>
+                            <div className="flex flex-1 flex-col gap-2 rounded-2xl p-5 bg-slate-50 dark:bg-slate-800/50 border border-slate-100 dark:border-slate-800">
+                                <div className="flex items-center gap-2 text-slate-500 dark:text-slate-400">
+                                    <span className="material-symbols-outlined text-sm">bolt</span>
+                                    <p className="text-xs font-medium uppercase tracking-tighter">Real Feel Avg</p>
+                                </div>
+                                <p className="text-primary text-xl font-bold font-display">High</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div className="p-4">
+                        <div className="flex items-center justify-between mb-4 px-2">
+                            <h3 className="text-slate-900 dark:text-slate-100 text-sm font-bold uppercase tracking-widest font-display">Recipe Collections</h3>
+                            <button className="text-primary text-xs font-bold font-display flex items-center">
+                                Add New <span className="material-symbols-outlined text-sm ml-1">add_circle</span>
+                            </button>
+                        </div>
+                        <div className="space-y-3">
+                            <Link to="/shopping-list" className="flex items-center p-4 rounded-xl bg-white dark:bg-slate-800 border border-slate-100 dark:border-slate-700 shadow-sm">
+                                <div className="w-14 h-14 rounded-lg bg-primary/20 flex items-center justify-center text-slate-900">
+                                    <span className="material-symbols-outlined">trolley</span>
+                                </div>
+                                <div className="ml-4 flex-1">
+                                    <div className="flex items-center gap-2">
+                                        <p className="text-slate-900 dark:text-slate-100 font-bold text-sm">Shopping List</p>
+                                    </div>
+                                    <p className="text-slate-400 text-xs mt-1">Smart generated items</p>
+                                </div>
+                                <span className="material-symbols-outlined text-slate-300">chevron_right</span>
+                            </Link>
+                        </div>
+                    </div>
+                    <BottomNav active="profile" />
+                </div>
+            )
+        }
+
+        const PlaceholderScreen = ({ title }) => (
+            <div className="min-h-screen flex flex-col items-center justify-center bg-background-light dark:bg-background-dark">
+                <h1 className="text-2xl font-bold text-slate-900 dark:text-slate-100">{title}</h1>
+                <p className="mt-4 text-slate-500">Screen content placeholder.</p>
+                <Link to="/" className="mt-8 text-primary font-bold bg-slate-900 px-6 py-2 rounded-full">Back to Home</Link>
+            </div>
+        );
+
+        // --- App Component ---
+        const App = () => {
+            return (
+                <MemoryRouter>
+                    <Routes>
+                        <Route path="/" element={<Home />} />
+                        <Route path="/discover" element={<Discover />} />
+                        <Route path="/insights" element={<Insights />} />
+                        <Route path="/profile" element={<Profile />} />
+                        <Route path="/journal" element={<PlaceholderScreen title="Journal / Real Feel" />} />
+                        <Route path="/family-planner" element={<PlaceholderScreen title="Family Planner" />} />
+                        <Route path="/batch-cooking" element={<PlaceholderScreen title="Batch Cooking Execution" />} />
+                        <Route path="/pro-creator" element={<PlaceholderScreen title="Pro Creator Spotlight" />} />
+                        <Route path="/real-match" element={<PlaceholderScreen title="Real Match Engine" />} />
+                        <Route path="/ingredient" element={<PlaceholderScreen title="Ingredient Dictionary" />} />
+                        <Route path="/shopping-list" element={<PlaceholderScreen title="Smart Shopping List" />} />
+                        <Route path="/goals" element={<PlaceholderScreen title="Goal Setting" />} />
+                        <Route path="/bio-sync" element={<PlaceholderScreen title="Bio-Sync Connection" />} />
+                    </Routes>
+                </MemoryRouter>
+            );
+        };
+
+        const root = createRoot(document.getElementById('root'));
+        root.render(<App />);
+    </script>
+</body>
+</html>

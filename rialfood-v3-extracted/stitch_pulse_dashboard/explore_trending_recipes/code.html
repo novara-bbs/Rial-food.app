@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Playfair+Display:ital,wght@0,700;1,700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              colors: {
+                "primary": "#25aff4",
+                "background-light": "#f5f7f8",
+                "background-dark": "#101c22",
+              },
+              fontFamily: {
+                "display": ["Inter", "sans-serif"],
+                "serif": ["Playfair Display", "serif"]
+              },
+              borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+            },
+          },
+        }
+    </script>
+<style>
+        .editorial-shadow {
+            box-shadow: 0 10px 30px -10px rgba(37, 175, 244, 0.15);
+        }
+        .glass-overlay {
+            background: rgba(16, 28, 34, 0.6);
+            backdrop-filter: blur(8px);
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark font-display text-slate-900 dark:text-slate-100 min-h-screen">
+<div class="max-w-md mx-auto bg-white dark:bg-background-dark min-h-screen shadow-2xl relative flex flex-col">
+<!-- Header -->
+<header class="sticky top-0 z-50 bg-white/80 dark:bg-background-dark/80 backdrop-blur-md px-6 pt-6 pb-2">
+<div class="flex items-center justify-between mb-6">
+<span class="material-symbols-outlined text-slate-900 dark:text-slate-100">menu</span>
+<h1 class="font-serif italic text-2xl tracking-tight">RIAL <span class="font-sans font-bold not-italic text-xs align-top text-primary">EXPLORE</span></h1>
+<div class="size-10 rounded-full bg-primary/10 flex items-center justify-center overflow-hidden border border-primary/20">
+<img class="w-full h-full object-cover" data-alt="User profile avatar" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCR5iIzmRo2QMByFz7rnH_FNM3oxanAngYgcnVZaEPipEsNJrBf5Xhbl_0JJNyUiN_YMNLDX60wSolYwDOgLf3YwEiORWogBqTEJhYkSq_OeoDzA1vhMqP_FQFPhqaMyWkIEpLCAS7ycvc3c4BtN0LHR9PJrzXxdmS4rt1ZWTIEWeUKJakofPTngk-Fmx_ZWMuXGoN3xT44m0NCE31NzivCEduGOK95NuZNk95o2TrZswBzCBQ2iIm05ngRxhdzuanHHUEuVdpoTPF2"/>
+</div>
+</div>
+<!-- Search Bar -->
+<div class="relative mb-4">
+<div class="absolute inset-y-0 left-4 flex items-center pointer-events-none">
+<span class="material-symbols-outlined text-slate-400 text-xl">search</span>
+</div>
+<input class="w-full bg-slate-100 dark:bg-slate-800 border-none rounded-xl py-3 pl-12 pr-4 text-sm focus:ring-2 focus:ring-primary/50 transition-all" placeholder="Search trending recipes..." type="text"/>
+</div>
+<!-- Categories -->
+<div class="flex gap-3 overflow-x-auto pb-4 no-scrollbar">
+<button class="whitespace-nowrap px-4 py-2 rounded-full bg-primary text-white text-xs font-bold tracking-wide">TRENDING</button>
+<button class="whitespace-nowrap px-4 py-2 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 text-xs font-bold tracking-wide">QUICK DINNERS</button>
+<button class="whitespace-nowrap px-4 py-2 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 text-xs font-bold tracking-wide">HIGH PROTEIN</button>
+<button class="whitespace-nowrap px-4 py-2 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 text-xs font-bold tracking-wide">FAMILY FAVORITES</button>
+</div>
+</header>
+<!-- Main Content -->
+<main class="flex-1 px-6 pb-24">
+<div class="flex items-end justify-between mb-6 pt-4">
+<div>
+<p class="text-[10px] font-bold tracking-[0.2em] text-primary uppercase">Editorial Pick</p>
+<h2 class="text-3xl font-serif font-bold dark:text-white">Top of the Week</h2>
+</div>
+<div class="text-[10px] font-mono text-slate-400">VOL. 24 / ISSUE 08</div>
+</div>
+<!-- Hero Recipe Card -->
+<div class="relative rounded-2xl overflow-hidden mb-8 editorial-shadow group">
+<div class="aspect-[4/5] w-full">
+<img class="w-full h-full object-cover" data-alt="Gourmet salad with fresh vegetables" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCv0jtqqUYm5LWWz76tjSQijkkCzrR4WDvCycYRYJsYY0clIWGxbvkti_lUFpj1XNYvYE9cMlqh3Fjy3_8p_p4fyWV9wA08uMGP-LYltgyP1ABLG51AYOPGHgs5fXb_LbsvlWZavL4ZpC-n7f58M0gopQFhAkBCM_OebK2SXXpF0HkUqEL7mWou_OBgu_FmU_LAyGocKeQH3N-uKcAHpfAV0VKPFZDM5R3-b0mMZ454_NnOliK48QKWM4n9zBowb2qeTZakW9kZYaZP"/>
+</div>
+<div class="absolute top-4 left-4">
+<span class="bg-primary px-3 py-1 rounded text-[10px] font-bold text-white tracking-widest uppercase">Rising Fast</span>
+</div>
+<div class="absolute top-4 right-4 bg-white/90 dark:bg-slate-900/90 backdrop-blur-sm rounded-lg p-2 flex flex-col items-center">
+<span class="text-[10px] font-bold text-slate-400 leading-none">REAL MATCH</span>
+<span class="text-lg font-bold text-primary">98%</span>
+</div>
+<div class="absolute inset-x-0 bottom-0 p-6 bg-gradient-to-t from-black/90 via-black/40 to-transparent">
+<p class="text-primary text-[10px] font-bold tracking-widest mb-2 uppercase">By Chef Julianne Thorne</p>
+<h3 class="text-white text-2xl font-serif font-bold leading-tight mb-2">Summer Harvest Buddha Bowl with Miso Drizzle</h3>
+<div class="flex items-center gap-4 text-white/70 text-[10px] font-mono uppercase">
+<span class="flex items-center gap-1"><span class="material-symbols-outlined text-xs">schedule</span> 15 MINS</span>
+<span class="flex items-center gap-1"><span class="material-symbols-outlined text-xs">local_fire_department</span> 420 KCAL</span>
+<span class="flex items-center gap-1"><span class="material-symbols-outlined text-xs">group</span> 4.9 (2.1k)</span>
+</div>
+</div>
+</div>
+<!-- Trending Feed Grid -->
+<div class="grid grid-cols-2 gap-4">
+<!-- Recipe Item 1 -->
+<div class="flex flex-col gap-3">
+<div class="relative rounded-xl overflow-hidden aspect-square">
+<img class="w-full h-full object-cover" data-alt="Modern vegan power bowl" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAvXI8nG5USZCTQXJ8r4kFeI0-P3gjXHNaunAkBFNgih69XMTE4cAxMJs6P5BcMxWvakl7tMPrTS8oP4sw8JnENEbdYRg4st7AFD7jb7pmiCjx_zNFnXsLoPJBlxMpjJ4D9SFde9BGbpozgP3uE6AifkVJ6lpZP45O1zsdAO1CIISLJkHy5FmdO43eKel4Yd95InOQMD9msrlc8QxeLmWaNXbys78DiXauJQyzVwe_77m1bqSFp7CELbOnvtXTGxyitNI76O2b86P10"/>
+<div class="absolute bottom-2 right-2 bg-primary/90 text-white text-[10px] font-bold px-2 py-1 rounded">84% MATCH</div>
+</div>
+<div>
+<p class="text-[9px] font-bold text-primary uppercase tracking-tighter">Mediterranean</p>
+<h4 class="font-serif font-bold text-sm leading-tight dark:text-white">Ancient Grain Tabbouleh</h4>
+<p class="text-[10px] text-slate-500 mt-1">@marco_eats</p>
+</div>
+</div>
+<!-- Recipe Item 2 -->
+<div class="flex flex-col gap-3">
+<div class="relative rounded-xl overflow-hidden aspect-square">
+<img class="w-full h-full object-cover" data-alt="Artisan sourdough pasta" src="https://lh3.googleusercontent.com/aida-public/AB6AXuA0SH2kABPW3pWPa3Da-E5pE6UX03QSB61R-BKf8gfK9BrRLSXHeg3HNTHw4GT7Mer1oxr26tRuDNc74fRxXgeNiterfuD0lZsrzkn1uAQriYRN48BSwdhvN3DsyIyQcuxuN-4gWMJOTXDuAXuDDa3Yn3-mEbemdBc_VAHH0R7OJFq2XWk1l-Tc6gYCBpj371MOvnvf2-o7IWpzbP3EcEp8jXe7pOcSHQD4sON27ExZvLOWVXI2aYnLgy2o-hW6x1uIIAzQFfsTkLtn"/>
+<div class="absolute bottom-2 right-2 bg-primary/90 text-white text-[10px] font-bold px-2 py-1 rounded">92% MATCH</div>
+</div>
+<div>
+<p class="text-[9px] font-bold text-primary uppercase tracking-tighter">Italian Tech</p>
+<h4 class="font-serif font-bold text-sm leading-tight dark:text-white">Smart-Ferment Sourdough Pasta</h4>
+<p class="text-[10px] text-slate-500 mt-1">@bio_kitchen</p>
+</div>
+</div>
+<!-- Recipe Item 3 -->
+<div class="flex flex-col gap-3 col-span-2 mt-4 p-4 rounded-2xl bg-slate-100 dark:bg-slate-900 border border-slate-200 dark:border-slate-800">
+<div class="flex items-center justify-between mb-4">
+<div class="flex items-center gap-2">
+<div class="size-2 bg-red-500 rounded-full animate-pulse"></div>
+<span class="text-[10px] font-bold tracking-widest uppercase">Happening Now</span>
+</div>
+<span class="text-[10px] font-mono text-slate-400">LIVE STATS: 1,240 COOKING</span>
+</div>
+<div class="flex gap-4">
+<div class="w-24 h-24 rounded-lg overflow-hidden shrink-0">
+<img class="w-full h-full object-cover" data-alt="Fluffy pancakes with syrup" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCrhLB3HkQWjtslQnVJqk9XdatJ9cTdNGfdExiX4zpUKGhverlmdTQ4kv0IS2Jb-IUuJs0QTh0uBSxDB7tA1uPLJeJLLG6sYMu5BNy5109rJ3uYoJGfVy7dRLJNtvVUOrUwLE5vLHMBuCo4-jL39pZ0h312v87eBYAMdNQ8fBxgZ1F0WrfbHCtsG77loxDllnNCZsyddt-o37fi6SfQwqYF5pnZxqhpoZa-ZhFhYXKWPlNVQOkjO2YGzyullGnuHSODeZpc-97MF5qG"/>
+</div>
+<div class="flex flex-col justify-center">
+<h4 class="font-serif font-bold text-lg leading-tight dark:text-white">Cloud-Fold Buttermilk Pancakes</h4>
+<p class="text-xs text-slate-500 mb-2">The most saved breakfast this morning.</p>
+<div class="flex items-center gap-2">
+<span class="text-[10px] font-bold text-primary">#1 BREAKFAST</span>
+<span class="text-[10px] text-slate-400">• 12k SAVES</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+<!-- Bottom Navigation Bar -->
+<nav class="fixed bottom-0 max-w-md w-full border-t border-slate-200 dark:border-slate-800 bg-white/95 dark:bg-background-dark/95 backdrop-blur-md px-6 pb-6 pt-3 flex justify-between items-center z-50">
+<a class="flex flex-col items-center gap-1 text-slate-400" href="#">
+<span class="material-symbols-outlined">home</span>
+<span class="text-[10px] font-bold tracking-tight">HOME</span>
+</a>
+<a class="flex flex-col items-center gap-1 text-primary" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1">explore</span>
+<span class="text-[10px] font-bold tracking-tight">EXPLORE</span>
+</a>
+<a class="flex flex-col items-center justify-center -mt-8" href="#">
+<div class="size-14 rounded-full bg-primary flex items-center justify-center text-white shadow-lg shadow-primary/40 border-4 border-white dark:border-background-dark">
+<span class="material-symbols-outlined text-3xl">add</span>
+</div>
+</a>
+<a class="flex flex-col items-center gap-1 text-slate-400" href="#">
+<span class="material-symbols-outlined">bookmark</span>
+<span class="text-[10px] font-bold tracking-tight">SAVED</span>
+</a>
+<a class="flex flex-col items-center gap-1 text-slate-400" href="#">
+<span class="material-symbols-outlined">person</span>
+<span class="text-[10px] font-bold tracking-tight">PROFILE</span>
+</a>
+</nav>
+</div>
+</body></html>

@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Editorial Tech - Workout &amp; Nutrition Sync</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@300;400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#ec5b13",
+                        "background-light": "#f8f6f6",
+                        "background-dark": "#221610",
+                    },
+                    fontFamily: {
+                        "display": ["Public Sans", "sans-serif"]
+                    },
+                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>
+        body {
+            font-family: 'Public Sans', sans-serif;
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .fill-icon {
+            font-variation-settings: 'FILL' 1;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 font-display">
+<div class="relative flex min-h-screen flex-col overflow-x-hidden">
+<!-- Header -->
+<header class="flex items-center bg-background-light dark:bg-background-dark p-4 pb-2 justify-between border-b border-primary/10">
+<div class="flex size-12 shrink-0 items-center justify-start">
+<span class="material-symbols-outlined text-slate-900 dark:text-slate-100 cursor-pointer">arrow_back</span>
+</div>
+<h1 class="text-slate-900 dark:text-slate-100 text-lg font-bold leading-tight tracking-tight flex-1 text-center">Editorial Tech</h1>
+<div class="flex w-12 items-center justify-end">
+<button class="flex items-center justify-center rounded-xl h-12 bg-transparent text-slate-900 dark:text-slate-100">
+<span class="material-symbols-outlined">share</span>
+</button>
+</div>
+</header>
+<!-- Navigation Tabs -->
+<nav class="pb-1 bg-background-light dark:bg-background-dark">
+<div class="flex border-b border-primary/10 px-4 gap-8">
+<a class="flex flex-col items-center justify-center border-b-[3px] border-b-transparent text-slate-500 dark:text-slate-400 pb-3 pt-4" href="#">
+<p class="text-sm font-bold">Workout</p>
+</a>
+<a class="flex flex-col items-center justify-center border-b-[3px] border-b-transparent text-slate-500 dark:text-slate-400 pb-3 pt-4" href="#">
+<p class="text-sm font-bold">Nutrition</p>
+</a>
+<a class="flex flex-col items-center justify-center border-b-[3px] border-primary text-primary pb-3 pt-4" href="#">
+<p class="text-sm font-bold">Sync Log</p>
+</a>
+</div>
+</nav>
+<!-- Content Area -->
+<main class="flex-1 overflow-y-auto">
+<div class="p-4">
+<h2 class="text-slate-900 dark:text-slate-100 text-2xl font-bold leading-tight tracking-tight pt-2 pb-1">Daily Sync: Strength Training</h2>
+<p class="text-slate-500 dark:text-slate-400 text-sm mb-6">Optimization for Muscle Hypertrophy &amp; Recovery</p>
+<!-- Performance Metrics -->
+<div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
+<div class="flex flex-col gap-2 rounded-xl p-5 bg-primary/10 dark:bg-primary/5 border border-primary/20">
+<p class="text-slate-600 dark:text-slate-300 text-sm font-medium">Total Energy</p>
+<p class="text-slate-900 dark:text-slate-100 tracking-tight text-2xl font-bold">2,450 kcal</p>
+<p class="text-emerald-500 text-sm font-bold flex items-center gap-1">
+<span class="material-symbols-outlined text-xs">trending_up</span> +10% surplus
+                        </p>
+</div>
+<div class="flex flex-col gap-2 rounded-xl p-5 bg-primary/10 dark:bg-primary/5 border border-primary/20">
+<p class="text-slate-600 dark:text-slate-300 text-sm font-medium">Protein Intake</p>
+<p class="text-slate-900 dark:text-slate-100 tracking-tight text-2xl font-bold">180g</p>
+<p class="text-primary text-sm font-bold flex items-center gap-1">
+<span class="material-symbols-outlined text-xs">remove_circle</span> Target: 190g
+                        </p>
+</div>
+<div class="flex flex-col gap-2 rounded-xl p-5 bg-primary/10 dark:bg-primary/5 border border-primary/20">
+<p class="text-slate-600 dark:text-slate-300 text-sm font-medium">Recovery Score</p>
+<p class="text-slate-900 dark:text-slate-100 tracking-tight text-2xl font-bold">92%</p>
+<p class="text-emerald-500 text-sm font-bold flex items-center gap-1">
+<span class="material-symbols-outlined text-xs">check_circle</span> Optimal
+                        </p>
+</div>
+</div>
+<!-- Timing Sidebar Layout -->
+<div class="space-y-6">
+<!-- Pre-Workout Meal -->
+<div class="flex gap-4">
+<div class="flex flex-col items-center shrink-0 w-12">
+<div class="size-10 rounded-full bg-primary/20 flex items-center justify-center text-primary">
+<span class="material-symbols-outlined">restaurant</span>
+</div>
+<div class="w-0.5 h-full bg-primary/20 my-2"></div>
+</div>
+<div class="flex-1 pb-4">
+<div class="flex justify-between items-start mb-2">
+<div>
+<h3 class="text-slate-900 dark:text-slate-100 font-bold">Pre-Workout Fuel</h3>
+<p class="text-slate-500 dark:text-slate-400 text-xs">08:30 AM • 90 mins before training</p>
+</div>
+<span class="bg-primary text-white text-[10px] px-2 py-1 rounded-full font-bold uppercase tracking-wider">High Carb</span>
+</div>
+<div class="bg-white dark:bg-background-dark/50 border border-primary/10 rounded-xl p-4 shadow-sm">
+<div class="flex gap-4 items-center">
+<div class="size-16 rounded-lg bg-slate-200 dark:bg-slate-800 shrink-0 overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="Oatmeal bowl with bananas and nuts" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCDTF6zqUZdkPLARggUiJEfFHnoLrwRwLU5bJqZJV2Dn0GYi79UqZ8XX558lG87vs9jDzxLW6u93Trloc7qbPlvhQTX0aVR9V19pyeoZdoVuVUpGi-rruKFl_OQQUEzl1yEpFdVA2mh-mIBzdSmY0OQbI_TqrdobvRYaq5petqpCPVRvzE5H2efVr6Nq0Z1_b9ZzvfzgoT93HhlLhzwE2tDOADqUi4z-qYpMI3XSZvTANImnszTfOMHv_ZhTdjk2rpbb-0TEXK-zreq"/>
+</div>
+<div class="flex-1">
+<p class="text-slate-900 dark:text-slate-100 font-medium">Steel-cut Oats &amp; Banana</p>
+<p class="text-slate-500 dark:text-slate-400 text-xs mt-1">45g Carbs • 12g Protein • 5g Fat</p>
+</div>
+</div>
+<p class="mt-3 text-xs text-slate-500 dark:text-slate-400 italic">"Slow-release glucose for sustained intensity."</p>
+</div>
+</div>
+</div>
+<!-- Training Session -->
+<div class="flex gap-4">
+<div class="flex flex-col items-center shrink-0 w-12">
+<div class="size-10 rounded-full bg-primary flex items-center justify-center text-white">
+<span class="material-symbols-outlined fill-icon">fitness_center</span>
+</div>
+<div class="w-0.5 h-full bg-primary/20 my-2"></div>
+</div>
+<div class="flex-1 pb-4">
+<div class="flex justify-between items-start mb-2">
+<div>
+<h3 class="text-slate-900 dark:text-slate-100 font-bold">Strength Session (Push)</h3>
+<p class="text-slate-500 dark:text-slate-400 text-xs">10:00 AM • 75 mins</p>
+</div>
+<span class="text-primary text-xs font-bold">640 kcal burnt</span>
+</div>
+<div class="bg-primary/5 border border-primary/30 rounded-xl p-4">
+<ul class="text-sm space-y-2 text-slate-700 dark:text-slate-300">
+<li class="flex justify-between border-b border-primary/10 pb-1">
+<span>Bench Press</span>
+<span class="font-bold">4 x 8 @ 185lbs</span>
+</li>
+<li class="flex justify-between border-b border-primary/10 pb-1">
+<span>Overhead Press</span>
+<span class="font-bold">3 x 10 @ 95lbs</span>
+</li>
+<li class="flex justify-between">
+<span>Lateral Raises</span>
+<span class="font-bold">3 x 15 @ 25lbs</span>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<!-- Post-Workout Meal -->
+<div class="flex gap-4">
+<div class="flex flex-col items-center shrink-0 w-12">
+<div class="size-10 rounded-full bg-primary/20 flex items-center justify-center text-primary">
+<span class="material-symbols-outlined">restaurant</span>
+</div>
+</div>
+<div class="flex-1 pb-4">
+<div class="flex justify-between items-start mb-2">
+<div>
+<h3 class="text-slate-900 dark:text-slate-100 font-bold">Anabolic Recovery Window</h3>
+<p class="text-slate-500 dark:text-slate-400 text-xs">11:30 AM • 15 mins after training</p>
+</div>
+<span class="bg-primary text-white text-[10px] px-2 py-1 rounded-full font-bold uppercase tracking-wider">High Protein</span>
+</div>
+<div class="bg-white dark:bg-background-dark/50 border border-primary/10 rounded-xl p-4 shadow-sm">
+<div class="flex gap-4 items-center">
+<div class="size-16 rounded-lg bg-slate-200 dark:bg-slate-800 shrink-0 overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="Grilled chicken breast with rice and broccoli" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBH-LdyOPDUJz2QjOHpKp3U9g3LDGqr0TujPjA0jYSe4s05uQzByssLefusw4hGxDDSFwnCa87jE_1iUT8HOIBjMrUQk3JLM3YAJSbUes78tuVf0ybrO-nKBhbiPYMKMqjrYfVjdoP6vvhanQILpKsal_uCWqjEOeEY17K87Fq1-rXhQYi3vGSTKqD8nRgQ3HYbVQfE8BvhbtZ28lWS9lpBYfjk7YPTwCh9Yf5gwyx5xIqCpFrtlMxrzuN4UkANrr_n1bryXH2NDbhF"/>
+</div>
+<div class="flex-1">
+<p class="text-slate-900 dark:text-slate-100 font-medium">Chicken, Rice &amp; Asparagus</p>
+<p class="text-slate-500 dark:text-slate-400 text-xs mt-1">30g Carbs • 45g Protein • 8g Fat</p>
+</div>
+</div>
+<p class="mt-3 text-xs text-slate-500 dark:text-slate-400 italic">"Rapid protein synthesis for muscle fiber repair."</p>
+</div>
+</div>
+</div>
+</div>
+<!-- Recovery Tip -->
+<div class="mt-4 p-4 rounded-xl bg-slate-100 dark:bg-slate-800/50 border-l-4 border-primary">
+<div class="flex gap-3">
+<span class="material-symbols-outlined text-primary">info</span>
+<div>
+<p class="text-sm font-bold text-slate-900 dark:text-slate-100">Editorial Tech Insight</p>
+<p class="text-xs text-slate-600 dark:text-slate-400 mt-1">Your nutrient timing today hit the 'Golden Window'. Protein synthesis is currently peaking. Ensure 7-8 hours of sleep tonight for maximum growth hormone release.</p>
+</div>
+</div>
+</div>
+<div class="h-24"></div>
+</div>
+</main>
+<!-- Bottom Navigation Bar -->
+<footer class="fixed bottom-0 left-0 right-0 z-50">
+<div class="flex gap-2 border-t border-primary/10 bg-background-light dark:bg-background-dark px-4 pb-6 pt-2">
+<a class="flex flex-1 flex-col items-center justify-end gap-1 text-slate-400 dark:text-slate-500" href="#">
+<div class="flex h-8 items-center justify-center">
+<span class="material-symbols-outlined">calendar_today</span>
+</div>
+<p class="text-[10px] font-medium leading-normal tracking-wide">Today</p>
+</a>
+<a class="flex flex-1 flex-col items-center justify-end gap-1 text-primary" href="#">
+<div class="flex h-8 items-center justify-center">
+<span class="material-symbols-outlined fill-icon">fitness_center</span>
+</div>
+<p class="text-[10px] font-medium leading-normal tracking-wide">Training</p>
+</a>
+<a class="flex flex-1 flex-col items-center justify-end gap-1 text-slate-400 dark:text-slate-500" href="#">
+<div class="flex h-8 items-center justify-center">
+<span class="material-symbols-outlined">restaurant</span>
+</div>
+<p class="text-[10px] font-medium leading-normal tracking-wide">Meals</p>
+</a>
+<a class="flex flex-1 flex-col items-center justify-end gap-1 text-slate-400 dark:text-slate-500" href="#">
+<div class="flex h-8 items-center justify-center">
+<span class="material-symbols-outlined">person</span>
+</div>
+<p class="text-[10px] font-medium leading-normal tracking-wide">Profile</p>
+</a>
+</div>
+</footer>
+</div>
+</body></html>

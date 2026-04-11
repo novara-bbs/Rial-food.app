@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>RIAL Brand Manifesto</title>
+<!-- Tailwind CSS CDN with Plugins -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- Google Fonts: Inter and an Editorial Serif (Playfair Display) -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&amp;family=Playfair+Display:ital,wght@0,700;1,700&amp;display=swap" rel="stylesheet"/>
+<script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              DEFAULT: '#3fca43', // Custom color from theme
+              charcoal: '#121212',
+              cream: '#F5F5F4',
+            }
+          },
+          fontFamily: {
+            sans: ['Inter', 'sans-serif'],
+            serif: ['Playfair Display', 'serif'],
+          },
+          borderRadius: {
+            'full': '9999px', // ROUND_FULL requirement
+          }
+        }
+      }
+    }
+  </script>
+<style data-purpose="typography">
+    .editorial-header {
+      font-family: 'Playfair Display', serif;
+      letter-spacing: -0.02em;
+      line-height: 1.1;
+    }
+    .body-text {
+      font-family: 'Inter', sans-serif;
+      line-height: 1.6;
+      color: #D1D5DB; /* light gray for readability on dark */
+    }
+  </style>
+<style data-purpose="layout">body {
+    background-color: #121212;
+    /* Charcoal */
+    color: #F5F5F4;
+    /* Cream */
+    }
+.grain-overlay {
+    background-image: url(https://lh3.googleusercontent.com/aida-public/AB6AXuCD4w-4XIYTF5ya89xZCeQQczanxXVcewHmXLgjRoQBcgYI1qduhhkV_vb7kBAcGQZjCUOH7xiCniVumH2WlnC8r0nAShqE0Rkb2hlSpuFxNg-r91s2PBLpYHl90G9xN0qPsl8WS9lo5QTBzhGR1nP_MtG8XH3EBUWpnmMC3TKcRI_rkacxuGkGp4e6yEfBCJe_EK8ZCyaINtEEdBnOmt2GAPgUByQzYdLm1gSrbl79_p116_Gyvo_gnRs6b1IKe1kIQUETE6UOinQP);
+    opacity: 0.05;
+    pointer-events: none
+    }</style>
+</head>
+<body class="antialiased selection:bg-brand selection:text-brand-charcoal">
+<div class="fixed inset-0 grain-overlay z-50"></div>
+<!-- BEGIN: Hero Section -->
+<header class="relative min-h-[70vh] flex flex-col justify-end p-6 pb-12 overflow-hidden border-b border-white/10" data-purpose="hero">
+<!-- Macro Photography Background -->
+<div class="absolute inset-0 z-0">
+<img alt="Macro Sliced Tomato" class="w-full h-full object-cover opacity-60" src="https://lh3.googleusercontent.com/aida-public/AB6AXuC7fnowla6hkd_QibPI6TD0_Ko3Cx4oiMe0HLbhN5zhNzv9uTKgC3KHEukdMQ7Kt16tJfwV2nMwjitOw8q-DoXLAcIr0kBmverwnT8N58w2iSeG9QS1UScIusIxQr_SAHpy7X9gW5ixRRJPuhtSUG8ufjTT8wcPXqm3q0laBIrCIYkd5k9H-1wu_6PaMYHKaM2SLLq14L6JJtA7eXo-Q3K6qImWo8odiR0XpBAczDk4fN-4M4PaBU7Uwy1T0-ri9XHr5m0o1KoZal2D"/>
+<div class="absolute inset-0 bg-gradient-to-t from-brand-charcoal via-transparent to-transparent"></div>
+</div>
+<div class="relative z-10 max-w-xl">
+<span class="inline-block px-4 py-1 border border-brand text-brand rounded-full text-xs font-semibold tracking-widest uppercase mb-4" data-purpose="badge">
+        Brand Manifesto v1.0
+      </span>
+<h1 class="editorial-header text-5xl md:text-6xl text-brand-cream italic">
+        RIAL: Authenticity in Every Byte
+      </h1>
+<p class="mt-6 body-text text-lg italic">
+        Bridging the gap between the digital kitchen and the tactile earth.
+      </p>
+</div>
+</header>
+<!-- END: Hero Section -->
+<!-- BEGIN: Main Content -->
+<main class="px-6 py-16 space-y-24">
+<!-- BEGIN: Manifesto Section -->
+<section class="max-w-screen-md mx-auto" data-purpose="manifesto-content" id="manifesto">
+<h2 class="editorial-header text-3xl text-brand mb-8 border-l-4 border-brand pl-4">The Real Manifesto</h2>
+<div class="body-text space-y-6 text-lg">
+<p>
+          In an era of synthetic flavors and curated illusions, RIAL stands for the <span class="text-brand font-semibold">unfiltered truth</span>. We believe that technology should not replace the senses, but amplify them.
+        </p>
+<p>
+          We source the data. We source the ingredients. We source the connection. Every byte of information we serve is as fresh as the sourdough rising in the morning sun.
+        </p>
+<div class="py-8">
+<img alt="Fresh Sourdough" class="w-full h-64 object-cover rounded-2xl shadow-2xl border border-white/5" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAOAAEQ6xZny5mWMQyFeKwtcuJORZN8_vhgaWw_6uyPddzBhN9hBpAl1sdUdrt18c47pcY2bNkwdCSZAcFoXTOb1Mxcjmxqh8mJBjROkVIJykD7x1ecENBlEDpRjCQC_GWSwd6i_ImoUunqKzXefB3ejJO6wZlIgrkS6SDRtaUUrI87PcYa-WgEqed7blwubYaLWOi0ifzSXmOSQKjuPJGNcsJqOQ0VlkG9rj8gvZb2AQY7aDEhTXnsyp6gCtO_q2RHprIYbBnXkElw"/>
+</div>
+</div>
+</section>
+<!-- END: Manifesto Section -->
+<!-- BEGIN: Visual Language Section -->
+<section class="max-w-screen-md mx-auto" data-purpose="design-system" id="visual-language">
+<h2 class="editorial-header text-3xl text-brand mb-8">Visual Language: Organic Tech</h2>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+<div class="space-y-4">
+<h3 class="font-semibold text-brand-cream uppercase tracking-wide text-sm">Color Palette</h3>
+<div class="flex space-x-2">
+<div class="w-12 h-12 rounded-full bg-brand border border-white/20" title="Brand Green"></div>
+<div class="w-12 h-12 rounded-full bg-brand-charcoal border border-white/20" title="Charcoal"></div>
+<div class="w-12 h-12 rounded-full bg-brand-cream border border-white/20" title="Cream"></div>
+</div>
+<p class="body-text text-sm">
+            High-contrast dark modes grounded by natural, earthy accents.
+          </p>
+</div>
+<div class="space-y-4">
+<h3 class="font-semibold text-brand-cream uppercase tracking-wide text-sm">Typography</h3>
+<div class="space-y-1">
+<p class="editorial-header text-2xl">Editorial Serif</p>
+<p class="body-text font-sans text-sm">Inter Sans - Minimal &amp; Functional</p>
+</div>
+</div>
+</div>
+</section>
+<!-- END: Visual Language Section -->
+<!-- BEGIN: Core Values Section -->
+<section class="max-w-screen-md mx-auto" data-purpose="values-grid" id="core-values">
+<h2 class="editorial-header text-3xl text-brand mb-12 text-center italic">Core Values</h2>
+<div class="grid grid-cols-1 gap-12">
+<!-- Value 1: Data -->
+<div class="flex gap-6 items-start" data-purpose="value-item">
+<div class="flex-shrink-0 w-12 h-12 rounded-full bg-brand/10 border border-brand/30 flex items-center justify-center text-brand font-bold">01</div>
+<div>
+<h3 class="editorial-header text-2xl mb-2">Data Integrity</h3>
+<p class="body-text">We treat information like fresh produce: handled with care, tracked to the source, and never processed beyond recognition.</p>
+</div>
+</div>
+<!-- Value 2: Food -->
+<div class="flex gap-6 items-start" data-purpose="value-item">
+<div class="flex-shrink-0 w-12 h-12 rounded-full bg-brand/10 border border-brand/30 flex items-center justify-center text-brand font-bold">02</div>
+<div>
+<h3 class="editorial-header text-2xl mb-2">Tactile Nourishment</h3>
+<p class="body-text">The digital experience must evoke the physical. The smell of yeast, the snap of a tomato skin, the warmth of the plate.</p>
+</div>
+</div>
+<!-- Value 3: Community -->
+<div class="flex gap-6 items-start" data-purpose="value-item">
+<div class="flex-shrink-0 w-12 h-12 rounded-full bg-brand/10 border border-brand/30 flex items-center justify-center text-brand font-bold">03</div>
+<div>
+<h3 class="editorial-header text-2xl mb-2">Radical Community</h3>
+<p class="body-text">Tables are for sharing. We build bridges between creators, consumers, and the earth that provides for both.</p>
+</div>
+</div>
+</div>
+</section>
+<!-- END: Core Values Section -->
+</main>
+<!-- END: Main Content -->
+<!-- BEGIN: Footer -->
+<footer class="py-12 px-6 border-t border-white/10 text-center" data-purpose="footer">
+<div class="mb-6">
+<div class="inline-block w-8 h-8 rounded-full bg-brand"></div>
+</div>
+<p class="text-xs uppercase tracking-[0.2em] opacity-40">© RIAL Design Systems MMXXIV</p>
+</footer>
+<!-- END: Footer -->
+</body></html>

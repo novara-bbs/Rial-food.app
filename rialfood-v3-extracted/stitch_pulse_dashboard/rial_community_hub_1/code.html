@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>RIAL Community Hub</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">tailwind.config = {darkMode: "class", theme: {extend: {colors: {primary: "#607AFB", "background-light": "#f5f6f8", "background-dark": "#0f1323", "neutral-light": "#eeeee8", "neutral-dark": "#32361a"}, fontFamily: {display: "Space Grotesk"}, borderRadius: {DEFAULT: "0.5rem", lg: "1rem", xl: "1.5rem", full: "9999px"}}}};</script>
+<style>
+        body { font-family: 'Space Grotesk', sans-serif; }
+        .hide-scrollbar::-webkit-scrollbar { display: none; }
+        .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 min-h-screen pb-24">
+<!-- Header Navigation -->
+<header class="sticky top-0 z-50 bg-background-light/80 dark:bg-background-dark/80 backdrop-blur-md border-b border-neutral-light dark:border-neutral-dark px-4 py-3">
+<div class="max-w-xl mx-auto flex items-center justify-between">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-full bg-primary flex items-center justify-center overflow-hidden border-2 border-primary">
+<img class="w-full h-full object-cover" data-alt="User profile picture of a fitness influencer" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDjoOe_IrMX3bell8ftMsRm2LB22Wgg5f3ltNpZzu3O49tl9_Qczh96CvRbtedPSUJ0NN04blWrZLhiyrjyGe5ogSvwrYO99LiU2MzF2R5MgYKZZohhsmpKpmEpjeIBVCCalR6f2DZn4I_EG7jdcpsXXM-l_YSNo27kVVwu-NP0pdB1AmAEgzzEaiZF1ScN6g2jq0C_53CRweF9bljSWuAe_F8QnxDX7wy5pJv1MD9dLnJcp16Zmiqlq8LtTdYxbwJA8ftO_jA7NO8i"/>
+</div>
+<div>
+<h1 class="text-lg font-bold leading-none tracking-tight">RIAL <span class="text-primary bg-background-dark dark:bg-primary dark:text-background-dark px-1 rounded-sm">HUB</span></h1>
+<p class="text-[10px] uppercase tracking-widest text-slate-500 font-semibold">Pro Community</p>
+</div>
+</div>
+<div class="flex items-center gap-2">
+<button class="p-2 rounded-full hover:bg-neutral-light dark:hover:bg-neutral-dark transition-colors">
+<span class="material-symbols-outlined text-2xl">search</span>
+</button>
+<button class="p-2 rounded-full hover:bg-neutral-light dark:hover:bg-neutral-dark transition-colors relative">
+<span class="material-symbols-outlined text-2xl">notifications</span>
+<span class="absolute top-2 right-2 w-2 h-2 bg-primary rounded-full border-2 border-background-light"></span>
+</button>
+</div>
+</div>
+</header>
+<main class="max-w-xl mx-auto">
+<!-- Story/Category Bar -->
+<div class="flex overflow-x-auto hide-scrollbar gap-4 px-4 py-6">
+<div class="flex flex-col items-center gap-2 shrink-0 group">
+<div class="w-16 h-24 rounded-xl border-2 border-primary p-0.5 overflow-hidden transition-transform group-active:scale-95">
+<div class="w-full h-full rounded-lg bg-center bg-cover relative" data-alt="A person performing a heavy squat workout" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuALavYgf4PZkksfT00ezKHTQWeqW7ZFeKEIy9e4npGe3wQn1tG9aD05v9Pnga-OfLXy6ETFbReA-rHsz9vSbHRbysqRpzLxDdzt6Cl-t7R5CVMoYbwtxFH5iipwcLOfp5Bpr7afJSXseDiDQkpjnWYW5P6bblcTGeUeAKeIUw5XeDSZTBJu_OqP9nyJrt51zITm2TE5Qqgmp8n3VH9EmQTOjP5FsVuo3WoqE6-0N5PmOzHhEAZq5ut8abrbb6aswhuhSs1JjAsmmNrN')">
+<div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
+<span class="absolute bottom-1 left-1 material-symbols-outlined text-white text-sm">play_circle</span>
+</div>
+</div>
+<p class="text-[11px] font-bold uppercase tracking-tighter">Live</p>
+</div>
+<!-- Repeated items for UI feel -->
+<div class="flex flex-col items-center gap-2 shrink-0 group">
+<div class="w-16 h-24 rounded-xl border-2 border-neutral-light dark:border-neutral-dark p-0.5 overflow-hidden">
+<div class="w-full h-full rounded-lg bg-center bg-cover" data-alt="Healthy meal prep containers with greens" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuBqEwtheuBGXij8JlgBHzGDHMIf7iXkyIor2sOepwH4jQqrbbPCKU2sa0AO8Ol5nuNmqCoDYGU3tW1Y8wZk-wEWawDSYsBB4F9cVaNSK0geP-cQZ90yWuoQR5C4agtu3ecqcWjJKjf8T00q1c7VhwHAUvv6ZL-NoOAeeiEfH_H02LOD6826HyRyKKXV-kbEgX5R9biogjfGtQOizk276JBQd56azBWLYtXhdcE5IszFV7TBmrPvvRBpgLVAdw-ARoPvQi2X7wIzPkxU')"></div>
+</div>
+<p class="text-[11px] font-medium text-slate-500 uppercase tracking-tighter">Meals</p>
+</div>
+<div class="flex flex-col items-center gap-2 shrink-0 group">
+<div class="w-16 h-24 rounded-xl border-2 border-neutral-light dark:border-neutral-dark p-0.5 overflow-hidden">
+<div class="w-full h-full rounded-lg bg-center bg-cover" data-alt="Yoga practitioner in a calm studio" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuBzHBOFCdtti2n2ZL0VDg5VdpzPV0dAv1g62IXe8FAYdNzNdQq26q8-OZt_uVM8wJmRDW4jhPzHwBTje-NYK6Qd_A7YzuV4yaoO0fKCrXyjV-WK7i7B57QdIPgBJHUFDRL70BgZ_5huH5IIzAoYGjSQBUTDDWV9_IGrjcWmNrc39DGb7xl5zGopdvFUnFbj4jdOj_QguvKAvESl67n_40Xo97IygubhsgLear9dzREm3BydUp9AAlD3aLr0nQ82dQSHh0xnhz27YSKm')"></div>
+</div>
+<p class="text-[11px] font-medium text-slate-500 uppercase tracking-tighter">Recovery</p>
+</div>
+<div class="flex flex-col items-center gap-2 shrink-0 group">
+<div class="w-16 h-24 rounded-xl border-2 border-neutral-light dark:border-neutral-dark p-0.5 overflow-hidden">
+<div class="w-full h-full rounded-lg bg-center bg-cover" data-alt="Gym equipment and weights" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuDfAMF9ZPU-CbBeHWmCwnUmEnSo_leukT4b93LgszO5l3eg6D3s2ucO92z2vHe8BMAENv15xsQ8WlskY6LATyMnBqblS3S5ZjPC1-loDLQHZ3FSZ1aVRUzySyTkWmSB2Dfco0vqiDLHndAC-HRA8jh670lZWqmBtzlxtk3sCRoqLrCodjLjzfAWSrNs8HBNMGf5pnwqsDMqoKd5JKZyZrQ3Li0IdojTey8LC7ePP4MlEUKctGb8k5oSmjfm2z7Xiy3EYhWKxmdSDdbb')"></div>
+</div>
+<p class="text-[11px] font-medium text-slate-500 uppercase tracking-tighter">Technique</p>
+</div>
+<div class="flex flex-col items-center gap-2 shrink-0 group">
+<div class="w-16 h-24 rounded-xl border-2 border-neutral-light dark:border-neutral-dark p-0.5 overflow-hidden">
+<div class="w-full h-full rounded-lg bg-center bg-cover" data-alt="A fresh salad bowl with vitamins" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuD7iMWJuoJEvJnWtDz6EDpuYu3Odd8rtaO58Q-igOYcrbNR-ycUg_ZiqQcWZa6YSKJ1SnWhLW8XTbs0vLh1sckEIDNGnzmsqRysWd86vflcB6Y2rBkGSjhtxNBsGKyv0L3ZDx_fW99ak-jaHpOqa-NtN0YTnygtL7uO3JZTnRihmA2TqPWClJGnlbtLmn1DBxc81bjq-COh9qX19AjGlsL6gQSJjwntTYbMhldGgZANq2q3WsJkmV5jNpCzEQlEEHgGmyjE6-qEaEFU')"></div>
+</div>
+<p class="text-[11px] font-medium text-slate-500 uppercase tracking-tighter">Supps</p>
+</div>
+</div>
+<!-- Segmented Control -->
+<div class="px-4 mb-6">
+<div class="flex border-b border-neutral-light dark:border-neutral-dark">
+<button class="flex-1 py-3 text-sm font-bold border-b-2 border-primary">For You</button>
+<button class="flex-1 py-3 text-sm font-medium text-slate-500 border-b-2 border-transparent">Following</button>
+<button class="flex-1 py-3 text-sm font-medium text-slate-500 border-b-2 border-transparent">Pro Creators</button>
+</div>
+</div>
+<!-- Featured Match Post (Editorial Style) -->
+<div class="px-4 mb-8">
+<div class="relative group rounded-xl overflow-hidden bg-background-dark text-white aspect-[4/5]">
+<img class="w-full h-full object-cover opacity-80 transition-transform duration-700 group-hover:scale-105" data-alt="Gourmet high-protein bowl with salmon and avocado" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBSEcZJ9aM5Z7FAQ8nnKYG6BG0ehnZqBdhDWCgmtNosMlo7-MHRLbfmTKfBa4bm3TIVhzq3Tf6T_wuPlpyikUzZ_jjC4TScqOSWsadaCNs3gB602npkaBYUx3Y3YV2XUIH3frJUdKOb6xOU-go0ZQC8id90OcKSwKHwu4HtiFQL9j3ErWwXYjLkE4A5LC24iLOWpkAxXfrBTTA_chxxhB_xu3GG-YuFHeSPFVh3h1kjZLP-w3l2s7iGgZ8HUDKVYvgd4CfprrrzBQwG"/>
+<div class="absolute inset-0 bg-gradient-to-t from-background-dark via-transparent to-transparent"></div>
+<!-- Match Overlay -->
+<div class="absolute top-4 left-4 flex items-center gap-2 bg-primary/90 backdrop-blur-sm px-3 py-1.5 rounded-full text-background-dark">
+<span class="material-symbols-outlined text-sm font-bold">bolt</span>
+<span class="text-xs font-black tracking-wider uppercase">98% Real Match</span>
+</div>
+<div class="absolute bottom-0 left-0 right-0 p-6">
+<p class="text-primary text-xs font-bold uppercase tracking-[0.2em] mb-2">Recipe of the Day</p>
+<h2 class="text-3xl font-bold leading-tight mb-4">High-Protein Lime Zest Chicken Bowl</h2>
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-3">
+<img class="w-8 h-8 rounded-full border border-primary" data-alt="Chef Marcus portrait" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAMqLytQ0VSN6mp1RlVFI3q78WWjHqICWuyq8np1YL-mVtq6KOEc6ZgGa_Opc46_FmJSu6tSNfnvflslUhIvt0hqDYxqDwBxq-drRrAvfa_6kot4-v2KZktneQYgxCzvfe4pgdzyg5pM3QvicTrHm_Z40kZ39lRcnusUlCJNMz_vJSxMn9OKoDeSLapkzCC2Sn0o3BlMEv2JbYXWxrnLxL8P7OLWdrg6avzX9Rz_fKB7J6CN-y61w8AtJtaEu4Njs-lkELJQtTSGZJj"/>
+<div>
+<p class="text-sm font-bold">Chef Marcus</p>
+<p class="text-[10px] text-slate-400">15m ago • 450 kcal</p>
+</div>
+</div>
+<button class="bg-primary text-background-dark px-5 py-2 rounded-lg text-sm font-black uppercase tracking-tight">View Recipe</button>
+</div>
+</div>
+</div>
+</div>
+<!-- Feed Posts (User Content with Technical Overlay) -->
+<div class="space-y-8 px-4">
+<!-- Feed Item 1 -->
+<article class="bg-white dark:bg-neutral-dark/30 rounded-xl overflow-hidden border border-neutral-light dark:border-neutral-dark">
+<div class="p-4 flex items-center justify-between">
+<div class="flex items-center gap-3">
+<div class="w-9 h-9 rounded-full bg-slate-200 overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="User avatar" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBdWCf4aM6oRqZbksx8iEbcnrgbWp97M3QOBde6fsmve65DTc7WWOGU2Rvs1vX1Cmrg22s99-l5R3Vc3uWhZcSvd9pDm5VPbxXHSlHyayGiHdadx3EppmFGZyAG7bp_mPmFJAz6MToXWmGWSEBaUXWIOOjcXHjlMpZRY0FFU22coVwupOERLUJfDzP-ZSTlrZhL50j8OBdhInn85m_Iw34nF-uTL30yvvT7dY8q8oIs4gwtifBa2K2rvpqtN--IQt9PlPbtocKC8mmU"/>
+</div>
+<div>
+<p class="text-sm font-bold">Alex Rivera</p>
+<p class="text-[10px] text-slate-500">San Diego, CA</p>
+</div>
+</div>
+<button class="material-symbols-outlined text-slate-400">more_horiz</button>
+</div>
+<div class="relative aspect-square">
+<!-- Elegant framing for "raw" content -->
+<div class="absolute inset-4 border border-white/20 z-10 pointer-events-none"></div>
+<img class="w-full h-full object-cover" data-alt="A man doing bicep curls in a home gym" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAYvL5rAejuHGYyZCv0_5_kwaPgHSB7GloK7p8I5WoYUGQsmYNpNqv4J_hatCbyJa5N8JqH63zTkcU-PpfsVNQTyD8MP8JtE3ywfG5eq-VXLBxgogSssFS5EePHzccFZEzweELFnnpDpypQiEghigSFAQUT2sBjmVXQuT7tX6Izljjf9Oxrkf5Nyf5v_WdHhPBsBs_D3U3T6QNb6kBKTMA_NgPpoUjxhKBHlZyYqntz62ddZbOhrIS80WF5Sh-vz0JLyYnZdAQnfbgZ"/>
+<!-- Technical Overlay -->
+<div class="absolute top-6 right-6 flex flex-col items-end gap-2">
+<div class="bg-black/50 backdrop-blur-md px-2 py-1 rounded text-[10px] text-white border-l-2 border-primary">
+                            HEART RATE: 142 BPM
+                        </div>
+<div class="bg-black/50 backdrop-blur-md px-2 py-1 rounded text-[10px] text-white border-l-2 border-primary">
+                            LOAD: 45 LBS
+                        </div>
+</div>
+</div>
+<div class="p-4">
+<div class="flex items-center gap-4 mb-3">
+<button class="flex items-center gap-1">
+<span class="material-symbols-outlined text-2xl">favorite</span>
+<span class="text-xs font-bold">1.2k</span>
+</button>
+<button class="flex items-center gap-1">
+<span class="material-symbols-outlined text-2xl">chat_bubble</span>
+<span class="text-xs font-bold">48</span>
+</button>
+<button class="flex items-center gap-1">
+<span class="material-symbols-outlined text-2xl">share</span>
+</button>
+<button class="ml-auto">
+<span class="material-symbols-outlined text-2xl">bookmark</span>
+</button>
+</div>
+<p class="text-sm leading-relaxed">
+<span class="font-bold">Alex Rivera</span> Finally hit the target for high-volume week. The recovery protocol from Chef Marcus actually works. ⚡️
+                    </p>
+<p class="text-[11px] text-slate-400 mt-2 uppercase font-bold tracking-tighter">View all 48 comments</p>
+</div>
+</article>
+<!-- Feed Item 2 (Pro Creator Video Integration) -->
+<article class="bg-white dark:bg-neutral-dark/30 rounded-xl overflow-hidden border border-neutral-light dark:border-neutral-dark">
+<div class="p-4 flex items-center gap-3">
+<div class="w-9 h-9 rounded-full bg-primary flex items-center justify-center font-bold text-xs">RIAL</div>
+<div>
+<p class="text-sm font-bold flex items-center gap-1">Sarah Jensen <span class="material-symbols-outlined text-primary text-[14px] fill-1">verified</span></p>
+<p class="text-[10px] text-slate-500 uppercase font-black tracking-widest">PRO CREATOR</p>
+</div>
+</div>
+<div class="relative aspect-video bg-black flex items-center justify-center group cursor-pointer">
+<img class="w-full h-full object-cover opacity-70 group-hover:opacity-60 transition-opacity" data-alt="Fitness pro doing high-intensity cardio" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAmYhM7FztX_K15aJzvID_Z9-Ze6ZXlrIkfN3fC_mBQKBLV0TAeYlv2NmmjPWHobHgsAWDxyHQTb_PWTgFxzrBQ7MAUPKB6RRup9-DVnqWy1xTZ6VKX9-zCC8SkscimRZuaokKRRon04m2DXFU3EW9khIvwIAtidBnUbTHtNFJ4oSMb9P3MIFlokARPn2IidfSC1EsmBtnfZaYbj9XEeBUladQJZsC47N27JcNDqXsg4ZHvVk31vESVmXEDwrSa5fEOAxL6-qfDTH_M"/>
+<div class="absolute inset-0 flex items-center justify-center">
+<div class="w-16 h-16 rounded-full bg-primary/90 flex items-center justify-center shadow-2xl transition-transform group-hover:scale-110">
+<span class="material-symbols-outlined text-background-dark text-4xl fill-1">play_arrow</span>
+</div>
+</div>
+<div class="absolute bottom-4 left-4 right-4 flex justify-between items-end">
+<div class="bg-black/40 backdrop-blur-md p-2 rounded-lg border border-white/10">
+<p class="text-[10px] font-bold text-white uppercase tracking-widest">Mastering the HIIT Cycle</p>
+<p class="text-[8px] text-slate-300">EPISODE 04 • 12:45 MIN</p>
+</div>
+<div class="bg-primary px-2 py-0.5 rounded text-[8px] font-black text-background-dark uppercase">4K ULTRA</div>
+</div>
+</div>
+<div class="p-4">
+<h3 class="font-bold text-base mb-1">Advanced Conditioning Series</h3>
+<p class="text-sm text-slate-600 dark:text-slate-400">Unlock the secrets to sustainable cardio without losing muscle mass.</p>
+<div class="mt-4 pt-4 border-t border-neutral-light dark:border-neutral-dark flex justify-between items-center">
+<div class="flex -space-x-2">
+<div class="w-6 h-6 rounded-full border-2 border-white bg-slate-300"></div>
+<div class="w-6 h-6 rounded-full border-2 border-white bg-slate-400"></div>
+<div class="w-6 h-6 rounded-full border-2 border-white bg-slate-500"></div>
+</div>
+<p class="text-[10px] text-slate-500 font-bold uppercase">+142 others joined this session</p>
+</div>
+</div>
+</article>
+</div>
+</main>
+<!-- Bottom Navigation Bar -->
+<nav class="fixed bottom-0 left-0 right-0 bg-white/95 dark:bg-background-dark/95 backdrop-blur-lg border-t border-neutral-light dark:border-neutral-dark z-50">
+<div class="max-w-xl mx-auto flex justify-between items-center px-6 py-3">
+<a class="flex flex-col items-center gap-1 text-slate-900 dark:text-white" href="#">
+<span class="material-symbols-outlined text-2xl fill-1">home</span>
+<span class="text-[10px] font-bold uppercase tracking-tighter">Home</span>
+</a>
+<a class="flex flex-col items-center gap-1 text-slate-400" href="#">
+<span class="material-symbols-outlined text-2xl">explore</span>
+<span class="text-[10px] font-bold uppercase tracking-tighter">Explore</span>
+</a>
+<a class="flex flex-col items-center -mt-8" href="#">
+<div class="w-14 h-14 bg-primary rounded-full flex items-center justify-center shadow-lg shadow-primary/20 border-4 border-background-light dark:border-background-dark">
+<span class="material-symbols-outlined text-background-dark text-3xl font-bold">add</span>
+</div>
+</a>
+<a class="flex flex-col items-center gap-1 text-slate-400" href="#">
+<span class="material-symbols-outlined text-2xl">bolt</span>
+<span class="text-[10px] font-bold uppercase tracking-tighter">Matches</span>
+</a>
+<a class="flex flex-col items-center gap-1 text-slate-400" href="#">
+<span class="material-symbols-outlined text-2xl">person</span>
+<span class="text-[10px] font-bold uppercase tracking-tighter">Profile</span>
+</a>
+</div>
+<!-- Safe Area Spacer -->
+<div class="h-6"></div>
+</nav>
+</body></html>

@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Smart Portion Calculator</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#ec5b13",
+                        "background-light": "#f8f6f6",
+                        "background-dark": "#221610",
+                    },
+                    fontFamily: {
+                        "display": ["Public Sans", "sans-serif"]
+                    },
+                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>
+        body {
+            font-family: 'Public Sans', sans-serif;
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .filled-icon {
+            font-variation-settings: 'FILL' 1;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 min-h-screen">
+<div class="relative flex min-h-screen w-full flex-col overflow-x-hidden">
+<!-- Header -->
+<header class="flex items-center bg-background-light dark:bg-background-dark p-4 border-b border-primary/10 sticky top-0 z-10">
+<div class="text-primary flex size-10 shrink-0 items-center justify-center cursor-pointer">
+<span class="material-symbols-outlined">arrow_back</span>
+</div>
+<h2 class="text-slate-900 dark:text-slate-100 text-lg font-bold leading-tight tracking-tight flex-1 text-center">Smart Portion Calculator</h2>
+<div class="flex w-10 items-center justify-end">
+<button class="flex items-center justify-center rounded-xl h-10 w-10 bg-transparent text-slate-600 dark:text-slate-400">
+<span class="material-symbols-outlined">more_horiz</span>
+</button>
+</div>
+</header>
+<main class="flex-1 pb-24">
+<!-- Selected Recipe Card -->
+<section class="px-4 py-6">
+<h3 class="text-slate-900 dark:text-slate-100 text-xl font-bold mb-4">Selected Recipe</h3>
+<div class="flex items-stretch justify-between gap-4 rounded-xl bg-white dark:bg-background-dark/50 border border-primary/10 p-4 shadow-sm">
+<div class="flex flex-[2_2_0px] flex-col justify-between gap-4">
+<div class="flex flex-col gap-1">
+<p class="text-slate-900 dark:text-slate-100 text-lg font-bold">Avocado Salmon</p>
+<p class="text-slate-500 dark:text-slate-400 text-sm">Healthy fats &amp; high protein</p>
+</div>
+<button class="flex items-center justify-center rounded-lg h-9 px-4 bg-primary/10 text-primary text-sm font-semibold w-fit hover:bg-primary/20 transition-colors">
+<span>Change Recipe</span>
+</button>
+</div>
+<div class="w-32 h-32 bg-center bg-no-repeat bg-cover rounded-xl" data-alt="Gourmet avocado salmon plated dish" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuDxkCKaUFFkvKRy3Any_qNMACvNJMVa6OrUTEJfu4KFv1TW95Fily9cNx02xOqtgn9D8qoDmpf-zR3g_IlmnkpCCp995fqJ7rBhVhN21zHA7Z5V9P1YtYA4rE4xD-VyfQlwa94HnAaUaZREC8dgPwgFUarEqO0EI2QuqD7MPdRCk5PTqiS0tJWQXZ91YYTYsUG7JhK04Q9--cq1Wi6Oq8DBZq2TSCmtHzeUkXW153pU1A7kW--tiq4eSDFMo6co3Crsp81qut1wNfmA");'></div>
+</div>
+</section>
+<!-- Family Members & Goals -->
+<section class="px-4 py-2">
+<div class="flex items-center justify-between mb-4">
+<h3 class="text-slate-900 dark:text-slate-100 text-xl font-bold">Family Members &amp; Goals</h3>
+<button class="text-primary text-sm font-bold flex items-center gap-1">
+<span class="material-symbols-outlined text-sm">add</span> Add Member
+                    </button>
+</div>
+<div class="space-y-3">
+<!-- User A -->
+<div class="flex items-center justify-between p-4 rounded-xl bg-primary/5 border border-primary/20">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-full bg-primary/20 flex items-center justify-center text-primary">
+<span class="material-symbols-outlined filled-icon">person</span>
+</div>
+<div>
+<p class="text-slate-900 dark:text-slate-100 font-bold">User A</p>
+<p class="text-slate-500 dark:text-slate-400 text-xs uppercase tracking-wider font-semibold">Volume Goal</p>
+</div>
+</div>
+<div class="text-right">
+<p class="text-primary text-lg font-bold">250g</p>
+<p class="text-slate-400 text-xs">Target Portion</p>
+</div>
+</div>
+<!-- User B -->
+<div class="flex items-center justify-between p-4 rounded-xl bg-white dark:bg-background-dark/30 border border-slate-200 dark:border-slate-800">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-full bg-slate-100 dark:bg-slate-800 flex items-center justify-center text-slate-500">
+<span class="material-symbols-outlined filled-icon">person</span>
+</div>
+<div>
+<p class="text-slate-900 dark:text-slate-100 font-bold">User B</p>
+<p class="text-slate-500 dark:text-slate-400 text-xs uppercase tracking-wider font-semibold">Weight Management</p>
+</div>
+</div>
+<div class="text-right">
+<p class="text-slate-900 dark:text-slate-100 text-lg font-bold">150g</p>
+<p class="text-slate-400 text-xs">Target Portion</p>
+</div>
+</div>
+</div>
+</section>
+<!-- Total Ingredients -->
+<section class="px-4 py-8">
+<div class="bg-slate-900 dark:bg-primary/10 rounded-2xl p-6 text-white">
+<div class="flex items-center gap-2 mb-6">
+<span class="material-symbols-outlined text-primary">shopping_basket</span>
+<h3 class="text-xl font-bold">Total Ingredients Needed</h3>
+</div>
+<div class="space-y-4">
+<div class="flex items-center justify-between border-b border-white/10 pb-3">
+<span class="text-slate-300">Fresh Salmon Fillet</span>
+<span class="font-bold text-primary">320g</span>
+</div>
+<div class="flex items-center justify-between border-b border-white/10 pb-3">
+<span class="text-slate-300">Ripe Avocado</span>
+<span class="font-bold text-primary">1.5 Units</span>
+</div>
+<div class="flex items-center justify-between border-b border-white/10 pb-3">
+<span class="text-slate-300">Quinoa (Dry)</span>
+<span class="font-bold text-primary">80g</span>
+</div>
+<div class="flex items-center justify-between border-b border-white/10 pb-3">
+<span class="text-slate-300">Cherry Tomatoes</span>
+<span class="font-bold text-primary">120g</span>
+</div>
+<div class="flex items-center justify-between">
+<span class="text-slate-300">Lemon Dressing</span>
+<span class="font-bold text-primary">45ml</span>
+</div>
+</div>
+<button class="w-full mt-8 bg-primary hover:bg-primary/90 text-white font-bold py-4 rounded-xl transition-all shadow-lg shadow-primary/20">
+                        Add All to Shopping List
+                    </button>
+</div>
+</section>
+</main>
+<!-- Bottom Navigation Bar -->
+<nav class="fixed bottom-0 left-0 right-0 z-20 bg-white dark:bg-background-dark border-t border-slate-200 dark:border-slate-800 px-4 pb-6 pt-2">
+<div class="flex justify-around items-center">
+<a class="flex flex-col items-center gap-1 text-slate-400" href="#">
+<span class="material-symbols-outlined">restaurant_menu</span>
+<p class="text-xs font-medium">Recipes</p>
+</a>
+<a class="flex flex-col items-center gap-1 text-primary" href="#">
+<span class="material-symbols-outlined filled-icon">calculate</span>
+<p class="text-xs font-medium">Calculator</p>
+</a>
+<a class="flex flex-col items-center gap-1 text-slate-400" href="#">
+<span class="material-symbols-outlined">shopping_cart</span>
+<p class="text-xs font-medium">Groceries</p>
+</a>
+<a class="flex flex-col items-center gap-1 text-slate-400" href="#">
+<span class="material-symbols-outlined">person</span>
+<p class="text-xs font-medium">Profile</p>
+</a>
+</div>
+</nav>
+</div>
+</body></html>

@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Editorial Tech - Body Composition Dashboard</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@300;400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#ec5b13",
+                        "background-light": "#f8f6f6",
+                        "background-dark": "#221610",
+                    },
+                    fontFamily: {
+                        "display": ["Public Sans", "sans-serif"]
+                    },
+                    borderRadius: { "DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px" },
+                },
+            },
+        }
+    </script>
+<style>
+        body {
+            font-family: "Public Sans", sans-serif;
+        }
+        .editorial-gradient {
+            background: linear-gradient(180deg, rgba(236, 91, 19, 0.1) 0%, rgba(34, 22, 16, 0) 100%);
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 min-h-screen">
+<div class="relative flex min-h-screen w-full flex-col overflow-x-hidden">
+<!-- Header -->
+<header class="sticky top-0 z-50 flex items-center bg-background-light/80 dark:bg-background-dark/80 backdrop-blur-md p-4 border-b border-slate-200 dark:border-primary/20 justify-between">
+<div class="flex items-center gap-3">
+<div class="bg-primary rounded-lg p-2 flex items-center justify-center text-white">
+<span class="material-symbols-outlined text-2xl">monitoring</span>
+</div>
+<div>
+<h2 class="text-slate-900 dark:text-slate-100 text-lg font-bold leading-tight tracking-tight uppercase">RIAL Editorial</h2>
+<p class="text-xs text-slate-500 dark:text-slate-400 font-medium tracking-widest">BODY COMPOSITION</p>
+</div>
+</div>
+<div class="flex items-center gap-2">
+<button class="flex size-10 items-center justify-center rounded-full bg-slate-200 dark:bg-primary/10 text-slate-700 dark:text-primary">
+<span class="material-symbols-outlined">notifications</span>
+</button>
+<div class="size-10 rounded-full bg-primary/20 border border-primary/40 flex items-center justify-center overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="User profile avatar smiling" src="https://lh3.googleusercontent.com/aida-public/AB6AXuA3lMUFtG3R6UOs_AFIeaUvEPVsknXYqeGuM6eXat-4I_pAr94tOap-PE_70589V4dXd3OXJHlzXkU32E8KUkQrwZbM4KKmIZDSJAbUNixO1kto-CYLycbrTJ1LhlsHn6Xx0utjMm3ujuis6IgK1ggg-IDSsdkagHk3yBNm0RvjCW6UYYm7N-R_9CvrWNszgYB3vS7d7C3prRbQB5Urpc_WBSjBxjYR8IYURwmvrojY19YIwe-3jFt6av8qTy0FL6p2Vtp9-BhVK_j5"/>
+</div>
+</div>
+</header>
+<main class="flex-1 pb-24">
+<!-- Hero Stats Row -->
+<div class="editorial-gradient px-4 pt-6 pb-4">
+<div class="flex flex-wrap gap-4">
+<div class="flex min-w-[150px] flex-1 flex-col gap-2 rounded-xl p-5 bg-white dark:bg-primary/5 border border-slate-200 dark:border-primary/20">
+<div class="flex items-center justify-between">
+<p class="text-slate-500 dark:text-slate-400 text-sm font-semibold uppercase tracking-wider">Weight</p>
+<span class="material-symbols-outlined text-primary text-xl">scale</span>
+</div>
+<p class="text-slate-900 dark:text-slate-100 tracking-tight text-3xl font-extrabold">75.4 <span class="text-sm font-medium">kg</span></p>
+<p class="text-red-500 text-sm font-bold flex items-center gap-1">
+<span class="material-symbols-outlined text-xs">arrow_downward</span> -0.5kg
+                        </p>
+</div>
+<div class="flex min-w-[150px] flex-1 flex-col gap-2 rounded-xl p-5 bg-white dark:bg-primary/5 border border-slate-200 dark:border-primary/20">
+<div class="flex items-center justify-between">
+<p class="text-slate-500 dark:text-slate-400 text-sm font-semibold uppercase tracking-wider">Body Fat</p>
+<span class="material-symbols-outlined text-primary text-xl">percent</span>
+</div>
+<p class="text-slate-900 dark:text-slate-100 tracking-tight text-3xl font-extrabold">14.2 <span class="text-sm font-medium">%</span></p>
+<p class="text-red-500 text-sm font-bold flex items-center gap-1">
+<span class="material-symbols-outlined text-xs">arrow_downward</span> -0.2%
+                        </p>
+</div>
+<div class="flex min-w-[150px] flex-1 flex-col gap-2 rounded-xl p-5 bg-white dark:bg-primary/5 border border-slate-200 dark:border-primary/20">
+<div class="flex items-center justify-between">
+<p class="text-slate-500 dark:text-slate-400 text-sm font-semibold uppercase tracking-wider">Muscle</p>
+<span class="material-symbols-outlined text-primary text-xl">fitness_center</span>
+</div>
+<p class="text-slate-900 dark:text-slate-100 tracking-tight text-3xl font-extrabold">38.5 <span class="text-sm font-medium">kg</span></p>
+<p class="text-green-500 text-sm font-bold flex items-center gap-1">
+<span class="material-symbols-outlined text-xs">arrow_upward</span> +0.1kg
+                        </p>
+</div>
+</div>
+</div>
+<!-- Chart Section -->
+<section class="px-4 py-6">
+<div class="flex items-center justify-between mb-4">
+<h2 class="text-slate-900 dark:text-slate-100 text-xl font-extrabold tracking-tight">PHASE PERFORMANCE</h2>
+<span class="text-xs bg-primary/20 text-primary px-2 py-1 rounded font-bold uppercase tracking-widest">Active: Cut</span>
+</div>
+<div class="bg-white dark:bg-primary/5 border border-slate-200 dark:border-primary/10 rounded-xl p-6">
+<div class="flex flex-col gap-1 mb-6">
+<p class="text-slate-500 dark:text-slate-400 text-xs font-bold uppercase tracking-widest">Progress Overview</p>
+<div class="flex items-baseline gap-2">
+<p class="text-slate-900 dark:text-slate-100 tracking-tight text-2xl font-bold">Six Month Delta</p>
+<p class="text-red-500 text-lg font-bold">-4.2%</p>
+</div>
+</div>
+<div class="relative h-[200px] w-full">
+<svg class="w-full h-full" fill="none" preserveaspectratio="none" viewbox="0 0 478 150" xmlns="http://www.w3.org/2000/svg">
+<path d="M0 109C18.15 109 18.15 21 36.3 21C54.46 21 54.46 41 72.61 41C90.76 41 90.76 93 108.92 93C127.07 93 127.07 33 145.23 33C163.38 33 163.38 101 181.53 101C199.69 101 199.69 61 217.84 61C236 61 236 45 254.15 45C272.3 45 272.3 121 290.46 121C308.61 121 308.61 149 326.76 149C344.92 149 344.92 1 363.07 1C381.23 1 381.23 81 399.38 81C417.53 81 417.53 129 435.69 129C453.84 129 453.84 25 472 25V149H0V109Z" fill="url(#chart-grad)"></path>
+<path d="M0 109C18.15 109 18.15 21 36.3 21C54.46 21 54.46 41 72.61 41C90.76 41 90.76 93 108.92 93C127.07 93 127.07 33 145.23 33C163.38 33 163.38 101 181.53 101C199.69 101 199.69 61 217.84 61C236 61 236 45 254.15 45C272.3 45 272.3 121 290.46 121C308.61 121 308.61 149 326.76 149C344.92 149 344.92 1 363.07 1C381.23 1 381.23 81 399.38 81C417.53 81 417.53 129 435.69 129C453.84 129 453.84 25 472 25" stroke="#ec5b13" stroke-linecap="round" stroke-width="3"></path>
+<defs>
+<lineargradient id="chart-grad" x1="0" x2="0" y1="0" y2="1">
+<stop offset="0%" stop-color="#ec5b13" stop-opacity="0.3"></stop>
+<stop offset="100%" stop-color="#ec5b13" stop-opacity="0"></stop>
+</lineargradient>
+</defs>
+</svg>
+</div>
+<div class="flex justify-between mt-4">
+<p class="text-slate-500 dark:text-slate-400 text-[10px] font-bold uppercase tracking-tighter">Jan</p>
+<p class="text-slate-500 dark:text-slate-400 text-[10px] font-bold uppercase tracking-tighter">Feb</p>
+<p class="text-slate-500 dark:text-slate-400 text-[10px] font-bold uppercase tracking-tighter">Mar</p>
+<p class="text-slate-500 dark:text-slate-400 text-[10px] font-bold uppercase tracking-tighter">Apr</p>
+<p class="text-slate-500 dark:text-slate-400 text-[10px] font-bold uppercase tracking-tighter">May</p>
+<p class="text-slate-500 dark:text-slate-400 text-[10px] font-bold uppercase tracking-tighter">Jun</p>
+</div>
+</div>
+</section>
+<!-- Gallery Section -->
+<section class="px-4 py-6">
+<div class="flex items-center justify-between mb-4">
+<h2 class="text-slate-900 dark:text-slate-100 text-xl font-extrabold tracking-tight">PROGRESS GALLERY</h2>
+<button class="text-primary text-sm font-bold flex items-center gap-1">
+                        VIEW ALL <span class="material-symbols-outlined text-sm">chevron_right</span>
+</button>
+</div>
+<div class="flex gap-4 overflow-x-auto pb-4 scrollbar-hide">
+<div class="min-w-[140px] flex-shrink-0 group relative overflow-hidden rounded-xl bg-slate-200 dark:bg-primary/10">
+<img class="w-full h-[200px] object-cover transition-transform duration-500 group-hover:scale-110" data-alt="Athletic person front view transformation photo" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAdYMPjw-m4-KkWWySbPzetXt023pG7jEXdiJtT3TE2Yd6AQ39cxURHZk67ecLeJ3BJQnsAXZ0xV5ppX01iotLah6FJss89rnhT5UjtT9GAVbpOZQ8lvUtiN_hPblmi_kau9_LRQEA-2oonCf9NaeScshxKs01neBNDDrQOli93PDpEP_A8l7F6ajL3bmTboFDgFFnY0mmVA6mi9qy-TCu_qYUxvrI9qgL0WdOjUqtaZxnstZhWsEqrAqEFjK08kAHRuaDmsUO-tYjH"/>
+<div class="absolute inset-x-0 bottom-0 p-3 bg-gradient-to-t from-black/80 to-transparent">
+<p class="text-white text-[10px] font-bold uppercase tracking-widest">Today</p>
+<p class="text-white text-xs font-medium">14.2% BF</p>
+</div>
+</div>
+<div class="min-w-[140px] flex-shrink-0 group relative overflow-hidden rounded-xl bg-slate-200 dark:bg-primary/10">
+<img class="w-full h-[200px] object-cover opacity-80 group-hover:opacity-100 transition-all" data-alt="Athletic person back view transformation photo" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBkjL1hEZr5mTRH1VriAODv9rQBcAhdodf5F56mMyY1XOZcXxh3rUgJyrMRzAbfuQfw_69-ctkCzzM5eQ5nmWIDPLmh4jNH8eqfUig2LEkl55YxsGPHrMltC9MwPP3eb4l90sEfOqVemGJZ2YicbmA-7nw-XdGFzrOMpsBzSL4JNbgJax-nX8T1jiJHNpl1Re8P8tKxWM7FQkjNDNzCgs_ek7ZQBn9DQfXJ1NQylecwL-LbHKTnNkCDqQuBMl241Ea41oKrAMxvmt7m"/>
+<div class="absolute inset-x-0 bottom-0 p-3 bg-gradient-to-t from-black/80 to-transparent">
+<p class="text-white text-[10px] font-bold uppercase tracking-widest">30 Days Ago</p>
+<p class="text-white text-xs font-medium">14.8% BF</p>
+</div>
+</div>
+<div class="min-w-[140px] flex-shrink-0 group relative overflow-hidden rounded-xl bg-slate-200 dark:bg-primary/10">
+<img class="w-full h-[200px] object-cover opacity-60 group-hover:opacity-100 transition-all" data-alt="Athletic person side profile transformation photo" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCYtCasFsbTi8Iyw2_mxunhJeXt4QRH9e1rnIwKK33Kcy-VKS0Q3aJz13Ft1Dss9CUaG6_7cbXCzXNbsFL8-ryyaeIM_beCcrxkWVcvLQG9EblQtBAJcWao1r7SrAlrDa_1Eie8yBYyAfejxKn4eIzC6bYFfaHXs_2WO7gTCmqlIvKVZS75EloofVv5xvnNxxb5a7lFybh0qShmXd4urj895wQnhtYCvYjJIl3PGAG-owEFf0twinyRh3BVwmGG4nNsVnvsnoycKI01"/>
+<div class="absolute inset-x-0 bottom-0 p-3 bg-gradient-to-t from-black/80 to-transparent">
+<p class="text-white text-[10px] font-bold uppercase tracking-widest">90 Days Ago</p>
+<p class="text-white text-xs font-medium">16.4% BF</p>
+</div>
+</div>
+<!-- Add Photo Card -->
+<button class="min-w-[140px] flex-shrink-0 flex flex-col items-center justify-center border-2 border-dashed border-slate-300 dark:border-primary/30 rounded-xl bg-transparent text-slate-400 dark:text-primary/50 hover:bg-primary/5 transition-colors">
+<span class="material-symbols-outlined text-3xl">add_a_photo</span>
+<p class="text-[10px] font-bold mt-2 uppercase">Add Entry</p>
+</button>
+</div>
+</section>
+</main>
+<!-- Bottom Navigation -->
+<nav class="fixed bottom-0 left-0 right-0 z-50 flex border-t border-slate-200 dark:border-primary/20 bg-background-light/90 dark:bg-background-dark/90 backdrop-blur-lg px-4 pb-6 pt-2">
+<a class="flex flex-1 flex-col items-center justify-center gap-1 text-primary" href="#">
+<span class="material-symbols-outlined fill-1">dashboard</span>
+<p class="text-[10px] font-bold uppercase leading-normal tracking-wider">Board</p>
+</a>
+<a class="flex flex-1 flex-col items-center justify-center gap-1 text-slate-500 dark:text-slate-400" href="#">
+<span class="material-symbols-outlined">analytics</span>
+<p class="text-[10px] font-bold uppercase leading-normal tracking-wider">Stats</p>
+</a>
+<a class="flex flex-1 flex-col items-center justify-center gap-1 text-slate-500 dark:text-slate-400" href="#">
+<span class="material-symbols-outlined">camera</span>
+<p class="text-[10px] font-bold uppercase leading-normal tracking-wider">Gallery</p>
+</a>
+<a class="flex flex-1 flex-col items-center justify-center gap-1 text-slate-500 dark:text-slate-400" href="#">
+<span class="material-symbols-outlined">person</span>
+<p class="text-[10px] font-bold uppercase leading-normal tracking-wider">Profile</p>
+</a>
+</nav>
+</div>
+</body></html>

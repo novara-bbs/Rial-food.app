@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>RIAL - Data Extraction</title>
+<!-- BEGIN: Core Setup -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&amp;family=Playfair+Display:wght@700&amp;display=swap" rel="stylesheet"/>
+<script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'sans-serif'],
+            serif: ['Playfair Display', 'serif'],
+          },
+          colors: {
+            rial: {
+              gold: '#C5A059',
+              slate: '#4A5568',
+              accent: '#F3F4F6',
+              success: '#4ADE80'
+            }
+          }
+        }
+      }
+    }
+  </script>
+<!-- END: Core Setup -->
+<style data-purpose="custom-styling">
+    body {
+      background-color: #FFFFFF;
+      color: #1A202C;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .technical-scan-line {
+      height: 2px;
+      background: linear-gradient(90deg, transparent, #C5A059, transparent);
+      position: absolute;
+      width: 100%;
+      top: 50%;
+      animation: scan 3s linear infinite;
+    }
+    @keyframes scan {
+      0% { top: 0%; opacity: 0; }
+      50% { opacity: 1; }
+      100% { top: 100%; opacity: 0; }
+    }
+    .blur-backdrop {
+      backdrop-filter: blur(8px);
+    }
+  </style>
+</head>
+<body class="font-sans antialiased overflow-hidden h-screen flex flex-col">
+<!-- BEGIN: Header -->
+<header class="p-6 flex justify-between items-center bg-white/80 blur-backdrop sticky top-0 z-50 border-b border-gray-100" data-purpose="app-header">
+<div class="flex flex-col">
+<span class="text-[10px] uppercase tracking-widest text-rial-gold font-semibold">Step 02 — Processing</span>
+<h1 class="font-serif text-2xl">Digital Extraction</h1>
+</div>
+<div class="h-10 w-10 rounded-full bg-rial-accent flex items-center justify-center">
+<svg class="w-5 h-5 text-rial-slate" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M6 18L18 6M6 6l12 12" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"></path></svg>
+</div>
+</header>
+<!-- END: Header -->
+<!-- BEGIN: Main Content -->
+<main class="flex-1 overflow-hidden flex flex-row">
+<!-- BEGIN: Left Panel - Digital Receipt View -->
+<section class="w-1/2 p-6 bg-gray-50 border-r border-gray-200 relative overflow-hidden" data-purpose="receipt-visualizer">
+<div class="relative h-full w-full bg-white shadow-2xl rounded-sm p-8 flex flex-col gap-4 transform rotate-1 scale-95 border border-gray-100">
+<!-- Scan Animation Effect -->
+<div class="technical-scan-line"></div>
+<!-- Mock Receipt Content -->
+<div class="border-b-2 border-dashed border-gray-200 pb-4 text-center">
+<p class="font-bold text-xs tracking-tighter uppercase">Fresh Market Premium</p>
+<p class="text-[10px] text-gray-400">Merchant ID: 09923-RIAL</p>
+</div>
+<div class="space-y-4 pt-4 opacity-60">
+<div class="flex justify-between text-[10px]">
+<span>ORG CHKN BRST 1.2KG</span>
+<span>$18.50</span>
+</div>
+<div class="flex justify-between text-[10px]">
+<span>SWT POTATOES 2KG</span>
+<span>$4.20</span>
+</div>
+<div class="flex justify-between text-[10px]">
+<span>GREEK YOGURT 500G</span>
+<span>$6.50</span>
+</div>
+<div class="flex justify-between text-[10px]">
+<span>AVOCADO MESH 3PK</span>
+<span>$5.00</span>
+</div>
+</div>
+<div class="mt-auto border-t border-gray-100 pt-4 flex justify-between items-end">
+<div class="text-[8px] text-gray-300">
+            05/24/2024 14:32<br/>TERMINAL: #45
+          </div>
+<div class="text-lg font-serif">$34.20</div>
+</div>
+</div>
+<!-- OCR Badge -->
+<div class="absolute bottom-10 left-10 bg-black text-white px-3 py-1 rounded-full text-[10px] tracking-widest uppercase font-medium shadow-xl">
+        Live Analysis
+      </div>
+</section>
+<!-- END: Left Panel -->
+<!-- BEGIN: Right Panel - Product List -->
+<section class="w-1/2 flex flex-col bg-white" data-purpose="data-structure-view">
+<!-- Progress Indicator -->
+<div class="p-6 pb-2" data-purpose="extraction-progress">
+<div class="flex justify-between items-end mb-2">
+<span class="text-xs font-medium text-gray-500 uppercase tracking-wide">Syncing Data</span>
+<span class="text-rial-gold font-serif text-lg">94% <span class="text-[10px] uppercase font-sans text-gray-400">Processed</span></span>
+</div>
+<div class="w-full h-1 bg-gray-100 rounded-full overflow-hidden">
+<div class="h-full bg-rial-gold w-[94%] transition-all duration-1000 ease-out"></div>
+</div>
+</div>
+<!-- Scrollable List -->
+<div class="flex-1 overflow-y-auto px-6 py-4 space-y-4">
+<!-- Item 1 -->
+<div class="group border border-gray-100 p-4 rounded-xl hover:border-rial-gold/30 hover:bg-rial-accent/20 transition-all duration-300">
+<div class="flex justify-between items-start">
+<div class="flex flex-col">
+<span class="text-[10px] text-rial-success font-bold uppercase tracking-tighter mb-1 flex items-center gap-1">
+<span class="w-1.5 h-1.5 rounded-full bg-rial-success"></span> Match 99%
+              </span>
+<h3 class="font-medium text-sm text-gray-900">Organic Chicken Breast - 1.2kg</h3>
+<p class="text-xs text-gray-400 mt-1">Category: Poultry / Lean Protein</p>
+</div>
+<div class="flex gap-2 opacity-40 group-hover:opacity-100 transition-opacity">
+<button class="p-1 hover:text-rial-gold transition-colors">
+<svg class="w-4 h-4" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"></path></svg>
+</button>
+<button class="p-1 hover:text-red-400 transition-colors">
+<svg class="w-4 h-4" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"></path></svg>
+</button>
+</div>
+</div>
+</div>
+<!-- Item 2 -->
+<div class="group border border-gray-100 p-4 rounded-xl hover:border-rial-gold/30 hover:bg-rial-accent/20 transition-all duration-300">
+<div class="flex justify-between items-start">
+<div class="flex flex-col">
+<span class="text-[10px] text-rial-gold font-bold uppercase tracking-tighter mb-1 flex items-center gap-1">
+<span class="w-1.5 h-1.5 rounded-full bg-rial-gold"></span> Match 88%
+              </span>
+<h3 class="font-medium text-sm text-gray-900">Sweet Potatoes - 2kg</h3>
+<p class="text-xs text-gray-400 mt-1">Category: Complex Carbs</p>
+</div>
+<div class="flex gap-2 opacity-40 group-hover:opacity-100 transition-opacity">
+<button class="p-1 hover:text-rial-gold transition-colors">
+<svg class="w-4 h-4" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"></path></svg>
+</button>
+<button class="p-1 hover:text-red-400 transition-colors">
+<svg class="w-4 h-4" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"></path></svg>
+</button>
+</div>
+</div>
+</div>
+<!-- Item 3 -->
+<div class="group border border-gray-100 p-4 rounded-xl opacity-50 grayscale">
+<div class="flex justify-between items-start">
+<div class="flex flex-col">
+<span class="text-[10px] text-gray-400 font-bold uppercase tracking-tighter mb-1 flex items-center gap-1">
+                Processing...
+              </span>
+<div class="h-4 w-32 bg-gray-100 rounded animate-pulse mb-2"></div>
+<div class="h-3 w-20 bg-gray-50 rounded animate-pulse"></div>
+</div>
+</div>
+</div>
+</div>
+<!-- Action Button -->
+<div class="p-6 border-t border-gray-100 bg-white" data-purpose="bottom-actions">
+<button class="w-full bg-black text-white py-4 px-6 rounded-none font-serif text-lg hover:bg-gray-900 transition-all flex justify-between items-center group shadow-xl">
+<span>Confirm to Pantry</span>
+<svg class="w-5 h-5 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M17 8l4 4m0 0l-4 4m4-4H3" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"></path></svg>
+</button>
+</div>
+</section>
+<!-- END: Right Panel -->
+</main>
+<!-- END: Main Content -->
+</body></html>

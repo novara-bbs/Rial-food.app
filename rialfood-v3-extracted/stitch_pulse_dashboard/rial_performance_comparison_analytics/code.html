@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>RIAL Advanced Biometric Comparison</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#ddff00",
+                        "background-light": "#f8f8f5",
+                        "background-dark": "#20230f",
+                    },
+                    fontFamily: {
+                        "display": ["Space Grotesk"]
+                    },
+                    borderRadius: {"DEFAULT": "0.5rem", "lg": "1rem", "xl": "1.5rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>
+        body {
+            font-family: 'Space Grotesk', sans-serif;
+        }
+        .chart-gradient {
+            background: linear-gradient(180deg, rgba(221, 255, 0, 0.2) 0%, rgba(221, 255, 0, 0) 100%);
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 min-h-screen">
+<!-- Header Section -->
+<div class="flex items-center bg-background-light dark:bg-background-dark p-4 border-b border-slate-200 dark:border-slate-800 sticky top-0 z-50">
+<div class="flex size-10 shrink-0 items-center justify-center rounded-lg bg-slate-100 dark:bg-slate-800">
+<span class="material-symbols-outlined text-slate-900 dark:text-slate-100">arrow_back</span>
+</div>
+<div class="flex-1 px-4">
+<h1 class="text-lg font-bold leading-tight tracking-tight">RIAL Biometric Lab</h1>
+<p class="text-xs text-slate-500 dark:text-slate-400 font-medium uppercase tracking-widest">Performance Analysis</p>
+</div>
+<div class="flex gap-2">
+<button class="flex size-10 items-center justify-center rounded-lg bg-slate-100 dark:bg-slate-800">
+<span class="material-symbols-outlined text-slate-900 dark:text-slate-100">share</span>
+</button>
+<button class="flex size-10 items-center justify-center rounded-lg bg-primary">
+<span class="material-symbols-outlined text-background-dark">ios_share</span>
+</button>
+</div>
+</div>
+<!-- Comparison Tabs -->
+<div class="bg-white dark:bg-slate-900/50 px-4">
+<div class="flex gap-8 overflow-x-auto no-scrollbar">
+<a class="flex flex-col items-center justify-center border-b-2 border-primary text-slate-900 dark:text-white pb-3 pt-4 whitespace-nowrap" href="#">
+<p class="text-sm font-bold tracking-tight">Volumen Week</p>
+<span class="text-[10px] text-primary uppercase font-black">Active Phase</span>
+</a>
+<a class="flex flex-col items-center justify-center border-b-2 border-transparent text-slate-400 dark:text-slate-500 pb-3 pt-4 whitespace-nowrap" href="#">
+<p class="text-sm font-bold tracking-tight">Definition Week</p>
+<span class="text-[10px] uppercase font-black">Recovery Phase</span>
+</a>
+<a class="flex flex-col items-center justify-center border-b-2 border-transparent text-slate-400 dark:text-slate-500 pb-3 pt-4 whitespace-nowrap" href="#">
+<p class="text-sm font-bold tracking-tight">Baseline Avg</p>
+<span class="text-[10px] uppercase font-black">Reference</span>
+</a>
+</div>
+</div>
+<main class="p-4 space-y-6 max-w-2xl mx-auto">
+<!-- Summary Dashboard Card -->
+<div class="bg-white dark:bg-slate-900 p-6 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm">
+<div class="flex justify-between items-start mb-6">
+<div>
+<h2 class="text-2xl font-bold tracking-tight">Real Feel vs Bio-Sync</h2>
+<p class="text-slate-500 text-sm">Advanced neural-cardio correlation</p>
+</div>
+<div class="bg-primary/10 text-primary px-3 py-1 rounded-full text-xs font-bold border border-primary/20">
+                    STABLE
+                </div>
+</div>
+<div class="grid grid-cols-2 gap-4">
+<div class="space-y-1">
+<p class="text-slate-400 text-xs font-bold uppercase tracking-widest">Real Feel Index</p>
+<div class="flex items-baseline gap-2">
+<span class="text-4xl font-bold">88</span>
+<span class="text-slate-400 text-sm font-medium">/100</span>
+</div>
+<div class="flex items-center gap-1 text-emerald-500">
+<span class="material-symbols-outlined text-sm">trending_up</span>
+<span class="text-sm font-bold">+12% vs last week</span>
+</div>
+</div>
+<div class="space-y-1 border-l border-slate-100 dark:border-slate-800 pl-4">
+<p class="text-slate-400 text-xs font-bold uppercase tracking-widest">Bio-Sync Eff.</p>
+<div class="flex items-baseline gap-2">
+<span class="text-4xl font-bold">92</span>
+<span class="text-slate-400 text-sm font-medium">%</span>
+</div>
+<div class="flex items-center gap-1 text-emerald-500">
+<span class="material-symbols-outlined text-sm">trending_up</span>
+<span class="text-sm font-bold">+5% optimal</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Technical Visualization 1: Area Chart -->
+<div class="bg-white dark:bg-slate-900 p-6 rounded-xl border border-slate-200 dark:border-slate-800">
+<div class="flex items-center justify-between mb-8">
+<div class="flex items-center gap-2">
+<div class="size-2 rounded-full bg-primary"></div>
+<span class="text-sm font-bold uppercase tracking-tighter">Real Feel Flux</span>
+</div>
+<select class="bg-slate-50 dark:bg-slate-800 border-none rounded-lg text-xs font-bold py-1 px-3">
+<option>7 DAY VIEW</option>
+<option>30 DAY VIEW</option>
+</select>
+</div>
+<div class="relative h-48 w-full mb-4">
+<!-- SVG Chart Mockup -->
+<svg class="w-full h-full" preserveaspectratio="none" viewbox="0 0 400 150">
+<defs>
+<lineargradient id="chartFill" x1="0%" x2="0%" y1="0%" y2="100%">
+<stop offset="0%" style="stop-color:#ddff00;stop-opacity:0.3"></stop>
+<stop offset="100%" style="stop-color:#ddff00;stop-opacity:0"></stop>
+</lineargradient>
+</defs>
+<path d="M0,120 Q50,30 100,100 T200,80 T300,40 T400,60 L400,150 L0,150 Z" fill="url(#chartFill)"></path>
+<path d="M0,120 Q50,30 100,100 T200,80 T300,40 T400,60" fill="none" stroke="#ddff00" stroke-linecap="round" stroke-width="3"></path>
+<!-- Threshold Line -->
+<line stroke="#475569" stroke-dasharray="4" stroke-width="1" x1="0" x2="400" y1="90" y2="90"></line>
+</svg>
+<div class="absolute top-[82px] right-0 text-[10px] text-slate-500 font-bold pr-2">THRESHOLD ALPHA</div>
+</div>
+<div class="flex justify-between px-2">
+<span class="text-[11px] font-bold text-slate-400">MON</span>
+<span class="text-[11px] font-bold text-slate-400">TUE</span>
+<span class="text-[11px] font-bold text-slate-400">WED</span>
+<span class="text-[11px] font-bold text-primary">THU</span>
+<span class="text-[11px] font-bold text-slate-400">FRI</span>
+<span class="text-[11px] font-bold text-slate-400">SAT</span>
+<span class="text-[11px] font-bold text-slate-400">SUN</span>
+</div>
+</div>
+<!-- Technical Callouts Grid -->
+<div class="grid grid-cols-2 gap-4">
+<div class="bg-background-dark text-white p-4 rounded-xl flex flex-col justify-between border border-slate-700">
+<div class="flex items-center gap-2 mb-4">
+<span class="material-symbols-outlined text-primary text-sm">bolt</span>
+<span class="text-[10px] font-black uppercase tracking-widest text-slate-400">Metabolic Window</span>
+</div>
+<div>
+<p class="text-3xl font-bold">142<span class="text-sm font-normal text-slate-500 ml-1">bpm</span></p>
+<p class="text-[11px] text-slate-400 mt-1">Anaerobic peak sustained for 12:40</p>
+</div>
+</div>
+<div class="bg-white dark:bg-slate-900 p-4 rounded-xl border border-slate-200 dark:border-slate-800 flex flex-col justify-between">
+<div class="flex items-center gap-2 mb-4">
+<span class="material-symbols-outlined text-primary text-sm">rebase_edit</span>
+<span class="text-[10px] font-black uppercase tracking-widest text-slate-400">Neural Load</span>
+</div>
+<div>
+<p class="text-3xl font-bold text-slate-900 dark:text-white">High</p>
+<p class="text-[11px] text-slate-500 mt-1">Recommended rest: 8.5h</p>
+</div>
+</div>
+</div>
+<!-- Bio-Sync Efficiency Bar Chart -->
+<div class="bg-white dark:bg-slate-900 p-6 rounded-xl border border-slate-200 dark:border-slate-800">
+<div class="flex items-center gap-2 mb-6">
+<span class="material-symbols-outlined text-slate-900 dark:text-white">bar_chart</span>
+<h3 class="font-bold">Sync Efficiency by Metric</h3>
+</div>
+<div class="space-y-4">
+<div class="space-y-2">
+<div class="flex justify-between text-xs font-bold uppercase tracking-tighter">
+<span>HRV Correlation</span>
+<span class="text-primary">94%</span>
+</div>
+<div class="h-1.5 w-full bg-slate-100 dark:bg-slate-800 rounded-full overflow-hidden">
+<div class="h-full bg-primary rounded-full" style="width: 94%"></div>
+</div>
+</div>
+<div class="space-y-2">
+<div class="flex justify-between text-xs font-bold uppercase tracking-tighter">
+<span>Sleep Architecture</span>
+<span class="text-primary">82%</span>
+</div>
+<div class="h-1.5 w-full bg-slate-100 dark:bg-slate-800 rounded-full overflow-hidden">
+<div class="h-full bg-primary rounded-full" style="width: 82%"></div>
+</div>
+</div>
+<div class="space-y-2">
+<div class="flex justify-between text-xs font-bold uppercase tracking-tighter">
+<span>Cortisol Sync</span>
+<span class="text-primary">68%</span>
+</div>
+<div class="h-1.5 w-full bg-slate-100 dark:bg-slate-800 rounded-full overflow-hidden">
+<div class="h-full bg-primary rounded-full" style="width: 68%"></div>
+</div>
+</div>
+</div>
+</div>
+<!-- Comparative Detail Row -->
+<div class="bg-primary p-4 rounded-xl flex items-center gap-4">
+<div class="size-12 shrink-0 rounded-lg bg-background-dark flex items-center justify-center">
+<span class="material-symbols-outlined text-primary">insights</span>
+</div>
+<div class="flex-1">
+<h4 class="text-background-dark font-bold text-sm">Lab Insight</h4>
+<p class="text-background-dark/80 text-xs leading-tight">Your 'Volumen Week' shows a 15% higher neural resilience than previous baselines.</p>
+</div>
+<span class="material-symbols-outlined text-background-dark">chevron_right</span>
+</div>
+<div class="h-20"></div> <!-- Spacer for Nav -->
+</main>
+<!-- Bottom Navigation Bar -->
+<div class="fixed bottom-0 left-0 right-0 border-t border-slate-200 dark:border-slate-800 bg-white/80 dark:bg-background-dark/80 backdrop-blur-md px-4 pb-6 pt-2 z-50">
+<div class="flex items-center justify-between max-w-lg mx-auto">
+<a class="flex flex-col items-center gap-1 text-slate-400 dark:text-slate-500" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+<p class="text-[10px] font-bold uppercase tracking-widest">Dashboard</p>
+</a>
+<a class="flex flex-col items-center gap-1 text-slate-400 dark:text-slate-500" href="#">
+<span class="material-symbols-outlined">vital_signs</span>
+<p class="text-[10px] font-bold uppercase tracking-widest">Biometrics</p>
+</a>
+<a class="flex flex-col items-center gap-1 text-primary" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1">compare_arrows</span>
+<p class="text-[10px] font-bold uppercase tracking-widest">Compare</p>
+</a>
+<a class="flex flex-col items-center gap-1 text-slate-400 dark:text-slate-500" href="#">
+<span class="material-symbols-outlined">fitness_center</span>
+<p class="text-[10px] font-bold uppercase tracking-widest">Training</p>
+</a>
+<a class="flex flex-col items-center gap-1 text-slate-400 dark:text-slate-500" href="#">
+<span class="material-symbols-outlined">person</span>
+<p class="text-[10px] font-bold uppercase tracking-widest">Profile</p>
+</a>
+</div>
+</div>
+</body></html>

@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;700&amp;family=Space+Mono:wght@400;700&amp;family=Work+Sans:wght@400;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#39FF14", // Scanner Green
+                        "cobalt": "#2E5BFF",
+                        "background-light": "#f8f6f6",
+                        "background-dark": "#0A0A0A", // Pitch Black
+                    },
+                    fontFamily: {
+                        "display": ["Space Grotesk", "sans-serif"],
+                        "mono": ["Space Mono", "monospace"]
+                    },
+                    borderRadius: {"DEFAULT": "0px", "lg": "0px", "xl": "0px", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>.scanline {
+    background: linear-gradient(to bottom, transparent 50%, rgba(57, 255, 20, 0.05) 51%);
+    background-size: 100% 4px
+    }
+.brutalist-border {
+    border: 1px solid #39FF14
+    }
+.grain {
+    background-image: url(https://lh3.googleusercontent.com/aida-public/AB6AXuDm-DfUhCd4mywbcfIFXDq4o6hGtUcXEyqxCEHVOBuu2dDM427Kl7OF6ueU0u058h0McQjI2UzNmYD3Wk6kHufNISL9nvRv2TAjdwS99-2BOyADI8G7TjWH5-IDPxCBFg5HBiEemjZaM010O9d4T3HUKD9hZbD_tZhuFF-mFa4T_uofPkE2O7xAv_Wp02PWmZfSqVl00XOCSNUHwHTqZeKlnxxwENwvUyzQfdL52goTkHCyNos_zz9_prrsJ6qj7dMX_WnbfLcRxdPN);
+    opacity: 0.1
+    }</style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark font-display text-slate-900 dark:text-slate-100 min-h-screen selection:bg-primary selection:text-black">
+<!-- Top Section: Brand Manifesto -->
+<header class="relative border-b-2 border-primary/30 p-8 overflow-hidden">
+<div class="absolute inset-0 scanline pointer-events-none"></div>
+<div class="relative z-10 max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-start md:items-end gap-6">
+<div>
+<p class="font-mono text-primary text-sm mb-2 tracking-[0.2em] uppercase">System_v2.0 // Authentication: Verified</p>
+<h1 class="text-6xl md:text-8xl font-bold tracking-tighter leading-none">RIAL // <span class="text-primary">BIO-EVIDENCE</span></h1>
+<p class="text-xl md:text-2xl mt-4 font-mono font-light uppercase tracking-widest text-primary/80">Raw Data. Real Nutrition.</p>
+</div>
+<div class="flex gap-4">
+<div class="h-16 w-1 border-l border-primary/40"></div>
+<div class="text-xs font-mono uppercase text-slate-400 leading-relaxed">
+                    [Manifesto]<br/>Digital Raw Engineering<br/>Tactical Biometrics<br/>Ref. 882-X9
+                </div>
+</div>
+</div>
+</header>
+<!-- Middle Section: Visual Language -->
+<section class="p-8 border-b-2 border-primary/30 bg-primary/5">
+<div class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-12">
+<div>
+<h3 class="font-mono text-primary mb-6 uppercase text-sm flex items-center gap-2">
+<span class="material-symbols-outlined text-sm">palette</span> Color Palette
+                </h3>
+<div class="grid grid-cols-3 gap-4">
+<div class="aspect-square bg-background-dark border border-white/20 flex flex-col justify-end p-3">
+<span class="font-mono text-[10px] text-white/40">#0A0A0A</span>
+<span class="font-bold text-xs uppercase">Pitch Black</span>
+</div>
+<div class="aspect-square bg-primary flex flex-col justify-end p-3">
+<span class="font-mono text-[10px] text-black/60">#39FF14</span>
+<span class="font-bold text-xs uppercase text-black">Scanner Green</span>
+</div>
+<div class="aspect-square bg-cobalt flex flex-col justify-end p-3">
+<span class="font-mono text-[10px] text-white/60">#2E5BFF</span>
+<span class="font-bold text-xs uppercase">Cobalt</span>
+</div>
+</div>
+</div>
+<div>
+<h3 class="font-mono text-primary mb-6 uppercase text-sm flex items-center gap-2">
+<span class="material-symbols-outlined text-sm">font_download</span> Typography
+                </h3>
+<div class="space-y-4">
+<div class="border-b border-primary/20 pb-2">
+<p class="text-4xl font-bold uppercase">Space Grotesk</p>
+<p class="font-mono text-[10px] text-slate-500 uppercase mt-1">Display / Headlines / Brutalist</p>
+</div>
+<div class="border-b border-primary/20 pb-2">
+<p class="text-2xl font-mono">System Mono</p>
+<p class="font-mono text-[10px] text-slate-500 uppercase mt-1">Data / Metrics / Metadata</p>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Bottom Section: Interface Previews -->
+<main class="p-8 pb-24 overflow-hidden">
+<div class="max-w-7xl mx-auto">
+<h2 class="text-4xl font-bold mb-12 uppercase tracking-tighter">Interface Previews // [01-03]</h2>
+<div class="relative flex flex-col lg:flex-row justify-center items-center gap-8 lg:gap-0 lg:h-[800px]">
+<!-- 1. The Pulse Engine -->
+<div class="relative lg:absolute lg:left-0 lg:z-10 w-full max-w-[320px] bg-background-dark border-2 border-primary overflow-hidden shadow-[20px_20px_0px_rgba(57,255,20,0.1)]">
+<div class="p-4 border-b border-primary flex justify-between items-center bg-primary/10">
+<span class="font-mono text-xs text-primary font-bold">PULSE_ENGINE.SYS</span>
+<span class="material-symbols-outlined text-primary text-sm">sensors</span>
+</div>
+<div class="p-6 space-y-6">
+<div class="relative h-40 border border-primary/30 flex items-center justify-center">
+<div class="absolute inset-0 scanline opacity-30"></div>
+<div class="text-center">
+<span class="block text-5xl font-mono text-primary">142</span>
+<span class="font-mono text-[10px] text-primary/60 uppercase">BPM // CURRENT_STRESS</span>
+</div>
+<div class="absolute bottom-2 right-2 flex gap-1">
+<div class="w-1 h-3 bg-primary"></div>
+<div class="w-1 h-5 bg-primary"></div>
+<div class="w-1 h-2 bg-primary"></div>
+<div class="w-1 h-4 bg-primary"></div>
+</div>
+</div>
+<div class="grid grid-cols-2 gap-2">
+<div class="p-3 bg-primary/5 border border-primary/20">
+<span class="block font-mono text-[10px] text-slate-400">ATP_LEVEL</span>
+<span class="font-mono text-lg">98.2%</span>
+</div>
+<div class="p-3 bg-primary/5 border border-primary/20">
+<span class="block font-mono text-[10px] text-slate-400">RECOVERY</span>
+<span class="font-mono text-lg text-cobalt">OPTIMAL</span>
+</div>
+</div>
+<div class="space-y-2">
+<div class="h-1 bg-slate-800 w-full overflow-hidden">
+<div class="h-full bg-primary w-[70%]"></div>
+</div>
+<div class="flex justify-between font-mono text-[9px] text-slate-500">
+<span>GLYCOGEN_LOAD</span>
+<span>70%</span>
+</div>
+</div>
+</div>
+</div>
+<!-- 2. The Asset Registry -->
+<div class="relative lg:z-30 w-full max-w-[340px] bg-background-dark border-2 border-white overflow-hidden shadow-[25px_25px_0px_rgba(255,255,255,0.05)]">
+<div class="p-4 border-b border-white flex justify-between items-center bg-white/5">
+<span class="font-mono text-xs text-white font-bold uppercase">Asset Registry // Recipes</span>
+<span class="material-symbols-outlined text-white text-sm">grid_view</span>
+</div>
+<div class="relative aspect-square">
+<img class="w-full h-full object-cover grayscale contrast-125 brightness-75" data-alt="Close up of a bowl of grainy technical nutrition food" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDP7PxoD-C4k95gv_UPEIp3Nx8medJQTghPN4LZTjxxjmEIW4vc1jWNRCn9QQyKHhmw8Lyn1TY5MiGJfBROamuSp97aVyqisJbcGYA9uj79uv4UC-ML3TFJ_4J5S8aCRgX5lQB_J1FEN2AxxYBRqyWV8zLSEhrOkDM3-76kZLDNte6xZ3JBieDDRcqBCYVwU3yzrt5EeslpXCcK1Rc0p25gTBfe8qrVjEiNzrnct3AWWowaGx9WWsYx-U-ih02jrr7t74dWZfINh-MN"/>
+<div class="absolute inset-0 bg-cobalt/20 mix-blend-overlay"></div>
+<div class="absolute inset-0 scanline opacity-40"></div>
+<!-- Technical Overlay -->
+<div class="absolute top-4 left-4 border-l border-t border-primary p-2">
+<span class="font-mono text-[10px] text-primary block">TARGET_ACQUISITION</span>
+<span class="font-mono text-[8px] text-white/50">84.22.11.0</span>
+</div>
+<div class="absolute bottom-4 right-4 text-right">
+<div class="flex gap-0.5 justify-end mb-1">
+<div class="w-1 h-4 bg-primary"></div>
+<div class="w-1 h-2 bg-primary"></div>
+<div class="w-1 h-6 bg-primary"></div>
+</div>
+<span class="font-mono text-[10px] bg-black px-1">MACRO_SCAN_V3</span>
+</div>
+</div>
+<div class="p-4 space-y-3">
+<h4 class="text-xl font-bold uppercase tracking-tighter">Raw Macro Bowl v.2</h4>
+<div class="flex flex-wrap gap-2">
+<span class="px-2 py-1 bg-white text-black font-mono text-[9px] font-bold">PRO: 42G</span>
+<span class="px-2 py-1 border border-white/20 font-mono text-[9px]">FAT: 12G</span>
+<span class="px-2 py-1 border border-white/20 font-mono text-[9px]">CHO: 65G</span>
+</div>
+</div>
+</div>
+<!-- 3. The Kitchen Lab -->
+<div class="relative lg:absolute lg:right-0 lg:z-20 w-full max-w-[320px] bg-background-dark border-2 border-cobalt overflow-hidden shadow-[20px_20px_0px_rgba(46,91,255,0.1)]">
+<div class="p-4 border-b border-cobalt flex justify-between items-center bg-cobalt/10">
+<span class="font-mono text-xs text-cobalt font-bold">KITCHEN_LAB.EXE</span>
+<span class="material-symbols-outlined text-cobalt text-sm">biotech</span>
+</div>
+<div class="p-6 space-y-6">
+<div class="flex items-center justify-between border-b border-cobalt/30 pb-4">
+<div>
+<span class="block font-mono text-[10px] text-slate-500 uppercase">Input_Mass</span>
+<span class="text-3xl font-mono">500<span class="text-sm text-cobalt">g</span></span>
+</div>
+<span class="material-symbols-outlined text-4xl text-cobalt/40">scale</span>
+</div>
+<div class="space-y-4">
+<p class="font-mono text-[11px] uppercase text-primary">Biometric Calibration Required...</p>
+<div class="grid grid-cols-4 gap-1">
+<div class="h-8 bg-cobalt"></div>
+<div class="h-8 bg-cobalt/60"></div>
+<div class="h-8 bg-cobalt/30"></div>
+<div class="h-8 border border-cobalt/20"></div>
+</div>
+</div>
+<button class="w-full py-4 bg-cobalt text-white font-bold uppercase tracking-widest text-sm hover:bg-cobalt/90 transition-colors">
+                            EXECUTE_SCALING
+                        </button>
+<div class="font-mono text-[8px] text-slate-600 leading-tight">
+                            TERMINAL OUTPUT: CALC_RESULT_ALPHA: SUCCESS // RATIO_ADJUST: 1.22% // SYNC_STATUS: STABLE
+                        </div>
+</div>
+</div>
+</div>
+</div>
+</main>
+<!-- Global Bottom Nav Bar -->
+<nav class="fixed bottom-0 left-0 w-full border-t border-primary/20 bg-background-dark/80 backdrop-blur-md z-50">
+<div class="max-w-xl mx-auto flex h-16">
+<a class="flex-1 flex flex-col items-center justify-center text-primary group" href="#">
+<span class="material-symbols-outlined group-hover:scale-110 transition-transform">monitoring</span>
+<span class="font-mono text-[8px] mt-1">CORE</span>
+</a>
+<a class="flex-1 flex flex-col items-center justify-center text-slate-500 hover:text-white transition-colors group" href="#">
+<span class="material-symbols-outlined group-hover:scale-110 transition-transform">database</span>
+<span class="font-mono text-[8px] mt-1">ASSETS</span>
+</a>
+<a class="flex-1 flex flex-col items-center justify-center text-slate-500 hover:text-white transition-colors group" href="#">
+<span class="material-symbols-outlined group-hover:scale-110 transition-transform">science</span>
+<span class="font-mono text-[8px] mt-1">LAB</span>
+</a>
+<a class="flex-1 flex flex-col items-center justify-center text-slate-500 hover:text-white transition-colors group" href="#">
+<span class="material-symbols-outlined group-hover:scale-110 transition-transform">account_circle</span>
+<span class="font-mono text-[8px] mt-1">BIO_ID</span>
+</a>
+</div>
+</nav>
+<!-- Technical Background Decals -->
+<div class="fixed top-20 right-10 pointer-events-none opacity-20 hidden xl:block">
+<div class="font-mono text-[10px] text-primary rotate-90 origin-right space-y-4">
+<p>00110101 // RIAL_V2 // EVIDENCE_COLLECTION</p>
+<p>LAT: 40.7128 N // LONG: 74.0060 W</p>
+<p>STATUS: SYSTEM_ACTIVE_STABLE</p>
+</div>
+</div>
+</body></html>
