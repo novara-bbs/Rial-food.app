@@ -1,11 +1,12 @@
-import { Search, Bookmark, Clock, Flame, Share2, ChefHat, Sunrise, Sun, Moon, Cookie, Zap, Sparkles, ChevronRight } from 'lucide-react';
+import { Search, ChefHat, Sunrise, Sun, Moon, Cookie, Zap, Sparkles, ChevronRight } from 'lucide-react';
 import React, { useState, useMemo } from 'react';
 import { toast } from 'sonner';
 import { useI18n } from '../../../i18n';
 import EmptyState from '../../../components/EmptyState';
+import RecipeCard from '../../../components/patterns/RecipeCard';
+import Swimlane from '../../../components/patterns/Swimlane';
 import { useAppState } from '../../../contexts/AppStateContext';
 import { calculateMatchScore } from '../../recipes/utils/matchScore';
-import { CREATORS_MAP } from '../../social/data/seed-creators';
 
 export default function Discovery({ onNavigateToRecipe, savedRecipes = [], onSaveRecipe }: { onNavigateToRecipe?: (recipe: any) => void, savedRecipes?: any[], onSaveRecipe?: (recipe: any) => void }) {
   const { t } = useI18n();
@@ -52,8 +53,6 @@ export default function Discovery({ onNavigateToRecipe, savedRecipes = [], onSav
         matchScore: calculateMatchScore(r, profileSlice, dictionary),
         cal: r.macros?.calories || r.cal || 0,
         pro: r.macros?.protein || r.pro || 0,
-        carbs: r.macros?.carbs || r.carbs || 0,
-        fats: r.macros?.fats || r.fats || 0,
         time: prep + cook > 0 ? `${prep + cook}M` : r.time || '—',
         totalTime: prep + cook,
         tag: r.tag || r.tags?.[0]?.toUpperCase() || '',
@@ -122,82 +121,6 @@ export default function Discovery({ onNavigateToRecipe, savedRecipes = [], onSav
   // Collection counts
   const batchCount = scoredRecipes.filter(r => r.tag === 'BATCH').length;
   const veganCount = scoredRecipes.filter(r => r.tag === 'VEGANO').length;
-
-  // --- Render helpers ---
-
-  const renderCard = (recipe: any) => (
-    <div
-      key={recipe.id}
-      onClick={() => onNavigateToRecipe && onNavigateToRecipe(recipe)}
-      className="relative shrink-0 w-52 h-72 rounded-sm overflow-hidden group cursor-pointer"
-    >
-      {recipe.img || recipe.image ? (
-        <img src={recipe.img || recipe.image} alt={recipe.title} className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" referrerPolicy="no-referrer" />
-      ) : (
-        <div className="absolute inset-0 bg-surface-container-highest flex items-center justify-center">
-          <ChefHat className="w-10 h-10 text-on-surface-variant/50" />
-        </div>
-      )}
-      <div className="absolute inset-0 bg-gradient-to-t from-background via-background/40 to-transparent" />
-
-      {/* Top badges */}
-      <div className="absolute top-2 left-2 right-2 flex justify-between items-start">
-        <div className="flex flex-col gap-1">
-          {recipe.tag && (
-            <span className="bg-surface/80 backdrop-blur-md text-primary text-[9px] font-black px-1.5 py-0.5 tracking-widest uppercase rounded-sm">
-              {recipe.tag}
-            </span>
-          )}
-          <span className="bg-primary text-on-primary text-[9px] font-black px-1.5 py-0.5 rounded-sm w-fit uppercase tracking-tighter">
-            {recipe.matchScore}% {t.discovery.match}
-          </span>
-        </div>
-        <div className="flex gap-1.5">
-          <button onClick={(e) => shareRecipe(e, recipe)} className="w-7 h-7 rounded-full bg-surface/80 backdrop-blur-md flex items-center justify-center text-on-surface-variant hover:text-primary transition-colors" aria-label="Share">
-            <Share2 className="w-3.5 h-3.5" />
-          </button>
-          <button onClick={(e) => toggleSave(e, recipe)} className="w-7 h-7 rounded-full bg-surface/80 backdrop-blur-md flex items-center justify-center text-on-surface-variant hover:text-primary transition-colors" aria-label="Save">
-            <Bookmark className={`w-3.5 h-3.5 ${savedRecipes.some(r => r.id === recipe.id) ? 'fill-primary text-primary' : ''}`} />
-          </button>
-        </div>
-      </div>
-
-      {/* Bottom info — simplified: time + cal + difficulty */}
-      <div className="absolute bottom-3 left-3 right-3">
-        <h4 className="font-headline font-bold text-sm text-tertiary leading-tight tracking-tight uppercase mb-1.5">{recipe.title}</h4>
-        {recipe.publishedBy && recipe.publishedBy !== 'self' && CREATORS_MAP[recipe.publishedBy] && (
-          <span className="font-label text-[8px] text-on-surface-variant/80 tracking-widest uppercase block mb-1">@{CREATORS_MAP[recipe.publishedBy].name}</span>
-        )}
-        <div className="flex items-center gap-2">
-          <div className="flex items-center gap-1 bg-surface-container-highest/80 backdrop-blur-sm px-1.5 py-0.5 rounded-sm">
-            <Clock className="w-2.5 h-2.5 text-outline" />
-            <span className="text-[9px] font-headline font-bold text-tertiary">{recipe.time}</span>
-          </div>
-          <div className="flex items-center gap-1 bg-surface-container-highest/80 backdrop-blur-sm px-1.5 py-0.5 rounded-sm">
-            <Flame className="w-2.5 h-2.5 text-primary" />
-            <span className="text-[9px] font-headline font-bold text-tertiary">{recipe.cal}</span>
-          </div>
-          {recipe.pro >= 30 && (
-            <span className="bg-primary/20 text-primary text-[8px] font-black px-1.5 py-0.5 rounded-sm uppercase tracking-tighter">
-              {recipe.pro}g pro
-            </span>
-          )}
-        </div>
-      </div>
-    </div>
-  );
-
-  const renderSwimlane = (title: string, recipes: any[]) => {
-    if (recipes.length === 0) return null;
-    return (
-      <section className="mb-8">
-        <h3 className="font-headline text-lg font-bold tracking-tight uppercase text-tertiary mb-3 px-6">{title}</h3>
-        <div className="flex gap-3 overflow-x-auto hide-scrollbar px-6 pb-3">
-          {recipes.map(renderCard)}
-        </div>
-      </section>
-    );
-  };
 
   const CollectionBanner = ({ title, count, bg }: { title: string; count: number; bg: string }) => {
     if (count === 0) return null;
@@ -280,40 +203,11 @@ export default function Discovery({ onNavigateToRecipe, savedRecipes = [], onSav
       {/* 3. Hero compacto — best match */}
       {editorialPick && (
         <section className="px-6 mb-8">
-          <div
-            onClick={() => onNavigateToRecipe && onNavigateToRecipe(editorialPick)}
-            className="relative rounded-sm overflow-hidden aspect-video group cursor-pointer"
-          >
-            {editorialPick.img || editorialPick.image ? (
-              <img src={editorialPick.img || editorialPick.image} alt={editorialPick.title} className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" referrerPolicy="no-referrer" />
-            ) : (
-              <div className="absolute inset-0 bg-surface-container-highest flex items-center justify-center">
-                <ChefHat className="w-16 h-16 text-on-surface-variant/20" />
-              </div>
-            )}
-            <div className="absolute inset-0 bg-gradient-to-t from-background via-background/30 to-transparent" />
-
-            {/* Inline badge top-left */}
-            <div className="absolute top-3 left-3 flex items-center gap-2">
-              <span className="bg-primary text-on-primary text-[9px] font-black px-2 py-1 rounded-sm uppercase tracking-widest">
-                {t.discovery.bestMatch} · {editorialPick.matchScore}%
-              </span>
-            </div>
-
-            {/* Bottom info */}
-            <div className="absolute bottom-0 left-0 right-0 p-5">
-              <h3 className="text-tertiary text-xl md:text-3xl font-headline font-black leading-tight tracking-tighter uppercase mb-2">
-                {editorialPick.title}
-              </h3>
-              <div className="flex items-center gap-4 text-on-surface-variant text-[10px] font-bold uppercase tracking-widest">
-                <span className="flex items-center gap-1.5"><Clock className="w-3 h-3 text-primary" /> {editorialPick.time}</span>
-                <span className="flex items-center gap-1.5"><Flame className="w-3 h-3 text-primary" /> {editorialPick.cal} KCAL</span>
-                {editorialPick.pro >= 30 && (
-                  <span className="bg-primary/20 text-primary px-1.5 py-0.5 rounded-sm text-[9px] font-black">{editorialPick.pro}g PRO</span>
-                )}
-              </div>
-            </div>
-          </div>
+          <RecipeCard
+            recipe={editorialPick}
+            variant="hero"
+            onPress={() => onNavigateToRecipe && onNavigateToRecipe(editorialPick)}
+          />
         </section>
       )}
 
@@ -325,25 +219,85 @@ export default function Discovery({ onNavigateToRecipe, savedRecipes = [], onSav
       )}
 
       {/* 4. "Para ti" carousel */}
-      {renderSwimlane(t.discovery.forYouTitle, forYou)}
+      <Swimlane title={t.discovery.forYouTitle}>
+        {forYou.map(r => (
+          <RecipeCard
+            key={r.id}
+            recipe={r}
+            variant="carousel"
+            onPress={() => onNavigateToRecipe && onNavigateToRecipe(r)}
+            onShare={(e) => shareRecipe(e, r)}
+            onSave={(e) => toggleSave(e, r)}
+            isSaved={savedRecipes.some((s: any) => s.id === r.id)}
+          />
+        ))}
+      </Swimlane>
 
       {/* 5. Collection banner: Meal Prep */}
       <CollectionBanner title={t.discovery.collectionMealPrep} count={batchCount} bg="bg-primary" />
 
       {/* 6. Quick meals carousel */}
-      {renderSwimlane(t.discovery.quickMealsTitle, quickMeals)}
+      <Swimlane title={t.discovery.quickMealsTitle}>
+        {quickMeals.map(r => (
+          <RecipeCard
+            key={r.id}
+            recipe={r}
+            variant="carousel"
+            onPress={() => onNavigateToRecipe && onNavigateToRecipe(r)}
+            onShare={(e) => shareRecipe(e, r)}
+            onSave={(e) => toggleSave(e, r)}
+            isSaved={savedRecipes.some((s: any) => s.id === r.id)}
+          />
+        ))}
+      </Swimlane>
 
       {/* 7. High protein carousel */}
-      {renderSwimlane(t.discovery.highProteinTitle, highProtein)}
+      <Swimlane title={t.discovery.highProteinTitle}>
+        {highProtein.map(r => (
+          <RecipeCard
+            key={r.id}
+            recipe={r}
+            variant="carousel"
+            onPress={() => onNavigateToRecipe && onNavigateToRecipe(r)}
+            onShare={(e) => shareRecipe(e, r)}
+            onSave={(e) => toggleSave(e, r)}
+            isSaved={savedRecipes.some((s: any) => s.id === r.id)}
+          />
+        ))}
+      </Swimlane>
 
       {/* 8. Collection banner: Vegan */}
       <CollectionBanner title={t.discovery.collectionVegan} count={veganCount} bg="bg-tertiary" />
 
       {/* 9. By time-of-day carousel */}
-      {renderSwimlane(mealTimeTitle, mealTimeRecipes)}
+      <Swimlane title={mealTimeTitle}>
+        {mealTimeRecipes.map(r => (
+          <RecipeCard
+            key={r.id}
+            recipe={r}
+            variant="carousel"
+            onPress={() => onNavigateToRecipe && onNavigateToRecipe(r)}
+            onShare={(e) => shareRecipe(e, r)}
+            onSave={(e) => toggleSave(e, r)}
+            isSaved={savedRecipes.some((s: any) => s.id === r.id)}
+          />
+        ))}
+      </Swimlane>
 
       {/* 10. Batch cooking carousel */}
-      {renderSwimlane(t.discovery.batchCookingTitle, batchCooking)}
+      <Swimlane title={t.discovery.batchCookingTitle}>
+        {batchCooking.map(r => (
+          <RecipeCard
+            key={r.id}
+            recipe={r}
+            variant="carousel"
+            onPress={() => onNavigateToRecipe && onNavigateToRecipe(r)}
+            onShare={(e) => shareRecipe(e, r)}
+            onSave={(e) => toggleSave(e, r)}
+            isSaved={savedRecipes.some((s: any) => s.id === r.id)}
+          />
+        ))}
+      </Swimlane>
     </div>
   );
 }

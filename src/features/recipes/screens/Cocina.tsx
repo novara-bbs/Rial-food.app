@@ -1,9 +1,9 @@
 import React, { useState, useMemo } from 'react';
-import { Search, Plus, Trash2, Clock, Link, BookOpen, ShoppingCart, Flame, ChefHat, Sparkles, Sunrise, Sun, Moon, Cookie } from 'lucide-react';
+import { Search, Plus, Link, BookOpen, ShoppingCart, Sparkles, Sunrise, Sun, Moon, Cookie } from 'lucide-react';
 import { useI18n } from '../../../i18n';
 import { useAppState } from '../../../contexts/AppStateContext';
 import { calculateMatchScore } from '../utils/matchScore';
-import { CREATORS_MAP } from '../../social/data/seed-creators';
+import RecipeCard from '../../../components/patterns/RecipeCard';
 import { aggregateShoppingItems, detectCategory, AISLE_CATEGORIES } from '../../planner/utils/grocery';
 import Planner from '../../planner/screens/Planner';
 import ShoppingList from '../../planner/screens/ShoppingList';
@@ -247,61 +247,13 @@ export default function Cocina({ onAddMeal, onCreateRecipe, onNavigateToRecipe, 
             ) : (
               <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3">
                 {filteredRecipes.map((recipe: any) => (
-                  <div
+                  <RecipeCard
                     key={recipe.id}
-                    onClick={() => onNavigateToRecipe?.(recipe)}
-                    className="relative h-64 rounded-sm overflow-hidden group cursor-pointer"
-                  >
-                    {/* Cover image */}
-                    {recipe.img || recipe.image ? (
-                      <img src={recipe.img || recipe.image} alt={recipe.title} className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" referrerPolicy="no-referrer" />
-                    ) : (
-                      <div className="absolute inset-0 bg-surface-container-highest flex items-center justify-center">
-                        <ChefHat className="w-10 h-10 text-on-surface-variant/50" />
-                      </div>
-                    )}
-                    <div className="absolute inset-0 bg-gradient-to-t from-background via-background/40 to-transparent" />
-
-                    {/* Top badges: tag + match% + delete */}
-                    <div className="absolute top-2 left-2 right-2 flex justify-between items-start">
-                      <div className="flex flex-col gap-1">
-                        {recipe.tag && (
-                          <span className="bg-surface/80 backdrop-blur-md text-primary text-[8px] font-black px-1.5 py-0.5 tracking-widest uppercase rounded-sm">
-                            {recipe.tag}
-                          </span>
-                        )}
-                        <span className="bg-primary text-on-primary text-[8px] font-black px-1.5 py-0.5 rounded-sm w-fit uppercase tracking-tighter">
-                          {recipe.matchScore}%
-                        </span>
-                      </div>
-                      <button onClick={(e) => handleDeleteRecipe(e, recipe.id)} className="w-6 h-6 rounded-full bg-surface/80 backdrop-blur-md flex items-center justify-center text-on-surface-variant hover:text-error transition-colors" aria-label="Delete">
-                        <Trash2 className="w-3 h-3" />
-                      </button>
-                    </div>
-
-                    {/* Bottom info */}
-                    <div className="absolute bottom-2 left-2 right-2">
-                      <h3 className="font-headline font-bold text-xs text-tertiary leading-tight tracking-tight uppercase mb-1">{recipe.title}</h3>
-                      {recipe.publishedBy && recipe.publishedBy !== 'self' && CREATORS_MAP[recipe.publishedBy] && (
-                        <span className="font-label text-[7px] text-on-surface-variant/80 tracking-widest uppercase block mb-1">@{CREATORS_MAP[recipe.publishedBy].name}</span>
-                      )}
-                      <div className="flex items-center gap-1.5 flex-wrap">
-                        <div className="flex items-center gap-0.5 bg-surface-container-highest/80 backdrop-blur-sm px-1 py-0.5 rounded-sm">
-                          <Clock className="w-2.5 h-2.5 text-outline" />
-                          <span className="text-[8px] font-headline font-bold text-tertiary">{recipe.time}</span>
-                        </div>
-                        <div className="flex items-center gap-0.5 bg-surface-container-highest/80 backdrop-blur-sm px-1 py-0.5 rounded-sm">
-                          <Flame className="w-2.5 h-2.5 text-primary" />
-                          <span className="text-[8px] font-headline font-bold text-tertiary">{recipe.cal}</span>
-                        </div>
-                        {recipe.pro >= 30 && (
-                          <span className="bg-primary/20 text-primary text-[7px] font-black px-1 py-0.5 rounded-sm uppercase tracking-tighter">
-                            {recipe.pro}g pro
-                          </span>
-                        )}
-                      </div>
-                    </div>
-                  </div>
+                    recipe={recipe}
+                    variant="grid"
+                    onPress={() => onNavigateToRecipe?.(recipe)}
+                    onDelete={(e) => handleDeleteRecipe(e, recipe.id)}
+                  />
                 ))}
               </div>
             )}
