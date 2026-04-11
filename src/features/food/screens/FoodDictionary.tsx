@@ -1,6 +1,7 @@
 import { useState, useMemo } from 'react';
 import { ChevronDown, ChevronUp, UtensilsCrossed, ShoppingCart, ThumbsUp, Minus, AlertTriangle, X } from 'lucide-react';
 import SearchInput from '../../../components/patterns/SearchInput';
+import PageHeader from '../../../components/patterns/PageHeader';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { useI18n } from '../../../i18n';
@@ -86,10 +87,7 @@ export default function FoodDictionary({ navigateTo }: Props) {
 
   return (
     <div className="px-6 max-w-4xl mx-auto pb-24 space-y-6">
-      {/* Title */}
-      <h2 className="font-headline text-3xl md:text-4xl font-bold tracking-tighter uppercase text-tertiary">
-        {t.foodDictionary.title}
-      </h2>
+      <PageHeader onBack={() => navigateTo('more')} label="" title={t.foodDictionary.title} />
 
       {/* Search bar */}
       <SearchInput

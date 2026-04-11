@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { TrendingUp, TrendingDown, Minus, Zap, Leaf, Brain, UtensilsCrossed, Trash2 } from 'lucide-react';
 import ConfirmDialog from '../../../components/ConfirmDialog';
+import EmptyState from '../../../components/EmptyState';
 import { useI18n } from '../../../i18n';
 import { useAppState } from '../../../contexts/AppStateContext';
 import { getCorrelations, getFoodInsights } from '../utils/correlations';
@@ -308,10 +309,7 @@ export default function RealFeelDiary({ realFeelLogs = [], onBack }: { realFeelL
             </div>
           ))}
           {realFeelLogs.length === 0 && (
-            <div className="text-center py-12">
-              <div className="text-3xl mb-3">📓</div>
-              <p className="text-on-surface-variant text-sm">{t.empty.diaryEmpty}</p>
-            </div>
+            <EmptyState icon="📓" title={t.empty.diaryEmpty} description={t.empty.diaryEmptyDesc || 'Registra cómo te sientes después de cada comida'} />
           )}
         </div>
       </div>

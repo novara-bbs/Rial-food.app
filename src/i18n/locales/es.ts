@@ -510,6 +510,7 @@ const es = {
     listEmpty: 'Crea un plan y la lista se genera sola.',
     socialEmpty: 'Descubre personas que cocinan como tú.',
     diaryEmpty: 'Necesitas 7 días para ver patrones.',
+    diaryEmptyDesc: 'Registra cómo te sientes después de cada comida',
     fastingEmpty: 'Elige un protocolo y empieza.',
     searchEmpty: 'Prueba con otra búsqueda o quita los filtros.',
   },

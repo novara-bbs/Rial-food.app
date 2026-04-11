@@ -494,6 +494,7 @@ const en: Translations = {
     listEmpty: 'Create a plan and the list generates itself.',
     socialEmpty: 'Discover people who cook like you.',
     diaryEmpty: 'You need 7 days to see patterns.',
+    diaryEmptyDesc: 'Log how you feel after each meal',
     fastingEmpty: 'Choose a protocol and start.',
     searchEmpty: 'Try a different search or remove filters.',
   },
