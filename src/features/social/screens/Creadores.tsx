@@ -43,7 +43,7 @@ export default function Creadores() {
                     <span className="flex items-center gap-1"><BookOpen className="w-3.5 h-3.5" /> {creator.recipes} {t.explore.creators.recipes}</span>
                   </div>
                 </div>
-                <button
+                <button type="button"
                   onClick={(e) => { e.stopPropagation(); toggleFollow(creator.id); }}
                   aria-label={`${isFollowing ? t.explore.creators.following : t.explore.creators.follow} @${creator.name}`}
                   className={`shrink-0 px-4 py-2 rounded-sm text-[10px] font-bold uppercase tracking-widest transition-all ${

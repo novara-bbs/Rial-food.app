@@ -149,7 +149,7 @@ export default function Profile({ userProfile, onBack, realFeelLogs = [], savedR
           { label: t.settings.privacy, icon: Shield },
           { label: t.settings.export, icon: CreditCard },
         ].map((item, idx) => (
-          <button key={idx} className="w-full flex items-center justify-between p-4 bg-surface-container-low border border-outline-variant/20 rounded-sm hover:border-primary/50 transition-all group text-left">
+          <button type="button" key={idx} className="w-full flex items-center justify-between p-4 bg-surface-container-low border border-outline-variant/20 rounded-sm hover:border-primary/50 transition-all group text-left">
             <div className="flex items-center gap-4">
               <item.icon className="w-5 h-5 text-on-surface-variant group-hover:text-primary transition-colors" />
               <span className="font-headline font-bold text-sm text-tertiary uppercase tracking-widest">{item.label}</span>

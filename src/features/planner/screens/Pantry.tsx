@@ -53,7 +53,7 @@ export default function Pantry({ onBack }: { onBack: () => void }) {
         onBack={onBack}
         title={t.pantry.title}
         rightAction={
-          <button onClick={() => setIsAdding(true)} className="w-10 h-10 bg-primary text-on-primary rounded-full flex items-center justify-center hover:bg-primary-container transition-colors shadow-lg">
+          <button type="button" onClick={() => setIsAdding(true)} className="w-10 h-10 bg-primary text-on-primary rounded-full flex items-center justify-center hover:bg-primary-container transition-colors shadow-lg">
             <Plus className="w-5 h-5" />
           </button>
         }
@@ -68,7 +68,7 @@ export default function Pantry({ onBack }: { onBack: () => void }) {
         <div className="bg-surface-container-high p-6 rounded-sm border border-primary/30 animate-in fade-in slide-in-from-top-4 duration-300">
           <div className="flex justify-between items-center mb-4">
             <h3 className="font-headline text-sm font-bold uppercase tracking-widest text-primary">{t.pantry.addToPantry}</h3>
-            <button onClick={() => setIsAdding(false)} className="text-on-surface-variant hover:text-tertiary">
+            <button type="button" onClick={() => setIsAdding(false)} className="text-on-surface-variant hover:text-tertiary">
               <X className="w-4 h-4" />
             </button>
           </div>
@@ -122,7 +122,7 @@ export default function Pantry({ onBack }: { onBack: () => void }) {
                         <p className="font-label text-[10px] uppercase tracking-widest text-on-surface-variant mt-0.5">{pantryItem.quantity}</p>
                       )}
                     </div>
-                    <button
+                    <button type="button"
                       onClick={() => removeItem(item.id)}
                       className="w-8 h-8 rounded-full bg-surface-container-highest flex items-center justify-center text-on-surface-variant hover:text-error transition-colors opacity-0 group-hover:opacity-100"
                       aria-label={`${t.pantry.deleteItem} ${item.name}`}

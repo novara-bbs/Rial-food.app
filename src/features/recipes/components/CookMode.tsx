@@ -86,7 +86,7 @@ export default function CookMode({
         </div>
         <div className="flex items-center gap-2">
           {ingredients.length > 0 && (
-            <button
+            <button type="button"
               onClick={() => setShowIngredients(s => !s)}
               className="p-2 rounded-full bg-white/10 hover:bg-white/20 transition-colors"
               aria-label={t.recipeDetail.viewIngredients}
@@ -94,7 +94,7 @@ export default function CookMode({
               <UtensilsCrossed className="w-4 h-4" />
             </button>
           )}
-          <button
+          <button type="button"
             onClick={onClose}
             className="p-2 rounded-full bg-white/10 hover:bg-white/20 transition-colors"
             aria-label={t.recipeDetail.exitCookMode}
@@ -107,7 +107,7 @@ export default function CookMode({
       {/* Step indicator dots */}
       <div className="flex gap-1.5 justify-center py-4">
         {normalized.map((_, i) => (
-          <button
+          <button type="button"
             key={i}
             onClick={() => setCurrent(i)}
             className={`rounded-full transition-all duration-200 ${i === current ? 'w-6 h-2 bg-primary' : 'w-2 h-2 bg-white/20 hover:bg-white/40'}`}
@@ -142,7 +142,7 @@ export default function CookMode({
                 onDone={() => setActiveTimers(prev => ({ ...prev, [current]: false }))}
               />
             ) : (
-              <button
+              <button type="button"
                 onClick={() => setActiveTimers(prev => ({ ...prev, [current]: true }))}
                 className="px-5 py-2 bg-primary text-on-primary rounded-sm font-headline text-xs font-bold uppercase tracking-widest hover:opacity-90 transition-opacity"
               >
@@ -155,7 +155,7 @@ export default function CookMode({
 
       {/* Navigation */}
       <div className="flex items-center justify-between px-6 pb-8 pt-4 border-t border-white/10">
-        <button
+        <button type="button"
           onClick={goPrev}
           disabled={current === 0}
           className="flex items-center gap-1 px-5 py-3 bg-white/10 rounded-sm text-white font-headline text-xs font-bold uppercase tracking-widest disabled:opacity-30 hover:bg-white/20 transition-colors"
@@ -167,7 +167,7 @@ export default function CookMode({
         <span className="text-white/50 font-mono text-sm">{current + 1}/{total}</span>
 
         {current < total - 1 ? (
-          <button
+          <button type="button"
             onClick={goNext}
             className="flex items-center gap-1 px-5 py-3 bg-primary text-on-primary rounded-sm font-headline text-xs font-bold uppercase tracking-widest hover:opacity-90 transition-colors"
           >
@@ -175,7 +175,7 @@ export default function CookMode({
             <ChevronRight className="w-4 h-4" />
           </button>
         ) : (
-          <button
+          <button type="button"
             onClick={onClose}
             className="flex items-center gap-1 px-5 py-3 bg-green-600 text-white rounded-sm font-headline text-xs font-bold uppercase tracking-widest hover:opacity-90 transition-colors"
           >

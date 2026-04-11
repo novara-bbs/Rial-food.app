@@ -14,6 +14,7 @@ export default function WeeklyMiniDash({ calAvg, proteinHitDays, totalDays, week
 
   return (
     <button
+      type="button"
       onClick={onNavigateToProgress}
       className="bg-surface-container-low border border-outline-variant/20 p-4 rounded-sm w-full text-left hover:border-primary/30 transition-colors group"
     >

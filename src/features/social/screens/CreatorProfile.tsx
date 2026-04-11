@@ -99,14 +99,14 @@ export default function CreatorProfile({ onBack }: { onBack: () => void }) {
         {/* Action button */}
         <div className="mt-5">
           {isSelf ? (
-            <button
+            <button type="button"
               onClick={() => navigateTo('settings')}
               className="w-full py-2.5 bg-surface-container-highest text-on-surface-variant rounded-sm font-headline text-xs font-bold uppercase tracking-widest flex items-center justify-center gap-2 hover:text-primary transition-colors"
             >
               <Settings className="w-4 h-4" /> {cp.editProfile}
             </button>
           ) : (
-            <button
+            <button type="button"
               onClick={toggleFollow}
               className={`w-full py-2.5 rounded-sm font-headline text-xs font-bold uppercase tracking-widest flex items-center justify-center gap-2 transition-all ${
                 isFollowing

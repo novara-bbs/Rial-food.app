@@ -52,7 +52,7 @@ export default function RecipeDetail({ recipe, onBack, onSaveRecipe, isSaved, on
   if (!recipe) {
     return (
       <div className="px-6 max-w-2xl mx-auto pt-8 space-y-4">
-        <button onClick={onBack} className="p-2 hover:bg-surface-container-highest rounded-sm transition-colors" aria-label={t.common?.back || 'Back'}>
+        <button type="button" onClick={onBack} className="p-2 hover:bg-surface-container-highest rounded-sm transition-colors" aria-label={t.common?.back || 'Back'}>
           <ArrowLeft className="w-5 h-5" />
         </button>
         <div className="text-center py-12">
@@ -244,15 +244,15 @@ export default function RecipeDetail({ recipe, onBack, onSaveRecipe, isSaved, on
         <img src={data.img || data.image} alt={data.title} className="w-full h-full object-cover" referrerPolicy="no-referrer" />
         <div className="absolute inset-0 bg-gradient-to-t from-background via-background/30 to-transparent" />
 
-        <button onClick={onBack} aria-label={t.common.back} className="absolute top-4 left-4 w-10 h-10 bg-surface/80 backdrop-blur-md rounded-full flex items-center justify-center text-tertiary hover:bg-primary hover:text-on-primary transition-colors z-10">
+        <button type="button" onClick={onBack} aria-label={t.common.back} className="absolute top-4 left-4 w-10 h-10 bg-surface/80 backdrop-blur-md rounded-full flex items-center justify-center text-tertiary hover:bg-primary hover:text-on-primary transition-colors z-10">
           <ArrowLeft className="w-5 h-5" />
         </button>
 
         <div className="absolute top-4 right-4 flex gap-2 z-10">
-          <button onClick={() => setShowPublishSheet(true)} aria-label={t.recipeDetail.shareToFeed} className="w-10 h-10 bg-surface/80 backdrop-blur-md rounded-full flex items-center justify-center text-tertiary hover:bg-primary hover:text-on-primary transition-colors">
+          <button type="button" onClick={() => setShowPublishSheet(true)} aria-label={t.recipeDetail.shareToFeed} className="w-10 h-10 bg-surface/80 backdrop-blur-md rounded-full flex items-center justify-center text-tertiary hover:bg-primary hover:text-on-primary transition-colors">
             <Share2 className="w-5 h-5" />
           </button>
-          <button onClick={() => onSaveRecipe && onSaveRecipe(getModifiedRecipe())} aria-label={t.common.save} className="w-10 h-10 bg-surface/80 backdrop-blur-md rounded-full flex items-center justify-center text-tertiary hover:bg-primary hover:text-on-primary transition-colors">
+          <button type="button" onClick={() => onSaveRecipe && onSaveRecipe(getModifiedRecipe())} aria-label={t.common.save} className="w-10 h-10 bg-surface/80 backdrop-blur-md rounded-full flex items-center justify-center text-tertiary hover:bg-primary hover:text-on-primary transition-colors">
             <Bookmark className={`w-5 h-5 ${isSaved ? 'fill-primary text-primary' : ''}`} />
           </button>
         </div>
@@ -281,14 +281,14 @@ export default function RecipeDetail({ recipe, onBack, onSaveRecipe, isSaved, on
         return (
           <div className="px-6 max-w-4xl mx-auto mt-4">
             <div className="flex items-center gap-3 bg-surface-container-low px-4 py-3 rounded-sm border border-outline-variant/20">
-              <button onClick={() => { setSelectedCreatorId(data.publishedBy!); navigateTo('creator-profile'); }} className="flex items-center gap-3 flex-1 min-w-0">
+              <button type="button" onClick={() => { setSelectedCreatorId(data.publishedBy!); navigateTo('creator-profile'); }} className="flex items-center gap-3 flex-1 min-w-0">
                 <img src={creator.avatar} alt={creator.name} className="w-8 h-8 rounded-full object-cover border border-outline-variant/20" referrerPolicy="no-referrer" />
                 <div className="min-w-0">
                   <span className="font-headline font-bold text-xs text-tertiary uppercase hover:text-primary transition-colors block truncate">@{creator.name}</span>
                   <span className="font-label text-[9px] text-on-surface-variant tracking-widest uppercase block">{t.recipeDetail.createdBy}</span>
                 </div>
               </button>
-              <button
+              <button type="button"
                 onClick={toggleFollowCreator}
                 className={`shrink-0 whitespace-nowrap px-3 py-1.5 rounded-sm text-[9px] font-bold uppercase tracking-widest transition-all ${
                   isFollowingCreator
@@ -385,11 +385,11 @@ export default function RecipeDetail({ recipe, onBack, onSaveRecipe, isSaved, on
         <div className="flex items-center justify-between mt-4 bg-surface-container-highest/50 p-3 rounded-sm border border-outline-variant/10">
           <span className="font-headline font-bold text-xs uppercase text-tertiary tracking-tight">{t.recipeDetail.servings}</span>
           <div className="flex items-center gap-3">
-            <button onClick={() => setServings(Math.max(1, servings - 1))} aria-label="Decrease servings" className="w-7 h-7 rounded-full bg-surface-container-low flex items-center justify-center text-on-surface-variant hover:text-primary border border-outline-variant/20">
+            <button type="button" onClick={() => setServings(Math.max(1, servings - 1))} aria-label="Decrease servings" className="w-7 h-7 rounded-full bg-surface-container-low flex items-center justify-center text-on-surface-variant hover:text-primary border border-outline-variant/20">
               <Minus className="w-3.5 h-3.5" />
             </button>
             <span className="font-headline font-bold text-lg text-tertiary w-4 text-center">{servings}</span>
-            <button onClick={() => setServings(servings + 1)} aria-label="Increase servings" className="w-7 h-7 rounded-full bg-surface-container-low flex items-center justify-center text-on-surface-variant hover:text-primary border border-outline-variant/20">
+            <button type="button" onClick={() => setServings(servings + 1)} aria-label="Increase servings" className="w-7 h-7 rounded-full bg-surface-container-low flex items-center justify-center text-on-surface-variant hover:text-primary border border-outline-variant/20">
               <Plus className="w-3.5 h-3.5" />
             </button>
           </div>
@@ -402,9 +402,9 @@ export default function RecipeDetail({ recipe, onBack, onSaveRecipe, isSaved, on
               <span className="font-label text-[10px] font-bold tracking-widest uppercase text-tertiary">{t.recipeDetail.family}</span>
             </div>
             <div className="flex flex-wrap gap-2">
-              <button className={`px-2.5 py-1 rounded-sm font-label text-[10px] font-bold tracking-widest uppercase border transition-all ${selectedFamily.length === 0 ? 'bg-primary text-on-primary border-primary' : 'bg-surface-container-highest text-on-surface-variant border-outline-variant/20'}`} onClick={() => setSelectedFamily([])}>{t.recipeDetail.onlyMe}</button>
+              <button type="button" className={`px-2.5 py-1 rounded-sm font-label text-[10px] font-bold tracking-widest uppercase border transition-all ${selectedFamily.length === 0 ? 'bg-primary text-on-primary border-primary' : 'bg-surface-container-highest text-on-surface-variant border-outline-variant/20'}`} onClick={() => setSelectedFamily([])}>{t.recipeDetail.onlyMe}</button>
               {familyMembers.map((member: any) => (
-                <button key={member.id} className={`px-2.5 py-1 rounded-sm font-label text-[10px] font-bold tracking-widest uppercase border transition-all ${selectedFamily.includes(member.id) ? 'bg-primary text-on-primary border-primary' : 'bg-surface-container-highest text-on-surface-variant border-outline-variant/20'}`} onClick={() => toggleFamilyMember(member.id)}>+ {member.name}</button>
+                <button type="button" key={member.id} className={`px-2.5 py-1 rounded-sm font-label text-[10px] font-bold tracking-widest uppercase border transition-all ${selectedFamily.includes(member.id) ? 'bg-primary text-on-primary border-primary' : 'bg-surface-container-highest text-on-surface-variant border-outline-variant/20'}`} onClick={() => toggleFamilyMember(member.id)}>+ {member.name}</button>
               ))}
             </div>
             <p className="mt-2 font-label text-[9px] text-on-surface-variant uppercase tracking-wider">
@@ -499,7 +499,7 @@ export default function RecipeDetail({ recipe, onBack, onSaveRecipe, isSaved, on
                 <p className="font-label text-xs tracking-widest text-on-surface-variant uppercase mb-3 text-center">{t.recipeDetail.selectDay}</p>
                 <div className="flex justify-between gap-2 mb-4">
                   {(t.realFeel.dayAbbr as string[]).map((day, idx) => (
-                    <button key={idx} onClick={() => { onAddToPlan && onAddToPlan(getModifiedRecipe(), idx); setShowDaySelector(false); }} className="w-10 h-10 rounded-sm bg-surface-container-highest text-tertiary font-headline font-bold hover:bg-primary hover:text-on-primary transition-colors">
+                    <button type="button" key={idx} onClick={() => { onAddToPlan && onAddToPlan(getModifiedRecipe(), idx); setShowDaySelector(false); }} className="w-10 h-10 rounded-sm bg-surface-container-highest text-tertiary font-headline font-bold hover:bg-primary hover:text-on-primary transition-colors">
                       {day}
                     </button>
                   ))}
@@ -568,7 +568,7 @@ export default function RecipeDetail({ recipe, onBack, onSaveRecipe, isSaved, on
                 {searchQuery && (
                   <div className="max-h-48 overflow-y-auto space-y-1 bg-surface-container-low p-2 rounded-sm border border-outline-variant/10">
                     {filteredDictionary.length > 0 ? filteredDictionary.slice(0, 10).map(ing => (
-                      <button key={ing.id} onClick={() => addExtraIngredient(ing)} className="w-full text-left px-3 py-2 rounded-sm hover:bg-surface-container-highest flex justify-between items-center group">
+                      <button type="button" key={ing.id} onClick={() => addExtraIngredient(ing)} className="w-full text-left px-3 py-2 rounded-sm hover:bg-surface-container-highest flex justify-between items-center group">
                         <span className="text-sm text-tertiary">{ing.name}</span>
                         <span className="text-xs text-on-surface-variant group-hover:text-primary">{t.recipeDetail.addExtra}</span>
                       </button>
@@ -582,7 +582,7 @@ export default function RecipeDetail({ recipe, onBack, onSaveRecipe, isSaved, on
             <div className="space-y-1.5">
               {allIngredientsToDisplay.map(ing => (
                 <div key={ing.id} className="flex items-center gap-2">
-                  <button onClick={() => toggleIngredient(ing.id)} className="flex-1 flex items-center gap-3 p-3 bg-surface-container-low rounded-sm border border-outline-variant/10 hover:border-primary/30 transition-colors text-left group">
+                  <button type="button" onClick={() => toggleIngredient(ing.id)} className="flex-1 flex items-center gap-3 p-3 bg-surface-container-low rounded-sm border border-outline-variant/10 hover:border-primary/30 transition-colors text-left group">
                     {checkedIngredients.includes(ing.id)
                       ? <CheckCircle2 className="w-4 h-4 text-primary shrink-0" />
                       : <Circle className="w-4 h-4 text-on-surface-variant shrink-0 group-hover:text-primary/50" />
@@ -597,7 +597,7 @@ export default function RecipeDetail({ recipe, onBack, onSaveRecipe, isSaved, on
                     <div className="flex items-center gap-1 bg-surface-container-low p-1.5 rounded-sm border border-outline-variant/10">
                       <input type="number" value={ing.amount} onChange={e => updateExtraIngredientAmount(ing.id, e.target.value)} className="w-14 bg-surface-container-highest border-none rounded-sm py-1 px-2 text-sm text-tertiary text-center focus:outline-none focus:ring-1 focus:ring-primary" />
                       <span className="text-[10px] text-on-surface-variant">{ing.unit}</span>
-                      <button onClick={() => removeExtraIngredient(ing.id)} className="p-1 text-outline hover:text-error"><X className="w-3.5 h-3.5" /></button>
+                      <button type="button" onClick={() => removeExtraIngredient(ing.id)} className="p-1 text-outline hover:text-error"><X className="w-3.5 h-3.5" /></button>
                     </div>
                   )}
                 </div>
@@ -777,7 +777,7 @@ export default function RecipeDetail({ recipe, onBack, onSaveRecipe, isSaved, on
               </h3>
               <div className="space-y-2">
                 {creatorRecipes.map((r: any) => (
-                  <button
+                  <button type="button"
                     key={r.id}
                     onClick={() => navToRecipe(r)}
                     className="w-full flex items-center gap-3 p-3 bg-surface-container-low border border-outline-variant/20 rounded-sm hover:border-primary/50 transition-colors text-left"

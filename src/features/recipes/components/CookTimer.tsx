@@ -61,15 +61,17 @@ export default function CookTimer({ minutes, onDone }: { minutes: number; onDone
         </div>
       </div>
       <div className="flex gap-2">
-        <button
+        <button type="button"
           onClick={() => setRunning(r => !r)}
           disabled={done}
+          aria-label={running ? 'Pausar' : 'Iniciar'}
           className="w-9 h-9 rounded-full bg-white/10 flex items-center justify-center text-white hover:bg-white/20 transition-colors disabled:opacity-40"
         >
           {running ? <Pause className="w-4 h-4" /> : <Play className="w-4 h-4" />}
         </button>
-        <button
+        <button type="button"
           onClick={() => { setSecondsLeft(totalSeconds); setRunning(false); }}
+          aria-label="Reiniciar"
           className="w-9 h-9 rounded-full bg-white/10 flex items-center justify-center text-white hover:bg-white/20 transition-colors"
         >
           <RotateCcw className="w-4 h-4" />

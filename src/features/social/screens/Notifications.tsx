@@ -86,7 +86,7 @@ export default function Notifications({ onBack }: { onBack: () => void }) {
         onBack={onBack}
         title={notif.title || 'Notifications'}
         rightAction={notifications.some(n => !n.read) ? (
-          <button
+          <button type="button"
             onClick={markAllNotificationsRead}
             className="flex items-center gap-1.5 text-xs text-primary font-label tracking-widest uppercase hover:underline"
           >

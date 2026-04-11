@@ -28,6 +28,7 @@ export default function More({ navigateTo }: { navigateTo: (screen: string) => v
         <div className="grid grid-cols-1 gap-3">
           {menuItems.map(item => (
             <button
+              type="button"
               key={item.id}
               onClick={() => navigateTo(item.screen)}
               className="flex items-center p-5 bg-surface-container-low rounded-sm border border-outline-variant/20 hover:border-primary/50 transition-all group"

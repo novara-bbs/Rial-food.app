@@ -349,9 +349,9 @@ export default function CreateRecipe({
             return (
               <div key={ri.id} className="bg-surface-container-low border border-outline-variant/20 rounded-sm p-3 flex items-center gap-2">
                 <div className="flex flex-col gap-0.5">
-                  <button onClick={() => setRecipeIngredients(prev => swapped(prev, idx, -1))} disabled={idx === 0}
+                  <button type="button" onClick={() => setRecipeIngredients(prev => swapped(prev, idx, -1))} disabled={idx === 0}
                     className="p-0.5 text-on-surface-variant hover:text-primary disabled:opacity-20 transition-colors"><ArrowUp className="w-3 h-3" /></button>
-                  <button onClick={() => setRecipeIngredients(prev => swapped(prev, idx, 1))} disabled={idx === recipeIngredients.length - 1}
+                  <button type="button" onClick={() => setRecipeIngredients(prev => swapped(prev, idx, 1))} disabled={idx === recipeIngredients.length - 1}
                     className="p-0.5 text-on-surface-variant hover:text-primary disabled:opacity-20 transition-colors"><ArrowDown className="w-3 h-3" /></button>
                 </div>
                 <div className="flex-1 min-w-0">
@@ -360,7 +360,7 @@ export default function CreateRecipe({
                     {ri.amount}g — {sm.calories} kcal · {sm.protein}g P
                   </p>
                 </div>
-                <button onClick={() => removeIngredient(ri.id)}
+                <button type="button" onClick={() => removeIngredient(ri.id)}
                   className="p-2 text-error/60 hover:text-error hover:bg-error/10 rounded-sm transition-colors shrink-0">
                   <Trash2 className="w-4 h-4" />
                 </button>
@@ -376,13 +376,13 @@ export default function CreateRecipe({
                 <input type="text" autoFocus value={searchQuery} onChange={e => setSearchQuery(e.target.value)}
                   placeholder={t.createRecipe.searchIngredient}
                   className="flex-1 bg-transparent text-sm font-body text-tertiary focus:outline-none placeholder:text-on-surface-variant" />
-                <button onClick={() => { setIsSearching(false); setSearchQuery(''); setExpandedIngId(null); }}
+                <button type="button" onClick={() => { setIsSearching(false); setSearchQuery(''); setExpandedIngId(null); }}
                   className="text-xs font-label uppercase tracking-widest text-on-surface-variant hover:text-tertiary">{t.common.cancel}</button>
               </div>
               <div className="max-h-72 overflow-y-auto divide-y divide-outline-variant/10">
                 {filteredDictionary.map(ing => (
                   <div key={ing.id}>
-                    <button
+                    <button type="button"
                       onClick={() => {
                         setExpandedIngId(expandedIngId === ing.id ? null : ing.id);
                         setPendingGrams(ing.servingSizes.find(s => s.isDefault)?.grams ?? 100);
@@ -413,7 +413,7 @@ export default function CreateRecipe({
               </div>
             </div>
           ) : (
-            <button onClick={() => setIsSearching(true)}
+            <button type="button" onClick={() => setIsSearching(true)}
               className="w-full border-2 border-dashed border-outline-variant/30 p-4 rounded-sm flex items-center justify-center gap-2 text-on-surface-variant hover:text-primary hover:border-primary/50 transition-colors font-label text-xs font-bold tracking-widest uppercase">
               <Plus className="w-4 h-4" /> {t.createRecipe.addIngredient}
             </button>
@@ -459,12 +459,12 @@ export default function CreateRecipe({
                   </div>
                 </div>
                 <div className="flex flex-col gap-1 shrink-0 mt-1">
-                  <button onClick={() => setSteps(prev => swapped(prev, idx, -1))} disabled={idx === 0}
+                  <button type="button" onClick={() => setSteps(prev => swapped(prev, idx, -1))} disabled={idx === 0}
                     className="p-1 text-on-surface-variant hover:text-primary disabled:opacity-20 transition-colors"><ArrowUp className="w-3.5 h-3.5" /></button>
-                  <button onClick={() => setSteps(prev => swapped(prev, idx, 1))} disabled={idx === steps.length - 1}
+                  <button type="button" onClick={() => setSteps(prev => swapped(prev, idx, 1))} disabled={idx === steps.length - 1}
                     className="p-1 text-on-surface-variant hover:text-primary disabled:opacity-20 transition-colors"><ArrowDown className="w-3.5 h-3.5" /></button>
                   {steps.length > 1 && (
-                    <button onClick={() => removeStep(idx)}
+                    <button type="button" onClick={() => removeStep(idx)}
                       className="p-1 text-error/60 hover:text-error transition-colors"><Trash2 className="w-3.5 h-3.5" /></button>
                   )}
                 </div>
@@ -472,7 +472,7 @@ export default function CreateRecipe({
             );
           })}
 
-          <button onClick={addStep}
+          <button type="button" onClick={addStep}
             className="w-full border-2 border-dashed border-outline-variant/30 p-3 rounded-sm flex items-center justify-center gap-2 text-on-surface-variant hover:text-primary hover:border-primary/50 transition-colors font-label text-xs font-bold tracking-widest uppercase">
             <Plus className="w-4 h-4" /> {t.createRecipe.addStep}
           </button>

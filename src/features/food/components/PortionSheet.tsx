@@ -52,7 +52,7 @@ export default function PortionSheet({ ingredient, onConfirm, onClose, unitSyste
               <h3 className="font-headline text-lg font-bold uppercase tracking-tighter text-tertiary">{ingredient.name}</h3>
               <p className="text-xs text-on-surface-variant font-label uppercase tracking-widest mt-0.5">{ingredient.category}</p>
             </div>
-            <button
+            <button type="button"
               onClick={onClose}
               className="w-8 h-8 flex items-center justify-center rounded-full bg-surface-container-highest text-on-surface-variant hover:text-tertiary transition-colors shrink-0"
             >
@@ -66,7 +66,7 @@ export default function PortionSheet({ ingredient, onConfirm, onClose, unitSyste
 
         {/* Confirm — always visible at bottom */}
         <div className="px-6 pb-6 pt-3 border-t border-outline-variant/10">
-          <button
+          <button type="button"
             onClick={() => onConfirm(result)}
             className="w-full py-4 bg-primary text-on-primary rounded-sm font-headline text-sm font-bold uppercase tracking-widest hover:opacity-90 transition-opacity flex items-center justify-center gap-2"
           >

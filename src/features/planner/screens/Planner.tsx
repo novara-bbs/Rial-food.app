@@ -163,7 +163,7 @@ export default function Planner({
           <span className="font-label text-xs tracking-[0.2em] text-primary uppercase mb-1 block">{t.planner.weeklyPlan}</span>
           <h2 className="font-headline text-3xl md:text-4xl font-bold tracking-tighter uppercase text-tertiary">{t.planner.currentWeek}</h2>
         </div>
-        <button
+        <button type="button"
           onClick={onOpenShoppingList}
           aria-label={t.planner.shoppingListBtn}
           className="bg-primary text-on-primary px-5 py-3 font-label text-xs font-bold tracking-widest uppercase flex items-center justify-center gap-2 rounded-full hover:bg-primary/90 transition-all shadow-lg shadow-primary/20"
@@ -175,7 +175,7 @@ export default function Planner({
 
       {/* ── Batch cooking insights banner ──────────────────────────────────── */}
       {batchAnalysis?.hasOpportunities && (
-        <button
+        <button type="button"
           onClick={() => setShowBatchInsights(v => !v)}
           className="w-full bg-surface-container-low border border-primary/20 rounded-sm p-4 text-left transition-colors hover:border-primary/40"
         >
@@ -229,7 +229,7 @@ export default function Planner({
             const hasMeals = dayMeals.length > 0;
             return (
               <div key={index} className="flex flex-col items-center gap-1.5">
-                <button
+                <button type="button"
                   onClick={() => setActiveDay(index)}
                   aria-label={dayNames[index]}
                   aria-pressed={activeDay === index}
@@ -304,7 +304,7 @@ export default function Planner({
                       {t.planner.leftoverFrom.replace('{day}', dayNames[s.sourceDayIndex])} · {t.planner.leftoverGoodFor.replace('{days}', String(s.freshnessWindowDays))}
                     </p>
                   </div>
-                  <button
+                  <button type="button"
                     onClick={() => addLeftover(s)}
                     className="text-[9px] font-bold uppercase tracking-widest text-brand-secondary bg-brand-secondary/10 px-3 py-1.5 rounded-full hover:bg-brand-secondary/20 transition-colors"
                   >
@@ -370,7 +370,7 @@ export default function Planner({
                     {/* Status + actions */}
                     <div className="flex flex-col items-end gap-2 shrink-0">
                       {/* Status badge — tap to cycle */}
-                      <button
+                      <button type="button"
                         onClick={() => cycleStatus(meal.id)}
                         className={`flex items-center gap-1 px-2 py-1 rounded-full text-[8px] font-bold uppercase tracking-wider transition-colors ${statusCfg.color}`}
                         title={t.planner.tapToChangeStatus}
@@ -382,7 +382,7 @@ export default function Planner({
                       <div className="flex items-center gap-2">
                         {/* Log quick action — only when not yet logged */}
                         {execStatus !== 'logged' && (
-                          <button
+                          <button type="button"
                             onClick={() => handleLog(meal)}
                             className="flex items-center gap-1 text-[8px] font-bold uppercase tracking-wider text-on-surface-variant hover:text-primary transition-colors"
                           >
@@ -392,7 +392,7 @@ export default function Planner({
                         )}
 
                         {/* Delete from plan */}
-                        <button
+                        <button type="button"
                           onClick={() => deleteMeal(meal.id)}
                           className="flex items-center gap-1 text-[8px] font-bold uppercase tracking-wider text-on-surface-variant hover:text-error transition-colors"
                           title={t.planner.deleteMeal}
@@ -408,7 +408,7 @@ export default function Planner({
           )}
 
           {/* Add meal button */}
-          <button
+          <button type="button"
             onClick={() => onAddMeal?.(activeDay)}
             aria-label={t.planner.addMealBtn}
             className="w-full border-2 border-dashed border-outline-variant/30 p-4 rounded-sm flex items-center justify-center gap-2 text-on-surface-variant hover:text-primary hover:border-primary/50 transition-colors font-label text-xs font-bold tracking-widest uppercase"

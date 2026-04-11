@@ -31,7 +31,7 @@ export default function DailyCheckIn({ initialStatus, onBack, onComplete }: { in
         <section>
           <h3 className="font-headline text-lg font-bold tracking-tight uppercase text-tertiary mb-4">{t.checkIn.generalStatus}</h3>
           <div className="grid grid-cols-2 gap-3">
-            <button 
+            <button type="button" 
               onClick={() => setStatus('optimal')}
               className={`p-4 rounded-sm border-2 flex flex-col items-center justify-center gap-2 transition-all ${
                 status === 'optimal' 
@@ -43,7 +43,7 @@ export default function DailyCheckIn({ initialStatus, onBack, onComplete }: { in
               <span className="font-label text-xs font-bold tracking-widest uppercase">{t.checkIn.optimal}</span>
               <span className="text-[10px] text-center opacity-80 leading-tight">{t.checkIn.highEnergy}</span>
             </button>
-            <button 
+            <button type="button" 
               onClick={() => setStatus('stable')}
               className={`p-4 rounded-sm border-2 flex flex-col items-center justify-center gap-2 transition-all ${
                 status === 'stable' 
@@ -55,7 +55,7 @@ export default function DailyCheckIn({ initialStatus, onBack, onComplete }: { in
               <span className="font-label text-xs font-bold tracking-widest uppercase">{t.checkIn.good}</span>
               <span className="text-[10px] text-center opacity-80 leading-tight">{t.checkIn.feelingNormal}</span>
             </button>
-            <button 
+            <button type="button" 
               onClick={() => setStatus('sluggish')}
               className={`p-4 rounded-sm border-2 flex flex-col items-center justify-center gap-2 transition-all ${
                 status === 'sluggish' 
@@ -67,7 +67,7 @@ export default function DailyCheckIn({ initialStatus, onBack, onComplete }: { in
               <span className="font-label text-xs font-bold tracking-widest uppercase">{t.checkIn.tired}</span>
               <span className="text-[10px] text-center opacity-80 leading-tight">{t.checkIn.lowEnergy}</span>
             </button>
-            <button 
+            <button type="button" 
               onClick={() => setStatus('bloated')}
               className={`p-4 rounded-sm border-2 flex flex-col items-center justify-center gap-2 transition-all ${
                 status === 'bloated' 
@@ -130,7 +130,7 @@ export default function DailyCheckIn({ initialStatus, onBack, onComplete }: { in
           <h3 className="font-headline text-lg font-bold tracking-tight uppercase text-tertiary mb-4">{t.checkIn.specificSymptoms}</h3>
           <div className="flex flex-wrap gap-3">
             {availableSymptoms.map(sym => (
-              <button 
+              <button type="button" 
                 key={sym}
                 onClick={() => toggleSymptom(sym)}
                 className={`px-4 py-2 rounded-full font-label text-xs font-bold tracking-wider uppercase transition-colors border ${
@@ -145,7 +145,7 @@ export default function DailyCheckIn({ initialStatus, onBack, onComplete }: { in
           </div>
         </section>
 
-        <button 
+        <button type="button" 
           disabled={!status}
           onClick={() => {
             if (onComplete && status) {

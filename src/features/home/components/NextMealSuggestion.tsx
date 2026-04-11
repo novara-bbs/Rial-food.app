@@ -17,6 +17,7 @@ export default function NextMealSuggestion({ suggestion, onTap }: {
 
   return (
     <button
+      type="button"
       onClick={onTap}
       className="bg-surface-container-low border border-outline-variant/20 p-3 rounded-sm flex items-center gap-3 w-full hover:border-primary/30 transition-colors group"
     >

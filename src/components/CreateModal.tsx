@@ -43,6 +43,7 @@ export default function CreateModal({ isOpen, onClose, onSelect }: { isOpen: boo
         <div className="p-4 grid grid-cols-2 gap-3">
           {actions.map(action => (
             <button
+              type="button"
               key={action.id}
               onClick={() => onSelect(action.id)}
               className="bg-surface-container-low p-4 rounded-sm border border-outline-variant/20 hover:border-primary/50 hover:bg-surface-container-highest transition-all flex flex-col items-center justify-center gap-3 group"

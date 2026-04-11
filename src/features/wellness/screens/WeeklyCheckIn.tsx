@@ -114,13 +114,13 @@ export default function WeeklyCheckIn({ onBack }: { onBack: () => void }) {
 
       {/* Toggle: current / history */}
       <div className="flex border border-outline-variant/20 rounded-sm overflow-hidden">
-        <button
+        <button type="button"
           onClick={() => setViewingPast(false)}
           className={`flex-1 py-3 font-headline text-xs font-bold uppercase tracking-widest transition-colors ${!viewingPast ? 'bg-primary text-on-primary' : 'bg-surface-container-low text-on-surface-variant'}`}
         >
           {t.weekly.thisWeek}
         </button>
-        <button
+        <button type="button"
           onClick={() => setViewingPast(true)}
           className={`flex-1 py-3 font-headline text-xs font-bold uppercase tracking-widest transition-colors ${viewingPast ? 'bg-primary text-on-primary' : 'bg-surface-container-low text-on-surface-variant'}`}
         >
@@ -238,7 +238,7 @@ export default function WeeklyCheckIn({ onBack }: { onBack: () => void }) {
             </div>
           </div>
 
-          <button
+          <button type="button"
             onClick={handleSave}
             className="w-full py-4 bg-primary text-on-primary rounded-sm font-headline font-bold text-sm uppercase tracking-widest hover:opacity-90 transition-opacity"
           >
@@ -256,7 +256,7 @@ export default function WeeklyCheckIn({ onBack }: { onBack: () => void }) {
           ) : (
             <>
               <div className="flex items-center justify-between">
-                <button
+                <button type="button"
                   onClick={() => setPastIndex(Math.min(pastIndex + 1, weeklyEntries.length - 1))}
                   disabled={pastIndex >= weeklyEntries.length - 1}
                   className="w-9 h-9 rounded-full bg-surface-container-low border border-outline-variant/20 flex items-center justify-center text-on-surface-variant hover:text-primary transition-colors disabled:opacity-30"
@@ -266,7 +266,7 @@ export default function WeeklyCheckIn({ onBack }: { onBack: () => void }) {
                 <span className="font-label text-xs uppercase tracking-widest text-on-surface-variant">
                   {t.weekly.weekOf} {new Date(pastEntry.weekStart).toLocaleDateString()}
                 </span>
-                <button
+                <button type="button"
                   onClick={() => setPastIndex(Math.max(pastIndex - 1, 0))}
                   disabled={pastIndex <= 0}
                   className="w-9 h-9 rounded-full bg-surface-container-low border border-outline-variant/20 flex items-center justify-center text-on-surface-variant hover:text-primary transition-colors disabled:opacity-30"

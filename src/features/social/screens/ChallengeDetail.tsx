@@ -108,11 +108,11 @@ export default function ChallengeDetail({ onBack, challengeId }: { onBack: () =>
 
       {/* Join / Check-in action */}
       {!isJoined ? (
-        <button onClick={handleJoin} className="w-full py-3 bg-primary text-on-primary rounded-sm font-headline text-xs font-bold uppercase tracking-widest hover:opacity-90 transition-opacity">
+        <button type="button" onClick={handleJoin} className="w-full py-3 bg-primary text-on-primary rounded-sm font-headline text-xs font-bold uppercase tracking-widest hover:opacity-90 transition-opacity">
           {ct.join || 'Join'}
         </button>
       ) : (
-        <button
+        <button type="button"
           onClick={handleCheckIn}
           disabled={checkedInToday}
           className={`w-full py-3 rounded-sm font-headline text-xs font-bold uppercase tracking-widest flex items-center justify-center gap-2 transition-all ${
@@ -178,7 +178,7 @@ export default function ChallengeDetail({ onBack, challengeId }: { onBack: () =>
 
       {/* Leave button */}
       {isJoined && (
-        <button
+        <button type="button"
           onClick={handleLeave}
           className="w-full py-2.5 bg-surface-container-highest text-on-surface-variant rounded-sm font-headline text-xs font-bold uppercase tracking-widest flex items-center justify-center gap-2 hover:text-error hover:border-error/50 border border-outline-variant/30 transition-colors"
         >

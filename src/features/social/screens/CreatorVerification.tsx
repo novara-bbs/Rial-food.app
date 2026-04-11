@@ -138,7 +138,7 @@ export default function CreatorVerification({ onBack }: { onBack: () => void }) 
         <h3 className="font-headline text-sm font-bold uppercase tracking-widest text-tertiary">{t.creator.selectBadge}</h3>
         <div className="grid grid-cols-2 gap-3">
           {BADGES.map(badge => (
-            <button
+            <button type="button"
               key={badge.id}
               onClick={() => setSelectedBadge(badge.id)}
               className={`p-4 rounded-sm border-2 text-left transition-all ${
@@ -180,7 +180,7 @@ export default function CreatorVerification({ onBack }: { onBack: () => void }) 
 
       {/* CTA */}
       <div className="space-y-3">
-        <button
+        <button type="button"
           onClick={handleApply}
           disabled={!allMet && metCount < 2}
           className="w-full py-4 bg-primary text-on-primary rounded-sm font-headline font-bold text-sm uppercase tracking-widest hover:opacity-90 transition-opacity disabled:opacity-40 flex items-center justify-center gap-2"

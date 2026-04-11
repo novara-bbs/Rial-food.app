@@ -116,7 +116,7 @@ export default function Onboarding({ isOpen, onClose, onComplete }: {
         <div className="p-5 border-b border-outline-variant/10 shrink-0">
           <div className="flex items-center justify-between mb-3">
             {step > 1 ? (
-              <button onClick={() => setStep(s => s - 1)} className="p-1 text-on-surface-variant hover:text-primary transition-colors">
+              <button type="button" onClick={() => setStep(s => s - 1)} className="p-1 text-on-surface-variant hover:text-primary transition-colors">
                 <ArrowLeft className="w-5 h-5" />
               </button>
             ) : <div className="w-5" />}
@@ -142,7 +142,7 @@ export default function Onboarding({ isOpen, onClose, onComplete }: {
                   const Icon = g.icon;
                   const selected = data.goal === g.id;
                   return (
-                    <button
+                    <button type="button"
                       key={g.id}
                       onClick={() => setData(d => ({ ...d, goal: g.id }))}
                       className={`w-full flex items-center gap-4 p-4 rounded-sm border transition-all text-left ${
@@ -193,7 +193,7 @@ export default function Onboarding({ isOpen, onClose, onComplete }: {
                     <label className="block text-xs font-label uppercase tracking-widest text-on-surface-variant mb-1.5">{t.onboarding.sex}</label>
                     <div className="flex gap-2">
                       {(['male', 'female'] as const).map(s => (
-                        <button key={s} onClick={() => setData(d => ({ ...d, sex: s }))}
+                        <button type="button" key={s} onClick={() => setData(d => ({ ...d, sex: s }))}
                           className={`flex-1 py-3 rounded-sm text-xs font-bold uppercase tracking-wider border transition-all ${
                             data.sex === s ? 'border-primary bg-primary/10 text-primary' : 'border-outline-variant/20 text-on-surface-variant bg-surface-container-low hover:border-primary/50'
                           }`}>
@@ -207,7 +207,7 @@ export default function Onboarding({ isOpen, onClose, onComplete }: {
                   <label className="block text-xs font-label uppercase tracking-widest text-on-surface-variant mb-2">{t.onboarding.activityLevel}</label>
                   <div className="space-y-2">
                     {activities.map(a => (
-                      <button key={a.id} onClick={() => setData(d => ({ ...d, activity: a.id as OnboardingData['activity'] }))}
+                      <button type="button" key={a.id} onClick={() => setData(d => ({ ...d, activity: a.id as OnboardingData['activity'] }))}
                         className={`w-full text-left px-4 py-3 rounded-sm border text-sm transition-all ${
                           data.activity === a.id ? 'border-primary bg-primary/10 text-primary font-bold' : 'border-outline-variant/20 text-on-surface-variant bg-surface-container-low hover:border-primary/50'
                         }`}>
@@ -249,7 +249,7 @@ export default function Onboarding({ isOpen, onClose, onComplete }: {
                 <p className="text-sm text-on-surface-variant mb-3">{t.onboarding.doYouTrain}</p>
                 <div className="flex gap-3">
                   {[true, false].map(v => (
-                    <button key={String(v)} onClick={() => setData(d => ({ ...d, trains: v }))}
+                    <button type="button" key={String(v)} onClick={() => setData(d => ({ ...d, trains: v }))}
                       className={`flex-1 py-3 rounded-sm text-xs font-bold uppercase tracking-wider border transition-all ${
                         data.trains === v ? 'border-primary bg-primary/10 text-primary' : 'border-outline-variant/20 text-on-surface-variant bg-surface-container-low'
                       }`}>
@@ -270,7 +270,7 @@ export default function Onboarding({ isOpen, onClose, onComplete }: {
                 {restrictions.map(r => {
                   const selected = data.restrictions.includes(r.id);
                   return (
-                    <button key={r.id}
+                    <button type="button" key={r.id}
                       onClick={() => setData(d => ({
                         ...d,
                         restrictions: selected ? d.restrictions.filter(x => x !== r.id) : [...d.restrictions, r.id],
@@ -298,7 +298,7 @@ export default function Onboarding({ isOpen, onClose, onComplete }: {
                     <span className="font-mono text-[9px] tracking-[0.3em] text-on-surface-variant uppercase block mb-2">{family}</span>
                     <div className="grid grid-cols-2 gap-2">
                       {familyThemes.map(th => (
-                        <button
+                        <button type="button"
                           key={th.id}
                           onClick={() => setTheme(th.id as Theme)}
                           className={`relative rounded-sm overflow-hidden border transition-all text-left ${
@@ -367,7 +367,7 @@ export default function Onboarding({ isOpen, onClose, onComplete }: {
         {/* Footer */}
         <div className="p-5 border-t border-outline-variant/10 shrink-0">
           {step < 6 ? (
-            <button
+            <button type="button"
               onClick={() => setStep(s => s + 1)}
               disabled={!canNext()}
               className="w-full py-4 bg-primary text-on-primary rounded-sm font-headline text-sm font-bold uppercase tracking-widest hover:opacity-90 transition-all disabled:opacity-40 flex items-center justify-center gap-2"
@@ -375,7 +375,7 @@ export default function Onboarding({ isOpen, onClose, onComplete }: {
               {t.onboarding.next} <ChevronRight className="w-4 h-4" />
             </button>
           ) : (
-            <button
+            <button type="button"
               onClick={handleFinish}
               className="w-full py-4 bg-primary text-on-primary rounded-sm font-headline text-sm font-bold uppercase tracking-widest hover:opacity-90 transition-all"
             >

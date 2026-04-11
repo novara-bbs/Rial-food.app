@@ -147,6 +147,7 @@ export default function Discover() {
                 </div>
               </div>
               <button
+                type="button"
                 onClick={(e) => { e.stopPropagation(); toggleChallenge('green-7'); }}
                 className={`px-3 py-1.5 rounded-sm font-label text-[9px] font-bold tracking-widest uppercase transition-all flex items-center gap-1 ${
                   joinedChallenges.includes('green-7')
@@ -167,6 +168,7 @@ export default function Discover() {
                 </div>
               </div>
               <button
+                type="button"
                 onClick={(e) => { e.stopPropagation(); toggleChallenge('hydration-3l'); }}
                 className={`px-3 py-1.5 rounded-sm font-label text-[9px] font-bold tracking-widest uppercase transition-all flex items-center gap-1 ${
                   joinedChallenges.includes('hydration-3l')

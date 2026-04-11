@@ -93,7 +93,7 @@ export default function ShoppingList({ onBack, shoppingList = [], setShoppingLis
       <header className="flex items-center justify-between mb-6">
         <div className="flex items-center gap-4">
           {onBack && (
-            <button onClick={onBack} aria-label={t.common.back} className="w-10 h-10 bg-surface-container-low rounded-full flex items-center justify-center text-tertiary hover:bg-surface-container-highest transition-colors">
+            <button type="button" onClick={onBack} aria-label={t.common.back} className="w-10 h-10 bg-surface-container-low rounded-full flex items-center justify-center text-tertiary hover:bg-surface-container-highest transition-colors">
               <ArrowLeft className="w-5 h-5" />
             </button>
           )}
@@ -103,16 +103,16 @@ export default function ShoppingList({ onBack, shoppingList = [], setShoppingLis
           </div>
         </div>
         <div className="flex items-center gap-2">
-          <button onClick={shareWhatsApp} disabled={!hasItems} aria-label="WhatsApp" title={t.shoppingList.shareViaWhatsApp} className="w-10 h-10 bg-surface-container-low rounded-full flex items-center justify-center text-on-surface-variant hover:text-primary transition-colors border border-outline-variant/20 disabled:opacity-30">
+          <button type="button" onClick={shareWhatsApp} disabled={!hasItems} aria-label="WhatsApp" title={t.shoppingList.shareViaWhatsApp} className="w-10 h-10 bg-surface-container-low rounded-full flex items-center justify-center text-on-surface-variant hover:text-primary transition-colors border border-outline-variant/20 disabled:opacity-30">
             <MessageCircle className="w-4 h-4" />
           </button>
-          <button onClick={shareGeneric} disabled={!hasItems} aria-label={t.shopping.share} className="w-10 h-10 bg-surface-container-low rounded-full flex items-center justify-center text-on-surface-variant hover:text-primary transition-colors border border-outline-variant/20 disabled:opacity-30">
+          <button type="button" onClick={shareGeneric} disabled={!hasItems} aria-label={t.shopping.share} className="w-10 h-10 bg-surface-container-low rounded-full flex items-center justify-center text-on-surface-variant hover:text-primary transition-colors border border-outline-variant/20 disabled:opacity-30">
             <Share2 className="w-4 h-4" />
           </button>
-          <button onClick={clearAll} disabled={!hasItems} aria-label={t.shoppingList.clearAll} className="w-10 h-10 bg-surface-container-low rounded-full flex items-center justify-center text-on-surface-variant hover:text-error transition-colors border border-outline-variant/20 disabled:opacity-30">
+          <button type="button" onClick={clearAll} disabled={!hasItems} aria-label={t.shoppingList.clearAll} className="w-10 h-10 bg-surface-container-low rounded-full flex items-center justify-center text-on-surface-variant hover:text-error transition-colors border border-outline-variant/20 disabled:opacity-30">
             <Trash2 className="w-4 h-4" />
           </button>
-          <button onClick={() => setIsAdding(true)} aria-label={t.shoppingList.addItem} className="w-10 h-10 bg-primary text-on-primary rounded-full flex items-center justify-center hover:bg-primary-container transition-colors shadow-lg">
+          <button type="button" onClick={() => setIsAdding(true)} aria-label={t.shoppingList.addItem} className="w-10 h-10 bg-primary text-on-primary rounded-full flex items-center justify-center hover:bg-primary-container transition-colors shadow-lg">
             <Plus className="w-5 h-5" />
           </button>
         </div>
@@ -146,7 +146,7 @@ export default function ShoppingList({ onBack, shoppingList = [], setShoppingLis
         <div className="bg-surface-container-high p-6 rounded-sm border border-primary/30 animate-in fade-in slide-in-from-top-4 duration-300">
           <div className="flex justify-between items-center mb-4">
             <h3 className="font-headline text-sm font-bold uppercase tracking-widest text-primary">{t.shoppingList.addItem}</h3>
-            <button onClick={() => setIsAdding(false)} aria-label={t.common.cancel} className="text-on-surface-variant hover:text-tertiary">
+            <button type="button" onClick={() => setIsAdding(false)} aria-label={t.common.cancel} className="text-on-surface-variant hover:text-tertiary">
               <X className="w-4 h-4" />
             </button>
           </div>
@@ -190,7 +190,7 @@ export default function ShoppingList({ onBack, shoppingList = [], setShoppingLis
                 {[...unchecked, ...checked].map((item: any) => {
                   const inPantry: boolean = item.inPantry ?? false;
                   return (
-                  <button
+                  <button type="button"
                     key={item.id}
                     onClick={() => toggleItem(item.id)}
                     aria-pressed={item.checked}
@@ -250,14 +250,14 @@ export default function ShoppingList({ onBack, shoppingList = [], setShoppingLis
           <EmptyState icon="📦" title={t.shoppingList.title} description={t.shoppingList.emptyStatePlan}>
             <div className="flex flex-col gap-3">
               {onNavigateToPlan && (
-                <button
+                <button type="button"
                   onClick={onNavigateToPlan}
                   className="px-8 py-3 bg-primary text-on-primary rounded-sm font-headline text-xs font-bold uppercase tracking-widest hover:opacity-90 transition-opacity"
                 >
                   {t.shoppingList.goToPlan}
                 </button>
               )}
-              <button onClick={() => setIsAdding(true)} className="px-8 py-3 bg-surface-container-highest border border-outline-variant/20 text-on-surface-variant rounded-sm font-headline text-xs font-bold uppercase tracking-widest hover:border-primary/50 transition-colors">
+              <button type="button" onClick={() => setIsAdding(true)} className="px-8 py-3 bg-surface-container-highest border border-outline-variant/20 text-on-surface-variant rounded-sm font-headline text-xs font-bold uppercase tracking-widest hover:border-primary/50 transition-colors">
                 {t.shoppingList.addItem}
               </button>
             </div>
@@ -268,7 +268,7 @@ export default function ShoppingList({ onBack, shoppingList = [], setShoppingLis
       {/* Clear completed FAB */}
       {completedCount > 0 && (
         <div className="fixed bottom-24 md:bottom-8 left-1/2 -translate-x-1/2 w-full max-w-md px-6 z-50">
-          <button
+          <button type="button"
             onClick={clearCompleted}
             className="w-full bg-surface-container-highest text-error border border-error/20 py-4 rounded-full font-headline font-bold text-sm uppercase tracking-widest hover:bg-error/10 transition-colors flex items-center justify-center gap-2 shadow-xl backdrop-blur-md"
           >

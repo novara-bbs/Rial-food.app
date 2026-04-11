@@ -100,7 +100,7 @@ export default function PostDetail({ onBack }: { onBack: () => void }) {
           className="flex-1 bg-surface-container-highest border border-outline-variant/30 py-2.5 px-3 text-xs font-label tracking-widest focus:outline-none focus:border-primary uppercase rounded-sm text-tertiary placeholder:text-on-surface-variant/50"
           onKeyDown={(e) => e.key === 'Enter' && handleSubmitComment()}
         />
-        <button
+        <button type="button"
           onClick={handleSubmitComment}
           disabled={!commentText.trim()}
           className="w-10 h-10 rounded-sm bg-primary text-on-primary flex items-center justify-center disabled:opacity-50 disabled:cursor-not-allowed"

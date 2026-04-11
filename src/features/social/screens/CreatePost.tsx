@@ -34,7 +34,7 @@ export default function CreatePost({ onBack, onCreatePost }: { onBack: () => voi
         label={t.createPost.community}
         title={t.createPost.title}
         rightAction={
-          <button
+          <button type="button"
             onClick={handlePublish}
             disabled={!content.trim()}
             className="bg-primary text-on-primary px-4 py-2 rounded-sm font-label text-xs font-bold tracking-widest uppercase flex items-center gap-2 hover:bg-primary-container transition-colors disabled:opacity-50"
@@ -57,7 +57,7 @@ export default function CreatePost({ onBack, onCreatePost }: { onBack: () => voi
           <div className="px-6 pb-4">
             <div className="relative rounded-sm overflow-hidden border border-outline-variant/20">
               <img src={image} alt="Preview" className="w-full max-h-48 object-cover" />
-              <button onClick={() => setImage(null)} className="absolute top-2 right-2 w-7 h-7 bg-surface-container-highest/90 rounded-full flex items-center justify-center text-on-surface-variant hover:text-error transition-colors">
+              <button type="button" onClick={() => setImage(null)} className="absolute top-2 right-2 w-7 h-7 bg-surface-container-highest/90 rounded-full flex items-center justify-center text-on-surface-variant hover:text-error transition-colors">
                 <X className="w-4 h-4" />
               </button>
             </div>
@@ -68,7 +68,7 @@ export default function CreatePost({ onBack, onCreatePost }: { onBack: () => voi
         {attachedRecipe && (
           <div className="px-6 pb-4">
             <div className="bg-background rounded-sm border border-primary/30 p-3 flex items-center gap-3 relative">
-              <button onClick={() => setAttachedRecipe(null)} className="absolute -top-2 -right-2 w-6 h-6 bg-error text-on-error rounded-full flex items-center justify-center text-[10px] font-bold shadow-lg">X</button>
+              <button type="button" onClick={() => setAttachedRecipe(null)} className="absolute -top-2 -right-2 w-6 h-6 bg-error text-on-error rounded-full flex items-center justify-center text-[10px] font-bold shadow-lg">X</button>
               {attachedRecipe.img && (
                 <img src={attachedRecipe.img} alt={attachedRecipe.title} className="w-12 h-12 rounded-sm object-cover" referrerPolicy="no-referrer" />
               )}
@@ -84,7 +84,7 @@ export default function CreatePost({ onBack, onCreatePost }: { onBack: () => voi
         {attachPerformance && (
           <div className="px-6 pb-6">
             <div className="bg-background rounded-sm border border-primary/30 p-4 grid grid-cols-2 gap-4 relative">
-              <button onClick={() => setAttachPerformance(false)} className="absolute -top-2 -right-2 w-6 h-6 bg-error text-on-error rounded-full flex items-center justify-center text-[10px] font-bold shadow-lg">X</button>
+              <button type="button" onClick={() => setAttachPerformance(false)} className="absolute -top-2 -right-2 w-6 h-6 bg-error text-on-error rounded-full flex items-center justify-center text-[10px] font-bold shadow-lg">X</button>
               <div className="flex flex-col items-center justify-center text-center p-2">
                 <Activity className="w-5 h-5 text-primary mb-1" />
                 <span className="font-headline text-xl font-bold text-tertiary">{userPerformance.recovery}%</span>
@@ -102,14 +102,14 @@ export default function CreatePost({ onBack, onCreatePost }: { onBack: () => voi
         {/* Action bar */}
         <div className="border-t border-outline-variant/10 p-4 bg-surface-container-highest flex items-center gap-4">
           <ImagePicker image={null} onImageChange={(base64) => base64 && setImage(base64)} />
-          <button
+          <button type="button"
             onClick={() => setShowRecipePicker(true)}
             className={`w-10 h-10 rounded-full flex items-center justify-center transition-colors ${attachedRecipe ? 'bg-primary text-on-primary' : 'bg-surface-container-low text-on-surface-variant hover:text-primary hover:bg-primary/10'}`}
             aria-label={t.createPost.addRecipe}
           >
             <ChefHat className="w-5 h-5" />
           </button>
-          <button
+          <button type="button"
             onClick={() => setAttachPerformance(!attachPerformance)}
             aria-label={t.createPost.includePerformance}
             className={`w-10 h-10 rounded-full flex items-center justify-center transition-colors ${attachPerformance ? 'bg-primary text-on-primary' : 'bg-surface-container-low text-on-surface-variant hover:text-primary hover:bg-primary/10'}`}

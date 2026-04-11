@@ -327,13 +327,14 @@ export default function AddMeal({
         {/* Quick capture buttons */}
         <div className="grid grid-cols-2 gap-3">
           <button
+            type="button"
             onClick={() => setShowScanner(true)}
             className="bg-surface-container-high text-tertiary border border-outline-variant/30 p-4 font-label text-xs font-bold tracking-widest uppercase flex flex-col items-center gap-2.5 rounded-sm hover:bg-surface-container-highest transition-colors group"
           >
             <Barcode className="w-5 h-5 text-on-surface-variant group-hover:text-primary transition-colors" />
             {t.fab.scanBarcode}
           </button>
-          <button
+          <button type="button"
             onClick={() => fileInputRef.current?.click()}
             disabled={isAnalyzing}
             className="bg-surface-container-high text-tertiary border border-outline-variant/30 p-4 font-label text-xs font-bold tracking-widest uppercase flex flex-col items-center gap-2.5 rounded-sm hover:bg-surface-container-highest transition-colors group disabled:opacity-60"
@@ -357,7 +358,7 @@ export default function AddMeal({
                   {t.addMealScreen?.aiDetected?.replace('{count}', String(photoResults.length)) || `IA detectó ${photoResults.length} alimentos`}
                 </h3>
               </div>
-              <button onClick={() => setPhotoResults([])} className="text-on-surface-variant hover:text-tertiary">
+              <button type="button" onClick={() => setPhotoResults([])} className="text-on-surface-variant hover:text-tertiary">
                 <X className="w-4 h-4" />
               </button>
             </div>
@@ -370,7 +371,7 @@ export default function AddMeal({
                     ~{food.estimatedGrams}g · {food.macros.cal} {t.common.kcal} · {food.macros.pro}g P
                   </span>
                 </div>
-                <button onClick={() => setPhotoResults(prev => prev.filter((_, j) => j !== i))}
+                <button type="button" onClick={() => setPhotoResults(prev => prev.filter((_, j) => j !== i))}
                   className="text-on-surface-variant hover:text-error transition-colors shrink-0">
                   <Trash2 className="w-3.5 h-3.5" />
                 </button>
@@ -379,7 +380,7 @@ export default function AddMeal({
             <div className="flex items-center justify-between text-[9px] font-label tracking-widest uppercase text-on-surface-variant pt-1">
               <span>Total: {photoResults.reduce((s, f) => s + f.macros.cal, 0)} {t.common.kcal} · {photoResults.reduce((s, f) => s + f.macros.pro, 0).toFixed(0)}g P</span>
             </div>
-            <button onClick={logPhotoResults}
+            <button type="button" onClick={logPhotoResults}
               className="w-full py-3 bg-primary text-on-primary rounded-sm font-headline text-xs font-bold uppercase tracking-widest hover:opacity-90 transition-opacity flex items-center justify-center gap-2">
               <Camera className="w-4 h-4" />
               {t.addMealScreen?.logDetected || `Registrar ${photoResults.length} alimentos`}
@@ -399,7 +400,7 @@ export default function AddMeal({
               className="w-full bg-surface-container-low border border-outline-variant/30 py-3.5 pl-12 pr-4 text-sm font-label tracking-widest focus:outline-none focus:border-primary uppercase rounded-sm text-tertiary placeholder:text-on-surface-variant/50"
             />
           </div>
-          <button
+          <button type="button"
             onClick={() => { setMultiMode(!multiMode); if (multiMode) setMultiQueue([]); }}
             className={`px-3 rounded-sm border font-label text-[9px] font-bold uppercase tracking-widest transition-colors flex items-center gap-1.5 shrink-0 ${
               multiMode ? 'bg-primary text-on-primary border-primary' : 'bg-surface-container-low text-on-surface-variant border-outline-variant/30 hover:border-primary/50'
@@ -493,7 +494,7 @@ export default function AddMeal({
                 </div>
 
                 <div className="flex items-center gap-1.5 shrink-0">
-                  <button
+                  <button type="button"
                     onClick={() => {
                       toggleFavorite(foodId);
                       toast.success(isFav ? t.addMealScreen.removedFromFavorites : t.addMealScreen.addedToFavorites);
@@ -502,7 +503,7 @@ export default function AddMeal({
                   >
                     <Star className={`w-4 h-4 ${isFav ? 'text-primary fill-primary' : ''}`} />
                   </button>
-                  <button
+                  <button type="button"
                     onClick={() => handleTapPlus(food)}
                     className="w-10 h-10 rounded-full bg-surface-container-highest flex items-center justify-center text-primary hover:bg-primary hover:text-on-primary transition-colors"
                   >
@@ -527,11 +528,11 @@ export default function AddMeal({
                 {multiTotals.cal} {t.common.kcal} · {multiTotals.pro.toFixed(0)}g P · {multiTotals.carbs.toFixed(0)}g C · {multiTotals.fats.toFixed(0)}g F
               </span>
             </div>
-            <button onClick={() => setMultiQueue([])}
+            <button type="button" onClick={() => setMultiQueue([])}
               className="text-on-surface-variant hover:text-error transition-colors p-1.5">
               <Trash2 className="w-4 h-4" />
             </button>
-            <button onClick={logMultiQueue}
+            <button type="button" onClick={logMultiQueue}
               className="bg-primary text-on-primary px-4 py-2.5 rounded-sm font-headline text-[10px] font-bold uppercase tracking-widest hover:opacity-90 transition-opacity">
               {t.addMealScreen?.logAll?.replace('{count}', String(multiQueue.length)) || `Registrar (${multiQueue.length})`}
             </button>

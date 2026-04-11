@@ -77,7 +77,7 @@ export default function StoryViewer({ onBack }: { onBack: () => void }) {
     return (
       <div className="fixed inset-0 z-50 bg-black flex items-center justify-center">
         <p className="text-white">{t.stories?.expired || 'No stories'}</p>
-        <button onClick={onBack} className="absolute top-6 right-6 text-white" aria-label="Close stories"><X className="w-6 h-6" /></button>
+        <button type="button" onClick={onBack} className="absolute top-6 right-6 text-white" aria-label="Close stories"><X className="w-6 h-6" /></button>
       </div>
     );
   }
@@ -106,7 +106,7 @@ export default function StoryViewer({ onBack }: { onBack: () => void }) {
       </div>
 
       {/* Close */}
-      <button onClick={(e) => { e.stopPropagation(); onBack(); }} className="absolute top-8 right-4 z-20 text-white/80 hover:text-white" aria-label="Close stories">
+      <button type="button" onClick={(e) => { e.stopPropagation(); onBack(); }} className="absolute top-8 right-4 z-20 text-white/80 hover:text-white" aria-label="Close stories">
         <X className="w-6 h-6" />
       </button>
 

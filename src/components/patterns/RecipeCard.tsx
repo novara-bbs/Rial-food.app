@@ -134,6 +134,7 @@ export default function RecipeCard({
           <div className="flex gap-1.5">
             {onShare && (
               <button
+                type="button"
                 onClick={onShare}
                 className="w-7 h-7 rounded-full bg-surface/80 backdrop-blur-md flex items-center justify-center text-on-surface-variant hover:text-primary transition-colors"
                 aria-label="Share"
@@ -143,6 +144,7 @@ export default function RecipeCard({
             )}
             {onSave && (
               <button
+                type="button"
                 onClick={onSave}
                 className="w-7 h-7 rounded-full bg-surface/80 backdrop-blur-md flex items-center justify-center text-on-surface-variant hover:text-primary transition-colors"
                 aria-label="Save"
@@ -152,6 +154,7 @@ export default function RecipeCard({
             )}
             {onDelete && (
               <button
+                type="button"
                 onClick={onDelete}
                 className="w-6 h-6 rounded-full bg-surface/80 backdrop-blur-md flex items-center justify-center text-on-surface-variant hover:text-error transition-colors"
                 aria-label="Delete"

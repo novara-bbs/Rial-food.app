@@ -63,7 +63,7 @@ export default function CreateStory({ onBack }: { onBack: () => void }) {
         onBack={onBack}
         title={t.stories?.create || 'Create Story'}
         rightAction={
-          <button
+          <button type="button"
             onClick={handlePublish}
             disabled={!canPublish()}
             className="bg-primary text-on-primary px-4 py-2 rounded-sm font-label text-xs font-bold tracking-widest uppercase flex items-center gap-2 hover:bg-primary-container transition-colors disabled:opacity-50"
@@ -76,7 +76,7 @@ export default function CreateStory({ onBack }: { onBack: () => void }) {
       {/* Type selector */}
       <div className="flex gap-2">
         {types.map(({ key, icon, label }) => (
-          <button
+          <button type="button"
             key={key}
             onClick={() => setStoryType(key)}
             className={`flex items-center gap-2 px-4 py-2.5 rounded-sm font-label text-[10px] font-bold tracking-widest uppercase transition-all ${
@@ -108,7 +108,7 @@ export default function CreateStory({ onBack }: { onBack: () => void }) {
             </div>
             <div className="flex gap-2 justify-center">
               {COLORS.map(color => (
-                <button
+                <button type="button"
                   key={color}
                   onClick={() => setBgColor(color)}
                   className={`w-8 h-8 rounded-full border-2 transition-transform ${bgColor === color ? 'border-primary scale-110' : 'border-transparent'}`}
@@ -148,7 +148,7 @@ export default function CreateStory({ onBack }: { onBack: () => void }) {
                     <span className="font-label text-sm tracking-widest text-primary">{selectedRecipe.cal} kcal</span>
                     <span className="font-label text-sm tracking-widest text-on-surface-variant">{selectedRecipe.pro}g P</span>
                   </div>
-                  <button
+                  <button type="button"
                     onClick={() => setSelectedRecipe(null)}
                     className="mt-4 text-xs text-on-surface-variant hover:text-error font-label tracking-widest uppercase"
                   >
@@ -157,7 +157,7 @@ export default function CreateStory({ onBack }: { onBack: () => void }) {
                 </div>
               </div>
             ) : (
-              <button
+              <button type="button"
                 onClick={() => setShowRecipePicker(true)}
                 className="w-full py-16 bg-surface-container-low border-2 border-dashed border-outline-variant/30 rounded-sm hover:border-primary/50 transition-colors flex flex-col items-center gap-3"
               >
@@ -173,7 +173,7 @@ export default function CreateStory({ onBack }: { onBack: () => void }) {
             {image ? (
               <div className="relative rounded-sm overflow-hidden">
                 <img src={image} alt="Preview" className="w-full max-h-[400px] object-cover" />
-                <button
+                <button type="button"
                   onClick={() => setImage(null)}
                   className="absolute top-3 right-3 w-8 h-8 bg-black/50 rounded-full flex items-center justify-center text-white hover:bg-black/70 transition-colors"
                 >

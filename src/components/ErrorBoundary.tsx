@@ -35,6 +35,7 @@ export default class ErrorBoundary extends React.Component<Props, State> {
             Ha ocurrido un error inesperado. Intenta recargar la página.
           </p>
           <button
+            type="button"
             onClick={() => this.setState({ hasError: false, error: null })}
             className="px-6 py-3 bg-primary text-on-primary rounded-sm font-headline text-xs font-bold uppercase tracking-widest hover:opacity-90 transition-opacity"
           >

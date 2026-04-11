@@ -23,6 +23,7 @@ export default function TabNav({ tabs, active, onChange, className }: TabNavProp
         const isActive = active === tab.id;
         return (
           <button
+            type="button"
             key={tab.id}
             onClick={() => onChange(tab.id)}
             className={cn(

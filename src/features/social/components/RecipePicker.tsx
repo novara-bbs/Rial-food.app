@@ -27,7 +27,7 @@ export default function RecipePicker({ recipes, onSelect, onClose }: RecipePicke
             <ChefHat className="w-5 h-5 text-primary" />
             <h3 className="font-headline font-bold text-sm uppercase text-tertiary tracking-widest">{t.createPost.selectRecipe}</h3>
           </div>
-          <button onClick={onClose} className="w-8 h-8 rounded-full bg-surface-container-highest flex items-center justify-center text-on-surface-variant hover:text-primary transition-colors">
+          <button type="button" onClick={onClose} className="w-8 h-8 rounded-full bg-surface-container-highest flex items-center justify-center text-on-surface-variant hover:text-primary transition-colors">
             <X className="w-4 h-4" />
           </button>
         </div>
@@ -51,7 +51,7 @@ export default function RecipePicker({ recipes, onSelect, onClose }: RecipePicke
             <p className="text-center text-xs text-on-surface-variant py-8">{t.createPost.noRecipesFound || 'No recipes found'}</p>
           ) : (
             filtered.map((recipe: any) => (
-              <button
+              <button type="button"
                 key={recipe.id}
                 onClick={() => onSelect({
                   id: String(recipe.id),

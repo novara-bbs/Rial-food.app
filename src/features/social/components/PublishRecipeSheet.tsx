@@ -43,7 +43,7 @@ export default function PublishRecipeSheet({ recipe, onClose }: PublishRecipeShe
             <Globe className="w-5 h-5 text-primary" />
             <h3 className="font-headline font-bold text-sm uppercase text-tertiary tracking-widest">{t.recipeDetail?.shareToFeed || 'Share to community'}</h3>
           </div>
-          <button onClick={onClose} className="w-8 h-8 rounded-full bg-surface-container-highest flex items-center justify-center text-on-surface-variant hover:text-primary">
+          <button type="button" onClick={onClose} className="w-8 h-8 rounded-full bg-surface-container-highest flex items-center justify-center text-on-surface-variant hover:text-primary">
             <X className="w-4 h-4" />
           </button>
         </div>
@@ -76,7 +76,7 @@ export default function PublishRecipeSheet({ recipe, onClose }: PublishRecipeShe
         </div>
 
         <div className="px-4 pb-4">
-          <button
+          <button type="button"
             onClick={handlePublish}
             className="w-full py-3 bg-primary text-on-primary rounded-sm font-headline text-xs font-bold uppercase tracking-widest flex items-center justify-center gap-2 hover:opacity-90 transition-opacity"
           >

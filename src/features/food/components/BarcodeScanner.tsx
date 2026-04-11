@@ -211,7 +211,7 @@ export default function BarcodeScanner({ onClose, onProductFound, onSaveToDictio
       {/* Header */}
       <div className="flex items-center justify-between p-4 shrink-0">
         <h2 className="font-headline text-lg font-bold uppercase text-tertiary tracking-tight">{t.fab.scanBarcode}</h2>
-        <button onClick={onClose} className="w-10 h-10 rounded-full bg-surface-container-highest flex items-center justify-center text-on-surface-variant hover:text-primary">
+        <button type="button" onClick={onClose} className="w-10 h-10 rounded-full bg-surface-container-highest flex items-center justify-center text-on-surface-variant hover:text-primary">
           <X className="w-5 h-5" />
         </button>
       </div>

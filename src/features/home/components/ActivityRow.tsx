@@ -29,7 +29,7 @@ export default function ActivityRow({ movement, setMovement, isTrainingDay, setI
             <Activity className="w-4 h-4 text-brand-secondary" />
             <span className="text-xs font-bold text-tertiary">{movement.activeMinutes}{t.home.activeMinLabel}</span>
           </div>
-          <button onClick={() => setIsEditing(!isEditing)} className="text-[10px] text-primary hover:underline font-bold uppercase tracking-widest">
+          <button type="button" onClick={() => setIsEditing(!isEditing)} className="text-[10px] text-primary hover:underline font-bold uppercase tracking-widest">
             {isEditing ? t.home.close : t.home.edit}
           </button>
         </div>
@@ -48,7 +48,7 @@ export default function ActivityRow({ movement, setMovement, isTrainingDay, setI
             {isTrainingDay ? t.home.trainingDay : t.home.restDay}
           </span>
         </div>
-        <button
+        <button type="button"
           onClick={() => setIsTrainingDay(!isTrainingDay)}
           className={`relative w-12 h-6 rounded-full transition-colors ${isTrainingDay ? 'bg-primary' : 'bg-surface-container-highest'}`}
         >
@@ -62,15 +62,15 @@ export default function ActivityRow({ movement, setMovement, isTrainingDay, setI
           <div>
             <span className="font-label text-[10px] uppercase tracking-widest text-on-surface-variant block mb-2">{t.home.addSteps}</span>
             <div className="flex gap-2">
-              <button onClick={() => setMovement && setMovement({ ...movement, steps: movement.steps + 500 })} className="flex-1 bg-surface-container-highest py-1 rounded text-xs font-bold text-tertiary">+500</button>
-              <button onClick={() => setMovement && setMovement({ ...movement, steps: movement.steps + 1000 })} className="flex-1 bg-surface-container-highest py-1 rounded text-xs font-bold text-tertiary">+1000</button>
+              <button type="button" onClick={() => setMovement && setMovement({ ...movement, steps: movement.steps + 500 })} className="flex-1 bg-surface-container-highest py-1 rounded text-xs font-bold text-tertiary">+500</button>
+              <button type="button" onClick={() => setMovement && setMovement({ ...movement, steps: movement.steps + 1000 })} className="flex-1 bg-surface-container-highest py-1 rounded text-xs font-bold text-tertiary">+1000</button>
             </div>
           </div>
           <div>
             <span className="font-label text-[10px] uppercase tracking-widest text-on-surface-variant block mb-2">{t.home.addActiveMin}</span>
             <div className="flex gap-2">
-              <button onClick={() => setMovement && setMovement({ ...movement, activeMinutes: movement.activeMinutes + 10 })} className="flex-1 bg-surface-container-highest py-1 rounded text-xs font-bold text-tertiary">+10m</button>
-              <button onClick={() => setMovement && setMovement({ ...movement, activeMinutes: movement.activeMinutes + 30 })} className="flex-1 bg-surface-container-highest py-1 rounded text-xs font-bold text-tertiary">+30m</button>
+              <button type="button" onClick={() => setMovement && setMovement({ ...movement, activeMinutes: movement.activeMinutes + 10 })} className="flex-1 bg-surface-container-highest py-1 rounded text-xs font-bold text-tertiary">+10m</button>
+              <button type="button" onClick={() => setMovement && setMovement({ ...movement, activeMinutes: movement.activeMinutes + 30 })} className="flex-1 bg-surface-container-highest py-1 rounded text-xs font-bold text-tertiary">+30m</button>
             </div>
           </div>
         </div>

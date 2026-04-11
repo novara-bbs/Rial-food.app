@@ -76,7 +76,7 @@ export default function Community({ communityPosts = [], onAddComment }: { commu
             <span className="font-mono text-[10px] font-bold tracking-[0.3em] text-primary uppercase">{t.community.globalCommunity}</span>
             <h2 className="font-headline text-3xl md:text-5xl font-black tracking-tighter uppercase text-tertiary mt-1">{t.community.title}</h2>
           </div>
-          <button
+          <button type="button"
             onClick={() => navigateTo('create-post')}
             aria-label={t.common.publish}
             className="bg-primary/10 text-primary border border-primary/30 px-4 py-2 font-label text-[10px] font-bold tracking-widest uppercase rounded-sm hover:bg-primary/20 transition-colors flex items-center gap-2"

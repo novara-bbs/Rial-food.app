@@ -148,7 +148,7 @@ export default function ImportRecipeURL({ onBack, onImport }: { onBack: () => vo
         <div className="space-y-6">
           {/* Mode toggle */}
           <div className="flex border border-outline-variant/20 rounded-sm overflow-hidden">
-            <button
+            <button type="button"
               onClick={() => setInputMode('url')}
               className={`flex-1 py-3 font-headline text-xs font-bold uppercase tracking-widest flex items-center justify-center gap-2 transition-colors ${
                 inputMode === 'url' ? 'bg-primary text-on-primary' : 'bg-surface-container-low text-on-surface-variant hover:text-tertiary'
@@ -156,7 +156,7 @@ export default function ImportRecipeURL({ onBack, onImport }: { onBack: () => vo
             >
               <Link className="w-4 h-4" /> URL
             </button>
-            <button
+            <button type="button"
               onClick={() => setInputMode('text')}
               className={`flex-1 py-3 font-headline text-xs font-bold uppercase tracking-widest flex items-center justify-center gap-2 transition-colors ${
                 inputMode === 'text' ? 'bg-primary text-on-primary' : 'bg-surface-container-low text-on-surface-variant hover:text-tertiary'
@@ -199,7 +199,7 @@ export default function ImportRecipeURL({ onBack, onImport }: { onBack: () => vo
             </div>
           )}
 
-          <button
+          <button type="button"
             onClick={handleImport}
             disabled={!url.trim() || loading}
             className="w-full py-4 bg-primary text-on-primary rounded-sm font-headline text-sm font-bold uppercase tracking-widest hover:opacity-90 transition-opacity disabled:opacity-50 flex items-center justify-center gap-3"
@@ -266,7 +266,7 @@ export default function ImportRecipeURL({ onBack, onImport }: { onBack: () => vo
                       )}
                     </div>
                     {ing.match && (
-                      <button
+                      <button type="button"
                         onClick={() => setShowAlternatives(showAlternatives === i ? null : i)}
                         className="p-1 text-on-surface-variant hover:text-primary transition-colors shrink-0"
                       >
@@ -332,10 +332,10 @@ export default function ImportRecipeURL({ onBack, onImport }: { onBack: () => vo
 
           {/* Actions */}
           <div className="flex gap-3">
-            <button onClick={() => setExtracted(null)} className="flex-1 py-4 border border-outline-variant/30 text-on-surface-variant rounded-sm font-headline text-sm font-bold uppercase tracking-widest hover:border-primary/50 transition-colors">
+            <button type="button" onClick={() => setExtracted(null)} className="flex-1 py-4 border border-outline-variant/30 text-on-surface-variant rounded-sm font-headline text-sm font-bold uppercase tracking-widest hover:border-primary/50 transition-colors">
               {t.common.edit}
             </button>
-            <button
+            <button type="button"
               onClick={handleSave}
               className="flex-1 py-4 bg-primary text-on-primary rounded-sm font-headline text-sm font-bold uppercase tracking-widest hover:opacity-90 transition-opacity"
             >

@@ -25,6 +25,16 @@
   --color-outline-variant: var(--outline-variant);
   --color-error: var(--error);
 
+  /* Macro nutrient colors (universal, theme-independent) */
+  --color-macro-protein: var(--macro-protein);
+  --color-macro-carbs: var(--macro-carbs);
+  --color-macro-fats: var(--macro-fats);
+
+  /* Overlay tokens (for full-screen dark overlays: CookMode, Stories) */
+  --color-on-overlay: var(--on-overlay);
+  --color-on-overlay-muted: var(--on-overlay-muted);
+  --color-overlay-border: var(--overlay-border);
+
   /* shadcn bridge tokens */
   --color-foreground: var(--foreground);
   --color-card: var(--card);
@@ -107,6 +117,14 @@
     --chart-recovery: #10b981;
     --chart-strain: #ef4444;
 
+    /* Semantic macro & overlay */
+    --macro-protein: #f87171;
+    --macro-carbs: #fbbf24;
+    --macro-fats: #38bdf8;
+    --on-overlay: #ffffff;
+    --on-overlay-muted: rgba(255,255,255,0.4);
+    --overlay-border: rgba(255,255,255,0.1);
+
     /* shadcn bridge */
     --foreground: var(--on-surface);
     --card: var(--surface-container-low);
@@ -161,6 +179,14 @@
     --chart-recovery: #10b981;
     --chart-strain: #ef4444;
 
+    /* Semantic macro & overlay */
+    --macro-protein: #f87171;
+    --macro-carbs: #fbbf24;
+    --macro-fats: #38bdf8;
+    --on-overlay: #ffffff;
+    --on-overlay-muted: rgba(255,255,255,0.4);
+    --overlay-border: rgba(255,255,255,0.1);
+
     /* shadcn bridge */
     --foreground: var(--on-surface);
     --card: var(--surface-container-low);
@@ -213,6 +239,14 @@
     --chart-text: #64748b;
     --chart-recovery: #38bdf8;
     --chart-strain: #f43f5e;
+
+    /* Semantic macro & overlay */
+    --macro-protein: #f87171;
+    --macro-carbs: #fbbf24;
+    --macro-fats: #38bdf8;
+    --on-overlay: #ffffff;
+    --on-overlay-muted: rgba(255,255,255,0.4);
+    --overlay-border: rgba(255,255,255,0.1);
 
     /* shadcn bridge */
     --foreground: var(--on-surface);
@@ -267,6 +301,14 @@
     --chart-recovery: #0284c7;
     --chart-strain: #e11d48;
 
+    /* Semantic macro & overlay */
+    --macro-protein: #f87171;
+    --macro-carbs: #fbbf24;
+    --macro-fats: #38bdf8;
+    --on-overlay: #ffffff;
+    --on-overlay-muted: rgba(255,255,255,0.4);
+    --overlay-border: rgba(255,255,255,0.1);
+
     /* shadcn bridge */
     --foreground: var(--on-surface);
     --card: var(--surface-container-low);
@@ -320,6 +362,14 @@
     --chart-recovery: #fb923c;
     --chart-strain: #ef4444;
 
+    /* Semantic macro & overlay */
+    --macro-protein: #f87171;
+    --macro-carbs: #fbbf24;
+    --macro-fats: #38bdf8;
+    --on-overlay: #ffffff;
+    --on-overlay-muted: rgba(255,255,255,0.4);
+    --overlay-border: rgba(255,255,255,0.1);
+
     /* shadcn bridge */
     --foreground: var(--on-surface);
     --card: var(--surface-container-low);
@@ -372,6 +422,14 @@
     --chart-text: #78716c;
     --chart-recovery: #ea580c;
     --chart-strain: #dc2626;
+
+    /* Semantic macro & overlay */
+    --macro-protein: #f87171;
+    --macro-carbs: #fbbf24;
+    --macro-fats: #38bdf8;
+    --on-overlay: #ffffff;
+    --on-overlay-muted: rgba(255,255,255,0.4);
+    --overlay-border: rgba(255,255,255,0.1);
 
     /* shadcn bridge */
     --foreground: var(--on-surface);

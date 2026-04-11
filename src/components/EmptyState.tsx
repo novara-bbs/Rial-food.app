@@ -15,6 +15,7 @@ export default function EmptyState({ icon, title, description, ctaLabel, onCta, 
       <p className="text-on-surface-variant font-body text-sm max-w-xs">{description}</p>
       {ctaLabel && onCta && (
         <button
+          type="button"
           onClick={onCta}
           className="mt-6 px-8 py-3 bg-primary text-on-primary rounded-sm font-headline text-xs font-bold uppercase tracking-widest hover:opacity-90 transition-opacity"
         >

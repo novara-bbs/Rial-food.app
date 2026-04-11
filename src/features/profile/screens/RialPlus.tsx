@@ -68,7 +68,7 @@ export default function RialPlus({ onBack }: { onBack: () => void }) {
     <div className="pb-32">
       {/* Hero */}
       <div className="relative bg-primary/10 border-b border-primary/20 px-6 pt-6 pb-12">
-        <button onClick={onBack} className="absolute top-6 left-6 p-2 hover:bg-surface-container-highest rounded-sm transition-colors">
+        <button type="button" onClick={onBack} className="absolute top-6 left-6 p-2 hover:bg-surface-container-highest rounded-sm transition-colors">
           <ArrowLeft className="w-5 h-5" />
         </button>
         <div className="text-center pt-10 space-y-3">
@@ -86,7 +86,7 @@ export default function RialPlus({ onBack }: { onBack: () => void }) {
         {/* Plan selector */}
         <div className="grid grid-cols-2 gap-3">
           {PLANS.map(plan => (
-            <button
+            <button type="button"
               key={plan.id}
               onClick={() => setSelectedPlan(plan.id as 'monthly' | 'yearly')}
               className={`relative p-5 rounded-sm border-2 transition-all text-left ${
@@ -163,7 +163,7 @@ export default function RialPlus({ onBack }: { onBack: () => void }) {
         {/* CTA */}
         <div className="fixed bottom-8 left-0 right-0 px-6 z-50">
           <div className="max-w-2xl mx-auto">
-            <button
+            <button type="button"
               onClick={handleUpgrade}
               disabled={isUpgrading}
               className="w-full py-5 bg-primary text-on-primary rounded-sm font-headline font-black text-lg uppercase tracking-widest hover:opacity-90 transition-opacity disabled:opacity-50 flex items-center justify-center gap-3 shadow-2xl shadow-primary/30"

@@ -63,7 +63,7 @@ export default function Challenges({ onBack }: { onBack: () => void }) {
                       </p>
                     </div>
                   </div>
-                  <button
+                  <button type="button"
                     onClick={(e) => { e.stopPropagation(); toggleChallenge(challenge.id); }}
                     className="px-3 py-1.5 rounded-sm text-[9px] font-bold uppercase tracking-widest bg-surface-container-highest text-on-surface-variant hover:text-error transition-colors"
                   >
@@ -101,7 +101,7 @@ export default function Challenges({ onBack }: { onBack: () => void }) {
                     </div>
                   </div>
                 </div>
-                <button
+                <button type="button"
                   onClick={(e) => { e.stopPropagation(); toggleChallenge(challenge.id); }}
                   className={`px-4 py-2 rounded-sm text-[10px] font-bold uppercase tracking-widest transition-all flex items-center gap-1 ${
                     isJoined

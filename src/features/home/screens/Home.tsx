@@ -238,6 +238,7 @@ export default function Home({
             <div className="space-y-2">
               {steps.map(step => (
                 <button
+                  type="button"
                   key={step.id}
                   onClick={step.done ? undefined : step.action}
                   disabled={step.done}
@@ -252,6 +253,7 @@ export default function Home({
               ))}
             </div>
             <button
+              type="button"
               onClick={() => { localStorage.setItem('rial_guidedSetupDismissed', 'true'); setGuidedDismissed(true); }}
               className="w-full text-center text-[10px] font-bold text-on-surface-variant uppercase tracking-widest hover:underline pt-1"
             >
@@ -278,6 +280,7 @@ export default function Home({
       {/* 5. Primary Actions — Log Meal + Check-in */}
       <div className="grid grid-cols-2 gap-4">
         <button
+          type="button"
           onClick={onAddMeal}
           className="bg-primary text-on-primary p-5 rounded-sm flex flex-col items-center justify-center gap-3 hover:bg-primary/90 transition-all shadow-lg shadow-primary/10 group"
         >
@@ -285,6 +288,7 @@ export default function Home({
           <span className="font-headline font-bold text-xs uppercase tracking-widest">{t.fab.logMeal}</span>
         </button>
         <button
+          type="button"
           onClick={() => onCheckIn()}
           className={`p-5 rounded-sm flex flex-col items-center justify-center gap-3 transition-all group border ${
             checkInStatus
@@ -322,14 +326,17 @@ export default function Home({
           </div>
           <div className="flex items-center gap-2">
             <button
+              type="button"
               onClick={() => setIsEditingHydration(!isEditingHydration)}
               className="text-[10px] text-brand-secondary hover:underline font-bold uppercase tracking-widest"
             >
               {isEditingHydration ? t.home.close : t.home.edit}
             </button>
             <button
+              type="button"
               onClick={handleAddWater}
               className="w-9 h-9 bg-brand-secondary text-on-secondary rounded-full flex items-center justify-center hover:opacity-90 transition-all active:scale-95 shadow-lg shadow-secondary/20 shrink-0"
+              aria-label="Add water"
             >
               <Plus className="w-4 h-4" />
             </button>
@@ -387,7 +394,7 @@ export default function Home({
 
       {/* 7c. Shopping Reminder — conditional */}
       {shoppingPendingCount > 0 && (
-        <button onClick={onNavigateToPlan} className="bg-surface-container-low border border-outline-variant/20 p-3 rounded-sm flex items-center gap-3 w-full hover:border-primary/30 transition-colors">
+        <button type="button" onClick={onNavigateToPlan} className="bg-surface-container-low border border-outline-variant/20 p-3 rounded-sm flex items-center gap-3 w-full hover:border-primary/30 transition-colors">
           <ShoppingCart className="w-4 h-4 text-primary" />
           <span className="text-xs font-bold uppercase tracking-widest text-tertiary flex-1 text-left">
             {(t.home.shoppingPending as string)?.replace('{count}', String(shoppingPendingCount))}

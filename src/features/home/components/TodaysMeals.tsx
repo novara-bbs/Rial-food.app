@@ -122,11 +122,11 @@ export default function TodaysMeals({
                     </div>
                     <div className="flex items-center gap-1 shrink-0">
                       {entry.grams && (
-                        <button onClick={() => startEdit(entry)} className="w-7 h-7 flex items-center justify-center rounded-full text-on-surface-variant/40 hover:text-primary hover:bg-primary/10 transition-colors opacity-0 group-hover:opacity-100">
+                        <button type="button" onClick={() => startEdit(entry)} className="w-7 h-7 flex items-center justify-center rounded-full text-on-surface-variant/40 hover:text-primary hover:bg-primary/10 transition-colors opacity-0 group-hover:opacity-100">
                           <Pencil className="w-3 h-3" />
                         </button>
                       )}
-                      <button onClick={() => handleDelete(entry)} className="w-7 h-7 flex items-center justify-center rounded-full text-on-surface-variant/40 hover:text-error hover:bg-error/10 transition-colors opacity-0 group-hover:opacity-100">
+                      <button type="button" onClick={() => handleDelete(entry)} className="w-7 h-7 flex items-center justify-center rounded-full text-on-surface-variant/40 hover:text-error hover:bg-error/10 transition-colors opacity-0 group-hover:opacity-100">
                         <Trash2 className="w-3.5 h-3.5" />
                       </button>
                     </div>
@@ -146,10 +146,10 @@ export default function TodaysMeals({
                           </button>
                         </div>
                         <span className="text-[10px] font-headline font-bold uppercase tracking-widest text-on-surface-variant">g</span>
-                        <button onClick={confirmEdit} className="w-8 h-8 flex items-center justify-center rounded-full bg-primary text-on-primary hover:opacity-90 transition-opacity">
+                        <button type="button" onClick={confirmEdit} className="w-8 h-8 flex items-center justify-center rounded-full bg-primary text-on-primary hover:opacity-90 transition-opacity">
                           <Check className="w-4 h-4" />
                         </button>
-                        <button onClick={() => setEditingEntry(null)} className="w-8 h-8 flex items-center justify-center rounded-full bg-surface-container-highest text-on-surface-variant hover:text-tertiary transition-colors">
+                        <button type="button" onClick={() => setEditingEntry(null)} className="w-8 h-8 flex items-center justify-center rounded-full bg-surface-container-highest text-on-surface-variant hover:text-tertiary transition-colors">
                           <X className="w-4 h-4" />
                         </button>
                       </div>
@@ -193,7 +193,7 @@ export default function TodaysMeals({
               <span className="font-label text-[10px] uppercase tracking-widest text-on-surface-variant flex items-center gap-1.5">
                 <Calendar className="w-3.5 h-3.5 text-primary" /> {t.home.plannedToday}
               </span>
-              <button onClick={onNavigateToPlan} className="text-[10px] font-bold text-primary uppercase tracking-widest hover:underline">{t.plan.title}</button>
+              <button type="button" onClick={onNavigateToPlan} className="text-[10px] font-bold text-primary uppercase tracking-widest hover:underline">{t.plan.title}</button>
             </div>
           )}
           {!dailyLog.length && (
@@ -201,7 +201,7 @@ export default function TodaysMeals({
               <span className="font-headline text-sm font-bold tracking-tight uppercase text-tertiary flex items-center gap-2">
                 <Calendar className="w-4 h-4 text-primary" /> {t.home.plannedToday}
               </span>
-              <button onClick={onNavigateToPlan} className="text-xs font-bold text-primary uppercase tracking-widest hover:underline">{t.plan.title}</button>
+              <button type="button" onClick={onNavigateToPlan} className="text-xs font-bold text-primary uppercase tracking-widest hover:underline">{t.plan.title}</button>
             </div>
           )}
           {todaysMeals.map((meal: any, idx: number) => (
@@ -216,7 +216,7 @@ export default function TodaysMeals({
                 <h3 className="font-headline text-sm font-bold text-tertiary uppercase truncate mt-0.5">{meal.title}</h3>
                 <span className="text-[10px] text-on-surface-variant font-mono">{meal.cal} {t.common.kcal}</span>
               </div>
-              <button
+              <button type="button"
                 onClick={(e) => { e.stopPropagation(); onLogMealNow && onLogMealNow(meal, 1); }}
                 className="shrink-0 px-4 py-2 bg-primary text-on-primary rounded-sm text-[10px] font-bold uppercase tracking-widest hover:opacity-90 transition-opacity"
               >
@@ -231,7 +231,7 @@ export default function TodaysMeals({
       {!hasContent && (
         <div className="bg-surface-container-low border border-dashed border-outline-variant/40 p-10 rounded-sm text-center">
           <p className="font-label text-sm text-on-surface-variant uppercase tracking-widest">{t.empty.planEmpty}</p>
-          <button onClick={onAddMeal} className="mt-4 text-primary font-bold uppercase text-xs tracking-widest hover:underline">{t.fab.logMeal}</button>
+          <button type="button" onClick={onAddMeal} className="mt-4 text-primary font-bold uppercase text-xs tracking-widest hover:underline">{t.fab.logMeal}</button>
         </div>
       )}
     </section>

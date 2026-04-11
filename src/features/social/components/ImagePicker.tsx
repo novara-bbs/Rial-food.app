@@ -21,7 +21,7 @@ export default function ImagePicker({ image, onImageChange }: ImagePickerProps) 
     return (
       <div className="relative rounded-sm overflow-hidden border border-outline-variant/20">
         <img src={image} alt="Preview" className="w-full max-h-64 object-cover" />
-        <button
+        <button type="button"
           onClick={() => onImageChange(null)}
           className="absolute top-2 right-2 w-7 h-7 bg-surface-container-highest/90 rounded-full flex items-center justify-center text-on-surface-variant hover:text-error transition-colors"
         >
@@ -35,14 +35,14 @@ export default function ImagePicker({ image, onImageChange }: ImagePickerProps) 
     <div className="flex gap-3">
       <input ref={cameraRef} type="file" accept="image/*" capture="environment" className="hidden" onChange={(e) => handleFile(e.target.files?.[0])} />
       <input ref={galleryRef} type="file" accept="image/*" className="hidden" onChange={(e) => handleFile(e.target.files?.[0])} />
-      <button
+      <button type="button"
         onClick={() => cameraRef.current?.click()}
         className="w-10 h-10 rounded-full bg-surface-container-low flex items-center justify-center text-on-surface-variant hover:text-primary hover:bg-primary/10 transition-colors"
         aria-label="Camera"
       >
         <Camera className="w-5 h-5" />
       </button>
-      <button
+      <button type="button"
         onClick={() => galleryRef.current?.click()}
         className="w-10 h-10 rounded-full bg-surface-container-low flex items-center justify-center text-on-surface-variant hover:text-brand-secondary hover:bg-brand-secondary/10 transition-colors"
         aria-label="Gallery"

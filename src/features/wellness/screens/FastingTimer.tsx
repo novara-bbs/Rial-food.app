@@ -69,7 +69,7 @@ export default function FastingTimer({ onBack }: { onBack: () => void }) {
       {/* Protocol selector */}
       <div className="flex gap-2 overflow-x-auto hide-scrollbar">
         {PROTOCOLS.map(p => (
-          <button
+          <button type="button"
             key={p.id}
             onClick={() => !isFasting && setProtocol(p)}
             disabled={isFasting}
@@ -122,7 +122,7 @@ export default function FastingTimer({ onBack }: { onBack: () => void }) {
         </div>
 
         {/* Start / Stop button */}
-        <button
+        <button type="button"
           onClick={isFasting ? handleStop : handleStart}
           className={`mt-6 px-10 py-4 rounded-sm font-headline text-sm font-bold uppercase tracking-widest flex items-center gap-3 transition-all ${
             isFasting

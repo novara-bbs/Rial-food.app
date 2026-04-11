@@ -81,7 +81,7 @@ export default function RealFeelInline({ onSubmit, onDismiss }: {
     label: string,
     color: string
   ) => (
-    <button
+    <button type="button"
       onClick={onClick}
       className={`flex-1 py-2 text-[10px] font-bold uppercase tracking-wider rounded-sm border transition-all ${
         active ? `${color} border-transparent` : 'border-outline-variant/20 text-on-surface-variant hover:border-primary/30'
@@ -97,7 +97,7 @@ export default function RealFeelInline({ onSubmit, onDismiss }: {
         <h3 className="font-headline text-sm font-bold uppercase tracking-widest text-primary">
           {t.realFeel.howDoYouFeel}
         </h3>
-        <button onClick={() => { setVisible(false); onDismiss(); }} className="text-on-surface-variant hover:text-primary transition-colors p-1">
+        <button type="button" onClick={() => { setVisible(false); onDismiss(); }} className="text-on-surface-variant hover:text-primary transition-colors p-1">
           <X className="w-4 h-4" />
         </button>
       </div>
@@ -105,7 +105,7 @@ export default function RealFeelInline({ onSubmit, onDismiss }: {
       {/* Emoji selector */}
       <div className="flex justify-between gap-2 mb-4">
         {EMOJIS.map(e => (
-          <button
+          <button type="button"
             key={e.level}
             onClick={() => setSelectedLevel(e.level)}
             className={`flex-1 flex flex-col items-center gap-1.5 py-3 rounded-sm border transition-all ${
@@ -169,7 +169,7 @@ export default function RealFeelInline({ onSubmit, onDismiss }: {
             {TAG_KEYS.map(key => {
               const selected = selectedTags.includes(key);
               return (
-                <button
+                <button type="button"
                   key={key}
                   onClick={() => toggleTag(key)}
                   className={`px-3 py-1.5 rounded-full text-[10px] font-bold uppercase tracking-wider border transition-all ${
@@ -184,7 +184,7 @@ export default function RealFeelInline({ onSubmit, onDismiss }: {
             })}
           </div>
 
-          <button
+          <button type="button"
             onClick={handleSubmit}
             className="w-full py-3 bg-primary text-on-primary rounded-sm font-headline text-xs font-bold uppercase tracking-widest hover:opacity-90 transition-opacity"
           >

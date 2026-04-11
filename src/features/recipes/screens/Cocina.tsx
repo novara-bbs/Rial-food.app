@@ -162,11 +162,11 @@ export default function Cocina({ onAddMeal, onCreateRecipe, onNavigateToRecipe, 
                   className="w-full pl-10 pr-4 py-3 bg-surface-container-low border border-outline-variant/20 rounded-sm text-on-surface placeholder:text-on-surface-variant text-sm font-body focus:outline-none focus:border-primary"
                 />
               </div>
-              <button onClick={onCreateRecipe} className="p-3 bg-primary text-on-primary rounded-sm hover:opacity-90 transition-opacity" title={t.recipes.create}>
+              <button type="button" onClick={onCreateRecipe} className="p-3 bg-primary text-on-primary rounded-sm hover:opacity-90 transition-opacity" title={t.recipes.create}>
                 <Plus className="w-5 h-5" />
               </button>
               {onImportUrl && (
-                <button onClick={onImportUrl} className="p-3 bg-surface-container-highest text-primary border border-outline-variant/20 rounded-sm hover:bg-primary/10 transition-colors" title={t.recipes.import}>
+                <button type="button" onClick={onImportUrl} className="p-3 bg-surface-container-highest text-primary border border-outline-variant/20 rounded-sm hover:bg-primary/10 transition-colors" title={t.recipes.import}>
                   <Link className="w-5 h-5" />
                 </button>
               )}
@@ -187,11 +187,11 @@ export default function Cocina({ onAddMeal, onCreateRecipe, onNavigateToRecipe, 
             {filteredRecipes.length === 0 ? (
               <EmptyState icon="📖" description={t.empty.recipesEmpty}>
                 <div className="flex gap-3">
-                  <button onClick={onCreateRecipe} className="px-6 py-3 bg-primary text-on-primary rounded-sm font-headline text-xs font-bold uppercase tracking-widest">
+                  <button type="button" onClick={onCreateRecipe} className="px-6 py-3 bg-primary text-on-primary rounded-sm font-headline text-xs font-bold uppercase tracking-widest">
                     {t.recipes.create}
                   </button>
                   {onImportUrl && (
-                    <button onClick={onImportUrl} className="px-6 py-3 bg-surface-container-highest border border-outline-variant/20 text-primary rounded-sm font-headline text-xs font-bold uppercase tracking-widest">
+                    <button type="button" onClick={onImportUrl} className="px-6 py-3 bg-surface-container-highest border border-outline-variant/20 text-primary rounded-sm font-headline text-xs font-bold uppercase tracking-widest">
                       {t.recipes.import}
                     </button>
                   )}
@@ -217,7 +217,7 @@ export default function Cocina({ onAddMeal, onCreateRecipe, onNavigateToRecipe, 
         {activeTab === 'plan' && (
           <>
             <div className="px-6 pb-3">
-              <button
+              <button type="button"
                 onClick={handleGenerateList}
                 className="w-full flex items-center justify-center gap-2 px-4 py-3 bg-primary text-on-primary rounded-sm font-headline text-xs font-bold uppercase tracking-widest hover:opacity-90 transition-opacity"
               >

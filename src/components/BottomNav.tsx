@@ -21,9 +21,11 @@ export default function BottomNav({ currentScreen, setCurrentScreen, onOpenCreat
         if (item.isAction) {
           return (
             <button
+              type="button"
               key={item.id}
               onClick={onOpenCreate}
               className="flex flex-col items-center justify-center w-16 -mt-6 mb-2"
+              aria-label="Crear"
             >
               <div className="w-14 h-14 rounded-full bg-primary text-on-primary flex items-center justify-center shadow-lg shadow-primary/20 hover:scale-105 transition-transform">
                 <Icon className="w-7 h-7" />
@@ -34,6 +36,7 @@ export default function BottomNav({ currentScreen, setCurrentScreen, onOpenCreat
 
         return (
           <button
+            type="button"
             key={item.id}
             onClick={() => setCurrentScreen(item.id)}
             className={`flex flex-col items-center justify-center w-16 py-2 transition-all ${

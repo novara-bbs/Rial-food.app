@@ -128,6 +128,7 @@ export default function Discovery({ onNavigateToRecipe, savedRecipes = [], onSav
     return (
       <div className="px-6 mb-8">
         <button
+          type="button"
           onClick={() => toast.success(`${title}: ${count}`)}
           className={`w-full ${bg} p-4 rounded-sm flex items-center gap-4`}
         >

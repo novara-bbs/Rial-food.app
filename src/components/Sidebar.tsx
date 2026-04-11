@@ -20,6 +20,7 @@ export default function Sidebar({ currentScreen, setCurrentScreen, onOpenCreate 
 
       <div className="px-4 mb-4">
         <button
+          type="button"
           onClick={onOpenCreate}
           className="w-full bg-primary text-on-primary py-3 rounded-sm font-headline font-bold text-sm uppercase tracking-widest hover:bg-primary-container transition-colors flex items-center justify-center gap-2 shadow-lg shadow-primary/10"
         >
@@ -33,6 +34,7 @@ export default function Sidebar({ currentScreen, setCurrentScreen, onOpenCreate 
           const isActive = currentScreen === item.id;
           return (
             <button
+              type="button"
               key={item.id}
               onClick={() => setCurrentScreen(item.id)}
               className={`flex items-center py-3 pl-6 pr-4 w-full text-left transition-all ${

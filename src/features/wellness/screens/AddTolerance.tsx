@@ -42,13 +42,13 @@ export default function AddTolerance({ onBack, onAddLog }: { onBack: () => void,
             <h3 className="font-headline text-lg font-bold tracking-tight uppercase text-on-surface-variant mb-4 border-b border-outline-variant/20 pb-2">{t.tolerance.recentIngredients}</h3>
             <div className="space-y-2">
               {displayIngredients.map((ing, idx) => (
-                <button key={idx} onClick={() => setSelectedIngredient(ing)} className="w-full flex items-center justify-between p-4 bg-surface-container-low rounded-sm border border-outline-variant/20 hover:border-primary/30 transition-colors text-left group">
+                <button type="button" key={idx} onClick={() => setSelectedIngredient(ing)} className="w-full flex items-center justify-between p-4 bg-surface-container-low rounded-sm border border-outline-variant/20 hover:border-primary/30 transition-colors text-left group">
                   <span className="font-headline font-bold text-base uppercase text-tertiary">{ing}</span>
                   <Plus className="w-5 h-5 text-on-surface-variant group-hover:text-primary transition-colors" />
                 </button>
               ))}
               {displayIngredients.length === 0 && searchQuery.trim() && (
-                <button onClick={() => setSelectedIngredient(searchQuery)} className="w-full flex items-center justify-between p-4 bg-surface-container-low rounded-sm border border-primary/50 hover:bg-primary/10 transition-colors text-left">
+                <button type="button" onClick={() => setSelectedIngredient(searchQuery)} className="w-full flex items-center justify-between p-4 bg-surface-container-low rounded-sm border border-primary/50 hover:bg-primary/10 transition-colors text-left">
                   <span className="font-headline font-bold text-base uppercase text-primary">+ "{searchQuery}"</span>
                   <Plus className="w-5 h-5 text-primary" />
                 </button>
@@ -60,7 +60,7 @@ export default function AddTolerance({ onBack, onAddLog }: { onBack: () => void,
         <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
           <div className="bg-surface-container-low p-4 rounded-sm border border-outline-variant/20 flex justify-between items-center">
             <span className="font-headline font-bold text-lg uppercase text-tertiary">{selectedIngredient}</span>
-            <button onClick={() => setSelectedIngredient(null)} className="text-xs font-label font-bold tracking-widest uppercase text-primary hover:underline">{t.common.edit}</button>
+            <button type="button" onClick={() => setSelectedIngredient(null)} className="text-xs font-label font-bold tracking-widest uppercase text-primary hover:underline">{t.common.edit}</button>
           </div>
 
           <section>
@@ -73,7 +73,7 @@ export default function AddTolerance({ onBack, onAddLog }: { onBack: () => void,
               ].map(level => {
                 const Icon = level.icon;
                 return (
-                  <button key={level.key} onClick={() => setToleranceLevel(level.key)}
+                  <button type="button" key={level.key} onClick={() => setToleranceLevel(level.key)}
                     className={`p-4 rounded-sm border-2 flex flex-col items-center justify-center gap-2 transition-all ${
                       toleranceLevel === level.key ? level.activeClass : 'border-outline-variant/20 bg-surface-container-low text-on-surface-variant hover:border-primary/50'
                     }`}>
@@ -91,7 +91,7 @@ export default function AddTolerance({ onBack, onAddLog }: { onBack: () => void,
               {symptomKeys.map(key => {
                 const label = (t.checkIn.symptomsList as Record<string, string>)[key] || key;
                 return (
-                  <button key={key} onClick={() => toggleSymptom(label)}
+                  <button type="button" key={key} onClick={() => toggleSymptom(label)}
                     className={`px-4 py-2 rounded-full text-xs font-bold tracking-widest uppercase transition-all border ${
                       selectedSymptoms.includes(label) ? 'bg-primary text-on-primary border-primary' : 'bg-surface-container-low text-on-surface-variant border-outline-variant/20 hover:border-primary/30'
                     }`}>
@@ -112,7 +112,7 @@ export default function AddTolerance({ onBack, onAddLog }: { onBack: () => void,
             />
           </section>
 
-          <button
+          <button type="button"
             disabled={!toleranceLevel}
             onClick={() => {
               if (onAddLog && selectedIngredient && toleranceLevel) {

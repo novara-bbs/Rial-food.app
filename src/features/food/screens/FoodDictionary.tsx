@@ -82,7 +82,7 @@ export default function FoodDictionary({ navigateTo }: Props) {
           className="w-full pl-10 pr-10 py-3 bg-surface-container-low border border-outline-variant/30 rounded-sm text-on-surface placeholder:text-on-surface-variant/60 focus:outline-none focus:border-primary transition-colors"
         />
         {query && (
-          <button onClick={() => setQuery('')} className="absolute right-3 top-1/2 -translate-y-1/2 text-on-surface-variant hover:text-on-surface">
+          <button type="button" onClick={() => setQuery('')} aria-label="Clear search" className="absolute right-3 top-1/2 -translate-y-1/2 text-on-surface-variant hover:text-on-surface">
             <X className="w-4 h-4" />
           </button>
         )}
@@ -91,6 +91,7 @@ export default function FoodDictionary({ navigateTo }: Props) {
       {/* Category chips */}
       <div className="flex gap-2 overflow-x-auto pb-1 -mx-4 px-4 scrollbar-none">
         <button
+          type="button"
           onClick={() => setActiveCategory(null)}
           className={`shrink-0 px-3 py-1.5 rounded-sm text-xs font-headline font-bold uppercase tracking-widest transition-colors ${
             activeCategory === null
@@ -104,6 +105,7 @@ export default function FoodDictionary({ navigateTo }: Props) {
           const meta = INGREDIENT_CATEGORIES[cat];
           return (
             <button
+              type="button"
               key={cat}
               onClick={() => setActiveCategory(activeCategory === cat ? null : cat)}
               className={`shrink-0 px-3 py-1.5 rounded-sm text-xs font-headline font-bold uppercase tracking-widest transition-colors ${
@@ -148,6 +150,7 @@ export default function FoodDictionary({ navigateTo }: Props) {
                     <div key={item.id} className="bg-surface-container-low rounded-sm border border-outline-variant/20 overflow-hidden">
                       {/* Collapsed row */}
                       <button
+                        type="button"
                         onClick={() => toggleExpand(item.id)}
                         className="w-full flex items-center p-3 text-left hover:bg-surface-container-highest/50 transition-colors"
                       >

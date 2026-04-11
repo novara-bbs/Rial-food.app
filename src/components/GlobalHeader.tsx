@@ -27,6 +27,7 @@ export default function GlobalHeader({ onOpenSettings, onOpenProfile, onOpenNoti
 
       <div className="flex items-center gap-2">
         <button
+          type="button"
           onClick={onOpenNotifications}
           className="p-2 text-on-surface-variant hover:text-primary transition-colors relative"
           aria-label={t.settings.notifications}
@@ -36,6 +37,7 @@ export default function GlobalHeader({ onOpenSettings, onOpenProfile, onOpenNoti
         </button>
 
         <button
+          type="button"
           onClick={onOpenSettings}
           className="p-2 text-on-surface-variant hover:text-primary transition-colors"
           aria-label={t.settings.title}
@@ -46,6 +48,7 @@ export default function GlobalHeader({ onOpenSettings, onOpenProfile, onOpenNoti
         <div className="h-6 w-[1px] bg-outline-variant/20 mx-2" />
 
         <button
+          type="button"
           onClick={onOpenProfile}
           className="flex items-center gap-3 pl-2 group"
           aria-label={t.profile.title}

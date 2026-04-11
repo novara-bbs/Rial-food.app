@@ -27,9 +27,8 @@ export default function MealSlotSelector({ value, onChange }: Props) {
   return (
     <div className="flex gap-2">
       {SLOTS.map(slot => (
-        <button
+        <button type="button"
           key={slot.id}
-          type="button"
           onClick={() => onChange(slot.id)}
           className={`flex-1 flex flex-col items-center gap-1 py-2.5 rounded-sm border transition-colors font-headline text-[9px] font-bold uppercase tracking-widest ${
             value === slot.id

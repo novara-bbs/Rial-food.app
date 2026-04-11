@@ -57,7 +57,7 @@ export default function PostCard({
           </div>
         </div>
         {isOwn && onDelete && (
-          <button
+          <button type="button"
             onClick={onDelete}
             className="w-8 h-8 rounded-full bg-surface-container-highest flex items-center justify-center text-on-surface-variant hover:text-error transition-colors"
           >
@@ -140,21 +140,21 @@ export default function PostCard({
 
       {/* Action bar */}
       <div className="px-5 py-3 bg-surface-container-highest/50 flex gap-6 border-t border-outline-variant/10">
-        <button onClick={onLike} aria-label={isLiked ? 'Unlike' : 'Like'} className={`flex items-center gap-2 transition-colors ${isLiked ? 'text-primary' : 'text-on-surface-variant hover:text-primary'}`}>
+        <button type="button" onClick={onLike} aria-label={isLiked ? 'Unlike' : 'Like'} className={`flex items-center gap-2 transition-colors ${isLiked ? 'text-primary' : 'text-on-surface-variant hover:text-primary'}`}>
           <Flame className={`w-5 h-5 ${isLiked ? 'fill-primary' : ''}`} />
           <span className="font-label text-xs font-bold">{post.likes + (isLiked ? 1 : 0)}</span>
         </button>
-        <button onClick={() => setShowComments(!showComments)} aria-label="Comments" className="flex items-center gap-2 text-on-surface-variant hover:text-primary transition-colors">
+        <button type="button" onClick={() => setShowComments(!showComments)} aria-label="Comments" className="flex items-center gap-2 text-on-surface-variant hover:text-primary transition-colors">
           <MessageSquare className="w-5 h-5" />
           <span className="font-label text-xs font-bold">{post.comments}</span>
         </button>
         {onSave && (
-          <button onClick={onSave} aria-label={isSaved ? 'Unsave' : 'Save'} className={`flex items-center gap-2 transition-colors ${isSaved ? 'text-primary' : 'text-on-surface-variant hover:text-primary'}`}>
+          <button type="button" onClick={onSave} aria-label={isSaved ? 'Unsave' : 'Save'} className={`flex items-center gap-2 transition-colors ${isSaved ? 'text-primary' : 'text-on-surface-variant hover:text-primary'}`}>
             <Bookmark className={`w-5 h-5 ${isSaved ? 'fill-primary' : ''}`} />
             <span className="font-label text-xs font-bold">{post.saves || 0}</span>
           </button>
         )}
-        <button onClick={onShare} aria-label="Share" className="flex items-center gap-2 text-on-surface-variant hover:text-primary transition-colors ml-auto">
+        <button type="button" onClick={onShare} aria-label="Share" className="flex items-center gap-2 text-on-surface-variant hover:text-primary transition-colors ml-auto">
           <Share2 className="w-5 h-5" />
         </button>
       </div>
@@ -193,7 +193,7 @@ export default function PostCard({
               className="flex-1 bg-surface-container-highest border border-outline-variant/30 py-2 px-3 text-xs font-label tracking-widest focus:outline-none focus:border-primary uppercase rounded-sm text-tertiary placeholder:text-on-surface-variant/50"
               onKeyDown={(e) => e.key === 'Enter' && submitComment()}
             />
-            <button
+            <button type="button"
               onClick={submitComment}
               disabled={!commentText.trim()}
               className="w-8 h-8 rounded-sm bg-primary text-on-primary flex items-center justify-center disabled:opacity-50 disabled:cursor-not-allowed"

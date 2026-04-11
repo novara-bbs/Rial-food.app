@@ -178,6 +178,7 @@ export default function App() {
           <div className="fixed bottom-24 md:bottom-8 right-6 flex flex-col gap-4 z-50">
             {currentScreen !== 'ai-coach' && showAIBot && (
               <button
+                type="button"
                 onClick={() => navigateTo('ai-coach')}
                 className="w-14 h-14 bg-surface-container-highest border-2 border-primary text-primary rounded-full shadow-lg flex items-center justify-center hover:bg-primary/20 transition-transform hover:scale-105"
                 aria-label="AI Coach"

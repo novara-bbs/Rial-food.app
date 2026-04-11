@@ -198,7 +198,7 @@ export default function Progress({ onBack }: { onBack: () => void }) {
               autoFocus
             />
             <span className="text-sm font-bold text-on-surface-variant">kg</span>
-            <button
+            <button type="button"
               onClick={handleLogWeight}
               className="w-9 h-9 flex items-center justify-center rounded-full bg-primary text-on-primary hover:opacity-90 transition-opacity"
             >
@@ -206,7 +206,7 @@ export default function Progress({ onBack }: { onBack: () => void }) {
             </button>
           </div>
         ) : (
-          <button
+          <button type="button"
             onClick={() => { setIsEditingWeight(true); setWeightInput(currentWeight ? String(currentWeight) : ''); }}
             className="w-full pt-3 border-t border-outline-variant/10 text-center text-[10px] font-bold text-primary uppercase tracking-widest hover:underline flex items-center justify-center gap-1.5"
           >

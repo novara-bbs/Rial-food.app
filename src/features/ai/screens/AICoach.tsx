@@ -90,7 +90,7 @@ export default function AICoach({
     return (
       <div className="px-6 max-w-4xl mx-auto space-y-8 pb-24 h-full flex flex-col">
         <header className="flex items-center gap-4 mb-6 shrink-0 pt-6">
-          <button 
+          <button type="button" 
             onClick={onBack}
             className="w-10 h-10 bg-surface-container-low rounded-full flex items-center justify-center text-tertiary hover:bg-surface-container-highest transition-colors shrink-0"
           >
@@ -110,7 +110,7 @@ export default function AICoach({
           </div>
           <h3 className="font-headline text-3xl font-bold text-tertiary uppercase">{t.aiCoach.proRequired}</h3>
           <p className="text-on-surface-variant max-w-md">{t.aiCoach.proMessage}</p>
-          <button
+          <button type="button"
             onClick={onBack}
             className="px-8 py-4 bg-primary text-on-primary rounded-sm font-headline font-bold text-lg uppercase tracking-widest hover:bg-primary/90 transition-colors flex items-center gap-2"
           >
@@ -124,7 +124,7 @@ export default function AICoach({
   return (
     <div className="max-w-4xl mx-auto h-full flex flex-col bg-surface">
       <header className="flex items-center gap-4 px-6 py-4 border-b border-outline-variant/20 shrink-0 bg-surface/80 backdrop-blur-md sticky top-0 z-10">
-        <button
+        <button type="button"
           onClick={onBack}
           className="w-10 h-10 bg-surface-container-low rounded-full flex items-center justify-center text-tertiary hover:bg-surface-container-highest transition-colors shrink-0"
         >
@@ -141,11 +141,11 @@ export default function AICoach({
             {showClearConfirm ? (
               <div className="flex items-center gap-2">
                 <span className="text-[10px] font-label text-on-surface-variant uppercase tracking-widest">{t.aiCoach.clearChatConfirm}</span>
-                <button onClick={clearChat} className="px-2 py-1 bg-error/20 text-error rounded-sm text-[10px] font-bold uppercase">Sí</button>
-                <button onClick={() => setShowClearConfirm(false)} className="px-2 py-1 bg-surface-container-highest text-on-surface-variant rounded-sm text-[10px] font-bold uppercase">No</button>
+                <button type="button" onClick={clearChat} className="px-2 py-1 bg-error/20 text-error rounded-sm text-[10px] font-bold uppercase">Sí</button>
+                <button type="button" onClick={() => setShowClearConfirm(false)} className="px-2 py-1 bg-surface-container-highest text-on-surface-variant rounded-sm text-[10px] font-bold uppercase">No</button>
               </div>
             ) : (
-              <button
+              <button type="button"
                 onClick={() => setShowClearConfirm(true)}
                 className="w-9 h-9 bg-surface-container-low rounded-full flex items-center justify-center text-on-surface-variant hover:text-error transition-colors"
                 aria-label={t.aiCoach.clearChat}
@@ -194,7 +194,7 @@ export default function AICoach({
           {messages.length === 1 && !isLoading && (
             <div className="flex flex-wrap gap-2 pb-2">
               {quickActions.map((action, idx) => (
-                <button
+                <button type="button"
                   key={idx}
                   onClick={() => handleSend(action.prompt)}
                   className="flex items-center gap-2 px-3 py-1.5 bg-surface-container-low border border-outline-variant/30 rounded-full text-xs font-label tracking-widest uppercase text-on-surface-variant hover:text-primary hover:border-primary/50 transition-colors"
@@ -222,7 +222,7 @@ export default function AICoach({
               disabled={!canSendMessage()}
               className="flex-1 bg-surface-container-highest border border-outline-variant/30 py-3 px-4 text-sm font-label tracking-widest focus:outline-none focus:border-primary uppercase rounded-sm text-tertiary placeholder:text-on-surface-variant/50 disabled:opacity-50"
             />
-            <button
+            <button type="button"
               onClick={() => handleSend()}
               disabled={!input.trim() || isLoading || !canSendMessage()}
               className="w-12 h-12 rounded-sm bg-primary text-on-primary flex items-center justify-center disabled:opacity-50 disabled:cursor-not-allowed transition-colors hover:bg-primary/90 shrink-0"

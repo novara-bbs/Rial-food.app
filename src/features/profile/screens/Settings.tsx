@@ -204,7 +204,7 @@ export default function Settings({ dailyMacros, setDailyMacros, isPro, setIsPro,
               </span>
             )}
           </div>
-          <button 
+          <button type="button" 
             onClick={() => setIsPro && setIsPro(!isPro)}
             className={`px-4 py-2 rounded-sm font-label text-xs font-bold tracking-widest uppercase transition-colors ${
               isPro 
@@ -230,13 +230,13 @@ export default function Settings({ dailyMacros, setDailyMacros, isPro, setIsPro,
                 <p className="text-xs text-on-surface-variant mt-1">{t.settings.dashboardModeDesc}</p>
               </div>
               <div className="flex bg-surface-container-low rounded-full p-1 border border-outline-variant/20">
-                <button
+                <button type="button"
                   onClick={() => updateBiometric('mode', 'simple')}
                   className={`px-4 py-2 rounded-full text-xs font-bold uppercase tracking-widest transition-all ${userProfile?.mode === 'simple' || !userProfile?.mode ? 'bg-primary text-on-primary shadow-md' : 'text-on-surface-variant hover:text-tertiary'}`}
                 >
                   {t.settings.simple}
                 </button>
-                <button
+                <button type="button"
                   onClick={() => updateBiometric('mode', 'advanced')}
                   className={`px-4 py-2 rounded-full text-xs font-bold uppercase tracking-widest transition-all ${userProfile?.mode === 'advanced' ? 'bg-primary text-on-primary shadow-md' : 'text-on-surface-variant hover:text-tertiary'}`}
                 >
@@ -303,7 +303,7 @@ export default function Settings({ dailyMacros, setDailyMacros, isPro, setIsPro,
               <Users className="w-6 h-6 text-primary" />
               <h3 className="font-headline text-xl font-bold text-tertiary uppercase">{t.settings.familyProfiles}</h3>
             </div>
-            <button 
+            <button type="button" 
               onClick={() => setIsAddingMember(true)}
               className="text-primary font-label text-[10px] font-bold tracking-widest uppercase hover:underline flex items-center gap-1"
             >
@@ -325,7 +325,7 @@ export default function Settings({ dailyMacros, setDailyMacros, isPro, setIsPro,
                     </p>
                   </div>
                 </div>
-                <button 
+                <button type="button" 
                   onClick={() => removeFamilyMember(member.id)}
                   className="text-outline hover:text-error transition-colors opacity-0 group-hover:opacity-100 p-2"
                   aria-label={t.settings.removeMember.replace('{name}', member.name)}
@@ -372,13 +372,13 @@ export default function Settings({ dailyMacros, setDailyMacros, isPro, setIsPro,
                   </div>
                 </div>
                 <div className="flex gap-2">
-                  <button 
+                  <button type="button" 
                     onClick={addFamilyMember}
                     className="flex-1 bg-primary text-on-primary py-2 rounded-sm font-label text-xs font-bold tracking-widest uppercase"
                   >
                     {t.settings.saveMember}
                   </button>
-                  <button
+                  <button type="button"
                     onClick={() => setIsAddingMember(false)}
                     className="flex-1 bg-surface-container-low text-on-surface-variant py-2 rounded-sm font-label text-xs font-bold tracking-widest uppercase border border-outline-variant/20"
                   >
@@ -570,7 +570,7 @@ export default function Settings({ dailyMacros, setDailyMacros, isPro, setIsPro,
           </div>
           <div className="flex flex-wrap gap-3">
             {dietaryOptions.map(option => (
-              <button
+              <button type="button"
                 key={option.key}
                 onClick={() => toggleDietaryPreference(option.key)}
                 className={`px-4 py-2 rounded-full font-label text-xs font-bold tracking-wider uppercase transition-colors border ${
@@ -608,7 +608,7 @@ export default function Settings({ dailyMacros, setDailyMacros, isPro, setIsPro,
             {dislikeResults.length > 0 && (
               <div className="mt-1 bg-surface-container-highest border border-outline-variant/20 rounded-sm max-h-40 overflow-y-auto">
                 {dislikeResults.map(d => (
-                  <button key={d.id} onClick={() => addDislike(d.id)} className="w-full text-left px-3 py-2 text-sm text-tertiary hover:bg-primary/10 transition-colors">
+                  <button type="button" key={d.id} onClick={() => addDislike(d.id)} className="w-full text-left px-3 py-2 text-sm text-tertiary hover:bg-primary/10 transition-colors">
                     {d.name}
                   </button>
                 ))}
@@ -620,7 +620,7 @@ export default function Settings({ dailyMacros, setDailyMacros, isPro, setIsPro,
                 return (
                   <span key={id} className="inline-flex items-center gap-1 bg-error/10 text-error px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider">
                     {ing?.name || id}
-                    <button onClick={() => removeDislike(id)} className="hover:bg-error/20 rounded-full p-0.5"><X className="w-3 h-3" /></button>
+                    <button type="button" onClick={() => removeDislike(id)} className="hover:bg-error/20 rounded-full p-0.5"><X className="w-3 h-3" /></button>
                   </span>
                 );
               })}
@@ -632,7 +632,7 @@ export default function Settings({ dailyMacros, setDailyMacros, isPro, setIsPro,
             <label className="block font-label text-[10px] tracking-widest uppercase text-on-surface-variant mb-2">{t.settings.intolerances}</label>
             <div className="flex flex-wrap gap-3">
               {allergenOptions.map(opt => (
-                <button
+                <button type="button"
                   key={opt.key}
                   onClick={() => toggleIntolerance(opt.key)}
                   className={`px-4 py-2 rounded-full font-label text-xs font-bold tracking-wider uppercase transition-colors border ${
@@ -719,7 +719,7 @@ export default function Settings({ dailyMacros, setDailyMacros, isPro, setIsPro,
                   <span className="font-mono text-[9px] tracking-[0.3em] text-on-surface-variant uppercase block mb-2">{family}</span>
                   <div className="grid grid-cols-2 gap-3">
                     {pair.map(th => (
-                      <button
+                      <button type="button"
                         key={th.id}
                         onClick={() => setTheme(th.id as Theme)}
                         className={`relative rounded-sm overflow-hidden border transition-all text-left ${
@@ -778,7 +778,7 @@ export default function Settings({ dailyMacros, setDailyMacros, isPro, setIsPro,
               { id: 'es' as Locale, label: 'Español', flag: '🇪🇸' },
               { id: 'en' as Locale, label: 'English', flag: '🇬🇧' },
             ]).map(lang => (
-              <button
+              <button type="button"
                 key={lang.id}
                 onClick={() => setLocale(lang.id)}
                 className={`flex items-center gap-3 p-4 rounded-sm border-2 transition-all ${
@@ -809,7 +809,7 @@ export default function Settings({ dailyMacros, setDailyMacros, isPro, setIsPro,
               { id: 'metric' as const, label: t.settings.metric, desc: t.settings.metricDesc },
               { id: 'imperial' as const, label: t.settings.imperial, desc: t.settings.imperialDesc },
             ]).map(sys => (
-              <button
+              <button type="button"
                 key={sys.id}
                 onClick={() => setUserProfile && setUserProfile((prev: any) => ({ ...prev, unitSystem: sys.id }))}
                 className={`flex flex-col items-start p-4 rounded-sm border-2 transition-all ${
@@ -850,13 +850,13 @@ export default function Settings({ dailyMacros, setDailyMacros, isPro, setIsPro,
         {/* Data Export */}
         <div className="bg-surface-container-low rounded-sm border border-outline-variant/20 p-5 space-y-4">
           <h3 className="font-headline text-sm font-bold uppercase tracking-widest text-tertiary">{t.settings.dataSection}</h3>
-          <button
+          <button type="button"
             onClick={exportCSV}
             className="w-full py-3 bg-surface-container-highest rounded-sm font-headline text-xs font-bold uppercase tracking-widest text-tertiary hover:bg-primary/10 hover:text-primary transition-colors flex items-center justify-center gap-2"
           >
             <Download className="w-4 h-4" /> {t.settings.exportCSV}
           </button>
-          <button
+          <button type="button"
             onClick={deleteAllData}
             className="w-full py-3 bg-surface-container-highest rounded-sm font-headline text-xs font-bold uppercase tracking-widest text-error hover:bg-error/10 transition-colors flex items-center justify-center gap-2"
           >
@@ -865,7 +865,7 @@ export default function Settings({ dailyMacros, setDailyMacros, isPro, setIsPro,
         </div>
 
         {/* Logout */}
-        <button className="w-full py-4 rounded-sm font-headline font-bold text-lg uppercase tracking-widest transition-colors bg-surface-container-highest text-error hover:bg-error/10 flex items-center justify-center gap-2 border border-error/20">
+        <button type="button" className="w-full py-4 rounded-sm font-headline font-bold text-lg uppercase tracking-widest transition-colors bg-surface-container-highest text-error hover:bg-error/10 flex items-center justify-center gap-2 border border-error/20">
           <LogOut className="w-5 h-5" /> {t.settings.logout}
         </button>
       </section>
