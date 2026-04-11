@@ -4,6 +4,7 @@ import { useState, useMemo } from 'react';
 import { toast } from 'sonner';
 import { useI18n, type Locale } from '../../../i18n';
 import { Switch } from '@/components/ui/switch';
+import { Button } from '@/components/ui/button';
 import { useLocalStorageState } from '../../../hooks/useLocalStorageState';
 import { getNutritionHistory } from '../../../hooks/useDailyReset';
 import type { Allergen, Ingredient } from '../../../types';
@@ -260,7 +261,7 @@ export default function Settings({ dailyMacros, setDailyMacros, isPro, setIsPro,
                 type="number"
                 value={userProfile?.age || 32}
                 onChange={(e) => updateBiometric('age', parseInt(e.target.value))}
-                className="w-full bg-surface-container-highest border border-outline-variant/20 rounded-sm py-2 px-3 text-tertiary font-headline font-bold focus:outline-none focus:border-primary"
+                className="w-full bg-surface-container-low border border-outline-variant/20 rounded-sm py-2 px-3 text-tertiary text-sm focus:outline-none focus:border-primary"
               />
             </div>
             <div>
@@ -269,7 +270,7 @@ export default function Settings({ dailyMacros, setDailyMacros, isPro, setIsPro,
                 type="number"
                 value={userProfile?.height || 175}
                 onChange={(e) => updateBiometric('height', parseInt(e.target.value))}
-                className="w-full bg-surface-container-highest border border-outline-variant/20 rounded-sm py-2 px-3 text-tertiary font-headline font-bold focus:outline-none focus:border-primary"
+                className="w-full bg-surface-container-low border border-outline-variant/20 rounded-sm py-2 px-3 text-tertiary text-sm focus:outline-none focus:border-primary"
               />
             </div>
             <div>
@@ -278,7 +279,7 @@ export default function Settings({ dailyMacros, setDailyMacros, isPro, setIsPro,
                 type="number"
                 value={userProfile?.weight || 78}
                 onChange={(e) => updateBiometric('weight', parseInt(e.target.value))}
-                className="w-full bg-surface-container-highest border border-outline-variant/20 rounded-sm py-2 px-3 text-tertiary font-headline font-bold focus:outline-none focus:border-primary"
+                className="w-full bg-surface-container-low border border-outline-variant/20 rounded-sm py-2 px-3 text-tertiary text-sm focus:outline-none focus:border-primary"
               />
             </div>
             <div>
@@ -286,7 +287,7 @@ export default function Settings({ dailyMacros, setDailyMacros, isPro, setIsPro,
               <select 
                 value={userProfile?.gender || 'female'}
                 onChange={(e) => updateBiometric('gender', e.target.value)}
-                className="w-full bg-surface-container-highest border border-outline-variant/20 rounded-sm py-2 px-3 text-tertiary font-headline font-bold focus:outline-none focus:border-primary uppercase text-xs"
+                className="w-full bg-surface-container-low border border-outline-variant/20 rounded-sm py-2 px-3 text-tertiary uppercase text-xs focus:outline-none focus:border-primary"
               >
                 <option value="male">{t.settings.male}</option>
                 <option value="female">{t.settings.female}</option>
@@ -344,7 +345,7 @@ export default function Settings({ dailyMacros, setDailyMacros, isPro, setIsPro,
                       type="text"
                       value={newMember.name}
                       onChange={(e) => setNewMember({ ...newMember, name: e.target.value })}
-                      className="w-full bg-surface-container-low border border-outline-variant/20 rounded-sm py-2 px-3 text-tertiary font-headline font-bold focus:outline-none focus:border-primary"
+                      className="w-full bg-surface-container-low border border-outline-variant/20 rounded-sm py-2 px-3 text-tertiary text-sm focus:outline-none focus:border-primary"
                       placeholder={t.settings.memberNamePlaceholder}
                     />
                   </div>
@@ -354,7 +355,7 @@ export default function Settings({ dailyMacros, setDailyMacros, isPro, setIsPro,
                       type="number"
                       value={newMember.age}
                       onChange={(e) => setNewMember({ ...newMember, age: parseInt(e.target.value) })}
-                      className="w-full bg-surface-container-low border border-outline-variant/20 rounded-sm py-2 px-3 text-tertiary font-headline font-bold focus:outline-none focus:border-primary"
+                      className="w-full bg-surface-container-low border border-outline-variant/20 rounded-sm py-2 px-3 text-tertiary text-sm focus:outline-none focus:border-primary"
                     />
                   </div>
                   <div>
@@ -362,7 +363,7 @@ export default function Settings({ dailyMacros, setDailyMacros, isPro, setIsPro,
                     <select 
                       value={newMember.goal}
                       onChange={(e) => setNewMember({ ...newMember, goal: e.target.value })}
-                      className="w-full bg-surface-container-low border border-outline-variant/20 rounded-sm py-2 px-3 text-tertiary font-headline font-bold focus:outline-none focus:border-primary uppercase text-xs"
+                      className="w-full bg-surface-container-low border border-outline-variant/20 rounded-sm py-2 px-3 text-tertiary uppercase text-xs focus:outline-none focus:border-primary"
                     >
                       <option value="lose">{t.settings.goalLose}</option>
                       <option value="maintain">{t.settings.goalMaintain}</option>
@@ -402,7 +403,7 @@ export default function Settings({ dailyMacros, setDailyMacros, isPro, setIsPro,
               <select 
                 value={userProfile?.goal || 'maintain'}
                 onChange={(e) => updateBiometric('goal', e.target.value)}
-                className="w-full bg-surface-container-highest border border-outline-variant/20 rounded-sm py-2 px-3 text-tertiary font-headline font-bold focus:outline-none focus:border-primary uppercase text-xs"
+                className="w-full bg-surface-container-low border border-outline-variant/20 rounded-sm py-2 px-3 text-tertiary uppercase text-xs focus:outline-none focus:border-primary"
               >
                 <option value="lose">{t.settings.goalLose}</option>
                 <option value="maintain">{t.settings.goalMaintain}</option>
@@ -415,7 +416,7 @@ export default function Settings({ dailyMacros, setDailyMacros, isPro, setIsPro,
               <select 
                 value={userProfile?.activityLevel || 'moderate'}
                 onChange={(e) => updateBiometric('activityLevel', e.target.value)}
-                className="w-full bg-surface-container-highest border border-outline-variant/20 rounded-sm py-2 px-3 text-tertiary font-headline font-bold focus:outline-none focus:border-primary uppercase text-xs"
+                className="w-full bg-surface-container-low border border-outline-variant/20 rounded-sm py-2 px-3 text-tertiary uppercase text-xs focus:outline-none focus:border-primary"
               >
                 <option value="sedentary">{t.settings.actSedentary}</option>
                 <option value="light">{t.settings.actLight}</option>
@@ -602,7 +603,7 @@ export default function Settings({ dailyMacros, setDailyMacros, isPro, setIsPro,
                 value={dislikeSearch}
                 onChange={(e) => setDislikeSearch(e.target.value)}
                 placeholder={t.settings.foodDislikesPlaceholder}
-                className="w-full bg-surface-container-highest border border-outline-variant/20 rounded-sm py-2 pl-9 pr-3 text-tertiary font-headline text-sm focus:outline-none focus:border-primary"
+                className="w-full bg-surface-container-low border border-outline-variant/20 rounded-sm py-2 pl-9 pr-3 text-tertiary text-sm focus:outline-none focus:border-primary"
               />
             </div>
             {dislikeResults.length > 0 && (
@@ -856,18 +857,19 @@ export default function Settings({ dailyMacros, setDailyMacros, isPro, setIsPro,
           >
             <Download className="w-4 h-4" /> {t.settings.exportCSV}
           </button>
-          <button type="button"
+          <Button
+            variant="destructive"
             onClick={deleteAllData}
-            className="w-full py-3 bg-surface-container-highest rounded-sm font-headline text-xs font-bold uppercase tracking-widest text-error hover:bg-error/10 transition-colors flex items-center justify-center gap-2"
+            className="w-full"
           >
             <AlertTriangle className="w-4 h-4" /> {t.settings.deleteData}
-          </button>
+          </Button>
         </div>
 
         {/* Logout */}
-        <button type="button" className="w-full py-4 rounded-sm font-headline font-bold text-lg uppercase tracking-widest transition-colors bg-surface-container-highest text-error hover:bg-error/10 flex items-center justify-center gap-2 border border-error/20">
+        <Button variant="destructive" size="lg" className="w-full">
           <LogOut className="w-5 h-5" /> {t.settings.logout}
-        </button>
+        </Button>
       </section>
     </div>
   );
