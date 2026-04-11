@@ -20,6 +20,12 @@ RIAL uses **Material Design 3 (MD3)** semantic tokens defined as CSS custom prop
 | `--outline-variant` | Borders, dividers | `border-outline-variant/20` |
 | `--error` | Destructive actions | `text-error` |
 | `--brand-secondary` | Secondary accent (charts, highlights) | `text-brand-secondary` |
+| `--macro-protein` | Protein macro color (`#f87171`) | `text-macro-protein` |
+| `--macro-carbs` | Carbs macro color (`#fbbf24`) | `text-macro-carbs` |
+| `--macro-fats` | Fat macro color (`#38bdf8`) | `text-macro-fats` |
+| `--on-overlay` | Text on dark full-screen overlays (`#ffffff`) | `text-on-overlay` |
+| `--on-overlay-muted` | Muted text on overlays (`rgba(255,255,255,0.4)`) | `text-on-overlay/40` |
+| `--overlay-border` | Borders on overlays (`rgba(255,255,255,0.1)`) | `border-overlay-border` |
 
 ### shadcn Bridge
 
@@ -52,6 +58,8 @@ shadcn/ui components use their own token names. A bridge in `index.css` maps MD3
 
 ## Typography
 
+### Font Families
+
 | Class | Usage |
 |-------|-------|
 | `font-headline` | Headings, titles, section headers. Always `uppercase tracking-tight` or `tracking-widest`. |
@@ -59,7 +67,60 @@ shadcn/ui components use their own token names. A bridge in `index.css` maps MD3
 | `font-body` | Body text, descriptions. Normal case, `text-sm`. |
 | `font-mono` | Monospace data, section subtitles. `text-[10px] tracking-[0.3em]`. |
 
+### Typography Hierarchy
+
+| Element | Classes | Usage |
+|---------|---------|-------|
+| Root screen title | `font-headline text-3xl md:text-4xl font-bold tracking-tighter uppercase text-tertiary` | Settings, More, FoodDictionary, Planner, Community, Discover |
+| Root screen title (hero) | `font-headline text-3xl font-black tracking-tight uppercase text-tertiary` | Home greeting only |
+| PageHeader title | `font-headline text-2xl font-bold tracking-tighter uppercase text-tertiary` | All push-nav screens using PageHeader |
+| Section header | `font-headline text-xl font-bold text-tertiary uppercase` | Settings sections, major groups |
+| Subsection header | `font-headline text-lg font-bold uppercase text-tertiary tracking-tight` | Secondary headings |
+| Mini header | `font-headline font-bold text-sm uppercase tracking-widest text-on-surface-variant` | Category labels, group dividers |
+| Label/caption | `font-label text-[10px] tracking-widest uppercase text-on-surface-variant` | Form labels, meta info |
+| Data emphasis | `font-headline font-black text-{size} text-{token}` | KPI numbers, stats, scores |
+
+**Rule**: `font-black` (weight 900) is intentional for numeric data emphasis and the Home hero title. All other `font-headline` headings use `font-bold`.
+
 ## Shared Components (`src/components/patterns/`)
+
+### SearchInput
+
+Standardized search field with optional clear button. Single source of truth for all search bars.
+
+```tsx
+import SearchInput from '@/components/patterns/SearchInput';
+
+// Default (full-width)
+<SearchInput
+  value={query}
+  onChange={setQuery}
+  placeholder="Buscar recetas..."
+  onClear={() => setQuery('')}  // shows × when value non-empty
+  className="..."               // optional — merges onto wrapper <div>
+/>
+
+// Compact (inside toolbars)
+<SearchInput
+  value={query}
+  onChange={setQuery}
+  placeholder="Buscar..."
+  size="sm"
+/>
+```
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `value` | `string` | required | Controlled value |
+| `onChange` | `(v: string) => void` | required | Change handler |
+| `placeholder` | `string` | — | Placeholder text |
+| `onClear` | `() => void` | — | If provided, shows × button when value non-empty |
+| `size` | `'default' \| 'sm'` | `'default'` | `sm` = compact, used inside toolbars |
+| `className` | `string` | — | Merged onto wrapper div |
+
+**Standard styles**: `bg-surface-container-low border border-outline-variant/30 rounded-sm font-label tracking-widest uppercase placeholder:text-on-surface-variant/50 focus:border-primary`
+
+**Consumers**: Discovery, FoodDictionary (with clear), AddMeal, Cocina, RecipeDetail (size sm), Discover
 
 ### RecipeCard
 
@@ -228,6 +289,38 @@ import EmptyState from '@/components/EmptyState';
 </EmptyState>
 ```
 
+## Button Convention
+
+Always use `<Button>` from `@/components/ui/button` for user actions. Reserve `<button>` for interactive controls that don't fit any variant (icon toggles, filter chips, custom affordances).
+
+| Variant | When to use |
+|---------|-------------|
+| `default` | Primary action, CTAs |
+| `destructive` | Delete, logout, irreversible actions |
+| `outline` | Secondary action, cancel |
+| `brand` | Secondary brand color (Cocina, recipe CTAs) |
+| `ghost` | Subtle inline actions |
+
+**Rules**:
+- All `<button>` elements **must** have `type="button"` to prevent accidental form submission.
+- Icon-only buttons **must** have `aria-label` describing the action.
+- Use `rounded-sm` (base provides it). Never override with `rounded-md` or `rounded-lg`.
+- Use size props (`xs`, `sm`, `lg`, `icon`, `icon-xs`, `icon-sm`, `icon-lg`) instead of padding overrides.
+
+## Form Input Convention
+
+All form inputs follow this pattern:
+
+```
+Label:  font-label text-[10px] tracking-widest uppercase text-on-surface-variant block mb-2
+Input:  bg-surface-container-low border border-outline-variant/20 rounded-sm py-2 px-3
+        text-on-surface text-sm focus:outline-none focus:border-primary
+Select: Same as input + uppercase text-xs (for enumerated options)
+Range:  bg-surface-container-highest h-2 rounded-full appearance-none accent-primary
+```
+
+**Rule**: Use `bg-surface-container-low` for all form inputs. `bg-surface-container-highest` is reserved for elevated UI (badges, inactive chips) — never for inputs.
+
 ## Style Rules
 
 | Rule | Do | Don't |
@@ -256,7 +349,8 @@ src/components/
     ├── Swimlane.tsx       ← Horizontal scroll + header
     ├── FilterRow.tsx      ← 2 variants: icon, pill
     ├── TabNav.tsx         ← Underline tab bar
-    └── PageHeader.tsx     ← Push-nav back + label + title
+    ├── PageHeader.tsx     ← Push-nav back + label + title
+    └── SearchInput.tsx    ← Unified search bar (default + sm)
 ```
 
 ## Page Wrapper Convention
@@ -280,11 +374,23 @@ All screens use a consistent wrapper pattern. The `max-w` value depends on conte
 - Centering: always `mx-auto`
 - Spacing: `space-y-6` default, `space-y-8` for breathing room in form screens
 
-## Known Gaps (Out of Scope)
+## Known Exceptions (Intentional Deviations)
 
-| Pattern | Location | Status |
+These patterns intentionally deviate from conventions — do not "fix" them:
+
+| Pattern | Location | Reason |
 |---------|----------|--------|
+| `bg-neutral-950` + `text-on-overlay` | CookMode.tsx | Fixed-black overlay — semantic bg doesn't theme-switch here by design |
+| `bg-black` | StoryViewer.tsx | Full-screen story viewer — always dark regardless of theme |
+| `COLORS` array hex values | CreateStory.tsx | Story background palette — decorative, not theme tokens |
+| `bg-black` / `bg-white` wearable icons | Settings.tsx wearables section | Brand logos (Whoop=black, Oura=white) — must preserve brand identity |
+| `bg-blue-500` Garmin icon | Settings.tsx | Garmin brand color |
+| `bg-green-600` finish button | CookMode.tsx | Success state — fixed semantic meaning |
+| `text-white` in `destructive` Button | button.tsx | On `bg-destructive` (solid red) — white text is correct regardless of theme |
+| `font-black` on KPI numbers | Progress, WeeklyCheckIn, FastingTimer | Data emphasis — intentional 900 weight |
+| `font-black` on Home greeting | Home.tsx | Hero landing screen — strongest visual weight |
+| Inline search (food dislikes) | Settings.tsx | Has `@` prefix layout — cannot use SearchInput |
 | Multi-select chips | DailyCheckIn symptoms | Inline — FilterRow is single-select |
-| Toggle-deselect filter | FoodDictionary categories | Inline — needs `toggleable` prop |
+| Toggle-deselect filter | FoodDictionary categories | Inline — toggles to null on re-click |
 | 2x2 status grid | DailyCheckIn status | Unique UI, not a filter pattern |
 | Tab duality | TabNav vs shadcn Tabs | Both valid — different use cases |
