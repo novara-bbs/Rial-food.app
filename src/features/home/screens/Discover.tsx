@@ -63,7 +63,7 @@ export default function Discover() {
       {/* Header */}
       <section>
         <span className="font-mono text-[10px] font-bold tracking-[0.3em] text-primary uppercase">{disc.engineTitle || 'Descubrir'}</span>
-        <h2 className="font-headline text-3xl md:text-5xl font-black tracking-tighter uppercase text-tertiary mt-1">{disc.title || 'Descubrir'}</h2>
+        <h2 className="font-headline text-3xl md:text-4xl font-bold tracking-tighter uppercase text-tertiary mt-1">{disc.title || 'Descubrir'}</h2>
 
         {/* Search */}
         <SearchInput

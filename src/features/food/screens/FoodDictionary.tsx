@@ -113,7 +113,7 @@ export default function FoodDictionary({ navigateTo }: Props) {
       </div>
 
       {/* Results count */}
-      <p className="text-xs text-on-surface-variant font-label tracking-wide">
+      <p className="text-xs text-on-surface-variant font-label tracking-widest uppercase">
         {(filtered.length === 1 ? t.foodDictionary.foodCountOne : t.foodDictionary.foodCount).replace('{count}', String(filtered.length))}
       </p>
 

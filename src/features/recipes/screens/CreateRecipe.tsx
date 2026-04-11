@@ -324,9 +324,9 @@ export default function CreateRecipe({
             <div className="grid grid-cols-4 gap-2">
               {[
                 { label: 'kcal', value: totals.macros.calories, color: 'text-primary' },
-                { label: 'Pro', value: `${totals.macros.protein}g`, color: 'text-red-400' },
-                { label: 'Carbs', value: `${totals.macros.carbs}g`, color: 'text-amber-400' },
-                { label: 'Fat', value: `${totals.macros.fats}g`, color: 'text-sky-400' },
+                { label: 'Pro', value: `${totals.macros.protein}g`, color: 'text-macro-protein' },
+                { label: 'Carbs', value: `${totals.macros.carbs}g`, color: 'text-macro-carbs' },
+                { label: 'Fat', value: `${totals.macros.fats}g`, color: 'text-macro-fats' },
               ].map(m => (
                 <div key={m.label} className="bg-surface-container-highest rounded-sm p-2 text-center">
                   <span className={`block font-headline font-bold text-base ${m.color}`}>{m.value}</span>
@@ -539,9 +539,9 @@ export default function CreateRecipe({
             <div className="grid grid-cols-4 gap-2">
               {[
                 { label: 'kcal', value: perServing.calories, color: 'text-primary' },
-                { label: 'Pro', value: `${perServing.protein}g`, color: 'text-red-400' },
-                { label: 'Carbs', value: `${perServing.carbs}g`, color: 'text-amber-400' },
-                { label: 'Fat', value: `${perServing.fats}g`, color: 'text-sky-400' },
+                { label: 'Pro', value: `${perServing.protein}g`, color: 'text-macro-protein' },
+                { label: 'Carbs', value: `${perServing.carbs}g`, color: 'text-macro-carbs' },
+                { label: 'Fat', value: `${perServing.fats}g`, color: 'text-macro-fats' },
               ].map(m => (
                 <div key={m.label} className="bg-surface-container-highest rounded-sm p-2 text-center">
                   <span className={`block font-headline font-bold text-lg ${m.color}`}>{m.value}</span>

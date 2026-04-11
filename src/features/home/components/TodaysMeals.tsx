@@ -156,9 +156,9 @@ export default function TodaysMeals({
                       <div className="grid grid-cols-4 gap-1.5">
                         {[
                           { label: 'kcal', value: previewMacros.cal, color: 'text-primary' },
-                          { label: 'P', value: `${previewMacros.pro}g`, color: 'text-red-400' },
-                          { label: 'C', value: `${previewMacros.carbs}g`, color: 'text-amber-400' },
-                          { label: 'F', value: `${previewMacros.fats}g`, color: 'text-sky-400' },
+                          { label: 'P', value: `${previewMacros.pro}g`, color: 'text-macro-protein' },
+                          { label: 'C', value: `${previewMacros.carbs}g`, color: 'text-macro-carbs' },
+                          { label: 'F', value: `${previewMacros.fats}g`, color: 'text-macro-fats' },
                         ].map(m => (
                           <div key={m.label} className="bg-surface-container-highest rounded-sm py-1 px-2 text-center">
                             <span className={`block font-headline font-bold text-xs ${m.color}`}>{m.value}</span>
@@ -177,9 +177,9 @@ export default function TodaysMeals({
             <span className="text-[9px] font-label font-bold uppercase tracking-widest text-on-surface-variant">{t.home.totalLogged}</span>
             <div className="flex items-center gap-3 text-[10px] font-headline font-bold uppercase tracking-wider">
               <span className="text-primary">{dailyLog.reduce((s, e) => s + e.macros.cal, 0)} kcal</span>
-              <span className="text-red-400">{dailyLog.reduce((s, e) => s + e.macros.pro, 0).toFixed(0)}g P</span>
-              <span className="text-amber-400">{dailyLog.reduce((s, e) => s + e.macros.carbs, 0).toFixed(0)}g C</span>
-              <span className="text-sky-400">{dailyLog.reduce((s, e) => s + e.macros.fats, 0).toFixed(0)}g F</span>
+              <span className="text-macro-protein">{dailyLog.reduce((s, e) => s + e.macros.pro, 0).toFixed(0)}g P</span>
+              <span className="text-macro-carbs">{dailyLog.reduce((s, e) => s + e.macros.carbs, 0).toFixed(0)}g C</span>
+              <span className="text-macro-fats">{dailyLog.reduce((s, e) => s + e.macros.fats, 0).toFixed(0)}g F</span>
             </div>
           </div>
         </>

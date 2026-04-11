@@ -74,7 +74,7 @@ export default function Community({ communityPosts = [], onAddComment }: { commu
         <div className="flex justify-between items-end mb-6">
           <div>
             <span className="font-mono text-[10px] font-bold tracking-[0.3em] text-primary uppercase">{t.community.globalCommunity}</span>
-            <h2 className="font-headline text-3xl md:text-5xl font-black tracking-tighter uppercase text-tertiary mt-1">{t.community.title}</h2>
+            <h2 className="font-headline text-3xl md:text-4xl font-bold tracking-tighter uppercase text-tertiary mt-1">{t.community.title}</h2>
           </div>
           <button type="button"
             onClick={() => navigateTo('create-post')}

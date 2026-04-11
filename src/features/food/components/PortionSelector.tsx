@@ -324,9 +324,9 @@ export default function PortionSelector({
         <div className="grid grid-cols-4 gap-2">
           {([
             { label: 'kcal', value: scaled.calories, color: 'text-primary' },
-            { label: t.portionSelector.protein, value: `${scaled.protein}g`, color: 'text-red-400' },
-            { label: t.portionSelector.carbs, value: `${scaled.carbs}g`, color: 'text-amber-400' },
-            { label: t.portionSelector.fats, value: `${scaled.fats}g`, color: 'text-sky-400' },
+            { label: t.portionSelector.protein, value: `${scaled.protein}g`, color: 'text-macro-protein' },
+            { label: t.portionSelector.carbs, value: `${scaled.carbs}g`, color: 'text-macro-carbs' },
+            { label: t.portionSelector.fats, value: `${scaled.fats}g`, color: 'text-macro-fats' },
           ] as const).map(m => (
             <div key={m.label} className="bg-surface-container-highest rounded-sm p-2 text-center">
               <span className={`block font-headline font-bold text-lg ${m.color}`}>{m.value}</span>

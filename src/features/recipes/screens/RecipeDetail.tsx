@@ -309,9 +309,9 @@ export default function RecipeDetail({ recipe, onBack, onSaveRecipe, isSaved, on
         <div className={`grid grid-cols-4 gap-2 ${hasCreator ? 'mt-3' : '-mt-4'} relative z-10`}>
           {[
             { label: 'kcal', value: Math.round(calculatedTotals.cal * s), color: 'text-primary', icon: Flame },
-            { label: 'pro', value: `${Math.round(calculatedTotals.pro * s)}g`, color: 'text-red-400', icon: Activity },
-            { label: 'carbs', value: `${Math.round(calculatedTotals.carbs * s)}g`, color: 'text-amber-400', icon: Droplet },
-            { label: 'fats', value: `${Math.round(calculatedTotals.fats * s)}g`, color: 'text-sky-400' },
+            { label: 'pro', value: `${Math.round(calculatedTotals.pro * s)}g`, color: 'text-macro-protein', icon: Activity },
+            { label: 'carbs', value: `${Math.round(calculatedTotals.carbs * s)}g`, color: 'text-macro-carbs', icon: Droplet },
+            { label: 'fats', value: `${Math.round(calculatedTotals.fats * s)}g`, color: 'text-macro-fats' },
           ].map(m => (
             <div key={m.label} className="bg-surface-container-low border border-outline-variant/20 rounded-sm p-3 text-center">
               <span className={`block font-headline font-bold text-lg ${m.color}`}>{m.value}</span>
