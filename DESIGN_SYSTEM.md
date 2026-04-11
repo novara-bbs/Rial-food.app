@@ -65,17 +65,35 @@ shadcn/ui components use their own token names. A bridge in `index.css` maps MD3
 
 Single source of truth for all recipe card layouts.
 
+**RecipeCardRecipe interface** (exported — pass a plain object matching these fields):
+
+```ts
+interface RecipeCardRecipe {
+  id: string | number;
+  title: string;
+  img?: string;        // primary image URL
+  image?: string;      // fallback image URL (alias)
+  tag?: string;        // badge label e.g. "BATCH", "VEGANO"
+  matchScore?: number; // 0–100 personalisation score
+  time?: string;       // display string e.g. "30M"
+  cal?: number;        // kcal
+  pro?: number;        // protein grams
+  publishedBy?: string; // creator ID (maps to CREATORS_MAP)
+}
+```
+
 ```tsx
 import RecipeCard from '@/components/patterns/RecipeCard';
 
 <RecipeCard
   recipe={recipe}
-  variant="carousel"    // carousel | grid | hero
+  variant="carousel"    // carousel | grid | hero (default: carousel)
   onPress={() => {}}
   onSave={(e) => {}}    // optional — carousel only
   onDelete={(e) => {}}  // optional — grid only
   onShare={(e) => {}}   // optional — carousel only
   isSaved={false}
+  className="..."       // optional — merged via cn() for outer container
 />
 ```
 
@@ -92,7 +110,10 @@ Horizontal scroll section with uppercase header. Auto-hides when children array 
 ```tsx
 import Swimlane from '@/components/patterns/Swimlane';
 
-<Swimlane title="Para Ti">
+<Swimlane
+  title="Para Ti"
+  className="..."   // optional — merged onto the outer <section> (default: mb-8)
+>
   {recipes.map(r => <RecipeCard key={r.id} recipe={r} variant="carousel" />)}
 </Swimlane>
 ```
@@ -110,6 +131,7 @@ import FilterRow from '@/components/patterns/FilterRow';
   active={activeId}
   onChange={setActiveId}
   variant="icon"
+  className="..."   // optional — merged onto the scroll container
 />
 
 // Pill variant — collection/category chips
@@ -118,6 +140,7 @@ import FilterRow from '@/components/patterns/FilterRow';
   active={activeId}
   onChange={setActiveId}
   variant="pill"
+  className="..."   // optional — merged onto the scroll container
 />
 ```
 
@@ -142,6 +165,7 @@ import TabNav from '@/components/patterns/TabNav';
   ]}
   active={activeTab}
   onChange={setActiveTab}
+  className="..."   // optional — merged onto the border-b container
 />
 ```
 

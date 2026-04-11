@@ -65,7 +65,7 @@ export default function FoodDictionary({ navigateTo }: Props) {
   };
 
   return (
-    <div className="px-4 md:px-6 max-w-4xl mx-auto pb-24 space-y-4">
+    <div className="px-6 max-w-4xl mx-auto pb-24 space-y-6">
       {/* Title */}
       <h2 className="font-headline text-3xl md:text-4xl font-bold tracking-tighter uppercase text-tertiary">
         {t.foodDictionary.title}
