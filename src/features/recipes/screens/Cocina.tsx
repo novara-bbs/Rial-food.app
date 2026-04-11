@@ -1,8 +1,9 @@
 import React, { useState, useMemo } from 'react';
-import { Search, Plus, Link, BookOpen, ShoppingCart, Sparkles, Sunrise, Sun, Moon, Cookie } from 'lucide-react';
+import { Search, Plus, Link, ShoppingCart, Sparkles, Sunrise, Sun, Moon, Cookie } from 'lucide-react';
 import { useI18n } from '../../../i18n';
 import { useAppState } from '../../../contexts/AppStateContext';
 import { calculateMatchScore } from '../utils/matchScore';
+import EmptyState from '../../../components/EmptyState';
 import RecipeCard from '../../../components/patterns/RecipeCard';
 import FilterRow from '../../../components/patterns/FilterRow';
 import TabNav from '../../../components/patterns/TabNav';
@@ -184,10 +185,8 @@ export default function Cocina({ onAddMeal, onCreateRecipe, onNavigateToRecipe, 
 
             {/* Recipe grid — portrait cards */}
             {filteredRecipes.length === 0 ? (
-              <div className="flex flex-col items-center justify-center py-16 text-center">
-                <BookOpen className="w-10 h-10 text-on-surface-variant/40 mb-4" />
-                <p className="text-on-surface-variant font-body text-sm">{t.empty.recipesEmpty}</p>
-                <div className="flex gap-3 mt-6">
+              <EmptyState icon="📖" description={t.empty.recipesEmpty}>
+                <div className="flex gap-3">
                   <button onClick={onCreateRecipe} className="px-6 py-3 bg-primary text-on-primary rounded-sm font-headline text-xs font-bold uppercase tracking-widest">
                     {t.recipes.create}
                   </button>
@@ -197,7 +196,7 @@ export default function Cocina({ onAddMeal, onCreateRecipe, onNavigateToRecipe, 
                     </button>
                   )}
                 </div>
-              </div>
+              </EmptyState>
             ) : (
               <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3">
                 {filteredRecipes.map((recipe: any) => (

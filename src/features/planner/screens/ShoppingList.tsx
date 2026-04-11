@@ -247,22 +247,21 @@ export default function ShoppingList({ onBack, shoppingList = [], setShoppingLis
         })}
 
         {!hasItems && !isAdding && (
-          <div className="flex flex-col items-center justify-center py-16 text-center px-6">
-            <Package className="w-12 h-12 text-on-surface-variant/50 mb-4" />
-            <h3 className="font-headline font-bold text-lg uppercase text-tertiary tracking-tight mb-2">{t.shoppingList.title}</h3>
-            <p className="text-on-surface-variant font-body text-sm max-w-xs mb-6">{t.shoppingList.emptyStatePlan}</p>
-            {onNavigateToPlan && (
-              <button
-                onClick={onNavigateToPlan}
-                className="px-8 py-3 bg-primary text-on-primary rounded-sm font-headline text-xs font-bold uppercase tracking-widest hover:opacity-90 transition-opacity mb-3"
-              >
-                {t.shoppingList.goToPlan}
+          <EmptyState icon="📦" title={t.shoppingList.title} description={t.shoppingList.emptyStatePlan}>
+            <div className="flex flex-col gap-3">
+              {onNavigateToPlan && (
+                <button
+                  onClick={onNavigateToPlan}
+                  className="px-8 py-3 bg-primary text-on-primary rounded-sm font-headline text-xs font-bold uppercase tracking-widest hover:opacity-90 transition-opacity"
+                >
+                  {t.shoppingList.goToPlan}
+                </button>
+              )}
+              <button onClick={() => setIsAdding(true)} className="px-8 py-3 bg-surface-container-highest border border-outline-variant/20 text-on-surface-variant rounded-sm font-headline text-xs font-bold uppercase tracking-widest hover:border-primary/50 transition-colors">
+                {t.shoppingList.addItem}
               </button>
-            )}
-            <button onClick={() => setIsAdding(true)} className="px-8 py-3 bg-surface-container-highest border border-outline-variant/20 text-on-surface-variant rounded-sm font-headline text-xs font-bold uppercase tracking-widest hover:border-primary/50 transition-colors">
-              {t.shoppingList.addItem}
-            </button>
-          </div>
+            </div>
+          </EmptyState>
         )}
       </div>
 

@@ -8,6 +8,7 @@ import PortionSelector from '../components/PortionSelector';
 import { getFoodQuality } from '../utils/nutrition';
 import type { Ingredient, IngredientCategory } from '../../../types';
 import { useAppState } from '../../../contexts/AppStateContext';
+import EmptyState from '../../../components/EmptyState';
 
 interface Props {
   navigateTo: (screen: string, data?: Record<string, unknown>) => void;
@@ -124,10 +125,7 @@ export default function FoodDictionary({ navigateTo }: Props) {
 
       {/* Grouped list */}
       {grouped.length === 0 ? (
-        <div className="text-center py-12 text-on-surface-variant space-y-2">
-          <p className="font-headline text-lg">{t.foodDictionary.noResults}</p>
-          <p className="text-sm">{t.foodDictionary.tryAnother}</p>
-        </div>
+        <EmptyState icon="🔍" title={t.foodDictionary.noResults} description={t.foodDictionary.tryAnother} />
       ) : (
         grouped.map(group => {
           const meta = INGREDIENT_CATEGORIES[group.category];

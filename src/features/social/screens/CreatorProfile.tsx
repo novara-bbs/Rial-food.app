@@ -6,6 +6,7 @@ import { useNavigation } from '../../../contexts/NavigationContext';
 import { useLocalStorageState } from '../../../hooks/useLocalStorageState';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
 import EmptyState from '../../../components/EmptyState';
+import RecipeCard from '../../../components/patterns/RecipeCard';
 import { CREATORS_MAP } from '../data/seed-creators';
 
 export default function CreatorProfile({ onBack }: { onBack: () => void }) {
@@ -182,26 +183,12 @@ export default function CreatorProfile({ onBack }: { onBack: () => void }) {
           ) : (
             <div className="grid grid-cols-2 gap-3">
               {creatorRecipes.slice(0, 8).map((recipe: any, i: number) => (
-                <button
+                <RecipeCard
                   key={recipe.id || i}
-                  onClick={() => navigateToRecipe(recipe)}
-                  className="bg-surface-container-low border border-outline-variant/20 rounded-sm overflow-hidden text-left hover:border-primary/50 transition-colors"
-                >
-                  {recipe.img ? (
-                    <img src={recipe.img} alt={recipe.title} className="w-full h-24 object-cover" referrerPolicy="no-referrer" onError={(e) => { (e.target as HTMLImageElement).style.display = 'none'; }} />
-                  ) : (
-                    <div className="w-full h-24 bg-gradient-to-br from-primary/10 to-tertiary/10 flex items-center justify-center">
-                      <ChefHat className="w-6 h-6 text-on-surface-variant/30" />
-                    </div>
-                  )}
-                  <div className="p-3">
-                    <h4 className="font-headline font-bold text-[11px] uppercase text-tertiary line-clamp-2">{recipe.title}</h4>
-                    <div className="flex gap-2 mt-1.5">
-                      <span className="font-label text-[9px] tracking-widest text-primary">{recipe.macros?.calories || recipe.cal || 0} kcal</span>
-                      <span className="font-label text-[9px] tracking-widest text-on-surface-variant">{recipe.macros?.protein || recipe.pro || 0}g P</span>
-                    </div>
-                  </div>
-                </button>
+                  recipe={{ ...recipe, cal: recipe.macros?.calories || recipe.cal || 0, pro: recipe.macros?.protein || recipe.pro || 0 }}
+                  variant="grid"
+                  onPress={() => navigateToRecipe(recipe)}
+                />
               ))}
             </div>
           )}

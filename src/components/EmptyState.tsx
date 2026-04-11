@@ -1,9 +1,12 @@
-export default function EmptyState({ icon, title, description, ctaLabel, onCta }: {
+import React from 'react';
+
+export default function EmptyState({ icon, title, description, ctaLabel, onCta, children }: {
   icon: string;
   title?: string;
   description: string;
   ctaLabel?: string;
   onCta?: () => void;
+  children?: React.ReactNode;
 }) {
   return (
     <div className="flex flex-col items-center justify-center py-16 text-center px-6">
@@ -18,6 +21,7 @@ export default function EmptyState({ icon, title, description, ctaLabel, onCta }
           {ctaLabel}
         </button>
       )}
+      {children && <div className="mt-6">{children}</div>}
     </div>
   );
 }
