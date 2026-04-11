@@ -70,15 +70,15 @@ export default function CookMode({
 
   return (
     <div
-      className="fixed inset-0 z-[100] bg-neutral-950 flex flex-col text-white select-none"
+      className="fixed inset-0 z-[100] bg-neutral-950 flex flex-col text-on-overlay select-none"
       onTouchStart={handleTouchStart}
       onTouchEnd={handleTouchEnd}
     >
       {/* Header */}
-      <div className="flex items-center justify-between px-6 pt-6 pb-4 border-b border-white/10">
+      <div className="flex items-center justify-between px-6 pt-6 pb-4 border-b border-overlay-border">
         <div>
-          <span className="font-label text-[10px] uppercase tracking-widest text-white/40 block truncate max-w-[200px]">{title}</span>
-          <p className="font-headline text-sm font-bold text-white/70">
+          <span className="font-label text-[10px] uppercase tracking-widest text-on-overlay/40 block truncate max-w-[200px]">{title}</span>
+          <p className="font-headline text-sm font-bold text-on-overlay/70">
             {t.recipeDetail.cookModeStep
               .replace('{current}', String(current + 1))
               .replace('{total}', String(total))}
@@ -88,7 +88,7 @@ export default function CookMode({
           {ingredients.length > 0 && (
             <button type="button"
               onClick={() => setShowIngredients(s => !s)}
-              className="p-2 rounded-full bg-white/10 hover:bg-white/20 transition-colors"
+              className="p-2 rounded-full bg-on-overlay/10 hover:bg-on-overlay/20 transition-colors"
               aria-label={t.recipeDetail.viewIngredients}
             >
               <UtensilsCrossed className="w-4 h-4" />
@@ -96,7 +96,7 @@ export default function CookMode({
           )}
           <button type="button"
             onClick={onClose}
-            className="p-2 rounded-full bg-white/10 hover:bg-white/20 transition-colors"
+            className="p-2 rounded-full bg-on-overlay/10 hover:bg-on-overlay/20 transition-colors"
             aria-label={t.recipeDetail.exitCookMode}
           >
             <X className="w-4 h-4" />
@@ -110,7 +110,7 @@ export default function CookMode({
           <button type="button"
             key={i}
             onClick={() => setCurrent(i)}
-            className={`rounded-full transition-all duration-200 ${i === current ? 'w-6 h-2 bg-primary' : 'w-2 h-2 bg-white/20 hover:bg-white/40'}`}
+            className={`rounded-full transition-all duration-200 ${i === current ? 'w-6 h-2 bg-primary' : 'w-2 h-2 bg-on-overlay/20 hover:bg-on-overlay/40'}`}
             aria-label={`Step ${i + 1}`}
           />
         ))}
@@ -126,7 +126,7 @@ export default function CookMode({
           <img src={step.photoUrl} alt={`Step ${current + 1}`} className="w-full max-w-sm rounded-sm object-cover max-h-48" />
         )}
 
-        <p className="text-xl md:text-2xl font-body leading-relaxed text-white max-w-lg">{step.text}</p>
+        <p className="text-xl md:text-2xl font-body leading-relaxed text-on-overlay max-w-lg">{step.text}</p>
 
         {step.detectedMinutes && (
           <div className="flex flex-col items-center gap-3">
@@ -154,17 +154,17 @@ export default function CookMode({
       </div>
 
       {/* Navigation */}
-      <div className="flex items-center justify-between px-6 pb-8 pt-4 border-t border-white/10">
+      <div className="flex items-center justify-between px-6 pb-8 pt-4 border-t border-overlay-border">
         <button type="button"
           onClick={goPrev}
           disabled={current === 0}
-          className="flex items-center gap-1 px-5 py-3 bg-white/10 rounded-sm text-white font-headline text-xs font-bold uppercase tracking-widest disabled:opacity-30 hover:bg-white/20 transition-colors"
+          className="flex items-center gap-1 px-5 py-3 bg-on-overlay/10 rounded-sm text-on-overlay font-headline text-xs font-bold uppercase tracking-widest disabled:opacity-30 hover:bg-on-overlay/20 transition-colors"
         >
           <ChevronLeft className="w-4 h-4" />
           {t.common.back}
         </button>
 
-        <span className="text-white/50 font-mono text-sm">{current + 1}/{total}</span>
+        <span className="text-on-overlay/50 font-mono text-sm">{current + 1}/{total}</span>
 
         {current < total - 1 ? (
           <button type="button"
@@ -190,18 +190,18 @@ export default function CookMode({
           className="absolute inset-0 bg-neutral-950/95 z-10 flex flex-col pt-16 px-6 pb-8"
           onClick={() => setShowIngredients(false)}
         >
-          <h3 className="font-headline font-bold text-lg uppercase text-white mb-4">{t.recipeDetail.viewIngredients}</h3>
+          <h3 className="font-headline font-bold text-lg uppercase text-on-overlay mb-4">{t.recipeDetail.viewIngredients}</h3>
           <div className="space-y-2 overflow-y-auto flex-1">
             {ingredients.map((ing, i) => (
-              <div key={i} className="flex justify-between py-2 border-b border-white/10 text-sm">
-                <span className="text-white">{ing.name}</span>
+              <div key={i} className="flex justify-between py-2 border-b border-overlay-border text-sm">
+                <span className="text-on-overlay">{ing.name}</span>
                 {ing.amount > 0 && (
-                  <span className="text-white/50 font-mono">{ing.amount}{ing.unit ? ` ${ing.unit}` : ''}</span>
+                  <span className="text-on-overlay/50 font-mono">{ing.amount}{ing.unit ? ` ${ing.unit}` : ''}</span>
                 )}
               </div>
             ))}
           </div>
-          <p className="text-white/50 text-xs mt-4 text-center">{t.recipeDetail.tapToClose}</p>
+          <p className="text-on-overlay/50 text-xs mt-4 text-center">{t.recipeDetail.tapToClose}</p>
         </div>
       )}
     </div>

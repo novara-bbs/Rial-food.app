@@ -44,7 +44,7 @@ export default function CookTimer({ minutes, onDone }: { minutes: number; onDone
     <div className="flex flex-col items-center gap-3">
       <div className="relative w-24 h-24">
         <svg className="w-24 h-24 -rotate-90" viewBox="0 0 88 88">
-          <circle cx="44" cy="44" r={radius} fill="none" stroke="currentColor" strokeWidth="4" className="text-white/10" />
+          <circle cx="44" cy="44" r={radius} fill="none" stroke="currentColor" strokeWidth="4" className="text-on-overlay/10" />
           <circle
             cx="44" cy="44" r={radius} fill="none" stroke="currentColor" strokeWidth="4"
             className={done ? 'text-brand-secondary' : 'text-primary'}
@@ -55,7 +55,7 @@ export default function CookTimer({ minutes, onDone }: { minutes: number; onDone
           />
         </svg>
         <div className="absolute inset-0 flex items-center justify-center">
-          <span className={`font-mono text-lg font-bold ${done ? 'text-brand-secondary' : 'text-white'}`}>
+          <span className={`font-mono text-lg font-bold ${done ? 'text-brand-secondary' : 'text-on-overlay'}`}>
             {done ? '✓' : `${mins}:${String(secs).padStart(2, '0')}`}
           </span>
         </div>
@@ -65,14 +65,14 @@ export default function CookTimer({ minutes, onDone }: { minutes: number; onDone
           onClick={() => setRunning(r => !r)}
           disabled={done}
           aria-label={running ? 'Pausar' : 'Iniciar'}
-          className="w-9 h-9 rounded-full bg-white/10 flex items-center justify-center text-white hover:bg-white/20 transition-colors disabled:opacity-40"
+          className="w-9 h-9 rounded-full bg-on-overlay/10 flex items-center justify-center text-on-overlay hover:bg-on-overlay/20 transition-colors disabled:opacity-40"
         >
           {running ? <Pause className="w-4 h-4" /> : <Play className="w-4 h-4" />}
         </button>
         <button type="button"
           onClick={() => { setSecondsLeft(totalSeconds); setRunning(false); }}
           aria-label="Reiniciar"
-          className="w-9 h-9 rounded-full bg-white/10 flex items-center justify-center text-white hover:bg-white/20 transition-colors"
+          className="w-9 h-9 rounded-full bg-on-overlay/10 flex items-center justify-center text-on-overlay hover:bg-on-overlay/20 transition-colors"
         >
           <RotateCcw className="w-4 h-4" />
         </button>

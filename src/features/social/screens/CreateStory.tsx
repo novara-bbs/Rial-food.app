@@ -102,7 +102,7 @@ export default function CreateStory({ onBack }: { onBack: () => void }) {
                 value={textContent}
                 onChange={(e) => setTextContent(e.target.value)}
                 placeholder={t.stories?.writeStory || 'Write your story...'}
-                className="w-full bg-transparent text-white text-2xl font-headline font-bold text-center focus:outline-none resize-none min-h-[200px] placeholder:text-white/50"
+                className="w-full bg-transparent text-on-overlay text-2xl font-headline font-bold text-center focus:outline-none resize-none min-h-[200px] placeholder:text-on-overlay/50"
                 maxLength={200}
               />
             </div>
@@ -175,7 +175,7 @@ export default function CreateStory({ onBack }: { onBack: () => void }) {
                 <img src={image} alt="Preview" className="w-full max-h-[400px] object-cover" />
                 <button type="button"
                   onClick={() => setImage(null)}
-                  className="absolute top-3 right-3 w-8 h-8 bg-black/50 rounded-full flex items-center justify-center text-white hover:bg-black/70 transition-colors"
+                  className="absolute top-3 right-3 w-8 h-8 bg-black/50 rounded-full flex items-center justify-center text-on-overlay hover:bg-black/70 transition-colors"
                 >
                   ✕
                 </button>
