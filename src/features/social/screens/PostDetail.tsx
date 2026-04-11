@@ -1,9 +1,10 @@
-import { ArrowLeft, Send } from 'lucide-react';
+import { Send } from 'lucide-react';
 import { useState, useMemo } from 'react';
 import { useI18n } from '../../../i18n';
 import { useAppState } from '../../../contexts/AppStateContext';
 import { useNavigation } from '../../../contexts/NavigationContext';
 import PostCard from '../components/PostCard';
+import PageHeader from '../../../components/patterns/PageHeader';
 
 export default function PostDetail({ onBack }: { onBack: () => void }) {
   const { t } = useI18n();
@@ -30,10 +31,8 @@ export default function PostDetail({ onBack }: { onBack: () => void }) {
 
   if (!post) {
     return (
-      <div className="px-6 max-w-2xl mx-auto pt-8">
-        <button onClick={onBack} className="p-2 hover:bg-surface-container-highest rounded-sm transition-colors">
-          <ArrowLeft className="w-5 h-5" />
-        </button>
+      <div className="px-6 max-w-2xl mx-auto pt-8 space-y-4">
+        <PageHeader onBack={onBack} label="" title={t.postDetail?.title || 'Post'} />
         <p className="text-center text-on-surface-variant mt-8">{t.postDetail?.notFound || 'Post not found'}</p>
       </div>
     );
@@ -41,16 +40,7 @@ export default function PostDetail({ onBack }: { onBack: () => void }) {
 
   return (
     <div className="px-6 max-w-2xl mx-auto space-y-6 pb-24">
-      {/* Header */}
-      <div className="flex items-center gap-4">
-        <button onClick={onBack} className="p-2 hover:bg-surface-container-highest rounded-sm transition-colors">
-          <ArrowLeft className="w-5 h-5" />
-        </button>
-        <div className="flex-1">
-          <span className="font-label text-xs tracking-[0.2em] text-primary uppercase block">RIAL</span>
-          <h1 className="font-headline text-2xl font-bold tracking-tighter uppercase text-tertiary">{t.postDetail?.title || 'Post'}</h1>
-        </div>
-      </div>
+      <PageHeader onBack={onBack} title={t.postDetail?.title || 'Post'} />
 
       {/* Post */}
       <PostCard

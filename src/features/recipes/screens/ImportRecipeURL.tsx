@@ -1,6 +1,7 @@
 import { useState } from 'react';
-import { ArrowLeft, Link, CheckCircle2, AlertTriangle, Loader2, FileText, HelpCircle, ChevronDown, ChevronUp } from 'lucide-react';
+import { Link, CheckCircle2, AlertTriangle, Loader2, FileText, HelpCircle, ChevronDown, ChevronUp } from 'lucide-react';
 import { useI18n } from '../../../i18n';
+import PageHeader from '../../../components/patterns/PageHeader';
 import { getGeminiClient } from '../../ai/lib/gemini';
 import { GEMINI_API_KEY } from '../../../config/env';
 import { enhanceIngredients, EnhancedIngredient, RecipeIntelligenceResult } from '../utils/recipe-intelligence';
@@ -141,12 +142,7 @@ export default function ImportRecipeURL({ onBack, onImport }: { onBack: () => vo
 
   return (
     <div className="px-6 max-w-4xl mx-auto space-y-6 pb-24">
-      <div className="flex items-center gap-4">
-        <button onClick={onBack} className="p-2 hover:bg-surface-container-highest rounded-sm transition-colors">
-          <ArrowLeft className="w-5 h-5" />
-        </button>
-        <h1 className="font-headline text-2xl font-bold tracking-tighter uppercase text-tertiary">{t.importUrl.title}</h1>
-      </div>
+      <PageHeader onBack={onBack} label="" title={t.importUrl.title} />
 
       {!extracted ? (
         <div className="space-y-6">

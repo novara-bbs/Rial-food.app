@@ -1,4 +1,4 @@
-import { ArrowLeft, Camera, Plus, Search, Trash2, ArrowUp, ArrowDown, Clock, ChevronRight, Check, Link2, Video, ImagePlus, ThumbsUp, Minus, AlertTriangle, UtensilsCrossed } from 'lucide-react';
+import { Camera, Plus, Search, Trash2, ArrowUp, ArrowDown, Clock, ChevronRight, Check, Link2, Video, ImagePlus, ThumbsUp, Minus, AlertTriangle, UtensilsCrossed } from 'lucide-react';
 import { useState, useMemo } from 'react';
 import type { Ingredient, RecipeIngredient, RecipeStep, Micronutrients, FoodTag } from '../../../types';
 import { useI18n } from '../../../i18n';
@@ -7,6 +7,7 @@ import { Badge } from '@/components/ui/badge';
 import PortionSelector, { scaleMacros } from '../../food/components/PortionSelector';
 import { getFoodQuality } from '../../food/utils/nutrition';
 import { useAppState } from '../../../contexts/AppStateContext';
+import PageHeader from '../../../components/patterns/PageHeader';
 
 const STEP_COUNT = 4;
 
@@ -215,22 +216,11 @@ export default function CreateRecipe({
   return (
     <div className="px-6 max-w-4xl mx-auto pb-24">
       {/* Header */}
-      <header className="flex items-center gap-4 mb-4">
-        <button
-          onClick={step === 1 ? onBack : () => setStep(s => s - 1)}
-          className="w-10 h-10 bg-surface-container-low rounded-full flex items-center justify-center text-tertiary hover:bg-surface-container-highest transition-colors shrink-0"
-        >
-          <ArrowLeft className="w-5 h-5" />
-        </button>
-        <div>
-          <span className="font-label text-xs tracking-[0.2em] text-primary uppercase block">
-            {t.createRecipe.stepProgress.replace('{step}', String(step)).replace('{total}', String(STEP_COUNT))}
-          </span>
-          <h2 className="font-headline text-2xl font-bold tracking-tighter uppercase text-tertiary">
-            {stepLabels[step - 1]}
-          </h2>
-        </div>
-      </header>
+      <PageHeader
+        onBack={step === 1 ? onBack : () => setStep(s => s - 1)}
+        label={t.createRecipe.stepProgress.replace('{step}', String(step)).replace('{total}', String(STEP_COUNT))}
+        title={stepLabels[step - 1]}
+      />
 
       {/* Progress bar */}
       <div className="flex gap-1.5 mb-8">

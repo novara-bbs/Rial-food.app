@@ -1,8 +1,9 @@
-import { ArrowLeft, TrendingUp, TrendingDown, Minus, Zap, Leaf, Brain, UtensilsCrossed } from 'lucide-react';
+import { TrendingUp, TrendingDown, Minus, Zap, Leaf, Brain, UtensilsCrossed } from 'lucide-react';
 import { useI18n } from '../../../i18n';
 import { useAppState } from '../../../contexts/AppStateContext';
 import { getCorrelations, getFoodInsights } from '../utils/correlations';
 import { AreaChart, Area, XAxis, YAxis, ResponsiveContainer, Tooltip } from 'recharts';
+import PageHeader from '../../../components/patterns/PageHeader';
 
 const EMOJI_MAP = ['😴', '😕', '😐', '😊', '💪'];
 
@@ -99,13 +100,7 @@ export default function RealFeelDiary({ realFeelLogs = [], onBack }: { realFeelL
 
   return (
     <div className="px-6 max-w-4xl mx-auto space-y-6 pb-24">
-      {/* Header */}
-      <div className="flex items-center gap-4">
-        <button onClick={onBack} className="p-2 hover:bg-surface-container-highest rounded-sm transition-colors">
-          <ArrowLeft className="w-5 h-5" />
-        </button>
-        <h1 className="font-headline text-2xl font-bold tracking-tighter uppercase text-tertiary">{t.realFeel.diary}</h1>
-      </div>
+      <PageHeader onBack={onBack} label="" title={t.realFeel.diary} />
 
       {/* Real Score */}
       <div className="bg-surface-container-low border border-outline-variant/20 rounded-sm p-6">

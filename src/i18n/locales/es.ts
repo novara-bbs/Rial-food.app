@@ -10,6 +10,8 @@ const es = {
   // Sub-tabs
   tabs: {
     recipes: 'Recetas',
+    recipeBook: 'Recetario',
+    forYou: 'Para Ti',
     plan: 'Plan',
     list: 'Lista',
     creators: 'Creadores',

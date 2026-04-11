@@ -10,6 +10,8 @@ const en: Translations = {
   },
   tabs: {
     recipes: 'Recipes',
+    recipeBook: 'My Recipes',
+    forYou: 'For You',
     plan: 'Plan',
     list: 'List',
     creators: 'Creators',

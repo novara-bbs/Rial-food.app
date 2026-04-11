@@ -1,7 +1,8 @@
 import { useState, useEffect } from 'react';
-import { ArrowLeft, Play, Square, Clock, Trophy, Timer, CheckCircle2, StopCircle } from 'lucide-react';
+import { Play, Square, Clock, Trophy, Timer, CheckCircle2, StopCircle } from 'lucide-react';
 import { useI18n } from '../../../i18n';
 import { useLocalStorageState } from '../../../hooks/useLocalStorageState';
+import PageHeader from '../../../components/patterns/PageHeader';
 
 const PROTOCOLS = [
   { id: '16:8', label: '16:8', fastHours: 16, eatHours: 8 },
@@ -63,12 +64,7 @@ export default function FastingTimer({ onBack }: { onBack: () => void }) {
 
   return (
     <div className="px-6 max-w-4xl mx-auto space-y-6 pb-24">
-      <div className="flex items-center gap-4">
-        <button onClick={onBack} className="p-2 hover:bg-surface-container-highest rounded-sm transition-colors">
-          <ArrowLeft className="w-5 h-5" />
-        </button>
-        <h1 className="font-headline text-2xl font-bold tracking-tighter uppercase text-tertiary">{t.fasting.title}</h1>
-      </div>
+      <PageHeader onBack={onBack} label="" title={t.fasting.title} />
 
       {/* Protocol selector */}
       <div className="flex gap-2 overflow-x-auto hide-scrollbar">

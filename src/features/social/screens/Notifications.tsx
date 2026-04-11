@@ -1,9 +1,10 @@
-import { ArrowLeft, CheckCheck, Flame, MessageSquare, UserPlus, Repeat2, Bookmark, Trophy } from 'lucide-react';
+import { CheckCheck, Flame, MessageSquare, UserPlus, Repeat2, Bookmark, Trophy } from 'lucide-react';
 import { useMemo } from 'react';
 import { useI18n } from '../../../i18n';
 import { useAppState } from '../../../contexts/AppStateContext';
 import { useNavigation } from '../../../contexts/NavigationContext';
 import EmptyState from '../../../components/EmptyState';
+import PageHeader from '../../../components/patterns/PageHeader';
 import type { Notification as NotificationType } from '../../../types/social';
 
 const ICON_MAP: Record<string, React.ReactNode> = {
@@ -81,25 +82,18 @@ export default function Notifications({ onBack }: { onBack: () => void }) {
 
   return (
     <div className="px-6 max-w-2xl mx-auto space-y-6 pb-24">
-      <div className="flex items-center justify-between">
-        <div className="flex items-center gap-4">
-          <button onClick={onBack} className="p-2 hover:bg-surface-container-highest rounded-sm transition-colors">
-            <ArrowLeft className="w-5 h-5" />
-          </button>
-          <div>
-            <span className="font-label text-xs tracking-[0.2em] text-primary uppercase block">RIAL</span>
-            <h1 className="font-headline text-2xl font-bold tracking-tighter uppercase text-tertiary">{notif.title || 'Notifications'}</h1>
-          </div>
-        </div>
-        {notifications.some(n => !n.read) && (
+      <PageHeader
+        onBack={onBack}
+        title={notif.title || 'Notifications'}
+        rightAction={notifications.some(n => !n.read) ? (
           <button
             onClick={markAllNotificationsRead}
             className="flex items-center gap-1.5 text-xs text-primary font-label tracking-widest uppercase hover:underline"
           >
             <CheckCheck className="w-4 h-4" /> {notif.markAllRead || 'Mark all read'}
           </button>
-        )}
-      </div>
+        ) : undefined}
+      />
 
       {notifications.length === 0 ? (
         <EmptyState icon="🔔" title={notif.title || 'Notifications'} description={notif.empty || 'No notifications'} />

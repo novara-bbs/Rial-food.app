@@ -1,8 +1,9 @@
-import { ArrowLeft, Type, Activity, ChefHat, Send } from 'lucide-react';
+import { Type, Activity, ChefHat, Send } from 'lucide-react';
 import { useState } from 'react';
 import { useI18n } from '../../../i18n';
 import { useAppState } from '../../../contexts/AppStateContext';
 import ImagePicker from '../components/ImagePicker';
+import PageHeader from '../../../components/patterns/PageHeader';
 import RecipePicker from '../components/RecipePicker';
 import type { StorySlide } from '../../../types/social';
 
@@ -58,25 +59,19 @@ export default function CreateStory({ onBack }: { onBack: () => void }) {
 
   return (
     <div className="px-6 max-w-2xl mx-auto space-y-6 pb-24">
-      {/* Header */}
-      <div className="flex items-center justify-between">
-        <div className="flex items-center gap-4">
-          <button onClick={onBack} className="p-2 hover:bg-surface-container-highest rounded-sm transition-colors">
-            <ArrowLeft className="w-5 h-5" />
+      <PageHeader
+        onBack={onBack}
+        title={t.stories?.create || 'Create Story'}
+        rightAction={
+          <button
+            onClick={handlePublish}
+            disabled={!canPublish()}
+            className="bg-primary text-on-primary px-4 py-2 rounded-sm font-label text-xs font-bold tracking-widest uppercase flex items-center gap-2 hover:bg-primary-container transition-colors disabled:opacity-50"
+          >
+            <Send className="w-4 h-4" /> {t.stories?.publish || 'Publish'}
           </button>
-          <div>
-            <span className="font-label text-xs tracking-[0.2em] text-primary uppercase block">RIAL</span>
-            <h1 className="font-headline text-2xl font-bold tracking-tighter uppercase text-tertiary">{t.stories?.create || 'Create Story'}</h1>
-          </div>
-        </div>
-        <button
-          onClick={handlePublish}
-          disabled={!canPublish()}
-          className="bg-primary text-on-primary px-4 py-2 rounded-sm font-label text-xs font-bold tracking-widest uppercase flex items-center gap-2 hover:bg-primary-container transition-colors disabled:opacity-50"
-        >
-          <Send className="w-4 h-4" /> {t.stories?.publish || 'Publish'}
-        </button>
-      </div>
+        }
+      />
 
       {/* Type selector */}
       <div className="flex gap-2">

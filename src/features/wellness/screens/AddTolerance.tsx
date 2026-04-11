@@ -1,6 +1,7 @@
-import { ArrowLeft, Search, Plus, AlertCircle, CheckCircle2, Activity } from 'lucide-react';
+import { Search, Plus, AlertCircle, CheckCircle2, Activity } from 'lucide-react';
 import { useState } from 'react';
 import { useI18n } from '../../../i18n';
+import PageHeader from '../../../components/patterns/PageHeader';
 
 export default function AddTolerance({ onBack, onAddLog }: { onBack: () => void, onAddLog?: (log: any) => void }) {
   const { t } = useI18n();
@@ -23,15 +24,7 @@ export default function AddTolerance({ onBack, onAddLog }: { onBack: () => void,
 
   return (
     <div className="px-6 max-w-4xl mx-auto space-y-8 pb-24">
-      <header className="flex items-center gap-4 mb-6">
-        <button onClick={onBack} className="w-10 h-10 bg-surface-container-low rounded-full flex items-center justify-center text-tertiary hover:bg-surface-container-highest transition-colors shrink-0">
-          <ArrowLeft className="w-5 h-5" />
-        </button>
-        <div>
-          <span className="font-label text-xs tracking-[0.2em] text-primary uppercase block">{t.tolerance.biometricLog}</span>
-          <h2 className="font-headline text-2xl font-bold tracking-tighter uppercase text-tertiary">{t.tolerance.title}</h2>
-        </div>
-      </header>
+      <PageHeader onBack={onBack} label={t.tolerance.biometricLog} title={t.tolerance.title} />
 
       {!selectedIngredient ? (
         <div className="space-y-6">

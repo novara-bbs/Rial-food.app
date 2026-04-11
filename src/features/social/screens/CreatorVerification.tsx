@@ -1,8 +1,9 @@
-import { ArrowLeft, Check, Clock, ChevronRight, BadgeCheck, Utensils, Heart, Trophy, Home } from 'lucide-react';
+import { Check, Clock, ChevronRight, BadgeCheck, Utensils, Heart, Trophy, Home } from 'lucide-react';
 import { useState } from 'react';
 import { toast } from 'sonner';
 import { useAppState } from '../../../contexts/AppStateContext';
 import { useI18n } from '../../../i18n';
+import PageHeader from '../../../components/patterns/PageHeader';
 
 interface Requirement {
   label: string;
@@ -56,12 +57,7 @@ export default function CreatorVerification({ onBack }: { onBack: () => void }) 
   if (submitted) {
     return (
       <div className="px-6 max-w-2xl mx-auto space-y-8 pb-24">
-        <div className="flex items-center gap-4">
-          <button onClick={onBack} className="p-2 hover:bg-surface-container-highest rounded-sm transition-colors">
-            <ArrowLeft className="w-5 h-5" />
-          </button>
-          <h1 className="font-headline text-2xl font-bold tracking-tighter uppercase text-tertiary">{t.creator.verification}</h1>
-        </div>
+        <PageHeader onBack={onBack} label="" title={t.creator.verification} />
         <div className="text-center py-16 space-y-6">
           <div className="w-24 h-24 bg-primary/20 rounded-full flex items-center justify-center mx-auto">
             <Clock className="w-12 h-12 text-primary animate-pulse" />
@@ -86,15 +82,7 @@ export default function CreatorVerification({ onBack }: { onBack: () => void }) 
 
   return (
     <div className="px-6 max-w-2xl mx-auto space-y-6 pb-24">
-      <div className="flex items-center gap-4">
-        <button onClick={onBack} className="p-2 hover:bg-surface-container-highest rounded-sm transition-colors">
-          <ArrowLeft className="w-5 h-5" />
-        </button>
-        <div>
-          <span className="font-label text-xs tracking-[0.2em] text-primary uppercase block">RIAL</span>
-          <h1 className="font-headline text-2xl font-bold tracking-tighter uppercase text-tertiary">{t.creator.verificationCreator}</h1>
-        </div>
-      </div>
+      <PageHeader onBack={onBack} title={t.creator.verificationCreator} />
 
       {/* Progress bar */}
       <div className="bg-surface-container-low border border-outline-variant/20 rounded-sm p-5 space-y-3">

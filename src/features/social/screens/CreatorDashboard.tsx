@@ -1,4 +1,4 @@
-import { ArrowLeft, Eye, Bookmark, DollarSign, TrendingUp, BarChart3 } from 'lucide-react';
+import { Eye, Bookmark, DollarSign, TrendingUp, BarChart3 } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
@@ -7,6 +7,7 @@ import { Separator } from '@/components/ui/separator';
 import { useAppState } from '../../../contexts/AppStateContext';
 import { useI18n } from '../../../i18n';
 import { getCreatorAnalytics } from '../utils/analytics';
+import PageHeader from '../../../components/patterns/PageHeader';
 
 export default function CreatorDashboard({ onBack }: { onBack: () => void }) {
   const { t } = useI18n();
@@ -38,16 +39,11 @@ export default function CreatorDashboard({ onBack }: { onBack: () => void }) {
 
   return (
     <div className="px-6 max-w-4xl mx-auto space-y-6 pb-24">
-      <div className="flex items-center gap-4">
-        <button onClick={onBack} className="p-2 hover:bg-surface-container-highest rounded-sm transition-colors" aria-label={cd.back}>
-          <ArrowLeft className="w-5 h-5" />
-        </button>
-        <div>
-          <span className="font-label text-xs tracking-[0.2em] text-primary uppercase block">RIAL</span>
-          <h1 className="font-headline text-2xl font-bold tracking-tighter uppercase text-tertiary">{cd.title}</h1>
-        </div>
-        <Badge variant="default" className="ml-auto">{cd.verified}</Badge>
-      </div>
+      <PageHeader
+        onBack={onBack}
+        title={cd.title}
+        rightAction={<Badge variant="default">{cd.verified}</Badge>}
+      />
 
       {/* Overview cards */}
       <div className="grid grid-cols-3 gap-3">

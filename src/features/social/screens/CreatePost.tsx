@@ -1,9 +1,10 @@
-import { ArrowLeft, Send, Activity, TrendingUp, ChefHat, X } from 'lucide-react';
+import { Send, Activity, TrendingUp, ChefHat, X } from 'lucide-react';
 import { useState } from 'react';
 import { useI18n } from '../../../i18n';
 import { useAppState } from '../../../contexts/AppStateContext';
 import ImagePicker from '../components/ImagePicker';
 import RecipePicker from '../components/RecipePicker';
+import PageHeader from '../../../components/patterns/PageHeader';
 
 export default function CreatePost({ onBack, onCreatePost }: { onBack: () => void, onCreatePost?: (content: string, performance?: any, options?: { images?: string[]; recipe?: any; hashtags?: string[] }) => void }) {
   const { t } = useI18n();
@@ -28,24 +29,20 @@ export default function CreatePost({ onBack, onCreatePost }: { onBack: () => voi
 
   return (
     <div className="px-6 max-w-2xl mx-auto space-y-6 pb-24">
-      <header className="flex items-center justify-between mb-6">
-        <div className="flex items-center gap-4">
-          <button onClick={onBack} className="w-10 h-10 bg-surface-container-low rounded-full flex items-center justify-center text-tertiary hover:bg-surface-container-highest transition-colors shrink-0">
-            <ArrowLeft className="w-5 h-5" />
+      <PageHeader
+        onBack={onBack}
+        label={t.createPost.community}
+        title={t.createPost.title}
+        rightAction={
+          <button
+            onClick={handlePublish}
+            disabled={!content.trim()}
+            className="bg-primary text-on-primary px-4 py-2 rounded-sm font-label text-xs font-bold tracking-widest uppercase flex items-center gap-2 hover:bg-primary-container transition-colors disabled:opacity-50"
+          >
+            <Send className="w-4 h-4" /> {t.common.publish}
           </button>
-          <div>
-            <span className="font-label text-xs tracking-[0.2em] text-primary uppercase block">{t.createPost.community}</span>
-            <h2 className="font-headline text-2xl font-bold tracking-tighter uppercase text-tertiary">{t.createPost.title}</h2>
-          </div>
-        </div>
-        <button
-          onClick={handlePublish}
-          disabled={!content.trim()}
-          className="bg-primary text-on-primary px-4 py-2 rounded-sm font-label text-xs font-bold tracking-widest uppercase flex items-center gap-2 hover:bg-primary-container transition-colors disabled:opacity-50"
-        >
-          <Send className="w-4 h-4" /> {t.common.publish}
-        </button>
-      </header>
+        }
+      />
 
       <div className="bg-surface-container-low rounded-sm border border-outline-variant/20 overflow-hidden">
         <textarea

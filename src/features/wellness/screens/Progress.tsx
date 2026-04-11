@@ -1,9 +1,10 @@
-import { TrendingUp, TrendingDown, Scale, Flame, Target, BarChart3, ArrowLeft, Calendar, Plus, Check, Sparkles } from 'lucide-react';
+import { TrendingUp, TrendingDown, Scale, Flame, Target, BarChart3, Calendar, Plus, Check, Sparkles } from 'lucide-react';
 import { useState, useMemo } from 'react';
 import { useI18n } from '../../../i18n';
 import { useAppState } from '../../../contexts/AppStateContext';
 import { getLoggingStreak, type DailyArchive } from '../../../hooks/useDailyReset';
 import { calcVitality } from '../../home/utils/homeWidgets';
+import PageHeader from '../../../components/patterns/PageHeader';
 
 interface WeightEntry { date: string; kg: number; note?: string }
 
@@ -101,14 +102,8 @@ export default function Progress({ onBack }: { onBack: () => void }) {
   const p = t.progress;
 
   return (
-    <div className="px-6 max-w-2xl mx-auto space-y-8 pb-32">
-      {/* Header */}
-      <div className="flex items-center gap-4 pt-6">
-        <button onClick={onBack} className="p-2 hover:bg-surface-container-highest rounded-sm transition-colors" aria-label="Back">
-          <ArrowLeft className="w-5 h-5 text-tertiary" />
-        </button>
-        <h1 className="font-headline text-3xl font-black text-tertiary uppercase tracking-tight">{p.title || 'Tu Progreso'}</h1>
-      </div>
+    <div className="px-6 max-w-2xl mx-auto space-y-8 pb-24">
+      <PageHeader onBack={onBack} label="" title={p.title || 'Tu Progreso'} />
 
       {/* ─── Dashboard Widgets ─── */}
       <section className="grid grid-cols-3 gap-3">

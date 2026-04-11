@@ -1,8 +1,9 @@
-import { ArrowLeft, Activity, Check, Clock, Trophy, Flame } from 'lucide-react';
+import { Activity, Check, Clock, Trophy, Flame } from 'lucide-react';
 import { useI18n } from '../../../i18n';
 import { useNavigation } from '../../../contexts/NavigationContext';
 import { useAppState } from '../../../contexts/AppStateContext';
 import { useLocalStorageState } from '../../../hooks/useLocalStorageState';
+import PageHeader from '../../../components/patterns/PageHeader';
 
 const CHALLENGES = [
   { id: 'green-7', titleKey: 'greenChallenge', icon: '🥬', days: 7, participants: 1240, color: 'primary' },
@@ -37,15 +38,7 @@ export default function Challenges({ onBack }: { onBack: () => void }) {
 
   return (
     <div className="px-6 max-w-2xl mx-auto space-y-6 pb-24">
-      <div className="flex items-center gap-4">
-        <button onClick={onBack} className="p-2 hover:bg-surface-container-highest rounded-sm transition-colors">
-          <ArrowLeft className="w-5 h-5" />
-        </button>
-        <div>
-          <span className="font-label text-xs tracking-[0.2em] text-primary uppercase block">RIAL</span>
-          <h1 className="font-headline text-2xl font-bold tracking-tighter uppercase text-tertiary">{t.challenges.title}</h1>
-        </div>
-      </div>
+      <PageHeader onBack={onBack} title={t.challenges.title} />
 
       {/* Joined challenges */}
       {joinedChallenges.length > 0 && (

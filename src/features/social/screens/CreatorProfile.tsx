@@ -1,4 +1,4 @@
-import { ArrowLeft, CheckCircle2, Calendar, ChefHat, Flame, Settings, UserPlus, UserCheck, Instagram, Youtube, Globe, Music2 } from 'lucide-react';
+import { CheckCircle2, Calendar, ChefHat, Flame, Settings, UserPlus, UserCheck, Instagram, Youtube, Globe, Music2 } from 'lucide-react';
 import { useMemo } from 'react';
 import { useI18n } from '../../../i18n';
 import { useAppState } from '../../../contexts/AppStateContext';
@@ -6,6 +6,7 @@ import { useNavigation } from '../../../contexts/NavigationContext';
 import { useLocalStorageState } from '../../../hooks/useLocalStorageState';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
 import EmptyState from '../../../components/EmptyState';
+import PageHeader from '../../../components/patterns/PageHeader';
 import RecipeCard from '../../../components/patterns/RecipeCard';
 import { CREATORS_MAP } from '../data/seed-creators';
 
@@ -59,16 +60,7 @@ export default function CreatorProfile({ onBack }: { onBack: () => void }) {
 
   return (
     <div className="px-6 max-w-2xl mx-auto space-y-6 pb-24">
-      {/* Header */}
-      <div className="flex items-center gap-4">
-        <button onClick={onBack} className="p-2 hover:bg-surface-container-highest rounded-sm transition-colors" aria-label={t.common.back}>
-          <ArrowLeft className="w-5 h-5" />
-        </button>
-        <div className="flex-1">
-          <span className="font-label text-xs tracking-[0.2em] text-primary uppercase block">RIAL</span>
-          <h1 className="font-headline text-2xl font-bold tracking-tighter uppercase text-tertiary">{cp.title}</h1>
-        </div>
-      </div>
+      <PageHeader onBack={onBack} title={cp.title} />
 
       {/* Profile card */}
       <div className="bg-surface-container-low border border-outline-variant/20 rounded-sm p-6">

@@ -149,6 +149,39 @@ Active: `text-primary border-primary`. Inactive: `text-on-surface-variant border
 
 **When to use TabNav vs shadcn Tabs**: TabNav for simple view switching (no content panels). shadcn `Tabs` when you need `TabsContent` wrappers for animation/lazy rendering.
 
+### PageHeader
+
+Standard back-navigation header for all push-nav screens. Standardizes back button style, RIAL label, and title.
+
+```tsx
+import PageHeader from '@/components/patterns/PageHeader';
+
+// With label (default "RIAL")
+<PageHeader onBack={onBack} title="Pantry" />
+
+// Custom label
+<PageHeader onBack={onBack} label={t.checkIn.title} title={t.checkIn.morningReport} />
+
+// No label
+<PageHeader onBack={onBack} label="" title={t.profile.title} />
+
+// With right action
+<PageHeader
+  onBack={onBack}
+  title="Notifications"
+  rightAction={<button>Mark all read</button>}
+/>
+```
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `onBack` | `() => void` | required | Back button handler |
+| `label` | `string` | `"RIAL"` | Small label above title. Empty string = no label |
+| `title` | `string` | required | Page title |
+| `rightAction` | `ReactNode` | — | Optional right-side slot (buttons, badges) |
+
+**When NOT to use PageHeader**: Hero layouts with full-bleed images (RecipeDetail), sticky chat headers (AICoach pro), conditional back buttons (ShoppingList inside tabs), hero pricing (RialPlus non-pro).
+
 ### EmptyState
 
 Centered empty state with emoji icon, optional title, description, optional CTA, and optional children for custom actions.
@@ -198,8 +231,30 @@ src/components/
     ├── RecipeCard.tsx     ← 3 variants: carousel, grid, hero
     ├── Swimlane.tsx       ← Horizontal scroll + header
     ├── FilterRow.tsx      ← 2 variants: icon, pill
-    └── TabNav.tsx         ← Underline tab bar
+    ├── TabNav.tsx         ← Underline tab bar
+    └── PageHeader.tsx     ← Push-nav back + label + title
 ```
+
+## Page Wrapper Convention
+
+All screens use a consistent wrapper pattern. The `max-w` value depends on content type:
+
+```tsx
+<div className="px-6 max-w-{size} mx-auto space-y-6 pb-24">
+```
+
+| Content type | `max-w` | Examples |
+|-------------|---------|----------|
+| Feature/form screens | `max-w-4xl` | DailyCheckIn, AddMeal, Pantry, CreateRecipe |
+| Social/reading screens | `max-w-2xl` | CreatorProfile, Notifications, CreatePost |
+| Grid/gallery screens | `max-w-5xl` | Cocina recipes tab, Home |
+| Full-width | none | Discovery (swimlanes edge-to-edge) |
+
+**Rules**:
+- Bottom padding: always `pb-24` (clears bottom nav)
+- Horizontal padding: always `px-6`
+- Centering: always `mx-auto`
+- Spacing: `space-y-6` default, `space-y-8` for breathing room in form screens
 
 ## Known Gaps (Out of Scope)
 

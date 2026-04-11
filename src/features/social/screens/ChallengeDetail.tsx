@@ -1,8 +1,9 @@
-import { ArrowLeft, Check, Trophy, Calendar, LogOut } from 'lucide-react';
+import { Check, Trophy, Calendar, LogOut } from 'lucide-react';
 import { useState, useMemo } from 'react';
 import { toast } from 'sonner';
 import { useI18n } from '../../../i18n';
 import { useLocalStorageState } from '../../../hooks/useLocalStorageState';
+import PageHeader from '../../../components/patterns/PageHeader';
 
 interface ChallengeProgress {
   challengeId: string;
@@ -92,16 +93,7 @@ export default function ChallengeDetail({ onBack, challengeId }: { onBack: () =>
 
   return (
     <div className="px-6 max-w-2xl mx-auto space-y-6 pb-24">
-      {/* Header */}
-      <div className="flex items-center gap-4">
-        <button onClick={onBack} className="p-2 hover:bg-surface-container-highest rounded-sm transition-colors">
-          <ArrowLeft className="w-5 h-5" />
-        </button>
-        <div className="flex-1">
-          <span className="font-label text-xs tracking-[0.2em] text-primary uppercase block">RIAL</span>
-          <h1 className="font-headline text-2xl font-bold tracking-tighter uppercase text-tertiary">{ct.detail || 'Challenge'}</h1>
-        </div>
-      </div>
+      <PageHeader onBack={onBack} title={ct.detail || 'Challenge'} />
 
       {/* Hero */}
       <div className="bg-surface-container-low border border-outline-variant/20 rounded-sm p-6 text-center">

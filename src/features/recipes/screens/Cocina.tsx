@@ -137,7 +137,7 @@ export default function Cocina({ onAddMeal, onCreateRecipe, onNavigateToRecipe, 
   };
 
   const tabs = [
-    { id: 'recipes' as const, label: t.tabs.recipes },
+    { id: 'recipes' as const, label: t.tabs.recipeBook },
     { id: 'plan' as const, label: t.tabs.plan },
     { id: 'list' as const, label: t.tabs.list },
   ];

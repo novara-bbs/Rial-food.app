@@ -1,6 +1,7 @@
-import { User, Mail, Shield, CreditCard, LogOut, ChevronRight, Flame, Trophy, Star, ArrowLeft } from 'lucide-react';
+import { User, Mail, Shield, CreditCard, LogOut, ChevronRight, Flame, Trophy, Star } from 'lucide-react';
 import { useI18n } from '../../../i18n';
 import { BADGES, LEVELS, calculatePoints, getUserLevel, getEarnedBadges, getNextMilestone, type UserStats } from '../utils/gamification';
+import PageHeader from '../../../components/patterns/PageHeader';
 
 export default function Profile({ userProfile, onBack, realFeelLogs = [], savedRecipes = [], communityPosts = [] }: {
   userProfile: any;
@@ -38,13 +39,7 @@ export default function Profile({ userProfile, onBack, realFeelLogs = [], savedR
 
   return (
     <div className="px-6 max-w-2xl mx-auto space-y-8 pb-24">
-      {/* Header */}
-      <div className="flex items-center gap-4 pt-2">
-        <button onClick={onBack} className="p-2 hover:bg-surface-container-highest rounded-sm transition-colors">
-          <ArrowLeft className="w-5 h-5" />
-        </button>
-        <h1 className="font-headline text-2xl font-bold tracking-tighter uppercase text-tertiary">{t.profile.title}</h1>
-      </div>
+      <PageHeader onBack={onBack} label="" title={t.profile.title} />
 
       {/* Avatar + name */}
       <div className="flex items-center gap-6">

@@ -162,9 +162,15 @@ export default function Discovery({ onNavigateToRecipe, savedRecipes = [], onSav
   const hasAnyResults = forYou.length > 0 || quickMeals.length > 0 || highProtein.length > 0 || mealTimeRecipes.length > 0 || batchCooking.length > 0;
 
   return (
-    <div className="max-w-5xl mx-auto space-y-0 pb-20">
+    <div className="max-w-5xl mx-auto space-y-0 pb-24">
+      {/* Title */}
+      <div className="px-6 pt-2 pb-3">
+        <span className="font-label text-xs tracking-[0.2em] text-primary uppercase block">RIAL</span>
+        <h1 className="font-headline text-2xl font-bold tracking-tighter uppercase text-tertiary">{t.discovery.title}</h1>
+      </div>
+
       {/* 1. Search bar */}
-      <section className="px-6 pt-2 pb-2">
+      <section className="px-6 pb-2">
         <div className="relative">
           <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-on-surface-variant w-5 h-5" />
           <input

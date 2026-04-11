@@ -1,10 +1,11 @@
-import { ArrowLeft, TrendingUp, TrendingDown, Minus, ChevronLeft, ChevronRight, CheckCircle2, XCircle, Target, ClipboardList, Utensils } from 'lucide-react';
+import { TrendingUp, TrendingDown, Minus, ChevronLeft, ChevronRight, CheckCircle2, XCircle, Target, ClipboardList, Utensils } from 'lucide-react';
 import { useState, useMemo } from 'react';
 import { toast } from 'sonner';
 import { useLocalStorageState } from '../../../hooks/useLocalStorageState';
 import { useAppState } from '../../../contexts/AppStateContext';
 import { useI18n } from '../../../i18n';
 import { DailyArchive } from '../../../hooks/useDailyReset';
+import PageHeader from '../../../components/patterns/PageHeader';
 
 interface WeeklyEntry {
   id: number;
@@ -109,15 +110,7 @@ export default function WeeklyCheckIn({ onBack }: { onBack: () => void }) {
 
   return (
     <div className="px-6 max-w-4xl mx-auto space-y-6 pb-24">
-      <div className="flex items-center gap-4">
-        <button onClick={onBack} className="p-2 hover:bg-surface-container-highest rounded-sm transition-colors">
-          <ArrowLeft className="w-5 h-5" />
-        </button>
-        <div>
-          <span className="font-label text-xs tracking-[0.2em] text-primary uppercase block">RIAL</span>
-          <h1 className="font-headline text-2xl font-bold tracking-tighter uppercase text-tertiary">{t.weekly.title}</h1>
-        </div>
-      </div>
+      <PageHeader onBack={onBack} title={t.weekly.title} />
 
       {/* Toggle: current / history */}
       <div className="flex border border-outline-variant/20 rounded-sm overflow-hidden">

@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect, useMemo } from 'react';
-import { ArrowLeft, Search, Plus, Camera, Barcode, Loader2, BookOpen, Leaf, Globe, Star, Clock, CheckSquare, Square, X, Sparkles, Trash2 } from 'lucide-react';
+import { Search, Plus, Camera, Barcode, Loader2, BookOpen, Leaf, Globe, Star, Clock, CheckSquare, Square, X, Sparkles, Trash2 } from 'lucide-react';
 import { Ingredient, Recipe, ServingSize } from '../../../types';
 import { useI18n } from '../../../i18n';
 import { getFoodQuality, FOOD_QUALITY_EMOJI } from '../utils/nutrition';
@@ -11,6 +11,7 @@ import PortionSheet from '../components/PortionSheet';
 import { PortionResult } from '../components/PortionSelector';
 import EmptyState from '../../../components/EmptyState';
 import TabNav from '../../../components/patterns/TabNav';
+import PageHeader from '../../../components/patterns/PageHeader';
 import FilterRow from '../../../components/patterns/FilterRow';
 import { useAppState } from '../../../contexts/AppStateContext';
 import { toast } from 'sonner';
@@ -265,19 +266,7 @@ export default function AddMeal({
     <>
       <div className="px-6 max-w-4xl mx-auto space-y-5 pb-28">
 
-        {/* Header */}
-        <header className="flex items-center gap-4 pt-2">
-          <button
-            onClick={onBack}
-            className="w-10 h-10 bg-surface-container-low rounded-full flex items-center justify-center text-tertiary hover:bg-surface-container-highest transition-colors shrink-0"
-          >
-            <ArrowLeft className="w-5 h-5" />
-          </button>
-          <div>
-            <span className="font-label text-xs tracking-[0.2em] text-primary uppercase block">{t.home.registered}</span>
-            <h2 className="font-headline text-2xl font-bold tracking-tighter uppercase text-tertiary">{t.home.addMeal}</h2>
-          </div>
-        </header>
+        <PageHeader onBack={onBack} label={t.home.registered} title={t.home.addMeal} />
 
         {/* Meal slot selector */}
         <MealSlotSelector value={mealSlot} onChange={setMealSlot} />

@@ -196,7 +196,7 @@ export default function Home({
   };
 
   return (
-    <div className="px-6 max-w-5xl mx-auto space-y-8 pb-32">
+    <div className="px-6 max-w-5xl mx-auto space-y-8 pb-24">
       {/* 1. Header — greeting + streak */}
       <section className="pt-6 flex items-center justify-between">
         <div className="flex items-center gap-3">

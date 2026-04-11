@@ -10,7 +10,7 @@ export default function Explore({ onNavigateToRecipe, savedRecipes, onSaveRecipe
   const [activeTab, setActiveTab] = useState<'recipes' | 'feed' | 'discover'>('recipes');
 
   const tabs = [
-    { id: 'recipes' as const, label: t.tabs.recipes },
+    { id: 'recipes' as const, label: t.tabs.forYou },
     { id: 'feed' as const, label: t.tabs.feed || 'Feed' },
     { id: 'discover' as const, label: t.tabs.discover || 'Descubrir' },
   ];

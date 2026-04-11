@@ -4,6 +4,7 @@ import { toast } from 'sonner';
 import { useAppState } from '../../../contexts/AppStateContext';
 import { useNavigation } from '../../../contexts/NavigationContext';
 import { useI18n } from '../../../i18n';
+import PageHeader from '../../../components/patterns/PageHeader';
 
 export default function RialPlus({ onBack }: { onBack: () => void }) {
   const { t } = useI18n();
@@ -45,12 +46,7 @@ export default function RialPlus({ onBack }: { onBack: () => void }) {
   if (isPro) {
     return (
       <div className="px-6 max-w-4xl mx-auto space-y-8 pb-24">
-        <div className="flex items-center gap-4">
-          <button onClick={onBack} className="p-2 hover:bg-surface-container-highest rounded-sm transition-colors">
-            <ArrowLeft className="w-5 h-5" />
-          </button>
-          <h1 className="font-headline text-2xl font-bold tracking-tighter uppercase text-tertiary">RIAL+</h1>
-        </div>
+        <PageHeader onBack={onBack} label="" title="RIAL+" />
         <div className="text-center py-16 space-y-6">
           <div className="w-24 h-24 bg-primary/20 rounded-full flex items-center justify-center mx-auto">
             <Crown className="w-12 h-12 text-primary" />
