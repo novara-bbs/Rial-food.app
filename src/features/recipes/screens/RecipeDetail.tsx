@@ -1,4 +1,4 @@
-import { ArrowLeft, Clock, Flame, Droplet, Activity, CheckCircle2, Circle, Minus, Plus, MessageSquare, Bookmark, X, Users, ShoppingCart, ChefHat, UtensilsCrossed, ThumbsUp, AlertTriangle, Target, Share2, ExternalLink, Pencil, Trash2, GitFork } from 'lucide-react';
+import { ArrowLeft, Clock, Flame, Droplet, Activity, CheckCircle2, Circle, Minus, Plus, MessageSquare, Bookmark, X, Users, ShoppingCart, ChefHat, UtensilsCrossed, ThumbsUp, AlertTriangle, Target, Share2, ExternalLink, Pencil, Trash2, GitFork, Crown } from 'lucide-react';
 import SearchInput from '../../../components/patterns/SearchInput';
 import { useState, useMemo, useEffect } from 'react';
 import CookMode from '../components/CookMode';
@@ -23,7 +23,7 @@ import ConfirmDialog from '../../../components/ConfirmDialog';
 export default function RecipeDetail({ recipe, onBack, onSaveRecipe, isSaved, onAddToPlan, onLogMealNow, onAddToShoppingList, dictionary = [], userProfile }: { recipe: any, onBack: () => void, onSaveRecipe?: (r: any) => void, isSaved?: boolean, onAddToPlan?: (recipe: any, dayIndex: number) => void, onLogMealNow?: (recipe: any, servings: number) => void, onAddToShoppingList?: (items: any[]) => void, dictionary?: any[], userProfile?: any }) {
   const { t } = useI18n();
   const { navigateTo } = useNavigation();
-  const { setSelectedCreatorId, communityPosts, savedRecipes, savedPosts, navigateToRecipe: navToRecipe, handleDeleteRecipe, handleDuplicateRecipe, setRecipeToEdit, handleCreateRecipeSubmit } = useAppState();
+  const { setSelectedCreatorId, communityPosts, savedRecipes, savedPosts, navigateToRecipe: navToRecipe, handleDeleteRecipe, handleDuplicateRecipe, setRecipeToEdit, handleCreateRecipeSubmit, isPro } = useAppState();
   const [followedCreators, setFollowedCreators] = useLocalStorageState<string[]>('followedCreators', []);
   const [checkedIngredients, setCheckedIngredients] = useState<string[]>([]);
   const [servings, setServings] = useState(1);
@@ -35,6 +35,7 @@ export default function RecipeDetail({ recipe, onBack, onSaveRecipe, isSaved, on
   const [searchQuery, setSearchQuery] = useState('');
   const [showPublishSheet, setShowPublishSheet] = useState(false);
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
+  const [showDuplicateConfirm, setShowDuplicateConfirm] = useState(false);
 
   // Track recipe view on mount
   useEffect(() => {
@@ -540,7 +541,7 @@ export default function RecipeDetail({ recipe, onBack, onSaveRecipe, isSaved, on
               )}
             </section>
 
-            {/* Quick actions */}
+            {/* Quick actions — primary */}
             <div className="flex flex-col sm:flex-row gap-3">
               <Button variant="brand" className="flex-1" onClick={() => onLogMealNow && onLogMealNow(getModifiedRecipe(), servings)}>
                 <UtensilsCrossed className="w-4 h-4 mr-2" /> {t.recipeDetail.logMeal}
@@ -548,11 +549,34 @@ export default function RecipeDetail({ recipe, onBack, onSaveRecipe, isSaved, on
               <Button variant="outline" className="flex-1" onClick={() => setShowDaySelector(true)}>
                 {t.recipeDetail.addToPlan}
               </Button>
-              <Button variant="outline" className="flex-1" onClick={() => handleDuplicateRecipe(getModifiedRecipe())}>
-                <GitFork className="w-4 h-4 mr-2" />
-                {t.recipeDetail.duplicate || 'Duplicar'}
-              </Button>
             </div>
+
+            {/* Versionar — secondary action, Pro-only */}
+            {data.publishedBy !== 'self' && (
+              <div className="border-t border-outline-variant/10 pt-3">
+                <button
+                  type="button"
+                  onClick={() => {
+                    if (!isPro) { navigateTo('rial-plus'); return; }
+                    setShowDuplicateConfirm(true);
+                  }}
+                  className="w-full flex items-center justify-between px-4 py-3 bg-surface-container-low border border-outline-variant/20 rounded-sm hover:border-primary/30 transition-colors group"
+                >
+                  <div className="flex items-center gap-3">
+                    <GitFork className="w-4 h-4 text-on-surface-variant group-hover:text-primary transition-colors" />
+                    <div className="text-left">
+                      <span className="font-headline font-bold text-xs text-tertiary uppercase tracking-widest block">
+                        {t.recipeDetail.createVersion || 'Crear mi versión'}
+                      </span>
+                      <span className="font-label text-[9px] text-on-surface-variant tracking-widest uppercase">
+                        {t.recipeDetail.versionDesc || 'Duplicar y personalizar esta receta'}
+                      </span>
+                    </div>
+                  </div>
+                  {!isPro && <Crown className="w-4 h-4 text-brand-secondary" />}
+                </button>
+              </div>
+            )}
 
             {showDaySelector && (
               <div className="bg-surface-container-low p-4 rounded-sm border border-outline-variant/20">
@@ -877,6 +901,15 @@ export default function RecipeDetail({ recipe, onBack, onSaveRecipe, isSaved, on
       cancelLabel={t.confirm.cancel}
       variant="destructive"
       onConfirm={() => handleDeleteRecipe(data.id)}
+    />
+    <ConfirmDialog
+      open={showDuplicateConfirm}
+      onOpenChange={setShowDuplicateConfirm}
+      title={t.recipeDetail.createVersion || 'Crear mi versión'}
+      description={`${t.recipeDetail.duplicateConfirmDesc || 'Se creará una copia editable de'} "${data.title}"${data.publishedByName ? ` ${t.recipeDetail.by || 'de'} ${data.publishedByName}` : ''}. ${t.recipeDetail.duplicateConfirmHint || 'Podrás modificarla y hacerla tuya.'}`}
+      confirmLabel={t.recipeDetail.duplicate || 'Duplicar'}
+      cancelLabel={t.confirm.cancel}
+      onConfirm={() => handleDuplicateRecipe(getModifiedRecipe())}
     />
     </>
   );
