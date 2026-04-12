@@ -1,4 +1,5 @@
 import React, { useState, useRef, useEffect, useMemo } from 'react';
+import PageShell from '../../../components/PageShell';
 import { Plus, Camera, Barcode, Loader2, BookOpen, Leaf, Globe, Star, Clock, CheckSquare, Square, X, Sparkles, Trash2 } from 'lucide-react';
 import SearchInput from '../../../components/patterns/SearchInput';
 import { Ingredient, Recipe, ServingSize } from '../../../types';
@@ -265,7 +266,7 @@ export default function AddMeal({
   // ─── Render ────────────────────────────────────────────────
   return (
     <>
-      <div className="px-6 max-w-4xl mx-auto space-y-5 pb-28">
+      <PageShell maxWidth="default" spacing="lg">
 
         <PageHeader onBack={onBack} label={t.home.registered} title={t.home.addMeal} />
 
@@ -511,11 +512,11 @@ export default function AddMeal({
             );
           })}
         </div>
-      </div>
+      </PageShell>
 
       {/* Multi-add running total banner */}
       {multiMode && multiQueue.length > 0 && (
-        <div className="fixed bottom-28 md:bottom-20 left-0 right-0 z-40 px-4">
+        <div className="fixed left-0 right-0 z-40 px-4 md:bottom-20" style={{ bottom: 'calc(env(safe-area-inset-bottom, 0px) + 7rem)' }}>
           <div className="max-w-lg mx-auto bg-surface-container-highest border border-primary/30 rounded-sm p-3 shadow-xl flex items-center gap-3">
             <div className="flex-1 min-w-0">
               <span className="font-headline text-xs font-bold uppercase tracking-widest text-tertiary block">

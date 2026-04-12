@@ -13,7 +13,7 @@ export default function BottomNav({ currentScreen, setCurrentScreen, onOpenCreat
   ];
 
   return (
-    <nav className="md:hidden fixed bottom-0 left-0 w-full z-50 flex justify-around items-end px-2 pb-6 pt-2 bg-background/95 backdrop-blur-xl border-t border-outline-variant/15">
+    <nav className="md:hidden fixed bottom-0 left-0 w-full z-50 flex justify-around items-end px-2 pb-safe-nav pt-2 bg-background/95 backdrop-blur-xl border-t border-outline-variant/15">
       {navItems.map(item => {
         const Icon = item.icon;
         const isActive = currentScreen === item.id;

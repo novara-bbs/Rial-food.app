@@ -155,7 +155,7 @@ export default function App() {
         setDailyMacros((prev: any) => ({ ...prev, target: result.targets }));
         setIsFirstTime(false);
       }} />
-      <div className={`flex h-screen overflow-hidden bg-background text-on-surface font-body selection:bg-primary selection:text-on-primary ${theme}`}>
+      <div className={`flex h-dvh overflow-hidden bg-background text-on-surface font-body selection:bg-primary selection:text-on-primary ${theme}`}>
         <Toaster theme={theme.includes('dark') ? 'dark' : 'light'} position="top-center" toastOptions={{
           className: 'bg-surface-container-highest border border-outline-variant/20 text-tertiary font-headline font-bold uppercase tracking-widest rounded-sm',
         }} />
@@ -177,7 +177,7 @@ export default function App() {
               </Suspense>
             </ErrorBoundary>
           </main>
-          <div className="fixed bottom-24 md:bottom-8 right-6 flex flex-col gap-4 z-50">
+          <div className="fixed right-6 flex flex-col gap-4 z-50 md:bottom-8" style={{ bottom: 'calc(env(safe-area-inset-bottom, 0px) + 6rem)' }}>
             {currentScreen !== 'ai-coach' && showAIBot && (
               <button
                 type="button"

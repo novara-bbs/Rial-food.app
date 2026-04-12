@@ -1,4 +1,5 @@
 import { Type, Activity, ChefHat, Send } from 'lucide-react';
+import PageShell from '../../../components/PageShell';
 import { useState } from 'react';
 import { useI18n } from '../../../i18n';
 import { useAppState } from '../../../contexts/AppStateContext';
@@ -58,7 +59,7 @@ export default function CreateStory({ onBack }: { onBack: () => void }) {
   ];
 
   return (
-    <div className="px-6 max-w-2xl mx-auto space-y-6 pb-24">
+    <PageShell maxWidth="narrow" spacing="md">
       <PageHeader
         onBack={onBack}
         title={t.stories?.create || 'Create Story'}
@@ -196,6 +197,6 @@ export default function CreateStory({ onBack }: { onBack: () => void }) {
           onClose={() => setShowRecipePicker(false)}
         />
       )}
-    </div>
+    </PageShell>
   );
 }

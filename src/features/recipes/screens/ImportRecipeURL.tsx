@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import PageShell from '../../../components/PageShell';
 import { Link, CheckCircle2, AlertTriangle, Loader2, FileText, HelpCircle, ChevronDown, ChevronUp } from 'lucide-react';
 import { useI18n } from '../../../i18n';
 import PageHeader from '../../../components/patterns/PageHeader';
@@ -141,7 +142,7 @@ export default function ImportRecipeURL({ onBack, onImport }: { onBack: () => vo
   };
 
   return (
-    <div className="px-6 max-w-4xl mx-auto space-y-6 pb-24">
+    <PageShell maxWidth="narrow" spacing="md">
       <PageHeader onBack={onBack} label="" title={t.importUrl.title} />
 
       {!extracted ? (
@@ -344,6 +345,6 @@ export default function ImportRecipeURL({ onBack, onImport }: { onBack: () => vo
           </div>
         </div>
       )}
-    </div>
+    </PageShell>
   );
 }

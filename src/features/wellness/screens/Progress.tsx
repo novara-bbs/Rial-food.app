@@ -1,4 +1,5 @@
 import { TrendingUp, TrendingDown, Scale, Flame, Target, BarChart3, Calendar, Plus, Check, Sparkles } from 'lucide-react';
+import PageShell from '../../../components/PageShell';
 import { useState, useMemo } from 'react';
 import { useI18n } from '../../../i18n';
 import { useAppState } from '../../../contexts/AppStateContext';
@@ -107,7 +108,7 @@ export default function Progress({ onBack }: { onBack: () => void }) {
   const p = t.progress;
 
   return (
-    <div className="px-6 max-w-2xl mx-auto space-y-8 pb-24">
+    <PageShell maxWidth="narrow" spacing="lg">
       <PageHeader onBack={onBack} label="" title={p.title || 'Tu Progreso'} />
 
       {/* ─── Dashboard Widgets ─── */}
@@ -339,6 +340,6 @@ export default function Progress({ onBack }: { onBack: () => void }) {
           </div>
         </div>
       </section>
-    </div>
+    </PageShell>
   );
 }

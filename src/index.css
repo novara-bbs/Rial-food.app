@@ -468,3 +468,11 @@
   -ms-overflow-style: none;
   scrollbar-width: none;
 }
+
+/* Safe area utilities for mobile browser chrome + notch */
+@utility pb-safe {
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+}
+@utility pb-safe-nav {
+  padding-bottom: calc(env(safe-area-inset-bottom, 0px) + 0.5rem);
+}

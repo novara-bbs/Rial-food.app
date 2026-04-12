@@ -1,4 +1,5 @@
 import { CheckCheck, Flame, MessageSquare, UserPlus, Repeat2, Bookmark, Trophy } from 'lucide-react';
+import PageShell from '../../../components/PageShell';
 import { useMemo } from 'react';
 import { useI18n } from '../../../i18n';
 import { useAppState } from '../../../contexts/AppStateContext';
@@ -81,7 +82,7 @@ export default function Notifications({ onBack }: { onBack: () => void }) {
   };
 
   return (
-    <div className="px-6 max-w-2xl mx-auto space-y-6 pb-24">
+    <PageShell maxWidth="narrow" spacing="md">
       <PageHeader
         onBack={onBack}
         title={notif.title || 'Notifications'}
@@ -104,6 +105,6 @@ export default function Notifications({ onBack }: { onBack: () => void }) {
           {renderGroup(notif.earlier || 'Earlier', grouped.earlier)}
         </div>
       )}
-    </div>
+    </PageShell>
   );
 }

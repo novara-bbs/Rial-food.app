@@ -1,4 +1,5 @@
 import { Zap, CheckCircle, Battery, AlertTriangle, Moon, Activity } from 'lucide-react';
+import PageShell from '../../../components/PageShell';
 import { useState } from 'react';
 import { useI18n } from '../../../i18n';
 import PageHeader from '../../../components/patterns/PageHeader';
@@ -24,7 +25,7 @@ export default function DailyCheckIn({ initialStatus, onBack, onComplete }: { in
   };
 
   return (
-    <div className="px-6 max-w-4xl mx-auto space-y-8 pb-24">
+    <PageShell maxWidth="default" spacing="lg">
       <PageHeader onBack={onBack} label={t.checkIn.title} title={t.checkIn.morningReport} />
 
       <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
@@ -163,6 +164,6 @@ export default function DailyCheckIn({ initialStatus, onBack, onComplete }: { in
           {t.checkIn.register}
         </button>
       </div>
-    </div>
+    </PageShell>
   );
 }

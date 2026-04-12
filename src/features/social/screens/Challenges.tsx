@@ -1,4 +1,5 @@
 import { Activity, Check, Clock, Trophy, Flame } from 'lucide-react';
+import PageShell from '../../../components/PageShell';
 import { useI18n } from '../../../i18n';
 import { useNavigation } from '../../../contexts/NavigationContext';
 import { useAppState } from '../../../contexts/AppStateContext';
@@ -37,7 +38,7 @@ export default function Challenges({ onBack }: { onBack: () => void }) {
   };
 
   return (
-    <div className="px-6 max-w-2xl mx-auto space-y-6 pb-24">
+    <PageShell maxWidth="narrow" spacing="md">
       <PageHeader onBack={onBack} title={t.challenges.title} />
 
       {/* Joined challenges */}
@@ -116,6 +117,6 @@ export default function Challenges({ onBack }: { onBack: () => void }) {
           );
         })}
       </section>
-    </div>
+    </PageShell>
   );
 }

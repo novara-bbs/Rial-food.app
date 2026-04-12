@@ -1,4 +1,5 @@
 import { ArrowLeft, Check, Crown, Sparkles, Brain, ShoppingCart, Zap, Lock, Star, BarChart3, Download, Microscope, Archive, ClipboardList, Globe, Timer, Target, type LucideIcon } from 'lucide-react';
+import PageShell from '../../../components/PageShell';
 import { useState } from 'react';
 import { toast } from 'sonner';
 import { useAppState } from '../../../contexts/AppStateContext';
@@ -45,7 +46,7 @@ export default function RialPlus({ onBack }: { onBack: () => void }) {
 
   if (isPro) {
     return (
-      <div className="px-6 max-w-4xl mx-auto space-y-8 pb-24">
+      <PageShell maxWidth="default" spacing="lg">
         <PageHeader onBack={onBack} label="" title="RIAL+" />
         <div className="text-center py-16 space-y-6">
           <div className="w-24 h-24 bg-primary/20 rounded-full flex items-center justify-center mx-auto">
@@ -60,12 +61,12 @@ export default function RialPlus({ onBack }: { onBack: () => void }) {
             <p className="font-headline text-lg font-bold text-tertiary mt-1">{t.rialPlus.renewal}</p>
           </div>
         </div>
-      </div>
+      </PageShell>
     );
   }
 
   return (
-    <div className="pb-32">
+    <div>
       {/* Hero */}
       <div className="relative bg-primary/10 border-b border-primary/20 px-6 pt-6 pb-12">
         <button type="button" onClick={onBack} className="absolute top-6 left-6 p-2 hover:bg-surface-container-highest rounded-sm transition-colors">
@@ -161,7 +162,7 @@ export default function RialPlus({ onBack }: { onBack: () => void }) {
         </div>
 
         {/* CTA */}
-        <div className="fixed bottom-8 left-0 right-0 px-6 z-50">
+        <div className="fixed left-0 right-0 px-6 z-50" style={{ bottom: 'calc(env(safe-area-inset-bottom, 0px) + 2rem)' }}>
           <div className="max-w-2xl mx-auto">
             <button type="button"
               onClick={handleUpgrade}

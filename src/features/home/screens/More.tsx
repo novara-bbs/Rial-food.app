@@ -1,4 +1,5 @@
 import { BookOpen, Settings, User, Sparkles, ChevronRight, Timer, Trophy, Gem, Heart, Package, CalendarCheck, BadgeCheck, BarChart3, Apple, TrendingUp } from 'lucide-react';
+import PageShell from '../../../components/PageShell';
 import { useI18n } from '../../../i18n';
 
 export default function More({ navigateTo }: { navigateTo: (screen: string) => void }) {
@@ -21,7 +22,7 @@ export default function More({ navigateTo }: { navigateTo: (screen: string) => v
   ];
 
   return (
-    <div className="px-6 max-w-4xl mx-auto space-y-8 pb-24">
+    <PageShell maxWidth="default" spacing="lg">
       <section>
         <h2 className="font-headline text-3xl md:text-4xl font-bold tracking-tighter uppercase text-tertiary mb-8">{t.more.title}</h2>
 
@@ -45,6 +46,6 @@ export default function More({ navigateTo }: { navigateTo: (screen: string) => v
           ))}
         </div>
       </section>
-    </div>
+    </PageShell>
   );
 }

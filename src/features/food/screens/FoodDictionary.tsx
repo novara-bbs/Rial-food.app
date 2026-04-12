@@ -1,4 +1,5 @@
 import { useState, useMemo } from 'react';
+import PageShell from '../../../components/PageShell';
 import { ChevronDown, ChevronUp, UtensilsCrossed, ShoppingCart, ThumbsUp, Minus, AlertTriangle, X } from 'lucide-react';
 import SearchInput from '../../../components/patterns/SearchInput';
 import PageHeader from '../../../components/patterns/PageHeader';
@@ -86,7 +87,7 @@ export default function FoodDictionary({ navigateTo }: Props) {
   };
 
   return (
-    <div className="px-6 max-w-4xl mx-auto pb-24 space-y-6">
+    <PageShell maxWidth="default" spacing="md">
       <PageHeader onBack={() => navigateTo('more')} label="" title={t.foodDictionary.title} />
 
       {/* Search bar */}
@@ -280,7 +281,7 @@ export default function FoodDictionary({ navigateTo }: Props) {
           );
         })
       )}
-    </div>
+    </PageShell>
   );
 }
 

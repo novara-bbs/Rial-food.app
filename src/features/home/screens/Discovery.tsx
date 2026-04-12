@@ -164,7 +164,7 @@ export default function Discovery({ onNavigateToRecipe, savedRecipes = [], onSav
   const hasAnyResults = forYou.length > 0 || quickMeals.length > 0 || highProtein.length > 0 || mealTimeRecipes.length > 0 || batchCooking.length > 0;
 
   return (
-    <div className="max-w-5xl mx-auto space-y-0 pb-24">
+    <div className="max-w-5xl mx-auto space-y-0">
       {/* Title */}
       <div className="px-6 pt-2 pb-3">
         <span className="font-label text-xs tracking-[0.2em] text-primary uppercase block">RIAL</span>

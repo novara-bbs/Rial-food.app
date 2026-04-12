@@ -1,4 +1,5 @@
 import { Camera, Plus, Search, Trash2, ArrowUp, ArrowDown, Clock, ChevronRight, Check, Link2, Video, ImagePlus, ThumbsUp, Minus, AlertTriangle, UtensilsCrossed } from 'lucide-react';
+import PageShell from '../../../components/PageShell';
 import { useState, useMemo } from 'react';
 import type { Ingredient, RecipeIngredient, RecipeStep, Micronutrients, FoodTag } from '../../../types';
 import { useI18n } from '../../../i18n';
@@ -223,7 +224,7 @@ export default function CreateRecipe({
   const stepLabels = [sl.information, sl.ingredients, sl.steps, sl.review];
 
   return (
-    <div className="px-6 max-w-4xl mx-auto pb-24">
+    <PageShell maxWidth="default" spacing="lg">
       {/* Header */}
       <PageHeader
         onBack={step === 1 ? onBack : () => setStep(s => s - 1)}
@@ -638,6 +639,6 @@ export default function CreateRecipe({
           </Button>
         )}
       </div>
-    </div>
+    </PageShell>
   );
 }

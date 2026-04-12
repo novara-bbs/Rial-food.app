@@ -1,4 +1,5 @@
 import { useTheme, type Theme } from '../../../contexts/ThemeContext';
+import PageShell from '../../../components/PageShell';
 import { Palette, Moon, Sun, Check, User, Target, Smartphone, Leaf, LogOut, ChevronRight, Crown, Sparkles, Users, Plus, Trash2, Globe, Scale, ShieldAlert, X, Search, Bell, Download, AlertTriangle } from 'lucide-react';
 import { useState, useMemo } from 'react';
 import { toast } from 'sonner';
@@ -201,7 +202,7 @@ export default function Settings({ dailyMacros, setDailyMacros, isPro, setIsPro,
   };
 
   return (
-    <div className="px-6 max-w-4xl mx-auto space-y-8 pb-24">
+    <PageShell maxWidth="default" spacing="lg">
       <section className="space-y-6">
         <span className="font-label text-xs tracking-[0.2em] text-primary uppercase mb-1 block">{t.settings.title}</span>
         <h2 className="font-headline text-3xl md:text-4xl font-bold tracking-tighter uppercase text-tertiary mb-6">{t.settings.title}</h2>
@@ -932,6 +933,6 @@ export default function Settings({ dailyMacros, setDailyMacros, isPro, setIsPro,
         variant="destructive"
         onConfirm={deleteAllData}
       />
-    </div>
+    </PageShell>
   );
 }

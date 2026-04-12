@@ -1,4 +1,5 @@
 import { TrendingUp, TrendingDown, Minus, ChevronLeft, ChevronRight, CheckCircle2, XCircle, Target, ClipboardList, Utensils } from 'lucide-react';
+import PageShell from '../../../components/PageShell';
 import { useState, useMemo } from 'react';
 import { toast } from 'sonner';
 import { useLocalStorageState } from '../../../hooks/useLocalStorageState';
@@ -109,7 +110,7 @@ export default function WeeklyCheckIn({ onBack }: { onBack: () => void }) {
   const vitalityLabel = (v: number) => v >= 75 ? t.weekly.vitalityHigh : v >= 50 ? t.weekly.vitalityMedium : v > 0 ? t.weekly.vitalityLow : '—';
 
   return (
-    <div className="px-6 max-w-4xl mx-auto space-y-6 pb-24">
+    <PageShell maxWidth="narrow" spacing="lg">
       <PageHeader onBack={onBack} title={t.weekly.title} />
 
       {/* Toggle: current / history */}
@@ -312,6 +313,6 @@ export default function WeeklyCheckIn({ onBack }: { onBack: () => void }) {
           )}
         </div>
       )}
-    </div>
+    </PageShell>
   );
 }

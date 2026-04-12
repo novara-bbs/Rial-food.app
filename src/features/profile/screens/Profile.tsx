@@ -1,4 +1,5 @@
 import { User, Mail, Shield, CreditCard, LogOut, ChevronRight, Flame, Trophy, Star, Pencil } from 'lucide-react';
+import PageShell from '../../../components/PageShell';
 import { useI18n } from '../../../i18n';
 import { BADGES, LEVELS, calculatePoints, getUserLevel, getEarnedBadges, getNextMilestone, calculateStreak, type UserStats } from '../utils/gamification';
 import PageHeader from '../../../components/patterns/PageHeader';
@@ -45,7 +46,7 @@ export default function Profile({ userProfile, onBack, realFeelLogs = [], savedR
   const levelProgress = nextLevel ? ((points - level.minPoints) / (nextLevel.minPoints - level.minPoints)) * 100 : 100;
 
   return (
-    <div className="px-6 max-w-2xl mx-auto space-y-8 pb-24">
+    <PageShell maxWidth="narrow" spacing="lg">
       <PageHeader
         onBack={onBack}
         label=""
@@ -193,6 +194,6 @@ export default function Profile({ userProfile, onBack, realFeelLogs = [], savedR
         <LogOut className="w-4 h-4 mr-2" />
         {t.profile.logout || 'Cerrar sesión'}
       </Button>
-    </div>
+    </PageShell>
   );
 }

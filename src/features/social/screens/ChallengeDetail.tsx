@@ -1,4 +1,5 @@
 import { Check, Trophy, Calendar, LogOut } from 'lucide-react';
+import PageShell from '../../../components/PageShell';
 import { useState, useMemo } from 'react';
 import { toast } from 'sonner';
 import { useI18n } from '../../../i18n';
@@ -92,7 +93,7 @@ export default function ChallengeDetail({ onBack, challengeId }: { onBack: () =>
   };
 
   return (
-    <div className="px-6 max-w-2xl mx-auto space-y-6 pb-24">
+    <PageShell maxWidth="narrow" spacing="md">
       <PageHeader onBack={onBack} title={ct.detail || 'Challenge'} />
 
       {/* Hero */}
@@ -185,6 +186,6 @@ export default function ChallengeDetail({ onBack, challengeId }: { onBack: () =>
           <LogOut className="w-4 h-4" /> {ct.leave || 'Leave challenge'}
         </button>
       )}
-    </div>
+    </PageShell>
   );
 }

@@ -1,4 +1,5 @@
 import { Eye, Bookmark, DollarSign, TrendingUp, BarChart3 } from 'lucide-react';
+import PageShell from '../../../components/PageShell';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
@@ -38,7 +39,7 @@ export default function CreatorDashboard({ onBack }: { onBack: () => void }) {
   }
 
   return (
-    <div className="px-6 max-w-4xl mx-auto space-y-6 pb-24">
+    <PageShell maxWidth="default" spacing="md">
       <PageHeader
         onBack={onBack}
         title={cd.title}
@@ -165,6 +166,6 @@ export default function CreatorDashboard({ onBack }: { onBack: () => void }) {
           </Card>
         </TabsContent>
       </Tabs>
-    </div>
+    </PageShell>
   );
 }

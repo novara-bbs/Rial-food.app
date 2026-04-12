@@ -1,4 +1,5 @@
 import { Check, Clock, ChevronRight, BadgeCheck, Utensils, Heart, Trophy, Home } from 'lucide-react';
+import PageShell from '../../../components/PageShell';
 import { useState } from 'react';
 import { toast } from 'sonner';
 import { useAppState } from '../../../contexts/AppStateContext';
@@ -57,7 +58,7 @@ export default function CreatorVerification({ onBack }: { onBack: () => void }) 
 
   if (submitted) {
     return (
-      <div className="px-6 max-w-2xl mx-auto space-y-8 pb-24">
+      <PageShell maxWidth="narrow" spacing="md">
         <PageHeader onBack={onBack} label="" title={t.creator.verification} />
         <div className="text-center py-16 space-y-6">
           <div className="w-24 h-24 bg-primary/20 rounded-full flex items-center justify-center mx-auto">
@@ -77,12 +78,12 @@ export default function CreatorVerification({ onBack }: { onBack: () => void }) 
             </p>
           </div>
         </div>
-      </div>
+      </PageShell>
     );
   }
 
   return (
-    <div className="px-6 max-w-2xl mx-auto space-y-6 pb-24">
+    <PageShell maxWidth="narrow" spacing="md">
       <PageHeader onBack={onBack} title={t.creator.verificationCreator} />
 
       {/* Progress bar */}
@@ -195,6 +196,6 @@ export default function CreatorVerification({ onBack }: { onBack: () => void }) 
           </p>
         )}
       </div>
-    </div>
+    </PageShell>
   );
 }

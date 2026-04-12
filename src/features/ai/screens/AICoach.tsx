@@ -88,7 +88,7 @@ export default function AICoach({
 
   if (!isPro) {
     return (
-      <div className="px-6 max-w-4xl mx-auto space-y-8 pb-24 h-full flex flex-col">
+      <div className="px-6 max-w-4xl mx-auto space-y-8 h-full flex flex-col">
         <header className="flex items-center gap-4 mb-6 shrink-0 pt-6">
           <button type="button" 
             onClick={onBack}

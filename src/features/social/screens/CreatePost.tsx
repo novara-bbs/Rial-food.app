@@ -1,4 +1,5 @@
 import { Send, Activity, TrendingUp, ChefHat, X } from 'lucide-react';
+import PageShell from '../../../components/PageShell';
 import { useState } from 'react';
 import { useI18n } from '../../../i18n';
 import { useAppState } from '../../../contexts/AppStateContext';
@@ -28,7 +29,7 @@ export default function CreatePost({ onBack, onCreatePost }: { onBack: () => voi
   };
 
   return (
-    <div className="px-6 max-w-2xl mx-auto space-y-6 pb-24">
+    <PageShell maxWidth="narrow" spacing="md">
       <PageHeader
         onBack={onBack}
         label={t.createPost.community}
@@ -128,6 +129,6 @@ export default function CreatePost({ onBack, onCreatePost }: { onBack: () => voi
           onClose={() => setShowRecipePicker(false)}
         />
       )}
-    </div>
+    </PageShell>
   );
 }

@@ -150,7 +150,7 @@ export default function Cocina({ onAddMeal, onCreateRecipe, onNavigateToRecipe, 
       <div className="flex-1 overflow-y-auto pt-4">
         {/* RECIPES TAB */}
         {activeTab === 'recipes' && (
-          <div className="px-6 max-w-5xl mx-auto space-y-4 pb-24">
+          <div className="px-6 max-w-5xl mx-auto space-y-4">
             {/* Search + actions */}
             <div className="flex gap-3">
               <SearchInput

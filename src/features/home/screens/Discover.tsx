@@ -1,4 +1,5 @@
 import { CheckCircle2, Users, BookOpen, TrendingUp, Flame, MessageSquare, Compass, Activity, Check } from 'lucide-react';
+import PageShell from '../../../components/PageShell';
 import SearchInput from '../../../components/patterns/SearchInput';
 import { useState, useMemo } from 'react';
 import { useI18n } from '../../../i18n';
@@ -59,7 +60,7 @@ export default function Discover() {
   };
 
   return (
-    <div className="px-6 max-w-4xl mx-auto space-y-8 pb-24">
+    <PageShell maxWidth="default" spacing="lg">
       {/* Header */}
       <section>
         <span className="font-mono text-[10px] font-bold tracking-[0.3em] text-primary uppercase">{disc.engineTitle || 'Descubrir'}</span>
@@ -253,6 +254,6 @@ export default function Discover() {
           ))}
         </div>
       </section>
-    </div>
+    </PageShell>
   );
 }

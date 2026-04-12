@@ -1,4 +1,5 @@
 import { Send } from 'lucide-react';
+import PageShell from '../../../components/PageShell';
 import { useState, useMemo } from 'react';
 import { useI18n } from '../../../i18n';
 import { useAppState } from '../../../contexts/AppStateContext';
@@ -39,7 +40,7 @@ export default function PostDetail({ onBack }: { onBack: () => void }) {
   }
 
   return (
-    <div className="px-6 max-w-2xl mx-auto space-y-6 pb-24">
+    <PageShell maxWidth="narrow" spacing="md">
       <PageHeader onBack={onBack} title={t.postDetail?.title || 'Post'} />
 
       {/* Post */}
@@ -124,6 +125,6 @@ export default function PostDetail({ onBack }: { onBack: () => void }) {
           ))}
         </div>
       )}
-    </div>
+    </PageShell>
   );
 }

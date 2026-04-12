@@ -1,4 +1,5 @@
 import { CheckCircle2, Users, BookOpen } from 'lucide-react';
+import PageShell from '../../../components/PageShell';
 import { useI18n } from '../../../i18n';
 import { useNavigation } from '../../../contexts/NavigationContext';
 import { useAppState } from '../../../contexts/AppStateContext';
@@ -23,7 +24,7 @@ export default function Creadores() {
   };
 
   return (
-    <div className="px-6 max-w-5xl mx-auto space-y-6 pb-24">
+    <PageShell maxWidth="wide" spacing="md">
       <div className="space-y-3">
         {MOCK_CREATORS.map(creator => {
           const isFollowing = followedCreators.includes(creator.id);
@@ -59,6 +60,6 @@ export default function Creadores() {
           );
         })}
       </div>
-    </div>
+    </PageShell>
   );
 }

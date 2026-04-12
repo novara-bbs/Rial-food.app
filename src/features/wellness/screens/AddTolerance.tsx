@@ -1,4 +1,5 @@
 import { Search, Plus, AlertCircle, CheckCircle2, Activity } from 'lucide-react';
+import PageShell from '../../../components/PageShell';
 import { useState } from 'react';
 import { useI18n } from '../../../i18n';
 import PageHeader from '../../../components/patterns/PageHeader';
@@ -23,7 +24,7 @@ export default function AddTolerance({ onBack, onAddLog }: { onBack: () => void,
     : recentIngredients;
 
   return (
-    <div className="px-6 max-w-4xl mx-auto space-y-8 pb-24">
+    <PageShell maxWidth="default" spacing="lg">
       <PageHeader onBack={onBack} label={t.tolerance.biometricLog} title={t.tolerance.title} />
 
       {!selectedIngredient ? (
@@ -129,6 +130,6 @@ export default function AddTolerance({ onBack, onAddLog }: { onBack: () => void,
           </button>
         </div>
       )}
-    </div>
+    </PageShell>
   );
 }

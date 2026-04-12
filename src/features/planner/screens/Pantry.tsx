@@ -1,4 +1,5 @@
 import { Plus, Trash2, X, Package } from 'lucide-react';
+import PageShell from '../../../components/PageShell';
 import React, { useState } from 'react';
 import { toast } from 'sonner';
 import { useI18n } from '../../../i18n';
@@ -48,7 +49,7 @@ export default function Pantry({ onBack }: { onBack: () => void }) {
   const groups = groupShoppingItems(pantryItems.map(i => ({ id: i.id, name: i.name, category: i.category, checked: false })));
 
   return (
-    <div className="px-6 max-w-4xl mx-auto space-y-8 pb-24">
+    <PageShell maxWidth="narrow" spacing="lg">
       <PageHeader
         onBack={onBack}
         title={t.pantry.title}
@@ -146,6 +147,6 @@ export default function Pantry({ onBack }: { onBack: () => void }) {
           />
         )}
       </div>
-    </div>
+    </PageShell>
   );
 }

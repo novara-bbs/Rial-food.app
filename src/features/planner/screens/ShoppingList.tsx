@@ -1,4 +1,5 @@
 import { ArrowLeft, CheckCircle2, Circle, Trash2, Plus, Share2, X, MessageCircle, Package } from 'lucide-react';
+import PageShell from '../../../components/PageShell';
 import React, { useState } from 'react';
 import { toast } from 'sonner';
 import { useI18n } from '../../../i18n';
@@ -91,7 +92,7 @@ export default function ShoppingList({ onBack, shoppingList = [], setShoppingLis
   ];
 
   return (
-    <div className="px-6 max-w-4xl mx-auto space-y-8 pb-24">
+    <PageShell maxWidth="default" spacing="lg">
       <header className="flex items-center justify-between mb-6">
         <div className="flex items-center gap-4">
           {onBack && (
@@ -269,7 +270,7 @@ export default function ShoppingList({ onBack, shoppingList = [], setShoppingLis
 
       {/* Clear completed FAB */}
       {completedCount > 0 && (
-        <div className="fixed bottom-24 md:bottom-8 left-1/2 -translate-x-1/2 w-full max-w-md px-6 z-50">
+        <div className="fixed left-1/2 -translate-x-1/2 w-full max-w-md px-6 z-50 md:bottom-8" style={{ bottom: 'calc(env(safe-area-inset-bottom, 0px) + 6rem)' }}>
           <button type="button"
             onClick={() => setPendingClearAction('completed')}
             className="w-full bg-surface-container-highest text-error border border-error/20 py-4 rounded-full font-headline font-bold text-sm uppercase tracking-widest hover:bg-error/10 transition-colors flex items-center justify-center gap-2 shadow-xl backdrop-blur-md"
@@ -293,6 +294,6 @@ export default function ShoppingList({ onBack, shoppingList = [], setShoppingLis
           setPendingClearAction(null);
         }}
       />
-    </div>
+    </PageShell>
   );
 }

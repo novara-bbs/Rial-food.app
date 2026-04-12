@@ -1,4 +1,5 @@
 import { Flame, Plus, CheckCircle2, Droplets, Sparkles, Sun, Moon, ShoppingCart, ChevronRight } from 'lucide-react';
+import PageShell from '../../../components/PageShell';
 import { useState, useEffect, useRef, useMemo, useCallback } from 'react';
 import RealFeelInline from '../../wellness/components/RealFeelInline';
 import NutritionHero from '../components/NutritionHero';
@@ -197,7 +198,7 @@ export default function Home({
   };
 
   return (
-    <div className="px-6 max-w-5xl mx-auto space-y-8 pb-24">
+    <PageShell maxWidth="wide" spacing="lg">
       {/* 1. Header — greeting + streak */}
       <section className="pt-6 flex items-center justify-between">
         <div className="flex items-center gap-3">
@@ -454,6 +455,6 @@ export default function Home({
           </section>
         );
       })()}
-    </div>
+    </PageShell>
   );
 }

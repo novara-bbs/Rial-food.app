@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import PageShell from '../../../components/PageShell';
 import { Play, Square, Clock, Trophy, Timer, CheckCircle2, StopCircle } from 'lucide-react';
 import { useI18n } from '../../../i18n';
 import { useLocalStorageState } from '../../../hooks/useLocalStorageState';
@@ -63,7 +64,7 @@ export default function FastingTimer({ onBack }: { onBack: () => void }) {
   const completedCount = fastingHistory.filter(h => h.completed).length;
 
   return (
-    <div className="px-6 max-w-4xl mx-auto space-y-6 pb-24">
+    <PageShell maxWidth="narrow" spacing="md">
       <PageHeader onBack={onBack} label="" title={t.fasting.title} />
 
       {/* Protocol selector */}
@@ -171,6 +172,6 @@ export default function FastingTimer({ onBack }: { onBack: () => void }) {
           </div>
         )}
       </div>
-    </div>
+    </PageShell>
   );
 }

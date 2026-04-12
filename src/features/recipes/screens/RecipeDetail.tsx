@@ -55,7 +55,7 @@ export default function RecipeDetail({ recipe, onBack, onSaveRecipe, isSaved, on
   // ── Early return if no recipe ────────────────
   if (!recipe) {
     return (
-      <div className="px-6 max-w-4xl mx-auto pt-8 pb-24 space-y-4">
+      <div className="px-6 max-w-4xl mx-auto pt-8 space-y-4">
         <button type="button" onClick={onBack} className="p-2 hover:bg-surface-container-highest rounded-sm transition-colors" aria-label={t.common?.back || 'Back'}>
           <ArrowLeft className="w-5 h-5" />
         </button>
@@ -243,7 +243,7 @@ export default function RecipeDetail({ recipe, onBack, onSaveRecipe, isSaved, on
         onClose={() => setCookModeActive(false)}
       />
     )}
-    <div className="pb-24">
+    <div>
       {/* ══ Hero Image ══ */}
       <div className="relative h-56 md:h-72 w-full">
         <img src={data.img || data.image} alt={data.title} className="w-full h-full object-cover" referrerPolicy="no-referrer" />

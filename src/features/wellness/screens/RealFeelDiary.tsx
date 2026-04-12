@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import PageShell from '../../../components/PageShell';
 import { TrendingUp, TrendingDown, Minus, Zap, Leaf, Brain, UtensilsCrossed, Trash2 } from 'lucide-react';
 import ConfirmDialog from '../../../components/ConfirmDialog';
 import EmptyState from '../../../components/EmptyState';
@@ -103,7 +104,7 @@ export default function RealFeelDiary({ realFeelLogs = [], onBack }: { realFeelL
   const weeklyPatterns = getWeeklyPatterns(realFeelLogs);
 
   return (
-    <div className="px-6 max-w-4xl mx-auto space-y-6 pb-24">
+    <PageShell maxWidth="default" spacing="lg">
       <PageHeader onBack={onBack} label="" title={t.realFeel.diary} />
 
       {/* Real Score */}
@@ -327,6 +328,6 @@ export default function RealFeelDiary({ realFeelLogs = [], onBack }: { realFeelL
           }
         }}
       />
-    </div>
+    </PageShell>
   );
 }

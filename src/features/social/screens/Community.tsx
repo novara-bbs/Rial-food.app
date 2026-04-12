@@ -1,4 +1,5 @@
 import { useMemo, useState } from 'react';
+import PageShell from '../../../components/PageShell';
 import { Plus } from 'lucide-react';
 import ConfirmDialog from '../../../components/ConfirmDialog';
 import { useI18n } from '../../../i18n';
@@ -74,7 +75,7 @@ export default function Community({ communityPosts = [], onAddComment }: { commu
   );
 
   return (
-    <div className="px-6 max-w-4xl mx-auto space-y-6 pb-24">
+    <PageShell maxWidth="default" spacing="md">
       {/* Header + Create */}
       <section>
         <div className="flex justify-between items-end mb-6">
@@ -127,6 +128,6 @@ export default function Community({ communityPosts = [], onAddComment }: { commu
         variant="destructive"
         onConfirm={confirmDeletePost}
       />
-    </div>
+    </PageShell>
   );
 }

@@ -111,7 +111,7 @@ export default function Onboarding({ isOpen, onClose, onComplete }: {
 
   return (
     <div className="fixed inset-0 z-[100] flex items-center justify-center bg-background/95 backdrop-blur-md p-4 animate-in fade-in duration-300">
-      <div className="bg-surface-container w-full max-w-lg max-h-[90vh] rounded-sm border border-outline-variant/20 shadow-2xl overflow-hidden flex flex-col animate-in zoom-in-95 duration-300">
+      <div className="bg-surface-container w-full max-w-lg max-h-[90dvh] rounded-sm border border-outline-variant/20 shadow-2xl overflow-hidden flex flex-col animate-in zoom-in-95 duration-300">
         {/* Header with progress */}
         <div className="p-5 border-b border-outline-variant/10 shrink-0">
           <div className="flex items-center justify-between mb-3">
