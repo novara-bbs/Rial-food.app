@@ -1,4 +1,4 @@
-import { Bell, Settings, User, Search } from 'lucide-react';
+import { Bell, Settings, Search } from 'lucide-react';
 import { useI18n } from '../i18n';
 
 interface GlobalHeaderProps {

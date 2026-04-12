@@ -39,23 +39,6 @@ interface RFEntry {
   mindset?: 'calm' | 'balanced' | 'stressed';
 }
 
-// Pearson correlation coefficient
-function pearson(x: number[], y: number[]): number {
-  const n = Math.min(x.length, y.length);
-  if (n < 3) return 0;
-  const mx = x.slice(0, n).reduce((s, v) => s + v, 0) / n;
-  const my = y.slice(0, n).reduce((s, v) => s + v, 0) / n;
-  let num = 0, dx2 = 0, dy2 = 0;
-  for (let i = 0; i < n; i++) {
-    const a = x[i] - mx, b = y[i] - my;
-    num += a * b;
-    dx2 += a * a;
-    dy2 += b * b;
-  }
-  const den = Math.sqrt(dx2 * dy2);
-  return den === 0 ? 0 : num / den;
-}
-
 // ──────────────────────────────────────────
 // CORRELATION DETECTORS (from Real Feel logs)
 // ──────────────────────────────────────────
@@ -180,7 +163,7 @@ function detectConsistencyTrend(logs: RFEntry[]): CorrelationInsight | null {
 // INSIGHT RULES (heuristic, no ML)
 // ──────────────────────────────────────────
 
-function insightLowVariety(savedRecipes: any[], mealPlan: any): InsightRecommendation | null {
+function insightLowVariety(_savedRecipes: any[], mealPlan: any): InsightRecommendation | null {
   // Count unique recipes used in plan this week
   const uniqueRecipes = new Set<string>();
   for (const dayMeals of Object.values(mealPlan || {})) {

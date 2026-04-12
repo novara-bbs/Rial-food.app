@@ -1,4 +1,4 @@
-import { TrendingUp, TrendingDown, Scale, Flame, Target, BarChart3, Calendar, Plus, Check, Sparkles } from 'lucide-react';
+import { TrendingUp, TrendingDown, Scale, Flame, BarChart3, Calendar, Plus, Check } from 'lucide-react';
 import PageShell from '../../../components/PageShell';
 import { useState, useMemo } from 'react';
 import { useI18n } from '../../../i18n';

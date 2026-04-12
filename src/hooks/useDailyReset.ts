@@ -126,7 +126,6 @@ export function getLoggingStreak(history: DailyArchive[]): { current: number; be
 
   if (dates.length === 0) return { current: 0, best: 0 };
 
-  let current = 0;
   let best = 0;
   let streak = 1;
   const today = todayStr();
@@ -137,30 +136,21 @@ export function getLoggingStreak(history: DailyArchive[]): { current: number; be
   const lastLogMs = new Date(dates[0]).getTime();
   const gapFromToday = (todayMs - lastLogMs) / dayMs;
 
-  if (gapFromToday > 1) {
-    // Last log was more than 1 day ago — no current streak
-    current = 0;
-  } else {
-    current = 1;
-  }
-
+  // First pass: compute best streak across all history
   for (let i = 1; i < dates.length; i++) {
     const prev = new Date(dates[i - 1]).getTime();
     const curr = new Date(dates[i]).getTime();
     if (prev - curr === dayMs) {
       streak++;
-      if (gapFromToday <= 1 && i < streak) current = streak;
     } else {
       best = Math.max(best, streak);
       streak = 1;
     }
   }
   best = Math.max(best, streak);
-  if (current === 0) current = gapFromToday <= 1 ? 1 : 0;
-  else current = Math.min(current, streak);
 
-  // Recompute current streak from the end
-  current = 1;
+  // Compute current streak from the end
+  let current = 1;
   for (let i = 1; i < dates.length; i++) {
     const prev = new Date(dates[i - 1]).getTime();
     const curr = new Date(dates[i]).getTime();

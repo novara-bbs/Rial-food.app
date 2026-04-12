@@ -1,4 +1,4 @@
-import { ShoppingCart, Plus, ChevronRight, Clock, CheckCircle2, Utensils, BookOpen, LogIn, Trash2 } from 'lucide-react';
+import { ShoppingCart, Plus, Clock, CheckCircle2, Utensils, BookOpen, LogIn, Trash2 } from 'lucide-react';
 import { useState } from 'react';
 import { toast } from 'sonner';
 import { useI18n } from '../../../i18n';

@@ -1,6 +1,6 @@
 import { useTheme, type Theme } from '../../../contexts/ThemeContext';
 import PageShell from '../../../components/PageShell';
-import { Palette, Moon, Sun, Check, User, Target, Smartphone, Leaf, LogOut, ChevronRight, Crown, Sparkles, Users, Plus, Trash2, Globe, Scale, ShieldAlert, X, Search, Bell, Download, AlertTriangle } from 'lucide-react';
+import { Palette, Moon, Sun, Check, User, Target, Smartphone, Leaf, LogOut, Crown, Sparkles, Users, Plus, Trash2, Globe, Scale, ShieldAlert, X, Search, Bell, Download, AlertTriangle, UserX, Cloud } from 'lucide-react';
 import { useState, useMemo } from 'react';
 import { toast } from 'sonner';
 import { useI18n, type Locale } from '../../../i18n';
@@ -12,14 +12,22 @@ import type { Allergen, Ingredient } from '../../../types';
 import { bodyWeightFromKg, bodyWeightToKg, heightFromCm, heightToCm, getBodyWeightUnit, getHeightUnit } from '../../food/utils/units';
 import { calculateDailyTargets, type Goal, type ActivityLevel, type Sex } from '../../food/utils/nutrition';
 import ConfirmDialog from '../../../components/ConfirmDialog';
+import { useAuth } from '../../../contexts/AuthContext';
+import { signOut, getSupabaseClient } from '../../../lib/supabase';
+import { exportUserData } from '../../../lib/sync';
+import { useNavigation } from '../../../contexts/NavigationContext';
+import { SUPABASE_URL, SUPABASE_ANON_KEY } from '../../../config/env';
 
 export default function Settings({ dailyMacros, setDailyMacros, isPro, setIsPro, showAIBot, setShowAIBot, userProfile, setUserProfile, dictionary = [] }: { dailyMacros?: any, setDailyMacros?: any, isPro?: boolean, setIsPro?: any, showAIBot?: boolean, setShowAIBot?: any, userProfile?: any, setUserProfile?: any, dictionary?: Ingredient[] }) {
   const { theme, setTheme } = useTheme();
   const { t, locale, setLocale } = useI18n();
+  const { user, isSupabaseEnabled } = useAuth();
+  const { navigateTo } = useNavigation();
 
   const [isAddingMember, setIsAddingMember] = useState(false);
   const [showDeleteAllConfirm, setShowDeleteAllConfirm] = useState(false);
-  const [editingMemberId, setEditingMemberId] = useState<string | null>(null);
+  const [showDeleteAccountConfirm, setShowDeleteAccountConfirm] = useState(false);
+  const [isDeletingAccount, setIsDeletingAccount] = useState(false);
   const [newMember, setNewMember] = useState({ name: '', age: 30, goal: 'maintain', activityLevel: 'active' });
 
   const addFamilyMember = () => {
@@ -38,6 +46,41 @@ export default function Settings({ dailyMacros, setDailyMacros, isPro, setIsPro,
       family: (prev.family || []).filter((m: any) => m.id !== id)
     }));
   };
+  const handleDeleteAccount = async () => {
+    if (!user || !isSupabaseEnabled) return;
+    setIsDeletingAccount(true);
+    try {
+      const sb = getSupabaseClient();
+      const headers: Record<string, string> = {
+        'Content-Type': 'application/json',
+        'apikey': SUPABASE_ANON_KEY,
+        'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
+      };
+      if (sb) {
+        const { data: { session } } = await sb.auth.getSession();
+        if (session?.access_token) {
+          headers['Authorization'] = `Bearer ${session.access_token}`;
+        }
+      }
+      const res = await fetch(`${SUPABASE_URL}/functions/v1/delete-account`, {
+        method: 'POST',
+        headers,
+      });
+      if (!res.ok) {
+        const err = await res.json().catch(() => ({})) as { error?: string };
+        throw new Error(err.error ?? `HTTP ${res.status}`);
+      }
+      await signOut();
+      toast.success(t.settings.deleteAccountSuccess);
+      setShowDeleteAccountConfirm(false);
+    } catch (err) {
+      console.error('[Settings] Delete account error:', err);
+      toast.error(t.settings.deleteAccountError);
+    } finally {
+      setIsDeletingAccount(false);
+    }
+  };
+
   const [notificationsEnabled, setNotificationsEnabled] = useLocalStorageState('notificationsEnabled', true);
   const [profilePublic, setProfilePublic] = useLocalStorageState('profilePublic', false);
 
@@ -910,6 +953,27 @@ export default function Settings({ dailyMacros, setDailyMacros, isPro, setIsPro,
           >
             <Download className="w-4 h-4" /> {t.settings.exportCSV}
           </button>
+          {/* GDPR: export all data as JSON */}
+          <button type="button"
+            onClick={async () => {
+              try {
+                const json = await exportUserData();
+                const blob = new Blob([json], { type: 'application/json' });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = `rial-data-${new Date().toISOString().slice(0, 10)}.json`;
+                a.click();
+                URL.revokeObjectURL(url);
+                toast.success(t.settings.exportSuccess);
+              } catch {
+                toast.error(t.settings.exportError);
+              }
+            }}
+            className="w-full py-3 bg-surface-container-highest rounded-sm font-headline text-xs font-bold uppercase tracking-widest text-tertiary hover:bg-primary/10 hover:text-primary transition-colors flex items-center justify-center gap-2"
+          >
+            <Cloud className="w-4 h-4" /> {t.settings.exportJSON}
+          </button>
           <Button
             variant="destructive"
             onClick={() => setShowDeleteAllConfirm(true)}
@@ -919,11 +983,60 @@ export default function Settings({ dailyMacros, setDailyMacros, isPro, setIsPro,
           </Button>
         </div>
 
-        {/* Logout */}
-        <Button variant="destructive" size="lg" className="w-full">
-          <LogOut className="w-5 h-5" /> {t.settings.logout}
-        </Button>
+        {/* Account */}
+        {isSupabaseEnabled && (
+          <div className="bg-surface-container-low rounded-sm border border-outline-variant/20 p-5 space-y-3">
+            <h3 className="font-headline text-sm font-bold uppercase tracking-widest text-tertiary">{t.settings.account}</h3>
+            {user ? (
+              <>
+                <p className="font-body text-xs text-on-surface-variant">{user.email}</p>
+                <Button
+                  variant="outline"
+                  className="w-full"
+                  onClick={async () => {
+                    await signOut();
+                    toast.success(t.settings.signedOut);
+                  }}
+                >
+                  <LogOut className="w-4 h-4" /> {t.settings.signOut}
+                </Button>
+                <Button
+                  variant="destructive"
+                  className="w-full"
+                  onClick={() => setShowDeleteAccountConfirm(true)}
+                  disabled={isDeletingAccount}
+                >
+                  <UserX className="w-4 h-4" />
+                  {isDeletingAccount ? t.settings.deleteAccountDeleting : t.settings.deleteAccount}
+                </Button>
+              </>
+            ) : (
+              <p className="font-body text-sm text-on-surface-variant">{t.settings.notSignedIn}</p>
+            )}
+          </div>
+        )}
       </section>
+
+      {/* Legal */}
+      <div className="flex items-center justify-center gap-4 py-4 border-t border-outline-variant/10">
+        <button
+          type="button"
+          onClick={() => navigateTo('privacy-policy')}
+          className="font-label text-[10px] uppercase tracking-widest text-on-surface-variant/60 hover:text-primary transition-colors"
+        >
+          {t.legal.privacyLink}
+        </button>
+        <span className="text-outline-variant/40">·</span>
+        <button
+          type="button"
+          onClick={() => navigateTo('terms-of-service')}
+          className="font-label text-[10px] uppercase tracking-widest text-on-surface-variant/60 hover:text-primary transition-colors"
+        >
+          {t.legal.termsLink}
+        </button>
+        <span className="text-outline-variant/40">·</span>
+        <span className="font-label text-[10px] uppercase tracking-widest text-on-surface-variant/40">v1.5.0</span>
+      </div>
 
       <ConfirmDialog
         open={showDeleteAllConfirm}
@@ -932,6 +1045,15 @@ export default function Settings({ dailyMacros, setDailyMacros, isPro, setIsPro,
         description={t.settings.deleteConfirm}
         variant="destructive"
         onConfirm={deleteAllData}
+      />
+
+      <ConfirmDialog
+        open={showDeleteAccountConfirm}
+        onOpenChange={setShowDeleteAccountConfirm}
+        title={t.settings.deleteAccountConfirmTitle}
+        description={t.settings.deleteAccountConfirmBody}
+        variant="destructive"
+        onConfirm={handleDeleteAccount}
       />
     </PageShell>
   );

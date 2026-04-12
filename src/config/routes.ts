@@ -31,4 +31,11 @@ export const screens = {
   Notifications: React.lazy(() => import('../features/social/screens/Notifications')),
   ChallengeDetail: React.lazy(() => import('../features/social/screens/ChallengeDetail')),
   Progress: React.lazy(() => import('../features/wellness/screens/Progress')),
+  // Auth screens
+  Login: React.lazy(() => import('../features/auth/screens/Login')),
+  Signup: React.lazy(() => import('../features/auth/screens/Signup')),
+  ForgotPassword: React.lazy(() => import('../features/auth/screens/ForgotPassword')),
+  // Legal screens
+  PrivacyPolicy: React.lazy(() => import('../features/legal/screens/PrivacyPolicy')),
+  TermsOfService: React.lazy(() => import('../features/legal/screens/TermsOfService')),
 } as const;

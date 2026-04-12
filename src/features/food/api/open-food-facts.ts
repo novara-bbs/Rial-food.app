@@ -4,6 +4,8 @@
  */
 
 import type { ServingSize } from '../../../types';
+import { withRetry } from '../../../lib/retry';
+import { logger } from '../../../lib/logger';
 
 export interface OFFResult {
   id: string;
@@ -140,29 +142,43 @@ const SEARCH_FIELDS = [
   'serving_size', 'serving_quantity', 'product_quantity',
 ].join(',');
 
+interface OFFProduct {
+  id: string;
+  product_name?: string;
+  brands?: string;
+  nutriments?: Record<string, number>;
+  serving_size?: string;
+  serving_quantity?: number;
+  product_quantity?: string;
+}
+
 export async function searchOpenFoodFacts(query: string): Promise<OFFResult[]> {
   try {
-    const res = await fetch(
-      `https://world.openfoodfacts.org/cgi/search.pl?search_terms=${encodeURIComponent(query)}&search_simple=1&action=process&json=1&page_size=8&fields=${SEARCH_FIELDS}`,
-      { signal: AbortSignal.timeout(5000) },
-    );
-    const data = await res.json();
-    return (data.products || [])
-      .filter((p: any) => p.product_name)
-      .map((p: any) => ({
-        id: `off_${p.id}`,
-        title: p.product_name + (p.brands ? ` (${p.brands})` : ''),
-        cal: Math.round(p.nutriments?.['energy-kcal_100g'] || 0),
-        pro: parseFloat((p.nutriments?.proteins_100g || 0).toFixed(1)),
-        carbs: parseFloat((p.nutriments?.carbohydrates_100g || 0).toFixed(1)),
-        fats: parseFloat((p.nutriments?.fat_100g || 0).toFixed(1)),
-        fiber: p.nutriments?.fiber_100g ? parseFloat(p.nutriments.fiber_100g.toFixed(1)) : undefined,
-        sugar: p.nutriments?.sugars_100g ? parseFloat(p.nutriments.sugars_100g.toFixed(1)) : undefined,
-        saturatedFat: p.nutriments?.['saturated-fat_100g'] ? parseFloat(p.nutriments['saturated-fat_100g'].toFixed(1)) : undefined,
-        servingSizes: parseOFFServings(p),
-        isApiResult: true as const,
-      }));
-  } catch {
+    return await withRetry(async () => {
+      const res = await fetch(
+        `https://world.openfoodfacts.org/cgi/search.pl?search_terms=${encodeURIComponent(query)}&search_simple=1&action=process&json=1&page_size=8&fields=${SEARCH_FIELDS}`,
+        { signal: AbortSignal.timeout(5000) },
+      );
+      if (!res.ok) throw new Error(`OFF API ${res.status}`);
+      const data = await res.json() as { products?: OFFProduct[] };
+      return (data.products || [])
+        .filter((p) => p.product_name)
+        .map((p) => ({
+          id: `off_${p.id}`,
+          title: p.product_name + (p.brands ? ` (${p.brands})` : ''),
+          cal: Math.round(p.nutriments?.['energy-kcal_100g'] ?? 0),
+          pro: parseFloat((p.nutriments?.proteins_100g ?? 0).toFixed(1)),
+          carbs: parseFloat((p.nutriments?.carbohydrates_100g ?? 0).toFixed(1)),
+          fats: parseFloat((p.nutriments?.fat_100g ?? 0).toFixed(1)),
+          fiber: p.nutriments?.fiber_100g ? parseFloat(p.nutriments.fiber_100g.toFixed(1)) : undefined,
+          sugar: p.nutriments?.sugars_100g ? parseFloat(p.nutriments.sugars_100g.toFixed(1)) : undefined,
+          saturatedFat: p.nutriments?.['saturated-fat_100g'] ? parseFloat(p.nutriments['saturated-fat_100g'].toFixed(1)) : undefined,
+          servingSizes: parseOFFServings(p),
+          isApiResult: true as const,
+        }));
+    }, { maxRetries: 2, label: 'OpenFoodFacts' });
+  } catch (error) {
+    logger.warn('OpenFoodFacts search failed', { query, error: error instanceof Error ? error.message : String(error) });
     return [];
   }
 }

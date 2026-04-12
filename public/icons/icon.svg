@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" width="1024" height="1024">
+  <!-- Background -->
+  <rect width="1024" height="1024" fill="#09090b" rx="0"/>
+
+  <!-- Outer ring accent -->
+  <circle cx="512" cy="512" r="420" fill="none" stroke="#dcfd05" stroke-width="18" opacity="0.18"/>
+
+  <!-- Inner filled circle -->
+  <circle cx="512" cy="512" r="340" fill="#111113"/>
+
+  <!-- Letter R — bold geometric -->
+  <g fill="#dcfd05">
+    <!-- Vertical stem -->
+    <rect x="340" y="290" width="80" height="444" rx="8"/>
+    <!-- Top bowl horizontal top -->
+    <rect x="340" y="290" width="240" height="72" rx="8"/>
+    <!-- Top bowl curve connector -->
+    <rect x="340" y="430" width="240" height="72" rx="8"/>
+    <!-- Rounded bowl right side -->
+    <rect x="548" y="290" width="80" height="212" rx="40"/>
+    <!-- Diagonal leg -->
+    <rect x="430" y="502" width="80" height="232" rx="8" transform="rotate(30 470 618)"/>
+  </g>
+
+  <!-- Accent dot — top right -->
+  <circle cx="680" cy="300" r="28" fill="#dcfd05"/>
+</svg>

@@ -22,7 +22,6 @@ export default function Home({
   onCheckIn,
   onAddMeal,
   onNavigateToPlan,
-  onNavigateToExplore,
   checkInStatus,
   dailyMacros,
   userProfile,

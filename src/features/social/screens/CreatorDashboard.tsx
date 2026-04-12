@@ -12,14 +12,11 @@ import PageHeader from '../../../components/patterns/PageHeader';
 
 export default function CreatorDashboard({ onBack }: { onBack: () => void }) {
   const { t } = useI18n();
-  const { savedRecipes, communityPosts, userProfile } = useAppState();
+  const { savedRecipes } = useAppState();
   const cd = t.creatorDashboard;
 
   // Derive real analytics from recipeAnalytics localStorage
   const analytics = getCreatorAnalytics(savedRecipes);
-  const userPosts = communityPosts.filter((p: any) => p.author?.name === userProfile.name || p.author?.name === 'Tú' || p.author?.id === 'self');
-  const totalRecipes = savedRecipes.length;
-  const totalPosts = userPosts.length;
   const totalViews = analytics.totalViews;
   const totalSaves = analytics.totalSaves;
 

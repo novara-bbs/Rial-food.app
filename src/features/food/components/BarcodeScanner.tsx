@@ -73,7 +73,7 @@ function productToIngredient(product: ScannedProduct): Ingredient {
 }
 
 export default function BarcodeScanner({ onClose, onProductFound, onSaveToDictionary, onAddToRecipe, unitSystem = 'metric' }: Props) {
-  const { t, locale } = useI18n();
+  const { t } = useI18n();
   const [state, setState] = useState<ScanState>('idle');
   const [product, setProduct] = useState<ScannedProduct | null>(null);
   const [errorMsg, setErrorMsg] = useState('');

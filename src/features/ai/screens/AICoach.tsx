@@ -1,8 +1,8 @@
-import React, { useState, useRef, useEffect } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { ArrowLeft, Send, Bot, User, Sparkles, Lock, Crown, Zap, Activity, Utensils, Trash2 } from 'lucide-react';
 import ReactMarkdown from 'react-markdown';
 import { useI18n } from '../../../i18n';
-import { getGeminiClient, buildSystemPrompt, GEMINI_MODEL } from '../lib/gemini';
+import { generateAIResponse, buildSystemPrompt } from '../lib/gemini';
 import { useLocalStorageState } from '../../../hooks/useLocalStorageState';
 import { useAIMessageGate } from '../../../hooks/useProGate';
 
@@ -56,20 +56,11 @@ export default function AICoach({
     setIsLoading(true);
 
     try {
-      const ai = await getGeminiClient();
       const systemInstruction = buildSystemPrompt(memoryContext, locale);
-
-      const response = await ai.models.generateContent({
-        model: GEMINI_MODEL,
-        contents: textToSend,
-        config: {
-          systemInstruction,
-          temperature: 0.7,
-        }
-      });
+      const text = await generateAIResponse(textToSend, systemInstruction);
 
       setMessages((prev: any[]) => {
-        const updated = [...prev, { role: 'model', text: response.text || t.aiCoach.errorMessage }];
+        const updated = [...prev, { role: 'model', text: text || t.aiCoach.errorMessage }];
         return updated.length > MAX_STORED_MESSAGES ? updated.slice(-MAX_STORED_MESSAGES) : updated;
       });
     } catch (error) {

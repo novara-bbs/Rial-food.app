@@ -5,13 +5,17 @@ import BottomNav from './components/BottomNav';
 import CreateModal from './components/CreateModal';
 import GlobalHeader from './components/GlobalHeader';
 import ErrorBoundary from './components/ErrorBoundary';
-import { Sparkles } from 'lucide-react';
+import { Sparkles, WifiOff } from 'lucide-react';
 import { useTheme } from './contexts/ThemeContext';
 import { useNavigation } from './contexts/NavigationContext';
 import { useAppState } from './contexts/AppStateContext';
+import { useOnlineStatus } from './hooks/useOnlineStatus';
+import { useAuth } from './contexts/AuthContext';
+import GdprConsent, { hasGivenConsent } from './components/GdprConsent';
 import { Toaster } from 'sonner';
 import { screens } from './config/routes';
 import { getFoodInsights } from './features/wellness/utils/correlations';
+import { useI18n } from './i18n';
 import type { DailyArchive } from './hooks/useDailyReset';
 import type { WeightEntry } from './contexts/AppStateContext';
 
@@ -22,6 +26,8 @@ const {
   WeeklyCheckIn, RialPlus, CreatorVerification, CreatorDashboard, FoodDictionary,
   Challenges, CreatorProfile, PostDetail, StoryViewer, CreateStory,
   Notifications: NotificationsScreen, ChallengeDetail, Progress,
+  Login, Signup, ForgotPassword,
+  PrivacyPolicy, TermsOfService,
 } = screens;
 
 function LoadingSkeleton() {
@@ -40,6 +46,10 @@ function LoadingSkeleton() {
 
 export default function App() {
   const { theme } = useTheme();
+  const { t } = useI18n();
+  const isOnline = useOnlineStatus();
+  const { status: authStatus, isSupabaseEnabled } = useAuth();
+  const [authScreen, setAuthScreen] = useState<'login' | 'signup' | 'forgot' | null>(null);
   const { currentScreen, previousScreen, navigateTo } = useNavigation();
   const {
     isPro, showAIBot,
@@ -52,7 +62,7 @@ export default function App() {
     mealPlan, setMealPlan, shoppingList, setShoppingList,
     communityPosts, toleranceLogs, realFeelLogs,
     checkInStatus, selectedRecipe,
-    targetPlanDay, setTargetPlanDay, dictionary,
+    setTargetPlanDay, dictionary,
     dailyLog, setDailyLog,
     weightHistory, nutritionHistory,
     selectedChallengeId,
@@ -67,6 +77,7 @@ export default function App() {
   } = useAppState();
 
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
+  const [showConsent, setShowConsent] = useState(() => !hasGivenConsent());
 
   const aiCoachMemory = useMemo(() => {
     const weekAgoDate = new Date(Date.now() - 7 * 86_400_000).toISOString().slice(0, 10);
@@ -144,9 +155,48 @@ export default function App() {
       case 'challenge-detail': return <ChallengeDetail onBack={() => navigateTo(previousScreen)} challengeId={selectedChallengeId || 'green-7'} />;
       case 'progress': return <Progress onBack={() => navigateTo(previousScreen)} />;
       case 'food-dictionary': return <FoodDictionary navigateTo={navigateTo} />;
+      case 'privacy-policy': return <PrivacyPolicy onBack={() => navigateTo(previousScreen)} />;
+      case 'terms-of-service': return <TermsOfService onBack={() => navigateTo(previousScreen)} />;
       default: return null;
     }
   };
+
+  // ── Auth loading splash ──────────────────────────────────────────────────
+  if (authStatus === 'loading') {
+    return (
+      <div className={`flex h-dvh items-center justify-center bg-background ${theme}`}>
+        <div className="flex flex-col items-center gap-4">
+          <div className="w-16 h-16 rounded-2xl bg-primary flex items-center justify-center">
+            <span className="font-headline text-2xl font-black text-on-primary">R</span>
+          </div>
+          <div className="w-5 h-5 border-2 border-primary/30 border-t-primary rounded-full animate-spin" />
+        </div>
+      </div>
+    );
+  }
+
+  // ── Auth screens (only shown if Supabase is configured + user chose to log in) ─
+  if (isSupabaseEnabled && authScreen) {
+    return (
+      <div className={`${theme}`}>
+        <Toaster theme={theme.includes('dark') ? 'dark' : 'light'} position="top-center" />
+        <Suspense fallback={<div className="h-screen bg-background" />}>
+          {authScreen === 'signup' && (
+            <Signup onNavigateToLogin={() => setAuthScreen('login')} />
+          )}
+          {authScreen === 'forgot' && (
+            <ForgotPassword onBack={() => setAuthScreen('login')} />
+          )}
+          {authScreen === 'login' && (
+            <Login
+              onNavigateToSignup={() => setAuthScreen('signup')}
+              onForgotPassword={() => setAuthScreen('forgot')}
+            />
+          )}
+        </Suspense>
+      </div>
+    );
+  }
 
   return (
     <>
@@ -161,6 +211,13 @@ export default function App() {
         }} />
         <Sidebar currentScreen={currentScreen} setCurrentScreen={navigateTo} onOpenCreate={() => setIsCreateModalOpen(true)} />
         <div className="flex-1 flex flex-col overflow-hidden relative">
+          {/* Offline banner */}
+          {!isOnline && (
+            <div className="flex items-center justify-center gap-2 px-4 py-2 bg-amber-500/15 border-b border-amber-500/30 text-amber-500 font-label text-[11px] uppercase tracking-widest">
+              <WifiOff className="w-3.5 h-3.5 shrink-0" />
+              <span>{t.offline.banner}</span>
+            </div>
+          )}
           <GlobalHeader
             onOpenSettings={() => navigateTo('settings')}
             onOpenProfile={() => navigateTo('profile')}
@@ -181,8 +238,10 @@ export default function App() {
             {currentScreen !== 'ai-coach' && showAIBot && (
               <button
                 type="button"
-                onClick={() => navigateTo('ai-coach')}
-                className="w-14 h-14 bg-surface-container-highest border-2 border-primary text-primary rounded-full shadow-lg flex items-center justify-center hover:bg-primary/20 transition-transform hover:scale-105"
+                onClick={() => isOnline && navigateTo('ai-coach')}
+                disabled={!isOnline}
+                title={!isOnline ? t.offline.aiDisabled : 'AI Coach'}
+                className="w-14 h-14 bg-surface-container-highest border-2 border-primary text-primary rounded-full shadow-lg flex items-center justify-center hover:bg-primary/20 transition-transform hover:scale-105 disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:scale-100"
                 aria-label="AI Coach"
               >
                 <Sparkles className="w-6 h-6" />
@@ -193,6 +252,14 @@ export default function App() {
         </div>
         <CreateModal isOpen={isCreateModalOpen} onClose={() => setIsCreateModalOpen(false)} onSelect={handleCreateAction} />
       </div>
+      {/* GDPR consent — shown once on first launch */}
+      {showConsent && (
+        <GdprConsent
+          onAccept={() => setShowConsent(false)}
+          onNavigatePrivacy={() => { setShowConsent(false); navigateTo('privacy-policy'); }}
+          onNavigateTerms={() => { setShowConsent(false); navigateTo('terms-of-service'); }}
+        />
+      )}
     </>
   );
 }

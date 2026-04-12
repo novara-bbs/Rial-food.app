@@ -2,7 +2,7 @@ import React, { useState, useRef, useEffect, useMemo } from 'react';
 import PageShell from '../../../components/PageShell';
 import { Plus, Camera, Barcode, Loader2, BookOpen, Leaf, Globe, Star, Clock, CheckSquare, Square, X, Sparkles, Trash2 } from 'lucide-react';
 import SearchInput from '../../../components/patterns/SearchInput';
-import { Ingredient, Recipe, ServingSize } from '../../../types';
+import { Ingredient, Recipe } from '../../../types';
 import { useI18n } from '../../../i18n';
 import { getFoodQuality, FOOD_QUALITY_EMOJI } from '../utils/nutrition';
 import { searchOpenFoodFacts, OFFResult } from '../api/open-food-facts';

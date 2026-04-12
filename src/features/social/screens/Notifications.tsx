@@ -3,7 +3,6 @@ import PageShell from '../../../components/PageShell';
 import { useMemo } from 'react';
 import { useI18n } from '../../../i18n';
 import { useAppState } from '../../../contexts/AppStateContext';
-import { useNavigation } from '../../../contexts/NavigationContext';
 import EmptyState from '../../../components/EmptyState';
 import PageHeader from '../../../components/patterns/PageHeader';
 import type { Notification as NotificationType } from '../../../types/social';
@@ -20,7 +19,6 @@ const ICON_MAP: Record<string, React.ReactNode> = {
 export default function Notifications({ onBack }: { onBack: () => void }) {
   const { t } = useI18n();
   const { notifications, markAllNotificationsRead } = useAppState();
-  const { navigateTo } = useNavigation();
   const notif = t.notifications;
 
   const grouped = useMemo(() => {

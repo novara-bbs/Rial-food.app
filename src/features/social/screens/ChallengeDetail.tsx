@@ -1,6 +1,6 @@
 import { Check, Trophy, Calendar, LogOut } from 'lucide-react';
 import PageShell from '../../../components/PageShell';
-import { useState, useMemo } from 'react';
+import { useMemo } from 'react';
 import { toast } from 'sonner';
 import { useI18n } from '../../../i18n';
 import { useLocalStorageState } from '../../../hooks/useLocalStorageState';

@@ -1,7 +1,7 @@
-import { User, Mail, Shield, CreditCard, LogOut, ChevronRight, Flame, Trophy, Star, Pencil } from 'lucide-react';
+import { Mail, Shield, CreditCard, LogOut, ChevronRight, Flame, Trophy, Star, Pencil } from 'lucide-react';
 import PageShell from '../../../components/PageShell';
 import { useI18n } from '../../../i18n';
-import { BADGES, LEVELS, calculatePoints, getUserLevel, getEarnedBadges, getNextMilestone, calculateStreak, type UserStats } from '../utils/gamification';
+import { BADGES, LEVELS, calculatePoints, getUserLevel, getEarnedBadges, calculateStreak, type UserStats } from '../utils/gamification';
 import PageHeader from '../../../components/patterns/PageHeader';
 import { bodyWeightFromKg, getBodyWeightUnit, heightFromCm, getHeightUnit } from '../../food/utils/units';
 import { useNavigation } from '../../../contexts/NavigationContext';
@@ -40,7 +40,6 @@ export default function Profile({ userProfile, onBack, realFeelLogs = [], savedR
   const points = calculatePoints(stats);
   const level = getUserLevel(points);
   const earned = getEarnedBadges(stats);
-  const nextLevelPoints = LEVELS[Math.min(level.level, LEVELS.length - 1)]?.minPoints || 0;
   const currentLevelIdx = LEVELS.findIndex(l => l.name === level.name);
   const nextLevel = LEVELS[currentLevelIdx + 1];
   const levelProgress = nextLevel ? ((points - level.minPoints) / (nextLevel.minPoints - level.minPoints)) * 100 : 100;

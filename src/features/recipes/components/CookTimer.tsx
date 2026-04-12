@@ -19,7 +19,7 @@ export default function CookTimer({ minutes, onDone }: { minutes: number; onDone
       gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.8);
       osc.start();
       osc.stop(ctx.currentTime + 0.8);
-    } catch {}
+    } catch { /* audio not available in this environment */ }
   }, []);
 
   useEffect(() => {

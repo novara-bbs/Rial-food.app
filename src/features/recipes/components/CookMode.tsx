@@ -65,7 +65,7 @@ export default function CookMode({
   };
   const handleTouchEnd = (e: React.TouchEvent) => {
     const dx = touchStartX.current - e.changedTouches[0].clientX;
-    if (Math.abs(dx) > 50) dx > 0 ? goNext() : goPrev();
+    if (Math.abs(dx) > 50) { if (dx > 0) { goNext(); } else { goPrev(); } }
   };
 
   return (

@@ -11,7 +11,7 @@ import { toast } from 'sonner';
 import { getFoodQuality } from '../../food/utils/nutrition';
 import { getRecipeSwaps } from '../utils/substitutions';
 import { calculateMatchScore } from '../utils/matchScore';
-import { getGoalSuggestions, type GoalSuggestion } from '../utils/goalOptimizer';
+import { getGoalSuggestions } from '../utils/goalOptimizer';
 import { trackRecipeView } from '../../social/utils/analytics';
 import { CREATORS_MAP } from '../../social/data/seed-creators';
 import { useNavigation } from '../../../contexts/NavigationContext';
@@ -23,7 +23,7 @@ import ConfirmDialog from '../../../components/ConfirmDialog';
 export default function RecipeDetail({ recipe, onBack, onSaveRecipe, isSaved, onAddToPlan, onLogMealNow, onAddToShoppingList, dictionary = [], userProfile }: { recipe: any, onBack: () => void, onSaveRecipe?: (r: any) => void, isSaved?: boolean, onAddToPlan?: (recipe: any, dayIndex: number) => void, onLogMealNow?: (recipe: any, servings: number) => void, onAddToShoppingList?: (items: any[]) => void, dictionary?: any[], userProfile?: any }) {
   const { t } = useI18n();
   const { navigateTo } = useNavigation();
-  const { setSelectedCreatorId, communityPosts, savedRecipes, savedPosts, navigateToRecipe: navToRecipe, handleDeleteRecipe, handleDuplicateRecipe, setRecipeToEdit, handleCreateRecipeSubmit, isPro } = useAppState();
+  const { setSelectedCreatorId, communityPosts, savedRecipes, savedPosts, navigateToRecipe: navToRecipe, handleDeleteRecipe, handleDuplicateRecipe, setRecipeToEdit, isPro } = useAppState();
   const [followedCreators, setFollowedCreators] = useLocalStorageState<string[]>('followedCreators', []);
   const [checkedIngredients, setCheckedIngredients] = useState<string[]>([]);
   const [servings, setServings] = useState(1);
@@ -73,11 +73,11 @@ export default function RecipeDetail({ recipe, onBack, onSaveRecipe, isSaved, on
 
   // ── Calculated totals ────────────────────────
   const calculatedTotals = useMemo(() => {
-    let cal = data.macros?.calories || 0;
-    let pro = data.macros?.protein || 0;
-    let carbs = data.macros?.carbs || 0;
-    let fats = data.macros?.fats || 0;
-    let micros = data.micros || { vitamins: {}, minerals: {}, others: {} };
+    const cal = data.macros?.calories || 0;
+    const pro = data.macros?.protein || 0;
+    const carbs = data.macros?.carbs || 0;
+    const fats = data.macros?.fats || 0;
+    const micros = data.micros || { vitamins: {}, minerals: {}, others: {} };
 
     let extraCal = 0, extraPro = 0, extraCarbs = 0, extraFats = 0;
     const extraMicros: Micronutrients = { vitamins: {}, minerals: {}, others: {} };
@@ -584,7 +584,7 @@ export default function RecipeDetail({ recipe, onBack, onSaveRecipe, isSaved, on
                 <p className="font-label text-xs tracking-widest text-on-surface-variant uppercase mb-3 text-center">{t.recipeDetail.selectDay}</p>
                 <div className="flex justify-between gap-2 mb-4">
                   {(t.realFeel.dayAbbr as string[]).map((day, idx) => (
-                    <button type="button" key={idx} onClick={() => { onAddToPlan && onAddToPlan(getModifiedRecipe(), idx); setShowDaySelector(false); }} className="w-10 h-10 rounded-sm bg-surface-container-highest text-tertiary font-headline font-bold hover:bg-primary hover:text-on-primary transition-colors">
+                    <button type="button" key={idx} onClick={() => { onAddToPlan?.(getModifiedRecipe(), idx); setShowDaySelector(false); }} className="w-10 h-10 rounded-sm bg-surface-container-highest text-tertiary font-headline font-bold hover:bg-primary hover:text-on-primary transition-colors">
                       {day}
                     </button>
                   ))}
@@ -857,7 +857,6 @@ export default function RecipeDetail({ recipe, onBack, onSaveRecipe, isSaved, on
         {data.publishedBy && data.publishedBy !== 'self' && (() => {
           const creatorRecipes = savedRecipes.filter((r: any) => r.publishedBy === data.publishedBy && r.id !== data.id).slice(0, 3);
           if (creatorRecipes.length === 0) return null;
-          const creator = CREATORS_MAP[data.publishedBy];
           return (
             <div className="mt-6">
               <h3 className="font-headline font-bold text-xs uppercase text-tertiary tracking-widest mb-3">

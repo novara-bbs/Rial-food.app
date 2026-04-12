@@ -27,7 +27,6 @@ export default function FastingTimer({ onBack }: { onBack: () => void }) {
 
   const isFasting = fastingStart !== null;
   const elapsedMs = isFasting ? now - fastingStart : 0;
-  const elapsedHours = elapsedMs / (1000 * 60 * 60);
   const targetMs = protocol.fastHours * 60 * 60 * 1000;
   const progress = Math.min(elapsedMs / targetMs, 1);
   const isComplete = progress >= 1;

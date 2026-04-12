@@ -186,7 +186,7 @@ export interface WeightEntry {
 const AppStateContext = createContext<AppStateContextType | undefined>(undefined);
 
 export function AppStateProvider({ children }: { children: React.ReactNode }) {
-  const { navigateTo, currentScreen, previousScreen } = useNavigation();
+  const { navigateTo, previousScreen } = useNavigation();
   const { t } = useI18n();
 
   // UI state (not persisted)

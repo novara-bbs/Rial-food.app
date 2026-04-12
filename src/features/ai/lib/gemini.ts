@@ -1,9 +1,10 @@
-import { GEMINI_API_KEY } from '../../../config/env';
+import { GEMINI_API_KEY, SUPABASE_URL, SUPABASE_ANON_KEY } from '../../../config/env';
+import { getSupabaseClient } from '../../../lib/supabase';
 
-/** Singleton Gemini client — loaded dynamically to avoid bundling. */
-let client: any = null;
+/** Singleton Gemini client — used only in dev/web fallback mode. */
+let client: any = null; // any: Gemini SDK types not available at build time
 
-export async function getGeminiClient(): Promise<any> {
+export async function getGeminiClient(): Promise<any> { // any: Gemini SDK types not available at build time
   if (!client) {
     const { GoogleGenAI } = await import('@google/genai');
     client = new GoogleGenAI({ apiKey: GEMINI_API_KEY });
@@ -11,7 +12,71 @@ export async function getGeminiClient(): Promise<any> {
   return client;
 }
 
-export const GEMINI_MODEL = 'gemini-3-flash-preview';
+export const GEMINI_MODEL = 'gemini-2.0-flash';
+
+/**
+ * Generate a Gemini AI response.
+ *
+ * Routes through the Supabase Edge Function proxy when SUPABASE_URL is
+ * configured (production / native). This keeps the Gemini API key
+ * server-side and enforces per-user rate limits (50 req/day).
+ *
+ * Falls back to a direct client call when no Supabase URL is set
+ * (local dev only — key will be visible in the browser).
+ */
+export async function generateAIResponse(
+  message: string,
+  systemInstruction: string,
+  options: { model?: string; temperature?: number } = {},
+): Promise<string> {
+  if (SUPABASE_URL) {
+    // ── Proxy path (production) ──
+    const sb = getSupabaseClient();
+    const headers: Record<string, string> = {
+      'Content-Type': 'application/json',
+      'apikey': SUPABASE_ANON_KEY,
+      'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
+    };
+
+    if (sb) {
+      const { data: { session } } = await sb.auth.getSession();
+      if (session?.access_token) {
+        headers['Authorization'] = `Bearer ${session.access_token}`;
+      }
+    }
+
+    const res = await fetch(`${SUPABASE_URL}/functions/v1/gemini-proxy`, {
+      method: 'POST',
+      headers,
+      body: JSON.stringify({
+        message,
+        systemInstruction,
+        model: options.model ?? GEMINI_MODEL,
+        temperature: options.temperature ?? 0.7,
+      }),
+    });
+
+    if (!res.ok) {
+      const err = await res.json().catch(() => ({})) as { error?: string };
+      throw new Error(err.error ?? `Gemini proxy HTTP ${res.status}`);
+    }
+
+    const data = await res.json() as { text?: string };
+    return data.text ?? '';
+  }
+
+  // ── Direct path (local dev only — API key visible in browser) ──
+  const ai = await getGeminiClient();
+  const response = await ai.models.generateContent({
+    model: options.model ?? GEMINI_MODEL,
+    contents: message,
+    config: {
+      systemInstruction,
+      temperature: options.temperature ?? 0.7,
+    },
+  });
+  return response.text ?? '';
+}
 
 export interface MemoryContext {
   dailyMacros: unknown;

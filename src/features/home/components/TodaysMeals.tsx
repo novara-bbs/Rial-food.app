@@ -16,7 +16,7 @@ interface TodaysMealsProps {
 
 export default function TodaysMeals({
   dailyLog, todaysMeals, onLogMealNow, onNavigateToPlan, onAddMeal,
-  setDailyLog, setDailyMacros, onNavigateToRecipe,
+  setDailyLog, setDailyMacros,
 }: TodaysMealsProps) {
   const { t } = useI18n();
   const [editingEntry, setEditingEntry] = useState<DailyLogEntry | null>(null);
@@ -217,7 +217,7 @@ export default function TodaysMeals({
                 <span className="text-[10px] text-on-surface-variant font-mono">{meal.cal} {t.common.kcal}</span>
               </div>
               <button type="button"
-                onClick={(e) => { e.stopPropagation(); onLogMealNow && onLogMealNow(meal, 1); }}
+                onClick={(e) => { e.stopPropagation(); onLogMealNow?.(meal, 1); }}
                 className="shrink-0 px-4 py-2 bg-primary text-on-primary rounded-sm text-[10px] font-bold uppercase tracking-widest hover:opacity-90 transition-opacity"
               >
                 {t.home.logIt}

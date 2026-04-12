@@ -1,10 +1,24 @@
+/**
+ * useProGate — checks the user's subscription status.
+ *
+ * Source of truth:
+ *  - Native (iOS/Android): RevenueCat entitlement "pro"
+ *  - Web (PWA/browser):    localStorage isPro flag (set by mock or future web checkout)
+ *
+ * Cached entitlement: if offline for up to 7 days, trust the last known RC value.
+ */
 import { useAppState } from '../contexts/AppStateContext';
 import { useNavigation } from '../contexts/NavigationContext';
 import { toast } from 'sonner';
 import { useI18n } from '../i18n';
+import { useEffect } from 'react';
+import { checkProEntitlement } from '../lib/purchases';
+import { isNative } from '../lib/platform';
 
 const FREE_AI_MESSAGES_PER_DAY = 5;
 const LS_KEY = 'rial_aiMessageCount';
+const RC_CACHE_KEY = 'rial_rcProCache';
+const RC_CACHE_TTL_MS = 7 * 24 * 60 * 60 * 1000; // 7 days
 
 function getTodayKey(): string {
   return new Date().toISOString().slice(0, 10);
@@ -29,10 +43,42 @@ function incrementAIMessageCount(): void {
   }
 }
 
+/** Read cached RevenueCat result (valid for 7 days) */
+function getCachedRCPro(): boolean | null {
+  try {
+    const raw = localStorage.getItem(RC_CACHE_KEY);
+    if (!raw) return null;
+    const { isPro, timestamp } = JSON.parse(raw) as { isPro: boolean; timestamp: number };
+    if (Date.now() - timestamp > RC_CACHE_TTL_MS) return null;
+    return isPro;
+  } catch {
+    return null;
+  }
+}
+
+function setCachedRCPro(isPro: boolean): void {
+  localStorage.setItem(RC_CACHE_KEY, JSON.stringify({ isPro, timestamp: Date.now() }));
+}
+
 export function useProGate() {
-  const { isPro } = useAppState();
+  const { isPro, setIsPro } = useAppState();
   const { navigateTo } = useNavigation();
   const { t } = useI18n();
+
+  // On native: verify entitlement with RevenueCat on mount (with 7-day offline cache)
+  useEffect(() => {
+    if (!isNative) return;
+    const cached = getCachedRCPro();
+    checkProEntitlement()
+      .then(rcIsPro => {
+        setCachedRCPro(rcIsPro);
+        if (rcIsPro !== isPro) setIsPro(rcIsPro);
+      })
+      .catch(() => {
+        // Offline — trust cached value if available
+        if (cached !== null && cached !== isPro) setIsPro(cached);
+      });
+  }, []); // eslint-disable-line
 
   const showGate = () => {
     toast(t.rialPlus.upgrade, { action: { label: 'RIAL+', onClick: () => navigateTo('rial-plus') } });

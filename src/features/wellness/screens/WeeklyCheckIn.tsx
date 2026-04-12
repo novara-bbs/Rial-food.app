@@ -21,7 +21,7 @@ interface WeeklyEntry {
 
 export default function WeeklyCheckIn({ onBack }: { onBack: () => void }) {
   const { t } = useI18n();
-  const { realFeelLogs, mealPlan, nutritionHistory, dailyMacros } = useAppState();
+  const { realFeelLogs, nutritionHistory, dailyMacros } = useAppState();
   const [weeklyEntries, setWeeklyEntries] = useLocalStorageState<WeeklyEntry[]>('weeklyCheckIns', []);
   const [viewingPast, setViewingPast] = useState(false);
   const [pastIndex, setPastIndex] = useState(0);
@@ -41,8 +41,6 @@ export default function WeeklyCheckIn({ onBack }: { onBack: () => void }) {
     ? Math.round((thisWeekLogs.reduce((s: number, l: any) => s + (l.level || 3), 0) / thisWeekLogs.length) * 20)
     : 0;
   const consistencyDays = new Set(thisWeekLogs.map((l: any) => l.date ? new Date(l.date).toDateString() : null).filter(Boolean)).size;
-  const totalPlannedThisWeek = Object.values(mealPlan || {}).reduce((s: number, meals: any) => s + (meals?.length || 0), 0);
-
   // Nutrition trends from archived history
   const nutritionTrends = useMemo(() => {
     const history = nutritionHistory as DailyArchive[];
@@ -106,8 +104,6 @@ export default function WeeklyCheckIn({ onBack }: { onBack: () => void }) {
   };
 
   const pastEntry = weeklyEntries[pastIndex];
-
-  const vitalityLabel = (v: number) => v >= 75 ? t.weekly.vitalityHigh : v >= 50 ? t.weekly.vitalityMedium : v > 0 ? t.weekly.vitalityLow : '—';
 
   return (
     <PageShell maxWidth="narrow" spacing="lg">

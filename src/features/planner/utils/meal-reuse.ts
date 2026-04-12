@@ -97,7 +97,7 @@ export function detectLeftovers(
 /**
  * Given a suggestion, build the "sobras" meal entry to add to the plan.
  */
-export function buildLeftoverMeal(sourceMeal: any, suggestion: LeftoverSuggestion): any {
+export function buildLeftoverMeal(sourceMeal: any, _suggestion: LeftoverSuggestion): any {
   return {
     ...sourceMeal,
     id: Date.now() + Math.random(),

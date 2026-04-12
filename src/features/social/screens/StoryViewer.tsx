@@ -1,18 +1,15 @@
-import { X, Activity, TrendingUp, ChevronLeft, ChevronRight } from 'lucide-react';
+import { X, Activity, TrendingUp } from 'lucide-react';
 import { useState, useEffect, useCallback, useMemo } from 'react';
 import { useI18n } from '../../../i18n';
 import { useAppState } from '../../../contexts/AppStateContext';
-import { useNavigation } from '../../../contexts/NavigationContext';
 import { cleanExpiredStories } from '../handlers/story-handlers';
-import type { Story, StorySlide } from '../../../types/social';
+import type { StorySlide } from '../../../types/social';
 
 const SLIDE_DURATION = 5000;
 
 export default function StoryViewer({ onBack }: { onBack: () => void }) {
   const { t } = useI18n();
   const { communityStories, handleMarkStoryViewed } = useAppState();
-  const { navigateTo } = useNavigation();
-
   const activeStories = useMemo(() => cleanExpiredStories(communityStories), [communityStories]);
 
   const [storyIndex, setStoryIndex] = useState(0);

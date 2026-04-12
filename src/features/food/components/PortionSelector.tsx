@@ -1,9 +1,8 @@
 import { useState, useMemo, useCallback } from 'react';
 import { Minus, Plus, Scale, UtensilsCrossed } from 'lucide-react';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Button } from '@/components/ui/button';
 import { useI18n } from '../../../i18n';
-import type { Ingredient, Macros, ServingSize } from '../../../types';
+import type { Ingredient, Macros } from '../../../types';
 import { formatWeight, getWeightUnit, toGrams, fromGrams, getQuickWeights, getWeightStep, type UnitSystem } from '../utils/units';
 
 export interface PortionResult {

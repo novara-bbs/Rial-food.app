@@ -1,11 +1,12 @@
-import { ArrowLeft, Check, Crown, Sparkles, Brain, ShoppingCart, Zap, Lock, Star, BarChart3, Download, Microscope, Archive, ClipboardList, Globe, Timer, Target, type LucideIcon } from 'lucide-react';
+import { ArrowLeft, Check, Crown, Sparkles, Brain, ShoppingCart, Lock, Star, BarChart3, Download, Microscope, Archive, ClipboardList, Globe, Timer, Target, RotateCcw, type LucideIcon } from 'lucide-react';
 import PageShell from '../../../components/PageShell';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { toast } from 'sonner';
 import { useAppState } from '../../../contexts/AppStateContext';
-import { useNavigation } from '../../../contexts/NavigationContext';
 import { useI18n } from '../../../i18n';
 import PageHeader from '../../../components/patterns/PageHeader';
+import { getOfferings, purchasePackage, restorePurchases, type OfferingInfo } from '../../../lib/purchases';
+import { isNative } from '../../../lib/platform';
 
 export default function RialPlus({ onBack }: { onBack: () => void }) {
   const { t } = useI18n();
@@ -32,16 +33,67 @@ export default function RialPlus({ onBack }: { onBack: () => void }) {
   const { isPro, setIsPro } = useAppState();
   const [selectedPlan, setSelectedPlan] = useState<'monthly' | 'yearly'>('yearly');
   const [isUpgrading, setIsUpgrading] = useState(false);
+  const [isRestoring, setIsRestoring] = useState(false);
+  const [rcOfferings, setRcOfferings] = useState<OfferingInfo | null>(null);
 
-  const handleUpgrade = () => {
+  // Load real prices from RevenueCat on native
+  useEffect(() => {
+    getOfferings().then(o => { if (o) setRcOfferings(o); });
+  }, []);
+
+  // Get display price — real from RC on native, static fallback on web
+  const getPrice = (plan: 'monthly' | 'yearly') => {
+    if (rcOfferings) {
+      return plan === 'monthly'
+        ? rcOfferings.monthly?.priceString ?? p.monthlyPrice
+        : rcOfferings.yearly?.priceString ?? p.yearlyPrice;
+    }
+    return plan === 'monthly' ? p.monthlyPrice : p.yearlyPrice;
+  };
+
+  const handleUpgrade = async () => {
     setIsUpgrading(true);
-    // Simulate payment flow
-    setTimeout(() => {
-      setIsPro(true);
+    try {
+      if (isNative && rcOfferings) {
+        // Real RevenueCat purchase
+        const pkg = selectedPlan === 'monthly' ? rcOfferings.monthly?.pkg : rcOfferings.yearly?.pkg;
+        if (!pkg) { toast.error(t.rialPlus.purchaseUnavailable); return; }
+        const result = await purchasePackage(pkg);
+        if (result.success) {
+          if (result.isPro) {
+            setIsPro(true);
+            toast.success(t.rialPlus.welcomePro, { duration: 4000 });
+            onBack();
+          }
+        } else if (!result.cancelled) {
+          toast.error(result.error ?? t.rialPlus.purchaseFailed);
+        }
+      } else {
+        // Web / dev fallback — mock purchase
+        await new Promise(r => setTimeout(r, 1500));
+        setIsPro(true);
+        toast.success(t.rialPlus.welcomePro, { duration: 4000 });
+        onBack();
+      }
+    } finally {
       setIsUpgrading(false);
-      toast.success(t.rialPlus.welcomePro, { duration: 4000 });
-      onBack();
-    }, 2000);
+    }
+  };
+
+  const handleRestore = async () => {
+    setIsRestoring(true);
+    try {
+      const restored = await restorePurchases();
+      if (restored) {
+        setIsPro(true);
+        toast.success(t.rialPlus.purchaseRestored, { duration: 4000 });
+        onBack();
+      } else {
+        toast(t.rialPlus.noPurchaseFound);
+      }
+    } finally {
+      setIsRestoring(false);
+    }
   };
 
   if (isPro) {
@@ -163,21 +215,33 @@ export default function RialPlus({ onBack }: { onBack: () => void }) {
 
         {/* CTA */}
         <div className="fixed left-0 right-0 px-6 z-50" style={{ bottom: 'calc(env(safe-area-inset-bottom, 0px) + 2rem)' }}>
-          <div className="max-w-2xl mx-auto">
+          <div className="max-w-2xl mx-auto space-y-2">
             <button type="button"
               onClick={handleUpgrade}
-              disabled={isUpgrading}
+              disabled={isUpgrading || isRestoring}
               className="w-full py-5 bg-primary text-on-primary rounded-sm font-headline font-black text-lg uppercase tracking-widest hover:opacity-90 transition-opacity disabled:opacity-50 flex items-center justify-center gap-3 shadow-2xl shadow-primary/30"
             >
               {isUpgrading ? (
                 <><Sparkles className="w-6 h-6 animate-pulse" /> {t.rialPlus.processing}</>
               ) : (
-                <><Crown className="w-6 h-6" /> {t.rialPlus.startRialPlus} — {selectedPlan === 'yearly' ? `${p.yearlyPrice}${p.yearlyPeriod}` : `${p.monthlyPrice}${p.monthlyPeriod}`}</>
+                <><Crown className="w-6 h-6" /> {t.rialPlus.startRialPlus} — {selectedPlan === 'yearly' ? `${getPrice('yearly')}${p.yearlyPeriod}` : `${getPrice('monthly')}${p.monthlyPeriod}`}</>
               )}
             </button>
-            <p className="text-center text-[9px] text-on-surface-variant uppercase tracking-widest mt-3">
-              {t.rialPlus.cancelAnytime}
-            </p>
+            <div className="flex items-center justify-between">
+              <p className="text-[9px] text-on-surface-variant uppercase tracking-widest">
+                {t.rialPlus.cancelAnytime}
+              </p>
+              {/* Restore purchases — required by Apple App Store */}
+              <button
+                type="button"
+                onClick={handleRestore}
+                disabled={isUpgrading || isRestoring}
+                className="text-[9px] text-on-surface-variant uppercase tracking-widest hover:text-primary flex items-center gap-1 disabled:opacity-40"
+              >
+                <RotateCcw className="w-3 h-3" />
+                {isRestoring ? t.rialPlus.restoring : t.rialPlus.restorePurchases}
+              </button>
+            </div>
           </div>
         </div>
       </div>

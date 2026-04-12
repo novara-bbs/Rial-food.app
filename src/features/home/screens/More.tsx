@@ -1,4 +1,4 @@
-import { BookOpen, Settings, User, Sparkles, ChevronRight, Timer, Trophy, Gem, Heart, Package, CalendarCheck, BadgeCheck, BarChart3, Apple, TrendingUp } from 'lucide-react';
+import { Settings, User, Sparkles, ChevronRight, Timer, Trophy, Gem, Heart, Package, CalendarCheck, BadgeCheck, BarChart3, Apple, TrendingUp } from 'lucide-react';
 import PageShell from '../../../components/PageShell';
 import { useI18n } from '../../../i18n';
 
