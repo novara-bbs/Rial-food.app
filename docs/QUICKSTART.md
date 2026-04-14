@@ -11,7 +11,7 @@ npm install
 
 # Create local environment
 cp .env.example .env.local
-# Edit .env.local — add your Gemini API key (optional, only needed for AI Coach)
+# Edit .env.local - add local env vars as needed
 
 # Start dev server
 npm run dev
@@ -92,5 +92,5 @@ Before committing:
 | Port 3000 in use | `npm run dev -- --port 3001` |
 | Blank screen | Check browser console for errors, clear localStorage |
 | Barcode camera not working | Use manual code input, or test on HTTPS/localhost |
-| AI Coach not responding | Check GEMINI_API_KEY in .env.local |
+| AI features not responding | Check `VITE_GEMINI_API_KEY` for local dev or confirm Supabase + `gemini-proxy` are configured |
 | Themes broken | Clear localStorage, check index.css theme tokens |

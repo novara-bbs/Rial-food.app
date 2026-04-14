@@ -12,7 +12,7 @@ npm install
 
 # 2. Set up environment
 cp .env.example .env.local
-# Edit .env.local with your Gemini API key
+# Edit .env.local with the env vars you need for local dev
 
 # 3. Run
 npm run dev
@@ -39,7 +39,7 @@ npm run dev
 | Styling | Tailwind CSS 4.1 (custom design tokens) |
 | Charts | Recharts 3.8 |
 | Icons | Lucide React |
-| AI | Google Gemini API |
+| AI | Google Gemini API via direct dev key or Supabase proxy |
 | Barcode | html5-qrcode + Open Food Facts API |
 | i18n | Custom (ES/EN, auto-detect system language) |
 | State | localStorage (Supabase-ready) |

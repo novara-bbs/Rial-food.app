@@ -2,8 +2,8 @@
  * Photo-based meal recognition using Gemini Vision.
  * Analyzes food photos and returns detected items with estimated portions and macros.
  */
-import { getGeminiClient } from '../../ai/lib/gemini';
-import { GEMINI_API_KEY } from '../../../config/env';
+import { generateGeminiText } from '../../ai/lib/gemini';
+import { GEMINI_API_KEY, SUPABASE_URL } from '../../../config/env';
 
 export interface DetectedFood {
   name: string;
@@ -53,7 +53,7 @@ export async function analyzePhotoMeal(
   base64Data: string,
   mimeType: string = 'image/jpeg',
 ): Promise<DetectedFood[]> {
-  if (!GEMINI_API_KEY) {
+  if (!SUPABASE_URL && !GEMINI_API_KEY) {
     // Demo fallback when no API key configured
     await new Promise(r => setTimeout(r, 1500));
     return [
@@ -63,9 +63,7 @@ export async function analyzePhotoMeal(
     ];
   }
 
-  const ai = await getGeminiClient();
-  const response = await ai.models.generateContent({
-    model: 'gemini-2.0-flash',
+  const text = await generateGeminiText({
     contents: [
       {
         role: 'user',
@@ -75,10 +73,8 @@ export async function analyzePhotoMeal(
         ],
       },
     ],
-    config: { temperature: 0.2 },
+    options: { model: 'gemini-2.0-flash', temperature: 0.2, maxOutputTokens: 1024 },
   });
-
-  const text = response.text || '';
   const jsonMatch = text.match(/\[[\s\S]*\]/);
   if (!jsonMatch) return [];
 

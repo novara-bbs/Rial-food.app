@@ -1,7 +1,7 @@
 import { GEMINI_API_KEY, SUPABASE_URL, SUPABASE_ANON_KEY } from '../../../config/env';
 import { getSupabaseClient } from '../../../lib/supabase';
 
-/** Singleton Gemini client — used only in dev/web fallback mode. */
+/** Singleton Gemini client - used only in dev/web fallback mode. */
 let client: any = null; // any: Gemini SDK types not available at build time
 
 export async function getGeminiClient(): Promise<any> { // any: Gemini SDK types not available at build time
@@ -14,6 +14,101 @@ export async function getGeminiClient(): Promise<any> { // any: Gemini SDK types
 
 export const GEMINI_MODEL = 'gemini-2.0-flash';
 
+export interface GeminiInlineData {
+  mimeType: string;
+  data: string;
+}
+
+export interface GeminiPart {
+  text?: string;
+  inlineData?: GeminiInlineData;
+}
+
+export interface GeminiContent {
+  role?: 'user' | 'model';
+  parts: GeminiPart[];
+}
+
+interface GenerateGeminiTextInput {
+  message?: string;
+  contents?: GeminiContent[];
+  systemInstruction?: string;
+  options?: { model?: string; temperature?: number; maxOutputTokens?: number };
+}
+
+async function buildProxyHeaders(): Promise<Record<string, string>> {
+  const headers: Record<string, string> = {
+    'Content-Type': 'application/json',
+    'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
+  };
+
+  const sb = getSupabaseClient();
+  if (!sb) return headers;
+
+  const { data: { session } } = await sb.auth.getSession();
+  if (session?.access_token) {
+    headers.Authorization = `Bearer ${session.access_token}`;
+  }
+
+  return headers;
+}
+
+async function generateGeminiViaProxy({
+  message,
+  contents,
+  systemInstruction,
+  options = {},
+}: GenerateGeminiTextInput): Promise<string> {
+  const res = await fetch(`${SUPABASE_URL}/functions/v1/gemini-proxy`, {
+    method: 'POST',
+    headers: await buildProxyHeaders(),
+    body: JSON.stringify({
+      message,
+      contents,
+      systemInstruction,
+      model: options.model ?? GEMINI_MODEL,
+      temperature: options.temperature ?? 0.7,
+      maxOutputTokens: options.maxOutputTokens,
+    }),
+  });
+
+  if (!res.ok) {
+    const err = await res.json().catch(() => ({})) as { error?: string };
+    throw new Error(err.error ?? `Gemini proxy HTTP ${res.status}`);
+  }
+
+  const data = await res.json() as { text?: string };
+  return data.text ?? '';
+}
+
+export async function generateGeminiText({
+  message,
+  contents,
+  systemInstruction,
+  options = {},
+}: GenerateGeminiTextInput): Promise<string> {
+  if (SUPABASE_URL) {
+    return generateGeminiViaProxy({ message, contents, systemInstruction, options });
+  }
+
+  if (!GEMINI_API_KEY) {
+    throw new Error('Gemini is not configured');
+  }
+
+  const ai = await getGeminiClient();
+  const response = await ai.models.generateContent({
+    model: options.model ?? GEMINI_MODEL,
+    contents: contents ?? message ?? '',
+    config: {
+      systemInstruction,
+      temperature: options.temperature ?? 0.7,
+      ...(typeof options.maxOutputTokens === 'number' ? { maxOutputTokens: options.maxOutputTokens } : {}),
+    },
+  });
+
+  return response.text ?? '';
+}
+
 /**
  * Generate a Gemini AI response.
  *
@@ -22,59 +117,14 @@ export const GEMINI_MODEL = 'gemini-2.0-flash';
  * server-side and enforces per-user rate limits (50 req/day).
  *
  * Falls back to a direct client call when no Supabase URL is set
- * (local dev only — key will be visible in the browser).
+ * (local dev only - key will be visible in the browser).
  */
 export async function generateAIResponse(
   message: string,
   systemInstruction: string,
   options: { model?: string; temperature?: number } = {},
 ): Promise<string> {
-  if (SUPABASE_URL) {
-    // ── Proxy path (production) ──
-    const sb = getSupabaseClient();
-    const headers: Record<string, string> = {
-      'Content-Type': 'application/json',
-      'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
-    };
-
-    if (sb) {
-      const { data: { session } } = await sb.auth.getSession();
-      if (session?.access_token) {
-        headers['Authorization'] = `Bearer ${session.access_token}`;
-      }
-    }
-
-    const res = await fetch(`${SUPABASE_URL}/functions/v1/gemini-proxy`, {
-      method: 'POST',
-      headers,
-      body: JSON.stringify({
-        message,
-        systemInstruction,
-        model: options.model ?? GEMINI_MODEL,
-        temperature: options.temperature ?? 0.7,
-      }),
-    });
-
-    if (!res.ok) {
-      const err = await res.json().catch(() => ({})) as { error?: string };
-      throw new Error(err.error ?? `Gemini proxy HTTP ${res.status}`);
-    }
-
-    const data = await res.json() as { text?: string };
-    return data.text ?? '';
-  }
-
-  // ── Direct path (local dev only — API key visible in browser) ──
-  const ai = await getGeminiClient();
-  const response = await ai.models.generateContent({
-    model: options.model ?? GEMINI_MODEL,
-    contents: message,
-    config: {
-      systemInstruction,
-      temperature: options.temperature ?? 0.7,
-    },
-  });
-  return response.text ?? '';
+  return generateGeminiText({ message, systemInstruction, options });
 }
 
 export interface MemoryContext {
@@ -88,7 +138,7 @@ export interface MemoryContext {
   intolerances?: string[];
   /** Names of disliked foods (resolved from IDs for readability) */
   foodDislikes?: string[];
-  /** Top food↔feeling insights from RealFeel correlation engine */
+  /** Top food-feeling insights from RealFeel correlation engine */
   recentFoodInsights?: { name: string; tone: string; avgLevel: number }[];
   /** Weekly nutrition averages */
   weeklyNutritionAvg?: { cal: number; pro: number; carbs: number; fats: number };

@@ -94,9 +94,11 @@ Deno.serve(async (req: Request) => {
   // ─── Parse request body ────────────────────────────────────────────────────
   let body: {
     message?: string;
+    contents?: unknown[];
     systemInstruction?: string;
     model?: string;
     temperature?: number;
+    maxOutputTokens?: number;
   };
 
   try {
@@ -107,21 +109,25 @@ Deno.serve(async (req: Request) => {
 
   const {
     message,
+    contents,
     systemInstruction,
     model = 'gemini-2.0-flash',
     temperature = 0.7,
+    maxOutputTokens = 1024,
   } = body;
 
-  if (!message) {
-    return json({ error: '"message" field is required' }, 400);
+  if (!message && (!Array.isArray(contents) || contents.length === 0)) {
+    return json({ error: 'Either "message" or "contents" is required' }, 400);
   }
 
   // ─── Call Gemini REST API ─────────────────────────────────────────────────
   const geminiUrl = `${GEMINI_BASE}/${model}:generateContent?key=${geminiKey}`;
 
   const geminiBody: Record<string, unknown> = {
-    contents: [{ parts: [{ text: message }] }],
-    generationConfig: { temperature, maxOutputTokens: 1024 },
+    contents: Array.isArray(contents) && contents.length > 0
+      ? contents
+      : [{ parts: [{ text: message }] }],
+    generationConfig: { temperature, maxOutputTokens },
   };
 
   if (systemInstruction) {

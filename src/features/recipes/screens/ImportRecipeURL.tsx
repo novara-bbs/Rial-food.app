@@ -4,8 +4,8 @@ import { Link, CheckCircle2, AlertTriangle, Loader2, FileText, HelpCircle, Chevr
 import { useI18n } from '../../../i18n';
 import PageHeader from '../../../components/patterns/PageHeader';
 import { logger } from '../../../lib/logger';
-import { getGeminiClient } from '../../ai/lib/gemini';
-import { GEMINI_API_KEY } from '../../../config/env';
+import { generateGeminiText } from '../../ai/lib/gemini';
+import { GEMINI_API_KEY, SUPABASE_URL } from '../../../config/env';
 import { enhanceIngredients, EnhancedIngredient, RecipeIntelligenceResult } from '../utils/recipe-intelligence';
 
 const EXTRACTION_PROMPT = `Extract a recipe from the following URL or description and return it as a valid JSON object with this exact structure:
@@ -58,18 +58,14 @@ export default function ImportRecipeURL({ onBack, onImport }: { onBack: () => vo
     try {
       let data: any;
 
-      if (!GEMINI_API_KEY) {
+      if (!SUPABASE_URL && !GEMINI_API_KEY) {
         await new Promise(r => setTimeout(r, 1500));
         data = buildFallback(url);
       } else {
-        const ai = await getGeminiClient();
-        const response = await ai.models.generateContent({
-          model: 'gemini-2.0-flash',
-          contents: EXTRACTION_PROMPT + url,
-          config: { temperature: 0.2 },
+        const text = await generateGeminiText({
+          message: EXTRACTION_PROMPT + url,
+          options: { model: 'gemini-2.0-flash', temperature: 0.2, maxOutputTokens: 2048 },
         });
-
-        const text = response.text || '';
         const jsonMatch = text.match(/\{[\s\S]*\}/);
         if (!jsonMatch) throw new Error('No JSON in response');
         data = JSON.parse(jsonMatch[0]);

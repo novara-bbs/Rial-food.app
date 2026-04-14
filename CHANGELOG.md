@@ -1,6 +1,13 @@
-# RIAL App — Changelog
+# RIAL App - Changelog
 
-## [1.5.0] — 2026-04-08
+## [1.5.1] - 2026-04-14
+
+### Deployment hardening
+- Unified Gemini calls behind the shared client/proxy layer so AI Coach, recipe import, and photo recognition can all use the Supabase `gemini-proxy` in production
+- Extended `supabase/functions/gemini-proxy` to accept rich `contents` payloads, including image inputs for Gemini Vision flows
+- Updated env and quickstart docs to reflect the production-safe Gemini setup
+
+## [1.5.0] - 2026-04-08
 
 ### Infrastructure
 - **i18n system**: ES/EN with auto system-language detection, instant runtime switching
@@ -16,16 +23,16 @@
 - **Mas** menu: Diario Real Feel, Ayuno, Challenges, AI Coach, Perfil, Ajustes, RIAL+
 
 ### New Screens (8)
-- `Cocina.tsx` — Unified recipes/plan/list with collections
-- `Creadores.tsx` — Creator profiles with verified badges, followers
-- `RealFeelDiary.tsx` — Real Score 0-100, Recharts area chart, correlations, timeline
-- `FastingTimer.tsx` — SVG circular timer, 4 protocols (16:8/18:6/20:4/OMAD), history
-- `ImportRecipeURL.tsx` — URL input, AI extraction simulation, ingredient review (check/warning)
+- `Cocina.tsx` - Unified recipes/plan/list with collections
+- `Creadores.tsx` - Creator profiles with verified badges, followers
+- `RealFeelDiary.tsx` - Real Score 0-100, Recharts area chart, correlations, timeline
+- `FastingTimer.tsx` - SVG circular timer, 4 protocols (16:8/18:6/20:4/OMAD), history
+- `ImportRecipeURL.tsx` - URL input, AI extraction simulation, ingredient review (check/warning)
 
 ### New Components (4)
-- `RealFeelInline.tsx` — Post-meal 5-emoji check-in with tags, auto-dismiss 60s
-- `BarcodeScanner.tsx` — html5-qrcode camera + Open Food Facts API + manual fallback
-- `EmptyState.tsx` — Reusable empty state component
+- `RealFeelInline.tsx` - Post-meal 5-emoji check-in with tags, auto-dismiss 60s
+- `BarcodeScanner.tsx` - html5-qrcode camera + Open Food Facts API + manual fallback
+- `EmptyState.tsx` - Reusable empty state component
 - Language switcher in Settings (ES/EN with flags)
 
 ### Enhanced Screens
@@ -38,7 +45,7 @@
 - **AddMeal**: Real barcode scanner, food quality emoji, i18n
 
 ### Dependencies Added
-- `html5-qrcode` — Barcode/QR scanning via device camera
+- `html5-qrcode` - Barcode/QR scanning via device camera
 
 ### Files Summary
 - **19 new files** created
