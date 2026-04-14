@@ -13,8 +13,10 @@
 
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
 
+// CORS: restrict to app domains in production. Use env var or fallback to wildcard for dev.
+const ALLOWED_ORIGIN = Deno.env.get('ALLOWED_ORIGIN') ?? '*';
 const CORS_HEADERS = {
-  'Access-Control-Allow-Origin': '*',
+  'Access-Control-Allow-Origin': ALLOWED_ORIGIN,
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
   'Access-Control-Allow-Methods': 'POST, OPTIONS',
 };
@@ -51,7 +53,11 @@ Deno.serve(async (req: Request) => {
 
   let userId: string | null = null;
   if (jwt && jwt !== Deno.env.get('SUPABASE_ANON_KEY')) {
-    const { data: { user } } = await supabase.auth.getUser(jwt);
+    const { data: { user }, error: authError } = await supabase.auth.getUser(jwt);
+    if (authError) {
+      console.warn('[gemini-proxy] JWT verification failed:', authError.message);
+      return json({ error: 'Invalid or expired authorization token' }, 401);
+    }
     userId = user?.id ?? null;
   }
 

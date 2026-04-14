@@ -3,6 +3,7 @@
  * Used to validate localStorage hydration and external API responses.
  */
 import { z } from 'zod';
+import { logger } from './logger';
 
 // ─── Macros ────────────────────────────────────────────
 export const MacrosSchema = z.object({
@@ -113,7 +114,7 @@ export function safeParse<T>(schema: z.ZodType<T>, data: unknown, fallback: T): 
   if (result.success) return result.data;
   const meta = (import.meta as unknown as { env?: { DEV?: boolean } });
   if (meta.env?.DEV) {
-    console.warn('[Schema validation failed]', result.error);
+    logger.warn('Schema validation failed', { error: result.error });
   }
   return fallback;
 }

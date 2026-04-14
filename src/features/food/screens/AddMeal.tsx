@@ -3,6 +3,7 @@ import PageShell from '../../../components/PageShell';
 import { Plus, Camera, Barcode, Loader2, BookOpen, Leaf, Globe, Star, Clock, CheckSquare, Square, X, Sparkles, Trash2 } from 'lucide-react';
 import SearchInput from '../../../components/patterns/SearchInput';
 import { Ingredient, Recipe } from '../../../types';
+import { logger } from '../../../lib/logger';
 import { useI18n } from '../../../i18n';
 import { getFoodQuality, FOOD_QUALITY_EMOJI } from '../utils/nutrition';
 import { searchOpenFoodFacts, OFFResult } from '../api/open-food-facts';
@@ -255,7 +256,7 @@ export default function AddMeal({
         toast.error(t.addMealScreen?.noFoodDetected || 'No se detectaron alimentos');
       }
     } catch (err) {
-      console.error('Photo analysis error:', err);
+      logger.error('Photo analysis error', { error: err instanceof Error ? err.message : String(err) });
       toast.error(t.addMealScreen?.photoError || 'Error al analizar la foto');
     } finally {
       setIsAnalyzing(false);

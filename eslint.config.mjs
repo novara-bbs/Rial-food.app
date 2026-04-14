@@ -12,7 +12,7 @@ export default tseslint.config(
     },
     rules: {
       'react-refresh/only-export-components': ['warn', { allowConstantExport: true }],
-      '@typescript-eslint/no-explicit-any': 'off', // too noisy for now, enable incrementally
+      '@typescript-eslint/no-explicit-any': 'warn', // warn to surface type debt; fix incrementally
       '@typescript-eslint/no-unused-vars': ['warn', { argsIgnorePattern: '^_', varsIgnorePattern: '^_' }],
       'no-console': 'warn',
     },

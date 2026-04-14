@@ -3,6 +3,7 @@ import { ArrowLeft, Send, Bot, User, Sparkles, Lock, Crown, Zap, Activity, Utens
 import ReactMarkdown from 'react-markdown';
 import { useI18n } from '../../../i18n';
 import { generateAIResponse, buildSystemPrompt } from '../lib/gemini';
+import { logger } from '../../../lib/logger';
 import { useLocalStorageState } from '../../../hooks/useLocalStorageState';
 import { useAIMessageGate } from '../../../hooks/useProGate';
 
@@ -64,7 +65,7 @@ export default function AICoach({
         return updated.length > MAX_STORED_MESSAGES ? updated.slice(-MAX_STORED_MESSAGES) : updated;
       });
     } catch (error) {
-      console.error('Error calling AI:', error);
+      logger.error('Error calling AI', { error: error instanceof Error ? error.message : String(error) });
       setMessages((prev: any[]) => [...prev, { role: 'model', text: t.aiCoach.errorMessage }]);
     } finally {
       setIsLoading(false);

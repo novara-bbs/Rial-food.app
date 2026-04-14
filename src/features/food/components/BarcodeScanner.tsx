@@ -3,6 +3,7 @@ import { X, Loader2, AlertTriangle, CheckCircle2, UtensilsCrossed, BookOpen, Sav
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { useI18n } from '../../../i18n';
+import { logger } from '../../../lib/logger';
 import PortionSelector from './PortionSelector';
 import type { PortionResult } from './PortionSelector';
 import type { Ingredient, ServingSize } from '../../../types';
@@ -111,7 +112,7 @@ export default function BarcodeScanner({ onClose, onProductFound, onSaveToDictio
           () => {},
         );
       } catch (err: any) {
-        console.warn('Camera not available:', err);
+        logger.warn('Camera not available', { error: err instanceof Error ? err.message : String(err) });
         setState('idle');
         setErrorMsg(t.scanner.cameraNotAvailable);
       }

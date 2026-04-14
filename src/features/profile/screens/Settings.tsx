@@ -3,6 +3,7 @@ import PageShell from '../../../components/PageShell';
 import { Palette, Moon, Sun, Check, User, Target, Smartphone, Leaf, LogOut, Crown, Sparkles, Users, Plus, Trash2, Globe, Scale, ShieldAlert, X, Search, Bell, Download, AlertTriangle, UserX, Cloud } from 'lucide-react';
 import { useState, useMemo } from 'react';
 import { toast } from 'sonner';
+import { logger } from '../../../lib/logger';
 import { useI18n, type Locale } from '../../../i18n';
 import { Switch } from '@/components/ui/switch';
 import { Button } from '@/components/ui/button';
@@ -74,7 +75,7 @@ export default function Settings({ dailyMacros, setDailyMacros, isPro, setIsPro,
       toast.success(t.settings.deleteAccountSuccess);
       setShowDeleteAccountConfirm(false);
     } catch (err) {
-      console.error('[Settings] Delete account error:', err);
+      logger.error('Delete account error', { error: err instanceof Error ? err.message : String(err) });
       toast.error(t.settings.deleteAccountError);
     } finally {
       setIsDeletingAccount(false);

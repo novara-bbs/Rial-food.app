@@ -79,9 +79,8 @@ export default defineConfig(({mode}) => {
         },
       }),
     ],
-    define: {
-      'process.env.GEMINI_API_KEY': JSON.stringify(env.GEMINI_API_KEY),
-    },
+    // Note: GEMINI_API_KEY is kept server-side via Supabase Edge Function proxy.
+    // Never expose it client-side via `define`.
     resolve: {
       alias: {
         '@': path.resolve(__dirname, './src'),

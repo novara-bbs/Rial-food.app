@@ -3,6 +3,7 @@ import PageShell from '../../../components/PageShell';
 import { Link, CheckCircle2, AlertTriangle, Loader2, FileText, HelpCircle, ChevronDown, ChevronUp } from 'lucide-react';
 import { useI18n } from '../../../i18n';
 import PageHeader from '../../../components/patterns/PageHeader';
+import { logger } from '../../../lib/logger';
 import { getGeminiClient } from '../../ai/lib/gemini';
 import { GEMINI_API_KEY } from '../../../config/env';
 import { enhanceIngredients, EnhancedIngredient, RecipeIntelligenceResult } from '../utils/recipe-intelligence';
@@ -97,7 +98,7 @@ export default function ImportRecipeURL({ onBack, onImport }: { onBack: () => vo
         macroSource: result.matchRate >= 0.5 ? 'dictionary' : 'ai',
       });
     } catch (err) {
-      console.error('Import error:', err);
+      logger.error('Import error', { error: err instanceof Error ? err.message : String(err) });
       const fallback = buildFallback(url);
       const result = enhanceIngredients(fallback.ingredients);
       setIntelligence(result);

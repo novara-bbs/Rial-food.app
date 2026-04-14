@@ -34,7 +34,6 @@ export async function generateAIResponse(
     const sb = getSupabaseClient();
     const headers: Record<string, string> = {
       'Content-Type': 'application/json',
-      'apikey': SUPABASE_ANON_KEY,
       'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
     };
 
