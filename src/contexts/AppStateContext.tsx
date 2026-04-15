@@ -12,6 +12,7 @@ import { createHandleCreatePost, createHandleAddComment } from '../features/soci
 import { createHandlePublishStory, createHandleMarkStoryViewed } from '../features/social/handlers/story-handlers';
 import type { Story, StorySlide, Notification as NotificationType, SocialLinks } from '../types/social';
 import { createHandleAddToleranceLog, createHandleRealFeelLog, createHandleCheckIn, createHandleCompleteCheckIn } from '../features/wellness/handlers/wellness-handlers';
+import { createHandleLogWeight, type LogWeightArgs } from '../features/wellness/handlers/weight-handlers';
 
 // ─── Types ───────────────────────────────────────────────────────────────────
 
@@ -113,6 +114,7 @@ interface AppStateContextType {
   handleCompleteCheckIn: (data: any) => void;
   handleDeleteRecipe: (recipeId: any) => void;
   handleDuplicateRecipe: (recipe: any) => void;
+  handleLogWeight: (args: LogWeightArgs) => void;
   navigateToRecipe: (recipe: any) => void;
   recipeToEdit: any;
   setRecipeToEdit: (recipe: any) => void;
@@ -371,6 +373,10 @@ export function AppStateProvider({ children }: { children: React.ReactNode }) {
     () => createHandleDuplicateRecipe({ setSavedRecipes, navigateTo, t }),
     [setSavedRecipes, navigateTo, t],
   );
+  const handleLogWeight = useMemo(
+    () => createHandleLogWeight({ setWeightHistory, setUserProfile }),
+    [setWeightHistory, setUserProfile],
+  );
   const handleImportRecipe = useMemo(
     () => createHandleImportRecipe({ setSavedRecipes, navigateTo, t }),
     [setSavedRecipes, navigateTo, t],
@@ -457,6 +463,7 @@ export function AppStateProvider({ children }: { children: React.ReactNode }) {
     handleCompleteCheckIn,
     handleDeleteRecipe,
     handleDuplicateRecipe,
+    handleLogWeight,
     navigateToRecipe,
     recipeToEdit, setRecipeToEdit,
   }), [
@@ -478,7 +485,7 @@ export function AppStateProvider({ children }: { children: React.ReactNode }) {
     handleCreatePost, handleAddComment, handleAddToleranceLog,
     handleCreateRecipeSubmit, handleRealFeelLog, handleImportRecipe,
     handleAddToPlan, handleCheckIn, handleCompleteCheckIn,
-    handleDeleteRecipe, handleDuplicateRecipe, navigateToRecipe,
+    handleDeleteRecipe, handleDuplicateRecipe, handleLogWeight, navigateToRecipe,
     recipeToEdit,
   ]);
 

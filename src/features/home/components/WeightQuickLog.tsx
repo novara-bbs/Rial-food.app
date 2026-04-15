@@ -2,28 +2,24 @@ import { useState } from 'react';
 import { Scale, Plus, Check, TrendingDown, TrendingUp, Minus } from 'lucide-react';
 import { bodyWeightFromKg, bodyWeightToKg, getBodyWeightUnit } from '../../food/utils/units';
 import { useI18n } from '../../../i18n';
+import { useAppState } from '../../../contexts/AppStateContext';
 import type { UnitSystem } from '../../food/utils/units';
 
-interface WeightEntry {
-  date: string;
-  kg: number;
-  note?: string;
-}
-
 interface WeightQuickLogProps {
-  weightHistory: WeightEntry[];
-  setWeightHistory: (fn: any) => void;
+  weightHistory: { date: string; kg: number; note?: string }[];
   unitSystem: UnitSystem;
   targetWeight?: number;
+  /** @deprecated handled internally via AppStateContext */
+  setWeightHistory?: (fn: any) => void;
 }
 
-export default function WeightQuickLog({ weightHistory, setWeightHistory, unitSystem, targetWeight }: WeightQuickLogProps) {
+export default function WeightQuickLog({ weightHistory, unitSystem, targetWeight }: WeightQuickLogProps) {
   const { t } = useI18n();
+  const { handleLogWeight } = useAppState();
   const [isEditing, setIsEditing] = useState(false);
   const [inputValue, setInputValue] = useState('');
 
   const unit = getBodyWeightUnit(unitSystem);
-  const today = new Date().toISOString().slice(0, 10);
 
   // Latest weight
   const sorted = [...weightHistory].sort((a, b) => b.date.localeCompare(a.date));
@@ -34,7 +30,7 @@ export default function WeightQuickLog({ weightHistory, setWeightHistory, unitSy
   const previous = sorted[1];
   const delta = latest && previous ? +(bodyWeightFromKg(latest.kg, unitSystem) - bodyWeightFromKg(previous.kg, unitSystem)).toFixed(1) : null;
 
-  // Target weight progress
+  // Target weight display
   const targetDisplay = targetWeight ? bodyWeightFromKg(targetWeight, unitSystem) : null;
   const toGoal = latest && targetWeight ? +(bodyWeightFromKg(latest.kg, unitSystem) - bodyWeightFromKg(targetWeight, unitSystem)).toFixed(1) : null;
 
@@ -59,11 +55,7 @@ export default function WeightQuickLog({ weightHistory, setWeightHistory, unitSy
     const val = parseFloat(inputValue);
     if (isNaN(val) || val < 20 || val > 300) return;
     const kg = bodyWeightToKg(val, unitSystem);
-    setWeightHistory((prev: WeightEntry[]) => {
-      // Replace today's entry if exists, else add new
-      const filtered = prev.filter((e: WeightEntry) => e.date !== today);
-      return [...filtered, { date: today, kg }];
-    });
+    handleLogWeight({ kg });
     setIsEditing(false);
     setInputValue('');
   };
@@ -86,7 +78,7 @@ export default function WeightQuickLog({ weightHistory, setWeightHistory, unitSy
               </p>
               {delta !== null && (
                 <span className={`flex items-center gap-0.5 text-[10px] font-bold ${deltaColor}`}>
-                  <DeltaIcon className="w-3 h-3" />
+                  <DeltaIcon className="w-3 h-3" aria-hidden="true" />
                   {delta > 0 ? '+' : ''}{delta}
                 </span>
               )}
@@ -109,7 +101,7 @@ export default function WeightQuickLog({ weightHistory, setWeightHistory, unitSy
             className="w-9 h-9 bg-primary text-on-primary rounded-full flex items-center justify-center hover:opacity-90 transition-all active:scale-95 shadow-lg shadow-primary/20 shrink-0"
             aria-label={t.home.logWeight || 'Log weight'}
           >
-            <Plus className="w-4 h-4" />
+            <Plus className="w-4 h-4" aria-hidden="true" />
           </button>
         </div>
       </div>
@@ -133,9 +125,9 @@ export default function WeightQuickLog({ weightHistory, setWeightHistory, unitSy
               type="button"
               onClick={handleLog}
               className="w-9 h-9 bg-primary text-on-primary rounded-full flex items-center justify-center hover:opacity-90 transition-all"
-              aria-label="Confirm"
+              aria-label={t.home.logWeight || 'Confirm'}
             >
-              <Check className="w-4 h-4" />
+              <Check className="w-4 h-4" aria-hidden="true" />
             </button>
           </div>
           {targetDisplay !== null && (

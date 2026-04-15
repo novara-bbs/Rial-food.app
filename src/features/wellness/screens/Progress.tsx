@@ -7,12 +7,11 @@ import { getLoggingStreak, type DailyArchive } from '../../../hooks/useDailyRese
 import { calcVitality } from '../../home/utils/homeWidgets';
 import PageHeader from '../../../components/patterns/PageHeader';
 import { bodyWeightFromKg, bodyWeightToKg, getBodyWeightUnit } from '../../food/utils/units';
-
-interface WeightEntry { date: string; kg: number; note?: string }
+import type { WeightEntry } from '../../../contexts/AppStateContext';
 
 export default function Progress({ onBack }: { onBack: () => void }) {
   const { t } = useI18n();
-  const { nutritionHistory, weightHistory, setWeightHistory, dailyMacros, dailyLog, realFeelLogs, mealPlan, userProfile } = useAppState();
+  const { nutritionHistory, weightHistory, dailyMacros, dailyLog, realFeelLogs, mealPlan, userProfile, handleLogWeight } = useAppState();
   const unitSystem = userProfile?.unitSystem ?? 'metric';
   const weightUnit = getBodyWeightUnit(unitSystem);
   const [isEditingWeight, setIsEditingWeight] = useState(false);
@@ -27,18 +26,12 @@ export default function Progress({ onBack }: { onBack: () => void }) {
   const todayStreak = dailyLog.length > 0 ? streak.current + 1 : streak.current;
 
   // ─── Weight Logging ─────────────────────────────────────────────────────────
-  const todayDate = new Date().toISOString().slice(0, 10);
-  const handleLogWeight = () => {
+  const handleLogWeightSubmit = () => {
     const val = parseFloat(weightInput);
-    if (isNaN(val) || !setWeightHistory) return;
+    if (isNaN(val)) return;
     const kg = bodyWeightToKg(val, unitSystem);
     if (kg < 20 || kg > 300) return;
-    setWeightHistory((prev: any[]) => {
-      const filtered = prev.filter((w: any) => w.date !== todayDate);
-      const entry: WeightEntry = { date: todayDate, kg };
-      if (weightNote.trim()) entry.note = weightNote.trim();
-      return [...filtered, entry];
-    });
+    handleLogWeight({ kg, note: weightNote.trim() || undefined });
     setIsEditingWeight(false);
     setWeightInput('');
     setWeightNote('');
@@ -255,14 +248,14 @@ export default function Progress({ onBack }: { onBack: () => void }) {
                 max="300"
                 value={weightInput}
                 onChange={e => setWeightInput(e.target.value)}
-                onKeyDown={e => e.key === 'Enter' && handleLogWeight()}
+                onKeyDown={e => e.key === 'Enter' && handleLogWeightSubmit()}
                 className="flex-1 bg-surface-container-highest border border-outline-variant/20 rounded-sm py-2 px-3 text-sm text-tertiary placeholder:text-on-surface-variant focus:outline-none focus:border-primary transition-colors"
                 placeholder={currentWeight ? String(bodyWeightFromKg(currentWeight, unitSystem)) : '72.5'}
                 autoFocus
               />
               <span className="text-sm font-bold text-on-surface-variant">{weightUnit}</span>
               <button type="button"
-                onClick={handleLogWeight}
+                onClick={handleLogWeightSubmit}
                 aria-label={p.logWeight}
                 className="w-9 h-9 flex items-center justify-center rounded-full bg-primary text-on-primary hover:opacity-90 transition-opacity"
               >

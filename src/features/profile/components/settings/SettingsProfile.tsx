@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { User, Users, Target, Sparkles, Plus, Trash2, Crown } from 'lucide-react';
 import { Switch } from '@/components/ui/switch';
 import { useI18n } from '../../../../i18n';
+import { useAppState } from '../../../../contexts/AppStateContext';
 import { bodyWeightFromKg, bodyWeightToKg, heightFromCm, heightToCm, getBodyWeightUnit, getHeightUnit } from '../../../food/utils/units';
 import { calculateDailyTargets, type Goal, type ActivityLevel, type Sex } from '../../../food/utils/nutrition';
 
@@ -15,6 +16,7 @@ interface Props {
 
 export default function SettingsProfile({ userProfile, setUserProfile, setDailyMacros, isPro, setIsPro }: Props) {
   const { t } = useI18n();
+  const { handleLogWeight } = useAppState();
 
   const [isAddingMember, setIsAddingMember] = useState(false);
   const [newMember, setNewMember] = useState({ name: '', age: 30, goal: 'maintain', activityLevel: 'active' });
@@ -34,6 +36,11 @@ export default function SettingsProfile({ userProfile, setUserProfile, setDailyM
       }
       return updated;
     });
+    // When weight is edited in Settings, seed a weightHistory entry so the
+    // Progress chart stays in sync (single write path via handleLogWeight).
+    if (key === 'weight' && typeof value === 'number' && value > 0) {
+      handleLogWeight({ kg: value });
+    }
   };
 
   const addFamilyMember = () => {

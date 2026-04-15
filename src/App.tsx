@@ -73,6 +73,7 @@ export default function App() {
     handleAddToleranceLog, handleCreateRecipeSubmit,
     handleRealFeelLog, handleImportRecipe, handleAddToPlan,
     handleCheckIn, handleCompleteCheckIn, navigateToRecipe,
+    handleLogWeight,
     recipeToEdit,
   } = useAppState();
 
@@ -204,6 +205,10 @@ export default function App() {
       <Onboarding isOpen={isFirstTime} onClose={() => setIsFirstTime(false)} onComplete={(result) => {
         setUserProfile(result.userProfile);
         setDailyMacros((prev: any) => ({ ...prev, target: result.targets }));
+        // Seed initial weight history entry so Progress chart has data from day 1
+        if (result.initialWeightKg && result.initialWeightKg > 0) {
+          handleLogWeight({ kg: result.initialWeightKg });
+        }
         setIsFirstTime(false);
       }} />
       <div className={`flex h-dvh overflow-hidden bg-background text-on-surface font-body selection:bg-primary selection:text-on-primary ${theme}`}>

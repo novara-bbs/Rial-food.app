@@ -1,5 +1,31 @@
 # RIAL App - Changelog
 
+## [1.5.6] - 2026-04-15
+
+### Q7 — Weight flow unification
+
+#### Single write path
+- New `src/features/wellness/handlers/weight-handlers.ts`: `createHandleLogWeight` factory — all weight writes go through one path; syncs both `weightHistory` (persistent record) and `userProfile.weight` (fast-read cache) atomically. Replaces same-date entries instead of appending.
+- New `src/features/wellness/utils/body-data.ts`: `getCurrentWeight(userProfile, weightHistory)` helper — derives current weight from latest history entry, falls back to `userProfile.weight`, then null. Single read path for display code.
+
+#### AppStateContext wire
+- `handleLogWeight` added to `AppStateContextType` and wired via `useMemo` factory pattern (mirrors `meal-handlers`); exposed through `useAppState()`.
+
+#### Migrated consumers (all now call `handleLogWeight`)
+- `WeightQuickLog.tsx` (Home): removed direct `setWeightHistory` prop call; uses context `handleLogWeight`; `setWeightHistory` prop kept as `@deprecated` for one-sprint compat
+- `Progress.tsx`: removed local handler + local `WeightEntry` interface; uses context `handleLogWeight`
+- `SettingsProfile.tsx`: on weight biometric update, also calls `handleLogWeight` to seed history entry (previously only updated `userProfile.weight`)
+- `App.tsx`: `onComplete` from `Onboarding` now calls `handleLogWeight` to seed initial history entry for new users (previously left `weightHistory` empty on first visit)
+
+#### Onboarding unit labels
+- Replaced hardcoded `(kg)` / `(cm)` labels with `getBodyWeightUnit('metric')` / `getHeightUnit('metric')` — unit-aware labels; `onComplete` now passes `initialWeightKg` to App for history seeding
+
+#### Test suite
+- New `src/features/wellness/handlers/weight-handlers.test.ts`: 7 tests covering dual-write, same-date replacement, new-date append, note inclusion/omission, custom date, edge values
+
+#### Config
+- `vitest.config.ts`: added `.claude/**` to exclude pattern (was picking up worktree node_modules test files)
+
 ## [1.5.5] - 2026-04-15
 
 ### Q5 — Lighthouse/PWA audit: A11y + manifest dedup

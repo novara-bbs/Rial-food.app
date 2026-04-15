@@ -9,6 +9,7 @@ Last updated: 2026-04-15
 - Vercel project id: `prj_t11VHYQjptazjUx7Y2hWLz0IDAjg`
 
 ## Recent merged commits (Rial-food.app main)
+- `(pending)` `feat(sprint-q7): unified weight flow — single handler, onboarding seed, Settings sync`
 - `ab34efa` `feat(sprint-q5): Lighthouse/PWA audit — A11y form labels, nav aria, manifest dedup`
 - `ea9108b` `docs(ai): update Q4 commit hash in state.md`
 - `9554b9c` `feat(sprint-q4): A11y nested-button fix, day i18n, weight entries list`
@@ -18,7 +19,7 @@ Last updated: 2026-04-15
 
 ## Quality baseline (2026-04-15)
 - TypeScript: 0 errors (`npx tsc --noEmit`)
-- Tests: 325/325 unit tests passing — 5 new suites added in Sprint O
+- Tests: 370/370 unit tests passing — 7 new tests added in Q7 (weight-handlers); vitest.config exclude fixed for worktree
 - E2E: fixed after Sprint P (regex matched Spanish `"Entendido, continuar"`; webServer now `vite preview` in CI)
 - Build: main app chunk 284 KB raw / 56 KB gzip (recharts + react-markdown deferred)
 - Lint: 0 errors
@@ -120,6 +121,10 @@ Execute Supabase sprint ONLY when ALL of these hold:
 - ~~**Q3**~~ ✓ DONE — Batch cooking UI, weight note + target progress, i18n (`deef2ed`)
 - ~~**Q4**~~ ✓ DONE — A11y nested-button fix (Challenges, Creadores), icon aria-labels, day i18n, weight entries list
 - ~~**Q5**~~ ✓ DONE — Lighthouse/PWA audit: nav `aria-current` + `aria-label`, WCAG 4.1.2 form labels across 8 components, manifest dedup
+- ~~**Q7**~~ ✓ DONE — Weight flow unification: single `createHandleLogWeight` handler, onboarding seed, Settings sync, `getCurrentWeight` helper, 7 tests
+- **Q8** — Home Progress preview card: replace `WeightQuickLog` with `ProgressPreviewCard` (sparkline, delta, target gap, quick-log inline, "Ver detalles →" deep-link to Progress)
+- **Q9** — Avatar + goals + settings consolidation: GlobalHeader avatar fix, avatar upload in SettingsProfile, hydration/movement/unit goals in SettingsNutrition, verify Onboarding→dailyMacros wiring
+- **Q10** — Progress v2: `BodySnapshot` type (extends WeightEntry with photoUrl + measurements), tabs (Weight / Photos / Measurements / Nutrition), photo timeline scaffold, measurements form, calendar photo overlay
 - **Q6** — Supabase integration (gated — see feature-freeze gate above): apply migration → expand SyncKey per audit → wire `syncOnSignIn`/`pushToCloud` in AppStateContext → `useSupabasePersistence` toggle in SettingsSystem → E2E with real Supabase project
 
 ## When to update this file

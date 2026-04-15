@@ -3,6 +3,7 @@ import { ArrowLeft, Dumbbell, Flame, Scale, Heart, Users, ChevronRight, Check, P
 import { useI18n } from '../../../i18n';
 import { useTheme } from '../../../contexts/ThemeContext';
 import { calculateDailyTargets, type Goal } from '../../food/utils/nutrition';
+import { getBodyWeightUnit, getHeightUnit } from '../../food/utils/units';
 import type { Theme } from '../../../contexts/ThemeContext';
 
 interface OnboardingData {
@@ -25,7 +26,7 @@ const DEFAULT_DATA: OnboardingData = {
 export default function Onboarding({ isOpen, onClose, onComplete }: {
   isOpen: boolean;
   onClose: () => void;
-  onComplete?: (data: { userProfile: any; targets: any }) => void;
+  onComplete?: (data: { userProfile: any; targets: any; initialWeightKg?: number }) => void;
 }) {
   const { t } = useI18n();
   const { theme, setTheme } = useTheme();
@@ -74,6 +75,8 @@ export default function Onboarding({ isOpen, onClose, onComplete }: {
         dietaryPreferences: data.restrictions,
       },
       targets: { cal: targets.cal, pro: targets.pro, carbs: targets.carbs, fats: targets.fats },
+      // Seed initial weightHistory so Progress chart has a baseline from day 1
+      initialWeightKg: data.weight,
     });
     onClose();
   };
@@ -173,12 +176,12 @@ export default function Onboarding({ isOpen, onClose, onComplete }: {
                 </div>
                 <div className="grid grid-cols-2 gap-3">
                   <div>
-                    <label className="block text-xs font-label uppercase tracking-widest text-on-surface-variant mb-1.5">{t.onboarding.weight} (kg)</label>
+                    <label className="block text-xs font-label uppercase tracking-widest text-on-surface-variant mb-1.5">{t.onboarding.weight} ({getBodyWeightUnit('metric')})</label>
                     <input type="number" step="0.1" inputMode="decimal" value={data.weight} onChange={e => setData(d => ({ ...d, weight: +e.target.value }))}
                       className="w-full px-4 py-3 bg-surface-container-low border border-outline-variant/20 rounded-sm text-on-surface text-sm font-mono focus:outline-none focus:border-primary" />
                   </div>
                   <div>
-                    <label className="block text-xs font-label uppercase tracking-widest text-on-surface-variant mb-1.5">{t.onboarding.height} (cm)</label>
+                    <label className="block text-xs font-label uppercase tracking-widest text-on-surface-variant mb-1.5">{t.onboarding.height} ({getHeightUnit('metric')})</label>
                     <input type="number" step="0.1" inputMode="decimal" value={data.height} onChange={e => setData(d => ({ ...d, height: +e.target.value }))}
                       className="w-full px-4 py-3 bg-surface-container-low border border-outline-variant/20 rounded-sm text-on-surface text-sm font-mono focus:outline-none focus:border-primary" />
                   </div>
