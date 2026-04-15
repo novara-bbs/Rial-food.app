@@ -1,0 +1,11 @@
+{
+  "$schema": "https://geminicli.com/schema/settings.json",
+  "context": {
+    "fileName": [
+      "AGENTS.md",
+      "GEMINI.md"
+    ],
+    "discoveryMaxDirs": 200,
+    "loadMemoryFromIncludeDirectories": false
+  }
+}

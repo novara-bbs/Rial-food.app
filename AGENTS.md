@@ -1,55 +1,87 @@
-# RIAL — Agent Definitions
+# RIAL Agent Guide
 
-## When to use which agent
+`AGENTS.md` is the universal entrypoint for development agents in this repository.
+Use it as the first read whether you are working from Codex, ChatGPT, Claude Code, Gemini CLI, Cursor, Windsurf, or a local model wrapper.
 
-### Explore (subagent_type: Explore)
-Use for: Finding files, understanding code structure, searching for patterns.
-- "Where is the barcode scanner code?"
-- "How does the meal plan state work?"
-- "What screens use useI18n?"
+## Read order
+1. Read this file first.
+2. Read `docs/ai/README.md` for the shared map.
+3. Read the specific files in `docs/ai/` that match the task.
+4. Use tool-specific adapters only when your IDE needs them:
+   - `CLAUDE.md`
+   - `GEMINI.md`
+   - `.cursor/rules/`
+   - `.windsurf/rules/`
 
-### Plan (subagent_type: Plan)
-Use for: Designing implementation approach before writing code.
-- New feature architecture
-- Multi-file refactors
-- Deciding between approaches
+## Project identity
+- Product: RIAL, a mobile-first nutrition platform with tracking, recipes, planning, wellness, social, and creator layers.
+- App stack: React 19, TypeScript, Vite, Tailwind CSS 4, Supabase, Capacitor.
+- Repo mode: active production candidate on the root checkout.
+- Release target: push and release from `main` to `rial-food/main` unless the user says otherwise.
+- Reference-only branch line: `.claude/worktrees/sleepy-knuth` exists, but do not treat it as the release baseline unless explicitly asked.
 
-### feature-dev:code-explorer
-Use for: Deep analysis of execution paths across multiple files.
-- Tracing how a meal gets logged end-to-end
-- Understanding the Real Feel data flow
+## Repo map
+- Product architecture: `docs/ARCHITECTURE.md`
+- Shared agent context: `docs/ai/`
+- App code: `src/`
+- Serverless AI proxy and backend glue: `supabase/`
+- CI: `.github/workflows/ci.yml`
+- Claude-specific local skills: `.claude/skills/`
 
-### feature-dev:code-reviewer
-Use for: Reviewing changes before commit.
-- Check for bugs, security issues
-- Verify i18n completeness
-- Verify TypeScript strictness
+## Universal working rules
+- Keep changes small, explicit, and easy to review.
+- Never commit secrets or move secrets into tracked config files.
+- Treat `docs/ai/` as the shared, versioned memory for the team.
+- Do not rely on local IDE memory as the source of truth for project knowledge.
+- Preserve existing architectural patterns unless the task explicitly changes them.
+- Do not edit `.claude/worktrees/sleepy-knuth` unless the user asks for that repo line.
+- For user-facing text in the app, keep i18n discipline: update both `src/i18n/locales/es.ts` and `src/i18n/locales/en.ts`.
+- For app behavior changes, update stable docs and `CHANGELOG.md` when the change is user-visible or architectural.
 
-### code-simplifier
-Use for: Refactoring after feature is working.
-- Reducing complexity in Home.tsx (580+ lines)
-- Extracting repeated patterns into shared components
+## Multi-agent workflow
+Use this default flow:
+1. Explore the current implementation and reuse paths.
+2. Plan the write set before editing.
+3. Execute changes with minimal overlap between agents.
+4. Verify with the cheapest useful checks first.
+5. Record durable knowledge in `docs/ai/state.md` or `CHANGELOG.md`.
+6. Leave a task handoff in `docs/ai/handoffs.md` when another agent may continue the work.
 
-## Parallel Agent Strategy
-Launch multiple agents when tasks are independent:
-```
-Agent 1: Explore — find all hardcoded Spanish strings
-Agent 2: Explore — check which screens lack empty states
-Agent 3: Explore — audit type safety in utils/
-```
+## Verification baseline
+- Cheap iteration check: `npx tsc --noEmit`
+- Repo validation for meaningful changes:
+  - `npm run lint`
+  - `npm run test`
+  - `npm run build`
+- Deployment-sensitive changes should also review:
+  - `vercel.json`
+  - `.env.example`
+  - `src/config/env.ts`
+  - `supabase/functions/`
+  - `.github/workflows/ci.yml`
 
-## Cost-Efficient Patterns
-1. **Use Explore for search, not Bash** — Explore agents use Glob/Grep efficiently
-2. **Batch independent file reads** — Read 3-4 files in parallel
-3. **Use Plan agents once, then execute** — Don't re-plan mid-implementation
-4. **TypeScript check is cheap** — Run `npx tsc --noEmit` after every batch of changes
-5. **Preview sparingly** — Only screenshot when UI changes are significant
-6. **Inline edits over full rewrites** — Use Edit tool, not Write, for existing files
+## Development AI vs product AI
+Do not mix these systems:
 
-## Task Decomposition Template
-For any feature request:
-1. **Explore** (1 agent): Understand current state + find reusable code
-2. **Plan** (mental or agent): Identify files to create/modify
-3. **Execute**: Create files in parallel, edit sequentially
-4. **Verify**: `tsc --noEmit` + preview if UI change
-5. **Document**: Update CHANGELOG.md + i18n files
+- Development AI:
+  - Codex, ChatGPT, Claude Code, Gemini CLI, Cursor, Windsurf, local models, and related tooling used to build the repo.
+- Product AI:
+  - RIAL app features such as AI Coach, recipe import, photo recognition, receipt or ticket scanning, and future low-cost production model flows.
+
+Development agents may read repo context, docs, tasks, and handoffs.
+Product AI flows must stay isolated behind app prompts, runtime safeguards, cost controls, and server-side secrets.
+
+## Shared context files
+- `docs/ai/project.md`: stable project map, architecture, commands, deployment context
+- `docs/ai/workflow.md`: collaboration style, validation, documentation rules, task routing
+- `docs/ai/state.md`: current release line, recent changes, active risks, next updates
+- `docs/ai/skills.md`: local skills and cross-tool equivalents
+- `docs/ai/handoffs.md`: partial-memory handoff template and log
+- `docs/ai/boundaries.md`: hard boundary between dev AI and product AI
+- `docs/ai/compatibility.md`: how this repo maps to Claude, Gemini, Cursor, Windsurf, Codex, and local models
+
+## Tool-specific notes
+- Claude Code reads `CLAUDE.md`, so `CLAUDE.md` imports this file and the shared docs.
+- Gemini CLI reads `GEMINI.md`, and `.gemini/settings.json` points Gemini to this repo's context files.
+- Cursor and Windsurf can read this root `AGENTS.md` directly; cross-cutting repo rules also live in `.cursor/rules/` and `.windsurf/rules/`.
+- Local-model or manual ChatGPT workflows should start here and then follow `docs/ai/README.md`.

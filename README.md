@@ -1,124 +1,105 @@
-# RIAL — Nutrition Platform
+# RIAL - Nutrition Platform
 
 > Real nutrition. Real recipes. Real community.
 
-6-dimension nutrition app: **Tracking + Recipes + Real Feel (wellness diary) + Meal Planning + Social Community + Creator Marketplace**.
+RIAL is a mobile-first nutrition platform that combines tracking, recipes, meal planning, wellness logging, social community features, and creator workflows in one app.
 
 ## Quick Start
 
 ```bash
-# 1. Install
 npm install
-
-# 2. Set up environment
 cp .env.example .env.local
-# Edit .env.local with the env vars you need for local dev
-
-# 3. Run
 npm run dev
-# Open http://localhost:3000
 ```
+
+Open `http://localhost:3000`.
 
 ## Commands
 
 | Command | Description |
-|---------|-------------|
-| `npm run dev` | Start dev server (port 3000) |
-| `npm run build` | Production build to `dist/` |
-| `npm run preview` | Preview production build |
-| `npx tsc --noEmit` | Type check (run before commits) |
-| `npm run lint` | TypeScript lint |
-| `npm run clean` | Remove dist/ |
+| --- | --- |
+| `npm run dev` | Start the Vite dev server on port 3000 |
+| `npm run lint` | Run the TypeScript no-emit check |
+| `npm run test` | Run the Vitest suite |
+| `npm run build` | Build production assets into `dist/` |
+| `npm run check` | Run TypeScript plus tests |
+| `npm run cap:sync` | Build web assets and sync Capacitor |
 
-## Tech Stack
+## Stack
 
 | Layer | Technology |
-|-------|-----------|
-| Framework | React 19 + TypeScript 5.8 |
-| Build | Vite 6.2 |
-| Styling | Tailwind CSS 4.1 (custom design tokens) |
-| Charts | Recharts 3.8 |
-| Icons | Lucide React |
-| AI | Google Gemini API via direct dev key or Supabase proxy |
-| Barcode | html5-qrcode + Open Food Facts API |
-| i18n | Custom (ES/EN, auto-detect system language) |
-| State | localStorage (Supabase-ready) |
+| --- | --- |
+| Frontend | React 19 + TypeScript |
+| Build | Vite 6 |
+| Styling | Tailwind CSS 4 + design tokens |
+| Native shell | Capacitor |
+| Backend | Supabase |
+| Runtime AI | Gemini via local dev key or Supabase proxy |
+| Monitoring | Sentry |
+| Subscriptions | RevenueCat |
 
-## Project Structure
+## Repository Shape
 
-```
+```text
 src/
-├── App.tsx                  # Root: routing, global state, handlers
-├── main.tsx                 # Entry point (providers)
-├── types.ts                 # TypeScript interfaces
-├── components/
-│   ├── BottomNav.tsx        # Mobile bottom navigation (4 tabs + FAB)
-│   ├── Sidebar.tsx          # Desktop sidebar navigation
-│   ├── GlobalHeader.tsx     # Top header (settings, profile, notifications)
-│   ├── CreateModal.tsx      # FAB action sheet (6 quick actions)
-│   ├── Onboarding.tsx       # 5-step onboarding wizard
-│   ├── RealFeelInline.tsx   # Post-meal wellness check-in (emoji + tags)
-│   ├── BarcodeScanner.tsx   # Camera barcode + Open Food Facts lookup
-│   └── EmptyState.tsx       # Reusable empty state component
-├── screens/
-│   ├── Home.tsx             # Hoy tab: macros, planned meals, insights
-│   ├── Cocina.tsx           # Kitchen tab: [Recetas] [Plan] [Lista]
-│   ├── Explore.tsx          # Explore tab: [Recetas] [Creadores] [Social]
-│   ├── More.tsx             # More menu: diary, fasting, profile, settings
-│   ├── RecipeDetail.tsx     # Full recipe view with food quality badge
-│   ├── AddMeal.tsx          # Log food (search, barcode, photo AI)
-│   ├── CreateRecipe.tsx     # 4-step recipe creator
-│   ├── ImportRecipeURL.tsx  # Import from YouTube/IG/TikTok/blogs
-│   ├── RealFeelDiary.tsx    # Real Score, Recharts chart, correlations
-│   ├── FastingTimer.tsx     # Circular timer, protocols, history
-│   ├── Creadores.tsx        # Creator profiles with verification
-│   ├── Profile.tsx          # Gamification: level, badges, streak
-│   ├── Settings.tsx         # Theme, language, biometrics, wearables
-│   ├── AICoach.tsx          # Gemini-powered chat with user context
-│   └── ...                  # Discovery, Community, Planner, ShoppingList, etc.
-├── i18n/
-│   ├── index.ts             # I18nProvider + useI18n hook
-│   └── locales/
-│       ├── es.ts            # Spanish (primary, ~300 keys)
-│       └── en.ts            # English (~300 keys)
-├── utils/
-│   ├── nutrition.ts         # TDEE calculator, food quality rating
-│   ├── gamification.ts      # Streaks, 14 badges, 6 levels, points
-│   └── correlations.ts      # Pearson correlations, insight engine
-├── hooks/
-│   └── useLocalStorageState.ts
-├── contexts/
-│   └── ThemeContext.tsx      # 6 theme variants (dark/light x 3 colors)
-└── data/
-    └── ingredients.ts       # Ingredient nutritional dictionary
+  config/
+  components/
+  contexts/
+  features/
+  hooks/
+  i18n/
+  lib/
+  types/
+supabase/
+  functions/
+docs/
+  ai/
+.claude/
+  skills/
 ```
 
-## Documentation
+## Core Docs
 
-| Document | Location | Purpose |
-|----------|----------|---------|
-| **CLAUDE.md** | Root | Project rules for AI agents (loaded every session) |
-| **AGENTS.md** | Root | Agent type guide + cost optimization |
-| **CHANGELOG.md** | Root | Version history |
-| Architecture | `docs/ARCHITECTURE.md` | System design, data models, decisions |
-| Rules | `docs/RULES.md` | Business logic, formulas, feature flags |
-| Contributing | `docs/CONTRIBUTING.md` | Dev workflow, checklists, patterns |
-| Skills | `docs/SKILLS.md` | Claude skills, credit optimization, enterprise checklist |
-| i18n Dictionary | `docs/i18n-dictionary.md` | Full ES/EN translation reference |
+| Document | Purpose |
+| --- | --- |
+| `AGENTS.md` | Universal repo entrypoint for development agents |
+| `docs/ai/README.md` | Shared multi-agent context map |
+| `docs/ai/project.md` | Stable project architecture and deployment map |
+| `docs/ai/workflow.md` | Collaboration, verification, and documentation workflow |
+| `docs/ai/state.md` | Current release snapshot and active risks |
+| `docs/ai/skills.md` | Repo skills and cross-tool capability mapping |
+| `docs/ai/handoffs.md` | Partial-memory handoff template and task log |
+| `docs/ai/boundaries.md` | Separation between development AI and product AI |
+| `docs/ai/compatibility.md` | Tool compatibility for Codex, Claude, Gemini, Cursor, Windsurf, and local models |
+| `docs/ARCHITECTURE.md` | System architecture reference |
+| `docs/CONTRIBUTING.md` | Development workflow and contribution checklist |
+| `docs/RULES.md` | Business rules and product logic |
+| `CHANGELOG.md` | Release history |
 
-## Navigation Map
+## Multi-agent setup
 
-```
-Hoy ────── Macros, Planned Today, Training Toggle, Insights, Real Feel
-Cocina ─── [Recetas] Collections, Search, Create, Import URL
-           [Plan]    Weekly calendar, drag meals, generate list
-           [Lista]   Auto shopping list, categories, share
-Explorar ─ [Recetas]   Public search, trending, filters
-           [Creadores] Verified profiles, follow
-           [Social]    Feed, posts, challenges
-Mas ────── Diario Real Feel, Ayuno, Challenges, AI Coach, Perfil, Ajustes, RIAL+
-```
+This repo now uses a layered approach:
+- `AGENTS.md` is the universal first read for any coding agent.
+- `docs/ai/` is the shared, versioned memory for deep project context.
+- `CLAUDE.md`, `GEMINI.md`, `.cursor/rules/`, and `.windsurf/rules/` are thin adapters for specific tools.
+
+This keeps cross-tool guidance synchronized while avoiding large duplicated prompts.
+
+## AI boundary
+
+There are two separate AI systems in this repository:
+- Development AI used to build and maintain the codebase
+- Product AI used inside the shipped app, such as AI Coach, recipe import, and photo recognition
+
+The shared docs in `docs/ai/` are only for development agents. They are not runtime prompts for end-user features.
+
+## Deployment notes
+
+- Release work should target `rial-food/main`.
+- The active Vercel project is `rial.app.v1.5`.
+- Production-safe Gemini usage should go through `supabase/functions/gemini-proxy`.
+- Do not commit secrets into tracked config.
 
 ## License
 
-Private / Confidential — RIAL 2026
+Private / Confidential - RIAL 2026

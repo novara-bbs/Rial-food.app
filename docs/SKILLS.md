@@ -1,5 +1,8 @@
 # Using Claude Code Skills Efficiently with RIAL
 
+This file is the Claude-specific companion to the shared multi-agent docs in `AGENTS.md` and `docs/ai/`.
+Use `docs/ai/skills.md` for the cross-tool view; use this file for Claude-oriented workflows and shortcuts.
+
 ## Available Skills (invoke with /)
 
 ### /commit
@@ -55,8 +58,8 @@ Bad: Sequential Grep calls trying different patterns
 - Use `preview_inspect` for CSS verification instead of screenshots
 
 ### 5. Context management
-- Keep CLAUDE.md under 200 lines — it's loaded every conversation
-- Use memory files for long-term knowledge
+- Keep CLAUDE.md thin — shared project knowledge now lives in `docs/ai/`
+- Use repo-owned memory in `docs/ai/` for long-term shared knowledge
 - Use TodoWrite for session-local tracking
 - Don't repeat context that's in CLAUDE.md
 

@@ -1,5 +1,13 @@
 # RIAL App - Changelog
 
+## [1.5.2] - 2026-04-14
+
+### Documentation and agent workflow
+- Replaced the old agent-type-only `AGENTS.md` with a universal multi-agent entrypoint for Codex, Claude, Gemini, Cursor, Windsurf, ChatGPT-style workflows, and local model setups
+- Added `docs/ai/` as the shared, versioned context layer for project map, workflow, current state, skills, handoffs, AI boundaries, and tool compatibility
+- Reduced `CLAUDE.md` to a thin adapter and added `GEMINI.md`, `.gemini/settings.json`, `.cursor/rules/`, and `.windsurf/rules/` so tool-specific context stays aligned without duplicating the repo rules
+- Reworked the local Claude skills so they write shared memory back into the repository instead of depending on private home-directory memory as the source of truth
+
 ## [1.5.1] - 2026-04-14
 
 ### Deployment hardening

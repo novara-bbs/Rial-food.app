@@ -1,0 +1,10 @@
+---
+trigger: model_decision
+description: Use this rule when workflow, architecture, or agent setup changes and docs may need synchronization.
+---
+
+- Keep `AGENTS.md` short and universal.
+- Keep `CLAUDE.md` and `GEMINI.md` thin and adapter-specific.
+- Keep shared project knowledge in `docs/ai/`.
+- If the workflow or release posture changes, review `README.md`, `CHANGELOG.md`, and the relevant files under `docs/ai/`.
+- Prefer updating one canonical section over copying the same rule into several files.

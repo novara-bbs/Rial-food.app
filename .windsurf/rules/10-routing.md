@@ -1,0 +1,10 @@
+---
+trigger: model_decision
+description: Use this rule when deciding how to split RIAL work across explore, planning, implementation, review, and handoff steps.
+---
+
+- Default flow: explore -> plan -> execute -> verify -> document -> handoff.
+- Split work in parallel only when file ownership is clearly separated.
+- Durable decisions belong in `docs/ai/state.md` or `CHANGELOG.md`.
+- Task transfer belongs in `docs/ai/handoffs.md`.
+- Use `docs/ai/skills.md` to map capabilities across tools before inventing tool-specific process.

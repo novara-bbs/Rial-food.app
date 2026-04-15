@@ -4,7 +4,7 @@
 
 ### Before editing
 1. **Read the file first** — never edit blind
-2. **Check CLAUDE.md** — verify your change aligns with project conventions
+2. **Check AGENTS.md + `docs/ai/`** — verify your change aligns with the shared project conventions
 3. **Plan the change** — identify all files that need updating (including i18n)
 
 ### During editing

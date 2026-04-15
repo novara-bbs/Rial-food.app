@@ -3,9 +3,11 @@
 ## Development Workflow
 
 ### Before starting any task
-1. Read `CLAUDE.md` for project rules and architecture
-2. Check `CHANGELOG.md` for recent changes
-3. Run `npm run dev` to start the dev server
+1. Read `AGENTS.md` for the universal repo rules
+2. Read `docs/ai/state.md` for the current release snapshot
+3. Use the tool-specific adapter only if your IDE needs it, for example `CLAUDE.md` or `GEMINI.md`
+4. Check `CHANGELOG.md` for recent changes
+5. Run `npm run dev` when the task needs the dev server
 
 ### Making changes
 1. **Read first**: Always read the files you'll modify before editing
@@ -36,7 +38,7 @@ Lighter, type-safe, no configuration overhead. The `Translations` type ensures b
 ### Why no state management library?
 Props + a few contexts cover the needs. The app has ~15 state values total. If state grows beyond 25 values, extract into domain contexts (NutritionContext, RecipeContext, UserContext).
 
-## Performance Tips for Claude Sessions
+## Performance Tips for Agent Sessions
 
 ### Credit-efficient patterns
 1. **Batch parallel reads**: Read 3-4 files in one message
@@ -56,7 +58,7 @@ Sequential (has dependencies):
 ```
 
 ### Common pitfalls
-- Don't edit App.tsx and a screen simultaneously — App.tsx imports may break
+- Don't edit App.tsx and a screen simultaneously if they depend on the same routing or shared state changes
 - Don't forget to add both ES and EN translations
 - Don't use `replace_all: true` on common words like "const" or "return"
 - Don't create files without adding them to the routing or import chain
