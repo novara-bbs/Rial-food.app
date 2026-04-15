@@ -12,7 +12,7 @@ import { createHandleCreatePost, createHandleAddComment } from '../features/soci
 import { createHandlePublishStory, createHandleMarkStoryViewed } from '../features/social/handlers/story-handlers';
 import type { Story, StorySlide, Notification as NotificationType, SocialLinks } from '../types/social';
 import { createHandleAddToleranceLog, createHandleRealFeelLog, createHandleCheckIn, createHandleCompleteCheckIn } from '../features/wellness/handlers/wellness-handlers';
-import { createHandleLogWeight, createHandleUpdateSnapshot, type LogWeightArgs } from '../features/wellness/handlers/weight-handlers';
+import { createHandleLogWeight, createHandleUpdateSnapshot, createHandleDeleteSnapshot, type LogWeightArgs } from '../features/wellness/handlers/weight-handlers';
 import type { BodySnapshot } from '../types/wellness';
 
 // ─── Types ───────────────────────────────────────────────────────────────────
@@ -117,6 +117,7 @@ interface AppStateContextType {
   handleDuplicateRecipe: (recipe: any) => void;
   handleLogWeight: (args: LogWeightArgs) => void;
   handleUpdateSnapshot: (args: { date: string; photoUrl?: string; measurements?: import('../types/wellness').BodyMeasurements }) => void;
+  handleDeleteSnapshot: (date: string) => void;
   navigateToRecipe: (recipe: any) => void;
   recipeToEdit: any;
   setRecipeToEdit: (recipe: any) => void;
@@ -380,6 +381,10 @@ export function AppStateProvider({ children }: { children: React.ReactNode }) {
     () => createHandleUpdateSnapshot({ setWeightHistory }),
     [setWeightHistory],
   );
+  const handleDeleteSnapshot = useMemo(
+    () => createHandleDeleteSnapshot({ setWeightHistory, setUserProfile }),
+    [setWeightHistory, setUserProfile],
+  );
   const handleImportRecipe = useMemo(
     () => createHandleImportRecipe({ setSavedRecipes, navigateTo, t }),
     [setSavedRecipes, navigateTo, t],
@@ -468,6 +473,7 @@ export function AppStateProvider({ children }: { children: React.ReactNode }) {
     handleDuplicateRecipe,
     handleLogWeight,
     handleUpdateSnapshot,
+    handleDeleteSnapshot,
     navigateToRecipe,
     recipeToEdit, setRecipeToEdit,
   }), [
@@ -489,7 +495,7 @@ export function AppStateProvider({ children }: { children: React.ReactNode }) {
     handleCreatePost, handleAddComment, handleAddToleranceLog,
     handleCreateRecipeSubmit, handleRealFeelLog, handleImportRecipe,
     handleAddToPlan, handleCheckIn, handleCompleteCheckIn,
-    handleDeleteRecipe, handleDuplicateRecipe, handleLogWeight, handleUpdateSnapshot, navigateToRecipe,
+    handleDeleteRecipe, handleDuplicateRecipe, handleLogWeight, handleUpdateSnapshot, handleDeleteSnapshot, navigateToRecipe,
     recipeToEdit,
   ]);
 

@@ -54,6 +54,29 @@ export function createHandleLogWeight({ setWeightHistory, setUserProfile }: Weig
 }
 
 /**
+ * Delete a snapshot by date. If the deleted entry was the most recent,
+ * updates `userProfile.weight` to the new latest kg (or leaves it if no entries remain).
+ */
+export function createHandleDeleteSnapshot({ setWeightHistory, setUserProfile }: WeightHandlerDeps) {
+  return (date: string) => {
+    setWeightHistory((prev: BodySnapshot[]) => {
+      const filtered = prev.filter(e => e.date !== date);
+      return filtered;
+    });
+    // Refresh profile.weight to the new latest after deletion.
+    // We read the state via the setter callback one more time to stay consistent.
+    setWeightHistory((prev: BodySnapshot[]) => {
+      const sorted = [...prev].sort((a, b) => b.date.localeCompare(a.date));
+      const latest = sorted[0];
+      if (latest && latest.kg > 0) {
+        setUserProfile((u: UserProfile) => ({ ...u, weight: latest.kg }));
+      }
+      return prev; // no change to history this pass
+    });
+  };
+}
+
+/**
  * Update photo or measurements on an existing snapshot without changing the kg value.
  * If no snapshot exists for the date, creates a stub entry with kg = 0 (to be filled later).
  */

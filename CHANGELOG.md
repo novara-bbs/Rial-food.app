@@ -1,5 +1,45 @@
 # RIAL App - Changelog
 
+## [1.5.10] - 2026-04-15
+
+### Q11 — Progress UX consolidation (Body + Nutrition)
+
+#### Root cause
+Q10 fragmented a single `BodySnapshot` (kg + photo + measurements per day) across 4 separate tabs. This contradicted the data model and user mental model: to see "what I logged on April 15" required visiting 3 tabs. Fixed by consolidating into **2 tabs** with a unified snapshot entry point.
+
+#### New structure
+- `Progress.tsx` reduced from 4 tabs → 2: **Cuerpo** (Body) · **Nutrición** (Nutrition)
+- **Body tab**: always-visible weight chart + stats strip, then a toggle between two views of the SAME data:
+  - **Timeline**: newest-first list of BodySnapshotCard (each card shows photo thumb + kg + measurement chips + note)
+  - **Calendario**: monthly grid with mini thumbnails on days with photos, Ruler icon on days with measurements, solid dot on days with weight-only
+- Unified CTA **"+ Registrar snapshot"** opens one modal that captures kg (required) + photo (collapsible) + measurements (collapsible) + note + date
+- Nutrition tab keeps weekly nutrition summary + streak + monthly meal-log calendar
+
+#### New components
+- `BodySnapshotCard.tsx` — compact card with adaptive content (only renders fields the snapshot has)
+- `LogSnapshotModal.tsx` — unified entry form with collapsible photo/measurements sections
+- `SnapshotDetailModal.tsx` — full snapshot view with Edit (reuses LogSnapshotModal) + Delete (two-tap confirm)
+- `BodyTimeline.tsx` — sorted list with filter chips (Todos / Con foto / Con medidas), each chip showing count
+- `BodyCalendar.tsx` — navigable monthly grid; tap populated day → detail modal; tap empty day → log modal prefilled with that date
+- `seed-body-snapshots.ts` — 30-day fixture with progressively richer snapshots (weight-only → photo → photo+waist → full); dev-only "Cargar datos de ejemplo" button in Progress when history is empty
+
+#### Handler
+- `createHandleDeleteSnapshot({ setWeightHistory, setUserProfile })` added to `weight-handlers.ts`
+- Wired as `handleDeleteSnapshot(date)` in `AppStateContext`; refreshes `userProfile.weight` if the deleted entry was the latest
+
+#### Photo seed strategy
+- SVG gradient placeholders encoded as base64 data URIs (no real bitmap images shipped in bundle)
+- Each seed day gets a different hue so timeline feels varied
+
+#### i18n
+- 30 new keys per locale under `progress.*` (tabs, timeline, calendar, filters, modal labels, empty states, confirmations)
+
+#### UX details
+- Modal uses shadcn `Dialog` (already in repo)
+- Delete flow is two-tap (first tap shows `¿Confirmar?`, second tap deletes + closes)
+- Edit modal opens on top of Detail, closes both on save
+- Timeline filter chips show counts so users know what's hidden before tapping
+
 ## [1.5.9] - 2026-04-15
 
 ### Q10 — Progress v2: BodySnapshot + tabs + photos + measurements

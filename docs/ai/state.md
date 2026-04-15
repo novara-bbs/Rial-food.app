@@ -9,6 +9,7 @@ Last updated: 2026-04-15
 - Vercel project id: `prj_t11VHYQjptazjUx7Y2hWLz0IDAjg`
 
 ## Recent merged commits (Rial-food.app main)
+- `(pending)` `feat(sprint-q11): Progress UX consolidation — 2 tabs, unified modal, timeline+calendar, seed data`
 - `1824bae` `feat(sprint-q10): BodySnapshot type, Progress tabs, photo timeline, measurements`
 - `94b16f7` `feat(sprint-q9): avatar upload, GlobalHeader fix, hydration/movement goal editors`
 - `f933347` `feat(sprint-q8): ProgressPreviewCard — sparkline, 7d delta, goal bar, quick-log, deep-link`
@@ -125,10 +126,11 @@ Execute Supabase sprint ONLY when ALL of these hold:
 - ~~**Q4**~~ ✓ DONE — A11y nested-button fix (Challenges, Creadores), icon aria-labels, day i18n, weight entries list
 - ~~**Q5**~~ ✓ DONE — Lighthouse/PWA audit: nav `aria-current` + `aria-label`, WCAG 4.1.2 form labels across 8 components, manifest dedup
 - ~~**Q7**~~ ✓ DONE — Weight flow unification: single `createHandleLogWeight` handler, onboarding seed, Settings sync, `getCurrentWeight` helper, 7 tests
-- **Q8** — Home Progress preview card: replace `WeightQuickLog` with `ProgressPreviewCard` (sparkline, delta, target gap, quick-log inline, "Ver detalles →" deep-link to Progress)
-- **Q9** — Avatar + goals + settings consolidation: GlobalHeader avatar fix, avatar upload in SettingsProfile, hydration/movement/unit goals in SettingsNutrition, verify Onboarding→dailyMacros wiring
-- **Q10** — Progress v2: `BodySnapshot` type (extends WeightEntry with photoUrl + measurements), tabs (Weight / Photos / Measurements / Nutrition), photo timeline scaffold, measurements form, calendar photo overlay
-- **Q6** — Supabase integration (gated — see feature-freeze gate above): apply migration → expand SyncKey per audit → wire `syncOnSignIn`/`pushToCloud` in AppStateContext → `useSupabasePersistence` toggle in SettingsSystem → E2E with real Supabase project
+- ~~**Q8**~~ ✓ DONE — ProgressPreviewCard on Home: sparkline, 7-day delta, goal bar, quick-log, "Ver detalles →" deep-link
+- ~~**Q9**~~ ✓ DONE — Avatar upload + GlobalHeader fix + hydration/movement sliders in SettingsNutrition
+- ~~**Q10**~~ ✓ DONE — BodySnapshot type, Progress tabs v1 (fragmented — superseded by Q11)
+- ~~**Q11**~~ ✓ DONE — Progress UX consolidation: 4 tabs → 2 (Cuerpo/Nutrición); unified LogSnapshotModal; Timeline + Calendar views of same data; SnapshotDetailModal with edit/delete; seed data for dev
+- **Q6** — Supabase integration (gated — see feature-freeze gate above): apply migration → expand SyncKey per audit (now includes `BodySnapshot.photoUrl` photos → Storage bucket) → wire `syncOnSignIn`/`pushToCloud` in AppStateContext → `useSupabasePersistence` toggle in SettingsSystem → E2E with real Supabase project
 
 ## When to update this file
 - A release line or deployment target changes
