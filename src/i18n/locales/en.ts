@@ -28,6 +28,7 @@ const en: Translations = {
     batchDesc: 'Save ~{mins} min this week by prepping ingredients in bulk',
     batchTimeSaved: '~{mins} min',
     batchTip: 'Prep base ingredients on Sunday to save time every day',
+    dayAbbr: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
   },
   home: {
     goodMorning: 'Good Morning',
@@ -218,6 +219,7 @@ const en: Translations = {
     title: 'Recipes',
     myRecipes: 'My recipes',
     search: 'Search recipes...',
+    removeIngredient: 'Remove ingredient',
     create: 'Create recipe',
     import: 'Import URL',
     collections: 'Collections',
@@ -347,6 +349,7 @@ const en: Translations = {
       following: 'Following',
       recipes: 'recipes',
       followers: 'followers',
+      viewProfile: 'View profile of',
     },
     social: {
       title: 'Social',
@@ -618,6 +621,7 @@ const en: Translations = {
     theme: 'Theme',
     language: 'Language',
     notifications: 'Notifications',
+    removeItem: 'Remove',
     privacy: 'Privacy',
     export: 'Export data',
     wearableConnections: 'Wearable connections',
@@ -1381,6 +1385,7 @@ const en: Translations = {
     weightNotePlaceholder: 'Optional note (e.g. after workout)',
     targetProgress: 'Progress toward goal',
     toGoal: 'to goal',
+    recentEntries: 'Recent entries',
   },
   toast: {
     recipeSaved: 'Recipe saved to Vault!',

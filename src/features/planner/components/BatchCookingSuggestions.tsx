@@ -12,12 +12,10 @@ interface BatchCookingSuggestionsProps {
   mealPlan: Record<number, any[]>;
 }
 
-const DAY_NAMES_ES = ['Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb', 'Dom'];
-
-function formatDays(indices: number[]): string {
+function formatDays(indices: number[], dayAbbr: string[]): string {
   return [...new Set(indices)]
     .sort((a, b) => a - b)
-    .map(i => DAY_NAMES_ES[i] ?? `D${i + 1}`)
+    .map(i => dayAbbr[i] ?? `D${i + 1}`)
     .join(', ');
 }
 
@@ -78,7 +76,7 @@ export default function BatchCookingSuggestions({ mealPlan }: BatchCookingSugges
                     {session.recipeNames.length > 3 && ` +${session.recipeNames.length - 3}`}
                   </p>
                   <p className="text-[9px] text-on-surface-variant/60 mt-0.5">
-                    {formatDays(session.dayIndices)}
+                    {formatDays(session.dayIndices, tc.dayAbbr)}
                   </p>
                 </div>
                 <div className="shrink-0 flex items-center gap-1 text-brand-secondary">

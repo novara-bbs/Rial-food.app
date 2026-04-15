@@ -221,6 +221,28 @@ export default function Progress({ onBack }: { onBack: () => void }) {
           </div>
         )}
 
+        {/* Recent weight entries */}
+        {sortedWeights.length > 0 && (
+          <div className="pt-3 border-t border-outline-variant/10 space-y-1">
+            <span className="font-label text-[9px] uppercase tracking-widest text-on-surface-variant">{p.recentEntries || 'Últimas entradas'}</span>
+            {[...sortedWeights].reverse().slice(0, 5).map(entry => (
+              <div key={entry.date} className="flex items-start justify-between gap-3 py-1">
+                <span className="font-label text-[10px] text-on-surface-variant shrink-0">
+                  {new Date(entry.date + 'T12:00:00').toLocaleDateString(undefined, { day: 'numeric', month: 'short' })}
+                </span>
+                <div className="flex-1 min-w-0 text-right">
+                  <span className="font-headline font-bold text-xs text-tertiary">
+                    {bodyWeightFromKg(entry.kg, unitSystem)} {weightUnit}
+                  </span>
+                  {entry.note && (
+                    <p className="text-[9px] text-on-surface-variant/70 mt-0.5 truncate">{entry.note}</p>
+                  )}
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
+
         {/* Weight input */}
         {isEditingWeight ? (
           <div className="pt-3 border-t border-outline-variant/10 space-y-2 animate-in fade-in slide-in-from-top-2">
@@ -241,9 +263,10 @@ export default function Progress({ onBack }: { onBack: () => void }) {
               <span className="text-sm font-bold text-on-surface-variant">{weightUnit}</span>
               <button type="button"
                 onClick={handleLogWeight}
+                aria-label={p.logWeight}
                 className="w-9 h-9 flex items-center justify-center rounded-full bg-primary text-on-primary hover:opacity-90 transition-opacity"
               >
-                <Check className="w-4 h-4" />
+                <Check className="w-4 h-4" aria-hidden="true" />
               </button>
             </div>
             <input

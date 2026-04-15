@@ -153,7 +153,7 @@ export default function SettingsNutrition({ dailyMacros, setDailyMacros, userPro
               return (
                 <span key={id} className="inline-flex items-center gap-1 bg-error/10 text-error px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider">
                   {ing?.name || id}
-                  <button type="button" onClick={() => removeDislike(id)} className="hover:bg-error/20 rounded-full p-0.5"><X className="w-3 h-3" /></button>
+                  <button type="button" onClick={() => removeDislike(id)} aria-label={t.settings.removeItem} className="hover:bg-error/20 rounded-full p-0.5"><X className="w-3 h-3" aria-hidden="true" /></button>
                 </span>
               );
             })}

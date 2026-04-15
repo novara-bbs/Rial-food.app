@@ -28,6 +28,7 @@ const es = {
     batchDesc: 'Ahorra ~{mins} min esta semana preparando ingredientes en lote',
     batchTimeSaved: '~{mins} min',
     batchTip: 'Prepara los ingredientes base el domingo y ahorra tiempo cada día',
+    dayAbbr: ['Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb', 'Dom'],
   },
   // Home screen
   home: {
@@ -225,6 +226,7 @@ const es = {
     myRecipes: 'Mis recetas',
     search: 'Buscar recetas...',
     create: 'Crear receta',
+    removeIngredient: 'Eliminar ingrediente',
     import: 'Importar URL',
     collections: 'Colecciones',
     quick: 'Rápidas',
@@ -357,6 +359,7 @@ const es = {
       following: 'Siguiendo',
       recipes: 'recetas',
       followers: 'seguidores',
+      viewProfile: 'Ver perfil de',
     },
     social: {
       title: 'Social',
@@ -638,6 +641,7 @@ const es = {
     theme: 'Tema',
     language: 'Idioma',
     notifications: 'Notificaciones',
+    removeItem: 'Eliminar',
     privacy: 'Privacidad',
     export: 'Exportar datos',
     wearableConnections: 'Conexiones wearable',
@@ -1430,6 +1434,7 @@ const es = {
     weightNotePlaceholder: 'Nota opcional (ej. después de entrenar)',
     targetProgress: 'Progreso hacia objetivo',
     toGoal: 'para el objetivo',
+    recentEntries: 'Últimas entradas',
   },
   toast: {
     recipeSaved: '¡Receta guardada en la Bóveda!',

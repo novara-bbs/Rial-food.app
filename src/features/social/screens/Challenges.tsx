@@ -50,23 +50,29 @@ export default function Challenges({ onBack }: { onBack: () => void }) {
           {CHALLENGES.filter(c => joinedChallenges.includes(c.id)).map(challenge => {
             const daysIn = getDaysInChallenge(challenge.id, challenge.days);
             const progress = (daysIn / challenge.days) * 100;
+            const challengeTitle = t.challenges[challenge.titleKey as keyof typeof t.challenges] as string || challenge.titleKey;
             return (
-              <div key={challenge.id} onClick={() => { setSelectedChallengeId(challenge.id); navigateTo('challenge-detail'); }} className="bg-surface-container-low border border-primary/30 rounded-sm p-5 space-y-3 cursor-pointer hover:border-primary/50 transition-colors">
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-3">
-                    <span className="text-2xl">{challenge.icon}</span>
-                    <div>
+              <div key={challenge.id} className="bg-surface-container-low border border-primary/30 rounded-sm p-5 space-y-3 hover:border-primary/50 transition-colors">
+                <div className="flex items-center justify-between gap-3">
+                  <button
+                    type="button"
+                    onClick={() => { setSelectedChallengeId(challenge.id); navigateTo('challenge-detail'); }}
+                    className="flex items-center gap-3 flex-1 min-w-0 text-left hover:opacity-80 transition-opacity"
+                    aria-label={challengeTitle}
+                  >
+                    <span className="text-2xl" aria-hidden="true">{challenge.icon}</span>
+                    <div className="min-w-0">
                       <h4 className="font-headline font-bold text-sm uppercase text-tertiary">
-                        {t.challenges[challenge.titleKey as keyof typeof t.challenges] || challenge.titleKey}
+                        {challengeTitle}
                       </h4>
                       <p className="text-[9px] text-on-surface-variant uppercase tracking-widest mt-0.5">
                         {t.challenges.dayProgress.replace('{current}', String(daysIn)).replace('{total}', String(challenge.days))}
                       </p>
                     </div>
-                  </div>
+                  </button>
                   <button type="button"
-                    onClick={(e) => { e.stopPropagation(); toggleChallenge(challenge.id); }}
-                    className="px-3 py-1.5 rounded-sm text-[9px] font-bold uppercase tracking-widest bg-surface-container-highest text-on-surface-variant hover:text-error transition-colors"
+                    onClick={() => toggleChallenge(challenge.id)}
+                    className="shrink-0 px-3 py-1.5 rounded-sm text-[9px] font-bold uppercase tracking-widest bg-surface-container-highest text-on-surface-variant hover:text-error transition-colors"
                   >
                     {t.challenges.leave}
                   </button>
@@ -87,30 +93,37 @@ export default function Challenges({ onBack }: { onBack: () => void }) {
         </h3>
         {CHALLENGES.map(challenge => {
           const isJoined = joinedChallenges.includes(challenge.id);
+          const challengeTitle = t.challenges[challenge.titleKey as keyof typeof t.challenges] as string || challenge.titleKey;
           return (
-            <div key={challenge.id} onClick={() => { setSelectedChallengeId(challenge.id); navigateTo('challenge-detail'); }} className="bg-surface-container-low border border-outline-variant/20 rounded-sm p-5 cursor-pointer hover:border-primary/50 transition-colors">
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-3">
-                  <span className="text-2xl">{challenge.icon}</span>
-                  <div>
+            <div key={challenge.id} className="bg-surface-container-low border border-outline-variant/20 rounded-sm p-5 hover:border-primary/50 transition-colors">
+              <div className="flex items-center justify-between gap-3">
+                <button
+                  type="button"
+                  onClick={() => { setSelectedChallengeId(challenge.id); navigateTo('challenge-detail'); }}
+                  className="flex items-center gap-3 flex-1 min-w-0 text-left hover:opacity-80 transition-opacity"
+                  aria-label={challengeTitle}
+                >
+                  <span className="text-2xl" aria-hidden="true">{challenge.icon}</span>
+                  <div className="min-w-0">
                     <h4 className="font-headline font-bold text-sm uppercase text-tertiary">
-                      {t.challenges[challenge.titleKey as keyof typeof t.challenges] || challenge.titleKey}
+                      {challengeTitle}
                     </h4>
                     <div className="flex items-center gap-3 mt-1 text-[9px] text-on-surface-variant uppercase tracking-widest">
-                      <span className="flex items-center gap-1"><Clock className="w-3 h-3" /> {challenge.days} {t.challenges.days}</span>
-                      <span className="flex items-center gap-1"><Flame className="w-3 h-3" /> {challenge.participants}</span>
+                      <span className="flex items-center gap-1"><Clock className="w-3 h-3" aria-hidden="true" /> {challenge.days} {t.challenges.days}</span>
+                      <span className="flex items-center gap-1"><Flame className="w-3 h-3" aria-hidden="true" /> {challenge.participants}</span>
                     </div>
                   </div>
-                </div>
+                </button>
                 <button type="button"
-                  onClick={(e) => { e.stopPropagation(); toggleChallenge(challenge.id); }}
-                  className={`px-4 py-2 rounded-sm text-[10px] font-bold uppercase tracking-widest transition-all flex items-center gap-1 ${
+                  onClick={() => toggleChallenge(challenge.id)}
+                  aria-pressed={isJoined}
+                  className={`shrink-0 px-4 py-2 rounded-sm text-[10px] font-bold uppercase tracking-widest transition-all flex items-center gap-1 ${
                     isJoined
                       ? 'bg-primary text-on-primary'
                       : 'bg-primary/10 text-primary border border-primary/20 hover:bg-primary hover:text-on-primary'
                   }`}
                 >
-                  {isJoined ? <><Check className="w-3 h-3" /> {t.challenges.joined}</> : t.challenges.join}
+                  {isJoined ? <><Check className="w-3 h-3" aria-hidden="true" /> {t.challenges.joined}</> : t.challenges.join}
                 </button>
               </div>
             </div>

@@ -1,5 +1,23 @@
 # RIAL App - Changelog
 
+## [1.5.4] - 2026-04-15
+
+### Q4 — A11y + i18n cleanup + UX gaps
+
+#### A11y
+- `Challenges.tsx`: removed nested `<div onClick>` + `<button>` pattern — cards now use sibling buttons (navigate / join-leave), no nested interactives; added `aria-pressed` to toggle button, `aria-hidden` to decorative icons
+- `Creadores.tsx`: same fix — card content area is now a `<button>` for profile navigation; follow/unfollow is a sibling button with `aria-pressed` + `aria-label`
+- `SettingsNutrition.tsx`: added `aria-label={t.settings.removeItem}` to icon-only dislike-remove button
+- `RecipeDetail.tsx`: added `aria-label={t.recipes.removeIngredient}` to icon-only extra-ingredient remove button
+- `Progress.tsx`: added `aria-label` to weight-confirm icon button
+
+#### i18n
+- `BatchCookingSuggestions.tsx`: replaced hardcoded `DAY_NAMES_ES` array with `t.cocina.dayAbbr` — day abbreviations now respect locale (ES: Lun-Dom, EN: Mon-Sun)
+- Added keys: `cocina.dayAbbr`, `progress.recentEntries`, `settings.removeItem`, `recipes.removeIngredient`, `explore.creators.viewProfile` in both ES + EN
+
+#### UX gaps (left behind from Q3)
+- `Progress.tsx`: weight notes are now visible — added "Recent entries" list (last 5, newest first) showing date, weight, and optional note inline; was saved but never displayed
+
 ## [1.5.3] - 2026-04-15
 
 ### Q1 — Fuzzy ingredient matching (C3 ImportRecipeURL deeper parsing)

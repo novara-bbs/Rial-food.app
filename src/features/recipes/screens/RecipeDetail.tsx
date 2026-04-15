@@ -637,7 +637,7 @@ export default function RecipeDetail({ recipe, onBack, onSaveRecipe, isSaved, on
                     <div className="flex items-center gap-1 bg-surface-container-low p-1.5 rounded-sm border border-outline-variant/10">
                       <input type="number" value={ing.amount} onChange={e => updateExtraIngredientAmount(ing.id, e.target.value)} className="w-14 bg-surface-container-highest border-none rounded-sm py-1 px-2 text-sm text-tertiary text-center focus:outline-none focus:ring-1 focus:ring-primary" />
                       <span className="text-[10px] text-on-surface-variant">{ing.unit}</span>
-                      <button type="button" onClick={() => removeExtraIngredient(ing.id)} className="p-1 text-outline hover:text-error"><X className="w-3.5 h-3.5" /></button>
+                      <button type="button" onClick={() => removeExtraIngredient(ing.id)} aria-label={t.recipes.removeIngredient} className="p-1 text-outline hover:text-error"><X className="w-3.5 h-3.5" aria-hidden="true" /></button>
                     </div>
                   )}
                 </div>
