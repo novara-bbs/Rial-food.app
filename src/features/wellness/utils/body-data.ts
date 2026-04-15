@@ -1,4 +1,4 @@
-import type { WeightEntry } from '../../../contexts/AppStateContext';
+import type { BodySnapshot } from '../../../types/wellness';
 
 /**
  * Returns the user's current weight in kg.
@@ -9,7 +9,7 @@ import type { WeightEntry } from '../../../contexts/AppStateContext';
  */
 export function getCurrentWeight(
   userProfile: { weight?: number } | null | undefined,
-  weightHistory: WeightEntry[],
+  weightHistory: BodySnapshot[],
 ): number | null {
   if (weightHistory.length > 0) {
     const sorted = [...weightHistory].sort((a, b) => b.date.localeCompare(a.date));

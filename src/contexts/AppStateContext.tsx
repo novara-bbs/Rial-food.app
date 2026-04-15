@@ -12,7 +12,8 @@ import { createHandleCreatePost, createHandleAddComment } from '../features/soci
 import { createHandlePublishStory, createHandleMarkStoryViewed } from '../features/social/handlers/story-handlers';
 import type { Story, StorySlide, Notification as NotificationType, SocialLinks } from '../types/social';
 import { createHandleAddToleranceLog, createHandleRealFeelLog, createHandleCheckIn, createHandleCompleteCheckIn } from '../features/wellness/handlers/wellness-handlers';
-import { createHandleLogWeight, type LogWeightArgs } from '../features/wellness/handlers/weight-handlers';
+import { createHandleLogWeight, createHandleUpdateSnapshot, type LogWeightArgs } from '../features/wellness/handlers/weight-handlers';
+import type { BodySnapshot } from '../types/wellness';
 
 // ─── Types ───────────────────────────────────────────────────────────────────
 
@@ -69,7 +70,7 @@ interface AppStateContextType {
   toggleFavorite: (foodId: string) => void;
 
   // Weight & history
-  weightHistory: WeightEntry[];
+  weightHistory: BodySnapshot[];
   setWeightHistory: (v: any) => void;
   nutritionHistory: DailyArchive[];
   setNutritionHistory: (v: any) => void;
@@ -115,6 +116,7 @@ interface AppStateContextType {
   handleDeleteRecipe: (recipeId: any) => void;
   handleDuplicateRecipe: (recipe: any) => void;
   handleLogWeight: (args: LogWeightArgs) => void;
+  handleUpdateSnapshot: (args: { date: string; photoUrl?: string; measurements?: import('../types/wellness').BodyMeasurements }) => void;
   navigateToRecipe: (recipe: any) => void;
   recipeToEdit: any;
   setRecipeToEdit: (recipe: any) => void;
@@ -170,11 +172,8 @@ interface ShoppingItem {
   checked: boolean;
 }
 
-export interface WeightEntry {
-  date: string;
-  kg: number;
-  note?: string;
-}
+// BodySnapshot + WeightEntry alias defined in src/types/wellness.ts
+export type { WeightEntry, BodySnapshot, BodyMeasurements } from '../types/wellness';
 
 // ─── Context ─────────────────────────────────────────────────────────────────
 
@@ -319,7 +318,7 @@ export function AppStateProvider({ children }: { children: React.ReactNode }) {
   const [selectedChallengeId, setSelectedChallengeId] = useState<string | null>(null);
 
   // Weight & nutrition history (persistent across days)
-  const [weightHistory, setWeightHistory] = useLocalStorageState<WeightEntry[]>('weightHistory', []);
+  const [weightHistory, setWeightHistory] = useLocalStorageState<BodySnapshot[]>('weightHistory', []);
   const [nutritionHistory, setNutritionHistory] = useLocalStorageState<DailyArchive[]>('nutritionHistory', []);
 
   // Daily food diary log (persisted, cleared manually or on new day)
@@ -376,6 +375,10 @@ export function AppStateProvider({ children }: { children: React.ReactNode }) {
   const handleLogWeight = useMemo(
     () => createHandleLogWeight({ setWeightHistory, setUserProfile }),
     [setWeightHistory, setUserProfile],
+  );
+  const handleUpdateSnapshot = useMemo(
+    () => createHandleUpdateSnapshot({ setWeightHistory }),
+    [setWeightHistory],
   );
   const handleImportRecipe = useMemo(
     () => createHandleImportRecipe({ setSavedRecipes, navigateTo, t }),
@@ -464,6 +467,7 @@ export function AppStateProvider({ children }: { children: React.ReactNode }) {
     handleDeleteRecipe,
     handleDuplicateRecipe,
     handleLogWeight,
+    handleUpdateSnapshot,
     navigateToRecipe,
     recipeToEdit, setRecipeToEdit,
   }), [
@@ -485,7 +489,7 @@ export function AppStateProvider({ children }: { children: React.ReactNode }) {
     handleCreatePost, handleAddComment, handleAddToleranceLog,
     handleCreateRecipeSubmit, handleRealFeelLog, handleImportRecipe,
     handleAddToPlan, handleCheckIn, handleCompleteCheckIn,
-    handleDeleteRecipe, handleDuplicateRecipe, handleLogWeight, navigateToRecipe,
+    handleDeleteRecipe, handleDuplicateRecipe, handleLogWeight, handleUpdateSnapshot, navigateToRecipe,
     recipeToEdit,
   ]);
 

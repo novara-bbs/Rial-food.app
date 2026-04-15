@@ -1,5 +1,31 @@
 # RIAL App - Changelog
 
+## [1.5.9] - 2026-04-15
+
+### Q10 — Progress v2: BodySnapshot + tabs + photos + measurements
+
+#### Data model
+- New `src/types/wellness.ts`: `BodySnapshot` type with optional `photoUrl` (base64) and `measurements` (`chestCm`, `waistCm`, `hipsCm`, `bodyFatPct`)
+- `WeightEntry` kept as backward-compat alias (`type WeightEntry = BodySnapshot`)
+- `AppStateContext`: `WeightEntry` inline definition replaced with re-export from `types/wellness`; internal state typed as `BodySnapshot[]`
+
+#### Weight handlers
+- `weight-handlers.ts`: extended `LogWeightArgs` with optional `photoUrl` and `measurements`
+- Merges with existing snapshot on re-weigh (preserves photo/measurements when weight is updated)
+- New `createHandleUpdateSnapshot`: updates photo/measurements on an existing snapshot without changing kg; creates stub entry if date has no snapshot
+- `handleUpdateSnapshot` wired into `AppStateContext` and exposed via `useAppState()`
+
+#### Progress.tsx — tabbed interface
+- **4 tabs**: Peso | Fotos | Medidas | Nutrición
+- **Weight tab**: existing chart, delta, target progress bar, recent entries (with camera icon indicator), log form — unchanged behavior
+- **Photos tab**: today's photo add/preview (camera + gallery), vertical timeline of all snapshots with photos (newest first), empty state CTA, remove button per photo
+- **Measurements tab**: inline form (chest/waist/hips/body fat %); saves to today's snapshot; delta table vs. earliest measurement entry; history list
+- **Nutrition tab**: existing nutrition summary + consistency calendar moved here; calendar shows a small dot on dates with photos
+- **Storage guard**: `estimateStorageUsage()` check before photo upload → toast warning at >4 MB
+
+#### i18n
+- 28 new keys added to both `es.ts` and `en.ts` under `progress.*` (tabs, photos, measurements, storage warning)
+
 ## [1.5.8] - 2026-04-15
 
 ### Q9 — Avatar + goals + settings consolidation
