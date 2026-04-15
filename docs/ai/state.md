@@ -9,7 +9,7 @@ Last updated: 2026-04-15
 - Vercel project id: `prj_t11VHYQjptazjUx7Y2hWLz0IDAjg`
 
 ## Recent merged commits (Rial-food.app main)
-- `(pending)` `feat(sprint-q11): Progress UX consolidation — 2 tabs, unified modal, timeline+calendar, seed data`
+- `6f7bcc3` `feat(sprint-q11): Progress UX consolidation — 2 tabs, unified modal, timeline+calendar, seed data`
 - `1824bae` `feat(sprint-q10): BodySnapshot type, Progress tabs, photo timeline, measurements`
 - `94b16f7` `feat(sprint-q9): avatar upload, GlobalHeader fix, hydration/movement goal editors`
 - `f933347` `feat(sprint-q8): ProgressPreviewCard — sparkline, 7d delta, goal bar, quick-log, deep-link`
