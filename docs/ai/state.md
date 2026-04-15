@@ -9,7 +9,7 @@ Last updated: 2026-04-15
 - Vercel project id: `prj_t11VHYQjptazjUx7Y2hWLz0IDAjg`
 
 ## Recent merged commits (Rial-food.app main)
-- `(pending)` `feat(sprint-q10): BodySnapshot type, Progress tabs, photo timeline, measurements`
+- `1824bae` `feat(sprint-q10): BodySnapshot type, Progress tabs, photo timeline, measurements`
 - `94b16f7` `feat(sprint-q9): avatar upload, GlobalHeader fix, hydration/movement goal editors`
 - `f933347` `feat(sprint-q8): ProgressPreviewCard — sparkline, 7d delta, goal bar, quick-log, deep-link`
 - `a9d2ec3` `feat(sprint-q7): unified weight flow — single handler, onboarding seed, Settings sync`
@@ -21,8 +21,8 @@ Last updated: 2026-04-15
 - `1659206` `feat(sprint-q1): fuzzy ingredient matching v2 — aliases, prep-strip, measurements`
 
 ## Quality baseline (2026-04-15)
-- TypeScript: 0 errors (`npx tsc --noEmit`)
-- Tests: 370/370 unit tests passing — 7 new tests added in Q7 (weight-handlers); vitest.config exclude fixed for worktree
+- TypeScript: 0 errors (`npx tsc --noEmit`) — verified after each of Q7–Q10
+- Tests: 370/370 unit tests passing — 7 new tests in Q7 (weight-handlers); vitest.config .claude/** exclude prevents worktree bleed
 - E2E: fixed after Sprint P (regex matched Spanish `"Entendido, continuar"`; webServer now `vite preview` in CI)
 - Build: main app chunk 284 KB raw / 56 KB gzip (recharts + react-markdown deferred)
 - Lint: 0 errors
