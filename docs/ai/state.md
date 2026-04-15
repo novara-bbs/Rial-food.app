@@ -4,16 +4,16 @@ Last updated: 2026-04-15
 
 ## Release snapshot
 - Root branch: `main` (clean, no open PRs)
-- Release remote: `rial-food`
+- Release remote: `rial-food` (worktree remote: `origin`)
 - Active Vercel project: `rial.app.v1.5`
 - Vercel project id: `prj_t11VHYQjptazjUx7Y2hWLz0IDAjg`
 
 ## Recent merged commits (Rial-food.app main)
+- `83e6c49` `feat(sprint-p): WeeklyReview Sunday home card + a11y AvatarRing button`
+- `fb5e062` `docs(ai): update state.md with Sprint O results and next sprint roadmap`
+- `6075a36` `docs(v1.5.2): multi-agent context system — shared docs/ai/, thin tool adapters`
 - `3369b50` `feat(sprint-o): Supabase migration, WeeklyReview, 5 test suites, a11y + bundle v2`
 - `dd085b8` `perf + refactor: AppStateContext memoization, lazy seeds, Settings/RecipeDetail splits`
-- `d8bb14e` `refactor(recipes): extract NutritionBar, SubstitutionPicker, DaySelectorSheet`
-- `080c5d6` `refactor(settings): split Settings.tsx into 4 focused section components`
-- `a1b620e` `fix: route Gemini features through Supabase proxy`
 
 ## Quality baseline (2026-04-15)
 - TypeScript: 0 errors (`npx tsc --noEmit`)
@@ -46,16 +46,22 @@ Last updated: 2026-04-15
 - All user-visible strings: `t.section.key` via `useI18n()`
 
 ## Current risks to watch
-- Supabase DB migration not yet applied to remote project (apply before backend features land)
-- `useSupabasePersistence` flag not wired in Settings UI (add toggle in SettingsSystem)
-- WeeklyReview has no Sunday trigger/notification yet (manual navigation from More menu only)
+- Supabase DB migration not yet applied to remote project (intentionally deferred — apply only after features stable)
+- `useSupabasePersistence` flag not wired (intentionally deferred — full Supabase sprint after feature-complete)
 - vendor-recharts chunk is 102 KB gzip — acceptable but worth monitoring
+- Challenges/Creadores card divs still have onClick (complex to fix: nested buttons → needs restructure)
+
+## Supabase integration strategy
+Infrastructure is prepared (`migration SQL`, `sync.ts`, `AuthContext`, auth screens). Full wiring intentionally deferred until:
+1. All major features complete and data model frozen
+2. Dedicated "Sprint Supabase": apply migration + wire sync in AppStateContext + Settings toggle + E2E test
 
 ## Next sprint candidates
-- P1: Apply Supabase migration + wire `useSupabasePersistence` flag in SettingsSystem
-- P2: Auth flow (Login/Signup screens already exist + routed, wire to Supabase auth)
-- P3: WeeklyReview Sunday trigger (service worker notification + Home card)
-- P4: Lighthouse audit (target: Performance ≥ 85, A11y ≥ 95, PWA ≥ 90)
+- Q1: Feature completeness — C3 (ImportRecipeURL deeper ingredient parsing), D (AddMeal unified search + multi-add)
+- Q2: Feature completeness — E (batch cooking/leftovers v0 rule ports), P (custom weight refinements)
+- Q3: A11y — Challenges/Creadores card restructure, remaining icon-only button audit
+- Q4: Lighthouse/PWA (Performance ≥ 85, A11y ≥ 95, PWA ≥ 90) — after features land
+- Supabase (last sprint): migration → sync wiring → Settings toggle → E2E
 
 ## When to update this file
 - A release line or deployment target changes
