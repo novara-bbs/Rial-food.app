@@ -5,8 +5,9 @@
 import { test, expect } from '@playwright/test';
 
 // Helper: dismiss GDPR consent if shown
+// Matches Spanish "Entendido, continuar" or English "Accept"
 async function dismissConsent(page: import('@playwright/test').Page) {
-  const consentBtn = page.getByRole('button', { name: /acepto|accept/i });
+  const consentBtn = page.getByRole('button', { name: /entendido|continuar|acepto|accept/i });
   if (await consentBtn.isVisible({ timeout: 2000 }).catch(() => false)) {
     await consentBtn.click();
   }

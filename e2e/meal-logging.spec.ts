@@ -16,8 +16,8 @@ test.beforeEach(async ({ page }) => {
     }));
   });
   await page.reload();
-  // Dismiss consent if visible
-  const consentBtn = page.getByRole('button', { name: /acepto|accept/i });
+  // Dismiss consent if visible (Spanish: "Entendido, continuar")
+  const consentBtn = page.getByRole('button', { name: /entendido|continuar|acepto|accept/i });
   if (await consentBtn.isVisible({ timeout: 1500 }).catch(() => false)) {
     await consentBtn.click();
   }

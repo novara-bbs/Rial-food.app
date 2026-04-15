@@ -33,7 +33,8 @@ export default defineConfig({
     },
   ],
   webServer: {
-    command: 'npm run dev',
+    // In CI: serve the pre-built dist/. Locally: use dev server for HMR.
+    command: process.env.CI ? 'npx vite preview --port 3000' : 'npm run dev',
     url: 'http://localhost:3000',
     reuseExistingServer: !process.env.CI,
     timeout: 60_000,
