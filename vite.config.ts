@@ -104,6 +104,17 @@ export default defineConfig(({mode}) => {
             'vendor-react': ['react', 'react-dom'],
             'vendor-ui': ['recharts', 'sonner', 'react-markdown'],
             'vendor-icons': ['lucide-react'],
+            // Data seeded on first-run only — keep out of the app shell so that
+            // returning users (who skip the dynamic import) never fetch them.
+            'data-ingredients': ['./src/features/food/data/ingredients'],
+            'data-seeds': [
+              './src/features/food/data/seed-recipes',
+              './src/features/planner/data/seed-meal-plan',
+              './src/features/planner/data/seed-shopping',
+              './src/features/social/data/seed-posts',
+              './src/features/social/data/seed-stories',
+              './src/features/wellness/data/seed-tolerance',
+            ],
           },
         },
       },

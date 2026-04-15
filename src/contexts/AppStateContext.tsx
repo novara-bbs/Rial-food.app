@@ -1,22 +1,15 @@
-import React, { createContext, useContext, useState, useMemo } from 'react';
+import React, { createContext, useContext, useState, useMemo, useCallback, useEffect } from 'react';
 import { toast } from 'sonner';
 import { Recipe, DailyCheckIn as DailyCheckInType, Ingredient } from '../types';
 import { useLocalStorageState } from '../hooks/useLocalStorageState';
 import { useDailyReset, DailyArchive } from '../hooks/useDailyReset';
 import { useNavigation } from './NavigationContext';
 import { Allergen } from '../types';
-import { INGREDIENT_DICTIONARY } from '../features/food/data/ingredients';
-import { SEED_RECIPES } from '../features/food/data/seed-recipes';
-import { SEED_MEAL_PLAN } from '../features/planner/data/seed-meal-plan';
-import { SEED_SHOPPING_LIST } from '../features/planner/data/seed-shopping';
-import { SEED_POSTS } from '../features/social/data/seed-posts';
-import { SEED_TOLERANCE_LOGS } from '../features/wellness/data/seed-tolerance';
 import { createHandleLogMeal, createHandleLogMealNow, DailyLogEntry, FoodHistoryEntry } from '../features/food/handlers/meal-handlers';
 import { useI18n } from '../i18n';
 import { createHandleSaveRecipe, createHandleAddToPlan, createHandleCreateRecipeSubmit, createHandleImportRecipe, createHandleDeleteRecipe, createHandleDuplicateRecipe } from '../features/recipes/handlers/recipe-handlers';
 import { createHandleCreatePost, createHandleAddComment } from '../features/social/handlers/social-handlers';
 import { createHandlePublishStory, createHandleMarkStoryViewed } from '../features/social/handlers/story-handlers';
-import { SEED_STORIES } from '../features/social/data/seed-stories';
 import type { Story, StorySlide, Notification as NotificationType, SocialLinks } from '../types/social';
 import { createHandleAddToleranceLog, createHandleRealFeelLog, createHandleCheckIn, createHandleCompleteCheckIn } from '../features/wellness/handlers/wellness-handlers';
 
@@ -197,13 +190,13 @@ export function AppStateProvider({ children }: { children: React.ReactNode }) {
   const [likedPosts, setLikedPosts] = useLocalStorageState<number[]>('likedPosts', []);
   const [savedPosts, setSavedPosts] = useLocalStorageState<number[]>('savedPosts', []);
 
-  const toggleLikePost = (postId: number) => {
+  const toggleLikePost = useCallback((postId: number) => {
     setLikedPosts((prev: number[]) => prev.includes(postId) ? prev.filter(id => id !== postId) : [...prev, postId]);
-  };
+  }, [setLikedPosts]);
 
-  const toggleSavePost = (postId: number) => {
+  const toggleSavePost = useCallback((postId: number) => {
     setSavedPosts((prev: number[]) => prev.includes(postId) ? prev.filter(id => id !== postId) : [...prev, postId]);
-  };
+  }, [setSavedPosts]);
 
   // Persisted state
   const [isPro, setIsPro] = useLocalStorageState<boolean>('isPro', false);
@@ -242,41 +235,83 @@ export function AppStateProvider({ children }: { children: React.ReactNode }) {
   // User-created / scanned foods
   const [userFoods, setUserFoods] = useLocalStorageState<Ingredient[]>('userFoods', []);
 
-  const addUserFood = (food: Ingredient) => {
+  const addUserFood = useCallback((food: Ingredient) => {
     setUserFoods((prev: Ingredient[]) => {
       // Avoid duplicates by id
       if (prev.some(f => f.id === food.id)) return prev;
       return [food, ...prev];
     });
     toast.success(t.mealToasts.foodSaved);
-  };
+  }, [setUserFoods, t]);
 
-  // Merged dictionary: built-in + user foods
+  // Ingredient dictionary (lazy-loaded to keep ~90KB out of the initial bundle)
+  const [baseDictionary, setBaseDictionary] = useState<Ingredient[]>([]);
+  useEffect(() => {
+    let cancelled = false;
+    import('../features/food/data/ingredients').then((m) => {
+      if (!cancelled) setBaseDictionary(m.INGREDIENT_DICTIONARY);
+    });
+    return () => { cancelled = true; };
+  }, []);
+
   const mergedDictionary = useMemo(
-    () => [...INGREDIENT_DICTIONARY, ...userFoods],
-    [userFoods],
+    () => [...baseDictionary, ...userFoods],
+    [baseDictionary, userFoods],
   );
 
-  const [savedRecipes, setSavedRecipes] = useLocalStorageState<any[]>('savedRecipes', SEED_RECIPES);
+  // Seeded content — all lazy-loaded on first mount if localStorage is empty
+  // Skipping the dynamic import when localStorage already has data keeps the
+  // cold-start path tight for returning users.
+  const [savedRecipes, setSavedRecipes] = useLocalStorageState<any[]>('savedRecipes', []);
+  useEffect(() => {
+    if (!window.localStorage.getItem('savedRecipes')) {
+      import('../features/food/data/seed-recipes').then((m) => setSavedRecipes(m.SEED_RECIPES));
+    }
+  }, []);
 
-  const [mealPlan, setMealPlan] = useLocalStorageState<Record<number, any[]>>('mealPlan', SEED_MEAL_PLAN);
+  const [mealPlan, setMealPlan] = useLocalStorageState<Record<number, any[]>>('mealPlan', {});
+  useEffect(() => {
+    if (!window.localStorage.getItem('mealPlan')) {
+      import('../features/planner/data/seed-meal-plan').then((m) => setMealPlan(m.SEED_MEAL_PLAN));
+    }
+  }, []);
 
-  const [shoppingList, setShoppingList] = useLocalStorageState<ShoppingItem[]>('shoppingList', SEED_SHOPPING_LIST);
+  const [shoppingList, setShoppingList] = useLocalStorageState<ShoppingItem[]>('shoppingList', []);
+  useEffect(() => {
+    if (!window.localStorage.getItem('shoppingList')) {
+      import('../features/planner/data/seed-shopping').then((m) => setShoppingList(m.SEED_SHOPPING_LIST));
+    }
+  }, []);
 
-  const [communityPosts, setCommunityPosts] = useLocalStorageState<any[]>('communityPosts', SEED_POSTS);
+  const [communityPosts, setCommunityPosts] = useLocalStorageState<any[]>('communityPosts', []);
+  useEffect(() => {
+    if (!window.localStorage.getItem('communityPosts')) {
+      import('../features/social/data/seed-posts').then((m) => setCommunityPosts(m.SEED_POSTS));
+    }
+  }, []);
 
-  const [toleranceLogs, setToleranceLogs] = useLocalStorageState<any[]>('toleranceLogs', SEED_TOLERANCE_LOGS);
+  const [toleranceLogs, setToleranceLogs] = useLocalStorageState<any[]>('toleranceLogs', []);
+  useEffect(() => {
+    if (!window.localStorage.getItem('toleranceLogs')) {
+      import('../features/wellness/data/seed-tolerance').then((m) => setToleranceLogs(m.SEED_TOLERANCE_LOGS));
+    }
+  }, []);
 
   const [realFeelLogs, setRealFeelLogs] = useLocalStorageState<any[]>('realFeelLogs', []);
 
-  // Stories
-  const [communityStories, setCommunityStories] = useLocalStorageState<Story[]>('communityStories', SEED_STORIES);
+  // Stories — lazy-seeded
+  const [communityStories, setCommunityStories] = useLocalStorageState<Story[]>('communityStories', []);
+  useEffect(() => {
+    if (!window.localStorage.getItem('communityStories')) {
+      import('../features/social/data/seed-stories').then((m) => setCommunityStories(m.SEED_STORIES));
+    }
+  }, []);
 
   // Notifications
   const [notifications, setNotifications] = useLocalStorageState<NotificationType[]>('notifications', []);
-  const markAllNotificationsRead = () => {
+  const markAllNotificationsRead = useCallback(() => {
     setNotifications((prev: NotificationType[]) => prev.map(n => ({ ...n, read: true })));
-  };
+  }, [setNotifications]);
 
   // Challenge detail
   const [selectedChallengeId, setSelectedChallengeId] = useState<string | null>(null);
@@ -292,43 +327,91 @@ export function AppStateProvider({ children }: { children: React.ReactNode }) {
   const [foodHistory, setFoodHistory] = useLocalStorageState<FoodHistoryEntry[]>('foodHistory', []);
   const [favoriteIds, setFavoriteIds] = useLocalStorageState<string[]>('favoriteIds', []);
 
-  const toggleFavorite = (foodId: string) => {
+  const toggleFavorite = useCallback((foodId: string) => {
     setFavoriteIds((prev: string[]) =>
       prev.includes(foodId) ? prev.filter(id => id !== foodId) : [...prev, foodId]
     );
-  };
+  }, [setFavoriteIds]);
 
   // Reset daily counters when calendar date changes (midnight rollover)
   useDailyReset({ setDailyLog, setDailyMacros, setHydration, setMovement });
 
-  // ─── Handlers (delegated to feature modules) ───────────────────────────────
+  // ─── Handlers (delegated to feature modules, memoized to prevent re-renders) ──
 
-  const navigateToRecipe = (recipe: any) => {
+  const navigateToRecipe = useCallback((recipe: any) => {
     setSelectedRecipe(recipe);
     navigateTo('recipe-detail');
-  };
+  }, [navigateTo]);
 
-  const handleLogMeal = createHandleLogMeal({ targetPlanDay, setMealPlan, setShoppingList, setTargetPlanDay, setDailyMacros, setDailyLog, setFoodHistory, navigateTo, previousScreen, t });
-  const handleLogMealNow = createHandleLogMealNow({ setDailyMacros, setDailyLog, setFoodHistory, navigateTo, t });
-  const handleSaveRecipe = createHandleSaveRecipe({ setSavedRecipes, t });
-  const handleAddToPlan = createHandleAddToPlan({ setSavedRecipes, setMealPlan, setShoppingList, navigateTo, t });
-  const handleCreateRecipeSubmit = createHandleCreateRecipeSubmit({ setSavedRecipes, navigateTo, t });
-  const handleDeleteRecipe = createHandleDeleteRecipe({ setSavedRecipes, navigateTo, t });
-  const handleDuplicateRecipe = createHandleDuplicateRecipe({ setSavedRecipes, navigateTo, t });
-  const handleImportRecipe = createHandleImportRecipe({ setSavedRecipes, navigateTo, t });
+  const handleLogMeal = useMemo(
+    () => createHandleLogMeal({ targetPlanDay, setMealPlan, setShoppingList, setTargetPlanDay, setDailyMacros, setDailyLog, setFoodHistory, navigateTo, previousScreen, t }),
+    [targetPlanDay, setMealPlan, setShoppingList, setDailyMacros, setDailyLog, setFoodHistory, navigateTo, previousScreen, t],
+  );
+  const handleLogMealNow = useMemo(
+    () => createHandleLogMealNow({ setDailyMacros, setDailyLog, setFoodHistory, navigateTo, t }),
+    [setDailyMacros, setDailyLog, setFoodHistory, navigateTo, t],
+  );
+  const handleSaveRecipe = useMemo(
+    () => createHandleSaveRecipe({ setSavedRecipes, t }),
+    [setSavedRecipes, t],
+  );
+  const handleAddToPlan = useMemo(
+    () => createHandleAddToPlan({ setSavedRecipes, setMealPlan, setShoppingList, navigateTo, t }),
+    [setSavedRecipes, setMealPlan, setShoppingList, navigateTo, t],
+  );
+  const handleCreateRecipeSubmit = useMemo(
+    () => createHandleCreateRecipeSubmit({ setSavedRecipes, navigateTo, t }),
+    [setSavedRecipes, navigateTo, t],
+  );
+  const handleDeleteRecipe = useMemo(
+    () => createHandleDeleteRecipe({ setSavedRecipes, navigateTo, t }),
+    [setSavedRecipes, navigateTo, t],
+  );
+  const handleDuplicateRecipe = useMemo(
+    () => createHandleDuplicateRecipe({ setSavedRecipes, navigateTo, t }),
+    [setSavedRecipes, navigateTo, t],
+  );
+  const handleImportRecipe = useMemo(
+    () => createHandleImportRecipe({ setSavedRecipes, navigateTo, t }),
+    [setSavedRecipes, navigateTo, t],
+  );
   const [recipeToEdit, setRecipeToEdit] = useState<any>(null);
-  const handleCreatePost = createHandleCreatePost({ setCommunityPosts, navigateTo });
-  const handlePublishStory = createHandlePublishStory({ setCommunityStories, navigateTo });
-  const handleMarkStoryViewed = createHandleMarkStoryViewed({ setCommunityStories });
-  const handleAddComment = createHandleAddComment({ setCommunityPosts });
-  const handleAddToleranceLog = createHandleAddToleranceLog({ setToleranceLogs, navigateTo });
-  const handleRealFeelLog = createHandleRealFeelLog({ setRealFeelLogs, getDailyLog: () => dailyLog });
-  const handleCheckIn = createHandleCheckIn({ setCheckInStatus, navigateTo });
-  const handleCompleteCheckIn = createHandleCompleteCheckIn({ setCheckInStatus, navigateTo });
+  const handleCreatePost = useMemo(
+    () => createHandleCreatePost({ setCommunityPosts, navigateTo }),
+    [setCommunityPosts, navigateTo],
+  );
+  const handlePublishStory = useMemo(
+    () => createHandlePublishStory({ setCommunityStories, navigateTo }),
+    [setCommunityStories, navigateTo],
+  );
+  const handleMarkStoryViewed = useMemo(
+    () => createHandleMarkStoryViewed({ setCommunityStories }),
+    [setCommunityStories],
+  );
+  const handleAddComment = useMemo(
+    () => createHandleAddComment({ setCommunityPosts }),
+    [setCommunityPosts],
+  );
+  const handleAddToleranceLog = useMemo(
+    () => createHandleAddToleranceLog({ setToleranceLogs, navigateTo }),
+    [setToleranceLogs, navigateTo],
+  );
+  const handleRealFeelLog = useMemo(
+    () => createHandleRealFeelLog({ setRealFeelLogs, getDailyLog: () => dailyLog }),
+    [setRealFeelLogs, dailyLog],
+  );
+  const handleCheckIn = useMemo(
+    () => createHandleCheckIn({ setCheckInStatus, navigateTo }),
+    [setCheckInStatus, navigateTo],
+  );
+  const handleCompleteCheckIn = useMemo(
+    () => createHandleCompleteCheckIn({ setCheckInStatus, navigateTo }),
+    [setCheckInStatus, navigateTo],
+  );
 
-  // ─── Context value ──────────────────────────────────────────────────────────
+  // ─── Context value (memoized to prevent unnecessary consumer re-renders) ────
 
-  const value: AppStateContextType = {
+  const value = useMemo<AppStateContextType>(() => ({
     isPro, setIsPro,
     showAIBot, setShowAIBot,
     isFirstTime, setIsFirstTime,
@@ -376,7 +459,28 @@ export function AppStateProvider({ children }: { children: React.ReactNode }) {
     handleDuplicateRecipe,
     navigateToRecipe,
     recipeToEdit, setRecipeToEdit,
-  };
+  }), [
+    isPro, setIsPro, showAIBot, setShowAIBot, isFirstTime, setIsFirstTime,
+    userProfile, setUserProfile, dailyMacros, setDailyMacros,
+    hydration, setHydration, movement, setMovement, dailyGoal, setDailyGoal,
+    savedRecipes, setSavedRecipes, mealPlan, setMealPlan,
+    shoppingList, setShoppingList, communityPosts, setCommunityPosts,
+    toleranceLogs, setToleranceLogs, realFeelLogs, setRealFeelLogs,
+    checkInStatus, setCheckInStatus, userFoods, addUserFood,
+    dailyLog, setDailyLog, foodHistory, favoriteIds, toggleFavorite,
+    weightHistory, setWeightHistory, nutritionHistory, setNutritionHistory,
+    selectedRecipe, targetPlanDay, selectedCreatorId, selectedPostId,
+    likedPosts, toggleLikePost, savedPosts, toggleSavePost,
+    communityStories, setCommunityStories, handlePublishStory, handleMarkStoryViewed,
+    notifications, markAllNotificationsRead, selectedChallengeId,
+    mergedDictionary,
+    handleLogMeal, handleLogMealNow, handleSaveRecipe,
+    handleCreatePost, handleAddComment, handleAddToleranceLog,
+    handleCreateRecipeSubmit, handleRealFeelLog, handleImportRecipe,
+    handleAddToPlan, handleCheckIn, handleCompleteCheckIn,
+    handleDeleteRecipe, handleDuplicateRecipe, navigateToRecipe,
+    recipeToEdit,
+  ]);
 
   return (
     <AppStateContext.Provider value={value}>
