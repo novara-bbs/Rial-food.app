@@ -1,22 +1,15 @@
-import React, { createContext, useContext, useState, useMemo, useCallback } from 'react';
+import React, { createContext, useContext, useState, useMemo, useCallback, useEffect } from 'react';
 import { toast } from 'sonner';
 import { Recipe, DailyCheckIn as DailyCheckInType, Ingredient } from '../types';
 import { useLocalStorageState } from '../hooks/useLocalStorageState';
 import { useDailyReset, DailyArchive } from '../hooks/useDailyReset';
 import { useNavigation } from './NavigationContext';
 import { Allergen } from '../types';
-import { INGREDIENT_DICTIONARY } from '../features/food/data/ingredients';
-import { SEED_RECIPES } from '../features/food/data/seed-recipes';
-import { SEED_MEAL_PLAN } from '../features/planner/data/seed-meal-plan';
-import { SEED_SHOPPING_LIST } from '../features/planner/data/seed-shopping';
-import { SEED_POSTS } from '../features/social/data/seed-posts';
-import { SEED_TOLERANCE_LOGS } from '../features/wellness/data/seed-tolerance';
 import { createHandleLogMeal, createHandleLogMealNow, DailyLogEntry, FoodHistoryEntry } from '../features/food/handlers/meal-handlers';
 import { useI18n } from '../i18n';
 import { createHandleSaveRecipe, createHandleAddToPlan, createHandleCreateRecipeSubmit, createHandleImportRecipe, createHandleDeleteRecipe, createHandleDuplicateRecipe } from '../features/recipes/handlers/recipe-handlers';
 import { createHandleCreatePost, createHandleAddComment } from '../features/social/handlers/social-handlers';
 import { createHandlePublishStory, createHandleMarkStoryViewed } from '../features/social/handlers/story-handlers';
-import { SEED_STORIES } from '../features/social/data/seed-stories';
 import type { Story, StorySlide, Notification as NotificationType, SocialLinks } from '../types/social';
 import { createHandleAddToleranceLog, createHandleRealFeelLog, createHandleCheckIn, createHandleCompleteCheckIn } from '../features/wellness/handlers/wellness-handlers';
 
@@ -251,26 +244,68 @@ export function AppStateProvider({ children }: { children: React.ReactNode }) {
     toast.success(t.mealToasts.foodSaved);
   }, [setUserFoods, t]);
 
-  // Merged dictionary: built-in + user foods
+  // Ingredient dictionary (lazy-loaded to keep ~90KB out of the initial bundle)
+  const [baseDictionary, setBaseDictionary] = useState<Ingredient[]>([]);
+  useEffect(() => {
+    let cancelled = false;
+    import('../features/food/data/ingredients').then((m) => {
+      if (!cancelled) setBaseDictionary(m.INGREDIENT_DICTIONARY);
+    });
+    return () => { cancelled = true; };
+  }, []);
+
   const mergedDictionary = useMemo(
-    () => [...INGREDIENT_DICTIONARY, ...userFoods],
-    [userFoods],
+    () => [...baseDictionary, ...userFoods],
+    [baseDictionary, userFoods],
   );
 
-  const [savedRecipes, setSavedRecipes] = useLocalStorageState<any[]>('savedRecipes', SEED_RECIPES);
+  // Seeded content — all lazy-loaded on first mount if localStorage is empty
+  // Skipping the dynamic import when localStorage already has data keeps the
+  // cold-start path tight for returning users.
+  const [savedRecipes, setSavedRecipes] = useLocalStorageState<any[]>('savedRecipes', []);
+  useEffect(() => {
+    if (!window.localStorage.getItem('savedRecipes')) {
+      import('../features/food/data/seed-recipes').then((m) => setSavedRecipes(m.SEED_RECIPES));
+    }
+  }, []);
 
-  const [mealPlan, setMealPlan] = useLocalStorageState<Record<number, any[]>>('mealPlan', SEED_MEAL_PLAN);
+  const [mealPlan, setMealPlan] = useLocalStorageState<Record<number, any[]>>('mealPlan', {});
+  useEffect(() => {
+    if (!window.localStorage.getItem('mealPlan')) {
+      import('../features/planner/data/seed-meal-plan').then((m) => setMealPlan(m.SEED_MEAL_PLAN));
+    }
+  }, []);
 
-  const [shoppingList, setShoppingList] = useLocalStorageState<ShoppingItem[]>('shoppingList', SEED_SHOPPING_LIST);
+  const [shoppingList, setShoppingList] = useLocalStorageState<ShoppingItem[]>('shoppingList', []);
+  useEffect(() => {
+    if (!window.localStorage.getItem('shoppingList')) {
+      import('../features/planner/data/seed-shopping').then((m) => setShoppingList(m.SEED_SHOPPING_LIST));
+    }
+  }, []);
 
-  const [communityPosts, setCommunityPosts] = useLocalStorageState<any[]>('communityPosts', SEED_POSTS);
+  const [communityPosts, setCommunityPosts] = useLocalStorageState<any[]>('communityPosts', []);
+  useEffect(() => {
+    if (!window.localStorage.getItem('communityPosts')) {
+      import('../features/social/data/seed-posts').then((m) => setCommunityPosts(m.SEED_POSTS));
+    }
+  }, []);
 
-  const [toleranceLogs, setToleranceLogs] = useLocalStorageState<any[]>('toleranceLogs', SEED_TOLERANCE_LOGS);
+  const [toleranceLogs, setToleranceLogs] = useLocalStorageState<any[]>('toleranceLogs', []);
+  useEffect(() => {
+    if (!window.localStorage.getItem('toleranceLogs')) {
+      import('../features/wellness/data/seed-tolerance').then((m) => setToleranceLogs(m.SEED_TOLERANCE_LOGS));
+    }
+  }, []);
 
   const [realFeelLogs, setRealFeelLogs] = useLocalStorageState<any[]>('realFeelLogs', []);
 
-  // Stories
-  const [communityStories, setCommunityStories] = useLocalStorageState<Story[]>('communityStories', SEED_STORIES);
+  // Stories — lazy-seeded
+  const [communityStories, setCommunityStories] = useLocalStorageState<Story[]>('communityStories', []);
+  useEffect(() => {
+    if (!window.localStorage.getItem('communityStories')) {
+      import('../features/social/data/seed-stories').then((m) => setCommunityStories(m.SEED_STORIES));
+    }
+  }, []);
 
   // Notifications
   const [notifications, setNotifications] = useLocalStorageState<NotificationType[]>('notifications', []);
