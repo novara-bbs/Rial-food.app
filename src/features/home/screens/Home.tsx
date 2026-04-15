@@ -1,4 +1,4 @@
-import { Flame, Plus, CheckCircle2, Droplets, Sparkles, Sun, Moon, ShoppingCart, ChevronRight } from 'lucide-react';
+import { Flame, Plus, CheckCircle2, Droplets, Sparkles, Sun, Moon, ShoppingCart, ChevronRight, BarChart3 } from 'lucide-react';
 import PageShell from '../../../components/PageShell';
 import { useState, useEffect, useRef, useMemo, useCallback } from 'react';
 import RealFeelInline from '../../wellness/components/RealFeelInline';
@@ -39,6 +39,7 @@ export default function Home({
   setDailyMacros,
   nutritionHistory = [],
   onNavigateToProgress,
+  onNavigateToWeeklyReview,
 }: {
   onCheckIn: (status?: string) => void,
   onAddMeal: () => void,
@@ -61,6 +62,7 @@ export default function Home({
   dailyLog?: DailyLogEntry[],
   setDailyLog?: (fn: any) => void,
   nutritionHistory?: any[],
+  onNavigateToWeeklyReview?: () => void,
 }) {
   const { t } = useI18n();
   const [greeting, setGreeting] = useState(t.home.goodMorning);
@@ -263,6 +265,25 @@ export default function Home({
           </section>
         );
       })()}
+
+      {/* 2b. Weekly Review card — Sundays with ≥3 RF logs */}
+      {new Date().getDay() === 0 && (realFeelLogs || []).length >= 3 && onNavigateToWeeklyReview && (
+        <button
+          type="button"
+          onClick={onNavigateToWeeklyReview}
+          className="w-full bg-brand-secondary/10 border border-brand-secondary/30 p-4 rounded-sm flex items-center gap-4 hover:bg-brand-secondary/15 transition-colors text-left animate-in fade-in slide-in-from-top-3"
+        >
+          <div className="w-10 h-10 bg-brand-secondary/20 rounded-full flex items-center justify-center shrink-0">
+            <BarChart3 className="w-5 h-5 text-brand-secondary" />
+          </div>
+          <div className="flex-1 min-w-0">
+            <p className="font-headline text-xs font-bold uppercase tracking-widest text-tertiary">{t.weeklyReview.homeCard}</p>
+            <p className="text-[11px] text-on-surface-variant mt-0.5 leading-relaxed">{t.weeklyReview.homeCardDesc}</p>
+          </div>
+          <span className="font-label text-[10px] font-bold uppercase tracking-widest text-brand-secondary shrink-0">{t.weeklyReview.homeCardCta}</span>
+          <ChevronRight className="w-4 h-4 text-brand-secondary shrink-0" />
+        </button>
+      )}
 
       {/* 3. Nutrition Hero — above the fold */}
       <NutritionHero dailyMacros={dailyMacros} mode={isSimpleMode ? 'simple' : 'detailed'} exerciseCalories={exerciseCalories} />

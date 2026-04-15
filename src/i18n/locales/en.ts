@@ -378,6 +378,9 @@ const en: Translations = {
     positive: 'Positive',
     warning: 'Warning',
     neutral: 'Neutral',
+    homeCard: 'Your weekly summary is ready',
+    homeCardDesc: 'Check your correlations and progress for this week',
+    homeCardCta: 'View summary',
   },
   more: {
     title: 'More',

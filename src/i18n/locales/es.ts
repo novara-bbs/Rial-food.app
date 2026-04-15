@@ -389,6 +389,9 @@ const es = {
     positive: 'Positivo',
     warning: 'Atención',
     neutral: 'Neutro',
+    homeCard: 'Tu resumen semanal está listo',
+    homeCardDesc: 'Revisa tus correlaciones y progreso de esta semana',
+    homeCardCta: 'Ver resumen',
   },
   // More menu
   more: {
