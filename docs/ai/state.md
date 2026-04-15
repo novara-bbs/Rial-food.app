@@ -9,7 +9,7 @@ Last updated: 2026-04-15
 - Vercel project id: `prj_t11VHYQjptazjUx7Y2hWLz0IDAjg`
 
 ## Recent merged commits (Rial-food.app main)
-- `[Q4]` `feat(sprint-q4): A11y nested-button fix, day i18n, weight entries list`
+- `9554b9c` `feat(sprint-q4): A11y nested-button fix, day i18n, weight entries list`
 - `deef2ed` `feat(sprint-q3): batch cooking UI, weight note + target progress, i18n, type fix`
 - `133e68e` `feat(sprint-q2): AddMeal unified search + OFFResult type fix`
 - `1659206` `feat(sprint-q1): fuzzy ingredient matching v2 — aliases, prep-strip, measurements`
