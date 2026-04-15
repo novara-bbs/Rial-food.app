@@ -1,0 +1,268 @@
+import { useState } from 'react';
+import { Smartphone, Sparkles, Globe, Bell, Users, Download, AlertTriangle, LogOut, UserX, Cloud } from 'lucide-react';
+import { toast } from 'sonner';
+import { Switch } from '@/components/ui/switch';
+import { Button } from '@/components/ui/button';
+import ConfirmDialog from '../../../../components/ConfirmDialog';
+import { logger } from '../../../../lib/logger';
+import { useI18n } from '../../../../i18n';
+import { useLocalStorageState } from '../../../../hooks/useLocalStorageState';
+import { getNutritionHistory } from '../../../../hooks/useDailyReset';
+import { useAuth } from '../../../../contexts/AuthContext';
+import { signOut, getSupabaseClient } from '../../../../lib/supabase';
+import { exportUserData } from '../../../../lib/sync';
+import { SUPABASE_URL, SUPABASE_ANON_KEY } from '../../../../config/env';
+
+interface Props {
+  userProfile: any;
+  setUserProfile: any;
+  showAIBot: boolean;
+  setShowAIBot: any;
+}
+
+export default function SettingsSystem({ userProfile, setUserProfile, showAIBot, setShowAIBot }: Props) {
+  const { t } = useI18n();
+  const { user, isSupabaseEnabled } = useAuth();
+
+  const [notificationsEnabled, setNotificationsEnabled] = useLocalStorageState('notificationsEnabled', true);
+  const [profilePublic, setProfilePublic] = useLocalStorageState('profilePublic', false);
+  const [connectedDevices, setConnectedDevices] = useState({ whoop: true, oura: false, garmin: false });
+  const [showDeleteAllConfirm, setShowDeleteAllConfirm] = useState(false);
+  const [showDeleteAccountConfirm, setShowDeleteAccountConfirm] = useState(false);
+  const [isDeletingAccount, setIsDeletingAccount] = useState(false);
+
+  const toggleDevice = (device: keyof typeof connectedDevices) => {
+    setConnectedDevices((prev) => ({ ...prev, [device]: !prev[device] }));
+  };
+
+  const exportCSV = () => {
+    const history = getNutritionHistory();
+    if (history.length === 0) {
+      toast.info(t.settings.noDataToExport);
+      return;
+    }
+    const header = 'date,calories,protein,carbs,fats,hydration,mealCount\n';
+    const rows = history.map((h) => `${h.date},${h.macros.consumed.cal},${h.macros.consumed.pro},${h.macros.consumed.carbs},${h.macros.consumed.fats},${h.hydration},${h.mealCount}`).join('\n');
+    const blob = new Blob([header + rows], { type: 'text/csv' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `rial-nutrition-${new Date().toISOString().slice(0, 10)}.csv`;
+    a.click();
+    URL.revokeObjectURL(url);
+    toast.success(t.settings.exportSuccess);
+  };
+
+  const deleteAllData = () => {
+    const keysToKeep = ['rial_lastActiveDate'];
+    Object.keys(localStorage).filter((k) => !keysToKeep.includes(k)).forEach((k) => localStorage.removeItem(k));
+    toast.success(t.settings.dataDeleted);
+    window.location.reload();
+  };
+
+  const handleDeleteAccount = async () => {
+    if (!user || !isSupabaseEnabled) return;
+    setIsDeletingAccount(true);
+    try {
+      const sb = getSupabaseClient();
+      const headers: Record<string, string> = {
+        'Content-Type': 'application/json',
+        'apikey': SUPABASE_ANON_KEY,
+        'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
+      };
+      if (sb) {
+        const { data: { session } } = await sb.auth.getSession();
+        if (session?.access_token) {
+          headers['Authorization'] = `Bearer ${session.access_token}`;
+        }
+      }
+      const res = await fetch(`${SUPABASE_URL}/functions/v1/delete-account`, { method: 'POST', headers });
+      if (!res.ok) {
+        const err = (await res.json().catch(() => ({}))) as { error?: string };
+        throw new Error(err.error ?? `HTTP ${res.status}`);
+      }
+      await signOut();
+      toast.success(t.settings.deleteAccountSuccess);
+      setShowDeleteAccountConfirm(false);
+    } catch (err) {
+      logger.error('Delete account error', { error: err instanceof Error ? err.message : String(err) });
+      toast.error(t.settings.deleteAccountError);
+    } finally {
+      setIsDeletingAccount(false);
+    }
+  };
+
+  const wearables = [
+    { key: 'whoop' as const, label: 'Whoop', badge: { bg: 'bg-black', text: 'text-white', char: 'W' } },
+    { key: 'oura' as const, label: 'Oura Ring', badge: { bg: 'bg-white', text: 'text-black', char: 'O' } },
+    { key: 'garmin' as const, label: 'Garmin Connect', badge: { bg: 'bg-blue-500', text: 'text-white', char: 'G' } },
+  ];
+
+  return (
+    <>
+      {/* AI Coach Settings */}
+      <div className="bg-surface-container-low p-6 rounded-sm border border-outline-variant/20">
+        <div className="flex items-center gap-3 mb-6">
+          <Sparkles className="w-6 h-6 text-primary" />
+          <h3 className="font-headline text-xl font-bold text-tertiary uppercase">{t.settings.aiAssistant}</h3>
+        </div>
+        <div className="flex items-center justify-between p-4 bg-surface-container-highest rounded-sm border border-outline-variant/10">
+          <div className="flex flex-col">
+            <h4 className="font-headline font-bold text-sm uppercase text-tertiary">{t.settings.aiFloatingBtn}</h4>
+            <p className="font-label text-[10px] tracking-widest uppercase text-on-surface-variant mt-1">
+              {showAIBot ? t.settings.aiVisibleAll : t.settings.aiHidden}
+            </p>
+          </div>
+          <Switch checked={!!showAIBot} onCheckedChange={(v) => setShowAIBot && setShowAIBot(v)} />
+        </div>
+      </div>
+
+      {/* Wearable Integrations */}
+      <div className="bg-surface-container-low p-6 rounded-sm border border-outline-variant/20">
+        <div className="flex items-center gap-3 mb-6">
+          <Smartphone className="w-6 h-6 text-primary" />
+          <h3 className="font-headline text-xl font-bold text-tertiary uppercase">{t.settings.connectedDevices}</h3>
+        </div>
+        <div className="space-y-4">
+          {wearables.map(({ key, label, badge }) => (
+            <div key={key} className="flex items-center justify-between p-4 bg-surface-container-highest rounded-sm border border-outline-variant/10">
+              <div className="flex items-center gap-3">
+                <div className={`w-8 h-8 rounded-full ${badge.bg} flex items-center justify-center ${badge.text} font-bold text-xs`}>{badge.char}</div>
+                <div>
+                  <h4 className="font-headline font-bold text-sm uppercase text-tertiary">{label}</h4>
+                  <p className={`font-label text-[10px] tracking-widest uppercase ${connectedDevices[key] ? 'text-primary' : 'text-on-surface-variant'}`}>
+                    {connectedDevices[key] ? t.settings.connected : t.settings.notConnected}
+                  </p>
+                </div>
+              </div>
+              <Switch checked={connectedDevices[key]} onCheckedChange={() => toggleDevice(key)} />
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Social Links */}
+      <div className="bg-surface-container-low p-6 rounded-sm border border-outline-variant/20 space-y-4">
+        <div className="flex items-center gap-3 mb-4">
+          <Globe className="w-5 h-5 text-primary" />
+          <h3 className="font-headline text-xl font-bold text-tertiary uppercase">{t.settings.socialLinksTitle}</h3>
+        </div>
+        <div className="space-y-3">
+          {([
+            { key: 'instagram', label: t.settings.instagramUsername, prefix: '@', placeholder: 'username' },
+            { key: 'tiktok', label: t.settings.tiktokUsername, prefix: '@', placeholder: 'username' },
+          ] as const).map(({ key, label, prefix, placeholder }) => (
+            <div key={key}>
+              <label className="block font-label text-[10px] tracking-widest uppercase text-on-surface-variant mb-1">{label}</label>
+              <div className="flex items-center gap-2 bg-surface-container-highest rounded-sm border border-outline-variant/20 px-3 py-2">
+                <span className="text-xs text-on-surface-variant">{prefix}</span>
+                <input type="text"
+                  value={userProfile?.socialLinks?.[key] || ''}
+                  onChange={(e) => setUserProfile((prev: any) => ({ ...prev, socialLinks: { ...prev.socialLinks, [key]: e.target.value || undefined } }))}
+                  placeholder={placeholder}
+                  className="bg-transparent text-sm text-on-surface flex-1 outline-none" />
+              </div>
+            </div>
+          ))}
+          {([
+            { key: 'youtube', label: t.settings.youtubeChannel, placeholder: 'https://youtube.com/@channel' },
+            { key: 'website', label: t.settings.websiteUrl, placeholder: 'https://example.com' },
+          ] as const).map(({ key, label, placeholder }) => (
+            <div key={key}>
+              <label className="block font-label text-[10px] tracking-widest uppercase text-on-surface-variant mb-1">{label}</label>
+              <input type="url"
+                value={userProfile?.socialLinks?.[key] || ''}
+                onChange={(e) => setUserProfile((prev: any) => ({ ...prev, socialLinks: { ...prev.socialLinks, [key]: e.target.value || undefined } }))}
+                placeholder={placeholder}
+                className="w-full bg-surface-container-highest rounded-sm border border-outline-variant/20 px-3 py-2 text-sm text-on-surface outline-none" />
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Notifications & Privacy */}
+      <div className="bg-surface-container-low rounded-sm border border-outline-variant/20 p-5 space-y-4">
+        <h3 className="font-headline text-sm font-bold uppercase tracking-widest text-tertiary">{t.settings.notificationsPrivacy}</h3>
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-3">
+            <Bell className="w-4 h-4 text-on-surface-variant" />
+            <span className="text-sm font-body text-on-surface">{t.settings.notifications}</span>
+          </div>
+          <Switch checked={notificationsEnabled} onCheckedChange={setNotificationsEnabled} />
+        </div>
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-3">
+            <Users className="w-4 h-4 text-on-surface-variant" />
+            <span className="text-sm font-body text-on-surface">{t.settings.publicProfile}</span>
+          </div>
+          <Switch checked={profilePublic} onCheckedChange={setProfilePublic} />
+        </div>
+      </div>
+
+      {/* Data Export */}
+      <div className="bg-surface-container-low rounded-sm border border-outline-variant/20 p-5 space-y-4">
+        <h3 className="font-headline text-sm font-bold uppercase tracking-widest text-tertiary">{t.settings.dataSection}</h3>
+        <button type="button" onClick={exportCSV}
+          className="w-full py-3 bg-surface-container-highest rounded-sm font-headline text-xs font-bold uppercase tracking-widest text-tertiary hover:bg-primary/10 hover:text-primary transition-colors flex items-center justify-center gap-2">
+          <Download className="w-4 h-4" /> {t.settings.exportCSV}
+        </button>
+        <button type="button"
+          onClick={async () => {
+            try {
+              const json = await exportUserData();
+              const blob = new Blob([json], { type: 'application/json' });
+              const url = URL.createObjectURL(blob);
+              const a = document.createElement('a');
+              a.href = url;
+              a.download = `rial-data-${new Date().toISOString().slice(0, 10)}.json`;
+              a.click();
+              URL.revokeObjectURL(url);
+              toast.success(t.settings.exportSuccess);
+            } catch {
+              toast.error(t.settings.exportError);
+            }
+          }}
+          className="w-full py-3 bg-surface-container-highest rounded-sm font-headline text-xs font-bold uppercase tracking-widest text-tertiary hover:bg-primary/10 hover:text-primary transition-colors flex items-center justify-center gap-2">
+          <Cloud className="w-4 h-4" /> {t.settings.exportJSON}
+        </button>
+        <Button variant="destructive" onClick={() => setShowDeleteAllConfirm(true)} className="w-full">
+          <AlertTriangle className="w-4 h-4" /> {t.settings.deleteData}
+        </Button>
+      </div>
+
+      {/* Account */}
+      {isSupabaseEnabled && (
+        <div className="bg-surface-container-low rounded-sm border border-outline-variant/20 p-5 space-y-3">
+          <h3 className="font-headline text-sm font-bold uppercase tracking-widest text-tertiary">{t.settings.account}</h3>
+          {user ? (
+            <>
+              <p className="font-body text-xs text-on-surface-variant">{user.email}</p>
+              <Button variant="outline" className="w-full"
+                onClick={async () => {
+                  await signOut();
+                  toast.success(t.settings.signedOut);
+                }}>
+                <LogOut className="w-4 h-4" /> {t.settings.signOut}
+              </Button>
+              <Button variant="destructive" className="w-full"
+                onClick={() => setShowDeleteAccountConfirm(true)} disabled={isDeletingAccount}>
+                <UserX className="w-4 h-4" />
+                {isDeletingAccount ? t.settings.deleteAccountDeleting : t.settings.deleteAccount}
+              </Button>
+            </>
+          ) : (
+            <p className="font-body text-sm text-on-surface-variant">{t.settings.notSignedIn}</p>
+          )}
+        </div>
+      )}
+
+      <ConfirmDialog open={showDeleteAllConfirm} onOpenChange={setShowDeleteAllConfirm}
+        title={t.settings.deleteData} description={t.settings.deleteConfirm}
+        variant="destructive" onConfirm={deleteAllData} />
+
+      <ConfirmDialog open={showDeleteAccountConfirm} onOpenChange={setShowDeleteAccountConfirm}
+        title={t.settings.deleteAccountConfirmTitle} description={t.settings.deleteAccountConfirmBody}
+        variant="destructive" onConfirm={handleDeleteAccount} />
+    </>
+  );
+}
