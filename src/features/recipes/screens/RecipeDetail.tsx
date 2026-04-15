@@ -1,14 +1,16 @@
-import { ArrowLeft, Clock, Flame, Droplet, Activity, CheckCircle2, Circle, Minus, Plus, MessageSquare, Bookmark, X, Users, ShoppingCart, ChefHat, UtensilsCrossed, ThumbsUp, AlertTriangle, Target, Share2, ExternalLink, Pencil, Trash2, GitFork, Crown } from 'lucide-react';
+import { ArrowLeft, Clock, Flame, Activity, Minus, CheckCircle2, Circle, Plus, MessageSquare, Bookmark, X, Users, ShoppingCart, ChefHat, UtensilsCrossed, Target, Share2, ExternalLink, Pencil, Trash2, GitFork, Crown } from 'lucide-react';
 import SearchInput from '../../../components/patterns/SearchInput';
 import { useState, useMemo, useEffect } from 'react';
 import CookMode from '../components/CookMode';
 import PublishRecipeSheet from '../../social/components/PublishRecipeSheet';
+import RecipeNutritionBar from '../components/RecipeNutritionBar';
+import RecipeSubstitutionPicker from '../components/RecipeSubstitutionPicker';
+import RecipeDaySelectorSheet from '../components/RecipeDaySelectorSheet';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Micronutrients } from '../../../types';
 import { toast } from 'sonner';
-import { getFoodQuality } from '../../food/utils/nutrition';
 import { getRecipeSwaps } from '../utils/substitutions';
 import { calculateMatchScore } from '../utils/matchScore';
 import { getGoalSuggestions } from '../utils/goalOptimizer';
@@ -363,32 +365,14 @@ export default function RecipeDetail({ recipe, onBack, onSaveRecipe, isSaved, on
 
       {/* ══ Macro summary bar ══ */}
       <div className="px-6 max-w-4xl mx-auto">
-        <div className={`grid grid-cols-4 gap-2 ${hasAttribution ? 'mt-3' : 'mt-4'} relative z-10`}>
-          {[
-            { label: 'kcal', value: Math.round(calculatedTotals.cal * s), color: 'text-primary', icon: Flame },
-            { label: 'pro', value: `${Math.round(calculatedTotals.pro * s)}g`, color: 'text-macro-protein', icon: Activity },
-            { label: 'carbs', value: `${Math.round(calculatedTotals.carbs * s)}g`, color: 'text-macro-carbs', icon: Droplet },
-            { label: 'fats', value: `${Math.round(calculatedTotals.fats * s)}g`, color: 'text-macro-fats' },
-          ].map(m => (
-            <div key={m.label} className="bg-surface-container-low border border-outline-variant/20 rounded-sm p-3 text-center">
-              <span className={`block font-headline font-bold text-lg ${m.color}`}>{m.value}</span>
-              <span className="text-[8px] font-label uppercase tracking-widest text-on-surface-variant">{m.label}</span>
-            </div>
-          ))}
-        </div>
-
-        {/* Food quality */}
-        {data.macros && (() => {
-          const quality = getFoodQuality(data.macros);
-          return (
-            <div className={`flex items-center gap-3 p-2.5 mt-3 rounded-sm border ${quality === 'good' ? 'bg-primary/10 border-primary/20' : quality === 'neutral' ? 'bg-brand-secondary/10 border-brand-secondary/20' : 'bg-error/10 border-error/20'}`}>
-              {quality === 'good' ? <ThumbsUp className="w-5 h-5 text-primary" /> :
-               quality === 'poor' ? <AlertTriangle className="w-5 h-5 text-error" /> :
-               <Minus className="w-5 h-5 text-brand-secondary" />}
-              <span className="text-xs font-bold uppercase tracking-widest text-on-surface-variant">{t.recipes.foodQuality[quality]}</span>
-            </div>
-          );
-        })()}
+        <RecipeNutritionBar
+          cal={Math.round(calculatedTotals.cal * s)}
+          pro={Math.round(calculatedTotals.pro * s)}
+          carbs={Math.round(calculatedTotals.carbs * s)}
+          fats={Math.round(calculatedTotals.fats * s)}
+          macros={data.macros}
+          hasAttribution={hasAttribution}
+        />
 
         {/* ── Video embed (YouTube / TikTok) ── */}
         {data.videoUrl && (() => {
@@ -511,36 +495,11 @@ export default function RecipeDetail({ recipe, onBack, onSaveRecipe, isSaved, on
             </div>
 
             {/* Smart swapper — powered by user preferences */}
-            <section>
-              <div className="flex items-center justify-between mb-3">
-                <h3 className="font-headline text-sm font-bold tracking-tight uppercase text-tertiary flex items-center gap-2">
-                  <Activity className="w-4 h-4 text-primary" /> {t.recipeDetail.smartSubstitute}
-                </h3>
-              </div>
-              {swapSuggestions.length > 0 ? (
-                <div className="space-y-2">
-                  {swapSuggestions.map(swap => (
-                    <div key={swap.fromIngredient.id} className="bg-surface-container-low p-3 rounded-sm border border-outline-variant/20 flex items-center gap-3">
-                      <div className="flex-1 min-w-0">
-                        <p className="text-tertiary font-headline font-bold text-xs">{swap.fromIngredient.name} → {swap.toIngredient.name}</p>
-                        <p className="text-on-surface-variant text-[10px] mt-0.5">
-                          {swap.reason === 'intolerance' ? `${swap.allergenHit}` : t.recipeDetail.swapReasonDislike || 'No te gusta'}
-                          {swap.macroImpact.pro !== 0 && ` · ${swap.macroImpact.pro > 0 ? '+' : ''}${swap.macroImpact.pro}g P`}
-                          {swap.macroImpact.cal !== 0 && ` · ${swap.macroImpact.cal > 0 ? '+' : ''}${swap.macroImpact.cal} kcal`}
-                        </p>
-                      </div>
-                      <Button variant="outline" size="sm" onClick={() => applySwap(swap.fromIngredient.id, swap.toIngredient)}>{t.recipeDetail.substitute}</Button>
-                    </div>
-                  ))}
-                </div>
-              ) : (
-                <p className="text-xs text-on-surface-variant py-4 text-center">
-                  {(userProfile?.foodDislikes?.length || userProfile?.intolerances?.length)
-                    ? (t.recipeDetail.noSwapsNeeded || 'Sin sustituciones para tu perfil.')
-                    : (t.recipeDetail.swapConfigNudge || 'Configura tus preferencias en Ajustes para ver sustituciones.')}
-                </p>
-              )}
-            </section>
+            <RecipeSubstitutionPicker
+              swapSuggestions={swapSuggestions}
+              onApplySwap={applySwap}
+              hasPreferences={!!(userProfile?.foodDislikes?.length || userProfile?.intolerances?.length)}
+            />
 
             {/* Quick actions — primary */}
             <div className="flex flex-col sm:flex-row gap-3">
@@ -580,17 +539,10 @@ export default function RecipeDetail({ recipe, onBack, onSaveRecipe, isSaved, on
             )}
 
             {showDaySelector && (
-              <div className="bg-surface-container-low p-4 rounded-sm border border-outline-variant/20">
-                <p className="font-label text-xs tracking-widest text-on-surface-variant uppercase mb-3 text-center">{t.recipeDetail.selectDay}</p>
-                <div className="flex justify-between gap-2 mb-4">
-                  {(t.realFeel.dayAbbr as string[]).map((day, idx) => (
-                    <button type="button" key={idx} onClick={() => { onAddToPlan?.(getModifiedRecipe(), idx); setShowDaySelector(false); }} className="w-10 h-10 rounded-sm bg-surface-container-highest text-tertiary font-headline font-bold hover:bg-primary hover:text-on-primary transition-colors">
-                      {day}
-                    </button>
-                  ))}
-                </div>
-                <Button variant="ghost" className="w-full" onClick={() => setShowDaySelector(false)}>{t.common.cancel}</Button>
-              </div>
+              <RecipeDaySelectorSheet
+                onSelectDay={(idx) => { onAddToPlan?.(getModifiedRecipe(), idx); setShowDaySelector(false); }}
+                onClose={() => setShowDaySelector(false)}
+              />
             )}
 
             {/* Community notes — from posts that reference this recipe */}
