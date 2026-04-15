@@ -9,7 +9,7 @@ Last updated: 2026-04-15
 - Vercel project id: `prj_t11VHYQjptazjUx7Y2hWLz0IDAjg`
 
 ## Recent merged commits (Rial-food.app main)
-- `[Q3]` `feat(sprint-q3): batch cooking UI, weight note + target progress, i18n, type fix`
+- `deef2ed` `feat(sprint-q3): batch cooking UI, weight note + target progress, i18n, type fix`
 - `133e68e` `feat(sprint-q2): AddMeal unified search + OFFResult type fix`
 - `1659206` `feat(sprint-q1): fuzzy ingredient matching v2 — aliases, prep-strip, measurements`
 - `88b64bc` `fix(e2e): fix CI E2E failures — consent selectors + vite preview in CI`
@@ -114,9 +114,9 @@ Execute Supabase sprint ONLY when ALL of these hold:
 - E2E green on last 3 commits to main
 
 ## Next sprint candidates (ordered)
-- **Q1** — Feature completeness: C3 (`ImportRecipeURL` deeper fuzzy ingredient matching)
-- **Q2** — Feature completeness: D (`AddMeal` unified search + multi-add — most-used flow)
-- **Q3** — Feature completeness: E (batch cooking + leftovers v0 rule ports) + P (custom weight refinements)
+- ~~**Q1**~~ ✓ DONE — C3 fuzzy ingredient matching (`deef2ed` ← `1659206`)
+- ~~**Q2**~~ ✓ DONE — AddMeal unified search + OFFResult type fix (`133e68e`)
+- ~~**Q3**~~ ✓ DONE — Batch cooking UI, weight note + target progress, i18n (`deef2ed`)
 - **Q4** — A11y: Challenges/Creadores card restructure (nested-button pattern), remaining icon-only button audit
 - **Q5** — Lighthouse/PWA audit (gate: Performance ≥ 85, A11y ≥ 95, PWA ≥ 90)
 - **Q6** — Supabase integration (gated): apply migration → expand SyncKey per audit above → wire `syncOnSignIn`/`pushToCloud` in AppStateContext → `useSupabasePersistence` toggle in SettingsSystem → E2E with real Supabase project
