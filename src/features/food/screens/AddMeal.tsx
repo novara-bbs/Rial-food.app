@@ -6,6 +6,7 @@ import { Ingredient, Recipe } from '../../../types';
 import { logger } from '../../../lib/logger';
 import { useI18n } from '../../../i18n';
 import { getFoodQuality, FOOD_QUALITY_EMOJI } from '../utils/nutrition';
+import { unifiedSearch } from '../utils/unified-search';
 import { searchOpenFoodFacts, OFFResult } from '../api/open-food-facts';
 import { analyzePhotoMeal, fileToBase64, DetectedFood } from '../api/photo-recognition';
 import BarcodeScanner from '../components/BarcodeScanner';
@@ -67,8 +68,9 @@ export default function AddMeal({
   const proPct = Math.min(100, Math.round((macros.consumed.pro / macros.target.pro) * 100));
 
   // ─── Open Food Facts debounced search ──────────────────────
+  // Fires for any query >= 3 chars (tab-independent so unified results include API)
   useEffect(() => {
-    if (activeTab !== 'ingredients' || searchQuery.length < 3) {
+    if (searchQuery.length < 3) {
       setApiResults([]);
       return;
     }
@@ -79,7 +81,7 @@ export default function AddMeal({
       setIsSearchingApi(false);
     }, 500);
     return () => { if (searchTimerRef.current) clearTimeout(searchTimerRef.current); };
-  }, [searchQuery, activeTab]);
+  }, [searchQuery]);
 
   // ─── Food list ─────────────────────────────────────────────
   const isSearching = searchQuery.trim().length > 0;
@@ -111,22 +113,25 @@ export default function AddMeal({
     return [...fromDict, ...fromRecipes];
   }, [favoriteIds, dictionary, savedRecipes]);
 
-  const localFoods: any[] = (() => {
-    const src: any[] = activeTab === 'recipes' ? savedRecipes : dictionary;
-    const q = searchQuery.toLowerCase();
-    return q
-      ? src.filter(f => ((f.title as string | undefined) ?? (f.name as string | undefined) ?? '').toLowerCase().includes(q))
-      : src;
-  })();
+  // ─── Unified local search results (memoized) ───────────────
+  // When searching: fuzzy-match dictionary (incl. userFoods) + recipe titles, merged + ranked.
+  // When not searching: tab-based browse (recents / favorites / all).
+  const unifiedLocalResults = useMemo(
+    () => isSearching
+      ? unifiedSearch(searchQuery, { dictionary, savedRecipes })
+      : [],
+    [isSearching, searchQuery, dictionary, savedRecipes],
+  );
 
   const displayFoods: any[] = (() => {
     if (isSearching) {
-      return activeTab === 'ingredients' ? [...localFoods, ...apiResults] : localFoods;
+      // Unified: local fuzzy results + API results appended after
+      return [...unifiedLocalResults, ...apiResults];
     }
-    // No search: show browse mode
+    // Browse mode (tab-scoped)
     if (browseMode === 'recents') return recentFoods;
     if (browseMode === 'favorites') return favoriteFoods;
-    return activeTab === 'ingredients' ? [...localFoods, ...apiResults] : localFoods;
+    return activeTab === 'ingredients' ? dictionary : savedRecipes;
   })();
 
   // ─── Helpers ────────────────────────────────────────────────
@@ -411,13 +416,14 @@ export default function AddMeal({
           </button>
         </div>
 
+        {/* Tabs control browse mode only; during search, results are unified across all sources */}
         <TabNav
           tabs={[
             { id: 'recipes', label: t.nav.kitchen, icon: BookOpen },
             { id: 'ingredients', label: t.recipes.ingredients, icon: Leaf },
           ]}
           active={activeTab}
-          onChange={(id) => { setActiveTab(id as typeof activeTab); setSearchQuery(''); setApiResults([]); }}
+          onChange={(id) => { setActiveTab(id as typeof activeTab); if (!isSearching) setApiResults([]); }}
         />
 
         {!isSearching && (

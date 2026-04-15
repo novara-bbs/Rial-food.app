@@ -274,6 +274,27 @@ function score(query: string, candidate: string): number {
   return Math.min(best, 1);
 }
 
+// ─── Shared matching loop ─────────────────────────────────────────────────────
+
+/** Score all items in `list` against `name`, return top N above threshold. */
+function _matchFromList(
+  list: Ingredient[],
+  name: string,
+  n: number,
+  threshold: number,
+): MatchResult[] {
+  const results: MatchResult[] = [];
+  for (const ing of list) {
+    const esScore = score(name, ing.name);
+    const enScore = score(name, ing.nameEn);
+    const best = esScore >= enScore
+      ? { ingredient: ing, score: esScore, matchedOn: 'es' as const }
+      : { ingredient: ing, score: enScore, matchedOn: 'en' as const };
+    if (best.score >= threshold) results.push(best);
+  }
+  return results.sort((a, b) => b.score - a.score).slice(0, n);
+}
+
 /**
  * Find the best dictionary match for an ingredient name.
  * Returns null if no match scores above threshold.
@@ -282,45 +303,33 @@ export function matchIngredient(
   name: string,
   threshold = 0.45,
 ): MatchResult | null {
-  let best: MatchResult | null = null;
-
-  for (const ing of INGREDIENT_DICTIONARY) {
-    const esScore = score(name, ing.name);
-    const enScore = score(name, ing.nameEn);
-
-    if (esScore >= enScore && esScore > (best?.score ?? 0)) {
-      best = { ingredient: ing, score: esScore, matchedOn: 'es' };
-    } else if (enScore > (best?.score ?? 0)) {
-      best = { ingredient: ing, score: enScore, matchedOn: 'en' };
-    }
-  }
-
-  return best && best.score >= threshold ? best : null;
+  const [best] = _matchFromList(INGREDIENT_DICTIONARY, name, 1, threshold);
+  return best ?? null;
 }
 
 /**
- * Find top N matches — useful for showing alternatives in UI.
+ * Find top N matches against the built-in INGREDIENT_DICTIONARY.
+ * Useful for showing alternatives in UI.
  */
 export function matchIngredientTopN(
   name: string,
   n = 3,
   threshold = 0.35,
 ): MatchResult[] {
-  const results: MatchResult[] = [];
+  return _matchFromList(INGREDIENT_DICTIONARY, name, n, threshold);
+}
 
-  for (const ing of INGREDIENT_DICTIONARY) {
-    const esScore = score(name, ing.name);
-    const enScore = score(name, ing.nameEn);
-    const best = esScore >= enScore
-      ? { ingredient: ing, score: esScore, matchedOn: 'es' as const }
-      : { ingredient: ing, score: enScore, matchedOn: 'en' as const };
-
-    if (best.score >= threshold) results.push(best);
-  }
-
-  return results
-    .sort((a, b) => b.score - a.score)
-    .slice(0, n);
+/**
+ * Find top N matches against a **custom** ingredient list.
+ * Use this when the list includes user-created foods (mergedDictionary).
+ */
+export function matchIngredientTopNFromList(
+  name: string,
+  list: Ingredient[],
+  n = 3,
+  threshold = 0.35,
+): MatchResult[] {
+  return _matchFromList(list, name, n, threshold);
 }
 
 /** Exported for testing only */
