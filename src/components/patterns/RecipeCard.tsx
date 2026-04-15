@@ -73,7 +73,7 @@ export default function RecipeCard({
       : `${recipe.matchScore}%`;
 
   return (
-    <div className={cn(CONTAINER[variant], className)} onClick={onPress}>
+    <button type="button" className={cn(CONTAINER[variant], 'text-left', className)} onClick={onPress} aria-label={recipe.title}>
       {/* Cover image */}
       {imageUrl ? (
         <img
@@ -241,6 +241,6 @@ export default function RecipeCard({
           </div>
         </div>
       )}
-    </div>
+    </button>
   );
 }

@@ -17,13 +17,15 @@ export interface TabNavProps {
 /** Underline tab bar — flex border-b with border-b-2 active indicator. */
 export default function TabNav({ tabs, active, onChange, className }: TabNavProps) {
   return (
-    <div className={cn('flex border-b border-outline-variant/20 px-6 pt-2 shrink-0', className)}>
+    <div role="tablist" className={cn('flex border-b border-outline-variant/20 px-6 pt-2 shrink-0', className)}>
       {tabs.map(tab => {
         const Icon = tab.icon;
         const isActive = active === tab.id;
         return (
           <button
             type="button"
+            role="tab"
+            aria-selected={isActive}
             key={tab.id}
             onClick={() => onChange(tab.id)}
             className={cn(

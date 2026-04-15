@@ -102,7 +102,12 @@ export default defineConfig(({mode}) => {
         output: {
           manualChunks: {
             'vendor-react': ['react', 'react-dom'],
-            'vendor-ui': ['recharts', 'sonner', 'react-markdown'],
+            // sonner only — loads eagerly (toasts used everywhere)
+            'vendor-ui': ['sonner'],
+            // Recharts: ~150 KB — used only in lazy screens (RealFeelDiary, Progress)
+            'vendor-recharts': ['recharts'],
+            // react-markdown: ~40 KB — used only in lazy AICoach screen
+            'vendor-markdown': ['react-markdown'],
             'vendor-icons': ['lucide-react'],
             // Data seeded on first-run only — keep out of the app shell so that
             // returning users (who skip the dynamic import) never fetch them.

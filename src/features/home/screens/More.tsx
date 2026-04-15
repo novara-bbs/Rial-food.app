@@ -10,6 +10,7 @@ export default function More({ navigateTo }: { navigateTo: (screen: string) => v
     { id: 'food-dictionary', label: t.foodDictionary.title, icon: Apple, desc: t.more.foodDictionaryDesc, screen: 'food-dictionary', color: 'text-primary' },
     { id: 'real-feel-diary', label: t.more.realFeelDiary, icon: Heart, desc: t.more.realFeelDesc, screen: 'real-feel-diary', color: 'text-brand-secondary' },
     { id: 'weekly-check-in', label: t.more.weeklyCheckIn, icon: CalendarCheck, desc: t.more.weeklyCheckInDesc, screen: 'weekly-check-in', color: 'text-brand-secondary' },
+    { id: 'weekly-review', label: t.weeklyReview.title, icon: BarChart3, desc: t.weeklyReview.subtitle, screen: 'weekly-review', color: 'text-brand-secondary' },
     { id: 'fasting', label: t.more.fasting, icon: Timer, desc: t.more.fastingDesc, screen: 'fasting-timer', color: 'text-brand-secondary' },
     { id: 'pantry', label: t.more.pantry, icon: Package, desc: t.more.pantryDesc, screen: 'pantry', color: 'text-primary' },
     { id: 'challenges', label: t.more.challenges, icon: Trophy, desc: t.more.challengesDesc, screen: 'challenges', color: 'text-tertiary' },

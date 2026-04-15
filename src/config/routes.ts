@@ -19,6 +19,7 @@ export const screens = {
   Profile: React.lazy(() => import('../features/profile/screens/Profile')),
   Pantry: React.lazy(() => import('../features/planner/screens/Pantry')),
   WeeklyCheckIn: React.lazy(() => import('../features/wellness/screens/WeeklyCheckIn')),
+  WeeklyReview: React.lazy(() => import('../features/wellness/screens/WeeklyReview')),
   RialPlus: React.lazy(() => import('../features/profile/screens/RialPlus')),
   CreatorVerification: React.lazy(() => import('../features/social/screens/CreatorVerification')),
   CreatorDashboard: React.lazy(() => import('../features/social/screens/CreatorDashboard')),

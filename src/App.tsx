@@ -23,7 +23,7 @@ const {
   Home, Explore, Cocina, More, RecipeDetail, AddMeal, AddTolerance,
   DailyCheckIn, CreateRecipe, CreatePost, AICoach, RealFeelDiary,
   FastingTimer, ImportRecipeURL, Settings, Profile, Pantry,
-  WeeklyCheckIn, RialPlus, CreatorVerification, CreatorDashboard, FoodDictionary,
+  WeeklyCheckIn, WeeklyReview, RialPlus, CreatorVerification, CreatorDashboard, FoodDictionary,
   Challenges, CreatorProfile, PostDetail, StoryViewer, CreateStory,
   Notifications: NotificationsScreen, ChallengeDetail, Progress,
   Login, Signup, ForgotPassword,
@@ -142,6 +142,7 @@ export default function App() {
       case 'fasting-timer': return <FastingTimer onBack={() => navigateTo('more')} />;
       case 'pantry': return <Pantry onBack={() => navigateTo('more')} />;
       case 'weekly-check-in': return <WeeklyCheckIn onBack={() => navigateTo('more')} />;
+      case 'weekly-review': return <WeeklyReview onBack={() => navigateTo('more')} />;
       case 'rial-plus': return <RialPlus onBack={() => navigateTo('more')} />;
       case 'import-url': return <ImportRecipeURL onBack={() => navigateTo(previousScreen)} onImport={handleImportRecipe} />;
       case 'creator-verification': return <CreatorVerification onBack={() => navigateTo('more')} />;
