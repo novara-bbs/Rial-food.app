@@ -1,5 +1,5 @@
 import { useState, useMemo } from 'react';
-import { Target, Leaf, ShieldAlert, Search, X } from 'lucide-react';
+import { Target, Leaf, ShieldAlert, Search, X, Droplets, Footprints } from 'lucide-react';
 import { useI18n } from '../../../../i18n';
 import type { Ingredient, Allergen } from '../../../../types';
 
@@ -9,9 +9,13 @@ interface Props {
   userProfile: any;
   setUserProfile: any;
   dictionary: Ingredient[];
+  hydration?: { consumed: number; target: number };
+  setHydration?: (fn: any) => void;
+  movement?: { steps: number; target: number; activeMinutes: number; activeTarget: number };
+  setMovement?: (fn: any) => void;
 }
 
-export default function SettingsNutrition({ dailyMacros, setDailyMacros, userProfile, setUserProfile, dictionary }: Props) {
+export default function SettingsNutrition({ dailyMacros, setDailyMacros, userProfile, setUserProfile, dictionary, hydration, setHydration, movement, setMovement }: Props) {
   const { t } = useI18n();
   const [dislikeSearch, setDislikeSearch] = useState('');
 
@@ -178,6 +182,83 @@ export default function SettingsNutrition({ dailyMacros, setDailyMacros, userPro
           </div>
         </div>
       </div>
+
+      {/* Activity & Hydration Goals */}
+      {(setHydration || setMovement) && (
+        <div className="bg-surface-container-low p-6 rounded-sm border border-outline-variant/20 space-y-6">
+          <div className="flex items-center gap-3">
+            <Droplets className="w-6 h-6 text-primary" />
+            <h3 className="font-headline text-xl font-bold text-tertiary uppercase">{t.settings.activityGoals ?? 'Objetivos'}</h3>
+          </div>
+
+          {/* Hydration target */}
+          {setHydration && hydration && (
+            <div>
+              <div className="flex justify-between text-xs font-label font-bold tracking-widest uppercase mb-2">
+                <span className="text-on-surface-variant">{t.settings.hydrationTarget ?? 'Hidratación diaria'}</span>
+                <span className="text-tertiary">{hydration.target} {t.home.cups ?? 'vasos'}</span>
+              </div>
+              <input
+                type="range"
+                min={1}
+                max={20}
+                step={1}
+                value={hydration.target}
+                onChange={(e) =>
+                  setHydration((prev: any) => ({ ...prev, target: parseInt(e.target.value) }))
+                }
+                className="w-full h-2 bg-surface-container-highest rounded-full appearance-none cursor-pointer accent-secondary"
+                aria-label={t.settings.hydrationTarget ?? 'Hydration target'}
+              />
+            </div>
+          )}
+
+          {/* Movement goals */}
+          {setMovement && movement && (
+            <>
+              <div>
+                <div className="flex justify-between text-xs font-label font-bold tracking-widest uppercase mb-2">
+                  <span className="text-on-surface-variant flex items-center gap-1.5">
+                    <Footprints className="w-3 h-3" aria-hidden="true" />
+                    {t.settings.stepsTarget ?? 'Objetivo pasos'}
+                  </span>
+                  <span className="text-tertiary">{movement.target.toLocaleString()}</span>
+                </div>
+                <input
+                  type="range"
+                  min={1000}
+                  max={20000}
+                  step={500}
+                  value={movement.target}
+                  onChange={(e) =>
+                    setMovement((prev: any) => ({ ...prev, target: parseInt(e.target.value) }))
+                  }
+                  className="w-full h-2 bg-surface-container-highest rounded-full appearance-none cursor-pointer accent-primary"
+                  aria-label={t.settings.stepsTarget ?? 'Steps target'}
+                />
+              </div>
+              <div>
+                <div className="flex justify-between text-xs font-label font-bold tracking-widest uppercase mb-2">
+                  <span className="text-on-surface-variant">{t.settings.activeMinTarget ?? 'Min. activos objetivo'}</span>
+                  <span className="text-tertiary">{movement.activeTarget} min</span>
+                </div>
+                <input
+                  type="range"
+                  min={10}
+                  max={120}
+                  step={5}
+                  value={movement.activeTarget}
+                  onChange={(e) =>
+                    setMovement((prev: any) => ({ ...prev, activeTarget: parseInt(e.target.value) }))
+                  }
+                  className="w-full h-2 bg-surface-container-highest rounded-full appearance-none cursor-pointer accent-primary"
+                  aria-label={t.settings.activeMinTarget ?? 'Active minutes target'}
+                />
+              </div>
+            </>
+          )}
+        </div>
+      )}
     </>
   );
 }

@@ -17,6 +17,10 @@ export default function Settings({
   userProfile,
   setUserProfile,
   dictionary = [],
+  hydration,
+  setHydration,
+  movement,
+  setMovement,
 }: {
   dailyMacros?: any;
   setDailyMacros?: any;
@@ -27,6 +31,10 @@ export default function Settings({
   userProfile?: any;
   setUserProfile?: any;
   dictionary?: Ingredient[];
+  hydration?: { consumed: number; target: number };
+  setHydration?: (fn: any) => void;
+  movement?: { steps: number; target: number; activeMinutes: number; activeTarget: number };
+  setMovement?: (fn: any) => void;
 }) {
   const { t } = useI18n();
   const { navigateTo } = useNavigation();
@@ -51,6 +59,10 @@ export default function Settings({
           userProfile={userProfile}
           setUserProfile={setUserProfile}
           dictionary={dictionary}
+          hydration={hydration}
+          setHydration={setHydration}
+          movement={movement}
+          setMovement={setMovement}
         />
 
         <SettingsAppearance

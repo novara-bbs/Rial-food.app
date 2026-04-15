@@ -138,7 +138,7 @@ export default function App() {
       case 'daily-check-in': return <DailyCheckIn initialStatus={checkInStatus?.status || null} onBack={() => navigateTo(previousScreen)} onComplete={handleCompleteCheckIn} />;
       case 'ai-coach': return <AICoach onBack={() => navigateTo(previousScreen)} isPro={isPro} memoryContext={aiCoachMemory} />;
       case 'profile': return <Profile userProfile={userProfile} onBack={() => navigateTo(previousScreen)} realFeelLogs={realFeelLogs} savedRecipes={savedRecipes} communityPosts={communityPosts} />;
-      case 'settings': return <Settings dailyMacros={dailyMacros} setDailyMacros={setDailyMacros} isPro={isProState} setIsPro={setIsPro} showAIBot={showAIBotState} setShowAIBot={setShowAIBot} userProfile={userProfile} setUserProfile={setUserProfile} dictionary={dictionary} />;
+      case 'settings': return <Settings dailyMacros={dailyMacros} setDailyMacros={setDailyMacros} isPro={isProState} setIsPro={setIsPro} showAIBot={showAIBotState} setShowAIBot={setShowAIBot} userProfile={userProfile} setUserProfile={setUserProfile} dictionary={dictionary} hydration={hydration} setHydration={setHydration} movement={movement} setMovement={setMovement} />;
       case 'real-feel-diary': return <RealFeelDiary realFeelLogs={realFeelLogs} onBack={() => navigateTo('more')} />;
       case 'fasting-timer': return <FastingTimer onBack={() => navigateTo('more')} />;
       case 'pantry': return <Pantry onBack={() => navigateTo('more')} />;
@@ -230,6 +230,7 @@ export default function App() {
             onOpenNotifications={() => navigateTo('notifications')}
             userName={userProfile?.name}
             isPro={isPro}
+            userAvatar={userProfile?.avatar}
           />
           <main className="flex-1 overflow-y-auto pb-24 md:pb-8 pt-4 hide-scrollbar">
             <ErrorBoundary>

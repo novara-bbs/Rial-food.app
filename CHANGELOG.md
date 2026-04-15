@@ -1,5 +1,29 @@
 # RIAL App - Changelog
 
+## [1.5.8] - 2026-04-15
+
+### Q9 — Avatar + goals + settings consolidation
+
+#### GlobalHeader avatar
+- Replaced hardcoded Unsplash `<img>` with `userProfile.avatar` (base64); falls back to 2-char initials from `userName` if no avatar
+- Added `userAvatar?: string | null` prop to `GlobalHeader`; wired from `App.tsx` via `userProfile.avatar`
+
+#### Avatar upload in SettingsProfile
+- Profile section header now shows real avatar (or initials circle) instead of hardcoded stock photo
+- Clicking the avatar triggers a `<input type="file" accept="image/*">` hidden input; image compressed via `compressImage(400px, 0.7)` and stored to `userProfile.avatar` (base64)
+- Camera hover overlay (icon) indicates the avatar is tappable
+
+#### Hydration + movement goals in SettingsNutrition
+- New "Objetivos de actividad" card in SettingsNutrition with: hydration target slider (1–20 cups), steps target slider (1k–20k, step 500), active minutes target slider (10–120 min, step 5)
+- Card renders only when `setHydration` or `setMovement` are provided (backward-compat)
+- Props `hydration`, `setHydration`, `movement`, `setMovement` wired through `Settings.tsx` → App.tsx `settings` case
+
+#### i18n
+- Added to both locales: `settings.activityGoals`, `settings.hydrationTarget`, `settings.stepsTarget`, `settings.activeMinTarget`, `settings.uploadAvatar`
+
+#### Onboarding → dailyMacros (verified ✓)
+- `App.tsx` onComplete already calls `setDailyMacros((prev) => ({ ...prev, target: result.targets }))` — no change needed
+
 ## [1.5.7] - 2026-04-15
 
 ### Q8 — Home Progress preview card

@@ -7,9 +7,10 @@ interface GlobalHeaderProps {
   onOpenNotifications: () => void;
   userName?: string;
   isPro?: boolean;
+  userAvatar?: string | null;
 }
 
-export default function GlobalHeader({ onOpenSettings, onOpenProfile, onOpenNotifications, userName, isPro }: GlobalHeaderProps) {
+export default function GlobalHeader({ onOpenSettings, onOpenProfile, onOpenNotifications, userName, isPro, userAvatar }: GlobalHeaderProps) {
   const { t } = useI18n();
 
   return (
@@ -58,13 +59,18 @@ export default function GlobalHeader({ onOpenSettings, onOpenProfile, onOpenNoti
             <p className="text-[10px] font-bold text-tertiary uppercase tracking-tight leading-none">{userName || 'User'}</p>
             <p className="text-[8px] font-mono text-primary uppercase tracking-widest mt-1">{isPro ? t.header.proMember : t.header.member}</p>
           </div>
-          <div className="w-8 h-8 rounded-full bg-surface-container-highest border border-outline-variant/20 overflow-hidden group-hover:border-primary/50 transition-all">
-            <img
-              src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=100&q=80"
-              alt={t.profile.title}
-              className="w-full h-full object-cover"
-              referrerPolicy="no-referrer"
-            />
+          <div className="w-8 h-8 rounded-full bg-surface-container-highest border border-outline-variant/20 overflow-hidden group-hover:border-primary/50 transition-all flex items-center justify-center">
+            {userAvatar ? (
+              <img
+                src={userAvatar}
+                alt={t.profile.title}
+                className="w-full h-full object-cover"
+              />
+            ) : (
+              <span className="font-headline font-bold text-xs text-primary uppercase select-none">
+                {(userName ?? '?').slice(0, 2)}
+              </span>
+            )}
           </div>
         </button>
       </div>
