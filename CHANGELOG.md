@@ -1,5 +1,29 @@
 # RIAL App - Changelog
 
+## [1.5.5] - 2026-04-15
+
+### Q5 — Lighthouse/PWA audit: A11y + manifest dedup
+
+#### A11y — navigation
+- `BottomNav.tsx`: added `aria-label` to `<nav>`, `aria-current="page"` to active item, `aria-hidden="true"` to all decorative icons; i18n-referenced `aria-label` for Create FAB (was hardcoded Spanish)
+- `Sidebar.tsx`: same fixes — `aria-label` on `<nav>`, `aria-current="page"` on active item, `aria-hidden="true"` on icons
+- `GlobalHeader.tsx`: added `aria-label` + changed `type="text"` → `type="search"` on search input
+
+#### A11y — form inputs (WCAG 4.1.2)
+- `Login.tsx`, `Signup.tsx`, `ForgotPassword.tsx`: `aria-label` on all email/password/name inputs; eye-toggle buttons now have `aria-label` (show/hide) + icon `aria-hidden`
+- `TodaysMeals.tsx`: `aria-label` on inline portion-edit input (was unlabeled)
+- `WeightQuickLog.tsx`: `aria-label` on weight number input
+- `Pantry.tsx`: `aria-label` on ingredient name + quantity inputs
+- `Home.tsx`: `aria-label` on hydration target range slider
+
+#### i18n
+- Added `nav.mainNav` (ES: "Navegación principal", EN: "Main navigation")
+- Added `home.editPortionGrams` (ES: "Cantidad en gramos", EN: "Amount in grams")
+- Added `auth.showPassword` / `auth.hidePassword` in both locales
+
+#### PWA — manifest dedup
+- `vite.config.ts`: removed inline `manifest:` block from VitePWA config — `public/manifest.json` is now the single source of truth; avoids duplicate `<link rel="manifest">` in production HTML
+
 ## [1.5.4] - 2026-04-15
 
 ### Q4 — A11y + i18n cleanup + UX gaps

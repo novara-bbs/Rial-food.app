@@ -140,7 +140,7 @@ export default function TodaysMeals({
                           <button type="button" onClick={() => setEditGrams(Math.max(1, editGrams - 10))} className="p-2 text-on-surface-variant hover:text-primary transition-colors">
                             <Minus className="w-3.5 h-3.5" />
                           </button>
-                          <input type="text" inputMode="decimal" value={editGrams} onChange={e => { const v = parseFloat(e.target.value); if (!isNaN(v) && v > 0) setEditGrams(v); }} className="w-16 text-center bg-transparent text-on-surface font-headline font-bold text-sm border-x border-outline-variant/20 py-1.5 focus:outline-none" />
+                          <input type="text" inputMode="decimal" value={editGrams} onChange={e => { const v = parseFloat(e.target.value); if (!isNaN(v) && v > 0) setEditGrams(v); }} aria-label={t.home.editPortionGrams} className="w-16 text-center bg-transparent text-on-surface font-headline font-bold text-sm border-x border-outline-variant/20 py-1.5 focus:outline-none" />
                           <button type="button" onClick={() => setEditGrams(editGrams + 10)} className="p-2 text-on-surface-variant hover:text-primary transition-colors">
                             <Plus className="w-3.5 h-3.5" />
                           </button>

@@ -123,6 +123,7 @@ export default function WeightQuickLog({ weightHistory, setWeightHistory, unitSy
               value={inputValue}
               onChange={e => setInputValue(e.target.value)}
               placeholder={currentDisplay !== null ? String(currentDisplay) : '70.0'}
+              aria-label={`${t.home.weight} (${unit})`}
               className="flex-1 bg-surface-container-highest border border-outline-variant/30 rounded-sm px-3 py-2 text-sm font-mono text-tertiary focus:outline-none focus:border-primary"
               autoFocus
               onKeyDown={e => { if (e.key === 'Enter') handleLog(); }}

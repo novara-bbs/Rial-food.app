@@ -13,7 +13,7 @@ export default function BottomNav({ currentScreen, setCurrentScreen, onOpenCreat
   ];
 
   return (
-    <nav className="md:hidden fixed bottom-0 left-0 w-full z-50 flex justify-around items-end px-2 pb-safe-nav pt-2 bg-background/95 backdrop-blur-xl border-t border-outline-variant/15">
+    <nav aria-label={t.nav.mainNav} className="md:hidden fixed bottom-0 left-0 w-full z-50 flex justify-around items-end px-2 pb-safe-nav pt-2 bg-background/95 backdrop-blur-xl border-t border-outline-variant/15">
       {navItems.map(item => {
         const Icon = item.icon;
         const isActive = currentScreen === item.id;
@@ -25,10 +25,10 @@ export default function BottomNav({ currentScreen, setCurrentScreen, onOpenCreat
               key={item.id}
               onClick={onOpenCreate}
               className="flex flex-col items-center justify-center w-16 -mt-6 mb-2"
-              aria-label="Crear"
+              aria-label={t.nav.create}
             >
               <div className="w-14 h-14 rounded-full bg-primary text-on-primary flex items-center justify-center shadow-lg shadow-primary/20 hover:scale-105 transition-transform">
-                <Icon className="w-7 h-7" />
+                <Icon className="w-7 h-7" aria-hidden="true" />
               </div>
             </button>
           );
@@ -39,11 +39,12 @@ export default function BottomNav({ currentScreen, setCurrentScreen, onOpenCreat
             type="button"
             key={item.id}
             onClick={() => setCurrentScreen(item.id)}
+            aria-current={isActive ? 'page' : undefined}
             className={`flex flex-col items-center justify-center w-16 py-2 transition-all ${
               isActive ? 'text-primary scale-110' : 'text-on-surface-variant hover:text-on-surface'
             }`}
           >
-            <Icon className={`w-6 h-6 mb-1 ${isActive ? 'fill-primary/20' : ''}`} />
+            <Icon className={`w-6 h-6 mb-1 ${isActive ? 'fill-primary/20' : ''}`} aria-hidden="true" />
             <span className="font-label text-[10px] font-bold tracking-[0.1em] uppercase">{item.label}</span>
           </button>
         );

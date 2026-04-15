@@ -9,12 +9,12 @@ Last updated: 2026-04-15
 - Vercel project id: `prj_t11VHYQjptazjUx7Y2hWLz0IDAjg`
 
 ## Recent merged commits (Rial-food.app main)
+- `(pending)` `feat(sprint-q5): Lighthouse/PWA audit — A11y form labels, nav aria, manifest dedup`
+- `ea9108b` `docs(ai): update Q4 commit hash in state.md`
 - `9554b9c` `feat(sprint-q4): A11y nested-button fix, day i18n, weight entries list`
 - `deef2ed` `feat(sprint-q3): batch cooking UI, weight note + target progress, i18n, type fix`
 - `133e68e` `feat(sprint-q2): AddMeal unified search + OFFResult type fix`
 - `1659206` `feat(sprint-q1): fuzzy ingredient matching v2 — aliases, prep-strip, measurements`
-- `88b64bc` `fix(e2e): fix CI E2E failures — consent selectors + vite preview in CI`
-- `83e6c49` `feat(sprint-p): WeeklyReview Sunday home card + a11y AvatarRing button`
 
 ## Quality baseline (2026-04-15)
 - TypeScript: 0 errors (`npx tsc --noEmit`)
@@ -119,8 +119,8 @@ Execute Supabase sprint ONLY when ALL of these hold:
 - ~~**Q2**~~ ✓ DONE — AddMeal unified search + OFFResult type fix (`133e68e`)
 - ~~**Q3**~~ ✓ DONE — Batch cooking UI, weight note + target progress, i18n (`deef2ed`)
 - ~~**Q4**~~ ✓ DONE — A11y nested-button fix (Challenges, Creadores), icon aria-labels, day i18n, weight entries list
-- **Q5** — Lighthouse/PWA audit (gate: Performance ≥ 85, A11y ≥ 95, PWA ≥ 90)
-- **Q6** — Supabase integration (gated): apply migration → expand SyncKey per audit above → wire `syncOnSignIn`/`pushToCloud` in AppStateContext → `useSupabasePersistence` toggle in SettingsSystem → E2E with real Supabase project
+- ~~**Q5**~~ ✓ DONE — Lighthouse/PWA audit: nav `aria-current` + `aria-label`, WCAG 4.1.2 form labels across 8 components, manifest dedup
+- **Q6** — Supabase integration (gated — see feature-freeze gate above): apply migration → expand SyncKey per audit → wire `syncOnSignIn`/`pushToCloud` in AppStateContext → `useSupabasePersistence` toggle in SettingsSystem → E2E with real Supabase project
 
 ## When to update this file
 - A release line or deployment target changes

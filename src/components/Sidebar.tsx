@@ -24,11 +24,11 @@ export default function Sidebar({ currentScreen, setCurrentScreen, onOpenCreate 
           onClick={onOpenCreate}
           className="w-full bg-primary text-on-primary py-3 rounded-sm font-headline font-bold text-sm uppercase tracking-widest hover:bg-primary-container transition-colors flex items-center justify-center gap-2 shadow-lg shadow-primary/10"
         >
-          <Plus className="w-5 h-5" /> {t.nav.create}
+          <Plus className="w-5 h-5" aria-hidden="true" /> {t.nav.create}
         </button>
       </div>
 
-      <nav className="flex-1 flex flex-col space-y-2">
+      <nav aria-label={t.nav.mainNav} className="flex-1 flex flex-col space-y-2">
         {navItems.map(item => {
           const Icon = item.icon;
           const isActive = currentScreen === item.id;
@@ -37,13 +37,14 @@ export default function Sidebar({ currentScreen, setCurrentScreen, onOpenCreate 
               type="button"
               key={item.id}
               onClick={() => setCurrentScreen(item.id)}
+              aria-current={isActive ? 'page' : undefined}
               className={`flex items-center py-3 pl-6 pr-4 w-full text-left transition-all ${
                 isActive
                   ? 'text-primary font-bold border-l-4 border-primary bg-surface-container-high'
                   : 'text-on-surface-variant hover:bg-surface-container hover:text-on-surface'
               }`}
             >
-              <Icon className="w-5 h-5 mr-4" />
+              <Icon className="w-5 h-5 mr-4" aria-hidden="true" />
               <span className="font-medium uppercase tracking-wider text-sm font-label">{item.label}</span>
             </button>
           );

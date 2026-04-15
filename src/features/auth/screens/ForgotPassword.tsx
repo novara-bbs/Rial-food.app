@@ -74,6 +74,7 @@ export default function ForgotPassword({ onBack }: ForgotPasswordProps) {
                   value={email}
                   onChange={e => setEmail(e.target.value)}
                   placeholder={t.auth.emailPlaceholder}
+                  aria-label={t.auth.emailPlaceholder}
                   autoComplete="email"
                   className="w-full pl-11 pr-4 py-3.5 bg-surface-container-low border border-outline-variant/30 rounded-xl font-body text-sm text-on-surface placeholder:text-on-surface-variant/50 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-colors"
                 />

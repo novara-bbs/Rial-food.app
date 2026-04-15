@@ -376,6 +376,7 @@ export default function Home({
               max="20"
               value={hydration.target}
               onChange={(e) => setHydration({ ...hydration, target: parseInt(e.target.value) })}
+              aria-label={`${t.home.dailyTarget} (${t.home.cups})`}
               className="w-full accent-secondary"
             />
           </div>

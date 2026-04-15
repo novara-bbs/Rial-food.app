@@ -6,6 +6,7 @@ const es = {
     explore: 'Explorar',
     more: 'Más',
     create: 'Crear',
+    mainNav: 'Navegación principal',
   },
   // Sub-tabs
   tabs: {
@@ -78,6 +79,7 @@ const es = {
     consumed: 'consumido',
     friend: 'Amigo',
     points: 'Puntos',
+    editPortionGrams: 'Cantidad en gramos',
     checkIn: 'Bienestar',
     weight: 'Peso',
     weightGoal: 'Objetivo',
@@ -1521,6 +1523,8 @@ const es = {
     emailPlaceholder: 'tu@email.com',
     passwordPlaceholder: 'Contraseña (mín. 8 caracteres)',
     namePlaceholder: 'Tu nombre',
+    showPassword: 'Mostrar contraseña',
+    hidePassword: 'Ocultar contraseña',
     signIn: 'Iniciar sesión',
     createAccount: 'Crear cuenta',
     forgotPassword: '¿Olvidaste tu contraseña?',

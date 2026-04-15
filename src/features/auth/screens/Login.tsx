@@ -78,6 +78,7 @@ export default function Login({ onNavigateToSignup, onForgotPassword }: LoginPro
               value={email}
               onChange={e => setEmail(e.target.value)}
               placeholder={t.auth.emailPlaceholder}
+              aria-label={t.auth.emailPlaceholder}
               autoComplete="email"
               className="w-full pl-11 pr-4 py-3.5 bg-surface-container-low border border-outline-variant/30 rounded-xl font-body text-sm text-on-surface placeholder:text-on-surface-variant/50 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-colors"
             />
@@ -91,15 +92,17 @@ export default function Login({ onNavigateToSignup, onForgotPassword }: LoginPro
               value={password}
               onChange={e => setPassword(e.target.value)}
               placeholder={t.auth.passwordPlaceholder}
+              aria-label={t.auth.passwordPlaceholder}
               autoComplete="current-password"
               className="w-full pl-11 pr-12 py-3.5 bg-surface-container-low border border-outline-variant/30 rounded-xl font-body text-sm text-on-surface placeholder:text-on-surface-variant/50 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-colors"
             />
             <button
               type="button"
               onClick={() => setShowPassword(v => !v)}
+              aria-label={showPassword ? t.auth.hidePassword : t.auth.showPassword}
               className="absolute right-4 top-1/2 -translate-y-1/2 text-on-surface-variant hover:text-on-surface"
             >
-              {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+              {showPassword ? <EyeOff className="w-4 h-4" aria-hidden="true" /> : <Eye className="w-4 h-4" aria-hidden="true" />}
             </button>
           </div>
 

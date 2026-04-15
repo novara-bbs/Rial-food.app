@@ -13,6 +13,9 @@ export default defineConfig(({mode}) => {
       VitePWA({
         registerType: 'autoUpdate',
         devOptions: { enabled: false },
+        // manifest is defined in public/manifest.json — single source of truth
+        // VitePWA reads it from public/ and generates the SW referencing it
+        includeAssets: ['icons/*.png', 'icons/*.svg', 'favicon-*.png', 'apple-touch-icon-180.png'],
         workbox: {
           // Precache app shell
           globPatterns: ['**/*.{js,css,html,ico,png,svg,webp,woff2}'],
@@ -59,22 +62,6 @@ export default defineConfig(({mode}) => {
                 cacheableResponse: { statuses: [0, 200] },
               },
             },
-          ],
-        },
-        manifest: {
-          name: 'RIAL — Nutrición Inteligente',
-          short_name: 'RIAL',
-          description: 'Tu compañero de nutrición con IA. Tracking, recetas, bienestar y más.',
-          theme_color: '#09090b',
-          background_color: '#09090b',
-          display: 'standalone',
-          orientation: 'portrait',
-          scope: '/',
-          start_url: '/',
-          icons: [
-            { src: '/icons/icon-192.png', sizes: '192x192', type: 'image/png' },
-            { src: '/icons/icon-512.png', sizes: '512x512', type: 'image/png' },
-            { src: '/icons/icon-maskable-512.png', sizes: '512x512', type: 'image/png', purpose: 'maskable' },
           ],
         },
       }),

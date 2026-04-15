@@ -78,6 +78,7 @@ export default function Pantry({ onBack }: { onBack: () => void }) {
               autoFocus
               type="text"
               placeholder={t.pantry.ingredientName}
+              aria-label={t.pantry.ingredientName}
               value={newName}
               onChange={e => setNewName(e.target.value)}
               className="w-full bg-surface-container-low border border-outline-variant/30 p-3 rounded-sm text-tertiary placeholder:text-outline focus:outline-none focus:border-primary transition-colors"
@@ -85,6 +86,7 @@ export default function Pantry({ onBack }: { onBack: () => void }) {
             <input
               type="text"
               placeholder={t.pantry.quantity}
+              aria-label={t.pantry.quantity}
               value={newQuantity}
               onChange={e => setNewQuantity(e.target.value)}
               className="w-full bg-surface-container-low border border-outline-variant/30 p-3 rounded-sm text-tertiary placeholder:text-outline focus:outline-none focus:border-primary transition-colors"

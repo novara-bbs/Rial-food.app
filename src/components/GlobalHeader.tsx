@@ -18,8 +18,9 @@ export default function GlobalHeader({ onOpenSettings, onOpenProfile, onOpenNoti
         <div className="relative max-w-xs w-full hidden md:block">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-on-surface-variant/50" />
           <input
-            type="text"
+            type="search"
             placeholder={t.header.searchPlaceholder}
+            aria-label={t.header.searchPlaceholder}
             className="w-full bg-surface-container-highest/30 border border-outline-variant/20 rounded-full py-1.5 pl-9 pr-4 text-xs focus:outline-none focus:border-primary/50 transition-all"
           />
         </div>
