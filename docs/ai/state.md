@@ -9,15 +9,16 @@ Last updated: 2026-04-15
 - Vercel project id: `prj_t11VHYQjptazjUx7Y2hWLz0IDAjg`
 
 ## Recent merged commits (Rial-food.app main)
+- `88b64bc` `fix(e2e): fix CI E2E failures — consent selectors + vite preview in CI`
 - `83e6c49` `feat(sprint-p): WeeklyReview Sunday home card + a11y AvatarRing button`
 - `fb5e062` `docs(ai): update state.md with Sprint O results and next sprint roadmap`
 - `6075a36` `docs(v1.5.2): multi-agent context system — shared docs/ai/, thin tool adapters`
 - `3369b50` `feat(sprint-o): Supabase migration, WeeklyReview, 5 test suites, a11y + bundle v2`
-- `dd085b8` `perf + refactor: AppStateContext memoization, lazy seeds, Settings/RecipeDetail splits`
 
 ## Quality baseline (2026-04-15)
 - TypeScript: 0 errors (`npx tsc --noEmit`)
-- Tests: 325/325 passing (`npx vitest run`) — 5 new suites added in Sprint O
+- Tests: 325/325 unit tests passing — 5 new suites added in Sprint O
+- E2E: fixed after Sprint P (regex matched Spanish `"Entendido, continuar"`; webServer now `vite preview` in CI)
 - Build: main app chunk 284 KB raw / 56 KB gzip (recharts + react-markdown deferred)
 - Lint: 0 errors
 
@@ -44,24 +45,81 @@ Last updated: 2026-04-15
 - State: localStorage via `useLocalStorageState` in `AppStateContext`
 - New handlers: factory function in `features/*/handlers/`, wired in `AppStateContext`
 - All user-visible strings: `t.section.key` via `useI18n()`
+- Archived product/market docs: `docs/archive/` (not loaded by agents)
 
 ## Current risks to watch
 - Supabase DB migration not yet applied to remote project (intentionally deferred — apply only after features stable)
 - `useSupabasePersistence` flag not wired (intentionally deferred — full Supabase sprint after feature-complete)
 - vendor-recharts chunk is 102 KB gzip — acceptable but worth monitoring
 - Challenges/Creadores card divs still have onClick (complex to fix: nested buttons → needs restructure)
+- **SyncKey covers ~10 of ~35 localStorage keys** — see audit below. Gap must be resolved in Supabase sprint (Q6).
+
+## localStorage audit (2026-04-15)
+All keys below are prefixed with `rial_` by `useLocalStorageState`. Column "Sync?" = whether `src/lib/sync.ts` `SyncKey` type includes it.
+
+| Key | Writer | Sync? | Recommendation at Q6 |
+|-----|--------|-------|----------------------|
+| `userProfile` | AppStateContext | ✓ | Keep — core identity |
+| `dailyMacros` | AppStateContext | ✓ | Keep — daily target + consumed |
+| `savedRecipes` | AppStateContext | ✓ | Keep — user's recipe book |
+| `mealPlan` | AppStateContext | ✓ | Keep — weekly plan |
+| `shoppingList` | AppStateContext | ✓ | Keep |
+| `realFeelLogs` | AppStateContext | ✓ | Keep |
+| `toleranceLogs` | AppStateContext | ✓ | Keep |
+| `weightHistory` | AppStateContext | ✓ | Keep |
+| `nutritionHistory` | AppStateContext | ✓ | Keep |
+| `isPro` | AppStateContext | ✓ | Keep (but validated server-side via RevenueCat) |
+| `likedPosts` | AppStateContext | ✗ | Add — social engagement cross-device |
+| `savedPosts` | AppStateContext | ✗ | Add |
+| `isFirstTime` | AppStateContext | ✗ | Add — prevents re-running onboarding |
+| `checkInStatus` | AppStateContext | ✗ | Add |
+| `hydration` | AppStateContext | ✗ | Add (daily, but useful across devices) |
+| `movement` | AppStateContext | ✗ | Add |
+| `dailyGoal` | AppStateContext | ✗ | Add |
+| `userFoods` | AppStateContext | ✗ | Add — custom scanned foods |
+| `communityPosts` | AppStateContext | ✗ | **Skip** — sourced from backend at Q6 |
+| `communityStories` | AppStateContext | ✗ | **Skip** — sourced from backend at Q6 |
+| `notifications` | AppStateContext | ✗ | **Skip** — backend-driven at Q6 |
+| `dailyLog` | AppStateContext | ✗ | Add — user's actual food log |
+| `foodHistory` | AppStateContext | ✗ | Add |
+| `favoriteIds` | AppStateContext | ✗ | Add |
+| `showAIBot` | AppStateContext | ✗ | **Skip** — UI pref, device-local |
+| `followedCreators` | Discover/Creadores/Profile | ✗ | Add — social graph |
+| `joinedChallenges` | Challenges | ✗ | Add |
+| `challengeJoinDates` | Challenges | ✗ | Add |
+| `challengeProgress` | ChallengeDetail | ✗ | Add |
+| `weeklyCheckIns` | WeeklyCheckIn | ✗ | Add |
+| `pantryItems` | Pantry | ✗ | Add |
+| `fasting-protocol` | FastingTimer | ✗ | Add — user pref |
+| `fasting-start` | FastingTimer | ✗ | **Skip** — active timer, device-local |
+| `fasting-history` | FastingTimer | ✗ | Add |
+| `aicoach-messages-*` | AICoach | ✗ | **Skip** — chat history, maybe keep local for privacy |
+| `notificationsEnabled` | SettingsSystem | ✗ | **Skip** — device pref |
+| `profilePublic` | SettingsSystem | ✗ | Add |
+
+**Summary:** 10 synced / 27 unsynced. Of the 27 unsynced: ~18 should sync (user data), ~9 should stay local (UI prefs, active timers, chat, backend-sourced).
+
+**Decision deferred to Q6 (Supabase sprint):** expand `SyncKey` + add sync-gate per key + dedup the `rial_*` prefix convention.
 
 ## Supabase integration strategy
-Infrastructure is prepared (`migration SQL`, `sync.ts`, `AuthContext`, auth screens). Full wiring intentionally deferred until:
-1. All major features complete and data model frozen
-2. Dedicated "Sprint Supabase": apply migration + wire sync in AppStateContext + Settings toggle + E2E test
+Infrastructure is prepared (`migration SQL`, `sync.ts`, `AuthContext`, auth screens). Full wiring intentionally deferred until all features stable (see gate below). Rationale: wiring sync into AppStateContext while data model still evolves = technical debt, since every new `useLocalStorageState` key would need a SyncKey decision and test.
 
-## Next sprint candidates
-- Q1: Feature completeness — C3 (ImportRecipeURL deeper ingredient parsing), D (AddMeal unified search + multi-add)
-- Q2: Feature completeness — E (batch cooking/leftovers v0 rule ports), P (custom weight refinements)
-- Q3: A11y — Challenges/Creadores card restructure, remaining icon-only button audit
-- Q4: Lighthouse/PWA (Performance ≥ 85, A11y ≥ 95, PWA ≥ 90) — after features land
-- Supabase (last sprint): migration → sync wiring → Settings toggle → E2E
+## Feature-freeze gate (triggers Q6)
+Execute Supabase sprint ONLY when ALL of these hold:
+- Q1-Q5 merged to main
+- `npx tsc --noEmit` → 0 errors
+- `npx vitest run` → 0 regressions
+- No refactor PRs open
+- Data model (types + SyncKey shape) stable for 1 full sprint
+- E2E green on last 3 commits to main
+
+## Next sprint candidates (ordered)
+- **Q1** — Feature completeness: C3 (`ImportRecipeURL` deeper fuzzy ingredient matching)
+- **Q2** — Feature completeness: D (`AddMeal` unified search + multi-add — most-used flow)
+- **Q3** — Feature completeness: E (batch cooking + leftovers v0 rule ports) + P (custom weight refinements)
+- **Q4** — A11y: Challenges/Creadores card restructure (nested-button pattern), remaining icon-only button audit
+- **Q5** — Lighthouse/PWA audit (gate: Performance ≥ 85, A11y ≥ 95, PWA ≥ 90)
+- **Q6** — Supabase integration (gated): apply migration → expand SyncKey per audit above → wire `syncOnSignIn`/`pushToCloud` in AppStateContext → `useSupabasePersistence` toggle in SettingsSystem → E2E with real Supabase project
 
 ## When to update this file
 - A release line or deployment target changes
