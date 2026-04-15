@@ -108,6 +108,7 @@ const en: Translations = {
     suggestedForYou: 'Suggested for you',
     fillsRemaining: 'Fills your remaining macros',
     viewProgress: 'View progress',
+    viewDetails: 'View details',
     weeklyCalAvg: 'Avg kcal',
     proteinDaysHit: 'Protein days',
     weightDelta: 'Week weight',

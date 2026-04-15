@@ -109,6 +109,7 @@ const es = {
     suggestedForYou: 'Sugerido para ti',
     fillsRemaining: 'Llena tus macros restantes',
     viewProgress: 'Ver progreso',
+    viewDetails: 'Ver detalles',
     weeklyCalAvg: 'Kcal media',
     proteinDaysHit: 'Días proteína',
     weightDelta: 'Peso semana',

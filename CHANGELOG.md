@@ -1,5 +1,19 @@
 # RIAL App - Changelog
 
+## [1.5.7] - 2026-04-15
+
+### Q8 — Home Progress preview card
+
+#### ProgressPreviewCard
+- New `src/features/home/components/ProgressPreviewCard.tsx`: replaces `WeightQuickLog` on Home
+- Shows current weight, 7-day delta (vs entry closest to 7 days ago, not just previous), goal progress bar with distance remaining, and mini 7-entry sparkline with a dot on the latest point
+- Bottom action row: inline "+ Registrar peso" pill (collapses/expands quick-log form) + "Ver detalles →" deep-link to Progress tab via `onNavigateToProgress`
+- Pressing Escape closes the inline form; Enter confirms
+- `WeightQuickLog.tsx` preserved (not deleted) — still usable if needed; Home no longer imports it
+
+#### i18n
+- Added `home.viewDetails` (ES: "Ver detalles", EN: "View details") in both locale files
+
 ## [1.5.6] - 2026-04-15
 
 ### Q7 — Weight flow unification

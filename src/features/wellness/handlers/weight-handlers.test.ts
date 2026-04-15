@@ -10,7 +10,10 @@ describe('createHandleLogWeight', () => {
   beforeEach(() => {
     setWeightHistory = vi.fn();
     setUserProfile = vi.fn();
-    handleLogWeight = createHandleLogWeight({ setWeightHistory, setUserProfile });
+    handleLogWeight = createHandleLogWeight({
+      setWeightHistory: setWeightHistory as any,
+      setUserProfile: setUserProfile as any,
+    });
   });
 
   it('writes to both weightHistory and userProfile.weight', () => {

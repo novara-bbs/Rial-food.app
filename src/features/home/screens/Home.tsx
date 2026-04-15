@@ -9,7 +9,7 @@ import RealScoreBadge from '../components/RealScoreBadge';
 import WeeklyMiniDash from '../components/WeeklyMiniDash';
 import NextMealSuggestion from '../components/NextMealSuggestion';
 import QuickActions from '../components/QuickActions';
-import WeightQuickLog from '../components/WeightQuickLog';
+import ProgressPreviewCard from '../components/ProgressPreviewCard';
 import { useI18n } from '../../../i18n';
 import { useAppState } from '../../../contexts/AppStateContext';
 import { calculateStreak } from '../../profile/utils/gamification';
@@ -92,7 +92,7 @@ export default function Home({
   );
 
   // Weekly progress metrics
-  const { weightHistory, setWeightHistory, shoppingList, savedRecipes } = useAppState();
+  const { weightHistory, shoppingList, savedRecipes } = useAppState();
   const weeklyProgress = useMemo(
     () => calcWeeklyProgress(nutritionHistory as any[], weightHistory as any[], dailyMacros.target.pro),
     [nutritionHistory, weightHistory, dailyMacros.target.pro]
@@ -383,12 +383,12 @@ export default function Home({
         )}
       </div>
 
-      {/* 6b. Weight Quick Log */}
-      <WeightQuickLog
+      {/* 6b. Progress Preview Card — weight, sparkline, quick-log, deep-link */}
+      <ProgressPreviewCard
         weightHistory={weightHistory as any[]}
-        setWeightHistory={setWeightHistory}
         unitSystem={userProfile?.unitSystem ?? 'metric'}
         targetWeight={userProfile?.targetWeight}
+        onNavigateToProgress={onNavigateToProgress}
       />
 
       {/* 6. Real Feel — conditional post-meal */}

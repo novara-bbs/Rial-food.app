@@ -9,7 +9,8 @@ Last updated: 2026-04-15
 - Vercel project id: `prj_t11VHYQjptazjUx7Y2hWLz0IDAjg`
 
 ## Recent merged commits (Rial-food.app main)
-- `(pending)` `feat(sprint-q7): unified weight flow — single handler, onboarding seed, Settings sync`
+- `(pending)` `feat(sprint-q8): ProgressPreviewCard — sparkline, 7d delta, goal bar, quick-log, deep-link`
+- `a9d2ec3` `feat(sprint-q7): unified weight flow — single handler, onboarding seed, Settings sync`
 - `ab34efa` `feat(sprint-q5): Lighthouse/PWA audit — A11y form labels, nav aria, manifest dedup`
 - `ea9108b` `docs(ai): update Q4 commit hash in state.md`
 - `9554b9c` `feat(sprint-q4): A11y nested-button fix, day i18n, weight entries list`
