@@ -9,11 +9,11 @@ Last updated: 2026-04-15
 - Vercel project id: `prj_t11VHYQjptazjUx7Y2hWLz0IDAjg`
 
 ## Recent merged commits (Rial-food.app main)
+- `[Q3]` `feat(sprint-q3): batch cooking UI, weight note + target progress, i18n, type fix`
+- `133e68e` `feat(sprint-q2): AddMeal unified search + OFFResult type fix`
+- `1659206` `feat(sprint-q1): fuzzy ingredient matching v2 — aliases, prep-strip, measurements`
 - `88b64bc` `fix(e2e): fix CI E2E failures — consent selectors + vite preview in CI`
 - `83e6c49` `feat(sprint-p): WeeklyReview Sunday home card + a11y AvatarRing button`
-- `fb5e062` `docs(ai): update state.md with Sprint O results and next sprint roadmap`
-- `6075a36` `docs(v1.5.2): multi-agent context system — shared docs/ai/, thin tool adapters`
-- `3369b50` `feat(sprint-o): Supabase migration, WeeklyReview, 5 test suites, a11y + bundle v2`
 
 ## Quality baseline (2026-04-15)
 - TypeScript: 0 errors (`npx tsc --noEmit`)

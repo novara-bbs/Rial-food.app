@@ -11,6 +11,7 @@ import TabNav from '../../../components/patterns/TabNav';
 import { aggregateShoppingItems, detectCategory, AISLE_CATEGORIES } from '../../planner/utils/grocery';
 import Planner from '../../planner/screens/Planner';
 import ShoppingList from '../../planner/screens/ShoppingList';
+import BatchCookingSuggestions from '../../planner/components/BatchCookingSuggestions';
 import { toast } from 'sonner';
 
 export default function Cocina({ onAddMeal, onCreateRecipe, onNavigateToRecipe, savedRecipes = [], setSavedRecipes, mealPlan, setMealPlan, shoppingList, setShoppingList, onLogMeal, isPro, onImportUrl }: {
@@ -222,6 +223,8 @@ export default function Cocina({ onAddMeal, onCreateRecipe, onNavigateToRecipe, 
                 {t.cocina.generateList}
               </button>
             </div>
+            {/* Batch cooking suggestions — only shown when meal plan has ≥2 meals sharing a base ingredient */}
+            <BatchCookingSuggestions mealPlan={mealPlan ?? {}} />
             <Planner onAddMeal={onAddMeal} mealPlan={mealPlan} setMealPlan={setMealPlan} setShoppingList={setShoppingList} onLogMeal={onLogMeal} />
           </>
         )}

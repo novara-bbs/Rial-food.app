@@ -24,6 +24,10 @@ const es = {
     generateList: 'Generar Lista de la Compra',
     listGenerated: 'Lista generada: {count} artículos',
     addRecipesFirst: 'Añade comidas al plan primero',
+    batchTitle: 'Batch Cooking',
+    batchDesc: 'Ahorra ~{mins} min esta semana preparando ingredientes en lote',
+    batchTimeSaved: '~{mins} min',
+    batchTip: 'Prepara los ingredientes base el domingo y ahorra tiempo cada día',
   },
   // Home screen
   home: {
@@ -1423,6 +1427,9 @@ const es = {
     missed: 'Sin datos',
     entries: 'registros',
     logWeight: 'Registrar peso',
+    weightNotePlaceholder: 'Nota opcional (ej. después de entrenar)',
+    targetProgress: 'Progreso hacia objetivo',
+    toGoal: 'para el objetivo',
   },
   toast: {
     recipeSaved: '¡Receta guardada en la Bóveda!',

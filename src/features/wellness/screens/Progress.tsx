@@ -17,6 +17,7 @@ export default function Progress({ onBack }: { onBack: () => void }) {
   const weightUnit = getBodyWeightUnit(unitSystem);
   const [isEditingWeight, setIsEditingWeight] = useState(false);
   const [weightInput, setWeightInput] = useState('');
+  const [weightNote, setWeightNote] = useState('');
 
   const history = nutritionHistory as DailyArchive[];
   const weights = weightHistory as WeightEntry[];
@@ -34,10 +35,13 @@ export default function Progress({ onBack }: { onBack: () => void }) {
     if (kg < 20 || kg > 300) return;
     setWeightHistory((prev: any[]) => {
       const filtered = prev.filter((w: any) => w.date !== todayDate);
-      return [...filtered, { date: todayDate, kg }];
+      const entry: WeightEntry = { date: todayDate, kg };
+      if (weightNote.trim()) entry.note = weightNote.trim();
+      return [...filtered, entry];
     });
     setIsEditingWeight(false);
     setWeightInput('');
+    setWeightNote('');
   };
 
   // ─── Dashboard Widgets ──────────────────────────────────────────────────────
@@ -104,6 +108,16 @@ export default function Progress({ onBack }: { onBack: () => void }) {
   const loggedDates = new Set(history.filter(h => h.mealCount > 0).map(h => h.date));
   // Include today if meals logged
   if (dailyLog.length > 0) loggedDates.add(now.toISOString().slice(0, 10));
+
+  // ─── Target Weight Progress ─────────────────────────────────────────────────
+  const targetKg = userProfile?.targetWeight ?? null;
+  const targetProgressPct: number | null =
+    targetKg && currentWeight && firstWeight && firstWeight !== targetKg
+      ? Math.min(100, Math.max(0, Math.round(
+          Math.abs(currentWeight - firstWeight) / Math.abs(targetKg - firstWeight) * 100,
+        )))
+      : null;
+  const targetDisplay = targetKg ? `${bodyWeightFromKg(targetKg, unitSystem)} ${weightUnit}` : null;
 
   const p = t.progress;
 
@@ -187,29 +201,59 @@ export default function Progress({ onBack }: { onBack: () => void }) {
           </div>
         </div>
 
+        {/* Target weight progress bar */}
+        {targetProgressPct !== null && targetDisplay && (
+          <div className="pt-3 border-t border-outline-variant/10 space-y-1.5 animate-in fade-in">
+            <div className="flex items-center justify-between">
+              <span className="font-label text-[9px] uppercase tracking-widest text-on-surface-variant">
+                {p.targetProgress || 'Progreso hacia objetivo'}
+              </span>
+              <span className="font-label text-[9px] font-bold text-primary uppercase tracking-widest">
+                {targetDisplay} · {targetProgressPct}%
+              </span>
+            </div>
+            <div className="h-1.5 w-full bg-surface-container-highest rounded-full overflow-hidden">
+              <div
+                className="h-full bg-primary rounded-full transition-all duration-500"
+                style={{ width: `${targetProgressPct}%` }}
+              />
+            </div>
+          </div>
+        )}
+
         {/* Weight input */}
         {isEditingWeight ? (
-          <div className="flex items-center gap-2 pt-3 border-t border-outline-variant/10 animate-in fade-in slide-in-from-top-2">
+          <div className="pt-3 border-t border-outline-variant/10 space-y-2 animate-in fade-in slide-in-from-top-2">
+            <div className="flex items-center gap-2">
+              <input
+                type="number"
+                inputMode="decimal"
+                step="0.1"
+                min="20"
+                max="300"
+                value={weightInput}
+                onChange={e => setWeightInput(e.target.value)}
+                onKeyDown={e => e.key === 'Enter' && handleLogWeight()}
+                className="flex-1 bg-surface-container-highest border border-outline-variant/20 rounded-sm py-2 px-3 text-sm text-tertiary placeholder:text-on-surface-variant focus:outline-none focus:border-primary transition-colors"
+                placeholder={currentWeight ? String(bodyWeightFromKg(currentWeight, unitSystem)) : '72.5'}
+                autoFocus
+              />
+              <span className="text-sm font-bold text-on-surface-variant">{weightUnit}</span>
+              <button type="button"
+                onClick={handleLogWeight}
+                className="w-9 h-9 flex items-center justify-center rounded-full bg-primary text-on-primary hover:opacity-90 transition-opacity"
+              >
+                <Check className="w-4 h-4" />
+              </button>
+            </div>
             <input
-              type="number"
-              inputMode="decimal"
-              step="0.1"
-              min="20"
-              max="300"
-              value={weightInput}
-              onChange={e => setWeightInput(e.target.value)}
-              onKeyDown={e => e.key === 'Enter' && handleLogWeight()}
-              className="flex-1 bg-surface-container-highest border border-outline-variant/20 rounded-sm py-2 px-3 text-sm text-tertiary placeholder:text-on-surface-variant focus:outline-none focus:border-primary transition-colors"
-              placeholder={currentWeight ? String(bodyWeightFromKg(currentWeight, unitSystem)) : '72.5'}
-              autoFocus
+              type="text"
+              value={weightNote}
+              onChange={e => setWeightNote(e.target.value)}
+              maxLength={100}
+              className="w-full bg-surface-container-highest border border-outline-variant/20 rounded-sm py-2 px-3 text-xs text-tertiary placeholder:text-on-surface-variant/60 focus:outline-none focus:border-primary transition-colors"
+              placeholder={p.weightNotePlaceholder || 'Nota opcional'}
             />
-            <span className="text-sm font-bold text-on-surface-variant">{weightUnit}</span>
-            <button type="button"
-              onClick={handleLogWeight}
-              className="w-9 h-9 flex items-center justify-center rounded-full bg-primary text-on-primary hover:opacity-90 transition-opacity"
-            >
-              <Check className="w-4 h-4" />
-            </button>
           </div>
         ) : (
           <button type="button"

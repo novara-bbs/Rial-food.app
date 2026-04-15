@@ -24,6 +24,10 @@ const en: Translations = {
     generateList: 'Generate Shopping List',
     listGenerated: 'List generated: {count} items',
     addRecipesFirst: 'Add meals to the plan first',
+    batchTitle: 'Batch Cooking',
+    batchDesc: 'Save ~{mins} min this week by prepping ingredients in bulk',
+    batchTimeSaved: '~{mins} min',
+    batchTip: 'Prep base ingredients on Sunday to save time every day',
   },
   home: {
     goodMorning: 'Good Morning',
@@ -1374,6 +1378,9 @@ const en: Translations = {
     missed: 'No data',
     entries: 'entries',
     logWeight: 'Log weight',
+    weightNotePlaceholder: 'Optional note (e.g. after workout)',
+    targetProgress: 'Progress toward goal',
+    toGoal: 'to goal',
   },
   toast: {
     recipeSaved: 'Recipe saved to Vault!',

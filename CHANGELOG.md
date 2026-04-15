@@ -1,5 +1,23 @@
 # RIAL App - Changelog
 
+## [1.5.3] - 2026-04-15
+
+### Q1 — Fuzzy ingredient matching (C3 ImportRecipeURL deeper parsing)
+- Rewrote `fuzzy-match.ts` with a full preprocessing pipeline: alias map (60+ regional names — papa→patata, palta→aguacate, carne picada→carne de res molida, etc.), prep-word stripping (asado, fresco, cocido, crudo…), measurement prefix stripping ("200g de", "2 tazas de", "3 huevos"), Spanish plural normalization
+- Added `matchIngredientTopNFromList(name, list, n, threshold)` — same fuzzy pipeline against any custom list, used by unified search
+- Expanded test suite from 18 → 40 tests covering aliases, prep-word stripping, measurement prefixes, and cross-language matching
+
+### Q2 — AddMeal unified search + multi-add
+- New `src/features/food/utils/unified-search.ts`: cross-source search merging fuzzy dict results + recipe title search, single ranked array, deduplicates by id
+- Added 16-test suite for unified search covering cross-source results, edge cases, empty sources
+- `AddMeal.tsx`: replaced tab-scoped simple `.includes()` with `unifiedSearch` — typing now searches ALL sources (dictionary + recipes) regardless of active tab; OFF API search fires for any query ≥ 3 chars; fixed `apiResults` type from `any[]` → `OFFResult[]`
+
+### Q3 — Batch cooking suggestions + weight refinements
+- New `BatchCookingSuggestions.tsx`: wires `analyzeBatchCooking()` (previously unconnected) into a collapsible plan-tab card showing shared base ingredients, recipes per session, estimated time saved, and day abbreviations
+- `Cocina.tsx` plan tab: renders `<BatchCookingSuggestions>` above the planner when opportunities exist
+- `Progress.tsx`: weight log form now includes optional note field (saved to `WeightEntry.note`); added targetWeight progress bar showing % toward goal using `userProfile.targetWeight`
+- i18n: batch cooking keys (`batchTitle`, `batchDesc`, `batchTimeSaved`, `batchTip`) + weight note placeholder + target progress label in ES + EN
+
 ## [1.5.2] - 2026-04-14
 
 ### Documentation and agent workflow

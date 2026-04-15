@@ -44,7 +44,7 @@ export default function AddMeal({
   const [browseMode, setBrowseMode] = useState<'recents' | 'favorites' | 'all'>('recents');
   const [mealSlot, setMealSlot] = useState<MealSlot>('lunch');
   const [searchQuery, setSearchQuery] = useState('');
-  const [apiResults, setApiResults] = useState<any[]>([]);
+  const [apiResults, setApiResults] = useState<OFFResult[]>([]);
   const [isSearchingApi, setIsSearchingApi] = useState(false);
   const [showScanner, setShowScanner] = useState(false);
   const [isAnalyzing, setIsAnalyzing] = useState(false);
