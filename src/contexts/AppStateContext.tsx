@@ -322,6 +322,36 @@ export function AppStateProvider({ children }: { children: React.ReactNode }) {
   const [weightHistory, setWeightHistory] = useLocalStorageState<BodySnapshot[]>('weightHistory', []);
   const [nutritionHistory, setNutritionHistory] = useLocalStorageState<DailyArchive[]>('nutritionHistory', []);
 
+  // Weight history — lazy-seeded
+  useEffect(() => {
+    if (!window.localStorage.getItem('weightHistory')) {
+      import('../features/wellness/data/seed-body-snapshots').then((m) => setWeightHistory(m.BODY_SNAPSHOT_SEED));
+    }
+  }, []);
+
+  // Nutrition history — lazy-seeded
+  useEffect(() => {
+    if (!window.localStorage.getItem('nutritionHistory')) {
+      import('../features/wellness/data/seed-nutrition-history').then((m) => setNutritionHistory(m.SEED_NUTRITION_HISTORY));
+    }
+  }, []);
+
+  // RealFeel logs — lazy-seeded
+  useEffect(() => {
+    if (!window.localStorage.getItem('realFeelLogs')) {
+      import('../features/wellness/data/seed-real-feel-logs').then((m) => setRealFeelLogs(m.SEED_REAL_FEEL_LOGS));
+    }
+  }, []);
+
+  // Weekly check-ins — lazy-seeded (stored directly; WeeklyCheckIn reads via useLocalStorageState)
+  useEffect(() => {
+    if (!window.localStorage.getItem('weeklyCheckIns')) {
+      import('../features/wellness/data/seed-weekly-checkins').then((m) => {
+        window.localStorage.setItem('weeklyCheckIns', JSON.stringify(m.SEED_WEEKLY_CHECKINS));
+      });
+    }
+  }, []);
+
   // Daily food diary log (persisted, cleared manually or on new day)
   const [dailyLog, setDailyLog] = useLocalStorageState<DailyLogEntry[]>('dailyLog', []);
 

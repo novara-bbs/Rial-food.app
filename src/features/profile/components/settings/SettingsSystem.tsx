@@ -54,7 +54,7 @@ export default function SettingsSystem({ userProfile, setUserProfile, showAIBot,
   };
 
   const deleteAllData = () => {
-    const keysToKeep = ['rial_lastActiveDate'];
+    const keysToKeep = ['rial_lastActiveDate', 'rial_isFirstTime'];
     Object.keys(localStorage).filter((k) => !keysToKeep.includes(k)).forEach((k) => localStorage.removeItem(k));
     toast.success(t.settings.dataDeleted);
     window.location.reload();
