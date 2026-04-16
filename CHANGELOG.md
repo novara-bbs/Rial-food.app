@@ -1,6 +1,38 @@
 # RIAL App - Changelog
 
+## [1.5.20] - 2026-04-17
+
+### merge(rial-food/main) — reconcile Q14/Q15.5/walkthrough with sprint-q/sprint-q18
+
+Parallel-stream reconciliation. `main` already carried three local commits (Q14 audit polish, Q15.5 design-system remediation, walkthrough + Q16 pilot migrations) when `rial-food/main` surfaced two upstream commits from a collaborator: `8b8a5b5` (Progress tab restructure) and `155f08b` (seed data overhaul). Merged on `main` with no feature branch per project convention ("no worktrees or branches going forward").
+
+Decisions at conflict points:
+- `src/features/wellness/screens/WeeklyReview.tsx` — accepted upstream deletion; reflection form absorbed into Progress's `InlineReflection` component. My Q16 pilot migration of that file is superseded.
+- `src/features/wellness/screens/Progress.tsx` — accepted upstream rewrite (443 lines, score ring + component extraction). My Q14 2-tab version superseded. `BodyTimeline`, `BodyCalendar`, `LogSnapshotModal`, `RitmoSection`, `LatestReflectionCard` remain in the repo as reusable components; may re-integrate in Q15.
+- `src/features/wellness/screens/WeeklyCheckIn.tsx` — accepted upstream simplification (history-only browser, 109 lines). My Q16 pilot migration superseded.
+- `src/App.tsx` — `weekly-review` route now renders `<Progress>` (upstream) with `navigateTo(previousScreen)` (my back-stack fix from Q14).
+- i18n, CHANGELOG, `docs/ai/state.md` — additive merge.
+
+## [1.5.19] - 2026-04-17
+
+### feat(sprint-q18) — seed data overhaul + delete-all safety [upstream `155f08b`]
+
+- New seeds: `src/features/wellness/data/seed-nutrition-history.ts`, `seed-real-feel-logs.ts`, `seed-weekly-checkins.ts`.
+- Expanded: `seed-recipes.ts` (18 → 46 recipes), `seed-meal-plan.ts` (1 → 7 days), `seed-posts.ts` (10 → 22 posts).
+- `AppStateContext.tsx` — 4 lazy-seeds wired so new users see a fully populated demo app on first launch.
+- `SettingsSystem.tsx` — `deleteAllData` preserves `rial_isFirstTime` so the user doesn't re-enter onboarding after a delete.
+
+### feat(sprint-q) — Progress tab restructure [upstream `8b8a5b5`]
+
+- `Progress.tsx` slimmed 837 → 443 lines via component extraction.
+- New wellness components: `WeeklyScoreCard`, `ConsistencyCalendar`, `InlineReflection`, `WeightTrendCard`.
+- `WeeklyReview.tsx` removed (absorbed into Progress).
+- i18n keys added: `weekly.dayHeaders`, `weekly.mealCount`, `weekly.daysLogged`, plus Q17b score-ring labels.
+- 5 bug fixes (per upstream commit message).
+
 ## [1.5.18] - 2026-04-17
+
+### feat(design-audit) — tab-by-tab walkthrough + Q16 pilot migrations
 
 ### feat(design-audit) — tab-by-tab walkthrough + Q16 pilot migrations
 
@@ -494,6 +526,38 @@ Q10 fragmented a single `BodySnapshot` (kg + photo + measurements per day) acros
 - `Cocina.tsx` plan tab: renders `<BatchCookingSuggestions>` above the planner when opportunities exist
 - `Progress.tsx`: weight log form now includes optional note field (saved to `WeightEntry.note`); added targetWeight progress bar showing % toward goal using `userProfile.targetWeight`
 - i18n: batch cooking keys (`batchTitle`, `batchDesc`, `batchTimeSaved`, `batchTip`) + weight note placeholder + target progress label in ES + EN
+
+## [1.5.11] - 2026-04-16
+
+### Progress tab — full restructure (Q16 + Q17 + Q17b)
+
+#### Architecture
+- **Progress.tsx** slimmed from 837 lines to 443-line orchestrator — all JSX extracted into 4 focused components
+- **4 new components**: `WeeklyScoreCard`, `ConsistencyCalendar`, `InlineReflection`, `WeightTrendCard`
+- **WeeklyReview screen deleted** — functionality absorbed into Progress inline reflection
+- `App.tsx`: `weekly-review` route now renders `<Progress />` for backwards compatibility
+
+#### User-visible improvements
+- **Weekly score ring** (0–100, color-coded) as hero metric in Nutrición tab
+- **Tab order changed**: Nutrición first (core use case), then Cuerpo
+- **Top meals this week** section shows highest-kcal meals from the week
+- **Calendar day-detail**: tap any logged day to see kcal / protein / meal count / vitality
+- **Activity row**: hydration (cups), steps, active minutes — inline in Esta Semana card
+- **Adherence bars enhanced**: each bar now shows raw avg value + % + delta vs prior week (Nutrition Summary section eliminated as redundant)
+- **Streak removed from Esta Semana** — now shows `daysLogged/7` (streak has its own home in Consistency Calendar)
+- **Bienestar unified to 1–5 scale** everywhere (was confusingly split: rawAvg/5 in header, avgVitality/100 in section)
+- **Home progress link** always visible when data exists (was Sunday-only)
+
+#### Bug fixes
+- **B1 — Week-start Sunday bug**: `getDay() * 86_400_000` gave "today" when called on Sunday and was DST-unsafe; replaced with `getWeekStartISO()` using `setDate`
+- **B2 — Hardcoded `es-ES` locale**: calendar month label and day-detail date now use locale from `useI18n()`
+- **B3 — Hardcoded Spanish day headers**: `['L','M','X','J','V','S','D']` replaced with i18n `t.progress.dayHeaders`
+- **B4 — mealsLogged counted RF logs not meals**: reflection save now counts from `history.mealCount` + `dailyLog.length`
+- **B5 — Bienestar metric scope mismatch**: `avgVitality` (7 logs × 20) removed; `rawAvg` (1–5, last 14 logs) used everywhere
+
+#### i18n
+- Added `dayHeaders`, `mealCount`, `daysLogged` keys to both `es.ts` and `en.ts`
+
 
 ## [1.5.2] - 2026-04-14
 

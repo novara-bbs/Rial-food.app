@@ -152,18 +152,22 @@ const q16MigrationAllowlist = [
   'src/features/wellness/components/BodyCalendar.tsx',
   'src/features/wellness/components/BodySnapshotCard.tsx',
   'src/features/wellness/components/BodyTimeline.tsx',
+  'src/features/wellness/components/ConsistencyCalendar.tsx',
   'src/features/wellness/components/DataSourceCaption.tsx',
+  'src/features/wellness/components/InlineReflection.tsx',
   'src/features/wellness/components/LatestReflectionCard.tsx',
   'src/features/wellness/components/LogSnapshotModal.tsx',
   'src/features/wellness/components/RealFeelInline.tsx',
   'src/features/wellness/components/RitmoSection.tsx',
   'src/features/wellness/components/SnapshotDetailModal.tsx',
+  'src/features/wellness/components/WeeklyScoreCard.tsx',
+  'src/features/wellness/components/WeightTrendCard.tsx',
   'src/features/wellness/screens/DailyCheckIn.tsx',
   'src/features/wellness/screens/FastingTimer.tsx',
   'src/features/wellness/screens/Progress.tsx',
   'src/features/wellness/screens/RealFeelDiary.tsx',
   'src/features/wellness/screens/WeeklyCheckIn.tsx',
-  'src/features/wellness/screens/WeeklyReview.tsx',
+  // WeeklyReview.tsx removed upstream — reflection form absorbed into Progress.tsx InlineReflection component.
 ];
 
 export default tseslint.config(

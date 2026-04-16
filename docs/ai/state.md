@@ -1,17 +1,21 @@
 # RIAL Current State
 
-Last updated: 2026-04-17 (walkthrough + Q16 pilot pass)
+Last updated: 2026-04-17 (post-merge with rial-food/main)
 
 ## Release snapshot
-- Root branch: `main` (clean, no open PRs)
+- Root branch: `main` (merged with `rial-food/main` — 3 local commits + 2 upstream commits reconciled in a single merge commit)
 - Release remote: `rial-food` (worktree remote: `origin`)
 - Active Vercel project: `rial.app.v1.5`
 - Vercel project id: `prj_t11VHYQjptazjUx7Y2hWLz0IDAjg`
+- **Governance (2026-04-17):** work directly on `main`. No feature branches, no worktrees going forward. Reconcile in-flight divergence by merging directly into `main`.
 
 ## Recent merged commits (Rial-food.app main)
-- _(uncommitted in working tree — see `git status`)_ `feat(design-audit): tab-by-tab walkthrough — 🔴 blocker fixes (NutritionHero overflow, 4 sub-HIG tap targets, 3 text-[7px]) + Q16 pilot migrations (WeeklyCheckIn, WeeklyReview) — baseline 134→84`
-- _(uncommitted in working tree — see `git status`)_ `feat(sprint-q15.5): design-system remediation — tokens, primitives, ESLint guardrails, ADRs, NEW-SCREEN-CHECKLIST, i18n symmetry check`
-- _(uncommitted in working tree — see `git status`)_ `feat(sprint-q14): audit polish — Profile streak fix, multi-ICP seed, empty states, dedup, back-stack`
+- `(pending merge commit)` `merge: reconcile Q14/Q15.5/walkthrough with sprint-q/sprint-q18`
+- `37dd18d` `feat(design-audit): tab-by-tab walkthrough — 🔴 blocker fixes (NutritionHero overflow, 4 sub-HIG tap targets, 3 text-[7px]) + Q16 pilot migrations (WeeklyCheckIn, WeeklyReview) — baseline 134→84`
+- `ac492fd` `feat(sprint-q15.5): design-system remediation — tokens, primitives, ESLint guardrails, ADRs, NEW-SCREEN-CHECKLIST, i18n symmetry check`
+- `a067241` `feat(sprint-q14): audit polish — Profile streak fix, multi-ICP seed, empty states, dedup, back-stack`
+- `155f08b` `feat(sprint-q18): seed data overhaul + delete-all safety` (upstream, 2026-04-16)
+- `8b8a5b5` `feat(sprint-q): Progress tab restructure — score ring, component extraction, 5 bug fixes` (upstream, 2026-04-16)
 - `6f7bcc3` `feat(sprint-q11): Progress UX consolidation — 2 tabs, unified modal, timeline+calendar, seed data`
 - `1824bae` `feat(sprint-q10): BodySnapshot type, Progress tabs, photo timeline, measurements`
 - `94b16f7` `feat(sprint-q9): avatar upload, GlobalHeader fix, hydration/movement goal editors`
@@ -23,10 +27,21 @@ Last updated: 2026-04-17 (walkthrough + Q16 pilot pass)
 - `133e68e` `feat(sprint-q2): AddMeal unified search + OFFResult type fix`
 - `1659206` `feat(sprint-q1): fuzzy ingredient matching v2 — aliases, prep-strip, measurements`
 
+## Merge reconciliation (2026-04-17)
+Two upstream commits (`8b8a5b5` sprint-q Progress restructure, `155f08b` sprint-q18 seed overhaul) landed on `rial-food/main` while three local commits (Q14, Q15.5, walkthrough) landed on `main`. Reconciled via merge on `main` (no feature branch). Conflict decisions:
+
+- **`src/features/wellness/screens/WeeklyReview.tsx`** — accepted upstream deletion. Reflection form absorbed into Progress's new `InlineReflection` component.
+- **`src/features/wellness/screens/Progress.tsx`** — accepted upstream rewrite (443 lines, score ring + extracted components `WeeklyScoreCard`/`ConsistencyCalendar`/`InlineReflection`/`WeightTrendCard`). My Q14 2-tab version superseded.
+- **`src/features/wellness/screens/WeeklyCheckIn.tsx`** — accepted upstream simplification (history-only browser, 109 lines).
+- **`BodyTimeline`, `BodyCalendar`, `LogSnapshotModal`, `RitmoSection`, `LatestReflectionCard`, `DataSourceCaption`** — remain in `src/features/wellness/components/` as reusable pieces (not wired into current Progress). `GlobalLogSnapshotModal` is still mounted at App root, so any component can still trigger the global log modal via `window.dispatchEvent(new Event('rial:open-log-snapshot'))`.
+- **i18n, CHANGELOG, `docs/ai/state.md`** — additive merges (no semantic conflicts).
+
+Collateral: my Q16 pilot migration on `WeeklyCheckIn.tsx` + `WeeklyReview.tsx` is wasted work (remote rewrote both). SectionCard baseline recalculated post-merge.
+
 ## Quality baseline (2026-04-17)
 - TypeScript: 0 errors (`npx tsc --noEmit`)
 - Tests: 481/481 unit tests passing (measured 2026-04-17 post-walkthrough) — Q13 added 64 (streaks, week-stats, weight-trend), Q14 added 40 (demo-personas shape + correlation integration), Q15.5 added 32 convention tests (`primitives-export`, `design-tokens`, `sectioncard-usage`), plus 20 from in-progress working-tree changes
-- i18n symmetry: **1406** keys aligned ES ↔ EN (`npm run check:i18n`) — +3 from walkthrough pass (`weekly.previousWeek`, `weekly.nextWeek`, `addMealScreen.addToMeal`)
+- i18n symmetry: **1428** keys aligned ES ↔ EN (`npm run check:i18n`) — post-merge (merges walkthrough's +3 keys with upstream's `weekly.{dayHeaders,mealCount,daysLogged,historyTitle,writeFromProgress,thisWeekTitle,body,nutrition,fats,mealDot,rfDot,wellbeing,wellbeingTitle,reflectionTitle,noReflections,viewHistory,topCorrelations,viewDiary,topMeals,viewAllRecipes}`)
 - Design-system lint: 0 errors, **~972** warnings (was 1016 pre-walkthrough; -44 via NutritionHero redesign + WeeklyCheckIn/WeeklyReview Q16 pilot migrations)
 - Build (measured 2026-04-16 via `npm run build`):
   - main entry (resolved from `dist/index.html`): **751 KB raw / 234 KB gzip**
@@ -85,7 +100,7 @@ Last updated: 2026-04-17 (walkthrough + Q16 pilot pass)
 - **SyncKey covers ~10 of ~35 localStorage keys** — see audit below. Gap must be resolved in Supabase sprint (Q6).
 - **CSP header pending (Q17)** — `vercel.json` now ships HSTS + X-Frame + nosniff + Permissions-Policy + Referrer-Policy, but Content-Security-Policy is deferred until all third-party sources are audited (Supabase, Sentry, Google GenAI, RevenueCat, recharts).
 - **Q14 + Q15.5 + walkthrough + Q16 pilot work uncommitted** — three logical chunks divergent from `main`. Recommended commit strategy before Q15: (a) `feat(sprint-q14)` — audit polish + multi-ICP seed, (b) `feat(sprint-q15.5)` — design-system remediation (tokens, primitives, ADRs, guardrails), (c) `feat(design-audit)` — walkthrough findings + Q16 pilot migrations. Keeps `git log` legible and makes per-wave revert possible.
-- **415 `text-[Npx]` + 84 SectionCard dup occurrences remain** — down from 445/134 at Q15.5 close. Walkthrough pilot cleared 30 `text-[Npx]` (all 3 `text-[7px]` illegibility + NutritionHero + WeeklyCheckIn + WeeklyReview) and 50 SectionCard shapes. Remaining drift under `warn` via Q16 migration allowlist in `eslint.config.mjs`. Q16 codemod sprint drains the rest; new files error immediately.
+- **~415–440 `text-[Npx]` + 93 SectionCard dup occurrences post-merge** — walkthrough pilot cleared 30 `text-[Npx]` and 50 SectionCard shapes (baselines 445→415 / 134→84). Merge with upstream then added 9 SectionCard shapes (4 new wellness components + rewritten Progress/WeeklyCheckIn) raising SectionCard baseline to **93**. `text-[Npx]` count needs re-measurement post-merge. Q16 codemod sprint drains the rest; new files error immediately via ESLint allowlist.
 - **Top `text-[Npx]` offenders for Q16:** `RecipeDetail` (25), `CreateRecipe` (24), `AddMeal` (15), `Planner` (15), `SettingsProfile` (15). Distribution: 30× 8px, 155× 9px, 200× 10px, 27× 11px, 3× 12px.
 - **Top SectionCard shape offenders for Q16:** `SettingsProfile` (11), `BarcodeScanner` (9), `Onboarding` (6), `ImportRecipeURL` (6), `RealFeelDiary` (6).
 
