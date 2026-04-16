@@ -1,0 +1,25 @@
+{
+  "github.copilot.chat.codeGeneration.instructions": [
+    { "file": "AGENTS.md" },
+    { "file": "docs/ai/project.md" },
+    { "file": "docs/ai/workflow.md" }
+  ],
+  "editor.formatOnSave": true,
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "typescript.tsdk": "node_modules/typescript/lib",
+  "typescript.enablePromptUseWorkspaceTsdk": true,
+  "files.eol": "\n",
+  "files.insertFinalNewline": true,
+  "files.trimTrailingWhitespace": true,
+  "[markdown]": {
+    "files.trimTrailingWhitespace": false
+  },
+  "search.exclude": {
+    "**/node_modules": true,
+    "**/dist": true,
+    "**/coverage": true,
+    "**/android": true,
+    "**/ios": true,
+    ".claude/worktrees/**": true
+  }
+}

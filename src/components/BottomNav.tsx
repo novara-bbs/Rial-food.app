@@ -24,7 +24,7 @@ export default function BottomNav({ currentScreen, setCurrentScreen, onOpenCreat
               type="button"
               key={item.id}
               onClick={onOpenCreate}
-              className="flex flex-col items-center justify-center w-16 -mt-6 mb-2"
+              className="flex flex-col items-center justify-center w-16 -mt-6 mb-2 focus-visible:outline-none focus-visible:[&>div]:ring-2 focus-visible:[&>div]:ring-primary/60 focus-visible:[&>div]:ring-offset-2 focus-visible:[&>div]:ring-offset-background"
               aria-label={t.nav.create}
             >
               <div className="w-14 h-14 rounded-full bg-primary text-on-primary flex items-center justify-center shadow-lg shadow-primary/20 hover:scale-105 transition-transform">
@@ -40,12 +40,12 @@ export default function BottomNav({ currentScreen, setCurrentScreen, onOpenCreat
             key={item.id}
             onClick={() => setCurrentScreen(item.id)}
             aria-current={isActive ? 'page' : undefined}
-            className={`flex flex-col items-center justify-center w-16 py-2 transition-all ${
+            className={`flex flex-col items-center justify-center w-16 py-2 transition-all rounded-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/60 focus-visible:ring-offset-2 focus-visible:ring-offset-background ${
               isActive ? 'text-primary scale-110' : 'text-on-surface-variant hover:text-on-surface'
             }`}
           >
             <Icon className={`w-6 h-6 mb-1 ${isActive ? 'fill-primary/20' : ''}`} aria-hidden="true" />
-            <span className="font-label text-[10px] font-bold tracking-[0.1em] uppercase">{item.label}</span>
+            <span className="font-label text-micro font-bold tracking-[0.1em] uppercase">{item.label}</span>
           </button>
         );
       })}

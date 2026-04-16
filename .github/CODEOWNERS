@@ -1,0 +1,36 @@
+# RIAL CODEOWNERS
+# Cada PR que toque estos paths requiere review del owner asignado.
+# Syntax: https://docs.github.com/en/repositories/managing-your-repositories-settings-and-security/customizing-your-repository/about-code-owners
+
+# Default owner para todo el repo
+*                                   @novara-bbs
+
+# Zonas críticas — dev AI / contexto compartido
+/AGENTS.md                          @novara-bbs
+/CLAUDE.md                          @novara-bbs
+/GEMINI.md                          @novara-bbs
+/docs/ai/                           @novara-bbs
+/.claude/                           @novara-bbs
+/.cursor/                           @novara-bbs
+/.windsurf/                         @novara-bbs
+/.gemini/                           @novara-bbs
+
+# Zonas críticas — CI / deploy / seguridad
+/.github/                           @novara-bbs
+/vercel.json                        @novara-bbs
+/.env.example                       @novara-bbs
+/LICENSE                            @novara-bbs
+/SECURITY.md                        @novara-bbs
+/CODE_OF_CONDUCT.md                 @novara-bbs
+
+# Backend / Supabase
+/supabase/                          @novara-bbs
+
+# Dominios principales
+/src/contexts/                      @novara-bbs
+/src/lib/                           @novara-bbs
+/src/features/ai/                   @novara-bbs
+/src/features/auth/                 @novara-bbs
+/src/features/wellness/             @novara-bbs
+/src/features/food/                 @novara-bbs
+/src/i18n/                          @novara-bbs

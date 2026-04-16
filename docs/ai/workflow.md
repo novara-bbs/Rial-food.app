@@ -27,7 +27,21 @@
   - `npm run lint`
   - `npm run test`
   - `npm run build`
+- One-shot preflight: `npm run release:preflight` (tsc + lint + lint:code + check:i18n + test + build + size:check).
+- Bundle budget: `npm run size:check` runs after build in CI and locally via preflight; fails if any chunk exceeds budget (see `scripts/check-bundle-size.mjs`).
+- **i18n symmetry**: any change touching `src/i18n/locales/` must run `npm run check:i18n` (ES ↔ EN key-set diff via TypeScript compiler API, wired into `release:preflight`). See ADR-004.
+- **Design-system lint**: `npm run lint:code` enforces ADR-001 (no duplicate SectionCard shape), ADR-002 (no `text-[Npx]`), ADR-005 (no `dark:` prefix). Q16 migration allowlist downgrades pre-existing offenders to warnings; new files error immediately.
+- **Convention tests**: `src/test/conventions/` locks design-system invariants (primitive exports, token scale, SectionCard drift baseline). Failures surface in `npm run test`.
+- **New screen gate**: screens added or refactored follow `docs/NEW-SCREEN-CHECKLIST.md` — scaffolding, primitives, tokens, a11y/HIG, i18n, theme parity.
+- Additional CI gates: **CodeQL** security scan (JS/TS, weekly + on PR) and **Lighthouse CI** (warn-only in v1, desktop preset, thresholds: perf 0.80, a11y 0.95, best-practices 0.90).
 - If the change touches deploy or env behavior, review `vercel.json`, `.env.example`, `src/config/env.ts`, and relevant `supabase/functions/` code.
+
+## Release helpers
+- `npm run rial:status` — snapshot del repo (rama, último commit, TS, tests, bundle, último sprint Qn, gaps). Usado por el SessionStart hook de Claude y por humanos.
+- `npm run release:preflight` — pipeline completo tsc + lint + test + build.
+- `npm run release:push:dry` — preflight + `git push --dry-run rial-food main`.
+- `npm run release:push` — preflight + push real a `rial-food/main`. Usar SOLO con aprobación explícita del usuario.
+- Desde Claude Code: `/rial-ship` orquesta preflight + propuesta de commit (sin push automático).
 
 ## Multi-agent coordination
 - Split work only when write scopes do not overlap.

@@ -222,6 +222,8 @@ const es = {
     avgFats: 'Media grasas',
     proteinTarget: 'Proteína {count}/{total} días',
     vsLastWeek: 'vs semana anterior',
+    previousWeek: 'Semana anterior',
+    nextWeek: 'Semana siguiente',
   },
   // Recipes
   recipes: {
@@ -402,6 +404,7 @@ const es = {
     homeCard: 'Tu resumen semanal está listo',
     homeCardDesc: 'Revisa tus correlaciones y progreso de esta semana',
     homeCardCta: 'Ver resumen',
+    dataSourceGlobal: 'agregado de esta semana',
   },
   // More menu
   more: {
@@ -637,6 +640,17 @@ const es = {
     wearables: 'Wearables',
     connected: 'Conectado',
     connect: 'Conectar',
+    realFeelMeals: 'Real Feel + comidas',
+  },
+  globalHeader: {
+    demoGate: {
+      title: 'Modo demo',
+      codeLabel: 'Código de acceso',
+      codePrompt: 'Introduce el código de 4 dígitos para activar el modo demo.',
+      codeInvalid: 'Código incorrecto.',
+      unlock: 'Desbloquear',
+      close: 'Cerrar',
+    },
   },
   // Settings
   settings: {
@@ -789,6 +803,15 @@ const es = {
     deleteAccountSuccess: 'Cuenta eliminada correctamente',
     deleteAccountError: 'Error al eliminar la cuenta. Inténtalo de nuevo.',
     notSignedIn: 'No has iniciado sesión',
+    // Q14 — developer panel
+    developer: 'Desarrollador',
+    loadDemoPersona: 'Cargar persona demo',
+    clearDemoData: 'Limpiar datos demo',
+    demoClara: 'Clara · Perdiendo grasa',
+    demoMarcos: 'Marcos · Ganando músculo',
+    demoAna: 'Ana · Salud general',
+    demoLoaded: 'Persona cargada — recargando',
+    demoCleared: 'Datos demo eliminados — recargando',
   },
   // Common
   common: {
@@ -1105,6 +1128,7 @@ const es = {
     searchPlaceholder: 'Buscar...',
     member: 'Miembro',
     proMember: 'Miembro Pro',
+    streakAria: 'Ver tu racha en Progreso',
   },
   // Planner specific (extends plan)
   planner: {
@@ -1398,6 +1422,7 @@ const es = {
     multiAdd: 'Multi',
     addedToQueue: 'Añadido a la cola',
     logAll: 'Registrar ({count})',
+    addToMeal: 'Añadir a la comida',
   },
   // Meal handler toasts
   mealToasts: {
@@ -1502,6 +1527,35 @@ const es = {
     weightOutOfRange: 'Peso fuera de rango (20–300 kg)',
     loadSeedData: 'Cargar datos de ejemplo (dev)',
     seedLoaded: '30 días de datos de ejemplo cargados',
+    // Q12 — data-source captions + Ritmo + share
+    dataSourceAutoDashboard: 'resumen de tu actividad',
+    dataSourceManualWeight: 'registra una entrada cuando te peses',
+    dataSourceAutoMacros: 'se actualiza con cada comida',
+    dataSourceAutoStreak: 'calculado al cerrar el día',
+    dataSourceAutoRitmo: 'sumado desde Home',
+    ritmoTitle: 'Ritmo diario',
+    ritmoEmpty: 'Sin datos aún — registra hidratación o movimiento en Home',
+    ritmoHydration: 'Hidratación',
+    ritmoMovement: 'Movimiento',
+    ritmoVitality: 'Real Feel',
+    shareSnapshot: 'Compartir con la comunidad',
+    // Q13 — IA consolidation
+    latestReflectionTitle: 'Última reflexión',
+    latestReflectionEmpty: 'Termina tu primera reflexión del domingo',
+    openWeeklyReview: 'Resumen de la semana',
+    openWeeklyCheckIn: 'Ver reflexión completa',
+    daysPlanned: 'días planeados',
+    plannedMeals: 'planificadas',
+    weightReplaced: 'Peso actualizado para hoy',
+    dataSourceManualReflection: 'completa tu domingo de reflexión',
+    dataSourceManualTarget: 'basado en tu último pesaje',
+    vsPrevWeek: 'vs. semana pasada',
+    meals: 'Comidas',
+    // Q14 — empty states + dedup
+    bodyCalendarEmpty: 'Aún no has añadido snapshots',
+    logFirstSnapshot: 'Registrar primer snapshot',
+    consistencyCalendarEmpty: 'Aún no has registrado comidas',
+    logFirstMeal: 'Registrar primera comida',
   },
   toast: {
     recipeSaved: '¡Receta guardada en la Bóveda!',

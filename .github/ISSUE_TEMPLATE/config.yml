@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Security report (private)
+    url: https://github.com/novara-bbs/Rial-food.app/security/policy
+    about: Reporta vulnerabilidades en privado a security@rialfoodworld.com. No abras un issue público.
+  - name: Code of Conduct concern
+    url: mailto:conduct@rialfoodworld.com
+    about: Reporta incidentes de conducta. Se tratan de forma privada.

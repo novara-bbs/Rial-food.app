@@ -78,6 +78,9 @@ jobs:
           VITE_RC_GOOGLE_API_KEY: ${{ secrets.VITE_RC_GOOGLE_API_KEY || '' }}
           VITE_SENTRY_DSN: ${{ secrets.VITE_SENTRY_DSN || '' }}
 
+      - name: Bundle size budget
+        run: npm run size:check
+
       - name: Upload build artifact
         uses: actions/upload-artifact@v4
         with:

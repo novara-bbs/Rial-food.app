@@ -37,6 +37,7 @@ Use it as the first read whether you are working from Codex, ChatGPT, Claude Cod
 - Do not edit `.claude/worktrees/sleepy-knuth` unless the user asks for that repo line.
 - For user-facing text in the app, keep i18n discipline: update both `src/i18n/locales/es.ts` and `src/i18n/locales/en.ts`.
 - For app behavior changes, update stable docs and `CHANGELOG.md` when the change is user-visible or architectural.
+- Proprietary license — see `LICENSE`. Do not publish snippets of `src/`, `supabase/functions/`, or internal docs publicly (Stack Overflow, public gists, blog posts) without written consent.
 
 ## Multi-agent workflow
 Use this default flow:
@@ -82,6 +83,16 @@ Product AI flows must stay isolated behind app prompts, runtime safeguards, cost
 
 ## Tool-specific notes
 - Claude Code reads `CLAUDE.md`, so `CLAUDE.md` imports this file and the shared docs.
+- Claude Code slash commands: `/rial-status`, `/rial-handoff`, `/rial-ship`, `/rial-freeze-check` (see `.claude/commands/`).
+- Claude Code subagents: `explore-rial`, `reviewer-rial` (see `.claude/agents/`).
+- SessionStart hook auto-runs `npm run rial:status` to inject repo snapshot at session open.
 - Gemini CLI reads `GEMINI.md`, and `.gemini/settings.json` points Gemini to this repo's context files.
 - Cursor and Windsurf can read this root `AGENTS.md` directly; cross-cutting repo rules also live in `.cursor/rules/` and `.windsurf/rules/`.
+- VS Code + GitHub Copilot read `.vscode/settings.json` and `.github/copilot-instructions.md`.
 - Local-model or manual ChatGPT workflows should start here and then follow `docs/ai/README.md`.
+
+## Release helpers (scripts)
+- `npm run rial:status` — snapshot (branch, last commit, TS, tests, bundle, sprint, gaps).
+- `npm run release:preflight` — tsc + lint + test + build.
+- `npm run release:push:dry` — preflight + dry-run push a `rial-food/main`.
+- `npm run release:push` — preflight + real push a `rial-food/main` (solo tras aprobación explícita).

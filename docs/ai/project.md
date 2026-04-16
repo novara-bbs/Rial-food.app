@@ -33,6 +33,14 @@ RIAL is a mobile-first nutrition product that combines tracking, recipes, meal p
 - Legacy Claude skill notes: `docs/SKILLS.md`
 - Change history: `CHANGELOG.md`
 
+## Design System
+- Spec: `docs/DESIGN-SYSTEM.md` — tokens, themes, do/don't
+- Primitives index: `docs/PRIMITIVES.md` — canonical components with minimal examples
+- New-screen checklist: `docs/NEW-SCREEN-CHECKLIST.md` — mandatory for each new screen
+- ADRs: `docs/adr/` — versioned architectural decisions (ADR-001 through ADR-007)
+- Audit origin: `docs/DESIGN-AUDIT-2026-04-16.md`
+- Guardrails in CI: ESLint `no-restricted-syntax` rules (design-system guardrails), `npm run check:i18n`, and three convention tests under `src/test/conventions/`
+
 ## Commands
 - `npm run dev`
 - `npm run lint`

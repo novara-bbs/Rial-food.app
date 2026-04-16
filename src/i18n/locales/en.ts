@@ -217,6 +217,8 @@ const en: Translations = {
     avgFats: 'Avg fats',
     proteinTarget: 'Protein {count}/{total} days',
     vsLastWeek: 'vs last week',
+    previousWeek: 'Previous week',
+    nextWeek: 'Next week',
   },
   recipes: {
     title: 'Recipes',
@@ -391,6 +393,7 @@ const en: Translations = {
     homeCard: 'Your weekly summary is ready',
     homeCardDesc: 'Check your correlations and progress for this week',
     homeCardCta: 'View summary',
+    dataSourceGlobal: 'aggregated this week',
   },
   more: {
     title: 'More',
@@ -618,6 +621,17 @@ const en: Translations = {
     wearables: 'Wearables',
     connected: 'Connected',
     connect: 'Connect',
+    realFeelMeals: 'Real Feel + meals',
+  },
+  globalHeader: {
+    demoGate: {
+      title: 'Demo mode',
+      codeLabel: 'Access code',
+      codePrompt: 'Enter the 4-digit code to activate demo mode.',
+      codeInvalid: 'Invalid code.',
+      unlock: 'Unlock',
+      close: 'Close',
+    },
   },
   settings: {
     title: 'Settings',
@@ -769,6 +783,15 @@ const en: Translations = {
     deleteAccountSuccess: 'Account deleted successfully',
     deleteAccountError: 'Error deleting account. Please try again.',
     notSignedIn: 'You are not signed in',
+    // Q14 — developer panel
+    developer: 'Developer',
+    loadDemoPersona: 'Load demo persona',
+    clearDemoData: 'Clear demo data',
+    demoClara: 'Clara · Cutting',
+    demoMarcos: 'Marcos · Lean bulk',
+    demoAna: 'Ana · Health-seeker',
+    demoLoaded: 'Persona loaded — reloading',
+    demoCleared: 'Demo data cleared — reloading',
   },
   common: {
     save: 'Save',
@@ -1068,6 +1091,7 @@ const en: Translations = {
     searchPlaceholder: 'Search...',
     member: 'Member',
     proMember: 'Pro Member',
+    streakAria: 'View your streak in Progress',
   },
   planner: {
     weeklyPlan: 'Weekly Plan',
@@ -1350,6 +1374,7 @@ const en: Translations = {
     multiAdd: 'Multi',
     addedToQueue: 'Added to queue',
     logAll: 'Log all ({count})',
+    addToMeal: 'Add to meal',
   },
   mealToasts: {
     addedToPlan: 'Meal added to planner!',
@@ -1453,6 +1478,35 @@ const en: Translations = {
     weightOutOfRange: 'Weight out of range (20–300 kg)',
     loadSeedData: 'Load sample data (dev)',
     seedLoaded: '30 days of sample data loaded',
+    // Q12 — data-source captions + Ritmo + share
+    dataSourceAutoDashboard: 'summary of your activity',
+    dataSourceManualWeight: 'log an entry whenever you weigh in',
+    dataSourceAutoMacros: 'updates with every meal',
+    dataSourceAutoStreak: 'computed when the day closes',
+    dataSourceAutoRitmo: 'aggregated from Home',
+    ritmoTitle: 'Daily rhythm',
+    ritmoEmpty: 'No data yet — log hydration or movement from Home',
+    ritmoHydration: 'Hydration',
+    ritmoMovement: 'Movement',
+    ritmoVitality: 'Real Feel',
+    shareSnapshot: 'Share with the community',
+    // Q13 — IA consolidation
+    latestReflectionTitle: 'Latest reflection',
+    latestReflectionEmpty: 'Finish your first Sunday reflection',
+    openWeeklyReview: 'Weekly summary',
+    openWeeklyCheckIn: 'Full reflection',
+    daysPlanned: 'days planned',
+    plannedMeals: 'planned',
+    weightReplaced: 'Weight updated for today',
+    dataSourceManualReflection: 'complete your Sunday reflection',
+    dataSourceManualTarget: 'based on your latest weigh-in',
+    vsPrevWeek: 'vs. last week',
+    meals: 'Meals',
+    // Q14 — empty states + dedup
+    bodyCalendarEmpty: 'No snapshots yet',
+    logFirstSnapshot: 'Log first snapshot',
+    consistencyCalendarEmpty: 'No meals logged yet',
+    logFirstMeal: 'Log first meal',
   },
   toast: {
     recipeSaved: 'Recipe saved to Vault!',

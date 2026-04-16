@@ -8,6 +8,16 @@
 - `.claude/skills/session-retro/`
   - End-of-session synthesis and documentation sync
 
+## Slash commands (Claude Code)
+- `/rial-status` — ejecuta `npm run rial:status` + resumen en 4 líneas. Equivalente manual en otros tools: `npm run rial:status`.
+- `/rial-handoff` — genera un bloque de handoff usando la plantilla de `docs/ai/handoffs.md` y lo anexa al archivo.
+- `/rial-ship` — preflight (tsc+lint+test+build) y propuesta de commit siguiendo el patrón del repo. Nunca pushea sin aprobación.
+- `/rial-freeze-check` — evalúa los 6 criterios del "Feature-freeze gate" de `docs/ai/state.md` antes de ejecutar Q6 (Supabase).
+
+## Subagents (Claude Code)
+- `explore-rial` — exploración orientada con rutas y convenciones pre-conocidas (feature-first, handler-factory, i18n dual).
+- `reviewer-rial` — checklist RIAL-específico de 10 ítems (i18n simétrico, SyncKey, release target, etc.) aplicable antes de commit.
+
 ## Shared intent behind those skills
 - Pre-task: load project context quickly without rereading the entire repo
 - Learn: turn a useful discovery into durable, versioned team knowledge

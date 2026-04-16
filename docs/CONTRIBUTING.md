@@ -65,15 +65,23 @@ Sequential (has dependencies):
 
 ## Adding a New Feature — Checklist
 
-- [ ] Define i18n keys (ES + EN)
+For new **screens**, follow [`docs/NEW-SCREEN-CHECKLIST.md`](./NEW-SCREEN-CHECKLIST.md) — it is mandatory and covers primitives, tokens, accessibility, i18n, and verification in one place.
+
+For smaller feature additions (utility, handler, data):
+- [ ] Define i18n keys (ES + EN) — confirm with `npm run check:i18n`
 - [ ] Create types in `types.ts` if needed
 - [ ] Create utility functions in `utils/` if needed
 - [ ] Create component/screen in `components/` or `screens/`
 - [ ] Wire into `App.tsx` (state, handler, routing)
 - [ ] Update `BottomNav`/`Sidebar`/`More` if navigation changes
-- [ ] Run `npx tsc --noEmit`
+- [ ] Run `npm run release:preflight` before asking for review
 - [ ] Visual test in browser
 - [ ] Update `CHANGELOG.md`
+
+**Design-system references:**
+- [`docs/DESIGN-SYSTEM.md`](./DESIGN-SYSTEM.md) — tokens, themes, do/don't
+- [`docs/PRIMITIVES.md`](./PRIMITIVES.md) — canonical components with examples
+- [`docs/adr/`](./adr/) — architectural decisions (ADR-001 through ADR-007)
 
 ## Adding a New Language — Checklist
 

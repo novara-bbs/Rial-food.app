@@ -1,15 +1,35 @@
 import tailwindcss from '@tailwindcss/vite';
 import react from '@vitejs/plugin-react';
 import path from 'path';
-import {defineConfig, loadEnv} from 'vite';
+import {defineConfig, loadEnv, type PluginOption} from 'vite';
 import { VitePWA } from 'vite-plugin-pwa';
 
-export default defineConfig(({mode}) => {
+// Bundle analyzer — opt-in via `ANALYZE=1 npm run build` (or `npm run analyze`).
+// Dynamic import keeps the dep optional: if not installed, the plugin is skipped.
+async function maybeVisualizer(): Promise<PluginOption | null> {
+  if (process.env.ANALYZE !== '1') return null;
+  try {
+    const mod = await import('rollup-plugin-visualizer');
+    return mod.visualizer({
+      filename: 'dist/stats.html',
+      gzipSize: true,
+      brotliSize: true,
+      open: false,
+    }) as PluginOption;
+  } catch {
+    console.warn('[vite] ANALYZE=1 set but `rollup-plugin-visualizer` is not installed. Skipping.');
+    return null;
+  }
+}
+
+export default defineConfig(async ({mode}) => {
   const env = loadEnv(mode, '.', '');
+  const visualizer = await maybeVisualizer();
   return {
     plugins: [
       react(),
       tailwindcss(),
+      ...(visualizer ? [visualizer] : []),
       VitePWA({
         registerType: 'autoUpdate',
         devOptions: { enabled: false },

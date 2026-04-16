@@ -2,6 +2,8 @@
 
 > Real nutrition. Real recipes. Real community.
 
+> Agents: start at [AGENTS.md](AGENTS.md). Contributors: see [docs/CONTRIBUTING.md](docs/CONTRIBUTING.md).
+
 RIAL is a mobile-first nutrition platform that combines tracking, recipes, meal planning, wellness logging, social community features, and creator workflows in one app.
 
 ## Quick Start
@@ -102,4 +104,6 @@ The shared docs in `docs/ai/` are only for development agents. They are not runt
 
 ## License
 
-Private / Confidential - RIAL 2026
+Proprietary. Copyright (c) 2026 RIAL FOOD WORLD S.L. All rights reserved.
+See [LICENSE](LICENSE) for full terms. Do not copy, modify, distribute, or publish
+source code without prior written consent. Contact: legal@rialfoodworld.com.

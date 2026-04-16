@@ -1,0 +1,10 @@
+dist/
+coverage/
+node_modules/
+android/
+ios/
+public/
+*.md
+CHANGELOG.md
+package-lock.json
+.claude/worktrees/

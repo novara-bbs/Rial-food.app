@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap');
 @import "tailwindcss";
 @import "tw-animate-css";
 @plugin "@tailwindcss/typography";
@@ -58,11 +58,44 @@
   --color-sidebar-accent: var(--sidebar-accent);
   --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
   --color-sidebar-border: var(--sidebar-border);
-  --radius: 0.25rem;
+
+  /* Radius scale — ADR-007. Base token + multiplicative scale.
+     Resolved values preserve Tailwind v4 defaults, so existing
+     `rounded-{xs,sm,md,lg,xl,2xl}` utilities keep their visuals.
+     Changing `--radius` rescales the entire system proportionally. */
+  --radius: 0.25rem;                         /* 4px — signature */
+  --radius-xs: calc(var(--radius) * 0.5);    /* 2px */
+  --radius-sm: var(--radius);                /* 4px — canonical primitive radius */
+  --radius-md: calc(var(--radius) * 1.5);    /* 6px */
+  --radius-lg: calc(var(--radius) * 2);      /* 8px */
+  --radius-xl: calc(var(--radius) * 3);      /* 12px */
+  --radius-2xl: calc(var(--radius) * 4);     /* 16px */
 
   --font-headline: "Space Grotesk", sans-serif;
   --font-body: "Inter", sans-serif;
-  --font-label: "JetBrains Mono", monospace;
+  --font-label: "JetBrains Mono", ui-monospace, monospace;
+
+  /* Typography scale — ADR-002. Semantic names, fixed pixel values.
+     Use these via `text-{token}` utilities (e.g. `text-body`, `text-label`).
+     ESLint bans arbitrary `text-[Npx]` in favor of these tokens. */
+  --text-micro: 0.625rem;      /* 10px — JetBrains Mono caps labels, legal */
+  --text-caption: 0.6875rem;   /* 11px — legal/footnote */
+  --text-label: 0.75rem;       /* 12px — form labels, chips, dense meta */
+  --text-body-sm: 0.8125rem;   /* 13px — secondary body */
+  --text-body: 0.875rem;       /* 14px — default body, primary reading */
+  --text-body-lg: 1rem;        /* 16px — prominent body (iOS minimum) */
+  --text-title-sm: 1.125rem;   /* 18px — card titles */
+  --text-title: 1.5rem;        /* 24px — section headlines */
+  --text-headline: 2rem;       /* 32px — screen headlines */
+  --text-display: 2.5rem;      /* 40px — hero metrics */
+
+  /* Shadow scale — ADR-002. Four elevation levels.
+     elev-0 = no elevation. elev-1 = hover hint. elev-2 = floating surface.
+     elev-3 = dialog/popover. Use `shadow-elev-{0..3}`. */
+  --shadow-elev-0: none;
+  --shadow-elev-1: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+  --shadow-elev-2: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+  --shadow-elev-3: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
 }
 
 @layer components {
