@@ -11,9 +11,11 @@ type Filter = 'all' | 'withPhoto' | 'withMeasurements';
 interface BodyTimelineProps {
   snapshots: BodySnapshot[];
   unitSystem: UnitSystem;
+  onShare?: (snapshot: BodySnapshot) => void;
+  shareLabel?: string;
 }
 
-export default function BodyTimeline({ snapshots, unitSystem }: BodyTimelineProps) {
+export default function BodyTimeline({ snapshots, unitSystem, onShare, shareLabel }: BodyTimelineProps) {
   const { t } = useI18n();
   const [filter, setFilter] = useState<Filter>('all');
   const [selectedDate, setSelectedDate] = useState<string | null>(null);
@@ -98,6 +100,8 @@ export default function BodyTimeline({ snapshots, unitSystem }: BodyTimelineProp
                 previousKg={prev?.kg ?? null}
                 unitSystem={unitSystem}
                 onTap={() => setSelectedDate(snap.date)}
+                onShare={onShare}
+                shareLabel={shareLabel}
               />
             );
           })

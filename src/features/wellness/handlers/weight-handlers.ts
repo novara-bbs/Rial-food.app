@@ -1,4 +1,5 @@
 import type { BodySnapshot, BodyMeasurements } from '../../../types/wellness';
+import { todayLocal } from '../../../lib/dates';
 
 // ─── Types ───────────────────────────────────────────────────────────────────
 
@@ -32,10 +33,12 @@ export interface LogWeightArgs {
  * Usage pattern mirrors meal-handlers.ts — wire via AppStateContext useMemo.
  */
 export function createHandleLogWeight({ setWeightHistory, setUserProfile }: WeightHandlerDeps) {
-  return ({ kg, date, note, photoUrl, measurements }: LogWeightArgs) => {
-    const today = date ?? new Date().toISOString().slice(0, 10);
+  return ({ kg, date, note, photoUrl, measurements }: LogWeightArgs): { replaced: boolean } => {
+    const today = date ?? todayLocal();
+    let replaced = false;
     setWeightHistory((prev: BodySnapshot[]) => {
       const existing = prev.find(e => e.date === today);
+      replaced = !!existing;
       const filtered = prev.filter(e => e.date !== today);
       const entry: BodySnapshot = {
         // Merge with existing snapshot so photo/measurements aren't lost on re-weigh
@@ -50,6 +53,7 @@ export function createHandleLogWeight({ setWeightHistory, setUserProfile }: Weig
     });
     // Keep profile.weight as a fast-read cache of latest weight
     setUserProfile((prev: UserProfile) => ({ ...prev, weight: kg }));
+    return { replaced };
   };
 }
 

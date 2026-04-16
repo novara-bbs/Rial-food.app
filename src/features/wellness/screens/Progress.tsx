@@ -1,30 +1,42 @@
 import {
-  TrendingUp, TrendingDown, Scale, Flame, BarChart3, Calendar,
-  Plus, List, Grid3x3, Sparkles,
+  TrendingUp, TrendingDown, Scale, Flame, BarChart3,
+  Plus, List, Grid3x3, CalendarCheck,
 } from 'lucide-react';
 import PageShell from '../../../components/PageShell';
 import { useState, useMemo } from 'react';
 import { useI18n } from '../../../i18n';
 import { useAppState } from '../../../contexts/AppStateContext';
-import { getLoggingStreak, type DailyArchive } from '../../../hooks/useDailyReset';
+import { useNavigation } from '../../../contexts/NavigationContext';
+import type { DailyArchive } from '../../../hooks/useDailyReset';
+import { todayLocal } from '../../../lib/dates';
 import { calcVitality } from '../../home/utils/homeWidgets';
+import { calcWeekMacros } from '../utils/week-stats';
+import { calcStreaks } from '../utils/streaks';
+import { calcWeightTrend } from '../utils/weight-trend';
 import PageHeader from '../../../components/patterns/PageHeader';
+import SectionCard from '../../../components/SectionCard';
+import StatTile from '../../../components/StatTile';
+import SegmentedTabs from '../../../components/SegmentedTabs';
+import Sparkline from '../../../components/Sparkline';
+import DayGridCalendar from '../../../components/DayGridCalendar';
 import { bodyWeightFromKg, getBodyWeightUnit } from '../../food/utils/units';
 import type { BodySnapshot } from '../../../types/wellness';
 import BodyTimeline from '../components/BodyTimeline';
 import BodyCalendar from '../components/BodyCalendar';
 import LogSnapshotModal from '../components/LogSnapshotModal';
-import { seedBodySnapshots } from '../data/seed-body-snapshots';
-import { toast } from 'sonner';
+import DataSourceCaption from '../components/DataSourceCaption';
+import RitmoSection from '../components/RitmoSection';
+import LatestReflectionCard from '../components/LatestReflectionCard';
 
 type MainTab = 'body' | 'nutrition';
 type BodyView = 'timeline' | 'calendar';
 
 export default function Progress({ onBack }: { onBack: () => void }) {
   const { t } = useI18n();
+  const { navigateTo } = useNavigation();
   const {
     nutritionHistory, weightHistory, dailyMacros, dailyLog,
-    realFeelLogs, mealPlan, userProfile, setWeightHistory,
+    realFeelLogs, mealPlan, userProfile, handleShareProgress,
   } = useAppState();
   const unitSystem = userProfile?.unitSystem ?? 'metric';
   const weightUnit = getBodyWeightUnit(unitSystem);
@@ -35,164 +47,146 @@ export default function Progress({ onBack }: { onBack: () => void }) {
 
   const history = nutritionHistory as DailyArchive[];
   const snapshots = weightHistory as BodySnapshot[];
-  const streak = getLoggingStreak(history);
-  const todayStreak = dailyLog.length > 0 ? streak.current + 1 : streak.current;
 
-  // ─── Dashboard Widgets ────────────────────────────────────────────────────────
+  // ─── Streaks (canonical meal-log streak shared by Home + Profile) ────────────
+  const streaks = calcStreaks({
+    history,
+    realFeelLogs: realFeelLogs || [],
+    todayHasMeals: dailyLog.length > 0,
+  });
+  const mealStreak = streaks.mealLog;
+
+  // ─── Dashboard widgets ───────────────────────────────────────────────────────
   const dashboardWidgets = useMemo(() => {
     const { avgVitality, trend: vitalityTrend, entryCount: recent7Count } = calcVitality(realFeelLogs || []);
-    const planValues: any[] = mealPlan ? Object.values(mealPlan) : [];
-    const totalPlannedWeek: number = planValues.reduce(
-      (sum: number, meals: any) => sum + (Array.isArray(meals) ? meals.length : 0),
+    const planValues: Array<unknown> = mealPlan ? Object.values(mealPlan) : [];
+    const totalPlannedWeek: number = planValues.reduce<number>(
+      (sum, meals) => sum + (Array.isArray(meals) ? meals.length : 0),
       0,
     );
     return { avgVitality, vitalityTrend, recent7Count, totalPlannedWeek };
   }, [realFeelLogs, mealPlan]);
 
-  // ─── Weight Trend (always visible in Body tab) ────────────────────────────────
-  const sortedWeights = [...snapshots]
-    .filter(s => s.kg > 0)
-    .sort((a, b) => a.date.localeCompare(b.date));
-  const last30Weights = sortedWeights.slice(-30);
-  const currentWeight = sortedWeights.length > 0 ? sortedWeights[sortedWeights.length - 1].kg : null;
-  const firstWeight = sortedWeights.length > 0 ? sortedWeights[0].kg : null;
-
-  const now = new Date();
-  const weekAgo = new Date(now.getTime() - 7 * 86_400_000).toISOString().slice(0, 10);
-  const recentWeights = sortedWeights.filter(w => w.date >= weekAgo);
-  const weekDelta = recentWeights.length >= 2
-    ? recentWeights[recentWeights.length - 1].kg - recentWeights[0].kg
-    : null;
-
-  const chartWidth = 300;
-  const chartHeight = 100;
-  const chartPadding = 10;
-  let weightPath = '';
-  if (last30Weights.length >= 2) {
-    const minKg = Math.min(...last30Weights.map(w => w.kg)) - 0.5;
-    const maxKg = Math.max(...last30Weights.map(w => w.kg)) + 0.5;
-    const range = maxKg - minKg || 1;
-    const points = last30Weights.map((w, i) => {
-      const x = chartPadding + (i / (last30Weights.length - 1)) * (chartWidth - 2 * chartPadding);
-      const y = chartPadding + (1 - (w.kg - minKg) / range) * (chartHeight - 2 * chartPadding);
-      return `${x},${y}`;
-    });
-    weightPath = `M${points.join(' L')}`;
-  }
-
-  // ─── Target progress ───────────────────────────────────────────────────────────
+  // ─── Weight trend (Body tab) ─────────────────────────────────────────────────
   const targetKg = userProfile?.targetWeight ?? null;
-  const targetProgressPct: number | null =
-    targetKg && currentWeight && firstWeight && firstWeight !== targetKg
-      ? Math.min(100, Math.max(0, Math.round(
-          Math.abs(currentWeight - firstWeight) / Math.abs(targetKg - firstWeight) * 100,
-        )))
-      : null;
+  const trend = useMemo(() => calcWeightTrend(snapshots, targetKg), [snapshots, targetKg]);
+
+  const targetProgressPct = trend.targetProgressPct != null
+    ? Math.round(trend.targetProgressPct * 100)
+    : null;
   const targetDisplay = targetKg ? `${bodyWeightFromKg(targetKg, unitSystem)} ${weightUnit}` : null;
 
-  // ─── Nutrition summary (only computed when Nutrition tab is active via useMemo) ──
-  const thisWeekStart = new Date(now.getTime() - now.getDay() * 86_400_000).toISOString().slice(0, 10);
-  const lastWeekStart = new Date(new Date(thisWeekStart).getTime() - 7 * 86_400_000).toISOString().slice(0, 10);
-  const thisWeekDays = history.filter(h => h.date >= thisWeekStart);
-  const lastWeekDays = history.filter(h => h.date >= lastWeekStart && h.date < thisWeekStart);
-  const avg = (entries: DailyArchive[], key: 'cal' | 'pro' | 'carbs' | 'fats') => {
-    if (entries.length === 0) return 0;
-    return Math.round(entries.reduce((s, e) => s + (e.macros.consumed[key] || 0), 0) / entries.length);
+  // ─── Nutrition summary (this week vs. previous) ──────────────────────────────
+  const macroTarget = {
+    cal: dailyMacros.target?.cal ?? 2400,
+    pro: dailyMacros.target?.pro ?? 180,
+    carbs: dailyMacros.target?.carbs ?? 250,
+    fats: dailyMacros.target?.fats ?? 65,
   };
-  const thisWeekAvg = { cal: avg(thisWeekDays, 'cal'), pro: avg(thisWeekDays, 'pro'), carbs: avg(thisWeekDays, 'carbs'), fats: avg(thisWeekDays, 'fats') };
-  const lastWeekAvg = { cal: avg(lastWeekDays, 'cal'), pro: avg(lastWeekDays, 'pro'), carbs: avg(lastWeekDays, 'carbs'), fats: avg(lastWeekDays, 'fats') };
-  const proteinTarget = dailyMacros.target?.pro || 180;
-  const proteinHitDays = thisWeekDays.filter(h => h.macros.consumed.pro >= proteinTarget).length;
+  const weekStats = useMemo(() => calcWeekMacros(history, macroTarget, 0), [history, macroTarget]);
+  const prevWeekStats = useMemo(() => calcWeekMacros(history, macroTarget, 1), [history, macroTarget]);
 
-  // ─── Consistency calendar (nutrition tab) ─────────────────────────────────────
-  const daysInMonth = new Date(now.getFullYear(), now.getMonth() + 1, 0).getDate();
-  const firstDayOfMonth = new Date(now.getFullYear(), now.getMonth(), 1).getDay();
-  const loggedDates = new Set(history.filter(h => h.mealCount > 0).map(h => h.date));
-  if (dailyLog.length > 0) loggedDates.add(now.toISOString().slice(0, 10));
+  // ─── Consistency calendar data map ───────────────────────────────────────────
+  const consistencyData = useMemo(() => {
+    const m = new Map<string, { logged: true }>();
+    (history || []).filter(h => h.mealCount > 0).forEach(h => m.set(h.date, { logged: true }));
+    if (dailyLog.length > 0) {
+      const today = todayLocal();
+      m.set(today, { logged: true });
+    }
+    return m;
+  }, [history, dailyLog.length]);
 
   const p = t.progress;
-  const TABS: Record<MainTab, string> = {
-    body: p.tabBody ?? 'Cuerpo',
-    nutrition: p.tabNutrition ?? 'Nutrición',
-  };
+
+  const MAIN_TABS = [
+    { id: 'body' as const, label: p.tabBody ?? 'Cuerpo' },
+    { id: 'nutrition' as const, label: p.tabNutrition ?? 'Nutrición' },
+  ];
+
+  const BODY_VIEWS = [
+    { id: 'timeline' as const, label: p.timeline ?? 'Timeline', icon: <List className="w-3 h-3" aria-hidden="true" /> },
+    { id: 'calendar' as const, label: p.calendarView ?? 'Calendario', icon: <Grid3x3 className="w-3 h-3" aria-hidden="true" /> },
+  ];
+
+  // Goal-aware weight coloring: for gain/muscle goals, weight up = positive (primary)
+  const isGainGoal = userProfile?.goal === 'gain' || userProfile?.goal === 'muscle';
+  const weightUpColor = isGainGoal ? 'text-primary' : 'text-brand-secondary';
+  const weightDownColor = isGainGoal ? 'text-brand-secondary' : 'text-primary';
+
+  // Trend chip for the weight section header
+  const weekDelta = trend.weekDelta;
+  const weekDeltaNode = weekDelta !== null ? (
+    <div className={`flex items-center gap-1 text-[10px] font-bold uppercase tracking-widest ${weekDelta > 0 ? weightUpColor : weekDelta < 0 ? weightDownColor : 'text-on-surface-variant'}`}>
+      {weekDelta > 0 ? <TrendingUp className="w-3.5 h-3.5" /> : weekDelta < 0 ? <TrendingDown className="w-3.5 h-3.5" /> : null}
+      {weekDelta > 0 ? '+' : ''}{bodyWeightFromKg(Math.abs(weekDelta), unitSystem).toFixed(1)} {weightUnit}
+    </div>
+  ) : null;
+
+  const kcalDelta = weekStats.deltaVsPrev.cal;
+  const proDelta = weekStats.deltaVsPrev.pro;
 
   return (
     <PageShell maxWidth="narrow" spacing="lg">
       <PageHeader onBack={onBack} label="" title={p.title || 'Tu Progreso'} />
 
       {/* ─── Dashboard Widgets ─── */}
+      <DataSourceCaption
+        kind="auto"
+        label={p.dataSourceAutoDashboard ?? 'resumen de tu actividad'}
+        className="mt-1"
+      />
       <section className="grid grid-cols-3 gap-3">
-        <div className="bg-surface-container-low border border-outline-variant/20 rounded-sm p-3 flex flex-col gap-1">
-          <span className="font-label text-[9px] uppercase tracking-widest text-on-surface-variant">Real Score</span>
-          <div className="flex items-center gap-1">
-            <span className="font-headline font-black text-xl text-primary">{dashboardWidgets.avgVitality}</span>
-            {dashboardWidgets.vitalityTrend === 'up' && <TrendingUp className="w-3.5 h-3.5 text-brand-secondary" />}
-            {dashboardWidgets.vitalityTrend === 'down' && <TrendingDown className="w-3.5 h-3.5 text-error" />}
-          </div>
-          <span className="text-[9px] text-on-surface-variant">{dashboardWidgets.recent7Count} {p.entries}</span>
-        </div>
-        <div className="bg-surface-container-low border border-outline-variant/20 rounded-sm p-3 flex flex-col gap-1">
-          <span className="font-label text-[9px] uppercase tracking-widest text-on-surface-variant">Plan</span>
-          <span className="font-headline font-black text-xl text-brand-secondary">{dashboardWidgets.totalPlannedWeek}</span>
-          <span className="text-[9px] text-on-surface-variant">{p.thisWeek || 'esta semana'}</span>
-        </div>
-        <div className="bg-surface-container-low border border-outline-variant/20 rounded-sm p-3 flex flex-col gap-1">
-          <span className="font-label text-[9px] uppercase tracking-widest text-on-surface-variant">{p.currentStreak || 'Racha actual'}</span>
-          <div className="flex items-center gap-1">
-            <Flame className="w-4 h-4 text-brand-secondary" />
-            <span className="font-headline font-black text-xl text-tertiary">{todayStreak}</span>
-          </div>
-          <span className="text-[9px] text-on-surface-variant">{p.days || 'días'}</span>
-        </div>
+        <StatTile
+          label="Real Score"
+          value={dashboardWidgets.avgVitality}
+          valueColor="primary"
+          trend={dashboardWidgets.vitalityTrend === 'up' ? 'up' : dashboardWidgets.vitalityTrend === 'down' ? 'down' : undefined}
+          subtle={`${dashboardWidgets.recent7Count} ${p.entries ?? 'entradas'}`}
+        />
+        <StatTile
+          label="Plan"
+          value={dashboardWidgets.totalPlannedWeek}
+          valueColor="secondary"
+          subtle={p.plannedMeals ?? 'planificadas'}
+        />
+        <StatTile
+          label={p.currentStreak || 'Racha actual'}
+          value={mealStreak.current}
+          valueColor="tertiary"
+          icon={<Flame className="w-4 h-4 text-brand-secondary" aria-hidden="true" />}
+          subtle={p.days || 'días'}
+        />
       </section>
 
       {/* ─── Main tabs: Cuerpo | Nutrición ─── */}
-      <div className="flex bg-surface-container rounded-sm p-1 gap-1">
-        {(Object.keys(TABS) as MainTab[]).map(tab => (
-          <button
-            key={tab}
-            type="button"
-            onClick={() => setMainTab(tab)}
-            className={`flex-1 py-2 text-[10px] font-bold uppercase tracking-widest rounded-sm transition-all ${
-              mainTab === tab
-                ? 'bg-primary text-on-primary shadow-sm'
-                : 'text-on-surface-variant hover:text-tertiary'
-            }`}
-          >
-            {TABS[tab]}
-          </button>
-        ))}
-      </div>
+      <SegmentedTabs
+        options={MAIN_TABS}
+        value={mainTab}
+        onChange={setMainTab}
+        ariaLabel={p.title ?? 'Progreso'}
+      />
 
       {/* ══════════════ BODY TAB ══════════════ */}
       {mainTab === 'body' && (
         <>
-          {/* Weight chart + stats — always visible */}
-          <section className="bg-surface-container-low border border-outline-variant/20 rounded-sm p-5 space-y-3">
-            <div className="flex items-center justify-between">
-              <h2 className="font-headline font-bold text-sm uppercase tracking-widest text-tertiary flex items-center gap-2">
-                <Scale className="w-4 h-4 text-primary" /> {p.weightTrend || 'Tendencia de Peso'}
-              </h2>
-              {weekDelta !== null && (
-                <div className={`flex items-center gap-1 text-[10px] font-bold uppercase tracking-widest ${weekDelta > 0 ? 'text-brand-secondary' : weekDelta < 0 ? 'text-primary' : 'text-on-surface-variant'}`}>
-                  {weekDelta > 0 ? <TrendingUp className="w-3.5 h-3.5" /> : weekDelta < 0 ? <TrendingDown className="w-3.5 h-3.5" /> : null}
-                  {weekDelta > 0 ? '+' : ''}{bodyWeightFromKg(Math.abs(weekDelta), unitSystem).toFixed(1)} {weightUnit}
-                </div>
-              )}
-            </div>
-
-            {last30Weights.length >= 2 ? (
-              <svg viewBox={`0 0 ${chartWidth} ${chartHeight}`} className="w-full h-24">
-                <path d={weightPath} fill="none" stroke="var(--primary)" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
-                {last30Weights.map((w, i) => {
-                  const minKg = Math.min(...last30Weights.map(w2 => w2.kg)) - 0.5;
-                  const maxKg = Math.max(...last30Weights.map(w2 => w2.kg)) + 0.5;
-                  const range = maxKg - minKg || 1;
-                  const x = chartPadding + (i / (last30Weights.length - 1)) * (chartWidth - 2 * chartPadding);
-                  const y = chartPadding + (1 - (w.kg - minKg) / range) * (chartHeight - 2 * chartPadding);
-                  return <circle key={w.date} cx={x} cy={y} r="2.5" fill="var(--primary)" />;
-                })}
-              </svg>
+          {/* Weight chart + stats */}
+          <SectionCard
+            icon={<Scale className="w-4 h-4 text-primary" aria-hidden="true" />}
+            title={p.weightTrend || 'Tendencia de Peso'}
+            caption={<DataSourceCaption kind="manual" label={p.dataSourceManualWeight ?? 'registra una entrada cuando te peses'} />}
+            action={weekDeltaNode}
+          >
+            {trend.last30.length >= 2 ? (
+              <Sparkline
+                values={trend.last30.map(w => w.kg)}
+                color="var(--primary)"
+                height={100}
+                strokeWidth={2.5}
+                dotRadius={2.5}
+                svgClassName="w-full h-24"
+                ariaLabel={p.weightTrend ?? 'Tendencia de Peso'}
+              />
             ) : (
               <div className="h-20 flex items-center justify-center text-on-surface-variant text-xs font-label uppercase tracking-widest">
                 {p.noWeightData || 'Registra tu peso para ver la tendencia'}
@@ -202,16 +196,22 @@ export default function Progress({ onBack }: { onBack: () => void }) {
             <div className="grid grid-cols-3 gap-4 pt-2 border-t border-outline-variant/10">
               <div className="text-center">
                 <span className="font-label text-[9px] uppercase tracking-widest text-on-surface-variant block">{p.current || 'Actual'}</span>
-                <span className="font-headline font-black text-base text-tertiary">{currentWeight ? `${bodyWeightFromKg(currentWeight, unitSystem)} ${weightUnit}` : '—'}</span>
+                <span className="font-headline font-black text-base text-tertiary">
+                  {trend.current !== null ? `${bodyWeightFromKg(trend.current, unitSystem)} ${weightUnit}` : '—'}
+                </span>
               </div>
               <div className="text-center">
                 <span className="font-label text-[9px] uppercase tracking-widest text-on-surface-variant block">{p.start || 'Inicio'}</span>
-                <span className="font-headline font-black text-base text-on-surface-variant">{firstWeight ? `${bodyWeightFromKg(firstWeight, unitSystem)} ${weightUnit}` : '—'}</span>
+                <span className="font-headline font-black text-base text-on-surface-variant">
+                  {trend.first !== null ? `${bodyWeightFromKg(trend.first, unitSystem)} ${weightUnit}` : '—'}
+                </span>
               </div>
               <div className="text-center">
                 <span className="font-label text-[9px] uppercase tracking-widest text-on-surface-variant block">{p.change || 'Cambio'}</span>
-                <span className={`font-headline font-black text-base ${currentWeight && firstWeight ? (currentWeight - firstWeight > 0 ? 'text-brand-secondary' : 'text-primary') : 'text-on-surface-variant'}`}>
-                  {currentWeight && firstWeight ? `${(currentWeight - firstWeight) > 0 ? '+' : ''}${bodyWeightFromKg(Math.abs(currentWeight - firstWeight), unitSystem).toFixed(1)} ${weightUnit}` : '—'}
+                <span className={`font-headline font-black text-base ${trend.current !== null && trend.first !== null ? (trend.current - trend.first > 0 ? weightUpColor : weightDownColor) : 'text-on-surface-variant'}`}>
+                  {trend.current !== null && trend.first !== null
+                    ? `${(trend.current - trend.first) > 0 ? '+' : ''}${bodyWeightFromKg(Math.abs(trend.current - trend.first), unitSystem).toFixed(1)} ${weightUnit}`
+                    : '—'}
                 </span>
               </div>
             </div>
@@ -226,35 +226,23 @@ export default function Progress({ onBack }: { onBack: () => void }) {
                     {targetDisplay} · {targetProgressPct}%
                   </span>
                 </div>
+                <DataSourceCaption kind="manual" label={p.dataSourceManualTarget ?? 'basado en tu último pesaje'} />
                 <div className="h-1.5 w-full bg-surface-container-highest rounded-full overflow-hidden">
                   <div className="h-full bg-primary rounded-full transition-all duration-500" style={{ width: `${targetProgressPct}%` }} />
                 </div>
               </div>
             )}
-          </section>
+          </SectionCard>
 
           {/* View toggle + Log CTA */}
           <div className="flex items-center gap-2">
-            <div className="flex bg-surface-container rounded-sm p-0.5 gap-0.5">
-              <button
-                type="button"
-                onClick={() => setBodyView('timeline')}
-                className={`flex items-center gap-1.5 px-3 py-1.5 text-[10px] font-bold uppercase tracking-widest rounded-sm transition-colors ${
-                  bodyView === 'timeline' ? 'bg-primary text-on-primary' : 'text-on-surface-variant hover:text-tertiary'
-                }`}
-              >
-                <List className="w-3 h-3" aria-hidden="true" /> {p.timeline ?? 'Timeline'}
-              </button>
-              <button
-                type="button"
-                onClick={() => setBodyView('calendar')}
-                className={`flex items-center gap-1.5 px-3 py-1.5 text-[10px] font-bold uppercase tracking-widest rounded-sm transition-colors ${
-                  bodyView === 'calendar' ? 'bg-primary text-on-primary' : 'text-on-surface-variant hover:text-tertiary'
-                }`}
-              >
-                <Grid3x3 className="w-3 h-3" aria-hidden="true" /> {p.calendarView ?? 'Calendario'}
-              </button>
-            </div>
+            <SegmentedTabs
+              options={BODY_VIEWS}
+              value={bodyView}
+              onChange={setBodyView}
+              size="sm"
+              ariaLabel={p.tabBody ?? 'Cuerpo'}
+            />
             <button
               type="button"
               onClick={() => setLogOpen(true)}
@@ -267,117 +255,163 @@ export default function Progress({ onBack }: { onBack: () => void }) {
 
           {/* Body view */}
           {bodyView === 'timeline'
-            ? <BodyTimeline snapshots={snapshots} unitSystem={unitSystem} />
+            ? (
+              <BodyTimeline
+                snapshots={snapshots}
+                unitSystem={unitSystem}
+                onShare={handleShareProgress ? (snap) => {
+                  const sortedAsc = [...snapshots].sort((a, b) => a.date.localeCompare(b.date));
+                  const reference = sortedAsc.find(s => s.date < snap.date) ?? sortedAsc[0];
+                  const delta = reference && reference.date !== snap.date
+                    ? +(snap.kg - reference.kg).toFixed(1)
+                    : undefined;
+                  const content = delta != null
+                    ? `${delta < 0 ? '−' : '+'}${Math.abs(delta).toFixed(1)} ${weightUnit} desde ${new Date(reference.date + 'T12:00:00').toLocaleDateString(undefined, { day: 'numeric', month: 'short' })}.`
+                    : `Hoy: ${bodyWeightFromKg(snap.kg, unitSystem)} ${weightUnit}.`;
+                  handleShareProgress({
+                    snapshot: snap,
+                    referenceSnapshot: reference && reference.date !== snap.date ? reference : undefined,
+                    content,
+                    author: { name: userProfile?.name || 'Tú', img: userProfile?.avatar },
+                  });
+                } : undefined}
+                shareLabel={p.shareSnapshot ?? 'Compartir con la comunidad'}
+              />
+            )
             : <BodyCalendar snapshots={snapshots} unitSystem={unitSystem} />
           }
-
-          {/* Dev-only seed button */}
-          {(import.meta as any).env?.DEV && snapshots.length === 0 && (
-            <button
-              type="button"
-              onClick={() => {
-                seedBodySnapshots(setWeightHistory);
-                toast.success(p.seedLoaded ?? '30 días de datos de ejemplo cargados');
-              }}
-              className="w-full flex items-center justify-center gap-2 py-3 bg-brand-secondary/10 border border-dashed border-brand-secondary/30 rounded-sm text-[10px] font-bold uppercase tracking-widest text-brand-secondary hover:bg-brand-secondary/20 transition-colors"
-            >
-              <Sparkles className="w-3.5 h-3.5" aria-hidden="true" />
-              {p.loadSeedData ?? 'Cargar datos de ejemplo (dev)'}
-            </button>
-          )}
         </>
       )}
 
       {/* ══════════════ NUTRITION TAB ══════════════ */}
       {mainTab === 'nutrition' && (
         <>
-          <section className="bg-surface-container-low border border-outline-variant/20 rounded-sm p-5 space-y-4">
-            <h2 className="font-headline font-bold text-sm uppercase tracking-widest text-tertiary flex items-center gap-2">
-              <BarChart3 className="w-4 h-4 text-brand-secondary" /> {p.nutritionSummary || 'Resumen Nutricional'}
-            </h2>
-
-            {thisWeekDays.length > 0 ? (
+          <SectionCard
+            icon={<BarChart3 className="w-4 h-4 text-brand-secondary" aria-hidden="true" />}
+            title={p.nutritionSummary || 'Resumen Nutricional'}
+            caption={<DataSourceCaption kind="auto" label={p.dataSourceAutoMacros ?? 'se actualiza con cada comida'} />}
+          >
+            {weekStats.daysLogged > 0 ? (
               <>
                 <div className="grid grid-cols-4 gap-3">
                   {(['cal', 'pro', 'carbs', 'fats'] as const).map(key => {
                     const labels: Record<string, string> = { cal: 'kcal', pro: 'Prot', carbs: 'Carbs', fats: 'Grasas' };
-                    const thisVal = thisWeekAvg[key];
-                    const lastVal = lastWeekAvg[key];
+                    const thisVal = weekStats.avg[key];
+                    const lastVal = prevWeekStats.avg[key];
                     const delta = lastVal > 0 ? Math.round(((thisVal - lastVal) / lastVal) * 100) : 0;
+                    const trendKey: 'up' | 'down' | 'flat' | undefined =
+                      lastVal > 0
+                        ? delta > 0 ? 'up' : delta < 0 ? 'down' : 'flat'
+                        : undefined;
                     return (
-                      <div key={key} className="text-center bg-surface-container rounded-sm p-3">
-                        <span className="font-label text-[8px] uppercase tracking-widest text-on-surface-variant block mb-1">{labels[key]}</span>
-                        <span className="font-headline font-black text-lg text-tertiary block">{thisVal}</span>
-                        {lastVal > 0 && (
-                          <span className={`text-[9px] font-bold ${delta > 0 ? 'text-brand-secondary' : delta < 0 ? 'text-primary' : 'text-on-surface-variant'}`}>
-                            {delta > 0 ? '+' : ''}{delta}%
-                          </span>
-                        )}
-                      </div>
+                      <StatTile
+                        key={key}
+                        label={labels[key]}
+                        value={thisVal}
+                        valueColor="tertiary"
+                        variant="raised"
+                        size="sm"
+                        trend={lastVal > 0 ? trendKey : undefined}
+                        trendValue={lastVal > 0 ? `${delta > 0 ? '+' : ''}${delta}%` : undefined}
+                      />
                     );
                   })}
                 </div>
                 <div className="flex items-center justify-between pt-3 border-t border-outline-variant/10">
                   <span className="font-label text-[10px] uppercase tracking-widest text-on-surface-variant">{p.proteinTarget || 'Objetivo de proteína'}</span>
-                  <span className="font-headline font-bold text-sm text-primary">{proteinHitDays}/{thisWeekDays.length} {p.days || 'días'}</span>
+                  <span className="font-headline font-bold text-sm text-primary">{weekStats.hitDays.pro}/{weekStats.daysLogged} {p.days || 'días'}</span>
                 </div>
+                {(kcalDelta !== null || proDelta !== null) && (
+                  <p className="text-[10px] text-on-surface-variant">
+                    {p.vsPrevWeek ?? 'vs. semana pasada'}:
+                    {kcalDelta !== null && <> kcal {kcalDelta > 0 ? '+' : ''}{kcalDelta}%</>}
+                    {proDelta !== null && <> · prot {proDelta > 0 ? '+' : ''}{proDelta}%</>}
+                  </p>
+                )}
               </>
             ) : (
               <div className="h-24 flex items-center justify-center text-on-surface-variant text-xs font-label uppercase tracking-widest">
                 {p.noNutritionData || 'Sin datos de esta semana'}
               </div>
             )}
-          </section>
+          </SectionCard>
 
-          <section className="bg-surface-container-low border border-outline-variant/20 rounded-sm p-5 space-y-4">
-            <h2 className="font-headline font-bold text-sm uppercase tracking-widest text-tertiary flex items-center gap-2">
-              <Flame className="w-4 h-4 text-brand-secondary" /> {p.consistency || 'Consistencia'}
-            </h2>
+          <SectionCard
+            icon={<Flame className="w-4 h-4 text-brand-secondary" aria-hidden="true" />}
+            title={p.consistency || 'Consistencia'}
+            caption={<DataSourceCaption kind="auto" label={p.dataSourceAutoStreak ?? 'calculado al cerrar el día'} />}
+          >
             <div className="grid grid-cols-2 gap-4">
-              <div className="bg-surface-container rounded-sm p-4 text-center">
-                <span className="font-headline font-black text-3xl text-primary">{todayStreak}</span>
-                <span className="font-label text-[9px] uppercase tracking-widest text-on-surface-variant block mt-1">{p.currentStreak || 'Racha actual'}</span>
-              </div>
-              <div className="bg-surface-container rounded-sm p-4 text-center">
-                <span className="font-headline font-black text-3xl text-on-surface-variant">{streak.best}</span>
-                <span className="font-label text-[9px] uppercase tracking-widest text-on-surface-variant block mt-1">{p.bestStreak || 'Mejor racha'}</span>
-              </div>
+              <StatTile
+                label={p.currentStreak || 'Racha actual'}
+                value={mealStreak.current}
+                valueColor="primary"
+                variant="raised"
+                size="md"
+                icon={<Flame className="w-4 h-4 text-brand-secondary" aria-hidden="true" />}
+              />
+              <StatTile
+                label={p.bestStreak || 'Mejor racha'}
+                value={mealStreak.best}
+                valueColor="on-surface-variant"
+                variant="raised"
+                size="md"
+              />
             </div>
 
             <div className="pt-3 border-t border-outline-variant/10">
               <span className="font-label text-[9px] uppercase tracking-widest text-on-surface-variant flex items-center gap-1.5 mb-3">
-                <Calendar className="w-3.5 h-3.5" />
-                {now.toLocaleDateString(undefined, { month: 'long', year: 'numeric' })}
+                <CalendarCheck className="w-3.5 h-3.5" aria-hidden="true" />
+                {new Date().toLocaleDateString(undefined, { month: 'long', year: 'numeric' })}
               </span>
-              <div className="grid grid-cols-7 gap-1.5">
-                {['L', 'M', 'X', 'J', 'V', 'S', 'D'].map(d => (
-                  <span key={d} className="text-center text-[8px] font-bold text-on-surface-variant uppercase">{d}</span>
-                ))}
-                {Array.from({ length: (firstDayOfMonth + 6) % 7 }).map((_, i) => <div key={`empty-${i}`} />)}
-                {Array.from({ length: daysInMonth }).map((_, i) => {
-                  const day = i + 1;
-                  const dateStr = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
-                  const isToday = dateStr === now.toISOString().slice(0, 10);
-                  const isLogged = loggedDates.has(dateStr);
-                  const isFuture = day > now.getDate();
-                  return (
-                    <div
-                      key={day}
-                      className={`aspect-square rounded-sm flex items-center justify-center text-[9px] font-bold ${
-                        isFuture
-                          ? 'bg-surface-container/50 text-on-surface-variant/30'
-                          : isLogged
-                            ? 'bg-primary text-on-primary'
-                            : 'bg-surface-container-highest text-on-surface-variant/50'
-                      } ${isToday ? 'ring-1 ring-primary ring-offset-1 ring-offset-surface-container-low' : ''}`}
+              <DayGridCalendar<{ logged: true }>
+                mode="month"
+                data={consistencyData}
+                prevMonthLabel={p.prevMonth ?? 'Mes anterior'}
+                nextMonthLabel={p.nextMonth ?? 'Mes siguiente'}
+                onSelectEmpty={() => navigateTo('add-meal')}
+                cellClassName={({ payload, isFuture }) =>
+                  isFuture
+                    ? 'bg-surface-container/50 text-on-surface-variant/30'
+                    : payload
+                      ? 'bg-primary text-on-primary'
+                      : 'bg-surface-container-highest text-on-surface-variant/50'
+                }
+                cellAriaLabel={({ date, payload }) => `${date.slice(-2)} ${payload ? '(logged)' : ''}`}
+                renderCell={({ date }) => <span>{Number(date.slice(-2))}</span>}
+                emptyState={
+                  <div className="text-center py-4 space-y-2">
+                    <p className="text-xs text-on-surface-variant">{p.consistencyCalendarEmpty ?? 'Aún no has registrado comidas'}</p>
+                    <button
+                      type="button"
+                      onClick={() => navigateTo('add-meal')}
+                      className="inline-flex items-center gap-1.5 bg-primary text-on-primary px-3 py-1.5 rounded-sm text-[10px] font-bold uppercase tracking-widest hover:opacity-90 transition-opacity"
                     >
-                      {day}
-                    </div>
-                  );
-                })}
-              </div>
+                      {p.logFirstMeal ?? 'Registrar primera comida'}
+                    </button>
+                  </div>
+                }
+              />
             </div>
-          </section>
+          </SectionCard>
+
+          {/* Weekly reflection — surfaces weeklyCheckIns inside the expected tab */}
+          <LatestReflectionCard />
+
+          {/* Ritmo diario — collapsible sparklines for Health-seeker ICP */}
+          <RitmoSection
+            history={history}
+            realFeelLogs={realFeelLogs || []}
+            title={p.ritmoTitle ?? 'Ritmo diario'}
+            captionLabel={p.dataSourceAutoRitmo ?? 'sumado desde Home'}
+            emptyLabel={p.ritmoEmpty ?? 'Sin datos aún — registra hidratación o movimiento en Home'}
+            daysLabel={p.days || 'días'}
+            labels={{
+              hydration: p.ritmoHydration ?? 'Hidratación',
+              movement: p.ritmoMovement ?? 'Movimiento',
+              vitality: p.ritmoVitality ?? 'Real Feel',
+            }}
+          />
         </>
       )}
 

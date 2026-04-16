@@ -17,12 +17,24 @@ export interface PostComment {
   likes?: number;
 }
 
+export interface ProgressPostPayload {
+  /** `snapshot` = one-off share of a BodySnapshot; `milestone` = auto-prompted when crossing ±1kg */
+  kind: 'snapshot' | 'milestone';
+  currentKg: number;
+  /** kg delta vs reference point (positive or negative). Omit on first share. */
+  deltaKg?: number;
+  /** YYYY-MM-DD of the reference snapshot used to compute delta. */
+  sinceDate?: string;
+  /** Inline base64 photo from the BodySnapshot (optional). */
+  photoUrl?: string;
+}
+
 export interface CommunityPost {
   id: number;
   author: PostAuthor;
   content: string;
   images?: string[];
-  type: 'text' | 'performance' | 'recipe' | 'repost';
+  type: 'text' | 'performance' | 'recipe' | 'repost' | 'progress';
   performance?: { recovery: number; strain: number };
   recipe?: {
     id?: string;
@@ -35,6 +47,7 @@ export interface CommunityPost {
     img: string;
     tag: string;
   };
+  progress?: ProgressPostPayload;
   repostOf?: number;
   hashtags?: string[];
   likes: number;

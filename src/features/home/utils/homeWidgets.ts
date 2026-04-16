@@ -1,43 +1,31 @@
-import type { DailyArchive } from '../../../hooks/useDailyReset';
-
-interface WeightEntry { date: string; kg: number; note?: string }
-
-/** Calculate Real Score (vitality 0-100) and trend from RealFeel logs */
+/** Calculate Real Score (vitality 0-100) and trend from RealFeel logs.
+ *  Entries without a valid level (1-5) are excluded from averages. */
 export function calcVitality(realFeelLogs: any[]): { avgVitality: number; trend: 'up' | 'down' | 'flat'; entryCount: number } {
   const logs = realFeelLogs || [];
-  const recent7 = logs.slice(0, 7);
-  const avgVitality = recent7.length > 0
-    ? Math.round((recent7.reduce((s: number, l: any) => s + (l.level || 3), 0) / recent7.length) * 20)
-    : 0;
-  const prev7 = logs.slice(7, 14);
-  const prevAvg = prev7.length > 0
-    ? Math.round((prev7.reduce((s: number, l: any) => s + (l.level || 3), 0) / prev7.length) * 20)
-    : 0;
-  const trend: 'up' | 'down' | 'flat' = recent7.length > 0 && prev7.length > 0
-    ? avgVitality > prevAvg + 5 ? 'up' : avgVitality < prevAvg - 5 ? 'down' : 'flat'
-    : 'flat';
-  return { avgVitality, trend, entryCount: recent7.length };
-}
 
-/** Calculate weekly progress metrics from nutrition history */
-export function calcWeeklyProgress(history: DailyArchive[], weights: WeightEntry[], proteinTarget: number): {
-  calAvg: number; proteinHitDays: number; totalDays: number; weekDelta: number | null;
-} {
-  const now = new Date();
-  const dayOfWeek = now.getDay();
-  const thisWeekStart = new Date(now.getTime() - dayOfWeek * 86_400_000).toISOString().slice(0, 10);
-  const thisWeekDays = history.filter(h => h.date >= thisWeekStart);
-  const calAvg = thisWeekDays.length > 0
-    ? Math.round(thisWeekDays.reduce((s, e) => s + (e.macros.consumed.cal || 0), 0) / thisWeekDays.length)
+  const validRecent = logs.slice(0, 7).filter((l: any) => l.level != null && l.level >= 1);
+  const avgVitality = validRecent.length > 0
+    ? Math.round((validRecent.reduce((s: number, l: any) => s + l.level, 0) / validRecent.length) * 20)
     : 0;
-  const proteinHitDays = thisWeekDays.filter(h => (h.macros.consumed as any).pro >= proteinTarget).length;
 
-  const weekAgo = new Date(now.getTime() - 7 * 86_400_000).toISOString().slice(0, 10);
-  const sortedWeights = [...weights].sort((a, b) => a.date.localeCompare(b.date));
-  const recentWeights = sortedWeights.filter(w => w.date >= weekAgo);
-  const weekDelta = recentWeights.length >= 2
-    ? recentWeights[recentWeights.length - 1].kg - recentWeights[0].kg
-    : null;
+  const validPrev = logs.slice(7, 14).filter((l: any) => l.level != null && l.level >= 1);
+  const prevAvg = validPrev.length > 0
+    ? Math.round((validPrev.reduce((s: number, l: any) => s + l.level, 0) / validPrev.length) * 20)
+    : 0;
 
-  return { calAvg, proteinHitDays, totalDays: thisWeekDays.length, weekDelta };
+  let trend: 'up' | 'down' | 'flat' = 'flat';
+  if (validRecent.length > 0 && validPrev.length > 0) {
+    // Standard 2-window comparison
+    trend = avgVitality > prevAvg + 5 ? 'up' : avgVitality < prevAvg - 5 ? 'down' : 'flat';
+  } else if (validRecent.length >= 4 && validPrev.length === 0) {
+    // Intra-set trend: split the available entries into halves
+    const mid = Math.floor(validRecent.length / 2);
+    const olderHalf = validRecent.slice(mid); // logs are newest-first → tail is older
+    const newerHalf = validRecent.slice(0, mid);
+    const olderAvg = Math.round((olderHalf.reduce((s: number, l: any) => s + l.level, 0) / olderHalf.length) * 20);
+    const newerAvg = Math.round((newerHalf.reduce((s: number, l: any) => s + l.level, 0) / newerHalf.length) * 20);
+    trend = newerAvg > olderAvg + 5 ? 'up' : newerAvg < olderAvg - 5 ? 'down' : 'flat';
+  }
+
+  return { avgVitality, trend, entryCount: validRecent.length };
 }

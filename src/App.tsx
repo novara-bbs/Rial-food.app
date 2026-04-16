@@ -12,12 +12,14 @@ import { useAppState } from './contexts/AppStateContext';
 import { useOnlineStatus } from './hooks/useOnlineStatus';
 import { useAuth } from './contexts/AuthContext';
 import GdprConsent, { hasGivenConsent } from './components/GdprConsent';
+import GlobalLogSnapshotModal from './features/wellness/components/GlobalLogSnapshotModal';
 import { Toaster } from 'sonner';
 import { screens } from './config/routes';
 import { getFoodInsights } from './features/wellness/utils/correlations';
 import { useI18n } from './i18n';
 import type { DailyArchive } from './hooks/useDailyReset';
-import type { WeightEntry } from './contexts/AppStateContext';
+import type { BodySnapshot } from './contexts/AppStateContext';
+import { dateToLocal } from './lib/dates';
 
 const {
   Home, Explore, Cocina, More, RecipeDetail, AddMeal, AddTolerance,
@@ -81,7 +83,7 @@ export default function App() {
   const [showConsent, setShowConsent] = useState(() => !hasGivenConsent());
 
   const aiCoachMemory = useMemo(() => {
-    const weekAgoDate = new Date(Date.now() - 7 * 86_400_000).toISOString().slice(0, 10);
+    const weekAgoDate = dateToLocal(new Date(Date.now() - 7 * 86_400_000));
     const recentHistory = (nutritionHistory as DailyArchive[]).filter(e => e.date >= weekAgoDate);
     const weeklyNutritionAvg = recentHistory.length > 0
       ? {
@@ -92,7 +94,7 @@ export default function App() {
         }
       : undefined;
 
-    const sortedWeights = [...(weightHistory as WeightEntry[])].sort((a, b) => a.date.localeCompare(b.date));
+    const sortedWeights = [...(weightHistory as BodySnapshot[])].sort((a, b) => a.date.localeCompare(b.date));
     const weightTrend = sortedWeights.length > 0
       ? (() => {
           const cur = sortedWeights[sortedWeights.length - 1].kg;
@@ -137,13 +139,13 @@ export default function App() {
       case 'create-post': return <CreatePost onBack={() => navigateTo(previousScreen)} onCreatePost={handleCreatePost} />;
       case 'daily-check-in': return <DailyCheckIn initialStatus={checkInStatus?.status || null} onBack={() => navigateTo(previousScreen)} onComplete={handleCompleteCheckIn} />;
       case 'ai-coach': return <AICoach onBack={() => navigateTo(previousScreen)} isPro={isPro} memoryContext={aiCoachMemory} />;
-      case 'profile': return <Profile userProfile={userProfile} onBack={() => navigateTo(previousScreen)} realFeelLogs={realFeelLogs} savedRecipes={savedRecipes} communityPosts={communityPosts} />;
+      case 'profile': return <Profile userProfile={userProfile} onBack={() => navigateTo(previousScreen)} realFeelLogs={realFeelLogs} savedRecipes={savedRecipes} communityPosts={communityPosts} nutritionHistory={nutritionHistory} dailyLogHasEntries={dailyLog.length > 0} />;
       case 'settings': return <Settings dailyMacros={dailyMacros} setDailyMacros={setDailyMacros} isPro={isProState} setIsPro={setIsPro} showAIBot={showAIBotState} setShowAIBot={setShowAIBot} userProfile={userProfile} setUserProfile={setUserProfile} dictionary={dictionary} hydration={hydration} setHydration={setHydration} movement={movement} setMovement={setMovement} />;
       case 'real-feel-diary': return <RealFeelDiary realFeelLogs={realFeelLogs} onBack={() => navigateTo('more')} />;
       case 'fasting-timer': return <FastingTimer onBack={() => navigateTo('more')} />;
       case 'pantry': return <Pantry onBack={() => navigateTo('more')} />;
-      case 'weekly-check-in': return <WeeklyCheckIn onBack={() => navigateTo('more')} />;
-      case 'weekly-review': return <WeeklyReview onBack={() => navigateTo('more')} />;
+      case 'weekly-check-in': return <WeeklyCheckIn onBack={() => navigateTo(previousScreen)} />;
+      case 'weekly-review': return <WeeklyReview onBack={() => navigateTo(previousScreen)} />;
       case 'rial-plus': return <RialPlus onBack={() => navigateTo('more')} />;
       case 'import-url': return <ImportRecipeURL onBack={() => navigateTo(previousScreen)} onImport={handleImportRecipe} />;
       case 'creator-verification': return <CreatorVerification onBack={() => navigateTo('more')} />;
@@ -267,6 +269,8 @@ export default function App() {
           onNavigateTerms={() => { setShowConsent(false); navigateTo('terms-of-service'); }}
         />
       )}
+      {/* Q13 — single app-wide modal for weight/snapshot logging */}
+      <GlobalLogSnapshotModal />
     </>
   );
 }

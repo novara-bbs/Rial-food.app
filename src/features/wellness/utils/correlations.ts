@@ -17,10 +17,12 @@ export interface CorrelationInsight {
   confidence: number;
 }
 
+export type InsightIconKey = 'variety' | 'protein' | 'hydration' | 'streak' | 'notebook';
+
 export interface InsightRecommendation {
   id: string;
   tone: CorrelationTone;
-  icon: string;
+  iconKey: InsightIconKey;
   title: string;
   detail: string;
   confidence: number;
@@ -176,7 +178,7 @@ function insightLowVariety(_savedRecipes: any[], mealPlan: any): InsightRecommen
   return {
     id: 'low-variety',
     tone: 'warning',
-    icon: '🥬',
+    iconKey: 'variety',
     title: 'Poca variedad esta semana',
     detail: `Solo ${uniqueRecipes.size} receta${uniqueRecipes.size === 1 ? '' : 's'} distinta${uniqueRecipes.size === 1 ? '' : 's'} en tu plan. Diversificar ayuda a cubrir micronutrientes.`,
     confidence: 0.65,
@@ -194,7 +196,7 @@ function insightProteinTarget(dailyMacros: any): InsightRecommendation | null {
   return {
     id: 'protein-low',
     tone: 'warning',
-    icon: '🥩',
+    iconKey: 'protein',
     title: 'Proteína por debajo del objetivo',
     detail: `Llevas ${dailyMacros.consumed.pro}g de ${dailyMacros.target.pro}g (${Math.round(ratio * 100)}%). Prioriza proteína en tu próxima comida.`,
     confidence: 0.7,
@@ -210,7 +212,7 @@ function insightHydration(hydration: any): InsightRecommendation | null {
   return {
     id: 'hydration-low',
     tone: 'warning',
-    icon: '💧',
+    iconKey: 'hydration',
     title: 'Baja hidratación',
     detail: `${hydration.consumed}/${hydration.target} vasos. La hidratación afecta energía, digestión y concentración.`,
     confidence: 0.6,
@@ -224,7 +226,7 @@ function insightStreak(streakDays: number): InsightRecommendation | null {
   return {
     id: 'streak-motivation',
     tone: 'positive',
-    icon: '🔥',
+    iconKey: 'streak',
     title: `¡Racha de ${streakDays} días!`,
     detail: streakDays >= 30
       ? 'Un mes registrando. Tu historial de correlaciones es cada vez más preciso.'
@@ -243,7 +245,7 @@ function insightRealFeelProgress(rfLogs: RFEntry[]): InsightRecommendation | nul
   return {
     id: 'realfeel-progress',
     tone: 'neutral',
-    icon: '📓',
+    iconKey: 'notebook',
     title: 'Real Feel en progreso',
     detail: `${rfLogs.length}/7 días registrados. Las correlaciones aparecen tras 7 días consistentes.`,
     confidence: 0.5,

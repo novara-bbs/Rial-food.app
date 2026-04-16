@@ -1,8 +1,8 @@
-import { useState } from 'react';
-import { Scale, Plus, Check, TrendingDown, TrendingUp, Minus, ChevronRight } from 'lucide-react';
-import { bodyWeightFromKg, bodyWeightToKg, getBodyWeightUnit } from '../../food/utils/units';
+import { Scale, Plus, TrendingDown, TrendingUp, Minus, ChevronRight } from 'lucide-react';
+import { bodyWeightFromKg, getBodyWeightUnit } from '../../food/utils/units';
 import { useI18n } from '../../../i18n';
-import { useAppState } from '../../../contexts/AppStateContext';
+import { useLogSnapshot } from '../../wellness/hooks/useLogSnapshot';
+import { dateToLocal } from '../../../lib/dates';
 import type { UnitSystem } from '../../food/utils/units';
 
 interface ProgressPreviewCardProps {
@@ -14,8 +14,11 @@ interface ProgressPreviewCardProps {
 
 /**
  * Q8 — replaces WeightQuickLog on Home.
- * Shows current weight, 7-day sparkline, delta from 7 days ago, target gap,
- * inline quick-log entry, and a "Ver detalles →" deep-link to Progress.
+ * Q13 — log button now triggers the app-wide `LogSnapshotModal` via
+ * `useLogSnapshot()` so there's a single, feature-rich entry point for
+ * weight + measurements + photo + date. The card keeps surfacing the
+ * latest weight, 7-day sparkline, delta, target gap, and a deep-link to
+ * Progress.
  */
 export default function ProgressPreviewCard({
   weightHistory,
@@ -24,9 +27,7 @@ export default function ProgressPreviewCard({
   onNavigateToProgress,
 }: ProgressPreviewCardProps) {
   const { t } = useI18n();
-  const { handleLogWeight } = useAppState();
-  const [isEditing, setIsEditing] = useState(false);
-  const [inputValue, setInputValue] = useState('');
+  const { openWithDate } = useLogSnapshot();
 
   const unit = getBodyWeightUnit(unitSystem);
 
@@ -38,7 +39,7 @@ export default function ProgressPreviewCard({
   // 7-day delta: compare latest to the entry closest to 7 days ago
   const sevenDaysAgo = new Date();
   sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
-  const sevenDaysAgoStr = sevenDaysAgo.toISOString().slice(0, 10);
+  const sevenDaysAgoStr = dateToLocal(sevenDaysAgo);
   const priorEntry = sorted.find(e => e.date <= sevenDaysAgoStr) ?? sorted[sorted.length - 1];
   const delta =
     latest && priorEntry && priorEntry.date !== latest.date
@@ -99,15 +100,6 @@ export default function ProgressPreviewCard({
           ? 'text-primary'
           : 'text-on-surface-variant';
 
-  const handleLog = () => {
-    const val = parseFloat(inputValue);
-    if (isNaN(val) || val < 20 || val > 300) return;
-    const kg = bodyWeightToKg(val, unitSystem);
-    handleLogWeight({ kg });
-    setIsEditing(false);
-    setInputValue('');
-  };
-
   return (
     <div className="bg-surface-container-low border border-outline-variant/20 p-4 rounded-sm space-y-3">
       {/* Top row: icon + weight + delta + sparkline */}
@@ -159,50 +151,15 @@ export default function ProgressPreviewCard({
         </div>
       )}
 
-      {/* Inline log form */}
-      {isEditing && (
-        <div className="pt-2 border-t border-outline-variant/10 animate-in fade-in slide-in-from-top-2">
-          <div className="flex items-center gap-2">
-            <input
-              type="number"
-              step="0.1"
-              inputMode="decimal"
-              value={inputValue}
-              onChange={e => setInputValue(e.target.value)}
-              placeholder={currentDisplay !== null ? String(currentDisplay) : '70.0'}
-              aria-label={`${t.home.weight ?? 'Peso'} (${unit})`}
-              className="flex-1 bg-surface-container-highest border border-outline-variant/30 rounded-sm px-3 py-2 text-sm font-mono text-tertiary focus:outline-none focus:border-primary"
-              autoFocus
-              onKeyDown={e => {
-                if (e.key === 'Enter') handleLog();
-                if (e.key === 'Escape') setIsEditing(false);
-              }}
-            />
-            <span className="text-xs font-bold text-on-surface-variant uppercase">{unit}</span>
-            <button
-              type="button"
-              onClick={handleLog}
-              className="w-9 h-9 bg-primary text-on-primary rounded-full flex items-center justify-center hover:opacity-90 transition-all active:scale-95"
-              aria-label={t.home.logWeight ?? 'Confirmar'}
-            >
-              <Check className="w-4 h-4" aria-hidden="true" />
-            </button>
-          </div>
-        </div>
-      )}
-
       {/* Bottom action row */}
       <div className="flex items-center gap-2 pt-1 border-t border-outline-variant/10">
         <button
           type="button"
-          onClick={() => {
-            if (!isEditing && currentDisplay !== null) setInputValue(String(currentDisplay));
-            setIsEditing(!isEditing);
-          }}
+          onClick={() => openWithDate()}
           className="flex items-center gap-1.5 bg-primary/10 text-primary px-3 py-1.5 rounded-full text-[10px] font-bold uppercase tracking-widest hover:bg-primary/20 transition-colors"
         >
           <Plus className="w-3 h-3" aria-hidden="true" />
-          {isEditing ? (t.home.close ?? 'Cerrar') : (t.home.logWeight ?? 'Registrar peso')}
+          {t.home.logWeight ?? 'Registrar peso'}
         </button>
         {onNavigateToProgress && (
           <button

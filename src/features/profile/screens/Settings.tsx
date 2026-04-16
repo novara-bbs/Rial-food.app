@@ -1,3 +1,6 @@
+import { useState } from 'react';
+import { Users, Loader2, Trash2 } from 'lucide-react';
+import { toast } from 'sonner';
 import PageShell from '../../../components/PageShell';
 import { useI18n } from '../../../i18n';
 import { useNavigation } from '../../../contexts/NavigationContext';
@@ -6,6 +9,14 @@ import SettingsProfile from '../components/settings/SettingsProfile';
 import SettingsNutrition from '../components/settings/SettingsNutrition';
 import SettingsAppearance from '../components/settings/SettingsAppearance';
 import SettingsSystem from '../components/settings/SettingsSystem';
+import DemoSeedCard from '../../dev/components/DemoSeedCard';
+import SectionCard from '../../../components/SectionCard';
+
+const PERSONA_OPTIONS = [
+  { id: 'clara-cut' as const, key: 'demoClara' as const },
+  { id: 'marcos-muscle' as const, key: 'demoMarcos' as const },
+  { id: 'ana-health' as const, key: 'demoAna' as const },
+] as const;
 
 export default function Settings({
   dailyMacros,
@@ -38,6 +49,30 @@ export default function Settings({
 }) {
   const { t } = useI18n();
   const { navigateTo } = useNavigation();
+  const [loadingPersona, setLoadingPersona] = useState<string | null>(null);
+
+  const isDev = (import.meta as any).env?.DEV === true;
+
+  const handleLoadPersona = async (id: 'clara-cut' | 'marcos-muscle' | 'ana-health') => {
+    if (loadingPersona) return;
+    setLoadingPersona(id);
+    try {
+      const { loadDemoPersona } = await import('../handlers/demo-persona-handlers');
+      toast.success(t.settings.demoLoaded);
+      await loadDemoPersona(id);
+    } catch {
+      toast.error('Error loading persona');
+      setLoadingPersona(null);
+    }
+  };
+
+  const handleClearPersona = async () => {
+    if (loadingPersona) return;
+    setLoadingPersona('clear');
+    const { clearDemoData } = await import('../handlers/demo-persona-handlers');
+    toast.success(t.settings.demoCleared);
+    clearDemoData();
+  };
 
   return (
     <PageShell maxWidth="default" spacing="lg">
@@ -76,6 +111,44 @@ export default function Settings({
           showAIBot={!!showAIBot}
           setShowAIBot={setShowAIBot}
         />
+
+        {/* Dev-only demo seed utility — hidden on prod builds (reveal via long-press avatar). */}
+        <DemoSeedCard />
+
+        {/* Q14 — Multi-ICP persona selector */}
+        {isDev && (
+          <SectionCard
+            icon={<Users className="w-4 h-4 text-brand-secondary" aria-hidden="true" />}
+            title={t.settings.developer}
+          >
+            <p className="text-[10px] text-on-surface-variant mb-3">{t.settings.loadDemoPersona}</p>
+            <div className="space-y-2">
+              {PERSONA_OPTIONS.map(({ id, key }) => (
+                <button
+                  key={id}
+                  type="button"
+                  onClick={() => handleLoadPersona(id)}
+                  disabled={!!loadingPersona}
+                  className="w-full flex items-center justify-between px-4 py-2.5 bg-surface-container-highest border border-outline-variant/20 rounded-sm text-left hover:border-primary/50 transition-colors disabled:opacity-50"
+                >
+                  <span className="font-headline text-xs font-bold uppercase tracking-widest text-tertiary">
+                    {t.settings[key]}
+                  </span>
+                  {loadingPersona === id && <Loader2 className="w-4 h-4 text-primary animate-spin" />}
+                </button>
+              ))}
+              <button
+                type="button"
+                onClick={handleClearPersona}
+                disabled={!!loadingPersona}
+                className="w-full flex items-center justify-center gap-2 px-4 py-2 text-error text-[10px] font-bold uppercase tracking-widest hover:bg-error/5 rounded-sm transition-colors disabled:opacity-50"
+              >
+                <Trash2 className="w-3 h-3" aria-hidden="true" />
+                {t.settings.clearDemoData}
+              </button>
+            </div>
+          </SectionCard>
+        )}
       </section>
 
       {/* Legal footer */}

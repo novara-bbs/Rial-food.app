@@ -54,6 +54,13 @@ export const LEVELS = [
 
 export const STREAK_MILESTONES = [3, 7, 14, 30, 60, 90, 180, 365];
 
+/**
+ * @deprecated Q13 — use `calcStreaks()` from `features/wellness/utils/streaks.ts`
+ * which returns both `mealLog` and `realFeel` streaks with a consistent
+ * definition. This helper treats any list of log dates as a single streak
+ * and is kept only for back-compat inside Profile; scheduled for removal
+ * in Q14 once Profile migrates to the canonical streaks util.
+ */
 export function calculateStreak(mealLogDates: string[]): number {
   if (!mealLogDates.length) return 0;
 

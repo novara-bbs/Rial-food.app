@@ -13,7 +13,10 @@ import { createHandlePublishStory, createHandleMarkStoryViewed } from '../featur
 import type { Story, StorySlide, Notification as NotificationType, SocialLinks } from '../types/social';
 import { createHandleAddToleranceLog, createHandleRealFeelLog, createHandleCheckIn, createHandleCompleteCheckIn } from '../features/wellness/handlers/wellness-handlers';
 import { createHandleLogWeight, createHandleUpdateSnapshot, createHandleDeleteSnapshot, type LogWeightArgs } from '../features/wellness/handlers/weight-handlers';
+import { createHandleShareProgress } from '../features/wellness/handlers/progress-share-handlers';
+import { createHandleLoadDemoSeed, createHandleClearDemoSeed } from '../features/dev/handlers/demo-seed-handlers';
 import type { BodySnapshot } from '../types/wellness';
+import type { CommunityPost } from '../types/social';
 
 // ─── Types ───────────────────────────────────────────────────────────────────
 
@@ -66,6 +69,7 @@ interface AppStateContextType {
 
   // Food history & favorites (persistent across days)
   foodHistory: FoodHistoryEntry[];
+  setFoodHistory: (v: any) => void;
   favoriteIds: string[];
   toggleFavorite: (foodId: string) => void;
 
@@ -115,9 +119,18 @@ interface AppStateContextType {
   handleCompleteCheckIn: (data: any) => void;
   handleDeleteRecipe: (recipeId: any) => void;
   handleDuplicateRecipe: (recipe: any) => void;
-  handleLogWeight: (args: LogWeightArgs) => void;
+  handleLogWeight: (args: LogWeightArgs) => { replaced: boolean };
   handleUpdateSnapshot: (args: { date: string; photoUrl?: string; measurements?: import('../types/wellness').BodyMeasurements }) => void;
   handleDeleteSnapshot: (date: string) => void;
+  handleShareProgress: (args: {
+    snapshot: BodySnapshot;
+    referenceSnapshot?: BodySnapshot;
+    content: string;
+    kind?: 'snapshot' | 'milestone';
+    author?: { id?: string; name?: string; img?: string; role?: string };
+  }) => CommunityPost;
+  handleLoadDemoSeed: () => Promise<void>;
+  handleClearDemoSeed: () => void;
   navigateToRecipe: (recipe: any) => void;
   recipeToEdit: any;
   setRecipeToEdit: (recipe: any) => void;
@@ -173,8 +186,8 @@ interface ShoppingItem {
   checked: boolean;
 }
 
-// BodySnapshot + WeightEntry alias defined in src/types/wellness.ts
-export type { WeightEntry, BodySnapshot, BodyMeasurements } from '../types/wellness';
+// Body-state types defined in src/types/wellness.ts
+export type { BodySnapshot, BodyMeasurements } from '../types/wellness';
 
 // ─── Context ─────────────────────────────────────────────────────────────────
 
@@ -218,21 +231,24 @@ export function AppStateProvider({ children }: { children: React.ReactNode }) {
     dietaryPreferences: [],
   });
 
+  // Fresh-install starts at zero — the hardcoded 840 cal / 45 g pro default used
+  // to show as if the user had already eaten before ever logging anything.
+  // "Lo que ves es lo que has hecho" → zeros for consumed, zeros for intake.
   const [dailyMacros, setDailyMacros] = useLocalStorageState<DailyMacros>('dailyMacros', {
-    consumed: { cal: 840, pro: 45, carbs: 110, fats: 25 },
+    consumed: { cal: 0, pro: 0, carbs: 0, fats: 0 },
     target: { cal: 2400, pro: 180, carbs: 250, fats: 65 },
   });
 
-  const [hydration, setHydration] = useLocalStorageState('hydration', { consumed: 4, target: 10 });
+  const [hydration, setHydration] = useLocalStorageState('hydration', { consumed: 0, target: 10 });
 
   const [movement, setMovement] = useLocalStorageState('movement', {
-    steps: 6432,
+    steps: 0,
     target: 10000,
-    activeMinutes: 24,
+    activeMinutes: 0,
     activeTarget: 45,
   });
 
-  const [dailyGoal, setDailyGoal] = useLocalStorageState('dailyGoal', 'Bebe 2L de agua hoy');
+  const [dailyGoal, setDailyGoal] = useLocalStorageState('dailyGoal', '');
 
   // User-created / scanned foods
   const [userFoods, setUserFoods] = useLocalStorageState<Ingredient[]>('userFoods', []);
@@ -422,6 +438,62 @@ export function AppStateProvider({ children }: { children: React.ReactNode }) {
     () => createHandleCompleteCheckIn({ setCheckInStatus, navigateTo }),
     [setCheckInStatus, navigateTo],
   );
+  const handleShareProgress = useMemo(
+    () => createHandleShareProgress({ setCommunityPosts }),
+    [setCommunityPosts],
+  );
+  const handleLoadDemoSeed = useMemo(
+    () => createHandleLoadDemoSeed({
+      setUserProfile,
+      setDailyMacros,
+      setHydration,
+      setMovement,
+      setDailyGoal,
+      setDailyLog,
+      setFoodHistory,
+      setWeightHistory,
+      setNutritionHistory,
+      setRealFeelLogs,
+      setSavedRecipes,
+      setMealPlan,
+      setShoppingList,
+      setCommunityPosts,
+      setCommunityStories,
+      setToleranceLogs,
+    }),
+    [
+      setUserProfile, setDailyMacros, setHydration, setMovement, setDailyGoal,
+      setDailyLog, setFoodHistory, setWeightHistory, setNutritionHistory,
+      setRealFeelLogs, setSavedRecipes, setMealPlan, setShoppingList,
+      setCommunityPosts, setCommunityStories, setToleranceLogs,
+    ],
+  );
+  const handleClearDemoSeed = useMemo(
+    () => createHandleClearDemoSeed({
+      setUserProfile,
+      setDailyMacros,
+      setHydration,
+      setMovement,
+      setDailyGoal,
+      setDailyLog,
+      setFoodHistory,
+      setWeightHistory,
+      setNutritionHistory,
+      setRealFeelLogs,
+      setSavedRecipes,
+      setMealPlan,
+      setShoppingList,
+      setCommunityPosts,
+      setCommunityStories,
+      setToleranceLogs,
+    }),
+    [
+      setUserProfile, setDailyMacros, setHydration, setMovement, setDailyGoal,
+      setDailyLog, setFoodHistory, setWeightHistory, setNutritionHistory,
+      setRealFeelLogs, setSavedRecipes, setMealPlan, setShoppingList,
+      setCommunityPosts, setCommunityStories, setToleranceLogs,
+    ],
+  );
 
   // ─── Context value (memoized to prevent unnecessary consumer re-renders) ────
 
@@ -443,7 +515,7 @@ export function AppStateProvider({ children }: { children: React.ReactNode }) {
     checkInStatus, setCheckInStatus,
     userFoods, addUserFood,
     dailyLog, setDailyLog,
-    foodHistory, favoriteIds, toggleFavorite,
+    foodHistory, setFoodHistory, favoriteIds, toggleFavorite,
     weightHistory, setWeightHistory,
     nutritionHistory, setNutritionHistory,
     selectedRecipe, setSelectedRecipe,
@@ -474,6 +546,9 @@ export function AppStateProvider({ children }: { children: React.ReactNode }) {
     handleLogWeight,
     handleUpdateSnapshot,
     handleDeleteSnapshot,
+    handleShareProgress,
+    handleLoadDemoSeed,
+    handleClearDemoSeed,
     navigateToRecipe,
     recipeToEdit, setRecipeToEdit,
   }), [
@@ -484,7 +559,7 @@ export function AppStateProvider({ children }: { children: React.ReactNode }) {
     shoppingList, setShoppingList, communityPosts, setCommunityPosts,
     toleranceLogs, setToleranceLogs, realFeelLogs, setRealFeelLogs,
     checkInStatus, setCheckInStatus, userFoods, addUserFood,
-    dailyLog, setDailyLog, foodHistory, favoriteIds, toggleFavorite,
+    dailyLog, setDailyLog, foodHistory, setFoodHistory, favoriteIds, toggleFavorite,
     weightHistory, setWeightHistory, nutritionHistory, setNutritionHistory,
     selectedRecipe, targetPlanDay, selectedCreatorId, selectedPostId,
     likedPosts, toggleLikePost, savedPosts, toggleSavePost,
@@ -495,7 +570,8 @@ export function AppStateProvider({ children }: { children: React.ReactNode }) {
     handleCreatePost, handleAddComment, handleAddToleranceLog,
     handleCreateRecipeSubmit, handleRealFeelLog, handleImportRecipe,
     handleAddToPlan, handleCheckIn, handleCompleteCheckIn,
-    handleDeleteRecipe, handleDuplicateRecipe, handleLogWeight, handleUpdateSnapshot, handleDeleteSnapshot, navigateToRecipe,
+    handleDeleteRecipe, handleDuplicateRecipe, handleLogWeight, handleUpdateSnapshot, handleDeleteSnapshot,
+    handleShareProgress, handleLoadDemoSeed, handleClearDemoSeed, navigateToRecipe,
     recipeToEdit,
   ]);
 

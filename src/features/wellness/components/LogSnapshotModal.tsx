@@ -7,6 +7,7 @@ import { bodyWeightFromKg, bodyWeightToKg, getBodyWeightUnit, type UnitSystem } 
 import { compressImage, estimateStorageUsage } from '../../social/utils/image-utils';
 import type { BodySnapshot, BodyMeasurements } from '../../../types/wellness';
 import { toast } from 'sonner';
+import { todayLocal } from '../../../lib/dates';
 
 interface LogSnapshotModalProps {
   open: boolean;
@@ -32,7 +33,7 @@ export default function LogSnapshotModal({
   const galleryInputRef = useRef<HTMLInputElement>(null);
 
   // Form state
-  const today = new Date().toISOString().slice(0, 10);
+  const today = todayLocal();
   const [date, setDate] = useState(today);
   const [weightInput, setWeightInput] = useState('');
   const [note, setNote] = useState('');
@@ -63,7 +64,6 @@ export default function LogSnapshotModal({
       setPhotoExpanded(false);
       setMeasureExpanded(false);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [open, initialSnapshot?.date, initialDate]);
 
   const handlePhotoUpload = async (file: File | undefined) => {
@@ -93,13 +93,14 @@ export default function LogSnapshotModal({
       Object.entries(measurements).filter(([, v]) => v != null && !isNaN(v as number)),
     ) as BodyMeasurements;
     const hasMeasure = Object.keys(cleanMeasurements).length > 0;
-    handleLogWeight({
+    const { replaced } = handleLogWeight({
       kg,
       date,
       note: note.trim() || undefined,
       photoUrl: photoUrl || undefined,
       measurements: hasMeasure ? cleanMeasurements : undefined,
     });
+    if (replaced) toast.info(t.progress?.weightReplaced ?? 'Peso actualizado para hoy');
     onOpenChange(false);
   };
 

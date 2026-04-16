@@ -1,6 +1,6 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { createHandleLogWeight } from './weight-handlers';
-import type { WeightEntry } from '../../../contexts/AppStateContext';
+import type { BodySnapshot } from '../../../contexts/AppStateContext';
 
 describe('createHandleLogWeight', () => {
   let setWeightHistory: ReturnType<typeof vi.fn>;
@@ -30,7 +30,7 @@ describe('createHandleLogWeight', () => {
 
   it('replaces existing entry for the same date', () => {
     const today = new Date().toISOString().slice(0, 10);
-    const existing: WeightEntry[] = [
+    const existing: BodySnapshot[] = [
       { date: today, kg: 70 },
       { date: '2026-01-01', kg: 72 },
     ];
@@ -39,14 +39,14 @@ describe('createHandleLogWeight', () => {
     const historyFn = setWeightHistory.mock.calls[0][0];
     const result = historyFn(existing);
 
-    const todayEntries = result.filter((e: WeightEntry) => e.date === today);
+    const todayEntries = result.filter((e: BodySnapshot) => e.date === today);
     expect(todayEntries).toHaveLength(1);
     expect(todayEntries[0].kg).toBe(74);
     expect(result).toHaveLength(2); // replaced, not appended
   });
 
   it('appends new entry when date has no existing entry', () => {
-    const existing: WeightEntry[] = [{ date: '2026-01-01', kg: 72 }];
+    const existing: BodySnapshot[] = [{ date: '2026-01-01', kg: 72 }];
     handleLogWeight({ kg: 74 });
 
     const historyFn = setWeightHistory.mock.calls[0][0];

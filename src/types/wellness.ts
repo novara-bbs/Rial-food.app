@@ -15,7 +15,7 @@ export interface BodyMeasurements {
  * so all existing localStorage data deserialises without migration).
  *
  * Storage: base64 inline in `photoUrl` for Q10.
- * Planned: Supabase Storage bucket migration in Q11.
+ * Planned: Supabase Storage bucket migration in Q6.
  */
 export interface BodySnapshot {
   date: string;          // YYYY-MM-DD
@@ -26,10 +26,20 @@ export interface BodySnapshot {
 }
 
 /**
- * WeightEntry is kept as a backward-compat alias.
- * Prefer BodySnapshot for new code; WeightEntry alias will be removed in Q12+.
+ * Weekly reflection entry. Formalised from the inline shape used in
+ * `src/features/wellness/screens/WeeklyCheckIn.tsx` to make seed data
+ * and handlers type-safe.
  */
-export type WeightEntry = BodySnapshot;
+export interface WeeklyCheckInEntry {
+  id: number;
+  weekStart: string;        // ISO date (YYYY-MM-DD)
+  workedWell: string;
+  whatWasHard: string;
+  focusNextWeek: string;
+  avgVitality: number;      // 0–100
+  mealsLogged: number;
+  consistencyDays: number;
+}
 
 export interface DailyCheckIn {
   id: string;

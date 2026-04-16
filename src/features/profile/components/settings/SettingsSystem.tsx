@@ -7,7 +7,7 @@ import ConfirmDialog from '../../../../components/ConfirmDialog';
 import { logger } from '../../../../lib/logger';
 import { useI18n } from '../../../../i18n';
 import { useLocalStorageState } from '../../../../hooks/useLocalStorageState';
-import { getNutritionHistory } from '../../../../hooks/useDailyReset';
+import { getNutritionHistory, archiveHydrationConsumed } from '../../../../hooks/useDailyReset';
 import { useAuth } from '../../../../contexts/AuthContext';
 import { signOut, getSupabaseClient } from '../../../../lib/supabase';
 import { exportUserData } from '../../../../lib/sync';
@@ -42,7 +42,7 @@ export default function SettingsSystem({ userProfile, setUserProfile, showAIBot,
       return;
     }
     const header = 'date,calories,protein,carbs,fats,hydration,mealCount\n';
-    const rows = history.map((h) => `${h.date},${h.macros.consumed.cal},${h.macros.consumed.pro},${h.macros.consumed.carbs},${h.macros.consumed.fats},${h.hydration},${h.mealCount}`).join('\n');
+    const rows = history.map((h) => `${h.date},${h.macros.consumed.cal},${h.macros.consumed.pro},${h.macros.consumed.carbs},${h.macros.consumed.fats},${archiveHydrationConsumed(h)},${h.mealCount}`).join('\n');
     const blob = new Blob([header + rows], { type: 'text/csv' });
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');

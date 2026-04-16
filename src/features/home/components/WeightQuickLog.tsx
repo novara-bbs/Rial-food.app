@@ -1,3 +1,9 @@
+/**
+ * @deprecated Q13 — superseded by `ProgressPreviewCard` on Home, which now
+ * delegates all weight logging to the app-wide `LogSnapshotModal` via
+ * `useLogSnapshot()`. This component is no longer mounted and is scheduled
+ * for removal in Q14 once every consumer migrates.
+ */
 import { useState } from 'react';
 import { Scale, Plus, Check, TrendingDown, TrendingUp, Minus } from 'lucide-react';
 import { bodyWeightFromKg, bodyWeightToKg, getBodyWeightUnit } from '../../food/utils/units';
@@ -13,6 +19,7 @@ interface WeightQuickLogProps {
   setWeightHistory?: (fn: any) => void;
 }
 
+/** @deprecated see file header. */
 export default function WeightQuickLog({ weightHistory, unitSystem, targetWeight }: WeightQuickLogProps) {
   const { t } = useI18n();
   const { handleLogWeight } = useAppState();

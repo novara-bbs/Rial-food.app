@@ -23,8 +23,9 @@ function getMindsetLabels(t: any): Record<string, string> {
 
 function calculateRealScore(logs: any[]): number {
   if (!logs.length) return 0;
-  const recent = logs.slice(0, 14);
-  const avg = recent.reduce((sum: number, l: any) => sum + (l.level || 3), 0) / recent.length;
+  const valid = logs.slice(0, 14).filter((l: any) => l.level != null && l.level >= 1);
+  if (valid.length === 0) return 0;
+  const avg = valid.reduce((sum: number, l: any) => sum + l.level, 0) / valid.length;
   return Math.round((avg / 5) * 100);
 }
 
@@ -125,7 +126,7 @@ export default function RealFeelDiary({ realFeelLogs = [], onBack }: { realFeelL
               <AreaChart data={
                 [...realFeelLogs].reverse().slice(-14).map((l: any) => ({
                   name: new Date(l.date).toLocaleDateString(undefined, { weekday: 'short' }),
-                  score: ((l.level || 3) / 5) * 100,
+                  score: ((l.level ?? 3) / 5) * 100,
                 }))
               }>
                 <defs>
@@ -265,7 +266,7 @@ export default function RealFeelDiary({ realFeelLogs = [], onBack }: { realFeelL
         <div className="space-y-2">
           {realFeelLogs.slice(0, 20).map((log: any, i: number) => (
             <div key={log.id || i} className="flex items-start gap-4 p-3 bg-surface-container-low border border-outline-variant/20 rounded-sm">
-              <span className="text-2xl shrink-0">{EMOJI_MAP[(log.level || 3) - 1]}</span>
+              <span className="text-2xl shrink-0">{EMOJI_MAP[(log.level ?? 3) - 1]}</span>
               <div className="flex-1 min-w-0">
                 {/* Structured signals row */}
                 {(log.energy || log.digestion || log.mindset) && (

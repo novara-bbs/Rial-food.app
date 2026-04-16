@@ -23,8 +23,14 @@ export function createHandleRealFeelLog(deps: { setRealFeelLogs: (fn: any) => vo
     const mealIds = recentMeals.map(m => m.id);
     const ingredientIds = [...new Set(recentMeals.flatMap(m => m.ingredientIds || []))];
 
+    // Clamp level to valid 1-5 range
+    const level = entry.level != null
+      ? Math.max(1, Math.min(5, Math.round(entry.level)))
+      : undefined;
+
     deps.setRealFeelLogs((prev: any[]) => [{
       ...entry,
+      level,
       id: now,
       date: new Date().toISOString(),
       mealIds,

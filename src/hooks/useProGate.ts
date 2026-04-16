@@ -8,6 +8,7 @@
  * Cached entitlement: if offline for up to 7 days, trust the last known RC value.
  */
 import { useAppState } from '../contexts/AppStateContext';
+import { todayLocal } from '../lib/dates';
 import { useNavigation } from '../contexts/NavigationContext';
 import { toast } from 'sonner';
 import { useI18n } from '../i18n';
@@ -21,7 +22,7 @@ const RC_CACHE_KEY = 'rial_rcProCache';
 const RC_CACHE_TTL_MS = 7 * 24 * 60 * 60 * 1000; // 7 days
 
 function getTodayKey(): string {
-  return new Date().toISOString().slice(0, 10);
+  return todayLocal();
 }
 
 function getAIMessageCount(): number {
