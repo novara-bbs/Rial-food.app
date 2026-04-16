@@ -1,5 +1,6 @@
 import { Zap, HelpCircle } from 'lucide-react';
 import { useI18n } from '../../../i18n';
+import SectionCard from '../../../components/SectionCard';
 
 interface Macros {
   consumed: { cal: number; pro: number; carbs: number; fats: number };
@@ -23,6 +24,8 @@ export default function NutritionHero({ dailyMacros, mode = 'detailed', exercise
     { label: t.home.fats, consumed: dailyMacros.consumed.fats, target: dailyMacros.target.fats, unit: 'g', val: macroProgress.fats, color: 'text-error', bg: 'bg-error/10', barColor: 'bg-error' },
   ];
 
+  const remaining = dailyMacros.target.cal - dailyMacros.consumed.cal + exerciseCalories;
+
   return (
     <section className="space-y-4">
       <div className="flex items-center justify-between px-1">
@@ -34,39 +37,52 @@ export default function NutritionHero({ dailyMacros, mode = 'detailed', exercise
         </h2>
       </div>
 
-      {/* Calorie Math: Target - Food + Exercise = Remaining */}
-      <div className="flex items-center justify-between bg-surface-container-low p-4 rounded-sm border border-outline-variant/20">
-        <div className="text-center flex-1">
-          <span className="block text-[10px] text-on-surface-variant uppercase tracking-widest font-bold mb-1">{t.home.target}</span>
-          <span className="font-headline font-bold text-tertiary">{dailyMacros.target.cal}</span>
+      {/*
+        Calorie equation hero — RESTANTE as primary number, math as caption.
+        Replaces the former 4-column flex layout that clipped "RESTANTE" on ≤375 px widths.
+      */}
+      <SectionCard padding="md" spacing="sm">
+        <div className="flex items-end justify-between gap-4">
+          <div className="min-w-0">
+            <div className="font-label text-micro uppercase tracking-wider font-bold text-on-surface-variant">
+              {t.home.remaining}
+            </div>
+            <div className="flex items-baseline gap-1.5 mt-1">
+              <span className="font-headline font-bold text-display text-primary tabular-nums leading-none">
+                {remaining}
+              </span>
+              <span className="font-label text-label font-bold text-on-surface-variant uppercase tracking-wider">
+                {t.home.kcal}
+              </span>
+            </div>
+          </div>
+          <dl className="shrink-0 text-right font-label text-micro uppercase tracking-wider space-y-1">
+            <div className="flex items-baseline justify-end gap-1.5">
+              <dt className="text-on-surface-variant font-bold">{t.home.target}</dt>
+              <dd className="tabular-nums font-bold text-on-surface">{dailyMacros.target.cal}</dd>
+            </div>
+            <div className="flex items-baseline justify-end gap-1.5">
+              <dt className="text-on-surface-variant font-bold">− {t.home.food}</dt>
+              <dd className="tabular-nums font-bold text-on-surface">{dailyMacros.consumed.cal}</dd>
+            </div>
+            <div className="flex items-baseline justify-end gap-1.5">
+              <dt className="text-on-surface-variant font-bold">+ {t.home.exercise}</dt>
+              <dd className="tabular-nums font-bold text-brand-secondary">{exerciseCalories}</dd>
+            </div>
+          </dl>
         </div>
-        <span className="text-on-surface-variant font-bold text-lg">-</span>
-        <div className="text-center flex-1">
-          <span className="block text-[10px] text-on-surface-variant uppercase tracking-widest font-bold mb-1">{t.home.food}</span>
-          <span className="font-headline font-bold text-tertiary">{dailyMacros.consumed.cal}</span>
-        </div>
-        <span className="text-on-surface-variant font-bold text-lg">+</span>
-        <div className="text-center flex-1">
-          <span className="block text-[10px] text-on-surface-variant uppercase tracking-widest font-bold mb-1">{t.home.exercise}</span>
-          <span className="font-headline font-bold text-brand-secondary">{exerciseCalories}</span>
-        </div>
-        <span className="text-on-surface-variant font-bold text-lg">=</span>
-        <div className="text-center flex-1">
-          <span className="block text-[10px] text-on-surface-variant uppercase tracking-widest font-bold mb-1">{t.home.remaining}</span>
-          <span className="font-headline font-bold text-primary text-xl">{dailyMacros.target.cal - dailyMacros.consumed.cal + exerciseCalories}</span>
-        </div>
-      </div>
+      </SectionCard>
 
       {/* Macro progress */}
       {mode === 'simple' ? (
-        <div className="bg-surface-container-low border border-outline-variant/20 p-6 rounded-sm space-y-6">
+        <SectionCard padding="lg" spacing="lg">
           {macroItems.map((m) => (
             <div key={m.label} className="space-y-2">
-              <div className="flex justify-between items-center">
-                <span className="font-label text-xs font-bold uppercase tracking-widest text-on-surface-variant">{m.label}</span>
-                <div className="flex items-center gap-2">
-                  <span className="text-[10px] font-bold text-on-surface-variant uppercase tracking-widest">{m.consumed} / {m.target}{m.unit}</span>
-                  <span className="font-headline font-bold text-sm text-tertiary w-10 text-right">{m.val}%</span>
+              <div className="flex justify-between items-center gap-3">
+                <span className="font-label text-label font-bold uppercase tracking-wider text-on-surface-variant">{m.label}</span>
+                <div className="flex items-center gap-3 shrink-0">
+                  <span className="font-label text-micro font-bold text-on-surface-variant uppercase tracking-wider tabular-nums">{m.consumed} / {m.target}{m.unit}</span>
+                  <span className="font-headline font-bold text-body-sm text-tertiary w-10 text-right tabular-nums">{m.val}%</span>
                 </div>
               </div>
               <div className="h-3 bg-surface-container-highest rounded-full overflow-hidden">
@@ -74,9 +90,9 @@ export default function NutritionHero({ dailyMacros, mode = 'detailed', exercise
               </div>
             </div>
           ))}
-        </div>
+        </SectionCard>
       ) : (
-        <div className="bg-surface-container-low border border-outline-variant/20 p-6 rounded-sm grid grid-cols-2 md:grid-cols-4 gap-6">
+        <SectionCard padding="lg" spacing="md" className="grid grid-cols-2 md:grid-cols-4 gap-6">
           {macroItems.map((m) => (
             <div key={m.label} className="flex flex-col items-center gap-2">
               <div className={`w-16 h-16 ${m.bg} rounded-full flex items-center justify-center relative`}>
@@ -84,15 +100,15 @@ export default function NutritionHero({ dailyMacros, mode = 'detailed', exercise
                   <circle cx="32" cy="32" r="28" fill="transparent" stroke="var(--surface-container-highest)" strokeWidth="4" />
                   <circle cx="32" cy="32" r="28" fill="transparent" stroke="currentColor" strokeWidth="4" strokeDasharray="175.9" strokeDashoffset={175.9 * (1 - Math.min(m.val, 100) / 100)} strokeLinecap="round" className={m.color} />
                 </svg>
-                <span className={`absolute text-xs font-black ${m.color}`}>{m.val}%</span>
+                <span className={`absolute font-label text-label font-black ${m.color}`}>{m.val}%</span>
               </div>
               <div className="text-center mt-1">
-                <span className="font-label text-xs font-bold uppercase tracking-widest text-on-surface-variant block">{m.label}</span>
-                <span className="text-[10px] font-bold text-tertiary uppercase tracking-widest">{m.consumed} / {m.target}{m.unit}</span>
+                <span className="font-label text-label font-bold uppercase tracking-wider text-on-surface-variant block">{m.label}</span>
+                <span className="font-label text-micro font-bold text-tertiary uppercase tracking-wider tabular-nums">{m.consumed} / {m.target}{m.unit}</span>
               </div>
             </div>
           ))}
-        </div>
+        </SectionCard>
       )}
     </section>
   );

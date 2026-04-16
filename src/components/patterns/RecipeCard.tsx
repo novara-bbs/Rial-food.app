@@ -60,8 +60,8 @@ export default function RecipeCard({
       ? CREATORS_MAP[recipe.publishedBy]
       : null;
 
-  const badgeSz = variant === 'grid' ? 'text-[8px]' : 'text-[9px]';
-  const creatorSz = variant === 'grid' ? 'text-[7px]' : 'text-[8px]';
+  const badgeSz = 'text-micro';
+  const creatorSz = 'text-micro';
   const infoPad = variant === 'grid' ? 'px-1 py-0.5' : 'px-1.5 py-0.5';
   const infoBottom = variant === 'grid' ? 'bottom-2 left-2 right-2' : 'bottom-3 left-3 right-3';
 
@@ -231,8 +231,8 @@ export default function RecipeCard({
             )}
             {(recipe.pro ?? 0) >= 30 && (
               <span
-                className={`bg-primary/20 text-primary ${
-                  variant === 'grid' ? 'text-[7px] px-1 py-0.5' : 'text-[8px] px-1.5 py-0.5'
+                className={`bg-primary/20 text-primary text-micro ${
+                  variant === 'grid' ? 'px-1 py-0.5' : 'px-1.5 py-0.5'
                 } font-black rounded-sm uppercase tracking-tighter`}
               >
                 {recipe.pro}g pro

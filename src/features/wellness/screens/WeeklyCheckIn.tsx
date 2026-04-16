@@ -1,28 +1,21 @@
 import { TrendingUp, TrendingDown, Minus, ChevronLeft, ChevronRight, CheckCircle2, XCircle, Target, ClipboardList, Utensils } from 'lucide-react';
 import PageShell from '../../../components/PageShell';
+import SectionCard from '../../../components/SectionCard';
+import StatTile from '../../../components/StatTile';
 import { useState, useMemo } from 'react';
 import { toast } from 'sonner';
 import { useLocalStorageState } from '../../../hooks/useLocalStorageState';
 import { useAppState } from '../../../contexts/AppStateContext';
 import { useI18n } from '../../../i18n';
 import { DailyArchive } from '../../../hooks/useDailyReset';
+import { dateToLocal } from '../../../lib/dates';
 import PageHeader from '../../../components/patterns/PageHeader';
-
-interface WeeklyEntry {
-  id: number;
-  weekStart: string; // ISO date
-  workedWell: string;
-  whatWasHard: string;
-  focusNextWeek: string;
-  avgVitality: number; // 0-100
-  mealsLogged: number;
-  consistencyDays: number;
-}
+import type { WeeklyCheckInEntry } from '../../../types/wellness';
 
 export default function WeeklyCheckIn({ onBack }: { onBack: () => void }) {
   const { t } = useI18n();
   const { realFeelLogs, nutritionHistory, dailyMacros } = useAppState();
-  const [weeklyEntries, setWeeklyEntries] = useLocalStorageState<WeeklyEntry[]>('weeklyCheckIns', []);
+  const [weeklyEntries, setWeeklyEntries] = useLocalStorageState<WeeklyCheckInEntry[]>('weeklyCheckIns', []);
   const [viewingPast, setViewingPast] = useState(false);
   const [pastIndex, setPastIndex] = useState(0);
 
@@ -37,8 +30,9 @@ export default function WeeklyCheckIn({ onBack }: { onBack: () => void }) {
   weekStart.setHours(0, 0, 0, 0);
 
   const thisWeekLogs = realFeelLogs.filter((l: any) => l.date && new Date(l.date) >= weekStart);
-  const avgVitality = thisWeekLogs.length > 0
-    ? Math.round((thisWeekLogs.reduce((s: number, l: any) => s + (l.level || 3), 0) / thisWeekLogs.length) * 20)
+  const validWeekLogs = thisWeekLogs.filter((l: any) => l.level != null && l.level >= 1);
+  const avgVitality = validWeekLogs.length > 0
+    ? Math.round((validWeekLogs.reduce((s: number, l: any) => s + l.level, 0) / validWeekLogs.length) * 20)
     : 0;
   const consistencyDays = new Set(thisWeekLogs.map((l: any) => l.date ? new Date(l.date).toDateString() : null).filter(Boolean)).size;
   // Nutrition trends from archived history
@@ -46,10 +40,10 @@ export default function WeeklyCheckIn({ onBack }: { onBack: () => void }) {
     const history = nutritionHistory as DailyArchive[];
     if (history.length === 0) return null;
 
-    const weekStartStr = weekStart.toISOString().slice(0, 10);
+    const weekStartStr = dateToLocal(weekStart);
     const prevWeekStart = new Date(weekStart);
     prevWeekStart.setDate(prevWeekStart.getDate() - 7);
-    const prevWeekStr = prevWeekStart.toISOString().slice(0, 10);
+    const prevWeekStr = dateToLocal(prevWeekStart);
 
     const thisWeek = history.filter(h => h.date >= weekStartStr);
     const prevWeek = history.filter(h => h.date >= prevWeekStr && h.date < weekStartStr);
@@ -88,7 +82,7 @@ export default function WeeklyCheckIn({ onBack }: { onBack: () => void }) {
       toast.error(t.weekly.fillOneField);
       return;
     }
-    const entry: WeeklyEntry = {
+    const entry: WeeklyCheckInEntry = {
       id: Date.now(),
       weekStart: weekStart.toISOString(),
       workedWell: workedWell.trim(),
@@ -129,53 +123,61 @@ export default function WeeklyCheckIn({ onBack }: { onBack: () => void }) {
         <>
           {/* This week's stats */}
           <div className="grid grid-cols-3 gap-3">
-            <div className="bg-surface-container-low border border-outline-variant/20 rounded-sm p-4 text-center">
-              <span className="font-label text-[9px] uppercase tracking-widest text-on-surface-variant block mb-1">{t.weekly.vitality}</span>
-              <span className="font-headline font-black text-2xl text-primary">{avgVitality > 0 ? avgVitality : '—'}</span>
-              <span className="font-label text-[9px] uppercase tracking-widest text-on-surface-variant block mt-1">/100</span>
-            </div>
-            <div className="bg-surface-container-low border border-outline-variant/20 rounded-sm p-4 text-center">
-              <span className="font-label text-[9px] uppercase tracking-widest text-on-surface-variant block mb-1">{t.weekly.logs}</span>
-              <span className="font-headline font-black text-2xl text-brand-secondary">{thisWeekLogs.length}</span>
-              <span className="font-label text-[9px] uppercase tracking-widest text-on-surface-variant block mt-1">{t.weekly.rfEntries}</span>
-            </div>
-            <div className="bg-surface-container-low border border-outline-variant/20 rounded-sm p-4 text-center">
-              <span className="font-label text-[9px] uppercase tracking-widest text-on-surface-variant block mb-1">{t.weekly.consistency}</span>
-              <span className="font-headline font-black text-2xl text-tertiary">{consistencyDays}/7</span>
-              <span className="font-label text-[9px] uppercase tracking-widest text-on-surface-variant block mt-1">{t.weekly.days}</span>
-            </div>
+            <StatTile
+              label={t.weekly.vitality}
+              value={avgVitality > 0 ? avgVitality : '—'}
+              subtle="/100"
+              valueColor="primary"
+              size="md"
+            />
+            <StatTile
+              label={t.weekly.logs}
+              value={thisWeekLogs.length}
+              subtle={t.weekly.rfEntries}
+              valueColor="secondary"
+              size="md"
+            />
+            <StatTile
+              label={t.weekly.consistency}
+              value={`${consistencyDays}/7`}
+              subtle={t.weekly.days}
+              valueColor="tertiary"
+              size="md"
+            />
           </div>
 
           {/* Nutrition summary */}
           {nutritionTrends && nutritionTrends.thisWeekDays > 0 && (
-            <div className="bg-surface-container-low border border-outline-variant/20 rounded-sm p-5 space-y-3">
-              <h3 className="font-headline text-xs font-bold uppercase tracking-widest text-tertiary flex items-center gap-2">
-                <Utensils className="w-4 h-4 text-primary" /> {t.weekly.nutritionSummary}
-              </h3>
+            <SectionCard
+              padding="md"
+              spacing="md"
+              title={t.weekly.nutritionSummary}
+              icon={<Utensils className="w-4 h-4 text-primary" aria-hidden="true" />}
+            >
               <div className="grid grid-cols-2 gap-3">
                 <div className="flex items-center justify-between">
-                  <span className="font-label text-[9px] uppercase tracking-widest text-on-surface-variant">{t.weekly.avgCalories}</span>
+                  <span className="font-label text-micro uppercase tracking-widest text-on-surface-variant">{t.weekly.avgCalories}</span>
                   <span className="font-headline font-bold text-sm text-tertiary flex items-center gap-1">
                     {nutritionTrends.thisAvg.cal}
                     <TrendIcon current={nutritionTrends.thisAvg.cal} previous={nutritionTrends.prevAvg.cal} />
                   </span>
                 </div>
                 <div className="flex items-center justify-between">
-                  <span className="font-label text-[9px] uppercase tracking-widest text-on-surface-variant">{t.weekly.avgProtein}</span>
+                  <span className="font-label text-micro uppercase tracking-widest text-on-surface-variant">{t.weekly.avgProtein}</span>
                   <span className="font-headline font-bold text-sm text-primary flex items-center gap-1">
                     {nutritionTrends.thisAvg.pro}g
                     <TrendIcon current={nutritionTrends.thisAvg.pro} previous={nutritionTrends.prevAvg.pro} />
                   </span>
                 </div>
                 <div className="flex items-center justify-between">
-                  <span className="font-label text-[9px] uppercase tracking-widest text-on-surface-variant">{t.weekly.avgCarbs}</span>
+                  <span className="font-label text-micro uppercase tracking-widest text-on-surface-variant">{t.weekly.avgCarbs}</span>
                   <span className="font-headline font-bold text-sm text-tertiary flex items-center gap-1">
                     {nutritionTrends.thisAvg.carbs}g
                     <TrendIcon current={nutritionTrends.thisAvg.carbs} previous={nutritionTrends.prevAvg.carbs} />
                   </span>
                 </div>
                 <div className="flex items-center justify-between">
-                  <span className="font-label text-[9px] uppercase tracking-widest text-on-surface-variant">{t.weekly.avgFats}</span>
+                  <span className="font-label text-micro uppercase tracking-widest text-on-surface-variant">{t.weekly.avgFats}</span>
                   <span className="font-headline font-bold text-sm text-tertiary flex items-center gap-1">
                     {nutritionTrends.thisAvg.fats}g
                     <TrendIcon current={nutritionTrends.thisAvg.fats} previous={nutritionTrends.prevAvg.fats} />
@@ -183,16 +185,16 @@ export default function WeeklyCheckIn({ onBack }: { onBack: () => void }) {
                 </div>
               </div>
               <div className="flex items-center justify-between pt-2 border-t border-outline-variant/10">
-                <span className="font-label text-[9px] uppercase tracking-widest text-on-surface-variant">
+                <span className="font-label text-micro uppercase tracking-widest text-on-surface-variant">
                   {t.weekly.proteinTarget.replace('{count}', String(nutritionTrends.proteinDaysHit)).replace('{total}', String(nutritionTrends.totalDaysThisWeek))}
                 </span>
                 {nutritionTrends.prevWeekDays > 0 && (
-                  <span className="font-label text-[9px] uppercase tracking-widest text-on-surface-variant">
+                  <span className="font-label text-micro uppercase tracking-widest text-on-surface-variant">
                     {t.weekly.vsLastWeek}
                   </span>
                 )}
               </div>
-            </div>
+            </SectionCard>
           )}
 
           {/* Reflection fields */}
@@ -256,9 +258,10 @@ export default function WeeklyCheckIn({ onBack }: { onBack: () => void }) {
                 <button type="button"
                   onClick={() => setPastIndex(Math.min(pastIndex + 1, weeklyEntries.length - 1))}
                   disabled={pastIndex >= weeklyEntries.length - 1}
-                  className="w-9 h-9 rounded-full bg-surface-container-low border border-outline-variant/20 flex items-center justify-center text-on-surface-variant hover:text-primary transition-colors disabled:opacity-30"
+                  aria-label={t.weekly.previousWeek}
+                  className="w-11 h-11 rounded-full bg-surface-container-low border border-outline-variant/20 flex items-center justify-center text-on-surface-variant hover:text-primary transition-colors disabled:opacity-30"
                 >
-                  <ChevronLeft className="w-4 h-4" />
+                  <ChevronLeft className="w-4 h-4" aria-hidden="true" />
                 </button>
                 <span className="font-label text-xs uppercase tracking-widest text-on-surface-variant">
                   {t.weekly.weekOf} {new Date(pastEntry.weekStart).toLocaleDateString()}
@@ -266,42 +269,49 @@ export default function WeeklyCheckIn({ onBack }: { onBack: () => void }) {
                 <button type="button"
                   onClick={() => setPastIndex(Math.max(pastIndex - 1, 0))}
                   disabled={pastIndex <= 0}
-                  className="w-9 h-9 rounded-full bg-surface-container-low border border-outline-variant/20 flex items-center justify-center text-on-surface-variant hover:text-primary transition-colors disabled:opacity-30"
+                  aria-label={t.weekly.nextWeek}
+                  className="w-11 h-11 rounded-full bg-surface-container-low border border-outline-variant/20 flex items-center justify-center text-on-surface-variant hover:text-primary transition-colors disabled:opacity-30"
                 >
-                  <ChevronRight className="w-4 h-4" />
+                  <ChevronRight className="w-4 h-4" aria-hidden="true" />
                 </button>
               </div>
 
               <div className="grid grid-cols-3 gap-3">
-                <div className="bg-surface-container-low border border-outline-variant/20 rounded-sm p-3 text-center">
-                  <span className="font-label text-[9px] uppercase tracking-widest text-on-surface-variant block">{t.weekly.vitality}</span>
-                  <span className="font-headline font-black text-xl text-primary">{pastEntry.avgVitality}</span>
-                </div>
-                <div className="bg-surface-container-low border border-outline-variant/20 rounded-sm p-3 text-center">
-                  <span className="font-label text-[9px] uppercase tracking-widest text-on-surface-variant block">{t.weekly.logs}</span>
-                  <span className="font-headline font-black text-xl text-brand-secondary">{pastEntry.mealsLogged}</span>
-                </div>
-                <div className="bg-surface-container-low border border-outline-variant/20 rounded-sm p-3 text-center">
-                  <span className="font-label text-[9px] uppercase tracking-widest text-on-surface-variant block">{t.weekly.days}</span>
-                  <span className="font-headline font-black text-xl text-tertiary">{pastEntry.consistencyDays}/7</span>
-                </div>
+                <StatTile
+                  label={t.weekly.vitality}
+                  value={pastEntry.avgVitality}
+                  valueColor="primary"
+                  size="sm"
+                />
+                <StatTile
+                  label={t.weekly.logs}
+                  value={pastEntry.mealsLogged}
+                  valueColor="secondary"
+                  size="sm"
+                />
+                <StatTile
+                  label={t.weekly.days}
+                  value={`${pastEntry.consistencyDays}/7`}
+                  valueColor="tertiary"
+                  size="sm"
+                />
               </div>
 
               {pastEntry.workedWell && (
                 <div className="bg-surface-container-low border border-primary/20 rounded-sm p-4">
-                  <p className="font-label text-[9px] uppercase tracking-widest text-primary mb-2 flex items-center gap-1"><CheckCircle2 className="w-3 h-3" /> {t.weekly.workedWell}</p>
+                  <p className="font-label text-micro uppercase tracking-widest text-primary mb-2 flex items-center gap-1"><CheckCircle2 className="w-3 h-3" aria-hidden="true" /> {t.weekly.workedWell}</p>
                   <p className="text-sm text-on-surface font-body leading-relaxed">{pastEntry.workedWell}</p>
                 </div>
               )}
               {pastEntry.whatWasHard && (
                 <div className="bg-surface-container-low border border-error/20 rounded-sm p-4">
-                  <p className="font-label text-[9px] uppercase tracking-widest text-error mb-2 flex items-center gap-1"><XCircle className="w-3 h-3" /> {t.weekly.wasHard}</p>
+                  <p className="font-label text-micro uppercase tracking-widest text-error mb-2 flex items-center gap-1"><XCircle className="w-3 h-3" aria-hidden="true" /> {t.weekly.wasHard}</p>
                   <p className="text-sm text-on-surface font-body leading-relaxed">{pastEntry.whatWasHard}</p>
                 </div>
               )}
               {pastEntry.focusNextWeek && (
                 <div className="bg-surface-container-low border border-brand-secondary/20 rounded-sm p-4">
-                  <p className="font-label text-[9px] uppercase tracking-widest text-brand-secondary mb-2 flex items-center gap-1"><Target className="w-3 h-3" /> {t.weekly.focus}</p>
+                  <p className="font-label text-micro uppercase tracking-widest text-brand-secondary mb-2 flex items-center gap-1"><Target className="w-3 h-3" aria-hidden="true" /> {t.weekly.focus}</p>
                   <p className="text-sm text-on-surface font-body leading-relaxed">{pastEntry.focusNextWeek}</p>
                 </div>
               )}

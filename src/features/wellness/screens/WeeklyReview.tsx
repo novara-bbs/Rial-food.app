@@ -1,26 +1,17 @@
 import { useMemo } from 'react';
 import { TrendingUp, TrendingDown, Minus, CalendarDays, Target, Flame, Activity, Droplet, ChevronRight } from 'lucide-react';
 import PageShell from '../../../components/PageShell';
+import SectionCard from '../../../components/SectionCard';
 import PageHeader from '../../../components/patterns/PageHeader';
 import { useAppState } from '../../../contexts/AppStateContext';
 import { useI18n } from '../../../i18n';
 import { useNavigation } from '../../../contexts/NavigationContext';
 import { getCorrelations, type CorrelationInsight } from '../utils/correlations';
 import type { DailyArchive } from '../../../hooks/useDailyReset';
+import { calcWeekMacros } from '../utils/week-stats';
+import DataSourceCaption from '../components/DataSourceCaption';
 
 // ─── Types ────────────────────────────────────────────────────────────────────
-
-interface WeekMacroStats {
-  avgCal: number;
-  avgPro: number;
-  avgCarbs: number;
-  avgFats: number;
-  adherenceCal: number;  // % of target
-  adherencePro: number;
-  adherenceCarbs: number;
-  adherenceFats: number;
-  daysLogged: number;
-}
 
 interface DaySummary {
   date: string;
@@ -55,35 +46,13 @@ export default function WeeklyReview({ onBack }: { onBack: () => void }) {
 
   const { weekStart, weekEnd } = useMemo(getWeekBounds, []);
 
-  // ── Macro stats for the week ────────────────────────────────────────────────
-  const macroStats = useMemo<WeekMacroStats | null>(() => {
+  // ── Macro stats for the week (Q13: canonical calcWeekMacros) ───────────────
+  const macroStats = useMemo(() => {
     const history = (nutritionHistory ?? []) as DailyArchive[];
-    const weekStartStr = weekStart.toISOString().slice(0, 10);
-    const weekEndStr = weekEnd.toISOString().slice(0, 10);
-
-    const thisWeek = history.filter(h => h.date >= weekStartStr && h.date <= weekEndStr);
-    if (thisWeek.length === 0) return null;
-
-    const avg = (key: 'cal' | 'pro' | 'carbs' | 'fats') =>
-      Math.round(thisWeek.reduce((s, e) => s + (e.macros.consumed[key] || 0), 0) / thisWeek.length);
-
     const target = dailyMacros?.target ?? { cal: 2000, pro: 120, carbs: 220, fats: 60 };
-    const pct = (v: number, t: number) => t > 0 ? Math.round((v / t) * 100) : 0;
-
-    const avgCal = avg('cal');
-    const avgPro = avg('pro');
-    const avgCarbs = avg('carbs');
-    const avgFats = avg('fats');
-
-    return {
-      avgCal, avgPro, avgCarbs, avgFats,
-      adherenceCal: pct(avgCal, target.cal),
-      adherencePro: pct(avgPro, target.pro),
-      adherenceCarbs: pct(avgCarbs, target.carbs),
-      adherenceFats: pct(avgFats, target.fats),
-      daysLogged: thisWeek.length,
-    };
-  }, [nutritionHistory, weekStart, weekEnd, dailyMacros]);
+    const stats = calcWeekMacros(history, target, 0);
+    return stats.daysLogged > 0 ? stats : null;
+  }, [nutritionHistory, dailyMacros]);
 
   // ── Real Feel stats for the week ────────────────────────────────────────────
   const rfStats = useMemo(() => {
@@ -95,14 +64,17 @@ export default function WeeklyReview({ onBack }: { onBack: () => void }) {
 
     if (thisWeekLogs.length === 0) return null;
 
-    const avgLevel = thisWeekLogs.reduce((s: number, l: any) => s + (l.level || 3), 0) / thisWeekLogs.length;
+    const validLogs = thisWeekLogs.filter((l: any) => l.level != null && l.level >= 1);
+    const avgLevel = validLogs.length > 0
+      ? validLogs.reduce((s: number, l: any) => s + l.level, 0) / validLogs.length
+      : 3;
 
     // Group by day to find best/worst
     const byDay: Record<string, number[]> = {};
     for (const log of thisWeekLogs) {
       const day = log.date?.slice(0, 10) ?? '';
       if (!byDay[day]) byDay[day] = [];
-      byDay[day].push(log.level || 3);
+      if (log.level != null && log.level >= 1) byDay[day].push(log.level);
     }
 
     const daySummaries: DaySummary[] = Object.entries(byDay).map(([date, levels]) => ({
@@ -149,6 +121,10 @@ export default function WeeklyReview({ onBack }: { onBack: () => void }) {
     <PageShell maxWidth="default" spacing="lg">
       <PageHeader title={t.weeklyReview.title} onBack={onBack} />
 
+      <div className="mb-4">
+        <DataSourceCaption kind="auto" label={t.weeklyReview.dataSourceGlobal ?? 'agregado de esta semana'} />
+      </div>
+
       <p className="font-label text-xs tracking-widest text-on-surface-variant uppercase mb-6">
         {t.weeklyReview.subtitle}
       </p>
@@ -170,26 +146,26 @@ export default function WeeklyReview({ onBack }: { onBack: () => void }) {
           </h3>
           <div className="grid grid-cols-2 gap-2">
             {[
-              { label: t.weeklyReview.calories, value: macroStats.avgCal, pct: macroStats.adherenceCal, unit: 'kcal', Icon: Flame },
-              { label: t.weeklyReview.protein, value: macroStats.avgPro, pct: macroStats.adherencePro, unit: 'g', Icon: Activity },
-              { label: t.weeklyReview.carbs, value: macroStats.avgCarbs, pct: macroStats.adherenceCarbs, unit: 'g', Icon: Droplet },
-              { label: t.weeklyReview.fats, value: macroStats.avgFats, pct: macroStats.adherenceFats, unit: 'g', Icon: Minus },
+              { label: t.weeklyReview.calories, value: macroStats.avg.cal, pct: macroStats.adherence.cal, unit: 'kcal', Icon: Flame },
+              { label: t.weeklyReview.protein, value: macroStats.avg.pro, pct: macroStats.adherence.pro, unit: 'g', Icon: Activity },
+              { label: t.weeklyReview.carbs, value: macroStats.avg.carbs, pct: macroStats.adherence.carbs, unit: 'g', Icon: Droplet },
+              { label: t.weeklyReview.fats, value: macroStats.avg.fats, pct: macroStats.adherence.fats, unit: 'g', Icon: Minus },
             ].map(({ label, value, pct, unit, Icon }) => (
-              <div key={label} className="bg-surface-container-low border border-outline-variant/20 rounded-sm p-3">
-                <div className="flex items-center gap-1 mb-1">
-                  <Icon className="w-3.5 h-3.5 text-on-surface-variant" />
-                  <span className="font-label text-[10px] uppercase tracking-widest text-on-surface-variant">{label}</span>
+              <SectionCard key={label} padding="sm" spacing="sm">
+                <div className="flex items-center gap-1">
+                  <Icon className="w-3.5 h-3.5 text-on-surface-variant" aria-hidden="true" />
+                  <span className="font-label text-micro uppercase tracking-widest text-on-surface-variant">{label}</span>
                 </div>
                 <p className="font-headline font-bold text-lg text-tertiary">{value}{unit}</p>
                 <p className={`font-label text-xs font-bold ${adherenceColor(pct)}`}>{pct}% {t.weeklyReview.targetLabel}</p>
                 {/* Progress bar */}
-                <div className="h-1 bg-surface-container-highest rounded-full mt-2 overflow-hidden">
+                <div className="h-1 bg-surface-container-highest rounded-full overflow-hidden">
                   <div
                     className={`h-full rounded-full transition-all ${pct >= 90 ? 'bg-primary' : pct >= 70 ? 'bg-brand-secondary' : 'bg-error'}`}
                     style={{ width: `${Math.min(pct, 100)}%` }}
                   />
                 </div>
-              </div>
+              </SectionCard>
             ))}
           </div>
           <p className="text-[10px] text-on-surface-variant mt-2 text-right">
@@ -202,12 +178,12 @@ export default function WeeklyReview({ onBack }: { onBack: () => void }) {
       {rfStats && (
         <section className="mb-6">
           <div className="grid grid-cols-3 gap-2">
-            <div className="bg-surface-container-low border border-outline-variant/20 rounded-sm p-3 text-center col-span-1">
-              <span className="font-headline font-bold text-2xl text-primary">{rfStats.avgLevel}</span>
-              <p className="font-label text-[10px] uppercase tracking-widest text-on-surface-variant mt-0.5">
+            <SectionCard padding="sm" spacing="sm" className="text-center col-span-1">
+              <span className="font-headline font-bold text-2xl text-primary block">{rfStats.avgLevel}</span>
+              <p className="font-label text-micro uppercase tracking-widest text-on-surface-variant">
                 {t.weeklyReview.avgRealFeel}
               </p>
-            </div>
+            </SectionCard>
             {rfStats.bestDay && (
               <div className="bg-primary/5 border border-primary/20 rounded-sm p-3 text-center">
                 <TrendingUp className="w-4 h-4 text-primary mx-auto mb-1" />

@@ -12,11 +12,16 @@ import QuickActions from '../components/QuickActions';
 import ProgressPreviewCard from '../components/ProgressPreviewCard';
 import { useI18n } from '../../../i18n';
 import { useAppState } from '../../../contexts/AppStateContext';
-import { calculateStreak } from '../../profile/utils/gamification';
 import { getInsights } from '../../wellness/utils/correlations';
-import { calcVitality, calcWeeklyProgress } from '../utils/homeWidgets';
+import { calcVitality } from '../utils/homeWidgets';
+import { calcWeekMacros } from '../../wellness/utils/week-stats';
+import { calcStreaks } from '../../wellness/utils/streaks';
+import { calcWeightTrend } from '../../wellness/utils/weight-trend';
 import { createHandleRepeatYesterday } from '../../food/handlers/meal-handlers';
 import type { DailyLogEntry } from '../../food/handlers/meal-handlers';
+import type { DailyArchive } from '../../../hooks/useDailyReset';
+import type { BodySnapshot } from '../../../types/wellness';
+import InsightRow from '../components/InsightRow';
 
 export default function Home({
   onCheckIn,
@@ -75,7 +80,6 @@ export default function Home({
     try { return localStorage.getItem('rial_guidedSetupDismissed') === 'true'; } catch { return false; }
   });
 
-  const streakDays = calculateStreak((realFeelLogs || []).map((l: any) => l.date).filter(Boolean));
   const isSimpleMode = userProfile?.mode === 'simple' || !userProfile?.mode;
 
   // Derive exercise calories from active minutes + training day
@@ -91,12 +95,30 @@ export default function Home({
     [realFeelLogs]
   );
 
-  // Weekly progress metrics
+  // Weekly progress metrics — canonical calcWeekMacros (Q13)
   const { weightHistory, shoppingList, savedRecipes } = useAppState();
-  const weeklyProgress = useMemo(
-    () => calcWeeklyProgress(nutritionHistory as any[], weightHistory as any[], dailyMacros.target.pro),
-    [nutritionHistory, weightHistory, dailyMacros.target.pro]
+  const weekMacros = useMemo(
+    () => calcWeekMacros(
+      (nutritionHistory ?? []) as DailyArchive[],
+      dailyMacros.target,
+      0,
+    ),
+    [nutritionHistory, dailyMacros.target]
   );
+  const weightTrend = useMemo(
+    () => calcWeightTrend((weightHistory ?? []) as BodySnapshot[], userProfile?.targetWeight),
+    [weightHistory, userProfile?.targetWeight]
+  );
+
+  // Streaks — canonical calcStreaks (Q13). Meal-log streak is the one surfaced in the UI.
+  const streakDays = useMemo(() => {
+    const streaks = calcStreaks({
+      history: (nutritionHistory ?? []) as DailyArchive[],
+      realFeelLogs: (realFeelLogs ?? []) as Array<{ date?: string }>,
+      todayHasMeals: dailyLog.length > 0,
+    });
+    return streaks.mealLog.current;
+  }, [nutritionHistory, realFeelLogs, dailyLog.length]);
 
   // Shopping pending count
   const shoppingPendingCount = useMemo(
@@ -210,10 +232,15 @@ export default function Home({
         </div>
         <div className="flex items-center gap-2">
           {!isSimpleMode && <RealScoreBadge avgVitality={avgVitality} trend={vitalityTrend} onTap={() => onNavigateToProgress?.()} />}
-          <div className="flex items-center gap-1.5 bg-brand-secondary/10 text-brand-secondary px-3 py-1.5 rounded-full border border-brand-secondary/20 shadow-sm">
-            <Flame className="w-4 h-4" />
-            <span className="font-bold text-[10px] uppercase tracking-widest">{t.home.streak}: {streakDays} {t.home.days}</span>
-          </div>
+          <button
+            type="button"
+            onClick={() => onNavigateToProgress?.()}
+            aria-label={t.header?.streakAria ?? `${t.home.streak}: ${streakDays} ${t.home.days}`}
+            className="flex items-center gap-1.5 bg-brand-secondary/10 text-brand-secondary min-h-11 px-4 rounded-full border border-brand-secondary/20 shadow-sm hover:bg-brand-secondary/15 hover:border-brand-secondary/40 transition-colors"
+          >
+            <Flame className="w-4 h-4" aria-hidden="true" />
+            <span className="font-bold text-micro uppercase tracking-widest">{t.home.streak}: {streakDays} {t.home.days}</span>
+          </button>
         </div>
       </section>
 
@@ -291,10 +318,10 @@ export default function Home({
       {/* 4. Weekly Mini Dashboard — advanced mode only */}
       {!isSimpleMode && (
         <WeeklyMiniDash
-          calAvg={weeklyProgress.calAvg}
-          proteinHitDays={weeklyProgress.proteinHitDays}
-          totalDays={weeklyProgress.totalDays}
-          weekDelta={weeklyProgress.weekDelta}
+          calAvg={weekMacros.avg.cal}
+          proteinHitDays={weekMacros.hitDays.pro}
+          totalDays={weekMacros.daysLogged}
+          weekDelta={weightTrend.weekDelta}
           onNavigateToProgress={() => onNavigateToProgress?.()}
         />
       )}
@@ -461,17 +488,7 @@ export default function Home({
               <Sparkles className="w-4 h-4 text-primary" /> {t.home.insights}
             </h2>
             {insights.slice(0, 3).map(ins => (
-              <div key={ins.id} className={`p-4 rounded-sm border flex items-start gap-3 ${
-                ins.tone === 'warning' ? 'bg-error/5 border-error/20' :
-                ins.tone === 'positive' ? 'bg-brand-secondary/5 border-brand-secondary/20' :
-                'bg-surface-container-low border-outline-variant/20'
-              }`}>
-                <span className="text-xl shrink-0">{ins.icon}</span>
-                <div className="flex-1 min-w-0">
-                  <p className="font-headline text-xs font-bold uppercase tracking-widest text-tertiary">{ins.title}</p>
-                  <p className="text-[11px] text-on-surface-variant mt-0.5 leading-relaxed">{ins.detail}</p>
-                </div>
-              </div>
+              <InsightRow key={ins.id} insight={ins} />
             ))}
           </section>
         );

@@ -65,14 +65,14 @@ export default function CookTimer({ minutes, onDone }: { minutes: number; onDone
           onClick={() => setRunning(r => !r)}
           disabled={done}
           aria-label={running ? 'Pausar' : 'Iniciar'}
-          className="w-9 h-9 rounded-full bg-on-overlay/10 flex items-center justify-center text-on-overlay hover:bg-on-overlay/20 transition-colors disabled:opacity-40"
+          className="w-11 h-11 rounded-full bg-on-overlay/10 flex items-center justify-center text-on-overlay hover:bg-on-overlay/20 transition-colors disabled:opacity-40"
         >
           {running ? <Pause className="w-4 h-4" /> : <Play className="w-4 h-4" />}
         </button>
         <button type="button"
           onClick={() => { setSecondsLeft(totalSeconds); setRunning(false); }}
           aria-label="Reiniciar"
-          className="w-9 h-9 rounded-full bg-on-overlay/10 flex items-center justify-center text-on-overlay hover:bg-on-overlay/20 transition-colors"
+          className="w-11 h-11 rounded-full bg-on-overlay/10 flex items-center justify-center text-on-overlay hover:bg-on-overlay/20 transition-colors"
         >
           <RotateCcw className="w-4 h-4" />
         </button>

@@ -504,15 +504,17 @@ export default function AddMeal({
                       toggleFavorite(foodId);
                       toast.success(isFav ? t.addMealScreen.removedFromFavorites : t.addMealScreen.addedToFavorites);
                     }}
-                    className="w-8 h-8 rounded-full flex items-center justify-center text-on-surface-variant hover:text-primary transition-colors"
+                    aria-label={isFav ? t.addMealScreen.removedFromFavorites : t.addMealScreen.addedToFavorites}
+                    className="w-11 h-11 rounded-full flex items-center justify-center text-on-surface-variant hover:text-primary transition-colors"
                   >
-                    <Star className={`w-4 h-4 ${isFav ? 'text-primary fill-primary' : ''}`} />
+                    <Star className={`w-4 h-4 ${isFav ? 'text-primary fill-primary' : ''}`} aria-hidden="true" />
                   </button>
                   <button type="button"
                     onClick={() => handleTapPlus(food)}
-                    className="w-10 h-10 rounded-full bg-surface-container-highest flex items-center justify-center text-primary hover:bg-primary hover:text-on-primary transition-colors"
+                    aria-label={t.addMealScreen.addToMeal}
+                    className="w-11 h-11 rounded-full bg-surface-container-highest flex items-center justify-center text-primary hover:bg-primary hover:text-on-primary transition-colors"
                   >
-                    <Plus className="w-5 h-5" />
+                    <Plus className="w-5 h-5" aria-hidden="true" />
                   </button>
                 </div>
               </div>

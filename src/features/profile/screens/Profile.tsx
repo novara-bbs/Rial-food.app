@@ -1,24 +1,34 @@
 import { Mail, Shield, CreditCard, LogOut, ChevronRight, Flame, Trophy, Star, Pencil } from 'lucide-react';
 import PageShell from '../../../components/PageShell';
+import SectionCard from '../../../components/SectionCard';
 import { useI18n } from '../../../i18n';
-import { BADGES, LEVELS, calculatePoints, getUserLevel, getEarnedBadges, calculateStreak, type UserStats } from '../utils/gamification';
+import { BADGES, LEVELS, calculatePoints, getUserLevel, getEarnedBadges, type UserStats } from '../utils/gamification';
+import { calcStreaks } from '../../wellness/utils/streaks';
+import type { DailyArchive } from '../../../hooks/useDailyReset';
 import PageHeader from '../../../components/patterns/PageHeader';
 import { bodyWeightFromKg, getBodyWeightUnit, heightFromCm, getHeightUnit } from '../../food/utils/units';
 import { useNavigation } from '../../../contexts/NavigationContext';
 import { Button } from '@/components/ui/button';
 
-export default function Profile({ userProfile, onBack, realFeelLogs = [], savedRecipes = [], communityPosts = [] }: {
+export default function Profile({ userProfile, onBack, realFeelLogs = [], savedRecipes = [], communityPosts = [], nutritionHistory = [], dailyLogHasEntries = false }: {
   userProfile: any;
   onBack: () => void;
   realFeelLogs?: any[];
   savedRecipes?: any[];
   communityPosts?: any[];
+  nutritionHistory?: DailyArchive[];
+  dailyLogHasEntries?: boolean;
 }) {
   const { t } = useI18n();
   const { navigateTo } = useNavigation();
 
-  // Calculate real streak from realFeelLogs
-  const streakDays = calculateStreak((realFeelLogs || []).map((l: any) => l.date).filter(Boolean));
+  // Canonical streak — aligned with Home + Progress (Q14)
+  const streaks = calcStreaks({
+    history: nutritionHistory as DailyArchive[],
+    realFeelLogs: realFeelLogs ?? [],
+    todayHasMeals: dailyLogHasEntries,
+  });
+  const streakDays = streaks.mealLog.current;
 
   // Build user stats for gamification
   const stats: UserStats = {
@@ -80,41 +90,46 @@ export default function Profile({ userProfile, onBack, realFeelLogs = [], savedR
       </div>
 
       {/* Level progress */}
-      <div className="bg-surface-container-low border border-outline-variant/20 rounded-sm p-5">
-        <div className="flex items-center justify-between mb-2">
-          <div className="flex items-center gap-2">
-            <Star className="w-4 h-4 text-primary" />
-            <span className="font-headline text-xs font-bold uppercase tracking-widest text-tertiary">
-              {t.gamification.level} {level.level}
-            </span>
-          </div>
-          {nextLevel && (
+      <SectionCard
+        icon={<Star className="w-4 h-4 text-primary" />}
+        title={`${t.gamification.level} ${level.level}`}
+        action={
+          nextLevel ? (
             <span className="text-[10px] text-on-surface-variant font-mono">
               {points}/{nextLevel.minPoints} pts
             </span>
-          )}
-        </div>
+          ) : undefined
+        }
+      >
         <div className="h-2 bg-surface-container-highest rounded-full overflow-hidden">
           <div className="h-full bg-primary rounded-full transition-all" style={{ width: `${Math.min(levelProgress, 100)}%` }} />
         </div>
         {nextLevel && (
-          <p className="text-[9px] text-on-surface-variant mt-2 uppercase tracking-widest">
+          <p className="text-[9px] text-on-surface-variant uppercase tracking-widest">
             {(t.gamification.levels as Record<string, string>)[nextLevel.name]} — {nextLevel.minPoints - points} pts
           </p>
         )}
-      </div>
+      </SectionCard>
 
-      {/* Streak */}
-      <div className="bg-surface-container-low border border-outline-variant/20 rounded-sm p-5 flex items-center justify-between">
+      {/* Streak — deep-link to Progress */}
+      <button
+        type="button"
+        onClick={() => navigateTo('progress')}
+        aria-label={t.header?.streakAria ?? t.gamification.streak}
+        className="bg-surface-container-low border border-outline-variant/20 rounded-sm p-5 flex items-center justify-between w-full text-left hover:border-brand-secondary/40 transition-colors group"
+      >
         <div className="flex items-center gap-3">
           <Flame className="w-6 h-6 text-brand-secondary" />
           <div>
             <span className="font-headline text-sm font-bold uppercase text-tertiary tracking-widest">{t.gamification.streak}</span>
-            <p className="text-[10px] text-on-surface-variant">Real Feel + meals</p>
+            <p className="text-[10px] text-on-surface-variant">{t.profile.realFeelMeals}</p>
           </div>
         </div>
-        <span className="font-mono text-3xl font-black text-brand-secondary">{stats.streakDays}</span>
-      </div>
+        <div className="flex items-center gap-2">
+          <span className="font-mono text-3xl font-black text-brand-secondary">{stats.streakDays}</span>
+          <ChevronRight className="w-4 h-4 text-on-surface-variant group-hover:text-brand-secondary transition-colors" />
+        </div>
+      </button>
 
       {/* Badges */}
       <div>
@@ -137,7 +152,7 @@ export default function Profile({ userProfile, onBack, realFeelLogs = [], savedR
                 title={(t.gamification.badgeNames as Record<string, string>)[badge.name] || badge.name}
               >
                 <span className="text-2xl">{badge.emoji}</span>
-                <span className="text-[7px] font-bold uppercase tracking-wider text-on-surface-variant text-center leading-tight">
+                <span className="text-micro font-bold uppercase tracking-wider text-on-surface-variant text-center leading-tight">
                   {(t.gamification.badgeNames as Record<string, string>)[badge.name] || badge.name}
                 </span>
               </div>
@@ -147,8 +162,7 @@ export default function Profile({ userProfile, onBack, realFeelLogs = [], savedR
       </div>
 
       {/* Body data */}
-      <div className="bg-surface-container-low border border-outline-variant/20 rounded-sm p-5">
-        <h3 className="font-headline text-sm font-bold uppercase tracking-widest text-tertiary mb-4">{t.profile.bodyData}</h3>
+      <SectionCard title={t.profile.bodyData}>
         <div className="grid grid-cols-2 gap-4 text-sm">
           {userProfile?.age && <div className="flex justify-between"><span className="text-on-surface-variant">{t.onboarding.age}</span><span className="font-bold text-tertiary">{userProfile.age}</span></div>}
           {userProfile?.height && <div className="flex justify-between"><span className="text-on-surface-variant">{t.onboarding.height}</span><span className="font-bold text-tertiary">{heightFromCm(userProfile.height, userProfile?.unitSystem ?? 'metric')} {getHeightUnit(userProfile?.unitSystem ?? 'metric')}</span></div>}
@@ -156,13 +170,13 @@ export default function Profile({ userProfile, onBack, realFeelLogs = [], savedR
           {userProfile?.goal && <div className="flex justify-between"><span className="text-on-surface-variant">{t.profile.goal}</span><span className="font-bold text-primary uppercase text-xs">{userProfile.goal}</span></div>}
         </div>
         {userProfile?.dietaryPreferences?.length > 0 && (
-          <div className="flex flex-wrap gap-1.5 mt-4">
+          <div className="flex flex-wrap gap-1.5">
             {userProfile.dietaryPreferences.map((p: string) => (
               <span key={p} className="text-[9px] font-bold uppercase tracking-wider bg-primary/10 text-primary px-2 py-0.5 rounded">{p}</span>
             ))}
           </div>
         )}
-      </div>
+      </SectionCard>
 
       {/* Menu items */}
       <div className="space-y-3">
