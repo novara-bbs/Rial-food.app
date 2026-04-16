@@ -10,6 +10,7 @@ import FilterRow from '../../../components/patterns/FilterRow';
 import PostCard from '../components/PostCard';
 import StoryRingsRow from '../components/StoryRingsRow';
 import { rankFeed, getFollowingFeed, getTrendingFeed } from '../utils/feed-algorithm';
+import { useLocalStorageState } from '../../../hooks/useLocalStorageState';
 
 type FeedMode = 'forYou' | 'following' | 'trending';
 
@@ -30,11 +31,21 @@ export default function Community({ communityPosts = [], onAddComment }: { commu
     }
   };
 
-  const isOwnPost = (post: any) => post.author?.name === userProfile.name || post.author?.name === 'Tu' || post.author?.id === 'self';
+  // Ownership must be id-based. The old name compare (`'Tu'`, `'Tú'`, or
+  // `userProfile.name`) broke in EN locale and whenever the user changed their
+  // display name. `createHandleCreatePost` always tags `author.id === 'self'`.
+  const isOwnPost = (post: any) => post.author?.id === 'self';
 
-  const [followedCreators] = [useMemo(() => {
-    try { return JSON.parse(localStorage.getItem('followedCreators') || '[]'); } catch { return []; }
-  }, [])];
+  // Canonical persistence hook. Replaces a stale `JSON.parse(localStorage)`
+  // snapshot inside a `useMemo([])` that never refreshed after the component
+  // mounted — toggling follow from other screens wouldn't surface here until
+  // full remount. Cross-screen live propagation will land in Wave 3 when this
+  // moves to a factory handler in AppStateContext.
+  // `followedCreators` stores creator ids — ids are strings (`'creator-1'`,
+  // `'self'`, etc.) across the app, not numbers. The previous `number[]`
+  // generic caused a type mismatch against `UserContext.followedCreators` in
+  // the feed ranker. Wave 3 will unify this under a factory handler.
+  const [followedCreators] = useLocalStorageState<string[]>('followedCreators', []);
 
   const userCtx = useMemo(() => ({
     followedCreators,
@@ -50,6 +61,8 @@ export default function Community({ communityPosts = [], onAddComment }: { commu
 
   const activeFeed = feedMode === 'forYou' ? forYouFeed : feedMode === 'following' ? followingFeed : trendingFeed;
 
+  const unitSystem = userProfile?.unitSystem ?? 'metric';
+
   const renderPost = (post: any) => (
     <PostCard
       key={post.id}
@@ -57,6 +70,7 @@ export default function Community({ communityPosts = [], onAddComment }: { commu
       isLiked={likedPosts.includes(post.id)}
       isSaved={savedPosts.includes(post.id)}
       isOwn={isOwnPost(post)}
+      unitSystem={unitSystem}
       onLike={() => toggleLikePost(post.id)}
       onSave={() => toggleSavePost(post.id)}
       onShare={() => {

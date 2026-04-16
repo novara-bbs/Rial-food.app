@@ -8,7 +8,7 @@ import type { Story } from '../../../types/social';
 
 export default function StoryRingsRow() {
   const { t } = useI18n();
-  const { communityStories } = useAppState();
+  const { communityStories, setSelectedStoryAuthorId } = useAppState();
   const { navigateTo } = useNavigation();
 
   const activeStories = useMemo(() => cleanExpiredStories(communityStories), [communityStories]);
@@ -46,7 +46,9 @@ export default function StoryRingsRow() {
           hasStory
           storyViewed={story.viewedBy.includes('self')}
           onClick={() => {
-            // store which story to view, then navigate
+            // Tell StoryViewer which author's story was tapped; it will pick the
+            // first non-expired story for that author as the initial slide.
+            setSelectedStoryAuthorId(story.authorId);
             navigateTo('story-viewer');
           }}
         />

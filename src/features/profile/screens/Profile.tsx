@@ -36,7 +36,9 @@ export default function Profile({ userProfile, onBack, realFeelLogs = [], savedR
     recipesImported: savedRecipes.filter((r: any) => r.tag === 'IMPORTADA').length,
     mealsLogged: 0, // would track from dailyMacros history
     realFeelCount: realFeelLogs.length,
-    postsPublished: communityPosts.filter((p: any) => p.author?.name === 'Tú' || p.author?.name === 'You').length,
+    // Id-based ownership check. Name-based compare broke in EN locale and on
+    // profile rename (see PostDetail.tsx for the same fix).
+    postsPublished: communityPosts.filter((p: any) => p.author?.id === 'self').length,
     plansCreated: 0,
     shoppingListUsed: false,
     fastingsCompleted: 0,

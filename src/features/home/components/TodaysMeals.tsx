@@ -121,13 +121,25 @@ export default function TodaysMeals({
                       </div>
                     </div>
                     <div className="flex items-center gap-1 shrink-0">
+                      {/* HIG 44×44 tap targets, always visible (opacity-0+group-hover
+                          was invisible on touch devices where there's no hover). */}
                       {entry.grams && (
-                        <button type="button" onClick={() => startEdit(entry)} className="w-7 h-7 flex items-center justify-center rounded-full text-on-surface-variant/40 hover:text-primary hover:bg-primary/10 transition-colors opacity-0 group-hover:opacity-100">
-                          <Pencil className="w-3 h-3" />
+                        <button
+                          type="button"
+                          onClick={() => startEdit(entry)}
+                          aria-label={t.home.editMeal}
+                          className="min-w-11 min-h-11 flex items-center justify-center rounded-full text-on-surface-variant hover:text-primary hover:bg-primary/10 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/50"
+                        >
+                          <Pencil className="w-4 h-4" />
                         </button>
                       )}
-                      <button type="button" onClick={() => handleDelete(entry)} className="w-7 h-7 flex items-center justify-center rounded-full text-on-surface-variant/40 hover:text-error hover:bg-error/10 transition-colors opacity-0 group-hover:opacity-100">
-                        <Trash2 className="w-3.5 h-3.5" />
+                      <button
+                        type="button"
+                        onClick={() => handleDelete(entry)}
+                        aria-label={t.home.deleteMealAria}
+                        className="min-w-11 min-h-11 flex items-center justify-center rounded-full text-on-surface-variant hover:text-error hover:bg-error/10 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-error/50"
+                      >
+                        <Trash2 className="w-4 h-4" />
                       </button>
                     </div>
                   </div>

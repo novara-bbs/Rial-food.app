@@ -15,7 +15,10 @@ export default function PostDetail({ onBack }: { onBack: () => void }) {
 
   const post = useMemo(() => communityPosts.find((p: any) => p.id === selectedPostId), [communityPosts, selectedPostId]);
 
-  const isOwn = post?.author?.name === userProfile.name || post?.author?.name === 'Tú';
+  // Id-based ownership check. Name-based compare broke in EN locale (`'Tú'`
+  // literal never matches) and whenever the user changed their display name.
+  const isOwn = post?.author?.id === 'self';
+  const unitSystem = userProfile?.unitSystem ?? 'metric';
 
   const handleSubmitComment = () => {
     if (!commentText.trim() || !post) return;
@@ -49,6 +52,7 @@ export default function PostDetail({ onBack }: { onBack: () => void }) {
         isLiked={likedPosts.includes(post.id)}
         isSaved={savedPosts.includes(post.id)}
         isOwn={isOwn}
+        unitSystem={unitSystem}
         onLike={() => toggleLikePost(post.id)}
         onSave={() => toggleSavePost(post.id)}
         onComment={(text) => handleAddComment(post.id, text)}

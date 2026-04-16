@@ -115,6 +115,91 @@ describe('createHandleAddToPlan', () => {
     expect(names.toLowerCase()).toContain('pollo');
     expect(result[0].checked).toBe(false);
   });
+
+  // ─── Wave 0.11 — mealType-aware slot mapping ─────────────────────────────
+
+  it('maps breakfast recipes to DESAYUNO at 08:00', () => {
+    makeHandler()(makeRecipe('r1', { mealType: 'breakfast' }), 0);
+    const updater = setMealPlan.mock.calls[0][0];
+    const result = updater({ 0: [] });
+    expect(result[0][0].time).toBe('08:00');
+    expect(result[0][0].type).toBe('DESAYUNO');
+  });
+
+  it('maps dinner recipes to CENA at 20:00', () => {
+    makeHandler()(makeRecipe('r1', { mealType: 'dinner' }), 0);
+    const updater = setMealPlan.mock.calls[0][0];
+    const result = updater({ 0: [] });
+    expect(result[0][0].time).toBe('20:00');
+    expect(result[0][0].type).toBe('CENA');
+  });
+
+  it('maps snack recipes to MERIENDA at 17:00', () => {
+    makeHandler()(makeRecipe('r1', { mealType: 'snack' }), 0);
+    const updater = setMealPlan.mock.calls[0][0];
+    const result = updater({ 0: [] });
+    expect(result[0][0].time).toBe('17:00');
+    expect(result[0][0].type).toBe('MERIENDA');
+  });
+
+  it('defaults to COMIDA at 13:00 when mealType is missing', () => {
+    makeHandler()(makeRecipe('r1'), 0);
+    const updater = setMealPlan.mock.calls[0][0];
+    const result = updater({ 0: [] });
+    expect(result[0][0].time).toBe('13:00');
+    expect(result[0][0].type).toBe('COMIDA');
+  });
+
+  it('accepts ES mealType values (desayuno, cena, merienda)', () => {
+    makeHandler()(makeRecipe('r1', { mealType: 'desayuno' }), 0);
+    const updater = setMealPlan.mock.calls[0][0];
+    const result = updater({ 0: [] });
+    expect(result[0][0].type).toBe('DESAYUNO');
+  });
+
+  it('uses i18n plan labels when t is provided (EN locale)', () => {
+    const handler = createHandleAddToPlan({
+      setSavedRecipes: vi.fn() as any,
+      setMealPlan: setMealPlan as any,
+      setShoppingList: setShoppingList as any,
+      navigateTo: vi.fn(),
+      t: { plan: { mealTypeBreakfast: 'BREAKFAST', mealTypeLunch: 'LUNCH', mealTypeDinner: 'DINNER', mealTypeSnack: 'SNACK' } },
+    });
+    handler(makeRecipe('r1', { mealType: 'dinner' }), 0);
+    const updater = setMealPlan.mock.calls[0][0];
+    const result = updater({ 0: [] });
+    expect(result[0][0].type).toBe('DINNER');
+  });
+
+  // ─── Wave 0.11 — aggregateShoppingItems dedup ────────────────────────────
+
+  it('aggregates duplicate ingredients instead of appending strings', () => {
+    const existing = [
+      { id: 1, name: 'Pollo', category: 'Proteína', checked: false, quantity: 100, unit: 'g', source: ['Prev'] },
+    ];
+    makeHandler()(makeRecipe(), 0);
+    const updater = setShoppingList.mock.calls[0][0];
+    const result = updater(existing);
+    // Should dedup + sum the 100g existing + 200g new → 300g total
+    const pollo = result.find((r: any) => r.name === 'Pollo');
+    expect(pollo).toBeDefined();
+    expect(pollo.quantity).toBe(300);
+    // Only one entry for Pollo (not two)
+    expect(result.filter((r: any) => r.name === 'Pollo')).toHaveLength(1);
+  });
+
+  it('produces GroceryItem shape (object), never raw strings', () => {
+    makeHandler()(makeRecipe(), 0);
+    const updater = setShoppingList.mock.calls[0][0];
+    const result = updater([]);
+    result.forEach((item: any) => {
+      expect(typeof item).toBe('object');
+      expect(item).toHaveProperty('id');
+      expect(item).toHaveProperty('name');
+      expect(item).toHaveProperty('category');
+      expect(item).toHaveProperty('checked');
+    });
+  });
 });
 
 // ─── createHandleDeleteRecipe ─────────────────────────────────────────────────

@@ -51,25 +51,44 @@ export default function ImportRecipeURL({ onBack, onImport }: { onBack: () => vo
   const [showAlternatives, setShowAlternatives] = useState<number | null>(null);
 
   const handleImport = async () => {
-    if (!url.trim()) return;
+    const trimmed = url.trim();
+    if (!trimmed) return;
+
+    // URL validation (only for url mode)
+    if (inputMode === 'url') {
+      try {
+        // eslint-disable-next-line no-new
+        new URL(trimmed);
+      } catch {
+        setError(t.importUrl.invalidUrl);
+        return;
+      }
+    }
+
     setLoading(true);
     setError('');
 
     try {
-      let data: any;
-
       if (!SUPABASE_URL && !GEMINI_API_KEY) {
-        await new Promise(r => setTimeout(r, 1500));
-        data = buildFallback(url);
-      } else {
-        const text = await generateGeminiText({
-          message: EXTRACTION_PROMPT + url,
-          options: { model: 'gemini-2.0-flash', temperature: 0.2, maxOutputTokens: 2048 },
-        });
-        const jsonMatch = text.match(/\{[\s\S]*\}/);
-        if (!jsonMatch) throw new Error('No JSON in response');
-        data = JSON.parse(jsonMatch[0]);
+        // Dev without proxy/key: no silent chicken-recipe. Surface a real error.
+        throw new Error('no-proxy');
       }
+
+      // 15s timeout guard — generateGeminiText doesn't expose AbortSignal.
+      const TIMEOUT_MS = 15_000;
+      const timeoutPromise = new Promise<never>((_, reject) =>
+        setTimeout(() => reject(new Error('timeout')), TIMEOUT_MS),
+      );
+      const text = await Promise.race([
+        generateGeminiText({
+          message: EXTRACTION_PROMPT + trimmed,
+          options: { model: 'gemini-2.0-flash', temperature: 0.2, maxOutputTokens: 2048 },
+        }),
+        timeoutPromise,
+      ]);
+      const jsonMatch = text.match(/\{[\s\S]*\}/);
+      if (!jsonMatch) throw new Error('No JSON in response');
+      const data = JSON.parse(jsonMatch[0]);
 
       // Run intelligence pipeline: fuzzy match + unit conversion + macro calculation
       const rawIngredients = (data.ingredients || []).map((ing: any) => ({
@@ -81,58 +100,40 @@ export default function ImportRecipeURL({ onBack, onImport }: { onBack: () => vo
       setIntelligence(result);
 
       const source = inputMode === 'url'
-        ? (url.includes('youtube') ? 'YouTube' : url.includes('instagram') ? 'Instagram' : 'Web')
+        ? (trimmed.includes('youtube') ? 'YouTube' : trimmed.includes('instagram') ? 'Instagram' : 'Web')
         : 'Texto';
 
       setExtracted({
         ...data,
         ingredients: result.ingredients,
         source,
-        sourceUrl: inputMode === 'url' ? url : undefined,
+        sourceUrl: inputMode === 'url' ? trimmed : undefined,
         // Use dictionary-calculated macros when match rate is good, otherwise keep AI estimates
         macros: result.matchRate >= 0.5 ? result.totalMacros : data.macros,
         macroSource: result.matchRate >= 0.5 ? 'dictionary' : 'ai',
       });
     } catch (err) {
-      logger.error('Import error', { error: err instanceof Error ? err.message : String(err) });
-      const fallback = buildFallback(url);
-      const result = enhanceIngredients(fallback.ingredients);
-      setIntelligence(result);
-      setExtracted({ ...fallback, ingredients: result.ingredients, macros: result.totalMacros, macroSource: 'dictionary' });
+      const msg = err instanceof Error ? err.message : String(err);
+      logger.error('Import error', { error: msg });
+      setError(msg === 'timeout' ? t.importUrl.timeout : t.importUrl.parseFailed);
     } finally {
       setLoading(false);
     }
   };
 
-  const buildFallback = (input: string) => ({
-    title: 'Receta importada',
-    description: 'Receta extraída automáticamente.',
-    source: input.includes('youtube') ? 'YouTube' : input.includes('instagram') ? 'Instagram' : 'Web',
-    sourceUrl: input,
-    prepTime: '15M',
-    cookTime: '25M',
-    servings: 4,
-    difficulty: 'Medio',
-    ingredients: [
-      { name: 'Pechuga de pollo', amount: 400, unit: 'g', matched: true },
-      { name: 'Arroz basmati', amount: 300, unit: 'g', matched: true },
-      { name: 'Cebolla', amount: 1, unit: 'ud', matched: true },
-      { name: 'Especias al gusto', amount: 2, unit: 'cda', matched: false },
-    ],
-    steps: [
-      'Cortar el pollo y sazonar.',
-      'Saltear la cebolla en aceite.',
-      'Añadir el pollo y cocinar 15 min.',
-      'Servir sobre arroz.',
-    ],
-    macros: { calories: 480, protein: 38, carbs: 52, fats: 10, saturatedFat: 2, transFat: 0, sugar: 3 },
-    tags: [],
-  });
-
   const handleSave = () => {
     if (!extracted) return;
+    // RecipeDetail consumes `ingredients` as legacy `string[]` ("amountunit name").
+    // Passing EnhancedIngredient objects renders as `[object Object]`. Flatten here.
+    const legacyIngredients: string[] = (extracted.ingredients || []).map((ing: EnhancedIngredient) => {
+      const amt = ing.amount ?? 0;
+      const unit = ing.unit ?? '';
+      const name = ing.match?.ingredient.name ?? ing.name;
+      return `${amt}${unit ? ` ${unit}` : ''} ${name}`.trim();
+    });
     onImport({
       ...extracted,
+      ingredients: legacyIngredients,
       img: 'https://images.unsplash.com/photo-1604908176997-125f25cc6f3d?auto=format&fit=crop&w=600&q=80',
       tag: 'IMPORTADA',
     });
@@ -152,7 +153,7 @@ export default function ImportRecipeURL({ onBack, onImport }: { onBack: () => vo
                 inputMode === 'url' ? 'bg-primary text-on-primary' : 'bg-surface-container-low text-on-surface-variant hover:text-tertiary'
               }`}
             >
-              <Link className="w-4 h-4" /> URL
+              <Link className="w-4 h-4" /> {t.importUrl.modeUrl}
             </button>
             <button type="button"
               onClick={() => setInputMode('text')}
@@ -160,13 +161,13 @@ export default function ImportRecipeURL({ onBack, onImport }: { onBack: () => vo
                 inputMode === 'text' ? 'bg-primary text-on-primary' : 'bg-surface-container-low text-on-surface-variant hover:text-tertiary'
               }`}
             >
-              <FileText className="w-4 h-4" /> Texto
+              <FileText className="w-4 h-4" /> {t.importUrl.modeText}
             </button>
           </div>
 
           <div>
             <label className="block text-xs font-label uppercase tracking-widest text-on-surface-variant mb-2">
-              {inputMode === 'url' ? t.importUrl.paste : 'Pega el texto de la receta'}
+              {inputMode === 'url' ? t.importUrl.paste : t.importUrl.pasteTextLabel}
             </label>
             {inputMode === 'url' ? (
               <div className="relative">
@@ -175,7 +176,7 @@ export default function ImportRecipeURL({ onBack, onImport }: { onBack: () => vo
                   type="url"
                   value={url}
                   onChange={e => setUrl(e.target.value)}
-                  placeholder="https://youtube.com/watch?v=..."
+                  placeholder={t.importUrl.urlPlaceholder}
                   className="w-full pl-10 pr-4 py-4 bg-surface-container-low border border-outline-variant/20 rounded-sm text-on-surface placeholder:text-on-surface-variant text-sm font-body focus:outline-none focus:border-primary"
                 />
               </div>

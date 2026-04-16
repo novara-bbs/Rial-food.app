@@ -45,10 +45,9 @@ export default function Home({
   nutritionHistory = [],
   onNavigateToProgress,
 }: {
-  onCheckIn: (status?: string) => void,
+  onCheckIn: () => void,
   onAddMeal: () => void,
   onNavigateToPlan: () => void,
-  onNavigateToExplore: () => void,
   onNavigateToProgress?: () => void,
   checkInStatus: any,
   dailyMacros: any,
@@ -335,7 +334,7 @@ export default function Home({
         </button>
         <button
           type="button"
-          onClick={() => onCheckIn()}
+          onClick={onCheckIn}
           className={`p-5 rounded-sm flex flex-col items-center justify-center gap-3 transition-all group border ${
             checkInStatus
               ? 'bg-primary/10 border-primary text-primary'

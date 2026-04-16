@@ -1,14 +1,32 @@
 import type { Story, StorySlide } from '../../../types/social';
 
-export function createHandlePublishStory(deps: { setCommunityStories: (fn: any) => void; navigateTo: (screen: string) => void }) {
+interface UserProfileLike {
+  name?: string;
+  avatar?: string | null;
+}
+
+interface StoryT {
+  social: { anonymousUser: string };
+}
+
+export function createHandlePublishStory(deps: {
+  setCommunityStories: (fn: any) => void;
+  navigateTo: (screen: string) => void;
+  getUserProfile: () => UserProfileLike;
+  getT: () => StoryT;
+}) {
   return (slides: StorySlide[]) => {
     const now = new Date();
     const expires = new Date(now.getTime() + 24 * 3600000);
+    const profile = deps.getUserProfile();
+    const t = deps.getT();
+    const authorName = (profile.name && profile.name.trim()) || t.social.anonymousUser;
+    const authorAvatar = profile.avatar || 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=200&q=80';
     const story: Story = {
       id: `story-self-${Date.now()}`,
       authorId: 'self',
-      authorName: 'Tú',
-      authorAvatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=200&q=80',
+      authorName,
+      authorAvatar,
       slides,
       createdAt: now.toISOString(),
       expiresAt: expires.toISOString(),

@@ -11,6 +11,8 @@ interface GlobalHeaderProps {
   userName?: string;
   isPro?: boolean;
   userAvatar?: string | null;
+  /** Show a red dot on the bell only when at least one notification is unread. */
+  hasUnreadNotifications?: boolean;
 }
 
 /**
@@ -21,7 +23,7 @@ interface GlobalHeaderProps {
 const DEMO_UNLOCK_CODE = '1537';
 const LONG_PRESS_MS = 800;
 
-export default function GlobalHeader({ onOpenSettings, onOpenProfile, onOpenNotifications, userName, isPro, userAvatar }: GlobalHeaderProps) {
+export default function GlobalHeader({ onOpenSettings, onOpenProfile, onOpenNotifications, userName, isPro, userAvatar, hasUnreadNotifications = false }: GlobalHeaderProps) {
   const { t } = useI18n();
 
   const [demoGateOpen, setDemoGateOpen] = useState(false);
@@ -98,7 +100,12 @@ export default function GlobalHeader({ onOpenSettings, onOpenProfile, onOpenNoti
             aria-label={t.settings.notifications}
           >
             <Bell className="w-5 h-5" />
-            <span className="absolute top-2 right-2 w-2 h-2 bg-primary rounded-full border-2 border-background" />
+            {hasUnreadNotifications && (
+              <span
+                className="absolute top-2 right-2 w-2 h-2 bg-primary rounded-full border-2 border-background"
+                aria-hidden="true"
+              />
+            )}
           </button>
 
           <button

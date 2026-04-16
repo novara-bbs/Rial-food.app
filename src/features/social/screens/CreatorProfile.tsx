@@ -52,10 +52,11 @@ export default function CreatorProfile({ onBack }: { onBack: () => void }) {
 
   const creatorPosts = useMemo(() => {
     if (isSelf) {
-      return communityPosts.filter((p: any) => p.author?.name === userProfile.name || p.author?.name === 'Tú');
+      // Id-based ownership. Name match breaks in EN locale and on profile rename.
+      return communityPosts.filter((p: any) => p.author?.id === 'self');
     }
-    return communityPosts.filter((p: any) => p.author?.id === creator.id || p.author?.name === creator.name);
-  }, [communityPosts, isSelf, creator, userProfile.name]);
+    return communityPosts.filter((p: any) => p.author?.id === creator.id);
+  }, [communityPosts, isSelf, creator]);
 
   const creatorRecipes = useMemo(() => {
     if (isSelf) return savedRecipes;

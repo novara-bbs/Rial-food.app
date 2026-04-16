@@ -2,12 +2,15 @@ import { Flame, MessageSquare, Share2, Bookmark, Activity, TrendingUp, Send, Tra
 import { useState } from 'react';
 import { useI18n } from '../../../i18n';
 import type { CommunityPost } from '../../../types/social';
+import type { UnitSystem } from '../../food/utils/units';
+import ProgressPostCard from './ProgressPostCard';
 
 interface PostCardProps {
   post: CommunityPost;
   isLiked: boolean;
   isSaved?: boolean;
   isOwn: boolean;
+  unitSystem?: UnitSystem;
   onLike: () => void;
   onSave?: () => void;
   onShare?: () => void;
@@ -19,7 +22,7 @@ interface PostCardProps {
 }
 
 export default function PostCard({
-  post, isLiked, isSaved, isOwn,
+  post, isLiked, isSaved, isOwn, unitSystem = 'metric',
   onLike, onSave, onShare, onDelete, onComment,
   onNavigateToProfile, onNavigateToPost, onNavigateToRecipe,
 }: PostCardProps) {
@@ -86,6 +89,18 @@ export default function PostCard({
           </div>
         )}
 
+        {/* Progress card — body-snapshot share (delta + optional photo) */}
+        {post.type === 'progress' && post.progress && (
+          <div className="mb-2">
+            <ProgressPostCard
+              post={post}
+              unitSystem={unitSystem}
+              currentLabel={t.progress?.current || 'Actual'}
+              sinceLabel={t.progress?.since || 'Desde'}
+            />
+          </div>
+        )}
+
         {/* Performance card */}
         {post.type === 'performance' && post.performance && (
           <div className="bg-background rounded-sm border border-outline-variant/20 p-4 grid grid-cols-2 gap-4 mb-2">
@@ -138,23 +153,25 @@ export default function PostCard({
         )}
       </div>
 
-      {/* Action bar */}
+      {/* Action bar — counters read `post.likes` / `post.saves` directly. The
+          toggleLikePost/toggleSavePost handlers in AppStateContext mutate the
+          canonical counter on the post, so no `+1` cosmetic offset is needed. */}
       <div className="px-5 py-3 bg-surface-container-highest/50 flex gap-6 border-t border-outline-variant/10">
-        <button type="button" onClick={onLike} aria-label={isLiked ? 'Unlike' : 'Like'} className={`flex items-center gap-2 transition-colors ${isLiked ? 'text-primary' : 'text-on-surface-variant hover:text-primary'}`}>
+        <button type="button" onClick={onLike} aria-label={isLiked ? (t.postCard?.unlikeLabel || 'Unlike') : (t.postCard?.likeLabel || 'Like')} className={`flex items-center gap-2 transition-colors ${isLiked ? 'text-primary' : 'text-on-surface-variant hover:text-primary'}`}>
           <Flame className={`w-5 h-5 ${isLiked ? 'fill-primary' : ''}`} />
-          <span className="font-label text-xs font-bold">{post.likes + (isLiked ? 1 : 0)}</span>
+          <span className="font-label text-xs font-bold">{post.likes || 0}</span>
         </button>
-        <button type="button" onClick={() => setShowComments(!showComments)} aria-label="Comments" className="flex items-center gap-2 text-on-surface-variant hover:text-primary transition-colors">
+        <button type="button" onClick={() => setShowComments(!showComments)} aria-label={t.postCard?.commentsLabel || 'Comments'} className="flex items-center gap-2 text-on-surface-variant hover:text-primary transition-colors">
           <MessageSquare className="w-5 h-5" />
           <span className="font-label text-xs font-bold">{post.comments}</span>
         </button>
         {onSave && (
-          <button type="button" onClick={onSave} aria-label={isSaved ? 'Unsave' : 'Save'} className={`flex items-center gap-2 transition-colors ${isSaved ? 'text-primary' : 'text-on-surface-variant hover:text-primary'}`}>
+          <button type="button" onClick={onSave} aria-label={isSaved ? (t.postCard?.unsaveLabel || 'Unsave') : (t.postCard?.saveLabel || 'Save')} className={`flex items-center gap-2 transition-colors ${isSaved ? 'text-primary' : 'text-on-surface-variant hover:text-primary'}`}>
             <Bookmark className={`w-5 h-5 ${isSaved ? 'fill-primary' : ''}`} />
             <span className="font-label text-xs font-bold">{post.saves || 0}</span>
           </button>
         )}
-        <button type="button" onClick={onShare} aria-label="Share" className="flex items-center gap-2 text-on-surface-variant hover:text-primary transition-colors ml-auto">
+        <button type="button" onClick={onShare} aria-label={t.postCard?.shareLabel || 'Share'} className="flex items-center gap-2 text-on-surface-variant hover:text-primary transition-colors ml-auto">
           <Share2 className="w-5 h-5" />
         </button>
       </div>

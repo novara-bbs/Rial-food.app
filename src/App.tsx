@@ -76,8 +76,12 @@ export default function App() {
     handleRealFeelLog, handleImportRecipe, handleAddToPlan,
     handleCheckIn, handleCompleteCheckIn, navigateToRecipe,
     handleLogWeight,
+    setOpenScannerOnAddMeal,
+    notifications,
     recipeToEdit,
   } = useAppState();
+
+  const hasUnreadNotifications = notifications.some(n => !n.read);
 
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
   const [showConsent, setShowConsent] = useState(() => !hasGivenConsent());
@@ -123,11 +127,13 @@ export default function App() {
     if (action === 'create-recipe') navigateTo('create-recipe');
     if (action === 'post-update') navigateTo('create-post');
     if (action === 'import-url') navigateTo('import-url');
+    // scan-barcode lives inside AddMeal; set a transient flag so AddMeal opens the scanner on mount.
+    if (action === 'scan-barcode') { setTargetPlanDay(null); setOpenScannerOnAddMeal(true); navigateTo('add-meal'); }
   };
 
   const renderScreen = () => {
     switch (currentScreen) {
-      case 'home': return <Home onNavigateToRecipe={navigateToRecipe} onCheckIn={handleCheckIn} onAddMeal={() => navigateTo('add-meal')} onNavigateToPlan={() => navigateTo('cocina')} onNavigateToExplore={() => navigateTo('explore')} onNavigateToProgress={() => navigateTo('progress')} dailyMacros={dailyMacros} setDailyMacros={setDailyMacros} checkInStatus={checkInStatus} onLogMealNow={handleLogMealNow} mealPlan={mealPlan} hydration={hydration} setHydration={setHydration} movement={movement} setMovement={setMovement} userProfile={userProfile} realFeelLogs={realFeelLogs} onRealFeelLog={handleRealFeelLog} dailyLog={dailyLog} setDailyLog={setDailyLog} nutritionHistory={nutritionHistory} />;
+      case 'home': return <Home onNavigateToRecipe={navigateToRecipe} onCheckIn={handleCheckIn} onAddMeal={() => navigateTo('add-meal')} onNavigateToPlan={() => navigateTo('cocina')} onNavigateToProgress={() => navigateTo('progress')} dailyMacros={dailyMacros} setDailyMacros={setDailyMacros} checkInStatus={checkInStatus} onLogMealNow={handleLogMealNow} mealPlan={mealPlan} hydration={hydration} setHydration={setHydration} movement={movement} setMovement={setMovement} userProfile={userProfile} realFeelLogs={realFeelLogs} onRealFeelLog={handleRealFeelLog} dailyLog={dailyLog} setDailyLog={setDailyLog} nutritionHistory={nutritionHistory} />;
       case 'cocina': return <Cocina onAddMeal={(dayIndex) => { setTargetPlanDay(dayIndex); navigateTo('add-meal'); }} onCreateRecipe={() => navigateTo('create-recipe')} onNavigateToRecipe={navigateToRecipe} savedRecipes={savedRecipes} setSavedRecipes={setSavedRecipes} mealPlan={mealPlan} setMealPlan={setMealPlan} shoppingList={shoppingList} setShoppingList={setShoppingList} onLogMeal={handleLogMeal} isPro={isPro} onImportUrl={() => navigateTo('import-url')} />;
       case 'explore': return <Explore onNavigateToRecipe={navigateToRecipe} savedRecipes={savedRecipes} onSaveRecipe={handleSaveRecipe} communityPosts={communityPosts} onAddComment={handleAddComment} />;
       case 'more': return <More navigateTo={navigateTo} />;
@@ -233,6 +239,7 @@ export default function App() {
             userName={userProfile?.name}
             isPro={isPro}
             userAvatar={userProfile?.avatar}
+            hasUnreadNotifications={hasUnreadNotifications}
           />
           <main className="flex-1 overflow-y-auto pb-24 md:pb-8 pt-4 hide-scrollbar">
             <ErrorBoundary>

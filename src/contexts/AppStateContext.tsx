@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState, useMemo, useCallback, useEffect } from 'react';
+import React, { createContext, useContext, useState, useMemo, useCallback, useEffect, useRef } from 'react';
 import { toast } from 'sonner';
 import { Recipe, DailyCheckIn as DailyCheckInType, Ingredient } from '../types';
 import { useLocalStorageState } from '../hooks/useLocalStorageState';
@@ -84,6 +84,12 @@ interface AppStateContextType {
   setSelectedRecipe: (v: Recipe | null) => void;
   targetPlanDay: number | null;
   setTargetPlanDay: (v: number | null) => void;
+  /** Transient flag: when true, AddMeal opens the barcode scanner on mount (reset after consume). */
+  openScannerOnAddMeal: boolean;
+  setOpenScannerOnAddMeal: (v: boolean) => void;
+  /** Transient: authorId the user tapped in StoryRingsRow — consumed by StoryViewer to set initial story. */
+  selectedStoryAuthorId: string | null;
+  setSelectedStoryAuthorId: (id: string | null) => void;
   dictionary: Ingredient[];
 
   // Social / creator profile
@@ -101,6 +107,7 @@ interface AppStateContextType {
   handleMarkStoryViewed: (storyId: string) => void;
   notifications: import('../types/social').Notification[];
   markAllNotificationsRead: () => void;
+  markNotificationRead: (notificationId: string) => void;
   selectedChallengeId: string | null;
   setSelectedChallengeId: (id: string | null) => void;
 
@@ -200,18 +207,15 @@ export function AppStateProvider({ children }: { children: React.ReactNode }) {
   // UI state (not persisted)
   const [selectedRecipe, setSelectedRecipe] = useState<Recipe | null>(null);
   const [targetPlanDay, setTargetPlanDay] = useState<number | null>(null);
+  const [openScannerOnAddMeal, setOpenScannerOnAddMeal] = useState<boolean>(false);
+  const [selectedStoryAuthorId, setSelectedStoryAuthorId] = useState<string | null>(null);
   const [selectedCreatorId, setSelectedCreatorId] = useState<string | null>(null);
   const [selectedPostId, setSelectedPostId] = useState<number | null>(null);
   const [likedPosts, setLikedPosts] = useLocalStorageState<number[]>('likedPosts', []);
   const [savedPosts, setSavedPosts] = useLocalStorageState<number[]>('savedPosts', []);
 
-  const toggleLikePost = useCallback((postId: number) => {
-    setLikedPosts((prev: number[]) => prev.includes(postId) ? prev.filter(id => id !== postId) : [...prev, postId]);
-  }, [setLikedPosts]);
-
-  const toggleSavePost = useCallback((postId: number) => {
-    setSavedPosts((prev: number[]) => prev.includes(postId) ? prev.filter(id => id !== postId) : [...prev, postId]);
-  }, [setSavedPosts]);
+  // Toggle handlers are declared further down, after `setCommunityPosts` is
+  // bound, so the callback closure captures the correct setter.
 
   // Persisted state
   const [isPro, setIsPro] = useLocalStorageState<boolean>('isPro', false);
@@ -277,41 +281,85 @@ export function AppStateProvider({ children }: { children: React.ReactNode }) {
     [baseDictionary, userFoods],
   );
 
-  // Seeded content — all lazy-loaded on first mount if localStorage is empty
+  // Seeded content — all lazy-loaded on first mount if localStorage is empty.
   // Skipping the dynamic import when localStorage already has data keeps the
-  // cold-start path tight for returning users.
+  // cold-start path tight for returning users. Inside the async `.then()` we
+  // also use a functional setter guard so a user write that lands between the
+  // sync check and the async resolve is never clobbered by the seed (race).
   const [savedRecipes, setSavedRecipes] = useLocalStorageState<any[]>('savedRecipes', []);
   useEffect(() => {
     if (!window.localStorage.getItem('savedRecipes')) {
-      import('../features/food/data/seed-recipes').then((m) => setSavedRecipes(m.SEED_RECIPES));
+      import('../features/food/data/seed-recipes').then((m) => {
+        setSavedRecipes((prev: any[]) => (prev.length === 0 ? m.SEED_RECIPES : prev));
+      });
     }
   }, []);
 
   const [mealPlan, setMealPlan] = useLocalStorageState<Record<number, any[]>>('mealPlan', {});
   useEffect(() => {
     if (!window.localStorage.getItem('mealPlan')) {
-      import('../features/planner/data/seed-meal-plan').then((m) => setMealPlan(m.SEED_MEAL_PLAN));
+      import('../features/planner/data/seed-meal-plan').then((m) => {
+        setMealPlan((prev: Record<number, any[]>) => (Object.keys(prev).length === 0 ? m.SEED_MEAL_PLAN : prev));
+      });
     }
   }, []);
 
   const [shoppingList, setShoppingList] = useLocalStorageState<ShoppingItem[]>('shoppingList', []);
   useEffect(() => {
     if (!window.localStorage.getItem('shoppingList')) {
-      import('../features/planner/data/seed-shopping').then((m) => setShoppingList(m.SEED_SHOPPING_LIST));
+      import('../features/planner/data/seed-shopping').then((m) => {
+        setShoppingList((prev: ShoppingItem[]) => (prev.length === 0 ? m.SEED_SHOPPING_LIST : prev));
+      });
     }
   }, []);
 
   const [communityPosts, setCommunityPosts] = useLocalStorageState<any[]>('communityPosts', []);
   useEffect(() => {
     if (!window.localStorage.getItem('communityPosts')) {
-      import('../features/social/data/seed-posts').then((m) => setCommunityPosts(m.SEED_POSTS));
+      import('../features/social/data/seed-posts').then((m) => {
+        setCommunityPosts((prev: any[]) => (prev.length === 0 ? m.SEED_POSTS : prev));
+      });
     }
   }, []);
+
+  // Toggles for like/save. Kept id-list for per-user state (cross-device sync +
+  // fast lookup) AND mutate canonical `post.likes`/`post.saves` counter on
+  // `communityPosts` so PostCard can render the real total. Prior code rendered
+  // `post.likes + (isLiked ? 1 : 0)` — cosmetic-only, broke for other-user
+  // likes coming from backend at Q6. Declared after `setCommunityPosts` is
+  // bound (React captures closure at definition time).
+  const toggleLikePost = useCallback((postId: number) => {
+    setLikedPosts((prev: number[]) => {
+      const willLike = !prev.includes(postId);
+      setCommunityPosts((posts: any[]) =>
+        posts.map(p => p.id === postId
+          ? { ...p, likes: Math.max(0, (p.likes || 0) + (willLike ? 1 : -1)) }
+          : p,
+        ),
+      );
+      return willLike ? [...prev, postId] : prev.filter(id => id !== postId);
+    });
+  }, [setLikedPosts, setCommunityPosts]);
+
+  const toggleSavePost = useCallback((postId: number) => {
+    setSavedPosts((prev: number[]) => {
+      const willSave = !prev.includes(postId);
+      setCommunityPosts((posts: any[]) =>
+        posts.map(p => p.id === postId
+          ? { ...p, saves: Math.max(0, (p.saves || 0) + (willSave ? 1 : -1)) }
+          : p,
+        ),
+      );
+      return willSave ? [...prev, postId] : prev.filter(id => id !== postId);
+    });
+  }, [setSavedPosts, setCommunityPosts]);
 
   const [toleranceLogs, setToleranceLogs] = useLocalStorageState<any[]>('toleranceLogs', []);
   useEffect(() => {
     if (!window.localStorage.getItem('toleranceLogs')) {
-      import('../features/wellness/data/seed-tolerance').then((m) => setToleranceLogs(m.SEED_TOLERANCE_LOGS));
+      import('../features/wellness/data/seed-tolerance').then((m) => {
+        setToleranceLogs((prev: any[]) => (prev.length === 0 ? m.SEED_TOLERANCE_LOGS : prev));
+      });
     }
   }, []);
 
@@ -329,6 +377,11 @@ export function AppStateProvider({ children }: { children: React.ReactNode }) {
   const [notifications, setNotifications] = useLocalStorageState<NotificationType[]>('notifications', []);
   const markAllNotificationsRead = useCallback(() => {
     setNotifications((prev: NotificationType[]) => prev.map(n => ({ ...n, read: true })));
+  }, [setNotifications]);
+  const markNotificationRead = useCallback((notificationId: string) => {
+    setNotifications((prev: NotificationType[]) =>
+      prev.map(n => (n.id === notificationId ? { ...n, read: true } : n)),
+    );
   }, [setNotifications]);
 
   // Challenge detail
@@ -388,6 +441,9 @@ export function AppStateProvider({ children }: { children: React.ReactNode }) {
 
   const navigateToRecipe = useCallback((recipe: any) => {
     setSelectedRecipe(recipe);
+    // Mark the Guided Setup "Explora una receta" step complete (Home.tsx reads this key).
+    // useLocalStorageState prefixes with `rial_` — the reader on Home.tsx:250 checks `rial_recipeViewed`.
+    try { window.localStorage.setItem('rial_recipeViewed', '1'); } catch { /* private mode */ }
     navigateTo('recipe-detail');
   }, [navigateTo]);
 
@@ -436,21 +492,29 @@ export function AppStateProvider({ children }: { children: React.ReactNode }) {
     [setSavedRecipes, navigateTo, t],
   );
   const [recipeToEdit, setRecipeToEdit] = useState<any>(null);
+  // Ref getters so the social/story handlers always see the latest userProfile
+  // and translation table without invalidating their identity every render.
+  const userProfileRef = useRef(userProfile);
+  useEffect(() => { userProfileRef.current = userProfile; }, [userProfile]);
+  const tRef = useRef(t);
+  useEffect(() => { tRef.current = t; }, [t]);
+  const getUserProfile = useCallback(() => userProfileRef.current, []);
+  const getT = useCallback(() => tRef.current, []);
   const handleCreatePost = useMemo(
-    () => createHandleCreatePost({ setCommunityPosts, navigateTo }),
-    [setCommunityPosts, navigateTo],
+    () => createHandleCreatePost({ setCommunityPosts, navigateTo, getUserProfile, getT }),
+    [setCommunityPosts, navigateTo, getUserProfile, getT],
   );
   const handlePublishStory = useMemo(
-    () => createHandlePublishStory({ setCommunityStories, navigateTo }),
-    [setCommunityStories, navigateTo],
+    () => createHandlePublishStory({ setCommunityStories, navigateTo, getUserProfile, getT }),
+    [setCommunityStories, navigateTo, getUserProfile, getT],
   );
   const handleMarkStoryViewed = useMemo(
     () => createHandleMarkStoryViewed({ setCommunityStories }),
     [setCommunityStories],
   );
   const handleAddComment = useMemo(
-    () => createHandleAddComment({ setCommunityPosts }),
-    [setCommunityPosts],
+    () => createHandleAddComment({ setCommunityPosts, getUserProfile, getT }),
+    [setCommunityPosts, getUserProfile, getT],
   );
   const handleAddToleranceLog = useMemo(
     () => createHandleAddToleranceLog({ setToleranceLogs, navigateTo }),
@@ -550,13 +614,15 @@ export function AppStateProvider({ children }: { children: React.ReactNode }) {
     nutritionHistory, setNutritionHistory,
     selectedRecipe, setSelectedRecipe,
     targetPlanDay, setTargetPlanDay,
+    openScannerOnAddMeal, setOpenScannerOnAddMeal,
+    selectedStoryAuthorId, setSelectedStoryAuthorId,
     selectedCreatorId, setSelectedCreatorId,
     selectedPostId, setSelectedPostId,
     likedPosts, toggleLikePost,
     savedPosts, toggleSavePost,
     communityStories, setCommunityStories,
     handlePublishStory, handleMarkStoryViewed,
-    notifications, markAllNotificationsRead,
+    notifications, markAllNotificationsRead, markNotificationRead,
     selectedChallengeId, setSelectedChallengeId,
     dictionary: mergedDictionary,
     handleLogMeal,
@@ -591,10 +657,10 @@ export function AppStateProvider({ children }: { children: React.ReactNode }) {
     checkInStatus, setCheckInStatus, userFoods, addUserFood,
     dailyLog, setDailyLog, foodHistory, setFoodHistory, favoriteIds, toggleFavorite,
     weightHistory, setWeightHistory, nutritionHistory, setNutritionHistory,
-    selectedRecipe, targetPlanDay, selectedCreatorId, selectedPostId,
+    selectedRecipe, targetPlanDay, openScannerOnAddMeal, selectedStoryAuthorId, selectedCreatorId, selectedPostId,
     likedPosts, toggleLikePost, savedPosts, toggleSavePost,
     communityStories, setCommunityStories, handlePublishStory, handleMarkStoryViewed,
-    notifications, markAllNotificationsRead, selectedChallengeId,
+    notifications, markAllNotificationsRead, markNotificationRead, selectedChallengeId,
     mergedDictionary,
     handleLogMeal, handleLogMealNow, handleSaveRecipe,
     handleCreatePost, handleAddComment, handleAddToleranceLog,

@@ -101,7 +101,7 @@ export default function Cocina({ onAddMeal, onCreateRecipe, onNavigateToRecipe, 
   };
 
   const handleGenerateList = () => {
-    const dayMeals = Object.values(mealPlan as Record<string, any[]>).flat();
+    const dayMeals = Object.values(mealPlan as Record<number, any[]>).flat();
     if (!dayMeals.length) {
       toast.info(t.cocina.addRecipesFirst);
       return;

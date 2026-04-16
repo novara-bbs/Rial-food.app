@@ -3,6 +3,7 @@ import PageShell from '../../../components/PageShell';
 import { useMemo } from 'react';
 import { useI18n } from '../../../i18n';
 import { useAppState } from '../../../contexts/AppStateContext';
+import { useNavigation } from '../../../contexts/NavigationContext';
 import EmptyState from '../../../components/EmptyState';
 import PageHeader from '../../../components/patterns/PageHeader';
 import type { Notification as NotificationType } from '../../../types/social';
@@ -18,8 +19,48 @@ const ICON_MAP: Record<string, React.ReactNode> = {
 
 export default function Notifications({ onBack }: { onBack: () => void }) {
   const { t } = useI18n();
-  const { notifications, markAllNotificationsRead } = useAppState();
+  const {
+    notifications,
+    markAllNotificationsRead,
+    markNotificationRead,
+    setSelectedPostId,
+    setSelectedCreatorId,
+    setSelectedChallengeId,
+  } = useAppState();
+  const { navigateTo } = useNavigation();
   const notif = t.notifications;
+
+  // Infer nav target from notification type. `targetId` on the Notification
+  // type is the payload id (post id for like/comment/repost/recipe_save;
+  // challenge id for challenge) while `fromUserId` is used for `follow` so
+  // the user lands on the follower's profile.
+  const handleOpenNotification = (n: NotificationType) => {
+    if (!n.read) markNotificationRead(n.id);
+    switch (n.type) {
+      case 'like':
+      case 'comment':
+      case 'repost':
+      case 'recipe_save':
+        if (n.targetId) {
+          const numericId = Number(n.targetId);
+          if (!Number.isNaN(numericId)) {
+            setSelectedPostId(numericId);
+            navigateTo('post-detail');
+          }
+        }
+        break;
+      case 'follow':
+        setSelectedCreatorId(n.fromUserId);
+        navigateTo('creator-profile');
+        break;
+      case 'challenge':
+        if (n.targetId) {
+          setSelectedChallengeId(n.targetId);
+          navigateTo('challenge-detail');
+        }
+        break;
+    }
+  };
 
   const grouped = useMemo(() => {
     const now = new Date();
@@ -55,11 +96,14 @@ export default function Notifications({ onBack }: { onBack: () => void }) {
       <div className="space-y-1">
         <h3 className="font-label text-[9px] tracking-[0.3em] text-on-surface-variant uppercase px-2 py-2">{label}</h3>
         {items.map(n => (
-          <div
+          <button
             key={n.id}
-            className={`flex items-center gap-3 p-3 rounded-sm cursor-pointer hover:bg-surface-container-highest transition-colors ${!n.read ? 'bg-primary/5' : ''}`}
+            type="button"
+            onClick={() => handleOpenNotification(n)}
+            aria-label={`${n.fromUserName} ${getDescription(n)}`}
+            className={`w-full flex items-center gap-3 p-3 rounded-sm text-left hover:bg-surface-container-highest focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary transition-colors ${!n.read ? 'bg-primary/5' : ''}`}
           >
-            <img src={n.fromUserAvatar} alt={n.fromUserName} className="w-10 h-10 rounded-full object-cover shrink-0" referrerPolicy="no-referrer" />
+            <img src={n.fromUserAvatar} alt="" className="w-10 h-10 rounded-full object-cover shrink-0" referrerPolicy="no-referrer" />
             <div className="flex-1 min-w-0">
               <p className="text-xs text-on-surface-variant">
                 <span className="font-headline font-bold text-tertiary">{n.fromUserName}</span>{' '}
@@ -71,9 +115,9 @@ export default function Notifications({ onBack }: { onBack: () => void }) {
             </div>
             <div className="flex items-center gap-2 shrink-0">
               {ICON_MAP[n.type]}
-              {!n.read && <div className="w-2 h-2 bg-primary rounded-full" />}
+              {!n.read && <div className="w-2 h-2 bg-primary rounded-full" aria-hidden="true" />}
             </div>
-          </div>
+          </button>
         ))}
       </div>
     );

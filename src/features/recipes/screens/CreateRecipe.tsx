@@ -77,8 +77,16 @@ export default function CreateRecipe({
   // ── Step 1: Basics ──
   const [title, setTitle] = useState(initialRecipe?.title || '');
   const [description, setDescription] = useState(initialRecipe?.description || '');
-  const [prepTime, setPrepTime] = useState(initialRecipe?.prepTime || '');
-  const [cookTime, setCookTime] = useState(initialRecipe?.cookTime || '');
+  // Numeric minutes. Free-form strings like "1h 30min" used to slip through
+  // and break `Cocina.parseMin()` (→ 1 minute instead of 90). Store as number,
+  // persist as "{n} min" for display continuity with seed data.
+  const parseTimeToMinutes = (v: any): number => {
+    if (typeof v === 'number') return v;
+    const n = parseInt(String(v || ''), 10);
+    return Number.isNaN(n) ? 0 : n;
+  };
+  const [prepTime, setPrepTime] = useState<number>(parseTimeToMinutes(initialRecipe?.prepTime));
+  const [cookTime, setCookTime] = useState<number>(parseTimeToMinutes(initialRecipe?.cookTime));
   const [difficulty, setDifficulty] = useState<'Fácil' | 'Medio' | 'Difícil'>(initialRecipe?.difficulty || 'Fácil');
   const [servings, setServings] = useState(initialRecipe?.servings || 4);
   const [sourceUrl, setSourceUrl] = useState(initialRecipe?.sourceUrl || '');
@@ -203,8 +211,8 @@ export default function CreateRecipe({
       ...(initialRecipe?.id ? { id: initialRecipe.id, tag: initialRecipe.tag, publishedBy: initialRecipe.publishedBy } : {}),
       title: title.trim(),
       description,
-      prepTime: prepTime || '15M',
-      cookTime: cookTime || '15M',
+      prepTime: `${prepTime || 15} min`,
+      cookTime: `${cookTime || 15} min`,
       difficulty,
       servings,
       macros: totals.macros,
@@ -267,13 +275,23 @@ export default function CreateRecipe({
           <div className="grid grid-cols-2 gap-3">
             <div>
               <label className="font-label text-[11px] font-bold tracking-widest uppercase text-on-surface-variant mb-2 block">{t.createRecipe.prepTime}</label>
-              <input type="text" value={prepTime} onChange={e => setPrepTime(e.target.value)} placeholder="15 min"
-                className="w-full bg-surface-container-low border border-outline-variant/30 p-3 font-body text-sm text-tertiary rounded-sm focus:outline-none focus:border-primary transition-all placeholder:text-outline-variant" />
+              <div className="relative">
+                <input type="number" inputMode="numeric" min={0} step={5}
+                  value={prepTime || ''} onChange={e => setPrepTime(Math.max(0, parseInt(e.target.value, 10) || 0))}
+                  placeholder="15"
+                  className="w-full bg-surface-container-low border border-outline-variant/30 p-3 pr-12 font-body text-sm text-tertiary rounded-sm focus:outline-none focus:border-primary transition-all placeholder:text-outline-variant" />
+                <span aria-hidden="true" className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 font-label text-[10px] tracking-widest uppercase text-on-surface-variant">min</span>
+              </div>
             </div>
             <div>
               <label className="font-label text-[11px] font-bold tracking-widest uppercase text-on-surface-variant mb-2 block">{t.createRecipe.cookTime}</label>
-              <input type="text" value={cookTime} onChange={e => setCookTime(e.target.value)} placeholder="20 min"
-                className="w-full bg-surface-container-low border border-outline-variant/30 p-3 font-body text-sm text-tertiary rounded-sm focus:outline-none focus:border-primary transition-all placeholder:text-outline-variant" />
+              <div className="relative">
+                <input type="number" inputMode="numeric" min={0} step={5}
+                  value={cookTime || ''} onChange={e => setCookTime(Math.max(0, parseInt(e.target.value, 10) || 0))}
+                  placeholder="20"
+                  className="w-full bg-surface-container-low border border-outline-variant/30 p-3 pr-12 font-body text-sm text-tertiary rounded-sm focus:outline-none focus:border-primary transition-all placeholder:text-outline-variant" />
+                <span aria-hidden="true" className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 font-label text-[10px] tracking-widest uppercase text-on-surface-variant">min</span>
+              </div>
             </div>
             <div>
               <label className="font-label text-[11px] font-bold tracking-widest uppercase text-on-surface-variant mb-2 block">{t.recipes.difficulty}</label>
@@ -501,7 +519,7 @@ export default function CreateRecipe({
               <h3 className="font-headline text-lg font-bold uppercase text-tertiary">{title || '—'}</h3>
               {description && <p className="text-sm text-on-surface-variant line-clamp-2">{description}</p>}
               <div className="flex items-center gap-3 text-[10px] font-label uppercase tracking-widest text-on-surface-variant flex-wrap">
-                <span className="flex items-center gap-1"><Clock className="w-3 h-3" /> {prepTime || '—'} + {cookTime || '—'}</span>
+                <span className="flex items-center gap-1"><Clock className="w-3 h-3" /> {prepTime ? `${prepTime} min` : '—'} + {cookTime ? `${cookTime} min` : '—'}</span>
                 <span className="flex items-center gap-1"><UtensilsCrossed className="w-3 h-3" /> {difficulty}</span>
                 <span>{servings} {t.recipes.servings}</span>
                 {/* Icon-based food quality instead of emoji */}

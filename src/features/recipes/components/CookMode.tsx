@@ -38,6 +38,7 @@ export default function CookMode({
   const [showIngredients, setShowIngredients] = useState(false);
   const [activeTimers, setActiveTimers] = useState<Record<number, boolean>>({});
   const touchStartX = useRef<number>(0);
+  const closeButtonRef = useRef<HTMLButtonElement | null>(null);
 
   const normalized: NormalizedStep[] = steps.map(s =>
     typeof s === 'string'
@@ -48,17 +49,77 @@ export default function CookMode({
   const step = normalized[current];
   const total = normalized.length;
 
-  // WakeLock — keep screen on while cooking
+  // WakeLock — keep screen on while cooking. Re-acquire on visibilitychange
+  // because browsers silently release the lock when the tab goes background.
   useEffect(() => {
     let lock: any = null;
-    if ('wakeLock' in navigator) {
-      (navigator as any).wakeLock.request('screen').then((l: any) => { lock = l; }).catch(() => {});
-    }
-    return () => { lock?.release?.(); };
+    let released = false;
+
+    const acquire = () => {
+      if (released) return;
+      if (!('wakeLock' in navigator)) return;
+      (navigator as any).wakeLock.request('screen').then((l: any) => {
+        lock = l;
+        l.addEventListener?.('release', () => { lock = null; });
+      }).catch(() => { /* ignore — screen just won't stay on */ });
+    };
+
+    const onVisibilityChange = () => {
+      if (document.visibilityState === 'visible' && !lock) acquire();
+    };
+
+    acquire();
+    document.addEventListener('visibilitychange', onVisibilityChange);
+
+    return () => {
+      released = true;
+      document.removeEventListener('visibilitychange', onVisibilityChange);
+      lock?.release?.();
+    };
+  }, []);
+
+  // Autofocus the close button on mount so users can exit with Tab+Enter
+  // immediately, and so screen readers announce "exit cook mode".
+  useEffect(() => {
+    closeButtonRef.current?.focus();
   }, []);
 
   const goNext = useCallback(() => setCurrent(c => Math.min(c + 1, total - 1)), [total]);
   const goPrev = useCallback(() => setCurrent(c => Math.max(c - 1, 0)), []);
+
+  // Keyboard: Escape closes, arrows navigate
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') { onClose(); return; }
+      if (e.key === 'ArrowRight') { goNext(); return; }
+      if (e.key === 'ArrowLeft') { goPrev(); return; }
+    };
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
+  }, [onClose, goNext, goPrev]);
+
+  // Empty-steps guard — avoid crashing on step.text when steps came empty.
+  if (total === 0) {
+    return (
+      <div
+        className="fixed inset-0 z-[100] bg-neutral-950 flex flex-col items-center justify-center text-on-overlay p-8 text-center"
+        role="dialog"
+        aria-modal="true"
+      >
+        <UtensilsCrossed className="w-10 h-10 text-on-overlay/40 mb-4" aria-hidden="true" />
+        <p className="font-body text-base max-w-sm leading-relaxed">{t.recipeDetail.cookModeNoSteps}</p>
+        <button
+          ref={closeButtonRef}
+          type="button"
+          onClick={onClose}
+          autoFocus
+          className="mt-6 min-h-11 px-6 bg-primary text-on-primary rounded-sm font-headline text-xs font-bold uppercase tracking-widest hover:opacity-90 transition-opacity focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/50"
+        >
+          {t.recipeDetail.cookModeClose}
+        </button>
+      </div>
+    );
+  }
 
   const handleTouchStart = (e: React.TouchEvent) => {
     touchStartX.current = e.touches[0].clientX;
@@ -94,9 +155,11 @@ export default function CookMode({
               <UtensilsCrossed className="w-4 h-4" />
             </button>
           )}
-          <button type="button"
+          <button
+            ref={closeButtonRef}
+            type="button"
             onClick={onClose}
-            className="p-2 rounded-full bg-on-overlay/10 hover:bg-on-overlay/20 transition-colors"
+            className="p-2 rounded-full bg-on-overlay/10 hover:bg-on-overlay/20 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/50"
             aria-label={t.recipeDetail.exitCookMode}
           >
             <X className="w-4 h-4" />

@@ -44,14 +44,18 @@ export function createHandleShareProgress(deps: ShareProgressDeps) {
       photoUrl: snapshot.photoUrl,
     };
 
+    // Fallback name is English-neutral so an i18n-agnostic default never leaks
+    // ES into EN feeds. Callers should pass `author.name` from `userProfile.name`.
+    // `time` is left empty — consumers should derive the display label from
+    // `createdAt` via `formatRelative()` in `lib/dates` + the matching i18n key.
     const post: CommunityPost = {
       id: Date.now(),
       author: {
         id: author?.id ?? 'self',
-        name: author?.name ?? 'Tú',
+        name: author?.name ?? 'You',
         img: author?.img ?? 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=100&q=80',
-        role: author?.role ?? 'Miembro',
-        time: 'Justo ahora',
+        role: author?.role ?? 'Member',
+        time: '',
       },
       content,
       images: [],

@@ -36,7 +36,7 @@ export default function AddMeal({
   dictionary = [],
 }: AddMealProps) {
   const { t } = useI18n();
-  const { userProfile, foodHistory, favoriteIds, toggleFavorite } = useAppState();
+  const { userProfile, foodHistory, favoriteIds, toggleFavorite, openScannerOnAddMeal, setOpenScannerOnAddMeal } = useAppState();
   const unitSystem = userProfile.unitSystem ?? 'metric';
 
   // ─── Local state ───────────────────────────────────────────
@@ -66,6 +66,15 @@ export default function AddMeal({
   const remainingCal = Math.max(0, macros.target.cal - macros.consumed.cal);
   const calPct = Math.min(100, Math.round((macros.consumed.cal / macros.target.cal) * 100));
   const proPct = Math.min(100, Math.round((macros.consumed.pro / macros.target.pro) * 100));
+
+  // Auto-open scanner when FAB "scan-barcode" action requested it (flag set in App.handleCreateAction).
+  // One-shot: reset the flag after consuming so revisiting AddMeal normally doesn't re-open scanner.
+  useEffect(() => {
+    if (openScannerOnAddMeal) {
+      setShowScanner(true);
+      setOpenScannerOnAddMeal(false);
+    }
+  }, [openScannerOnAddMeal, setOpenScannerOnAddMeal]);
 
   // ─── Open Food Facts debounced search ──────────────────────
   // Fires for any query >= 3 chars (tab-independent so unified results include API)

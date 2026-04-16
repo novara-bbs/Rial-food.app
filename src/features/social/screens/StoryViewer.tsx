@@ -9,12 +9,27 @@ const SLIDE_DURATION = 5000;
 
 export default function StoryViewer({ onBack }: { onBack: () => void }) {
   const { t } = useI18n();
-  const { communityStories, handleMarkStoryViewed } = useAppState();
+  const { communityStories, handleMarkStoryViewed, selectedStoryAuthorId, setSelectedStoryAuthorId } = useAppState();
   const activeStories = useMemo(() => cleanExpiredStories(communityStories), [communityStories]);
 
-  const [storyIndex, setStoryIndex] = useState(0);
+  // Initial story: if StoryRingsRow set `selectedStoryAuthorId`, open at that author;
+  // otherwise fall back to index 0. One-shot: reset the context flag after consuming.
+  const initialStoryIndex = useMemo(() => {
+    if (!selectedStoryAuthorId) return 0;
+    const idx = activeStories.findIndex(s => s.authorId === selectedStoryAuthorId);
+    return idx >= 0 ? idx : 0;
+  }, [activeStories, selectedStoryAuthorId]);
+
+  const [storyIndex, setStoryIndex] = useState(initialStoryIndex);
   const [slideIndex, setSlideIndex] = useState(0);
   const [progress, setProgress] = useState(0);
+
+  // Consume the transient `selectedStoryAuthorId` once on mount so a back-nav
+  // re-entry to StoryViewer starts cleanly. Intentionally empty deps.
+  useEffect(() => {
+    if (selectedStoryAuthorId) setSelectedStoryAuthorId(null);
+    // eslint-disable-next-line
+  }, []);
 
   const currentStory = activeStories[storyIndex];
   const currentSlide = currentStory?.slides[slideIndex];
