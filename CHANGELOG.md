@@ -1,5 +1,6 @@
 # RIAL App - Changelog
 
+
 ## [1.5.10] - 2026-04-15
 
 ### Q11 — Progress UX consolidation (Body + Nutrition)
@@ -189,6 +190,38 @@ Q10 fragmented a single `BodySnapshot` (kg + photo + measurements per day) acros
 - `Cocina.tsx` plan tab: renders `<BatchCookingSuggestions>` above the planner when opportunities exist
 - `Progress.tsx`: weight log form now includes optional note field (saved to `WeightEntry.note`); added targetWeight progress bar showing % toward goal using `userProfile.targetWeight`
 - i18n: batch cooking keys (`batchTitle`, `batchDesc`, `batchTimeSaved`, `batchTip`) + weight note placeholder + target progress label in ES + EN
+
+## [1.5.11] - 2026-04-16
+
+### Progress tab — full restructure (Q16 + Q17 + Q17b)
+
+#### Architecture
+- **Progress.tsx** slimmed from 837 lines to 443-line orchestrator — all JSX extracted into 4 focused components
+- **4 new components**: `WeeklyScoreCard`, `ConsistencyCalendar`, `InlineReflection`, `WeightTrendCard`
+- **WeeklyReview screen deleted** — functionality absorbed into Progress inline reflection
+- `App.tsx`: `weekly-review` route now renders `<Progress />` for backwards compatibility
+
+#### User-visible improvements
+- **Weekly score ring** (0–100, color-coded) as hero metric in Nutrición tab
+- **Tab order changed**: Nutrición first (core use case), then Cuerpo
+- **Top meals this week** section shows highest-kcal meals from the week
+- **Calendar day-detail**: tap any logged day to see kcal / protein / meal count / vitality
+- **Activity row**: hydration (cups), steps, active minutes — inline in Esta Semana card
+- **Adherence bars enhanced**: each bar now shows raw avg value + % + delta vs prior week (Nutrition Summary section eliminated as redundant)
+- **Streak removed from Esta Semana** — now shows `daysLogged/7` (streak has its own home in Consistency Calendar)
+- **Bienestar unified to 1–5 scale** everywhere (was confusingly split: rawAvg/5 in header, avgVitality/100 in section)
+- **Home progress link** always visible when data exists (was Sunday-only)
+
+#### Bug fixes
+- **B1 — Week-start Sunday bug**: `getDay() * 86_400_000` gave "today" when called on Sunday and was DST-unsafe; replaced with `getWeekStartISO()` using `setDate`
+- **B2 — Hardcoded `es-ES` locale**: calendar month label and day-detail date now use locale from `useI18n()`
+- **B3 — Hardcoded Spanish day headers**: `['L','M','X','J','V','S','D']` replaced with i18n `t.progress.dayHeaders`
+- **B4 — mealsLogged counted RF logs not meals**: reflection save now counts from `history.mealCount` + `dailyLog.length`
+- **B5 — Bienestar metric scope mismatch**: `avgVitality` (7 logs × 20) removed; `rawAvg` (1–5, last 14 logs) used everywhere
+
+#### i18n
+- Added `dayHeaders`, `mealCount`, `daysLogged` keys to both `es.ts` and `en.ts`
+
 
 ## [1.5.2] - 2026-04-14
 

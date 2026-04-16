@@ -23,7 +23,7 @@ const {
   Home, Explore, Cocina, More, RecipeDetail, AddMeal, AddTolerance,
   DailyCheckIn, CreateRecipe, CreatePost, AICoach, RealFeelDiary,
   FastingTimer, ImportRecipeURL, Settings, Profile, Pantry,
-  WeeklyCheckIn, WeeklyReview, RialPlus, CreatorVerification, CreatorDashboard, FoodDictionary,
+  WeeklyCheckIn, RialPlus, CreatorVerification, CreatorDashboard, FoodDictionary,
   Challenges, CreatorProfile, PostDetail, StoryViewer, CreateStory,
   Notifications: NotificationsScreen, ChallengeDetail, Progress,
   Login, Signup, ForgotPassword,
@@ -125,7 +125,7 @@ export default function App() {
 
   const renderScreen = () => {
     switch (currentScreen) {
-      case 'home': return <Home onNavigateToRecipe={navigateToRecipe} onCheckIn={handleCheckIn} onAddMeal={() => navigateTo('add-meal')} onNavigateToPlan={() => navigateTo('cocina')} onNavigateToExplore={() => navigateTo('explore')} onNavigateToProgress={() => navigateTo('progress')} onNavigateToWeeklyReview={() => navigateTo('weekly-review')} dailyMacros={dailyMacros} setDailyMacros={setDailyMacros} checkInStatus={checkInStatus} onLogMealNow={handleLogMealNow} mealPlan={mealPlan} hydration={hydration} setHydration={setHydration} movement={movement} setMovement={setMovement} userProfile={userProfile} realFeelLogs={realFeelLogs} onRealFeelLog={handleRealFeelLog} dailyLog={dailyLog} setDailyLog={setDailyLog} nutritionHistory={nutritionHistory} />;
+      case 'home': return <Home onNavigateToRecipe={navigateToRecipe} onCheckIn={handleCheckIn} onAddMeal={() => navigateTo('add-meal')} onNavigateToPlan={() => navigateTo('cocina')} onNavigateToExplore={() => navigateTo('explore')} onNavigateToProgress={() => navigateTo('progress')} dailyMacros={dailyMacros} setDailyMacros={setDailyMacros} checkInStatus={checkInStatus} onLogMealNow={handleLogMealNow} mealPlan={mealPlan} hydration={hydration} setHydration={setHydration} movement={movement} setMovement={setMovement} userProfile={userProfile} realFeelLogs={realFeelLogs} onRealFeelLog={handleRealFeelLog} dailyLog={dailyLog} setDailyLog={setDailyLog} nutritionHistory={nutritionHistory} />;
       case 'cocina': return <Cocina onAddMeal={(dayIndex) => { setTargetPlanDay(dayIndex); navigateTo('add-meal'); }} onCreateRecipe={() => navigateTo('create-recipe')} onNavigateToRecipe={navigateToRecipe} savedRecipes={savedRecipes} setSavedRecipes={setSavedRecipes} mealPlan={mealPlan} setMealPlan={setMealPlan} shoppingList={shoppingList} setShoppingList={setShoppingList} onLogMeal={handleLogMeal} isPro={isPro} onImportUrl={() => navigateTo('import-url')} />;
       case 'explore': return <Explore onNavigateToRecipe={navigateToRecipe} savedRecipes={savedRecipes} onSaveRecipe={handleSaveRecipe} communityPosts={communityPosts} onAddComment={handleAddComment} />;
       case 'more': return <More navigateTo={navigateTo} />;
@@ -143,7 +143,7 @@ export default function App() {
       case 'fasting-timer': return <FastingTimer onBack={() => navigateTo('more')} />;
       case 'pantry': return <Pantry onBack={() => navigateTo('more')} />;
       case 'weekly-check-in': return <WeeklyCheckIn onBack={() => navigateTo('more')} />;
-      case 'weekly-review': return <WeeklyReview onBack={() => navigateTo('more')} />;
+      case 'weekly-review': return <Progress onBack={() => navigateTo('more')} />; // Q16: absorbed into Progress
       case 'rial-plus': return <RialPlus onBack={() => navigateTo('more')} />;
       case 'import-url': return <ImportRecipeURL onBack={() => navigateTo(previousScreen)} onImport={handleImportRecipe} />;
       case 'creator-verification': return <CreatorVerification onBack={() => navigateTo('more')} />;
