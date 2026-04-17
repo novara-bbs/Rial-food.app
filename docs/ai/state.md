@@ -1,16 +1,19 @@
 # RIAL Current State
 
-Last updated: 2026-04-18 (post Wave 3 commit, Wave 4 in progress)
+Last updated: 2026-04-17 (post seed-hydration fix, pre-push)
 
 ## Release snapshot
-- Root branch: `main`. **Ahead of `rial-food/main` by 4 commits** (Waves 0-3 of 2026-04-18 tab audit) + pending Wave 4 docs commit. No pushes performed per governance "no puseamos hasta le final" — awaiting explicit approval.
+- Root branch: `main`, in sync with `rial-food/main`. **1 pending local commit** (`[1.5.22]` seed-hydration fix) awaiting explicit push approval per governance "no puseamos hasta le final".
 - Release remote: `rial-food` (worktree remote: `origin`)
 - Active Vercel project: `rial.app.v1.5`
 - Vercel project id: `prj_t11VHYQjptazjUx7Y2hWLz0IDAjg`
 - **Governance (2026-04-17):** work directly on `main`. No feature branches, no worktrees going forward. Reconcile in-flight divergence by merging directly into `main`.
 
-## Recent commits on `main` (not yet pushed)
-- `(pending)` `docs(wave-4): AUDIT-TAB-2026-04-18 + state + CHANGELOG 1.5.21`
+## Recent commits on `main` (pending = not yet pushed)
+- `(pending)` `fix(seed-hydration): versioned re-hydration so existing users receive bumped seeds`
+- `0dd90eb` `fix(e2e): scope nav tests to mobile viewport + unprefixed localStorage seeds`
+- `53e8434` `fix(e2e): force Playwright locale to es-ES so i18n-anchored selectors pass on CI`
+- `e46ec12` `docs(wave-4): AUDIT-TAB-2026-04-18 close-out + CHANGELOG 1.5.21 + state snapshot + NEW-SCREEN-CHECKLIST`
 - `26ba1bd` `refactor(wave-3): Explora tab polish — factory handlers + drift purge + i18n + Discover relocation`
 - `7db26c8` `refactor(wave-2): Cocina tab polish — drift purge, HIG taps, unsave confirm, iframe sandbox, mealSlot picker`
 - `ecb73fa` `refactor(wave-1): Hoy tab polish — drift purge, empty states, HIG taps, memo, i18n, SyncKey`
@@ -47,7 +50,7 @@ Collateral: my Q16 pilot migration on `WeeklyCheckIn.tsx` + `WeeklyReview.tsx` i
 
 ## Quality baseline (2026-04-18, post Wave 3)
 - TypeScript: 0 errors (`npx tsc --noEmit`)
-- Tests: **501/501** unit tests passing (+20 since 2026-04-17 via Waves 1-3 handler + guided-setup + recipe import tests)
+- Tests: **515/515** unit tests passing (+14 since 2026-04-18 via `seedVersion.test.ts`)
 - i18n symmetry: **1475** keys aligned ES ↔ EN (`npm run check:i18n`) — +47 since merge (Guided Setup, social i18n sweep, `t.common.close`, StoryViewer labels)
 - Design-system lint: 0 errors, **~862** warnings (-110 since walkthrough — Waves 1-3 drift purge). All Q16 allowlist entries downgraded; new files still error.
 - Build (measured 2026-04-18 via `npm run release:preflight`):
@@ -103,6 +106,7 @@ Plan file: `.claude/plans/replicated-orbiting-coral.md`. Close-out doc: `docs/AU
 - State: localStorage via `useLocalStorageState` in `AppStateContext`
 - New handlers: factory function in `features/*/handlers/`, wired in `AppStateContext`
 - All user-visible strings: `t.section.key` via `useI18n()`
+- **Seed hydration**: every lazy-loaded seed goes through `src/lib/seedVersion.ts`. Add the key to `SEED_VERSIONS`, call `shouldReseed(key, dataKey)` to guard the `useEffect`, stamp `setStoredSeedVersion(key)` after a successful import. When you change a seed's semantic content and want existing users to receive it, **bump the version** — never decrease. Pick a merge strategy in `AppStateContext`: `preserve-user` (savedRecipes), `preserve-if-nonempty` (transactional logs + plans), `replace` (demo-only content). Cross-device propagation is a separate problem the Q6 Supabase sync layer will tackle.
 - Archived product/market docs: `docs/archive/` (not loaded by agents)
 
 ## Current risks to watch

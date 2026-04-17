@@ -23,6 +23,7 @@ import { createHandleAddToleranceLog, createHandleRealFeelLog, createHandleCheck
 import { createHandleLogWeight, createHandleUpdateSnapshot, createHandleDeleteSnapshot, type LogWeightArgs } from '../features/wellness/handlers/weight-handlers';
 import { createHandleShareProgress } from '../features/wellness/handlers/progress-share-handlers';
 import { createHandleLoadDemoSeed, createHandleClearDemoSeed } from '../features/dev/handlers/demo-seed-handlers';
+import { shouldReseed, setStoredSeedVersion } from '../lib/seedVersion';
 import type { BodySnapshot } from '../types/wellness';
 import type { CommunityPost } from '../types/social';
 
@@ -302,45 +303,85 @@ export function AppStateProvider({ children }: { children: React.ReactNode }) {
     [baseDictionary, userFoods],
   );
 
-  // Seeded content — all lazy-loaded on first mount if localStorage is empty.
-  // Skipping the dynamic import when localStorage already has data keeps the
-  // cold-start path tight for returning users. Inside the async `.then()` we
-  // also use a functional setter guard so a user write that lands between the
-  // sync check and the async resolve is never clobbered by the seed (race).
+  // Seeded content — all lazy-loaded on first mount via `shouldReseed()`.
+  // The presence-only guard used before meant bumps to a seed file never
+  // reached users who had visited a previous deploy (their localStorage
+  // already had the old array, so the import was skipped forever). Now
+  // each key has a version in `src/lib/seedVersion.ts`; bumping it causes
+  // existing users to re-hydrate on next mount.
+  //
+  // Three merge strategies — chosen per key by data nature:
+  //   • preserve-user   — dedup by `id`, keep items where publishedBy==='self'
+  //                       or tag==='IMPORTADA', replace rest with fresh seed.
+  //                       Only `savedRecipes` (mixed user/demo content).
+  //   • preserve-if-nonempty — if user already has data, don't touch it;
+  //                       only re-seed an empty slot. For transactional logs
+  //                       and the meal plan.
+  //   • replace         — overwrite completely. For demo-only content
+  //                       (communityPosts, communityStories).
+  //
+  // Functional setter guards still protect against the race where a user
+  // write lands between `shouldReseed()` and the async `.then()`.
+  // `.catch()` is added so a failed chunk (network flake, CDN edge issue)
+  // surfaces in DevTools instead of disappearing silently.
   const [savedRecipes, setSavedRecipes] = useLocalStorageState<any[]>('savedRecipes', []);
   useEffect(() => {
-    if (!window.localStorage.getItem('savedRecipes')) {
-      import('../features/food/data/seed-recipes').then((m) => {
-        setSavedRecipes((prev: any[]) => (prev.length === 0 ? m.SEED_RECIPES : prev));
-      });
-    }
+    if (!shouldReseed('savedRecipes', 'savedRecipes')) return;
+    import('../features/food/data/seed-recipes')
+      .then((m) => {
+        // preserve-user: keep user-created + imported recipes; replace the rest.
+        setSavedRecipes((prev: any[]) => {
+          if (prev.length === 0) return m.SEED_RECIPES;
+          const userOwned = prev.filter(
+            (r) => r && (r.publishedBy === 'self' || r.tag === 'IMPORTADA'),
+          );
+          const userIds = new Set(userOwned.map((r) => r.id));
+          const seedFresh = m.SEED_RECIPES.filter((r: any) => !userIds.has(r.id));
+          return [...userOwned, ...seedFresh];
+        });
+        setStoredSeedVersion('savedRecipes');
+      })
+      .catch((err) => console.warn('[seed] savedRecipes load failed', err));
   }, []);
 
   const [mealPlan, setMealPlan] = useLocalStorageState<Record<number, any[]>>('mealPlan', {});
   useEffect(() => {
-    if (!window.localStorage.getItem('mealPlan')) {
-      import('../features/planner/data/seed-meal-plan').then((m) => {
-        setMealPlan((prev: Record<number, any[]>) => (Object.keys(prev).length === 0 ? m.SEED_MEAL_PLAN : prev));
-      });
-    }
+    if (!shouldReseed('mealPlan', 'mealPlan')) return;
+    import('../features/planner/data/seed-meal-plan')
+      .then((m) => {
+        // preserve-if-nonempty: user's existing plan is sacred.
+        setMealPlan((prev: Record<number, any[]>) =>
+          Object.keys(prev).length === 0 ? m.SEED_MEAL_PLAN : prev,
+        );
+        setStoredSeedVersion('mealPlan');
+      })
+      .catch((err) => console.warn('[seed] mealPlan load failed', err));
   }, []);
 
   const [shoppingList, setShoppingList] = useLocalStorageState<ShoppingItem[]>('shoppingList', []);
   useEffect(() => {
-    if (!window.localStorage.getItem('shoppingList')) {
-      import('../features/planner/data/seed-shopping').then((m) => {
-        setShoppingList((prev: ShoppingItem[]) => (prev.length === 0 ? m.SEED_SHOPPING_LIST : prev));
-      });
-    }
+    if (!shouldReseed('shoppingList', 'shoppingList')) return;
+    import('../features/planner/data/seed-shopping')
+      .then((m) => {
+        // preserve-if-nonempty: user may have a real list in progress.
+        setShoppingList((prev: ShoppingItem[]) =>
+          prev.length === 0 ? m.SEED_SHOPPING_LIST : prev,
+        );
+        setStoredSeedVersion('shoppingList');
+      })
+      .catch((err) => console.warn('[seed] shoppingList load failed', err));
   }, []);
 
   const [communityPosts, setCommunityPosts] = useLocalStorageState<any[]>('communityPosts', []);
   useEffect(() => {
-    if (!window.localStorage.getItem('communityPosts')) {
-      import('../features/social/data/seed-posts').then((m) => {
-        setCommunityPosts((prev: any[]) => (prev.length === 0 ? m.SEED_POSTS : prev));
-      });
-    }
+    if (!shouldReseed('communityPosts', 'communityPosts')) return;
+    import('../features/social/data/seed-posts')
+      .then((m) => {
+        // replace: demo content, Q6 will swap this for backend-sourced posts.
+        setCommunityPosts(m.SEED_POSTS);
+        setStoredSeedVersion('communityPosts');
+      })
+      .catch((err) => console.warn('[seed] communityPosts load failed', err));
   }, []);
 
   // Toggles for like/save. Kept id-list for per-user state (cross-device sync +
@@ -377,11 +418,16 @@ export function AppStateProvider({ children }: { children: React.ReactNode }) {
 
   const [toleranceLogs, setToleranceLogs] = useLocalStorageState<any[]>('toleranceLogs', []);
   useEffect(() => {
-    if (!window.localStorage.getItem('toleranceLogs')) {
-      import('../features/wellness/data/seed-tolerance').then((m) => {
-        setToleranceLogs((prev: any[]) => (prev.length === 0 ? m.SEED_TOLERANCE_LOGS : prev));
-      });
-    }
+    if (!shouldReseed('toleranceLogs', 'toleranceLogs')) return;
+    import('../features/wellness/data/seed-tolerance')
+      .then((m) => {
+        // preserve-if-nonempty: a user's tolerance journal is their record.
+        setToleranceLogs((prev: any[]) =>
+          prev.length === 0 ? m.SEED_TOLERANCE_LOGS : prev,
+        );
+        setStoredSeedVersion('toleranceLogs');
+      })
+      .catch((err) => console.warn('[seed] toleranceLogs load failed', err));
   }, []);
 
   const [realFeelLogs, setRealFeelLogs] = useLocalStorageState<any[]>('realFeelLogs', []);
@@ -389,9 +435,14 @@ export function AppStateProvider({ children }: { children: React.ReactNode }) {
   // Stories — lazy-seeded
   const [communityStories, setCommunityStories] = useLocalStorageState<Story[]>('communityStories', []);
   useEffect(() => {
-    if (!window.localStorage.getItem('communityStories')) {
-      import('../features/social/data/seed-stories').then((m) => setCommunityStories(m.SEED_STORIES));
-    }
+    if (!shouldReseed('communityStories', 'communityStories')) return;
+    import('../features/social/data/seed-stories')
+      .then((m) => {
+        // replace: demo content, Q6 will swap for backend-sourced stories.
+        setCommunityStories(m.SEED_STORIES);
+        setStoredSeedVersion('communityStories');
+      })
+      .catch((err) => console.warn('[seed] communityStories load failed', err));
   }, []);
 
   // Notifications
@@ -425,32 +476,67 @@ export function AppStateProvider({ children }: { children: React.ReactNode }) {
 
   // Weight history — lazy-seeded
   useEffect(() => {
-    if (!window.localStorage.getItem('weightHistory')) {
-      import('../features/wellness/data/seed-body-snapshots').then((m) => setWeightHistory(m.BODY_SNAPSHOT_SEED));
-    }
+    if (!shouldReseed('weightHistory', 'weightHistory')) return;
+    import('../features/wellness/data/seed-body-snapshots')
+      .then((m) => {
+        // preserve-if-nonempty: user's weight history is their record.
+        setWeightHistory((prev: BodySnapshot[]) =>
+          prev.length === 0 ? m.BODY_SNAPSHOT_SEED : prev,
+        );
+        setStoredSeedVersion('weightHistory');
+      })
+      .catch((err) => console.warn('[seed] weightHistory load failed', err));
   }, []);
 
   // Nutrition history — lazy-seeded
   useEffect(() => {
-    if (!window.localStorage.getItem('nutritionHistory')) {
-      import('../features/wellness/data/seed-nutrition-history').then((m) => setNutritionHistory(m.SEED_NUTRITION_HISTORY));
-    }
+    if (!shouldReseed('nutritionHistory', 'nutritionHistory')) return;
+    import('../features/wellness/data/seed-nutrition-history')
+      .then((m) => {
+        // preserve-if-nonempty: user's daily archive is their record.
+        setNutritionHistory((prev: DailyArchive[]) =>
+          prev.length === 0 ? m.SEED_NUTRITION_HISTORY : prev,
+        );
+        setStoredSeedVersion('nutritionHistory');
+      })
+      .catch((err) => console.warn('[seed] nutritionHistory load failed', err));
   }, []);
 
   // RealFeel logs — lazy-seeded
   useEffect(() => {
-    if (!window.localStorage.getItem('realFeelLogs')) {
-      import('../features/wellness/data/seed-real-feel-logs').then((m) => setRealFeelLogs(m.SEED_REAL_FEEL_LOGS));
-    }
+    if (!shouldReseed('realFeelLogs', 'realFeelLogs')) return;
+    import('../features/wellness/data/seed-real-feel-logs')
+      .then((m) => {
+        // preserve-if-nonempty: user's mood/feel journal is their record.
+        setRealFeelLogs((prev: any[]) =>
+          prev.length === 0 ? m.SEED_REAL_FEEL_LOGS : prev,
+        );
+        setStoredSeedVersion('realFeelLogs');
+      })
+      .catch((err) => console.warn('[seed] realFeelLogs load failed', err));
   }, []);
 
-  // Weekly check-ins — lazy-seeded (stored directly; WeeklyCheckIn reads via useLocalStorageState)
+  // Weekly check-ins — lazy-seeded. Writes directly to localStorage because
+  // WeeklyCheckIn screen owns its own `useLocalStorageState('weeklyCheckIns')`;
+  // we just pre-populate the slot before the screen mounts.
   useEffect(() => {
-    if (!window.localStorage.getItem('weeklyCheckIns')) {
-      import('../features/wellness/data/seed-weekly-checkins').then((m) => {
-        window.localStorage.setItem('weeklyCheckIns', JSON.stringify(m.SEED_WEEKLY_CHECKINS));
-      });
-    }
+    if (!shouldReseed('weeklyCheckIns', 'weeklyCheckIns')) return;
+    import('../features/wellness/data/seed-weekly-checkins')
+      .then((m) => {
+        // preserve-if-nonempty: only seed if no check-ins exist yet. We can't
+        // use a React setter here, so read-then-write with JSON.parse guard.
+        try {
+          const raw = window.localStorage.getItem('weeklyCheckIns');
+          const existing = raw ? JSON.parse(raw) : [];
+          if (!Array.isArray(existing) || existing.length === 0) {
+            window.localStorage.setItem('weeklyCheckIns', JSON.stringify(m.SEED_WEEKLY_CHECKINS));
+          }
+        } catch {
+          window.localStorage.setItem('weeklyCheckIns', JSON.stringify(m.SEED_WEEKLY_CHECKINS));
+        }
+        setStoredSeedVersion('weeklyCheckIns');
+      })
+      .catch((err) => console.warn('[seed] weeklyCheckIns load failed', err));
   }, []);
 
   // Daily food diary log (persisted, cleared manually or on new day)

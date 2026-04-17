@@ -1,5 +1,31 @@
 # RIAL App - Changelog
 
+## [1.5.22] - 2026-04-17
+
+### fix(seed-hydration) — existing users now receive bumped seed content
+
+Fixes a persistence bug where users who had visited a prior deploy stayed pinned on stale seed data forever. Concretely: Cocina showed ~5 recipes on the Vercel deploy while `npm run dev` (fresh localStorage) showed 46. Same pattern affected 10 other seed keys.
+
+**Root cause.** `AppStateContext.tsx` guarded each seed hydration with `if (!localStorage.getItem(<key>))`. After the first visit the key existed, so subsequent deploys with bumped seed content never re-hydrated — the lazy chunk import was skipped entirely.
+
+**Fix.** New `src/lib/seedVersion.ts` util with a per-key `SEED_VERSIONS` registry and a `rial_seedVersion_<key>` marker in localStorage. Each seed `useEffect` now calls `shouldReseed(key, dataKey)` (true on cold start OR when stored version < current) and stamps the current version via `setStoredSeedVersion(key)` after a successful import. Three merge strategies chosen per key: `preserve-user` (savedRecipes keeps `publishedBy: 'self'` + `tag: 'IMPORTADA'`), `preserve-if-nonempty` (transactional logs and meal plan), `replace` (demo-only content like communityPosts / communityStories, to be replaced by backend at Q6).
+
+**Added**
+- `src/lib/seedVersion.ts` — `SEED_VERSIONS` registry, `shouldReseed`, `getStoredSeedVersion`, `setStoredSeedVersion`, `clearSeed`, `ALL_SEED_KEYS`.
+- `src/lib/seedVersion.test.ts` — 14 unit tests covering registry validation, cold start, pre-versioning era, stale version, equal version, future-compat, garbage markers, clear idempotency.
+- `e2e/seed-hydration.spec.ts` — Playwright test covering stale-version re-hydration preserving user-owned recipes, cold-start seeding with version stamping, and up-to-date no-op.
+- `.catch((err) => console.warn(...))` on all 10 dynamic seed imports — chunk failures now surface in DevTools instead of disappearing silently.
+
+**Changed**
+- `src/contexts/AppStateContext.tsx` — 10 seed `useEffect`s refactored from presence-only guard to versioned `shouldReseed()` + strategy-specific merge + `setStoredSeedVersion()` + `.catch()`. Large inline comment block documents the three strategies.
+- `SEED_VERSIONS.savedRecipes = 2` — reflects the 46-recipe sprint-q18 overhaul. Users pinned to the old 5-recipe array will re-hydrate on next mount, preserving any recipes they created (`publishedBy: 'self'`) or imported (`tag: 'IMPORTADA'`).
+- `SEED_VERSIONS.communityPosts = 2` — reflects sprint-q18 post expansion (6 posts with progress types).
+
+**Notes**
+- User-reported scenario is now self-healing: their marker is absent → stored version resolves to 0 → 0 < 2 triggers reseed on next load. No manual reset required.
+- `DemoSeedCard` (existing) + its `createHandleClearDemoSeed` handler in `src/features/dev/handlers/demo-seed-handlers.ts` still exists as an escape hatch; note that handler has a pre-existing localStorage prefix mismatch (it calls `removeItem('rial_${key}')` but `useLocalStorageState` writes keys unprefixed). Flagged as follow-up, out of scope for this fix.
+- Testing baseline: TypeScript 0 errors, lint 0 errors, 515/515 unit tests passing (+14), build + size budgets green.
+
 ## [1.5.21] - 2026-04-18
 
 ### refactor(audit-tab) — Hoy / Cocina / Explora tab audit (5 waves)
