@@ -62,3 +62,22 @@ export async function shareContent(options: { title?: string; text?: string; url
     await navigator.clipboard.writeText(options.url);
   }
 }
+
+/**
+ * Open an external video URL (TikTok, Instagram, Vimeo, arbitrary web).
+ *
+ * On native: uses `@capacitor/browser`, which lets iOS Universal Links and
+ * Android App Links hand off to the installed app first; if no app is
+ * registered for the URL the system falls back to the in-app browser. On
+ * web: opens a new tab with `noopener,noreferrer` to avoid leaking the
+ * `window.opener` reference.
+ */
+export async function openExternalVideo(url: string): Promise<void> {
+  if (!url) return;
+  if (isNative) {
+    const { Browser } = await import('@capacitor/browser');
+    await Browser.open({ url, presentationStyle: 'popover' });
+    return;
+  }
+  window.open(url, '_blank', 'noopener,noreferrer');
+}

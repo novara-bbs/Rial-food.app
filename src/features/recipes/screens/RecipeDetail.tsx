@@ -2,6 +2,9 @@ import { ArrowLeft, Clock, Flame, Activity, Minus, CheckCircle2, Circle, Plus, M
 import SearchInput from '../../../components/patterns/SearchInput';
 import { useState, useMemo, useEffect } from 'react';
 import CookMode from '../components/CookMode';
+import HeroGallery from '../components/HeroGallery';
+import MediaLightbox from '../components/MediaLightbox';
+import VideoSection from '../components/VideoSection';
 import PublishRecipeSheet from '../../social/components/PublishRecipeSheet';
 import RecipeNutritionBar from '../components/RecipeNutritionBar';
 import RecipeSubstitutionPicker from '../components/RecipeSubstitutionPicker';
@@ -14,6 +17,7 @@ import { toast } from 'sonner';
 import { getRecipeSwaps } from '../utils/substitutions';
 import { calculateMatchScore } from '../utils/matchScore';
 import { getGoalSuggestions } from '../utils/goalOptimizer';
+import { defaultSlotFor } from '../utils/meal-slot';
 import { trackRecipeView } from '../../social/utils/analytics';
 import { CREATORS_MAP } from '../../social/data/seed-creators';
 import { useNavigation } from '../../../contexts/NavigationContext';
@@ -39,6 +43,7 @@ export default function RecipeDetail({ recipe, onBack, onSaveRecipe, isSaved, on
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
   const [showDuplicateConfirm, setShowDuplicateConfirm] = useState(false);
   const [showUnsaveConfirm, setShowUnsaveConfirm] = useState(false);
+  const [lightboxIdx, setLightboxIdx] = useState<number | null>(null);
 
   // Track recipe view on mount
   useEffect(() => {
@@ -236,6 +241,11 @@ export default function RecipeDetail({ recipe, onBack, onSaveRecipe, isSaved, on
   const hasCreator = !!(data.publishedBy && data.publishedBy !== 'self' && CREATORS_MAP[data.publishedBy]);
   const hasAttribution = hasCreator || data.publishedBy === 'self' || !!data.forkedFrom;
 
+  // Consolidated photo list: prefer `photos[]`, fall back to legacy single `img`/`image`.
+  const galleryPhotos: string[] = (data.photos && data.photos.length > 0)
+    ? data.photos
+    : [data.img || data.image].filter(Boolean);
+
   return (
     <>
     {cookModeActive && (
@@ -247,10 +257,15 @@ export default function RecipeDetail({ recipe, onBack, onSaveRecipe, isSaved, on
       />
     )}
     <div>
-      {/* ══ Hero Image ══ */}
-      <div className="relative h-56 md:h-72 w-full">
-        <img src={data.img || data.image} alt={data.title} className="w-full h-full object-cover" referrerPolicy="no-referrer" />
-        <div className="absolute inset-0 bg-gradient-to-t from-background via-background/30 to-transparent" />
+      {/* ══ Hero Image / Gallery ══ */}
+      <div className="relative h-56 md:h-72 w-full overflow-hidden">
+        <HeroGallery
+          photos={galleryPhotos}
+          alt={data.title}
+          onTap={galleryPhotos.length > 0 ? (idx) => setLightboxIdx(idx) : undefined}
+          className="absolute inset-0"
+        />
+        <div className="absolute inset-0 bg-gradient-to-t from-background via-background/30 to-transparent pointer-events-none" />
 
         <button type="button" onClick={onBack} aria-label={t.common.back} className="absolute top-4 left-4 w-10 h-10 bg-surface/80 backdrop-blur-md rounded-full flex items-center justify-center text-tertiary hover:bg-primary hover:text-on-primary transition-colors z-10">
           <ArrowLeft className="w-5 h-5" />
@@ -388,44 +403,8 @@ export default function RecipeDetail({ recipe, onBack, onSaveRecipe, isSaved, on
           hasAttribution={hasAttribution}
         />
 
-        {/* ── Video embed (YouTube / TikTok) ── */}
-        {data.videoUrl && (() => {
-          const ytMatch = data.videoUrl.match(/(?:youtu\.be\/|youtube\.com\/(?:watch\?v=|embed\/|shorts\/))([a-zA-Z0-9_-]{11})/);
-          const ttMatch = data.videoUrl.match(/tiktok\.com\/@[\w.-]+\/video\/(\d+)/);
-          if (ytMatch?.[1]) {
-            return (
-              <div className="mt-4 rounded-sm overflow-hidden border border-outline-variant/20">
-                <div className="aspect-video bg-surface-container-low relative">
-                  <iframe
-                    src={`https://www.youtube-nocookie.com/embed/${ytMatch[1]}`}
-                    title="Recipe video"
-                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                    sandbox="allow-scripts allow-same-origin allow-presentation"
-                    allowFullScreen
-                    className="absolute inset-0 w-full h-full"
-                  />
-                </div>
-              </div>
-            );
-          }
-          if (ttMatch?.[1]) {
-            return (
-              <div className="mt-4 rounded-sm overflow-hidden border border-outline-variant/20">
-                <div className="aspect-[9/16] max-h-[500px] bg-surface-container-low relative">
-                  <iframe
-                    src={`https://www.tiktok.com/embed/v2/${ttMatch[1]}`}
-                    title="Recipe video"
-                    allow="encrypted-media"
-                    sandbox="allow-scripts allow-same-origin allow-presentation"
-                    allowFullScreen
-                    className="absolute inset-0 w-full h-full"
-                  />
-                </div>
-              </div>
-            );
-          }
-          return null;
-        })()}
+        {/* ── Video (YouTube inline / TikTok·IG·Vimeo link-out) ── */}
+        <VideoSection videoUrl={data.videoUrl} posterFallback={data.img || data.image} />
 
         {/* ── Source link ── */}
         {data.sourceUrl && (
@@ -561,7 +540,7 @@ export default function RecipeDetail({ recipe, onBack, onSaveRecipe, isSaved, on
 
             {showDaySelector && (
               <RecipeDaySelectorSheet
-                defaultSlot={(data.mealType as any) || 'lunch'}
+                defaultSlot={defaultSlotFor(data)}
                 onSelect={(idx, slot) => { onAddToPlan?.(getModifiedRecipe(), idx, slot); setShowDaySelector(false); }}
                 onClose={() => setShowDaySelector(false)}
               />
@@ -866,6 +845,13 @@ export default function RecipeDetail({ recipe, onBack, onSaveRecipe, isSaved, on
         onClose={() => setShowPublishSheet(false)}
       />
     )}
+    <MediaLightbox
+      photos={galleryPhotos}
+      startIndex={lightboxIdx ?? 0}
+      open={lightboxIdx !== null}
+      onOpenChange={(o) => { if (!o) setLightboxIdx(null); }}
+      alt={data.title}
+    />
     <ConfirmDialog
       open={showDeleteConfirm}
       onOpenChange={setShowDeleteConfirm}

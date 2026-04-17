@@ -9,6 +9,7 @@ export interface RecipeCardRecipe {
   title: string;
   img?: string;
   image?: string;
+  photos?: string[];
   tag?: string;
   matchScore?: number;
   time?: string;
@@ -100,6 +101,19 @@ export default function RecipeCard({
           variant === 'hero' ? 'via-background/30' : 'via-background/40'
         } to-transparent`}
       />
+
+      {/* ── Multi-photo affordance (dots top-center) ── */}
+      {variant !== 'grid' && recipe.photos && recipe.photos.length >= 2 && (
+        <div className="absolute top-2 left-1/2 -translate-x-1/2 flex gap-1 pointer-events-none">
+          {recipe.photos.slice(0, 6).map((_, i) => (
+            <span
+              key={i}
+              className={cn('h-1 rounded-full bg-white/70', i === 0 ? 'w-3' : 'w-1')}
+              aria-hidden="true"
+            />
+          ))}
+        </div>
+      )}
 
       {/* ── Hero top badge ── */}
       {variant === 'hero' && recipe.matchScore !== undefined && (

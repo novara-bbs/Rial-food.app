@@ -1,5 +1,34 @@
 # RIAL App - Changelog
 
+## [1.5.24] - 2026-04-17
+
+### feat(recipes) — Fase 1 multi-media (hero carousel + lightbox + video híbrido)
+
+Primera capa display-only de multi-foto y video en recetas. Consume `photos?: string[]` + `videoUrl?: string` que ya existían en `Recipe` pero nunca se renderizaban. **Sin uploader**: esta fase desbloquea el UX (creadores ven varias fotos, importadores enlazan Reels/TikToks) sin comprometer la decisión de storage, que queda para Q6 Supabase. Estrategia de video híbrida: YouTube inline (iframe `youtube-nocookie.com`), TikTok / Instagram / Vimeo → poster + link-out vía `@capacitor/browser` (iOS Universal Links / Android App Links abren la app nativa si está instalada; web fallback a `window.open` con `noopener,noreferrer`). Mismo patrón que Yummly, NYT Cooking, Paprika. Plan: `.claude/plans/revisa-el-recepi-card-crystalline-moore.md`.
+
+**Added**
+- `src/types/recipe.ts` — `VideoPlatform` (`'youtube' | 'tiktok' | 'instagram' | 'vimeo' | 'other'`) + `ParsedVideo` (con `canEmbed: boolean`, `watchUrl`, `embedUrl`, `posterUrl?`).
+- `src/features/recipes/utils/videoEmbed.ts` — `parseVideoSource(url)` centraliza la detección de plataforma via `URL` API (sin regex frágil). YouTube → `embedUrl` + `posterUrl` (`i.ytimg.com/vi/{id}/hqdefault.jpg`) + `canEmbed: true`. Resto → `canEmbed: false`. `platformLabel(platform)` para i18n-friendly placeholders.
+- `src/features/recipes/utils/videoEmbed.test.ts` — matriz de 12+ casos (YouTube canonical / `youtu.be` / Shorts, TikTok, Instagram reel/post, Vimeo, `other`, inputs inválidos, con/sin protocolo).
+- `src/features/recipes/components/HeroGallery.tsx` — carrusel CSS-only (`scroll-snap-x mandatory`, sin deps). Single-photo case renderiza `<img>` directa (ahorro paint en el ~80% de recetas que siguen con una sola imagen). Multi-photo: counter pill + dot navigation + `aria-roledescription="carousel"`. Lazy-load para `idx > 0`.
+- `src/features/recipes/components/MediaLightbox.tsx` — modal fullscreen basado en shadcn Dialog. Swipe horizontal + `ArrowLeft`/`ArrowRight`. Pinch-zoom diferido a V2.
+- `src/features/recipes/components/VideoSection.tsx` — strategy split. YouTube → iframe sandboxed. Otros → card con poster + `PlayCircle` + label "Ver en {platform}" → `openExternalVideo(watchUrl)`.
+- `src/lib/platform.ts` — `openExternalVideo(url)`: native usa `@capacitor/browser` (dynamic import, `presentationStyle: 'popover'`), web usa `window.open(url, '_blank', 'noopener,noreferrer')`.
+- 7 claves i18n simétricas ES/EN bajo `recipeDetail`: `gallery`, `photoOf`, `openLightbox`, `closeLightbox`, `watchOn`, `watchOnSubtitle`, `unsupportedVideo`.
+
+**Changed**
+- `src/features/recipes/screens/RecipeDetail.tsx` — reemplaza `<img>` hero por `<HeroGallery>` (lightbox on tap via `setLightboxIdx`); reemplaza regex YouTube/TikTok + iframe duplicado (38 líneas) por `<VideoSection videoUrl={data.videoUrl} posterFallback={data.img || data.image} />`; monta `<MediaLightbox>` al cierre del árbol. `galleryPhotos` cae a `[data.img || data.image]` cuando `photos?` está ausente (receta legacy renderiza idéntico).
+- `src/components/patterns/RecipeCard.tsx` — extiende `RecipeCardRecipe` con `photos?: string[]`. Afordancia visual en variants `carousel` + `hero`: dots centrados arriba (primero activo, resto `w-1`) cuando `photos.length ≥ 2`. Variant `grid` no los pinta (scroll performance en Cocina). `pointer-events-none` para no interceptar clicks.
+- `src/features/food/data/seed-recipes.ts` — 4 recetas demo con `photos[]`; 2 con `videoUrl` (1 YouTube real público, 1 TikTok): `id: 1` (ChefMarta, salmón, 3 photos + YouTube), `tortitas-avena` (FitCarlos, 2 photos + TikTok), `my-tostada-aguacate` (self, 2 photos), `my-bowl-mediterraneo` (self, 3 photos).
+- `src/lib/seedVersion.ts` — `SEED_VERSIONS.savedRecipes` bump 3 → **4** (regla de oro: cambio semántico de seed obliga bump para que usuarios existentes re-hidraten vía `shouldReseed`).
+
+**Notes**
+- **Out of scope (Fase 2+)**: uploader de fotos (`pickImage()` con `@capacitor/camera`), compresión canvas, migración data-URL → IDB, captura automática de `og:image` en `ImportRecipeURL`, video local MP4.
+- **Out of scope (Fase 3 = Q6)**: Supabase Storage bucket, signed URLs, push de `photos[]` al backend (hoy no se sube nada — sólo se referencia URLs externas o seed).
+- **Storage impact hoy = 0**. El merge strategy de `savedRecipes` sigue siendo `preserve-user`, así que el bump no sobreescribe recetas propias; sólo completa los slots de seed que aún no estaban en localStorage.
+- Afordancia visual en RecipeCard sigue el patrón Instagram/TikTok (dots arriba) para evitar colisión con el info-block bottom. Max 6 dots renderizados (galerías mayores quedan acotadas visualmente pero navegables dentro del lightbox).
+- YouTube iframe usa `youtube-nocookie.com` + `sandbox="allow-scripts allow-same-origin allow-presentation"` (mismo patrón que el viejo bloque regex que sustituye, sin regresión de CSP).
+
 ## [1.5.23] - 2026-04-17
 
 ### fix(ui/cocina-explora) — normaliza shells, RecipeCard tokens y tap-targets HIG
