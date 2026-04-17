@@ -1,5 +1,6 @@
 import { Check, Clock, ChevronRight, BadgeCheck, Utensils, Heart, Trophy, Home } from 'lucide-react';
 import PageShell from '../../../components/PageShell';
+import SectionCard from '../../../components/SectionCard';
 import { useState } from 'react';
 import { toast } from 'sonner';
 import { useAppState } from '../../../contexts/AppStateContext';
@@ -70,7 +71,7 @@ export default function CreatorVerification({ onBack }: { onBack: () => void }) 
           <p className="text-on-surface-variant font-body text-sm max-w-sm mx-auto leading-relaxed">
             {t.creator.reviewDescription}
           </p>
-          <div className="bg-surface-container-low border border-outline-variant/20 rounded-sm p-4 max-w-xs mx-auto text-left space-y-2">
+          <SectionCard padding="none" spacing="sm" className="p-4 max-w-xs mx-auto text-left">
             <p className="font-label text-micro uppercase tracking-widest text-primary font-bold">{t.creator.applicationSummary}</p>
             <p className="text-sm font-body text-on-surface">
               {t.creator.badge}: <span className="font-bold">{BADGES.find(b => b.id === selectedBadge)?.label}</span>
@@ -78,7 +79,7 @@ export default function CreatorVerification({ onBack }: { onBack: () => void }) 
             <p className="text-sm font-body text-on-surface">
               {t.creator.requirementsMet}: <span className="font-bold text-primary">{metCount}/4</span>
             </p>
-          </div>
+          </SectionCard>
         </div>
       </PageShell>
     );
@@ -89,7 +90,7 @@ export default function CreatorVerification({ onBack }: { onBack: () => void }) 
       <PageHeader onBack={onBack} title={t.creator.verificationCreator} />
 
       {/* Progress bar */}
-      <div className="bg-surface-container-low border border-outline-variant/20 rounded-sm p-5 space-y-3">
+      <SectionCard padding="md" spacing="md">
         <div className="flex items-center justify-between">
           <span className="font-headline text-xs font-bold uppercase tracking-widest text-tertiary">{t.creator.progress}</span>
           <span className="font-headline text-sm font-black text-primary">{metCount}/4 {t.creator.requirementsCount}</span>
@@ -100,7 +101,7 @@ export default function CreatorVerification({ onBack }: { onBack: () => void }) 
             style={{ width: `${(metCount / 4) * 100}%` }}
           />
         </div>
-      </div>
+      </SectionCard>
 
       {/* Requirements checklist */}
       <div className="space-y-3">

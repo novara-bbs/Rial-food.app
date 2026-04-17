@@ -107,7 +107,6 @@ const q16MigrationAllowlist = [
   // doesn't fit. Same pattern as TodaysMeals; remove when we add a
   // <ListCard> variant.
   'src/features/social/screens/CreatorProfile.tsx',
-  'src/features/social/screens/CreatorVerification.tsx',
   'src/features/social/screens/PostDetail.tsx',
   'src/features/wellness/screens/Progress.tsx',
   'src/features/wellness/screens/RealFeelDiary.tsx',
