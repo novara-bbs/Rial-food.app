@@ -19,3 +19,17 @@
  */
 export const INPUT_SURFACE_CLASSES =
   'bg-surface-container-low border border-outline-variant/20 rounded-sm';
+
+/**
+ * Surface used by clickable card-shaped buttons (`<button>` elements that
+ * render as list rows or tappable tiles) that need SectionCard elevation.
+ * Combine with per-control padding / layout / hover styles via `cn()`.
+ *
+ * @example
+ *   <button
+ *     type="button"
+ *     className={cn(BUTTON_CARD_SURFACE_CLASSES, 'p-3 flex items-start gap-3 hover:border-primary/40 transition-colors text-left')}
+ *   />
+ */
+export const BUTTON_CARD_SURFACE_CLASSES =
+  'bg-surface-container-low border border-outline-variant/20 rounded-sm';

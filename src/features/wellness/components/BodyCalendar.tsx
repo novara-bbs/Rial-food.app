@@ -4,6 +4,7 @@ import { useI18n } from '../../../i18n';
 import SnapshotDetailModal from './SnapshotDetailModal';
 import LogSnapshotModal from './LogSnapshotModal';
 import DayGridCalendar from '../../../components/DayGridCalendar';
+import SectionCard from '../../../components/SectionCard';
 import type { BodySnapshot } from '../../../types/wellness';
 import type { UnitSystem } from '../../food/utils/units';
 import { todayLocal } from '../../../lib/dates';
@@ -56,7 +57,7 @@ export default function BodyCalendar({ snapshots, unitSystem }: BodyCalendarProp
 
   return (
     <>
-      <div className="bg-surface-container-low border border-outline-variant/20 rounded-sm p-4 space-y-4">
+      <SectionCard padding="md" spacing="md">
         <DayGridCalendar<BodySnapshot>
           mode="month"
           data={snapshotsByDate}
@@ -99,7 +100,7 @@ export default function BodyCalendar({ snapshots, unitSystem }: BodyCalendarProp
             </div>
           }
         />
-      </div>
+      </SectionCard>
 
       <SnapshotDetailModal
         open={!!selectedSnapshot}

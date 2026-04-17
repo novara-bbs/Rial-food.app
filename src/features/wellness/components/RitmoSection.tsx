@@ -4,6 +4,7 @@ import { type DailyArchive, archiveHydrationConsumed, archiveActiveMinutes } fro
 import { dateToLocal } from '../../../lib/dates';
 import DataSourceCaption from './DataSourceCaption';
 import Sparkline from '../../../components/Sparkline';
+import SectionCard from '../../../components/SectionCard';
 
 interface RitmoSectionProps {
   history: DailyArchive[];
@@ -73,7 +74,7 @@ export default function RitmoSection({
   }, [history, realFeelLogs]);
 
   return (
-    <section className="bg-surface-container-low border border-outline-variant/20 rounded-sm overflow-hidden">
+    <SectionCard padding="none" spacing="none" className="overflow-hidden">
       <button
         type="button"
         onClick={() => setOpen(o => !o)}
@@ -128,7 +129,7 @@ export default function RitmoSection({
           )}
         </div>
       )}
-    </section>
+    </SectionCard>
   );
 }
 

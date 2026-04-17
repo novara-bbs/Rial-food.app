@@ -1,5 +1,6 @@
 import { Scale, Camera, Ruler, Share2 } from 'lucide-react';
 import { bodyWeightFromKg, getBodyWeightUnit, type UnitSystem } from '../../food/utils/units';
+import { BUTTON_CARD_SURFACE_CLASSES } from '../../../components/ui/surface';
 import type { BodySnapshot } from '../../../types/wellness';
 
 interface BodySnapshotCardProps {
@@ -42,7 +43,7 @@ export default function BodySnapshotCard({ snapshot, previousKg, unitSystem, onT
       <button
         type="button"
         onClick={onTap}
-        className="w-full bg-surface-container-low border border-outline-variant/20 rounded-sm p-3 flex items-start gap-3 hover:border-primary/40 transition-colors text-left"
+        className={`w-full ${BUTTON_CARD_SURFACE_CLASSES} p-3 flex items-start gap-3 hover:border-primary/40 transition-colors text-left`}
       >
         {/* Left: thumb or icon */}
         <div className="w-16 h-16 rounded-sm shrink-0 overflow-hidden bg-primary/10 flex items-center justify-center">

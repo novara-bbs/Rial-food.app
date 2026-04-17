@@ -1,4 +1,5 @@
 import { CheckCircle2, XCircle, Target, ChevronDown, ChevronUp } from 'lucide-react';
+import SectionCard from '../../../components/SectionCard';
 
 interface WeeklyEntry {
   workedWell: string;
@@ -38,7 +39,7 @@ export default function InlineReflection({
   focusNext, setFocusNext, onSave, onNavigateHistory, t, tWeekly,
 }: InlineReflectionProps) {
   return (
-    <section className="bg-surface-container-low border border-outline-variant/20 rounded-sm p-5 space-y-3">
+    <SectionCard padding="md" spacing="md">
       <button
         type="button"
         onClick={onToggle}
@@ -123,6 +124,6 @@ export default function InlineReflection({
           </div>
         </div>
       )}
-    </section>
+    </SectionCard>
   );
 }
