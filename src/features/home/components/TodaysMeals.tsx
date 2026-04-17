@@ -1,5 +1,6 @@
 import { Calendar, UtensilsCrossed, Trash2, Pencil, Check, X, Minus, Plus } from 'lucide-react';
 import { useState } from 'react';
+import SectionCard from '../../../components/SectionCard';
 import { useI18n } from '../../../i18n';
 import type { DailyLogEntry } from '../../food/handlers/meal-handlers';
 
@@ -95,7 +96,7 @@ export default function TodaysMeals({
       {/* Logged meals */}
       {dailyLog.length > 0 && (
         <>
-          <div className="bg-surface-container-low border border-outline-variant/20 rounded-sm divide-y divide-outline-variant/10 overflow-hidden">
+          <SectionCard padding="none" spacing="none" className="divide-y divide-outline-variant/10 overflow-hidden">
             {dailyLog.map((entry) => {
               const isEditing = editingEntry?.id === entry.id;
               const previewFactor = isEditing && entry.grams ? editGrams / entry.grams : 1;
@@ -183,7 +184,7 @@ export default function TodaysMeals({
                 </div>
               );
             })}
-          </div>
+          </SectionCard>
           {/* Diary totals */}
           <div className="flex items-center justify-between bg-surface-container-highest/50 rounded-sm px-4 py-2.5">
             <span className="text-micro font-label font-bold uppercase tracking-widest text-on-surface-variant">{t.home.totalLogged}</span>
@@ -217,7 +218,7 @@ export default function TodaysMeals({
             </div>
           )}
           {todaysMeals.map((meal: any, idx: number) => (
-            <div key={meal.id || idx} className="bg-surface-container-low border border-outline-variant/20 p-4 rounded-sm flex items-center gap-4 group">
+            <SectionCard key={meal.id || idx} padding="none" spacing="none" className="p-4 flex items-center gap-4 group">
               <div className="w-12 h-12 rounded-sm bg-surface-container-highest overflow-hidden shrink-0">
                 <img src={meal.img || "https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&w=100&q=80"} alt={meal.title} className="w-full h-full object-cover" referrerPolicy="no-referrer" />
               </div>
@@ -234,7 +235,7 @@ export default function TodaysMeals({
               >
                 {t.home.logIt}
               </button>
-            </div>
+            </SectionCard>
           ))}
         </div>
       )}

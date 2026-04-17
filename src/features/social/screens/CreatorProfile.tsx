@@ -141,7 +141,7 @@ export default function CreatorProfile({ onBack }: { onBack: () => void }) {
             <EmptyState icon="📝" title={cp.noPosts} description={isSelf ? cp.noPostsSelf : cp.noPosts} />
           ) : (
             creatorPosts.map((post: any) => (
-              <article key={post.id} className="relative bg-surface-container-low border border-outline-variant/20 rounded-sm p-4 hover:border-primary/50 transition-colors focus-within:border-primary/50">
+              <SectionCard key={post.id} padding="none" spacing="none" className="relative p-4 hover:border-primary/50 transition-colors focus-within:border-primary/50">
                 {/* Stretched-link button gives the whole card a keyboard-focusable target without nesting buttons in buttons. Recipe CTA below uses stopPropagation + higher z-index to override. */}
                 <button
                   type="button"
@@ -177,7 +177,7 @@ export default function CreatorProfile({ onBack }: { onBack: () => void }) {
                   <span className="flex items-center gap-1"><Flame className="w-3.5 h-3.5" /> {post.likes}</span>
                   <span className="font-label text-micro tracking-widest uppercase">{post.author?.time || ''}</span>
                 </div>
-              </article>
+              </SectionCard>
             ))
           )}
         </TabsContent>
