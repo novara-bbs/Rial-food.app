@@ -2,6 +2,7 @@ import { useState, useMemo } from 'react';
 import { Target, Leaf, ShieldAlert, Search, X, Droplets, Footprints } from 'lucide-react';
 import { useI18n } from '../../../../i18n';
 import type { Ingredient, Allergen } from '../../../../types';
+import { INPUT_SURFACE_CLASSES } from '@/components/ui/surface';
 
 interface Props {
   dailyMacros: any;
@@ -140,7 +141,7 @@ export default function SettingsNutrition({ dailyMacros, setDailyMacros, userPro
             <input type="text" value={dislikeSearch}
               onChange={(e) => setDislikeSearch(e.target.value)}
               placeholder={t.settings.foodDislikesPlaceholder}
-              className="w-full bg-surface-container-low border border-outline-variant/20 rounded-sm py-2 pl-9 pr-3 text-tertiary text-sm focus:outline-none focus:border-primary" />
+              className={`${INPUT_SURFACE_CLASSES} w-full py-2 pl-9 pr-3 text-tertiary text-sm focus:outline-none focus:border-primary`} />
           </div>
           {dislikeResults.length > 0 && (
             <div className="mt-1 bg-surface-container-highest border border-outline-variant/20 rounded-sm max-h-40 overflow-y-auto">
