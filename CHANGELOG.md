@@ -1,5 +1,21 @@
 # RIAL App - Changelog
 
+## [1.5.29] - 2026-04-17
+
+### fix(demo-seed) — Clear demo now drops seed-version markers and uses unprefixed keys
+
+Follow-up to 1.5.22. `createHandleClearDemoSeed` was leaving `rial_seedVersion_<key>` markers intact, so after clicking "Clear demo" and reloading, `shouldReseed` saw `stored === current` and skipped re-hydration — the user was left with empty seeded slots (e.g. Cocina showed 0 recipes) until they manually wiped localStorage. Same handler also used a stale `rial_` prefix on every `localStorage` op, so the explicit removals were no-ops and the direct-write `rial_weeklyCheckIns` / `rial_demoSeedVersion` keys were orphans that nothing read.
+
+**Fix.** `createHandleClearDemoSeed` now iterates `ALL_SEED_KEYS` and calls `clearSeed(key, key)` from `src/lib/seedVersion.ts` — removes both the data key and its version marker. `createHandleLoadDemoSeed` writes `weeklyCheckIns` unprefixed (matching `useLocalStorageState`). Orphan `demoSeedVersion` write and the unused `DEMO_SEED_KEYS` / `DEMO_SEED_VERSION` / `version` bundle field in `demo-seed.ts` are dropped.
+
+**Changed**
+- `src/features/dev/handlers/demo-seed-handlers.ts` — imports `ALL_SEED_KEYS` + `clearSeed`; clear loop now removes version markers; load writes `weeklyCheckIns` not `rial_weeklyCheckIns`; drops orphan `rial_demoSeedVersion` write.
+- `src/features/dev/data/demo-seed.ts` — removes unused `DEMO_SEED_KEYS` export, `DEMO_SEED_VERSION` constant, and `version: number` on `DemoSeedBundle`.
+
+**Notes**
+- Behavior change is observable only via the dev-only DemoSeedCard flow in Settings.
+- Tests `src/features/dev/handlers/demo-seed-handlers.test.ts` land in the companion commit (7 regression tests locking the fix).
+
 ## [1.5.28] - 2026-04-17
 
 ### docs(market) — Priorización competitiva + análisis de pantallas + datos duros (`priority-review.md` + 8 fichas top enriquecidas)

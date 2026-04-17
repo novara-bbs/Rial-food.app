@@ -1,4 +1,5 @@
-import { buildDemoSeed, DEMO_SEED_KEYS } from '../data/demo-seed';
+import { buildDemoSeed } from '../data/demo-seed';
+import { ALL_SEED_KEYS, clearSeed } from '../../../lib/seedVersion';
 
 /**
  * Dev handlers for loading and clearing the Demo Rial seed.
@@ -6,10 +7,14 @@ import { buildDemoSeed, DEMO_SEED_KEYS } from '../data/demo-seed';
  * Implementation rationale:
  *  - Setters are React state; we call them in one pass so consumers re-render
  *    against the final consistent snapshot instead of intermediate partials.
- *  - `clearDemoSeed` removes ONLY the `rial_*` keys the demo writes. Auth,
- *    sync flags, and unrelated prefs stay intact.
- *  - `rial_demoSeedVersion` is written so future versions can hot-swap without
- *    pushing stale data back.
+ *  - `clearDemoSeed` resets React state to neutral defaults and clears the
+ *    seed-version markers (`rial_seedVersion_<key>`) for every key in
+ *    `ALL_SEED_KEYS`. Without that, `shouldReseed` would see matching
+ *    versions on reload and leave the user with empty seeded slots.
+ *  - `weeklyCheckIns` is written directly here because no setter is wired
+ *    through AppStateContext — WeeklyCheckIn owns its own `useLocalStorageState`.
+ *    `useLocalStorageState` stores keys as-is (no `rial_` prefix), so we
+ *    write the plain `weeklyCheckIns` key.
  */
 
 export interface DemoSeedSetters {
@@ -51,11 +56,10 @@ export function createHandleLoadDemoSeed(setters: DemoSeedSetters) {
     setters.setCommunityStories(seed.communityStories);
     setters.setToleranceLogs(seed.toleranceLogs);
 
-    // Weekly check-ins + demoSeedVersion are written directly to localStorage
-    // because they're not exposed via AppStateContext setters.
+    // Weekly check-ins have no AppStateContext setter. `useLocalStorageState`
+    // stores keys unprefixed, so write to `weeklyCheckIns` directly.
     try {
-      window.localStorage.setItem('rial_weeklyCheckIns', JSON.stringify(seed.weeklyCheckIns));
-      window.localStorage.setItem('rial_demoSeedVersion', String(seed.version));
+      window.localStorage.setItem('weeklyCheckIns', JSON.stringify(seed.weeklyCheckIns));
     } catch {
       // ignore
     }
@@ -95,12 +99,16 @@ export function createHandleClearDemoSeed(setters: DemoSeedSetters) {
     setters.setCommunityStories([]);
     setters.setToleranceLogs([]);
 
-    // Clear any demo-owned localStorage keys that don't have setters wired.
+    // Clear the seed-version markers so `shouldReseed` fires again on next
+    // mount. `clearSeed` also removes the data key itself — the React
+    // setters above will re-persist `[]`/`{}` defaults via useEffect, but
+    // the missing version marker is what makes `shouldReseed` return true
+    // on reload (stored < current). Also wipes the direct-write
+    // `weeklyCheckIns` slot which has no setter path.
     try {
-      for (const key of DEMO_SEED_KEYS) {
-        window.localStorage.removeItem(`rial_${key}`);
+      for (const seedKey of ALL_SEED_KEYS) {
+        clearSeed(seedKey, seedKey);
       }
-      window.localStorage.removeItem('rial_weeklyCheckIns');
     } catch {
       // ignore
     }

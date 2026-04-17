@@ -14,31 +14,6 @@ import type { BodySnapshot, WeeklyCheckInEntry } from '../../../types/wellness';
 import type { DailyLogEntry, FoodHistoryEntry } from '../../food/handlers/meal-handlers';
 import type { CommunityPost, ProgressPostPayload } from '../../../types/social';
 
-/**
- * Keys that the demo seed writes. Used by `clearDemoSeed` to know exactly
- * what to reset — the rest of localStorage (user prefs, auth, etc.) is left alone.
- */
-export const DEMO_SEED_KEYS = [
-  'userProfile',
-  'dailyMacros',
-  'hydration',
-  'movement',
-  'dailyGoal',
-  'dailyLog',
-  'foodHistory',
-  'weightHistory',
-  'nutritionHistory',
-  'realFeelLogs',
-  'weeklyCheckIns',
-  'savedRecipes',
-  'mealPlan',
-  'shoppingList',
-  'communityPosts',
-  'communityStories',
-  'toleranceLogs',
-  'demoSeedVersion',
-] as const;
-
 export interface DemoSeedBundle {
   userProfile: {
     name: string;
@@ -70,10 +45,7 @@ export interface DemoSeedBundle {
   communityPosts: CommunityPost[];
   communityStories: unknown[];
   toleranceLogs: unknown[];
-  version: number;
 }
-
-const DEMO_SEED_VERSION = 1;
 
 /**
  * Clara's canonical profile. Mirrors the narrative of the timeline
@@ -213,7 +185,6 @@ export async function buildDemoSeed(): Promise<DemoSeedBundle> {
     toleranceLogs: toleranceMod.SEED_TOLERANCE_LOGS,
     communityPosts: [...claraPosts, ...postsMod.SEED_POSTS],
     communityStories: storiesMod.SEED_STORIES,
-    version: DEMO_SEED_VERSION,
   };
 }
 
