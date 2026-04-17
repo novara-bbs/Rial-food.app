@@ -63,6 +63,10 @@ export const RecipeSchema = z.object({
   difficulty: z.string().default('Fácil'),
   servings: z.number().optional(),
   publishedBy: z.string().optional(),
+  // Canonical slot vocabulary (multi-valued, post-Q19 meal-taxonomy).
+  suitableFor: z.array(z.enum(['breakfast', 'lunch', 'dinner', 'snack'])).optional(),
+  // Legacy single-valued slot — retained for hydration of pre-Q19 user data.
+  // Consumers should go through `getRecipeSlots()` to normalise to MealSlot[].
   mealType: z.string().optional(),
   tag: z.string().optional(),
   ingredients: z.array(z.string()).optional(),

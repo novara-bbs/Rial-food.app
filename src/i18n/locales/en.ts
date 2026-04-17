@@ -126,6 +126,14 @@ const en: Translations = {
       'Sleeping 7-8 hours is crucial for muscle recovery and fat loss.',
     ],
   },
+  // Canonical meal-slot vocabulary. Used by new code; pre-existing screens still
+  // read t.home.*, t.discovery.cat*, t.plan.mealType* (kept in sync with these).
+  mealSlot: {
+    breakfast: 'Breakfast',
+    lunch: 'Lunch',
+    dinner: 'Dinner',
+    snack: 'Snack',
+  },
   realFeel: {
     title: 'Real Feel',
     howDoYouFeel: 'How do you feel?',
@@ -966,7 +974,7 @@ const en: Translations = {
     catBreakfast: 'Breakfast',
     catLunch: 'Lunch',
     catDinner: 'Dinner',
-    catSnack: 'Snacks',
+    catSnack: 'Snack',
     catQuick: 'Quick',
     forYouTitle: 'For you',
     highProteinTitle: 'High protein',
@@ -1013,6 +1021,8 @@ const en: Translations = {
     sourceLabel: 'Original source',
     photo: 'Photo',
     suggestedTags: 'Suggested tags',
+    suitableForLabel: 'Suitable for',
+    suitableForHelp: 'Leave empty if it fits any slot',
     stepLabels: {
       information: 'Basics',
       ingredients: 'Ingredients',

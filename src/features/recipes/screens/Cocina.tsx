@@ -4,6 +4,8 @@ import SearchInput from '../../../components/patterns/SearchInput';
 import { useI18n } from '../../../i18n';
 import { useAppState } from '../../../contexts/AppStateContext';
 import { calculateMatchScore } from '../utils/matchScore';
+import { recipeFitsSlot } from '../utils/meal-slot';
+import type { MealSlot } from '../../../types';
 import EmptyState from '../../../components/EmptyState';
 import PageShell from '../../../components/PageShell';
 import RecipeCard from '../../../components/patterns/RecipeCard';
@@ -63,31 +65,33 @@ export default function Cocina({ onAddMeal, onCreateRecipe, onNavigateToRecipe, 
     [savedRecipes, profileSlice, dictionary],
   );
 
-  // mealType categories — mirrors Discovery (parity: same filter model across Cocina/Explora)
+  // Primary meal-slot filter. Recipes without `suitableFor` are versatile and
+  // match every slot (see `recipeFitsSlot`). "Quick" lives in `collections`
+  // below — it's a time axis, not a slot, and conflating them in one row
+  // confused users (Q19 meal-taxonomy refactor).
   const mealCategories = [
     { id: 'all', label: t.discovery.catAll, icon: Sparkles },
     { id: 'breakfast', label: t.discovery.catBreakfast, icon: Sunrise },
     { id: 'lunch', label: t.discovery.catLunch, icon: Sun },
     { id: 'dinner', label: t.discovery.catDinner, icon: Moon },
     { id: 'snack', label: t.discovery.catSnack, icon: Cookie },
-    { id: 'quick', label: t.discovery.catQuick, icon: Zap },
   ];
 
-  // Collection pills — `quick` promoted to mealCategories above to avoid redundancy.
+  const quickCount = scoredRecipes.filter(r => r.totalTime > 0 && r.totalTime <= 20).length;
+
   const collections = [
     { id: 'all', label: t.recipes.all, count: scoredRecipes.length },
     { id: 'mine', label: t.recipes.myRecipes, count: scoredRecipes.filter(r => r.publishedBy === 'self' && r.tag !== 'IMPORTADA').length },
     { id: 'imported', label: t.recipes.imported, count: scoredRecipes.filter(r => r.tag === 'IMPORTADA').length },
+    { id: 'quick', label: t.discovery.catQuick, count: quickCount, icon: Zap },
     { id: 'high-protein', label: t.recipes.highProtein, count: scoredRecipes.filter(r => r.pro >= 30).length },
   ];
 
-  // Combined filters: mealType + collection + search
+  // Combined filters: slot (primary) + collection (secondary) + search.
   const filteredRecipes = useMemo(() => {
     let list = scoredRecipes;
-    if (activeMealType === 'quick') {
-      list = list.filter(r => r.totalTime > 0 && r.totalTime <= 20);
-    } else if (activeMealType !== 'all') {
-      list = list.filter(r => r.mealType === activeMealType);
+    if (activeMealType !== 'all') {
+      list = list.filter(r => recipeFitsSlot(r, activeMealType as MealSlot));
     }
     if (searchQuery.trim()) {
       const q = searchQuery.toLowerCase();
@@ -95,6 +99,7 @@ export default function Cocina({ onAddMeal, onCreateRecipe, onNavigateToRecipe, 
     }
     if (activeCollection === 'mine') list = list.filter(r => r.publishedBy === 'self' && r.tag !== 'IMPORTADA');
     if (activeCollection === 'imported') list = list.filter(r => r.tag === 'IMPORTADA');
+    if (activeCollection === 'quick') list = list.filter(r => r.totalTime > 0 && r.totalTime <= 20);
     if (activeCollection === 'high-protein') list = list.filter(r => r.pro >= 30);
     return list;
   }, [scoredRecipes, activeMealType, searchQuery, activeCollection]);

@@ -1,7 +1,8 @@
 import { Sun, UtensilsCrossed, Moon, Apple } from 'lucide-react';
 import { useI18n } from '../../../i18n';
+import type { MealSlot } from '../../../types';
 
-export type MealSlot = 'breakfast' | 'lunch' | 'dinner' | 'snack';
+export type { MealSlot };
 
 interface SlotDef {
   id: MealSlot;

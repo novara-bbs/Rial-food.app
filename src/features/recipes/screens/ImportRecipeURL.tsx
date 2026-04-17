@@ -8,6 +8,29 @@ import { logger } from '../../../lib/logger';
 import { generateGeminiText } from '../../ai/lib/gemini';
 import { GEMINI_API_KEY, SUPABASE_URL } from '../../../config/env';
 import { enhanceIngredients, EnhancedIngredient, RecipeIntelligenceResult } from '../utils/recipe-intelligence';
+import MealSlotMultiSelect from '../../food/components/MealSlotMultiSelect';
+import type { MealSlot } from '../../../types';
+
+/**
+ * Heuristic slot inference from recipe title (the most signal-dense field the
+ * extractor returns). Falls back to `[]` (versatile) when no keyword hits —
+ * users can always tweak before saving. Q19 meal-taxonomy migration.
+ */
+function inferSuitableFor(title: string): MealSlot[] {
+  const lower = title.toLowerCase();
+  const hasAny = (words: string[]) => words.some(w => lower.includes(w));
+
+  if (hasAny(['pancake', 'tortita', 'avena', 'oatmeal', 'porridge', 'tostada', 'toast', 'waffle', 'granola', 'smoothie', 'batido', 'cereal', 'desayuno', 'breakfast'])) {
+    return ['breakfast'];
+  }
+  if (hasAny(['snack', 'barrita', 'bar ', 'galleta', 'cookie', 'brownie', 'muffin', 'postre', 'dessert', 'bocadito', 'merienda'])) {
+    return ['snack'];
+  }
+  if (hasAny(['sopa', 'soup', 'caldo', 'ensalada', 'salad', 'bowl', 'pasta', 'risotto', 'curry', 'guiso', 'estofado', 'stew', 'arroz', 'rice'])) {
+    return ['lunch', 'dinner'];
+  }
+  return [];
+}
 
 const EXTRACTION_PROMPT = `Extract a recipe from the following URL or description and return it as a valid JSON object with this exact structure:
 {
@@ -50,6 +73,8 @@ export default function ImportRecipeURL({ onBack, onImport }: { onBack: () => vo
   const [error, setError] = useState('');
   const [inputMode, setInputMode] = useState<'url' | 'text'>('url');
   const [showAlternatives, setShowAlternatives] = useState<number | null>(null);
+  // Slot inference populates this when extraction completes; user edits before saving.
+  const [suitableFor, setSuitableFor] = useState<MealSlot[]>([]);
 
   const handleImport = async () => {
     const trimmed = url.trim();
@@ -112,6 +137,7 @@ export default function ImportRecipeURL({ onBack, onImport }: { onBack: () => vo
         macros: result.matchRate >= 0.5 ? result.totalMacros : data.macros,
         macroSource: result.matchRate >= 0.5 ? 'dictionary' : 'ai',
       });
+      setSuitableFor(inferSuitableFor(String(data.title || '')));
     } catch (err) {
       const msg = err instanceof Error ? err.message : String(err);
       logger.error('Import error', { error: msg });
@@ -136,6 +162,7 @@ export default function ImportRecipeURL({ onBack, onImport }: { onBack: () => vo
       ingredients: legacyIngredients,
       img: 'https://images.unsplash.com/photo-1604908176997-125f25cc6f3d?auto=format&fit=crop&w=600&q=80',
       tag: 'IMPORTADA',
+      suitableFor: suitableFor.length > 0 ? suitableFor : undefined,
     });
   };
 
@@ -291,6 +318,17 @@ export default function ImportRecipeURL({ onBack, onImport }: { onBack: () => vo
                 </div>
               ))}
             </div>
+          </div>
+
+          {/* Suitable-for slots — inferred from title, editable before save. */}
+          <div>
+            <h3 className="font-headline text-sm font-bold uppercase tracking-widest text-tertiary mb-3">
+              {t.createRecipe.suitableForLabel}
+            </h3>
+            <MealSlotMultiSelect value={suitableFor} onChange={setSuitableFor} ariaLabel={t.createRecipe.suitableForLabel} />
+            <p className="text-micro font-label tracking-widest uppercase text-on-surface-variant mt-2">
+              {t.createRecipe.suitableForHelp}
+            </p>
           </div>
 
           {/* Macros */}

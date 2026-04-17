@@ -4,6 +4,7 @@ import {
   detectCategory,
   type GroceryItem,
 } from '../../planner/utils/grocery';
+import { getRecipeSlots } from '../utils/meal-slot';
 
 interface RecipeHandlerDeps {
   setSavedRecipes: (fn: any) => void;
@@ -60,8 +61,11 @@ function resolveMealSlot(mealType: string | undefined, t: any): { time: string; 
 
 export function createHandleAddToPlan(deps: RecipeHandlerDeps) {
   return (recipe: any, dayIndex: number, mealSlot?: MealSlotKey) => {
-    // Explicit slot (from MealSlotSelector) wins over recipe.mealType.
-    const slot = resolveMealSlot(mealSlot ?? recipe.mealType, deps.t);
+    // Explicit slot (from MealSlotSelector) wins over the recipe's own suitableFor.
+    // Falls back to the first entry in `suitableFor` (or legacy `mealType`) via
+    // `getRecipeSlots`; if the recipe is versatile, `resolveMealSlot` defaults to lunch.
+    const slotHint = mealSlot ?? getRecipeSlots(recipe)?.[0];
+    const slot = resolveMealSlot(slotHint, deps.t);
 
     deps.setMealPlan((prev: Record<number, any[]>) => ({
       ...prev,

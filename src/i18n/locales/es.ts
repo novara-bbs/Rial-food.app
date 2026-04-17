@@ -127,6 +127,14 @@ const es = {
       'Dormir 7-8 horas es crucial para la recuperación muscular y la pérdida de grasa.',
     ],
   },
+  // Canonical meal-slot vocabulary. Used by new code; pre-existing screens still
+  // read t.home.*, t.discovery.cat*, t.plan.mealType* (kept in sync with these).
+  mealSlot: {
+    breakfast: 'Desayuno',
+    lunch: 'Comida',
+    dinner: 'Cena',
+    snack: 'Snack',
+  },
   // Real Feel
   realFeel: {
     title: 'Real Feel',
@@ -329,8 +337,9 @@ const es = {
     },
     mealTypeBreakfast: 'DESAYUNO',
     mealTypeLunch: 'COMIDA',
+    // Snack is canonical across ES/EN; keep uppercase to match other badge labels in planner.
     mealTypeDinner: 'CENA',
-    mealTypeSnack: 'MERIENDA',
+    mealTypeSnack: 'SNACK',
   },
   // Shopping list
   shoppingList: {
@@ -990,9 +999,9 @@ const es = {
     sharedSuccess: 'Compartido en la comunidad',
     catAll: 'Todo',
     catBreakfast: 'Desayuno',
-    catLunch: 'Almuerzo',
+    catLunch: 'Comida',
     catDinner: 'Cena',
-    catSnack: 'Snacks',
+    catSnack: 'Snack',
     catQuick: 'Rápido',
     forYouTitle: 'Para ti',
     highProteinTitle: 'Alto en proteína',
@@ -1041,6 +1050,8 @@ const es = {
     sourceLabel: 'Fuente original',
     photo: 'Foto',
     suggestedTags: 'Etiquetas sugeridas',
+    suitableForLabel: 'Apta para',
+    suitableForHelp: 'Deja vacío si encaja en cualquier franja',
     stepLabels: {
       information: 'Información',
       ingredients: 'Ingredientes',

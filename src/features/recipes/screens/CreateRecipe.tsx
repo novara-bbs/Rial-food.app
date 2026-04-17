@@ -1,11 +1,13 @@
 import { Camera, Plus, Search, Trash2, ArrowUp, ArrowDown, Clock, ChevronRight, Check, Link2, Video, ImagePlus, ThumbsUp, Minus, AlertTriangle, UtensilsCrossed } from 'lucide-react';
 import PageShell from '../../../components/PageShell';
 import { useState, useMemo } from 'react';
-import type { Ingredient, RecipeIngredient, RecipeStep, Micronutrients, FoodTag } from '../../../types';
+import type { Ingredient, RecipeIngredient, RecipeStep, Micronutrients, FoodTag, MealSlot } from '../../../types';
 import { useI18n } from '../../../i18n';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import PortionSelector, { scaleMacros } from '../../food/components/PortionSelector';
+import MealSlotMultiSelect from '../../food/components/MealSlotMultiSelect';
+import { getRecipeSlots } from '../utils/meal-slot';
 import { getFoodQuality } from '../../food/utils/nutrition';
 import { useAppState } from '../../../contexts/AppStateContext';
 import PageHeader from '../../../components/patterns/PageHeader';
@@ -91,6 +93,11 @@ export default function CreateRecipe({
   const [servings, setServings] = useState(initialRecipe?.servings || 4);
   const [sourceUrl, setSourceUrl] = useState(initialRecipe?.sourceUrl || '');
   const [videoUrl, setVideoUrl] = useState(initialRecipe?.videoUrl || '');
+  // Slots this recipe fits well. Empty = versatile (matches every slot filter).
+  // See Q19 meal-taxonomy migration rationale.
+  const [suitableFor, setSuitableFor] = useState<MealSlot[]>(
+    () => (initialRecipe ? getRecipeSlots(initialRecipe) ?? [] : []),
+  );
 
   // ── Step 2: Ingredients ──
   const [recipeIngredients, setRecipeIngredients] = useState<RecipeIngredient[]>(initialRecipe?.recipeIngredients || []);
@@ -218,6 +225,7 @@ export default function CreateRecipe({
       macros: totals.macros,
       micros: totals.micros,
       tags: autoTags,
+      suitableFor: suitableFor.length > 0 ? suitableFor : undefined,
       img: initialRecipe?.img || 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&w=800&q=80',
       sourceUrl: sourceUrl || undefined,
       videoUrl: videoUrl || undefined,
@@ -307,6 +315,17 @@ export default function CreateRecipe({
               <input type="number" value={servings} onChange={e => setServings(Math.max(1, parseInt(e.target.value) || 1))} min={1}
                 className="w-full bg-surface-container-low border border-outline-variant/30 p-3 font-body text-sm text-tertiary rounded-sm focus:outline-none focus:border-primary transition-all" />
             </div>
+          </div>
+
+          {/* Suitable-for slots — empty means versatile (Q19 meal-taxonomy). */}
+          <div>
+            <label className="font-label text-caption font-bold tracking-widest uppercase text-on-surface-variant mb-2 block">
+              {t.createRecipe.suitableForLabel}
+            </label>
+            <MealSlotMultiSelect value={suitableFor} onChange={setSuitableFor} ariaLabel={t.createRecipe.suitableForLabel} />
+            <p className="text-micro font-label tracking-widest uppercase text-on-surface-variant mt-2">
+              {t.createRecipe.suitableForHelp}
+            </p>
           </div>
 
           {/* Source & Video — creator-quality fields */}

@@ -24,6 +24,7 @@ import { createHandleLogWeight, createHandleUpdateSnapshot, createHandleDeleteSn
 import { createHandleShareProgress } from '../features/wellness/handlers/progress-share-handlers';
 import { createHandleLoadDemoSeed, createHandleClearDemoSeed } from '../features/dev/handlers/demo-seed-handlers';
 import { shouldReseed, setStoredSeedVersion } from '../lib/seedVersion';
+import { getRecipeSlots } from '../features/recipes/utils/meal-slot';
 import { logger } from '../lib/logger';
 import type { BodySnapshot } from '../types/wellness';
 import type { CommunityPost } from '../types/social';
@@ -343,6 +344,27 @@ export function AppStateProvider({ children }: { children: React.ReactNode }) {
         setStoredSeedVersion('savedRecipes');
       })
       .catch((err) => logger.warn('seed.savedRecipes load failed', { err }));
+  }, []);
+
+  // Q19 meal-taxonomy: one-shot idempotent migration. Normalises any surviving
+  // legacy `mealType` string into the canonical `suitableFor: MealSlot[]`
+  // shape so storage isn't hybrid forever. Idempotent — skips when every
+  // recipe already matches the target shape.
+  useEffect(() => {
+    setSavedRecipes((prev: any[]) => {
+      if (!prev.length) return prev;
+      const needsMigration = prev.some(
+        (r) => r && r.mealType && (!r.suitableFor || r.suitableFor.length === 0),
+      );
+      if (!needsMigration) return prev;
+      return prev.map((r) => {
+        if (!r || r.suitableFor?.length) return r;
+        const slots = getRecipeSlots(r);
+        if (!slots) return r;
+        const { mealType: _legacy, ...rest } = r;
+        return { ...rest, suitableFor: slots };
+      });
+    });
   }, []);
 
   const [mealPlan, setMealPlan] = useLocalStorageState<Record<number, any[]>>('mealPlan', {});

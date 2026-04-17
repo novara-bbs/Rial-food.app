@@ -1,4 +1,4 @@
-import { ChefHat, Sunrise, Sun, Moon, Cookie, Zap, Sparkles, ChevronRight } from 'lucide-react';
+import { ChefHat, Sunrise, Sun, Moon, Cookie, Sparkles, ChevronRight } from 'lucide-react';
 import SearchInput from '../../../components/patterns/SearchInput';
 import React, { useState, useMemo } from 'react';
 import { toast } from 'sonner';
@@ -10,6 +10,8 @@ import Swimlane from '../../../components/patterns/Swimlane';
 import FilterRow from '../../../components/patterns/FilterRow';
 import { useAppState } from '../../../contexts/AppStateContext';
 import { calculateMatchScore } from '../../recipes/utils/matchScore';
+import { recipeFitsSlot } from '../../recipes/utils/meal-slot';
+import type { MealSlot } from '../../../types';
 
 export default function Discovery({ onNavigateToRecipe, savedRecipes = [], onSaveRecipe }: { onNavigateToRecipe?: (recipe: any) => void, savedRecipes?: any[], onSaveRecipe?: (recipe: any) => void }) {
   const { t } = useI18n();
@@ -27,14 +29,15 @@ export default function Discovery({ onNavigateToRecipe, savedRecipes = [], onSav
     toast.success(t.discovery.sharedSuccess || 'Shared to community!');
   };
 
-  // Categories
+  // Primary slot filter. Recipes without `suitableFor` are versatile and show
+  // under every slot. "Quick" used to live here — now surfaced via its own
+  // swimlane below, avoiding the eje-mixing (slot vs time) that confused users.
   const categories = [
     { id: 'all', label: t.discovery.catAll, icon: Sparkles },
     { id: 'breakfast', label: t.discovery.catBreakfast, icon: Sunrise },
     { id: 'lunch', label: t.discovery.catLunch, icon: Sun },
     { id: 'dinner', label: t.discovery.catDinner, icon: Moon },
     { id: 'snack', label: t.discovery.catSnack, icon: Cookie },
-    { id: 'quick', label: t.discovery.catQuick, icon: Zap },
   ];
 
   // Profile slice for match scoring
@@ -59,18 +62,16 @@ export default function Discovery({ onNavigateToRecipe, savedRecipes = [], onSav
         time: prep + cook > 0 ? `${prep + cook}M` : r.time || '—',
         totalTime: prep + cook,
         tag: r.tag || r.tags?.[0]?.toUpperCase() || '',
-        mealType: r.mealType || '',
       };
     });
   }, [savedRecipes, profileSlice, dictionary]);
 
-  // Apply category + search filter
+  // Apply category + search filter. Slot filter uses `recipeFitsSlot` so
+  // recipes without `suitableFor` (versatile) surface under every category.
   const filteredBase = useMemo(() => {
     let list = scoredRecipes;
-    if (activeCategory === 'quick') {
-      list = list.filter(r => r.totalTime > 0 && r.totalTime <= 20);
-    } else if (activeCategory !== 'all') {
-      list = list.filter(r => r.mealType === activeCategory);
+    if (activeCategory !== 'all') {
+      list = list.filter(r => recipeFitsSlot(r, activeCategory as MealSlot));
     }
     if (searchQuery.trim()) {
       const q = searchQuery.toLowerCase();
@@ -113,7 +114,7 @@ export default function Discovery({ onNavigateToRecipe, savedRecipes = [], onSav
   const mealTimeTitle = mealTimeType === 'breakfast' ? t.discovery.breakfastTitle
     : mealTimeType === 'lunch' ? t.discovery.lunchTitle : t.discovery.dinnerTitle;
   const mealTimeRecipes = useMemo(() =>
-    filteredBase.filter(r => r.mealType === mealTimeType)
+    filteredBase.filter(r => recipeFitsSlot(r, mealTimeType as MealSlot))
       .sort((a, b) => b.matchScore - a.matchScore).slice(0, 6),
     [filteredBase, mealTimeType],
   );
