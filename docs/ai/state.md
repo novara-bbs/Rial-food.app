@@ -1,15 +1,18 @@
 # RIAL Current State
 
-Last updated: 2026-04-17 (post Q16 B2 wave — FastingTimer + ChallengeDetail + CreatorProfile + WeeklyCheckIn + BodyCalendar + BodySnapshotCard + InlineReflection + RitmoSection + BodyTimeline → `<SectionCard>` / `BUTTON_CARD_SURFACE_CLASSES` · pushed to `rial-food/main` HEAD `088a40a`, working tree clean)
+Last updated: 2026-04-17 (post Q16 B2 full wave — 12 social/wellness screens migrated to `<SectionCard>` / `BUTTON_CARD_SURFACE_CLASSES` · pushed to `rial-food/main` HEAD `14ecb8c`, working tree clean)
 
 ## Release snapshot
-- Root branch: `main`, **in sync with `rial-food/main`** at HEAD `088a40a`. Six commits landed this session: FastingTimer, ChallengeDetail+CreatorProfile, WeeklyCheckIn stat tiles, 4 wellness components batch (BodyCalendar + BodySnapshotCard + InlineReflection + RitmoSection) + `BUTTON_CARD_SURFACE_CLASSES` helper, allowlist trim, BodyTimeline empty-state. 14 SectionCard-shape drift occurrences eliminated (41 → 27); 8 files removed from ESLint Q16 allowlist (27 → 19).
+- Root branch: `main`, **in sync with `rial-food/main`** at HEAD `14ecb8c`. Nine commits landed this session: FastingTimer (3), ChallengeDetail+CreatorProfile (5), WeeklyCheckIn stat tiles (3), wellness components batch (BodyCalendar+BodySnapshotCard+InlineReflection+RitmoSection, 4 migrations) + `BUTTON_CARD_SURFACE_CLASSES` helper, allowlist trim, BodyTimeline empty-state, state snapshot, Challenges+Discover (3), CreatorVerification (2). **19 SectionCard-shape drift occurrences eliminated** (41 → 22); **9 files removed from ESLint Q16 allowlist** (27 → 18).
 - Release remote: `rial-food` (worktree remote: `origin`)
 - Active Vercel project: `rial.app.v1.5`
 - Vercel project id: `prj_t11VHYQjptazjUx7Y2hWLz0IDAjg`
 - **Governance (2026-04-17):** work directly on `main`. No feature branches, no worktrees going forward. Reconcile in-flight divergence by merging directly into `main`.
 
 ## Recent commits on `main` (in sync with `rial-food/main`)
+- `14ecb8c` `refactor(q16-b2): CreatorVerification SectionCard shapes -> primitive (2 migrations)`
+- `03e5c41` `refactor(q16-b2): Challenges + Discover SectionCard shapes -> primitive (3 migrations)`
+- `5403567` `docs(state): post-wave snapshot — 6 commits to 088a40a, drift 41->27, allowlist 27->19`
 - `088a40a` `refactor(q16-b2): BodyTimeline empty state SectionCard shape -> primitive`
 - `170cfa5` `chore(q16): drop 4 wellness components from allowlist`
 - `f12415e` `refactor(q16-b2): wellness components SectionCard shapes -> primitive (4 migrations)`
@@ -74,21 +77,21 @@ Two upstream commits (`8b8a5b5` sprint-q Progress restructure, `155f08b` sprint-
 
 Collateral: my Q16 pilot migration on `WeeklyCheckIn.tsx` + `WeeklyReview.tsx` is wasted work (remote rewrote both). SectionCard baseline recalculated post-merge.
 
-## Quality baseline (2026-04-17, post Q16 B2 wave — FastingTimer / Challenge / Creator / WeeklyCheckIn / 5 wellness components)
+## Quality baseline (2026-04-17, post Q16 B2 full wave — 12 social/wellness screens migrated)
 - TypeScript: 0 errors (`npx tsc --noEmit`)
 - Tests: **556/556** unit tests passing
 - i18n symmetry: **1499** keys aligned ES ↔ EN (`npm run check:i18n`)
-- Design-system lint: 0 errors, 589 warnings (pre-existing type-debt `no-explicit-any` + intentional allowlisted drift)
+- Design-system lint: 0 errors, 584 warnings (pre-existing type-debt `no-explicit-any` + intentional allowlisted drift)
 - Build (measured 2026-04-17 via `npm run release:preflight`):
   - main entry: **769.3 KB raw / 240.8 KB gzip**
   - vendor-recharts: 331.5 KB raw / 99.8 KB gzip
   - total dist/assets/*.js: **2716.6 KB raw / 773.6 KB gzip**
-- Drift baselines (re-measured 2026-04-17 post wave):
+- Drift baselines (re-measured 2026-04-17 post full wave):
   - `text-[Npx]` occurrences across `src/`: **0** (Q16 B1 codemod `78786fc` eliminated all 249)
-  - SectionCard shape: **27** real drift (30 grep matches − 3 legit: `SectionCard.tsx` primitive + `surface.ts` `INPUT_SURFACE_CLASSES` + `surface.ts` `BUTTON_CARD_SURFACE_CLASSES`). Down from 41 pre-wave / 44 pre-wellness-batch / 72 pre-B2. Remaining hotspots: `RealFeelDiary` (6), `PostDetail` (3), `Discover` (2), `Onboarding` (2), `TodaysMeals` (2), `Profile` (2), `CreatorVerification` (2), `CreatorProfile` (1 — intentional post list-item, needs `<ListCard>`), `AICoach` (1), `Planner` (1), `Pantry` (1), `ShoppingList` (1), `RialPlus` (1), `BarcodeScanner` (1), `Challenges` (1).
-  - ESLint Q16 migration allowlist: **19 files** (−8 from this wave: FastingTimer was never listed; ChallengeDetail + 5 wellness/components — BodyCalendar/BodySnapshotCard/BodyTimeline/InlineReflection/RitmoSection — + WeeklyCheckIn all dropped).
+  - SectionCard shape: **22** real drift (25 grep matches − 3 legit: `SectionCard.tsx` primitive + 2 helpers in `surface.ts`). Down from 27 (pre-CreatorVerification) / 41 (pre-wave) / 72 (pre-B2). Remaining hotspots: `RealFeelDiary` (6), `PostDetail` (3), `Onboarding` (2), `TodaysMeals` (2), `Profile` (2), `CreatorProfile` (1 — intentional post list-item, needs `<ListCard>`), `AICoach` (1), `Planner` (1), `Pantry` (1), `ShoppingList` (1), `RialPlus` (1), `BarcodeScanner` (1).
+  - ESLint Q16 migration allowlist: **18 files** (−9 from this wave: FastingTimer was never listed; ChallengeDetail + CreatorVerification + Challenges + Discover + 5 wellness/components — BodyCalendar/BodySnapshotCard/BodyTimeline/InlineReflection/RitmoSection — + WeeklyCheckIn all dropped).
   - `INPUT_SURFACE_CLASSES` helper consumers: **4** (unchanged).
-  - `BUTTON_CARD_SURFACE_CLASSES` helper consumers: **1** (`BodySnapshotCard` — new in `f12415e`). Mirrors input pattern for clickable card-shaped `<button>` elements.
+  - `BUTTON_CARD_SURFACE_CLASSES` helper consumers: **3** (`BodySnapshotCard` + `Discover` creator-card + `Discover` post-card). New in `f12415e` + `03e5c41`.
 
 ## 2026-04-17 Q19 meal-taxonomy (shipped — `5dab667`)
 Plan: `.claude/plans/analiza-si-tiene-sentido-floating-kurzweil.md`. CHANGELOG: `[1.5.25]`.
@@ -183,7 +186,7 @@ Plan file: `.claude/plans/replicated-orbiting-coral.md`. Close-out doc: `docs/AU
 - Challenges/Creadores card divs still have onClick (complex to fix: nested buttons → needs restructure)
 - **SyncKey covers ~10 of ~35 localStorage keys** — see audit below. Gap must be resolved in Supabase sprint (Q6).
 - **CSP header pending (Q17)** — `vercel.json` now ships HSTS + X-Frame + nosniff + Permissions-Policy + Referrer-Policy, but Content-Security-Policy is deferred until all third-party sources are audited (Supabase, Sentry, Google GenAI, RevenueCat, recharts).
-- **SectionCard shape drift: 27 occurrences pending B2 migration** — down from 41 (pre-wave) / 72 (pre-B2). 2026-04-17 wave shipped FastingTimer (3→0), ChallengeDetail (3→0), CreatorProfile (3→1 intentional post list-item), WeeklyCheckIn (3→0), BodyCalendar (1→0), BodySnapshotCard (1→0 via new `BUTTON_CARD_SURFACE_CLASSES`), InlineReflection (1→0), RitmoSection (1→0), BodyTimeline (1→0). Remaining hotspots: `RealFeelDiary` (6), `PostDetail` (3), `Discover` (2), `Onboarding` (2), `TodaysMeals` (2), `Profile` (2), `CreatorVerification` (2), `AICoach` (1), `Planner` (1), `Pantry` (1), `ShoppingList` (1), `RialPlus` (1), `BarcodeScanner` (1), `Challenges` (1), `CreatorProfile` (1 — post list-item, blocked on `<ListCard>` variant). Strategy: continue `INPUT_SURFACE_CLASSES`/`BUTTON_CARD_SURFACE_CLASSES` pattern for input shells + clickable-card buttons; migrate true card sections to `<SectionCard>`. ESLint guardrail keeps new drift at 0.
+- **SectionCard shape drift: 22 occurrences pending B2 migration** — down from 41 (pre-wave) / 72 (pre-B2). 2026-04-17 wave shipped FastingTimer (3→0), ChallengeDetail (3→0), CreatorProfile (3→1 intentional post list-item), WeeklyCheckIn (3→0), BodyCalendar (1→0), BodySnapshotCard (1→0 via new `BUTTON_CARD_SURFACE_CLASSES`), InlineReflection (1→0), RitmoSection (1→0), BodyTimeline (1→0), Challenges (1→0), Discover (2→0), CreatorVerification (2→0). Remaining hotspots: `RealFeelDiary` (6), `PostDetail` (3), `Onboarding` (2), `TodaysMeals` (2), `Profile` (2), `AICoach` (1), `Planner` (1), `Pantry` (1), `ShoppingList` (1), `RialPlus` (1), `BarcodeScanner` (1), `CreatorProfile` (1 — post list-item, blocked on `<ListCard>` variant). Strategy: continue `INPUT_SURFACE_CLASSES`/`BUTTON_CARD_SURFACE_CLASSES` pattern for input shells + clickable-card buttons; migrate true card sections to `<SectionCard>`. ESLint guardrail keeps new drift at 0.
 
 ## localStorage audit (2026-04-15)
 All keys below are prefixed with `rial_` by `useLocalStorageState`. Column "Sync?" = whether `src/lib/sync.ts` `SyncKey` type includes it.
