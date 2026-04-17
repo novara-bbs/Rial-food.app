@@ -16,22 +16,24 @@ interface SectionCardProps {
   caption?: ReactNode;
   /** Slot aligned to the right side of the header (trend chip, CTA, toggle). */
   action?: ReactNode;
-  /** Internal vertical padding. */
-  padding?: 'sm' | 'md' | 'lg';
-  /** Vertical spacing of children. */
-  spacing?: 'sm' | 'md' | 'lg';
+  /** Internal vertical padding. `none` omits padding for list containers or custom layouts. */
+  padding?: 'none' | 'sm' | 'md' | 'lg';
+  /** Vertical spacing of children. `none` omits `space-y-*` for grids or divide-y layouts. */
+  spacing?: 'none' | 'sm' | 'md' | 'lg';
   /** Extra Tailwind classes merged with the base container classes. */
   className?: string;
   children: ReactNode;
 }
 
 const PAD: Record<NonNullable<SectionCardProps['padding']>, string> = {
+  none: '',
   sm: 'p-3',
   md: 'p-5',
   lg: 'p-6',
 };
 
 const SPACE: Record<NonNullable<SectionCardProps['spacing']>, string> = {
+  none: '',
   sm: 'space-y-2',
   md: 'space-y-3',
   lg: 'space-y-4',
@@ -50,7 +52,14 @@ export default function SectionCard({
   const hasHeader = !!(title || icon || caption || action);
   return (
     <section
-      className={`bg-surface-container-low border border-outline-variant/20 rounded-sm ${PAD[padding]} ${SPACE[spacing]} ${className}`.trim()}
+      className={[
+        'bg-surface-container-low border border-outline-variant/20 rounded-sm',
+        PAD[padding],
+        SPACE[spacing],
+        className,
+      ]
+        .filter(Boolean)
+        .join(' ')}
     >
       {hasHeader && (
         <div className="flex items-start justify-between gap-2">
