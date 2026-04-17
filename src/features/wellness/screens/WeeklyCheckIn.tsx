@@ -1,5 +1,6 @@
 import { ChevronLeft, ChevronRight, CheckCircle2, XCircle, Target, ClipboardList } from 'lucide-react';
 import PageShell from '../../../components/PageShell';
+import SectionCard from '../../../components/SectionCard';
 import { useState } from 'react';
 import { useLocalStorageState } from '../../../hooks/useLocalStorageState';
 import { useI18n } from '../../../i18n';
@@ -63,18 +64,18 @@ export default function WeeklyCheckIn({ onBack }: { onBack: () => void }) {
             </div>
 
             <div className="grid grid-cols-3 gap-3">
-              <div className="bg-surface-container-low border border-outline-variant/20 rounded-sm p-3 text-center">
+              <SectionCard padding="sm" spacing="none" className="text-center">
                 <span className="font-label text-micro uppercase tracking-widest text-on-surface-variant block">{t.weekly?.vitality || 'Vitalidad'}</span>
                 <span className="font-headline font-black text-xl text-primary">{pastEntry.avgVitality}</span>
-              </div>
-              <div className="bg-surface-container-low border border-outline-variant/20 rounded-sm p-3 text-center">
+              </SectionCard>
+              <SectionCard padding="sm" spacing="none" className="text-center">
                 <span className="font-label text-micro uppercase tracking-widest text-on-surface-variant block">{t.weekly?.logs || 'Registros'}</span>
                 <span className="font-headline font-black text-xl text-brand-secondary">{pastEntry.mealsLogged}</span>
-              </div>
-              <div className="bg-surface-container-low border border-outline-variant/20 rounded-sm p-3 text-center">
+              </SectionCard>
+              <SectionCard padding="sm" spacing="none" className="text-center">
                 <span className="font-label text-micro uppercase tracking-widest text-on-surface-variant block">{t.weekly?.days || 'días'}</span>
                 <span className="font-headline font-black text-xl text-tertiary">{pastEntry.consistencyDays}/7</span>
-              </div>
+              </SectionCard>
             </div>
 
             {pastEntry.workedWell && (

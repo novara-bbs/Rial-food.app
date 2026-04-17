@@ -118,7 +118,6 @@ const q16MigrationAllowlist = [
   'src/features/wellness/components/RitmoSection.tsx',
   'src/features/wellness/screens/Progress.tsx',
   'src/features/wellness/screens/RealFeelDiary.tsx',
-  'src/features/wellness/screens/WeeklyCheckIn.tsx',
 ];
 
 export default tseslint.config(
