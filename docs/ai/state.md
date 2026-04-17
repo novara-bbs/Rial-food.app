@@ -1,18 +1,23 @@
 # RIAL Current State
 
-Last updated: 2026-04-17 (post Q16 B1 codemod + B2 helper + SettingsProfile/Nutrition + SectionCard API extension + BarcodeScanner/Onboarding partials; `rial-food/main` HEAD `48def0d`, 3 commits ahead awaiting push)
+Last updated: 2026-04-17 (post Q16 B2 wellness batch + demo-seed fix — pushed to `rial-food/main` HEAD `4d1c6f4`, working tree clean)
 
 ## Release snapshot
-- Root branch: `main`, **3 commits ahead of `rial-food/main`** (HEAD `27dad43`). B2 batch complete locally (SectionCard `none` variant, BarcodeScanner/Onboarding INPUT_SURFACE_CLASSES, allowlist drop of migrated files) — push gated on explicit approval.
+- Root branch: `main`, **in sync with `rial-food/main`** at HEAD `4d1c6f4`. Last push delivered 6 commits covering Q16-B2 wellness migrations (WeeklyScoreCard, ConsistencyCalendar, WeightTrendCard → `<SectionCard>` primitive) + demo-seed handler fix (clear now removes version markers; load writes `weeklyCheckIns` unprefixed) + regression tests.
 - Release remote: `rial-food` (worktree remote: `origin`)
 - Active Vercel project: `rial.app.v1.5`
 - Vercel project id: `prj_t11VHYQjptazjUx7Y2hWLz0IDAjg`
 - **Governance (2026-04-17):** work directly on `main`. No feature branches, no worktrees going forward. Reconcile in-flight divergence by merging directly into `main`.
 
-## Recent commits on `main` (3 ahead of `rial-food/main`)
-- `27dad43` `chore(q16): drop SettingsProfile + SettingsNutrition from allowlist` *(local)*
-- `4fc53fd` `refactor(q16-b2): BarcodeScanner + Onboarding inputs → INPUT_SURFACE_CLASSES` *(local)*
-- `05b558b` `feat(q16-b2): extend SectionCard with padding='none' + spacing='none'` *(local)*
+## Recent commits on `main` (in sync with `rial-food/main`)
+- `4d1c6f4` `test(demo-seed): lock in clear + load handler fixes`
+- `98c75b3` `fix(demo-seed): clear seed-version markers and drop stale rial_ prefix`
+- `60a43cc` `chore(q16): drop migrated wellness components from allowlist`
+- `5f5ad24` `refactor(q16-b2): wellness SectionCard shapes -> primitive (5 migrations)`
+- `27c882b` `docs(state): snapshot post Q16 B2 batch — SectionCard none variant + BarcodeScanner/Onboarding inputs`
+- `27dad43` `chore(q16): drop SettingsProfile + SettingsNutrition from allowlist`
+- `4fc53fd` `refactor(q16-b2): BarcodeScanner + Onboarding inputs → INPUT_SURFACE_CLASSES`
+- `05b558b` `feat(q16-b2): extend SectionCard with padding='none' + spacing='none'`
 - `48def0d` `refactor(q16-b2): SettingsNutrition dislike search → INPUT_SURFACE_CLASSES`
 - `7386c5c` `refactor(q16-b2): SettingsProfile inputs → INPUT_SURFACE_CLASSES`
 - `8054c9d` `chore(q16): shrink allowlist further + extract INPUT_SURFACE_CLASSES`
@@ -62,22 +67,22 @@ Two upstream commits (`8b8a5b5` sprint-q Progress restructure, `155f08b` sprint-
 
 Collateral: my Q16 pilot migration on `WeeklyCheckIn.tsx` + `WeeklyReview.tsx` is wasted work (remote rewrote both). SectionCard baseline recalculated post-merge.
 
-## Quality baseline (2026-04-17, post Q16 B1 codemod + B2 helper + SettingsProfile/Nutrition/BarcodeScanner/Onboarding partials)
+## Quality baseline (2026-04-17, post Q16 B2 wellness batch + demo-seed fix)
 - TypeScript: 0 errors (`npx tsc --noEmit`)
-- Tests: **549/549** unit tests passing
+- Tests: **556/556** unit tests passing (+7 demo-seed regression tests vs 549 pre-batch)
 - i18n symmetry: **1499** keys aligned ES ↔ EN (`npm run check:i18n`)
-- Design-system lint: 0 errors, **610** warnings (type-debt `no-explicit-any` only — dropped from 883 post-Q16 B1 codemod `78786fc` and B2 migrations cleaning 24 more)
+- Design-system lint: 0 errors, warnings pre-existentes type-debt (`no-explicit-any`) — B2 wellness batch migrated 3 additional files off allowlist
 - Build (measured 2026-04-17 via `npm run release:preflight`):
-  - main entry: **769.8 KB raw / 240.9 KB gzip**
+  - main entry: **769.3 KB raw / 240.8 KB gzip**
   - vendor-recharts: 331.5 KB raw / 99.8 KB gzip
-  - total dist/assets/*.js: **2719.9 KB raw / 773.5 KB gzip**
-- Drift baselines (re-measured 2026-04-17 post B2 batch):
+  - total dist/assets/*.js: **2717.2 KB raw / 773.5 KB gzip**
+- Drift baselines (re-measured 2026-04-17 post wellness batch):
   - `text-[Npx]` occurrences across `src/`: **0** (Q16 B1 codemod `78786fc` eliminated all 249)
-  - SectionCard shape: **44** real drift (46 grep matches − 2 legit: `SectionCard.tsx` primitive + `surface.ts` helper). Down from 72 pre-B2. Remaining hotspots: `RealFeelDiary` (6), `FastingTimer` (3), `ChallengeDetail` (3), `CreatorProfile` (3), `PostDetail` (3), `WeeklyCheckIn` (3), `Onboarding` (2).
-  - ESLint Q16 migration allowlist: **30 files** (−2 from B2 batch: `SettingsProfile`, `SettingsNutrition`; BarcodeScanner + Onboarding stay listed because residual shape occurrences remain).
+  - SectionCard shape: **41** real drift (43 grep matches − 2 legit: `SectionCard.tsx` primitive + `surface.ts` helper). Down from 44 pre-wellness-batch / 72 pre-B2. Remaining hotspots: `RealFeelDiary` (6), `FastingTimer` (3), `ChallengeDetail` (3), `CreatorProfile` (3), `PostDetail` (3), `WeeklyCheckIn` (3), `Onboarding` (2), `TodaysMeals` (2), `Profile` (2), `CreatorVerification` (2), `Discover` (2).
+  - ESLint Q16 migration allowlist: **27 files** (−3 from B2 wellness batch: `WeeklyScoreCard`, `ConsistencyCalendar`, `WeightTrendCard`; BarcodeScanner + Onboarding stay listed because residual shape occurrences remain).
   - `INPUT_SURFACE_CLASSES` helper consumers: **4** (`SettingsProfile`, `SettingsNutrition`, `BarcodeScanner` inputs, `Onboarding` inputs). SectionCard API extended with `padding='none'` / `spacing='none'` variants for list containers.
 
-## 2026-04-17 Q19 meal-taxonomy (uncommitted)
+## 2026-04-17 Q19 meal-taxonomy (shipped — `5dab667`)
 Plan: `.claude/plans/analiza-si-tiene-sentido-floating-kurzweil.md`. CHANGELOG: `[1.5.25]`.
 
 **Decisión de producto.** Sustituir `Recipe.mealType: string` (single-valued) por `Recipe.suitableFor: MealSlot[]` (multi-valued opcional). Empty/undefined = receta versátil (aparece en todos los filtros de franja). Precedente Paprika/PlateJoy — única separación limpia entre "apta para" (propiedad de la receta) y "slot de consumo" (decisión al planificar/loggear) entre 19 competidores analizados. Mantener las 4 franjas canónicas (Breakfast/Lunch/Dinner/Snack) como vocabulario familiar — no introducir slots renombrables/configurables (Q20+). "Rápido" sale del eje primario de franjas y se promueve a `collections` (eje ortogonal tiempo ≤ 20 min). Cierra de paso regresión silenciosa donde recetas creadas/importadas por el usuario quedaban invisibles en filtros de franja (pre-Q19 `CreateRecipe` no asignaba `mealType`).
