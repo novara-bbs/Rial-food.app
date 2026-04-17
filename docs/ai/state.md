@@ -1,6 +1,6 @@
 # RIAL Current State
 
-Last updated: 2026-04-17 (post Cocina/Explora cohesion pass — RecipeCard tokens + PageShell normalize)
+Last updated: 2026-04-17 (post Q19 meal-taxonomy — `suitableFor[]` multi-slot + migration + i18n canonical; preflight + runtime verification pending)
 
 ## Release snapshot
 - Root branch: `main`, in sync with `rial-food/main`. No pending local commits.
@@ -63,18 +63,41 @@ Collateral: my Q16 pilot migration on `WeeklyCheckIn.tsx` + `WeeklyReview.tsx` i
   - `text-[Npx]` in `src/features/social/**`: **0** (unchanged)
   - ESLint Q16 migration allowlist: **~41 files** (−2 from Wave 3 — `RecipeCard.tsx`, `Discovery.tsx` migrated)
 
-## 2026-04-17 Cocina/Explora cohesion pass (uncommitted)
-Plan: `.claude/plans/quiero-que-analices-concretamente-effervescent-deer.md`. CHANGELOG: `[1.5.23]`.
+## 2026-04-17 Q19 meal-taxonomy (uncommitted)
+Plan: `.claude/plans/analiza-si-tiene-sentido-floating-kurzweil.md`. CHANGELOG: `[1.5.25]`.
 
-**Decisión de producto.** Mantener la asimetría grid (Cocina = biblioteca) vs lanes/carrusel (Explora/Discovery = editorial). Es el patrón industria confirmado en 9 competidores (Yummly, NYT Cooking, Mealime, Instagram, TikTok, Pinterest, Spotify, Apple Music, Paprika). **NO** añadir toggle grid/carrusel en Cocina — no lo hace ningún competidor de comida y genera choice paralysis. Si en Q18+ aparece demanda real, la alternativa correcta es grid↔list (para librerías grandes, pattern Paprika/Apple Music), no grid↔carrusel.
+**Decisión de producto.** Sustituir `Recipe.mealType: string` (single-valued) por `Recipe.suitableFor: MealSlot[]` (multi-valued opcional). Empty/undefined = receta versátil (aparece en todos los filtros de franja). Precedente Paprika/PlateJoy — única separación limpia entre "apta para" (propiedad de la receta) y "slot de consumo" (decisión al planificar/loggear) entre 19 competidores analizados. Mantener las 4 franjas canónicas (Breakfast/Lunch/Dinner/Snack) como vocabulario familiar — no introducir slots renombrables/configurables (Q20+). "Rápido" sale del eje primario de franjas y se promueve a `collections` (eje ortogonal tiempo ≤ 20 min). Cierra de paso regresión silenciosa donde recetas creadas/importadas por el usuario quedaban invisibles en filtros de franja (pre-Q19 `CreateRecipe` no asignaba `mealType`).
 
 **Write set.**
-- `src/components/patterns/RecipeCard.tsx` — `TITLE.grid` sube a `text-sm` + `mb-1.5` (paridad con carousel; la densidad sigue siendo función del ancho de celda); `infoPad` + `infoBottom` unificados; Save/Share/Delete a 36×36 px (ADR-003, HIG inline-card min); 4 `text-[Npx]` → `text-micro` (ADR-002).
-- `src/features/recipes/screens/Cocina.tsx` — `<PageShell maxWidth="wide" spacing="sm">` elimina drift hand-rolled `px-6 max-w-5xl mx-auto`; mealCategories gana "Rápido" (Zap) para paridad con Discovery; collection pill `quick` eliminado (redundante tras promoción).
-- `src/features/home/screens/Discovery.tsx` — `<PageShell maxWidth="wide" noPadding className="space-y-0">` (preserva bleed full-width de Swimlane); CollectionBanner counter `text-[10px]` → `text-micro`.
-- `eslint.config.mjs` — `RecipeCard.tsx` + `Discovery.tsx` salen del Q16 allowlist.
+- `src/types/recipe.ts` + `src/types/index.ts` — `MealSlot` canónico + re-export; `Recipe.suitableFor?: MealSlot[]` + `@deprecated mealType?: string`.
+- `src/lib/schemas.ts` — zod dual (`suitableFor` canónico + `mealType` legacy retenido para hydration).
+- `src/features/recipes/utils/meal-slot.ts` (**nuevo**) + `meal-slot.test.ts` (**27 assertions**) — `getRecipeSlots / recipeFitsSlot / defaultSlotFor` con normalización ES+EN + case-insensitive.
+- `src/features/food/components/MealSlotMultiSelect.tsx` (**nuevo**) — picker multi-check HIG-compliant (`role="group"`, `aria-pressed`, min-h-11).
+- `src/features/food/data/seed-recipes.ts` — 46 recetas migradas a `suitableFor[]` (versátiles → `['lunch','dinner']`; específicos → un solo slot).
+- `src/lib/seedVersion.ts` — `savedRecipes` 3 → 4 (re-hidrata usuarios existentes con estrategia `preserve-user`).
+- `src/features/recipes/screens/Cocina.tsx` + `src/features/home/screens/Discovery.tsx` — filtros vía `recipeFitsSlot`; "Rápido" movido a `collections`.
+- `src/features/recipes/components/RecipeDaySelectorSheet.tsx` + `src/features/recipes/handlers/recipe-handlers.ts` + `src/features/recipes/screens/RecipeDetail.tsx` — default slot vía `defaultSlotFor(recipe)`.
+- `src/features/recipes/screens/CreateRecipe.tsx` — picker integrado; hidratación edit-mode vía `getRecipeSlots(initialRecipe)` (fix de pérdida de slot legacy al re-guardar).
+- `src/features/recipes/screens/ImportRecipeURL.tsx` — `inferSuitableFor(title)` heurística ES/EN; chips editables pre-guardado.
+- `src/contexts/AppStateContext.tsx` — migración eager idempotente: legacy `mealType` → `suitableFor[]` on mount, drop del campo deprecado. Early-return cuando no hay nada que migrar.
+- `src/i18n/locales/es.ts` + `src/i18n/locales/en.ts` — namespace canónico `t.mealSlot.*`; duplicados corregidos (`Almuerzo` → `Comida`, `MERIENDA` → `SNACK`, `Snacks` → `Snack`). +13 claves, 1475 → 1488 simétricas.
 
-**Verificación.** `npx tsc --noEmit` ✓, `npm run lint:code` 0 errors ✓, `npm run test` 515/515 ✓, `npm run check:i18n` 1475 ✓, `npm run build` + `npm run size:check` dentro de budget ✓.
+**Quality baseline post-ejecución.**
+- TypeScript: 0 errors (`npx tsc --noEmit`)
+- Tests: **542/542** (+27 nuevos en `meal-slot.test.ts` · 515 → 542)
+- i18n symmetry: **1488** keys aligned ES ↔ EN
+- Design-system lint: 0 errors, warnings pre-existentes (Q16 allowlist sin cambios)
+- Consumers audit: cero accesos directos a `recipe.mealType` en `Home.tsx`, `TodaysMeals`, `AddMeal.tsx`, `Planner.tsx`; todo vía helpers
+- Build + size:check: dentro de budget (pendiente de correr `release:preflight`)
+
+**Nuevos risks.**
+- `Recipe.tag: string` ad-hoc sigue vivo (GUARDADO/VEGANO/EXPRESS/BATCH/MI RECETA/IMPORTADA/POSTRE/SNACK/DESAYUNO/PLANEADO/SOBRAS). **Bug latente**: `Discovery.tsx:126` filtra `r.tag === 'VEGANO'` mientras `CreateRecipe` escribe a `tags[].includes('vegan')` → recetas veganas del usuario no aparecen en el filtro Vegano. Defer a Q16 codemod sprint (requiere `origin?: 'user' | 'imported' | 'seed'` + `FoodTag = 'batch-cooking'` + migración 40+ sitios).
+- Literales `'merienda'` supervivientes en `meal-slot.ts:47` + `recipe-handlers.ts:50` son parsers de legacy strings (no UI), intencionales.
+
+**Pendiente antes de commit/push.** Runtime verification de 7 escenarios en preview + `npm run release:preflight`.
+
+## 2026-04-17 Cocina/Explora cohesion pass (committed in 1.5.23)
+Plan: `.claude/plans/quiero-que-analices-concretamente-effervescent-deer.md`. CHANGELOG: `[1.5.23]`. Cohesion pass RecipeCard tokens + PageShell normalize. Baseline post-pase: 515/515 tests, 1475 i18n keys, bundle en budget.
 
 ## 2026-04-18 tab audit (Hoy / Cocina / Explora)
 Plan file: `.claude/plans/replicated-orbiting-coral.md`. Close-out doc: `docs/AUDIT-TAB-2026-04-18.md`. 5 waves executed (Wave 4 docs in progress). 17 functional bugs fixed, 2 dead files deleted, drift cleaned across 30+ files, factory-handler pattern completed for social. No pushes — commits staged for single approval-gated push.

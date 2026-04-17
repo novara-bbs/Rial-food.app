@@ -1,5 +1,40 @@
 # RIAL App - Changelog
 
+## [1.5.25] - 2026-04-17
+
+### feat(q19-meal-taxonomy) — Recipe.mealType (single) → Recipe.suitableFor: MealSlot[] (multi-valued)
+
+Refactor de modelo y UX que resuelve el caso de uso real "¿comida o cena?": una receta puede encajar en varias franjas simultáneamente, y las versátiles (sin asignación) encajan en todas. Precedente Paprika/PlateJoy. Mantiene las 4 franjas canónicas (Breakfast/Lunch/Dinner/Snack) como vocabulario; cambia cómo una receta se asocia a ellas. Cierra de paso una regresión silenciosa pre-Q19 donde las recetas creadas o importadas por el usuario nunca recibían `mealType` y quedaban invisibles en los filtros de franja (solo "Todo" y "Rápido"). Plan: `.claude/plans/analiza-si-tiene-sentido-floating-kurzweil.md`.
+
+**Changed**
+- `src/types/recipe.ts` — `Recipe.mealType?: string` → `@deprecated`, promovido `Recipe.suitableFor?: MealSlot[]`. `MealSlot = 'breakfast' | 'lunch' | 'dinner' | 'snack'` canónico aquí; re-export desde `src/types/index.ts` para eliminar la dependencia cruzada feature→feature (antes vivía en `MealSlotSelector.tsx`).
+- `src/lib/schemas.ts` — zod dual: `suitableFor: z.array(z.enum([...])).optional()` + legacy `mealType: z.string().optional()` retenido para hidratación de storage pre-Q19.
+- `src/features/food/data/seed-recipes.ts` — 46 recetas migradas a `suitableFor[]`. Los mains versátiles (bowls, pasta, ensaladas) llevan `['lunch','dinner']`; specifics mantienen un solo slot. `src/lib/seedVersion.ts` bump `savedRecipes` 3 → 4 para re-hidratar usuarios existentes con estrategia `preserve-user` (no pisa recetas propias).
+- `src/features/recipes/screens/Cocina.tsx` + `src/features/home/screens/Discovery.tsx` — filtros pasan de `r.mealType === active` a `recipeFitsSlot(r, active)`. "Rápido" sale del eje primario de franjas y se promueve a `collections` (eje ortogonal tiempo ≤ 20 min, junto a Proteína/Batch/Vegetal). Sin toggle grid↔carrusel: Cocina sigue grid (biblioteca), Discovery sigue carrusel (editorial).
+- `src/features/recipes/components/RecipeDaySelectorSheet.tsx` + `src/features/recipes/handlers/recipe-handlers.ts` — default slot pasa de `recipe.mealType` a `defaultSlotFor(recipe)` (primer entry de `suitableFor`, fallback `'lunch'`).
+- `src/i18n/locales/es.ts` + `src/i18n/locales/en.ts` — namespace canónico `t.mealSlot.{breakfast,lunch,dinner,snack}`. Eliminados duplicados (`t.discovery.catLunch: 'Almuerzo'` → `'Comida'`; `t.discovery.catSnack: 'Snacks'` → `'Snack'`; `t.plan.mealTypeSnack: 'MERIENDA'` → `'SNACK'`). Un solo vocabulario visible. +13 claves, 1475 → 1488 simétricas ES ↔ EN.
+
+**Added**
+- `src/features/recipes/utils/meal-slot.ts` — helpers canónicos:
+  - `getRecipeSlots(recipe)` normaliza nuevo `suitableFor` + legacy `mealType` (ES + EN, case-insensitive, acepta `desayuno`/`almuerzo`/`comida`/`cena`/`merienda`/`snack`). Retorna `undefined` cuando la receta es versátil (semánticamente distinto de `[]`).
+  - `recipeFitsSlot(recipe, slot)` → `true` para versátiles.
+  - `defaultSlotFor(recipe)` → primer entry o `'lunch'`.
+- `src/features/food/components/MealSlotMultiSelect.tsx` — nuevo picker multi-check (variante de `MealSlotSelector`). HIG-compliant (`min-h-11`), `role="group"`, `aria-pressed`. 4 píldoras icono + label (Sun/UtensilsCrossed/Moon/Apple).
+- `src/features/recipes/screens/CreateRecipe.tsx` — nuevo state `suitableFor: MealSlot[]`, picker integrado entre difficulty/servings y Source/Video. Hidrata desde `getRecipeSlots(initialRecipe) ?? []` para que edit-mode honre el `mealType` legacy sin pérdida de datos. Default en receta nueva: `[]` (versátil, encaja en todas las franjas).
+- `src/features/recipes/screens/ImportRecipeURL.tsx` — `inferSuitableFor(title)` heurística ES/EN: `pancake|avena|tostada|yogur` → breakfast; `barrita|galleta|snack|merienda` → snack; `sopa|bowl|pasta|arroz` → lunch+dinner. Pre-selecciona chips editables tras parseo; si el usuario no toca, se guarda la inferencia.
+- `src/features/recipes/utils/meal-slot.test.ts` — **27 assertions** cubriendo suitableFor precedence, legacy ES/EN normalization, case-insensitivity, versátil fallback, `defaultSlotFor`. Suite total: 515 → **542**.
+- Migración eager idempotente en `src/contexts/AppStateContext.tsx` — una useEffect post-mount detecta recetas con `mealType` legacy pero sin `suitableFor`, las normaliza vía `getRecipeSlots`, dropea el campo legacy. Early-return cuando no hay nada que migrar; seguro en cualquier orden respecto al reseed.
+- 2 claves i18n en `createRecipe`: `suitableForLabel` ("Apta para" / "Suitable for") + `suitableForHelp` ("Deja vacío si encaja en cualquier franja" / "Leave empty if it fits any slot").
+
+**Fixed**
+- Recetas creadas o importadas por el usuario no aparecían en filtros de franja (regresión silenciosa pre-Q19: `CreateRecipe` y `ImportRecipeURL` nunca asignaban `mealType`, y los filtros comparaban con `===`).
+- `CreateRecipe` edit-mode de una receta con `mealType` legacy: el picker mostraba vacío y al re-guardar se perdía el slot. Ahora hidrata vía `getRecipeSlots(initialRecipe)`.
+
+**Notes**
+- **Compatibilidad**: storage pre-Q19 se lee transparentemente vía `getRecipeSlots`. Ningún consumer accede `.mealType` directamente (audit en close-out: 0 accesos en `Home.tsx`, `TodaysMeals`, `AddMeal.tsx`, `Planner.tsx`). Las únicas referencias supervivientes son el parser legacy en `meal-slot.ts` y las claves i18n `t.plan.mealType*` (labels, no leen del modelo).
+- **Out of scope (Q16 codemod sprint)**: deprecación de `Recipe.tag: string` ad-hoc (GUARDADO/VEGANO/EXPRESS/BATCH/MI RECETA/IMPORTADA/POSTRE/SNACK/DESAYUNO/PLANEADO/SOBRAS). Bug latente conocido: `Discovery.tsx:126` filtra por `r.tag === 'VEGANO'` mientras `CreateRecipe` escribe a `tags[].includes('vegan')` — recetas de usuario vegano no aparecen en el filtro Vegano. Se documenta pero no se arregla en este sprint (requiere introducir `origin?: 'user' | 'imported' | 'seed'` + `FoodTag = 'batch-cooking'` + migración de 40+ sitios).
+- **Out of scope (Q20+)**: timeline sin slots (MacroFactor-style) y slots configurables/renombrables por usuario. No se tocó el modelo de `mealPlan: Record<number, Meal[]>` — sigue soportando N meals arbitrarios por día.
+
 ## [1.5.24] - 2026-04-17
 
 ### feat(recipes) — Fase 1 multi-media (hero carousel + lightbox + video híbrido)
