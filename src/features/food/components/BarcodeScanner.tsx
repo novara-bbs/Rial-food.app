@@ -9,6 +9,7 @@ import type { PortionResult } from './PortionSelector';
 import type { Ingredient, ServingSize } from '../../../types';
 import { parseOFFServings } from '../api/open-food-facts';
 import type { UnitSystem } from '../utils/units';
+import { INPUT_SURFACE_CLASSES } from '@/components/ui/surface';
 
 type ScanState = 'idle' | 'scanning' | 'looking-up' | 'found' | 'not-found' | 'error';
 
@@ -367,7 +368,7 @@ export default function BarcodeScanner({ onClose, onProductFound, onSaveToDictio
                     value={customFood.name}
                     onChange={e => setCustomFood(prev => ({ ...prev, name: e.target.value }))}
                     placeholder={t.scanner.foodNamePlaceholder}
-                    className="w-full px-3 py-2.5 bg-surface-container-low border border-outline-variant/20 rounded-sm text-on-surface text-sm focus:outline-none focus:border-primary"
+                    className={`${INPUT_SURFACE_CLASSES} w-full px-3 py-2.5 text-on-surface text-sm focus:outline-none focus:border-primary`}
                   />
                 </div>
 
@@ -378,7 +379,7 @@ export default function BarcodeScanner({ onClose, onProductFound, onSaveToDictio
                     value={customFood.brand}
                     onChange={e => setCustomFood(prev => ({ ...prev, brand: e.target.value }))}
                     placeholder={t.scanner.brandPlaceholder}
-                    className="w-full px-3 py-2.5 bg-surface-container-low border border-outline-variant/20 rounded-sm text-on-surface text-sm focus:outline-none focus:border-primary"
+                    className={`${INPUT_SURFACE_CLASSES} w-full px-3 py-2.5 text-on-surface text-sm focus:outline-none focus:border-primary`}
                   />
                 </div>
 
@@ -389,7 +390,7 @@ export default function BarcodeScanner({ onClose, onProductFound, onSaveToDictio
                     inputMode="decimal"
                     value={customFood.serving}
                     onChange={e => setCustomFood(prev => ({ ...prev, serving: e.target.value }))}
-                    className="w-full px-3 py-2.5 bg-surface-container-low border border-outline-variant/20 rounded-sm text-on-surface text-sm focus:outline-none focus:border-primary"
+                    className={`${INPUT_SURFACE_CLASSES} w-full px-3 py-2.5 text-on-surface text-sm focus:outline-none focus:border-primary`}
                   />
                 </div>
 
@@ -402,7 +403,7 @@ export default function BarcodeScanner({ onClose, onProductFound, onSaveToDictio
                       value={customFood.cal}
                       onChange={e => setCustomFood(prev => ({ ...prev, cal: e.target.value }))}
                       placeholder="0"
-                      className="w-full px-3 py-2.5 bg-surface-container-low border border-outline-variant/20 rounded-sm text-on-surface text-sm focus:outline-none focus:border-primary"
+                      className={`${INPUT_SURFACE_CLASSES} w-full px-3 py-2.5 text-on-surface text-sm focus:outline-none focus:border-primary`}
                     />
                   </div>
                   <div>
@@ -413,7 +414,7 @@ export default function BarcodeScanner({ onClose, onProductFound, onSaveToDictio
                       value={customFood.pro}
                       onChange={e => setCustomFood(prev => ({ ...prev, pro: e.target.value }))}
                       placeholder="0"
-                      className="w-full px-3 py-2.5 bg-surface-container-low border border-outline-variant/20 rounded-sm text-on-surface text-sm focus:outline-none focus:border-primary"
+                      className={`${INPUT_SURFACE_CLASSES} w-full px-3 py-2.5 text-on-surface text-sm focus:outline-none focus:border-primary`}
                     />
                   </div>
                   <div>
@@ -424,7 +425,7 @@ export default function BarcodeScanner({ onClose, onProductFound, onSaveToDictio
                       value={customFood.carbs}
                       onChange={e => setCustomFood(prev => ({ ...prev, carbs: e.target.value }))}
                       placeholder="0"
-                      className="w-full px-3 py-2.5 bg-surface-container-low border border-outline-variant/20 rounded-sm text-on-surface text-sm focus:outline-none focus:border-primary"
+                      className={`${INPUT_SURFACE_CLASSES} w-full px-3 py-2.5 text-on-surface text-sm focus:outline-none focus:border-primary`}
                     />
                   </div>
                   <div>
@@ -435,7 +436,7 @@ export default function BarcodeScanner({ onClose, onProductFound, onSaveToDictio
                       value={customFood.fats}
                       onChange={e => setCustomFood(prev => ({ ...prev, fats: e.target.value }))}
                       placeholder="0"
-                      className="w-full px-3 py-2.5 bg-surface-container-low border border-outline-variant/20 rounded-sm text-on-surface text-sm focus:outline-none focus:border-primary"
+                      className={`${INPUT_SURFACE_CLASSES} w-full px-3 py-2.5 text-on-surface text-sm focus:outline-none focus:border-primary`}
                     />
                   </div>
                 </div>
@@ -485,7 +486,7 @@ export default function BarcodeScanner({ onClose, onProductFound, onSaveToDictio
                   value={manualCode}
                   onChange={e => setManualCode(e.target.value)}
                   placeholder={t.scanner.barcodePlaceholder}
-                  className="flex-1 px-4 py-3 bg-surface-container-low border border-outline-variant/20 rounded-sm text-on-surface text-sm font-mono focus:outline-none focus:border-primary"
+                  className={`${INPUT_SURFACE_CLASSES} flex-1 px-4 py-3 text-on-surface text-sm font-mono focus:outline-none focus:border-primary`}
                   onKeyDown={e => e.key === 'Enter' && handleManualSubmit()}
                 />
                 <Button

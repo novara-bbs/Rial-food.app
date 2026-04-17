@@ -5,6 +5,7 @@ import { useTheme } from '../../../contexts/ThemeContext';
 import { calculateDailyTargets, type Goal } from '../../food/utils/nutrition';
 import { getBodyWeightUnit, getHeightUnit } from '../../food/utils/units';
 import type { Theme } from '../../../contexts/ThemeContext';
+import { INPUT_SURFACE_CLASSES } from '@/components/ui/surface';
 
 interface OnboardingData {
   goal: string;
@@ -172,25 +173,25 @@ export default function Onboarding({ isOpen, onClose, onComplete }: {
                 <div>
                   <label className="block text-xs font-label uppercase tracking-widest text-on-surface-variant mb-1.5">{t.onboarding.name}</label>
                   <input type="text" value={data.name} onChange={e => setData(d => ({ ...d, name: e.target.value }))}
-                    className="w-full px-4 py-3 bg-surface-container-low border border-outline-variant/20 rounded-sm text-on-surface text-sm focus:outline-none focus:border-primary" placeholder="Vicente" />
+                    className={`${INPUT_SURFACE_CLASSES} w-full px-4 py-3 text-on-surface text-sm focus:outline-none focus:border-primary`} placeholder="Vicente" />
                 </div>
                 <div className="grid grid-cols-2 gap-3">
                   <div>
                     <label className="block text-xs font-label uppercase tracking-widest text-on-surface-variant mb-1.5">{t.onboarding.weight} ({getBodyWeightUnit('metric')})</label>
                     <input type="number" step="0.1" inputMode="decimal" value={data.weight} onChange={e => setData(d => ({ ...d, weight: +e.target.value }))}
-                      className="w-full px-4 py-3 bg-surface-container-low border border-outline-variant/20 rounded-sm text-on-surface text-sm font-mono focus:outline-none focus:border-primary" />
+                      className={`${INPUT_SURFACE_CLASSES} w-full px-4 py-3 text-on-surface text-sm font-mono focus:outline-none focus:border-primary`} />
                   </div>
                   <div>
                     <label className="block text-xs font-label uppercase tracking-widest text-on-surface-variant mb-1.5">{t.onboarding.height} ({getHeightUnit('metric')})</label>
                     <input type="number" step="0.1" inputMode="decimal" value={data.height} onChange={e => setData(d => ({ ...d, height: +e.target.value }))}
-                      className="w-full px-4 py-3 bg-surface-container-low border border-outline-variant/20 rounded-sm text-on-surface text-sm font-mono focus:outline-none focus:border-primary" />
+                      className={`${INPUT_SURFACE_CLASSES} w-full px-4 py-3 text-on-surface text-sm font-mono focus:outline-none focus:border-primary`} />
                   </div>
                 </div>
                 <div className="grid grid-cols-2 gap-3">
                   <div>
                     <label className="block text-xs font-label uppercase tracking-widest text-on-surface-variant mb-1.5">{t.onboarding.age}</label>
                     <input type="number" value={data.age} onChange={e => setData(d => ({ ...d, age: +e.target.value }))}
-                      className="w-full px-4 py-3 bg-surface-container-low border border-outline-variant/20 rounded-sm text-on-surface text-sm font-mono focus:outline-none focus:border-primary" />
+                      className={`${INPUT_SURFACE_CLASSES} w-full px-4 py-3 text-on-surface text-sm font-mono focus:outline-none focus:border-primary`} />
                   </div>
                   <div>
                     <label className="block text-xs font-label uppercase tracking-widest text-on-surface-variant mb-1.5">{t.onboarding.sex}</label>
