@@ -1,5 +1,6 @@
 import { ArrowLeft, Check, Crown, Sparkles, Brain, ShoppingCart, Lock, Star, BarChart3, Download, Microscope, Archive, ClipboardList, Globe, Timer, Target, RotateCcw, type LucideIcon } from 'lucide-react';
 import PageShell from '../../../components/PageShell';
+import SectionCard from '../../../components/SectionCard';
 import { useState, useEffect } from 'react';
 import { toast } from 'sonner';
 import { useAppState } from '../../../contexts/AppStateContext';
@@ -203,7 +204,7 @@ export default function RialPlus({ onBack }: { onBack: () => void }) {
         </div>
 
         {/* Social proof */}
-        <div className="bg-surface-container-low border border-outline-variant/20 rounded-sm p-5">
+        <SectionCard padding="md" spacing="none">
           <div className="flex items-center gap-1 mb-2">
             {Array.from({ length: 5 }).map((_, i) => <Star key={i} className="w-4 h-4 text-primary fill-primary" />)}
           </div>
@@ -211,7 +212,7 @@ export default function RialPlus({ onBack }: { onBack: () => void }) {
             {t.rialPlus.testimonial}
           </p>
           <p className="font-label text-micro uppercase tracking-widest text-on-surface-variant mt-3">{t.rialPlus.testimonialAuthor}</p>
-        </div>
+        </SectionCard>
 
         {/* CTA */}
         <div className="fixed left-0 right-0 px-6 z-50" style={{ bottom: 'calc(env(safe-area-inset-bottom, 0px) + 2rem)' }}>

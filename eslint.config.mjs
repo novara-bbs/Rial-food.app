@@ -97,7 +97,6 @@ const q16MigrationAllowlist = [
   'src/features/planner/screens/ShoppingList.tsx',
   'src/features/profile/components/Onboarding.tsx',
   'src/features/profile/screens/Profile.tsx',
-  'src/features/profile/screens/RialPlus.tsx',
   // Social screens. CreatorProfile profile card + About tab migrated to
   // <SectionCard> in Q16 B2; the post list-item still uses an `<article>`
   // with stretched-link focus-within shape — SectionCard renders `<section>`
