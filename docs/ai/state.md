@@ -1,15 +1,20 @@
 # RIAL Current State
 
-Last updated: 2026-04-17 (post Q16 B2 full wave — 12 social/wellness screens migrated to `<SectionCard>` / `BUTTON_CARD_SURFACE_CLASSES` · pushed to `rial-food/main` HEAD `14ecb8c`, working tree clean)
+Last updated: 2026-04-17 (Q16-B2 COMPLETE — SectionCard-shape drift 22 → 0 real occurrences; ESLint allowlist 18 → 5 shadcn-only · pushed to `rial-food/main` HEAD `350662f`, working tree clean)
 
 ## Release snapshot
-- Root branch: `main`, **in sync with `rial-food/main`** at HEAD `14ecb8c`. Nine commits landed this session: FastingTimer (3), ChallengeDetail+CreatorProfile (5), WeeklyCheckIn stat tiles (3), wellness components batch (BodyCalendar+BodySnapshotCard+InlineReflection+RitmoSection, 4 migrations) + `BUTTON_CARD_SURFACE_CLASSES` helper, allowlist trim, BodyTimeline empty-state, state snapshot, Challenges+Discover (3), CreatorVerification (2). **19 SectionCard-shape drift occurrences eliminated** (41 → 22); **9 files removed from ESLint Q16 allowlist** (27 → 18).
+- Root branch: `main`, **in sync with `rial-food/main`** at HEAD `350662f`. Final Q16-B2 commit: TodaysMeals + CreatorProfile (3 migrations). **Q16-B2 complete: SectionCard-shape drift = 0 real occurrences** (only SectionCard.tsx primitive + 2 helpers in surface.ts remain); **ESLint Q16 allowlist = 5 files** (shadcn/ui only: badge/input/select/tabs/textarea).
 - Release remote: `rial-food` (worktree remote: `origin`)
 - Active Vercel project: `rial.app.v1.5`
 - Vercel project id: `prj_t11VHYQjptazjUx7Y2hWLz0IDAjg`
 - **Governance (2026-04-17):** work directly on `main`. No feature branches, no worktrees going forward. Reconcile in-flight divergence by merging directly into `main`.
 
 ## Recent commits on `main` (in sync with `rial-food/main`)
+- `350662f` `refactor(q16-b2): TodaysMeals + CreatorProfile SectionCard shapes -> primitive (3 migrations)`
+- `8b600c9` `refactor(q16-b2): RealFeelDiary SectionCard shapes -> primitive (6 migrations)`
+- `8f48068` `refactor(q16-b2): Planner+Pantry+ShoppingList+AICoach+BarcodeScanner+Onboarding -> SectionCard/INPUT_SURFACE_CLASSES`
+- `aeaee0b` `refactor(q16-b2): PostDetail + Profile SectionCard shapes -> primitive`
+- `dd7cabb` `refactor(q16-b2): RialPlus SectionCard shape -> primitive`
 - `14ecb8c` `refactor(q16-b2): CreatorVerification SectionCard shapes -> primitive (2 migrations)`
 - `03e5c41` `refactor(q16-b2): Challenges + Discover SectionCard shapes -> primitive (3 migrations)`
 - `5403567` `docs(state): post-wave snapshot — 6 commits to 088a40a, drift 41->27, allowlist 27->19`
@@ -77,21 +82,21 @@ Two upstream commits (`8b8a5b5` sprint-q Progress restructure, `155f08b` sprint-
 
 Collateral: my Q16 pilot migration on `WeeklyCheckIn.tsx` + `WeeklyReview.tsx` is wasted work (remote rewrote both). SectionCard baseline recalculated post-merge.
 
-## Quality baseline (2026-04-17, post Q16 B2 full wave — 12 social/wellness screens migrated)
+## Quality baseline (2026-04-17, Q16-B2 COMPLETE — all SectionCard-shape drift eliminated)
 - TypeScript: 0 errors (`npx tsc --noEmit`)
 - Tests: **556/556** unit tests passing
 - i18n symmetry: **1499** keys aligned ES ↔ EN (`npm run check:i18n`)
-- Design-system lint: 0 errors, 584 warnings (pre-existing type-debt `no-explicit-any` + intentional allowlisted drift)
+- Design-system lint: 0 errors, warnings pre-existing (type-debt `no-explicit-any` + 5 intentional shadcn allowlist entries)
 - Build (measured 2026-04-17 via `npm run release:preflight`):
-  - main entry: **769.3 KB raw / 240.8 KB gzip**
+  - main entry: **769.9 KB raw / 241.0 KB gzip**
   - vendor-recharts: 331.5 KB raw / 99.8 KB gzip
-  - total dist/assets/*.js: **2716.6 KB raw / 773.6 KB gzip**
-- Drift baselines (re-measured 2026-04-17 post full wave):
+  - total dist/assets/*.js: **2714.7 KB raw / 773.2 KB gzip**
+- Drift baselines (final, post Q16-B2 complete):
   - `text-[Npx]` occurrences across `src/`: **0** (Q16 B1 codemod `78786fc` eliminated all 249)
-  - SectionCard shape: **22** real drift (25 grep matches − 3 legit: `SectionCard.tsx` primitive + 2 helpers in `surface.ts`). Down from 27 (pre-CreatorVerification) / 41 (pre-wave) / 72 (pre-B2). Remaining hotspots: `RealFeelDiary` (6), `PostDetail` (3), `Onboarding` (2), `TodaysMeals` (2), `Profile` (2), `CreatorProfile` (1 — intentional post list-item, needs `<ListCard>`), `AICoach` (1), `Planner` (1), `Pantry` (1), `ShoppingList` (1), `RialPlus` (1), `BarcodeScanner` (1).
-  - ESLint Q16 migration allowlist: **18 files** (−9 from this wave: FastingTimer was never listed; ChallengeDetail + CreatorVerification + Challenges + Discover + 5 wellness/components — BodyCalendar/BodySnapshotCard/BodyTimeline/InlineReflection/RitmoSection — + WeeklyCheckIn all dropped).
-  - `INPUT_SURFACE_CLASSES` helper consumers: **4** (unchanged).
-  - `BUTTON_CARD_SURFACE_CLASSES` helper consumers: **3** (`BodySnapshotCard` + `Discover` creator-card + `Discover` post-card). New in `f12415e` + `03e5c41`.
+  - SectionCard shape: **0** real drift. All 22 remaining occurrences migrated across this session's commits. Only legitimate matches remain: `SectionCard.tsx` (primitive itself) + 2 helpers in `surface.ts` (INPUT_SURFACE_CLASSES / BUTTON_CARD_SURFACE_CLASSES).
+  - ESLint Q16 migration allowlist: **5 files** (shadcn/ui only: `badge.tsx`, `input.tsx`, `select.tsx`, `tabs.tsx`, `textarea.tsx` — library convention, intentional, not to be removed).
+  - `INPUT_SURFACE_CLASSES` helper consumers: **4** (BarcodeScanner, Onboarding, PostDetail, SettingsNutrition).
+  - `BUTTON_CARD_SURFACE_CLASSES` helper consumers: **5** (BodySnapshotCard, Discover ×2, PostDetail, Profile).
 
 ## 2026-04-17 Q19 meal-taxonomy (shipped — `5dab667`)
 Plan: `.claude/plans/analiza-si-tiene-sentido-floating-kurzweil.md`. CHANGELOG: `[1.5.25]`.
@@ -186,7 +191,7 @@ Plan file: `.claude/plans/replicated-orbiting-coral.md`. Close-out doc: `docs/AU
 - Challenges/Creadores card divs still have onClick (complex to fix: nested buttons → needs restructure)
 - **SyncKey covers ~10 of ~35 localStorage keys** — see audit below. Gap must be resolved in Supabase sprint (Q6).
 - **CSP header pending (Q17)** — `vercel.json` now ships HSTS + X-Frame + nosniff + Permissions-Policy + Referrer-Policy, but Content-Security-Policy is deferred until all third-party sources are audited (Supabase, Sentry, Google GenAI, RevenueCat, recharts).
-- **SectionCard shape drift: 22 occurrences pending B2 migration** — down from 41 (pre-wave) / 72 (pre-B2). 2026-04-17 wave shipped FastingTimer (3→0), ChallengeDetail (3→0), CreatorProfile (3→1 intentional post list-item), WeeklyCheckIn (3→0), BodyCalendar (1→0), BodySnapshotCard (1→0 via new `BUTTON_CARD_SURFACE_CLASSES`), InlineReflection (1→0), RitmoSection (1→0), BodyTimeline (1→0), Challenges (1→0), Discover (2→0), CreatorVerification (2→0). Remaining hotspots: `RealFeelDiary` (6), `PostDetail` (3), `Onboarding` (2), `TodaysMeals` (2), `Profile` (2), `AICoach` (1), `Planner` (1), `Pantry` (1), `ShoppingList` (1), `RialPlus` (1), `BarcodeScanner` (1), `CreatorProfile` (1 — post list-item, blocked on `<ListCard>` variant). Strategy: continue `INPUT_SURFACE_CLASSES`/`BUTTON_CARD_SURFACE_CLASSES` pattern for input shells + clickable-card buttons; migrate true card sections to `<SectionCard>`. ESLint guardrail keeps new drift at 0.
+- ~~**SectionCard shape drift**~~ ✓ **Q16-B2 COMPLETE** — 0 real occurrences remain (72 → 41 → 22 → **0** across B1+B2). ESLint allowlist 5 files (shadcn-only, intentional). Convention test `sectioncard-usage` still enforces the guardrail for new code. `INPUT_SURFACE_CLASSES` + `BUTTON_CARD_SURFACE_CLASSES` helpers cover the two edge cases (form inputs + clickable button-cards). No further SectionCard shape migration work needed.
 
 ## localStorage audit (2026-04-15)
 All keys below are prefixed with `rial_` by `useLocalStorageState`. Column "Sync?" = whether `src/lib/sync.ts` `SyncKey` type includes it.
@@ -267,7 +272,7 @@ Execute Supabase sprint ONLY when ALL of these hold:
 - **Next audit tranche (candidate)** — Diccionario (FoodDictionary / AddMeal / BarcodeScanner / PortionSelector / MealSlotSelector) + Despensa (Pantry) + More menu + Settings + Profile + legal screens + Progress regression re-check. Same 4-wave shape.
 - **Q15** — ICP-adaptive Progress widgets (Clara/Marcos/Ana persona switches show/hide widget types) + before/after photo compare (Timeline tab, use `BodySnapshot.photoUrl` pairs) + remove deprecated `calculateStreak()` (callers already migrated to `calcStreaks` via Q13 — sweep for stale imports) + custom body measurements (extend `BodySnapshot` with user-defined metric definitions).
 - ~~**Q16 B1**~~ ✓ DONE — `text-[Npx]` codemod (`78786fc`): 249 replacements across 47 files using literal→token map (7-10px→`text-micro`, 11px→`text-caption`, 12px→`text-label`, 13px→`text-body-sm`, 14px→`text-body`, 16px→`text-body-lg`, 18px→`text-title-sm`, ≥24px→`text-title`/`text-headline`/`text-display`). Follow-up `f00d8d6` trimmed 24 clean files from the ESLint allowlist. Baseline: 249 → **0** occurrences.
-- **Q16 B2** (in progress) — SectionCard shape drift **72 → 44** across commits (`8054c9d` helper + `7386c5c` SettingsProfile + `48def0d` SettingsNutrition + staged batch BarcodeScanner/Onboarding inputs + SectionCard `none` variant). Helper `INPUT_SURFACE_CLASSES` (`src/components/ui/surface.ts`) factors out the form-input shell that duplicates SectionCard elevation but needs `rounded-sm` / custom padding. Next passes: `ImportRecipeURL`, `RealFeelDiary`, `FastingTimer`, `ChallengeDetail`/`CreatorProfile`/`PostDetail` (social). Success = allowlist empty, SectionCard-shape baseline = 0, convention test deleted.
+- ~~**Q16 B2**~~ ✓ **DONE** — SectionCard shape drift **72 → 0** across the full migration wave. HEAD `350662f`. `INPUT_SURFACE_CLASSES` + `BUTTON_CARD_SURFACE_CLASSES` helpers in `src/components/ui/surface.ts` cover edge-cases. ESLint allowlist: 5 shadcn-only files. Convention test `sectioncard-usage` remains as ongoing guardrail (never delete — keeps new drift at 0).
 - **Q17** — Security + responsive hardening. (1) CSP header in `vercel.json` (deferred from Q15.5) — audit third-party origins: Supabase, Sentry, Google GenAI, RevenueCat, recharts CDN, Capacitor bridges. (2) WCAG AA contrast fix on `theme-orange-light` (`on-surface-variant` 4.4:1 → ≥4.5:1). (3) Responsive tablet/desktop breakpoints — audit `PageShell` variants and current `sm:/md:` usage; promote layouts that rely on mobile-only heuristics.
 - **Q6** — Supabase integration (gated — see feature-freeze gate above): apply migration → expand SyncKey per audit (now includes `BodySnapshot.photoUrl` photos → Storage bucket) → wire `syncOnSignIn`/`pushToCloud` in AppStateContext → `useSupabasePersistence` toggle in SettingsSystem → E2E with real Supabase project.
 
