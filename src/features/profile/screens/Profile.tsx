@@ -1,6 +1,7 @@
 import { Mail, Shield, CreditCard, LogOut, ChevronRight, Flame, Trophy, Star, Pencil } from 'lucide-react';
 import PageShell from '../../../components/PageShell';
 import SectionCard from '../../../components/SectionCard';
+import { BUTTON_CARD_SURFACE_CLASSES } from '../../../components/ui/surface';
 import { useI18n } from '../../../i18n';
 import { BADGES, LEVELS, calculatePoints, getUserLevel, getEarnedBadges, type UserStats } from '../utils/gamification';
 import { calcStreaks } from '../../wellness/utils/streaks';
@@ -118,7 +119,7 @@ export default function Profile({ userProfile, onBack, realFeelLogs = [], savedR
         type="button"
         onClick={() => navigateTo('progress')}
         aria-label={t.header?.streakAria ?? t.gamification.streak}
-        className="bg-surface-container-low border border-outline-variant/20 rounded-sm p-5 flex items-center justify-between w-full text-left hover:border-brand-secondary/40 transition-colors group"
+        className={`${BUTTON_CARD_SURFACE_CLASSES} p-5 flex items-center justify-between w-full text-left hover:border-brand-secondary/40 transition-colors group`}
       >
         <div className="flex items-center gap-3">
           <Flame className="w-6 h-6 text-brand-secondary" />
@@ -187,7 +188,7 @@ export default function Profile({ userProfile, onBack, realFeelLogs = [], savedR
           { label: t.settings.privacy, icon: Shield, action: () => navigateTo('settings') },
           { label: t.settings.export, icon: CreditCard, action: () => navigateTo('settings') },
         ].map((item, idx) => (
-          <button type="button" key={idx} onClick={item.action} className="w-full flex items-center justify-between p-4 bg-surface-container-low border border-outline-variant/20 rounded-sm hover:border-primary/50 transition-all group text-left">
+          <button type="button" key={idx} onClick={item.action} className={`w-full flex items-center justify-between p-4 ${BUTTON_CARD_SURFACE_CLASSES} hover:border-primary/50 transition-all group text-left`}>
             <div className="flex items-center gap-4">
               <item.icon className="w-5 h-5 text-on-surface-variant group-hover:text-primary transition-colors" />
               <span className="font-headline font-bold text-sm text-tertiary uppercase tracking-widest">{item.label}</span>

@@ -97,14 +97,10 @@ const q16MigrationAllowlist = [
   'src/features/planner/screens/ShoppingList.tsx',
   'src/features/profile/components/Onboarding.tsx',
   'src/features/profile/screens/Profile.tsx',
-  // Social screens. CreatorProfile profile card + About tab migrated to
-  // <SectionCard> in Q16 B2; the post list-item still uses an `<article>`
+  // Social screens. CreatorProfile post list-item still uses an `<article>`
   // with stretched-link focus-within shape — SectionCard renders `<section>`
-  // so the semantic doesn't fit. Same pattern as TodaysMeals; remove when
-  // we add a <ListCard> variant. PostDetail retains 3 SectionCard-shape
-  // occurrences pending Q16 B2 migration.
+  // so the semantic doesn't fit. Remove when we add a <ListCard> variant.
   'src/features/social/screens/CreatorProfile.tsx',
-  'src/features/social/screens/PostDetail.tsx',
   'src/features/wellness/screens/Progress.tsx',
   'src/features/wellness/screens/RealFeelDiary.tsx',
 ];

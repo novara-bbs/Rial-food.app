@@ -1,5 +1,7 @@
 import { Send } from 'lucide-react';
 import PageShell from '../../../components/PageShell';
+import SectionCard from '../../../components/SectionCard';
+import { BUTTON_CARD_SURFACE_CLASSES, INPUT_SURFACE_CLASSES } from '../../../components/ui/surface';
 import { useState, useMemo } from 'react';
 import { useI18n } from '../../../i18n';
 import { useAppState } from '../../../contexts/AppStateContext';
@@ -77,7 +79,7 @@ export default function PostDetail({ onBack }: { onBack: () => void }) {
         <div className="space-y-3">
           <h3 className="font-headline font-bold text-caption uppercase text-tertiary tracking-widest">{t.postDetail.allComments} ({post.commentsList.length})</h3>
           {post.commentsList.map((comment: any) => (
-            <div key={comment.id} className="flex gap-3 p-3 bg-surface-container-low border border-outline-variant/20 rounded-sm">
+            <SectionCard key={comment.id} padding="none" spacing="none" className="flex gap-3 p-3">
               <div className="w-8 h-8 rounded-full bg-surface-container-highest flex items-center justify-center text-caption font-bold text-tertiary shrink-0">
                 {comment.authorImg ? (
                   <img src={comment.authorImg} alt={comment.author} className="w-8 h-8 rounded-full object-cover" referrerPolicy="no-referrer" />
@@ -92,13 +94,13 @@ export default function PostDetail({ onBack }: { onBack: () => void }) {
                 </div>
                 <p className="text-caption text-on-surface-variant mt-1 leading-relaxed">{comment.text}</p>
               </div>
-            </div>
+            </SectionCard>
           ))}
         </div>
       )}
 
       {/* Fixed comment input */}
-      <div className="flex items-center gap-2 bg-surface-container-low border border-outline-variant/20 rounded-sm p-3">
+      <div className={`flex items-center gap-2 ${INPUT_SURFACE_CLASSES} p-3`}>
         <input
           type="text"
           value={commentText}
@@ -129,7 +131,7 @@ export default function PostDetail({ onBack }: { onBack: () => void }) {
                 setSelectedPostId(p.id);
                 navigateTo('post-detail');
               }}
-              className="w-full text-left bg-surface-container-low border border-outline-variant/20 rounded-sm p-4 hover:border-primary/50 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary transition-colors"
+              className={`w-full text-left ${BUTTON_CARD_SURFACE_CLASSES} p-4 hover:border-primary/50 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary transition-colors`}
               aria-label={p.content?.slice(0, 80)}
             >
               <p className="text-body-sm text-on-surface-variant line-clamp-2">{p.content}</p>
