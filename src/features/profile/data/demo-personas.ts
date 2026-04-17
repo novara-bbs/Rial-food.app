@@ -50,11 +50,19 @@ export interface DemoPersona {
 
 const TODAY = new Date();
 
-/** Return YYYY-MM-DD for `daysAgo` days before today */
+/** Format a Date as YYYY-MM-DD using LOCAL date parts (TZ-safe). */
+function formatLocalYMD(d: Date): string {
+  const yyyy = d.getFullYear();
+  const mm = String(d.getMonth() + 1).padStart(2, '0');
+  const dd = String(d.getDate()).padStart(2, '0');
+  return `${yyyy}-${mm}-${dd}`;
+}
+
+/** Return YYYY-MM-DD for `daysAgo` days before today (local calendar). */
 function dateAgo(daysAgo: number): string {
   const d = new Date(TODAY);
   d.setDate(d.getDate() - daysAgo);
-  return d.toISOString().slice(0, 10);
+  return formatLocalYMD(d);
 }
 
 /** Return ISO datetime string for `daysAgo` at a given hour */
@@ -123,14 +131,16 @@ function buildNutritionHistory(
   return entries;
 }
 
-/** Collect Sunday weekStart dates going backward */
+/** Collect Sunday weekStart dates going backward (local calendar, TZ-safe) */
 function sundayWeekStarts(count: number): string[] {
   const sundays: string[] = [];
   const d = new Date(TODAY);
-  // Walk backward to find previous Sunday
+  // Anchor to noon so setDate arithmetic can't cross a DST boundary
+  d.setHours(12, 0, 0, 0);
+  // Walk backward to find previous Sunday (getDay() is local day-of-week)
   d.setDate(d.getDate() - d.getDay());
   for (let i = 0; i < count; i++) {
-    sundays.push(d.toISOString().slice(0, 10));
+    sundays.push(formatLocalYMD(d));
     d.setDate(d.getDate() - 7);
   }
   return sundays.reverse();

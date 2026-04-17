@@ -17,15 +17,24 @@ import fs from 'node:fs';
 import path from 'node:path';
 
 /**
- * Baseline recorded at Wave 3 close was 134. Q15.5 walkthrough pilot
- * (NutritionHero redesign + WeeklyCheckIn/WeeklyReview migrations)
- * dropped it to 84. The 2026-04-17 merge with `rial-food/main` added
- * 9 occurrences from upstream sprint-q (Progress restructure: 4 new
- * wellness components + rewritten Progress/WeeklyCheckIn), raising the
- * baseline to 93. Q16 codemod sprint drops it further; it may never
- * rise. When it reaches 0, delete this test file.
+ * Baseline history:
+ *   134 — Wave 3 close (pre-Q15.5)
+ *    84 — Q15.5 walkthrough pilot (NutritionHero + WeeklyCheckIn/WeeklyReview)
+ *    93 — 2026-04-17 merge with `rial-food/main` (upstream Progress
+ *         restructure added 9 occurrences: 4 new wellness components +
+ *         rewritten Progress/WeeklyCheckIn)
+ *    84 — 2026-04-18 Wave 1 Hoy tab polish (Home + ProgressPreviewCard +
+ *         ActivityRow to SectionCard, NextMealSuggestion +
+ *         WeeklyMiniDash + QuickActions + Shopping reminder recolored
+ *         to bg-surface-container as interactive cards)
+ *
+ * TodaysMeals retains 2 occurrences (list container + meal item card) that
+ * don't fit SectionCard's fixed-padding + space-y shape; those need a
+ * <ListCard> variant or SectionCard `padding="none"` option.
+ *
+ * Q16 codemod sprint drops it further; when it reaches 0, delete this test.
  */
-const BASELINE = 93;
+const BASELINE = 84;
 
 const SHAPE = /bg-surface-container-low[^"'`]*\bborder-outline-variant\/20[^"'`]*\brounded-sm/;
 

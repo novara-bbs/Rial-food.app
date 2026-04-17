@@ -1,4 +1,5 @@
 import { Scale, Plus, TrendingDown, TrendingUp, Minus, ChevronRight } from 'lucide-react';
+import SectionCard from '../../../components/SectionCard';
 import { bodyWeightFromKg, getBodyWeightUnit } from '../../food/utils/units';
 import { useI18n } from '../../../i18n';
 import { useLogSnapshot } from '../../wellness/hooks/useLogSnapshot';
@@ -100,15 +101,45 @@ export default function ProgressPreviewCard({
           ? 'text-primary'
           : 'text-on-surface-variant';
 
+  // Empty state: no weight history yet. Surface a dedicated CTA (tap the log
+  // button) instead of rendering "— kg" which reads as a broken data point.
+  if (!latest) {
+    return (
+      <SectionCard padding="md" spacing="md">
+        <div className="flex items-center gap-3">
+          <div className="w-10 h-10 bg-primary/10 rounded-full flex items-center justify-center shrink-0">
+            <Scale className="w-5 h-5 text-primary" />
+          </div>
+          <div className="flex-1 min-w-0">
+            <p className="font-label text-micro text-on-surface-variant uppercase tracking-widest">
+              {t.home.weight ?? 'Peso'}
+            </p>
+            <p className="font-headline font-bold text-sm text-tertiary uppercase mt-0.5">
+              {t.progress?.noWeightYet ?? 'Registra tu primer peso'}
+            </p>
+          </div>
+        </div>
+        <button
+          type="button"
+          onClick={() => openWithDate()}
+          className="w-full flex items-center justify-center gap-2 bg-primary text-on-primary min-h-11 px-4 rounded-sm text-label font-bold uppercase tracking-widest hover:opacity-90 transition-opacity"
+        >
+          <Plus className="w-4 h-4" aria-hidden="true" />
+          {t.progress?.logFirstWeight ?? t.home.logWeight ?? 'Registrar peso'}
+        </button>
+      </SectionCard>
+    );
+  }
+
   return (
-    <div className="bg-surface-container-low border border-outline-variant/20 p-4 rounded-sm space-y-3">
+    <SectionCard padding="md" spacing="md">
       {/* Top row: icon + weight + delta + sparkline */}
       <div className="flex items-center gap-3">
         <div className="w-10 h-10 bg-primary/10 rounded-full flex items-center justify-center shrink-0">
           <Scale className="w-5 h-5 text-primary" />
         </div>
         <div className="flex-1 min-w-0">
-          <p className="font-label text-[10px] text-on-surface-variant uppercase tracking-widest">
+          <p className="font-label text-micro text-on-surface-variant uppercase tracking-widest">
             {t.home.weight ?? 'Peso'}
           </p>
           <div className="flex items-center gap-2 flex-wrap">
@@ -116,7 +147,7 @@ export default function ProgressPreviewCard({
               {currentDisplay !== null ? `${currentDisplay} ${unit}` : `— ${unit}`}
             </p>
             {delta !== null && (
-              <span className={`flex items-center gap-0.5 text-[10px] font-bold ${deltaColor}`}>
+              <span className={`flex items-center gap-0.5 text-micro font-bold ${deltaColor}`}>
                 <DeltaIcon className="w-3 h-3" aria-hidden="true" />
                 {delta > 0 ? '+' : ''}
                 {delta}
@@ -145,7 +176,7 @@ export default function ProgressPreviewCard({
               );
             })()}
           </div>
-          <span className="text-[9px] font-label text-on-surface-variant uppercase tracking-widest shrink-0 whitespace-nowrap">
+          <span className="text-micro font-label text-on-surface-variant uppercase tracking-widest shrink-0 whitespace-nowrap">
             {Math.abs(toGoal)} {unit} {t.home.toGoal ?? 'para objetivo'}
           </span>
         </div>
@@ -156,7 +187,7 @@ export default function ProgressPreviewCard({
         <button
           type="button"
           onClick={() => openWithDate()}
-          className="flex items-center gap-1.5 bg-primary/10 text-primary px-3 py-1.5 rounded-full text-[10px] font-bold uppercase tracking-widest hover:bg-primary/20 transition-colors"
+          className="flex items-center gap-1.5 bg-primary/10 text-primary px-4 min-h-11 rounded-full text-micro font-bold uppercase tracking-widest hover:bg-primary/20 transition-colors"
         >
           <Plus className="w-3 h-3" aria-hidden="true" />
           {t.home.logWeight ?? 'Registrar peso'}
@@ -165,13 +196,13 @@ export default function ProgressPreviewCard({
           <button
             type="button"
             onClick={onNavigateToProgress}
-            className="flex items-center gap-1 ml-auto text-[10px] font-bold uppercase tracking-widest text-on-surface-variant hover:text-primary transition-colors"
+            className="flex items-center gap-1 ml-auto text-micro font-bold uppercase tracking-widest text-on-surface-variant hover:text-primary transition-colors min-h-11 px-3"
           >
             {t.home.viewDetails ?? 'Ver detalles'}
             <ChevronRight className="w-3 h-3" aria-hidden="true" />
           </button>
         )}
       </div>
-    </div>
+    </SectionCard>
   );
 }

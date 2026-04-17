@@ -16,7 +16,21 @@
 import { getSupabaseClient, type Json } from './supabase';
 import { logger } from './logger';
 
+/**
+ * Keys that should round-trip between localStorage and Supabase.
+ *
+ * Scope rules (decided 2026-04-15 audit, updated Wave 1 of tab audit):
+ *   - ✓ Sync: user-owned data that should follow the account across devices.
+ *   - ✗ Skip: UI preferences (theme, `showAIBot`), active timers
+ *     (`fasting-start`), chat transcripts, notification state, and anything
+ *     sourced from the backend itself (`communityPosts`, `communityStories`).
+ *
+ * Note: expanding this type does NOT wire push/pull automatically — keys must
+ * still be referenced from `pushToCloud(key, value)` and `syncOnSignIn()` in
+ * the Supabase sprint (Q6). This is the type surface we want to be ready for.
+ */
 type SyncKey =
+  // Q5 — original cloud set (user profile + daily state + content)
   | 'userProfile'
   | 'dailyMacros'
   | 'savedRecipes'
@@ -26,7 +40,35 @@ type SyncKey =
   | 'toleranceLogs'
   | 'weightHistory'
   | 'nutritionHistory'
-  | 'isPro';
+  | 'isPro'
+  // Wave 1 tab audit — Hoy surface
+  | 'dailyLog'
+  | 'hydration'
+  | 'movement'
+  | 'dailyGoal'
+  | 'isFirstTime'
+  | 'checkInStatus'
+  | 'guidedSetupDismissed'
+  | 'recipeViewed'
+  // Wave 1 tab audit — food surface
+  | 'userFoods'
+  | 'foodHistory'
+  | 'favoriteIds'
+  // Wave 1 tab audit — social graph
+  | 'likedPosts'
+  | 'savedPosts'
+  | 'followedCreators'
+  | 'joinedChallenges'
+  | 'challengeJoinDates'
+  | 'challengeProgress'
+  // Wave 1 tab audit — wellness + pantry + fasting + profile pref
+  | 'weeklyCheckIns'
+  | 'pantryItems'
+  | 'fasting-protocol'
+  | 'fasting-history'
+  | 'profilePublic'
+  // Wave 3 tab audit (future) — subtab persistence
+  | 'exploreActiveTab';
 
 // ─── Push a single key to Supabase ───────────────────────────────────────────
 

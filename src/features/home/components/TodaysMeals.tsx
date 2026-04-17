@@ -86,7 +86,7 @@ export default function TodaysMeals({
           <UtensilsCrossed className="w-5 h-5 text-primary" /> {t.home.todaysLog}
         </h2>
         {dailyLog.length > 0 && (
-          <span className="text-[10px] font-label font-bold uppercase tracking-widest text-on-surface-variant">
+          <span className="text-micro font-label font-bold uppercase tracking-widest text-on-surface-variant">
             {dailyLog.length} {dailyLog.length === 1 ? t.home.foodSingular : t.home.foods}
           </span>
         )}
@@ -112,7 +112,7 @@ export default function TodaysMeals({
                     <span className="text-lg shrink-0">{slotIcons[entry.mealSlot] || '🍽️'}</span>
                     <div className="flex-1 min-w-0 cursor-pointer" onClick={() => entry.grams ? startEdit(entry) : undefined}>
                       <span className="font-headline text-xs font-bold uppercase text-tertiary truncate block">{entry.title}</span>
-                      <div className="flex items-center gap-2 text-[9px] font-label tracking-widest uppercase text-on-surface-variant mt-0.5">
+                      <div className="flex items-center gap-2 text-micro font-label tracking-widest uppercase text-on-surface-variant mt-0.5">
                         <span>{entry.time}</span>
                         <span>·</span>
                         <span className="text-primary font-bold">{entry.portionDescription}</span>
@@ -157,7 +157,7 @@ export default function TodaysMeals({
                             <Plus className="w-3.5 h-3.5" />
                           </button>
                         </div>
-                        <span className="text-[10px] font-headline font-bold uppercase tracking-widest text-on-surface-variant">g</span>
+                        <span className="text-micro font-headline font-bold uppercase tracking-widest text-on-surface-variant">g</span>
                         <button type="button" onClick={confirmEdit} className="w-8 h-8 flex items-center justify-center rounded-full bg-primary text-on-primary hover:opacity-90 transition-opacity">
                           <Check className="w-4 h-4" />
                         </button>
@@ -174,7 +174,7 @@ export default function TodaysMeals({
                         ].map(m => (
                           <div key={m.label} className="bg-surface-container-highest rounded-sm py-1 px-2 text-center">
                             <span className={`block font-headline font-bold text-xs ${m.color}`}>{m.value}</span>
-                            <span className="text-[8px] font-label uppercase tracking-widest text-on-surface-variant">{m.label}</span>
+                            <span className="text-micro font-label uppercase tracking-widest text-on-surface-variant">{m.label}</span>
                           </div>
                         ))}
                       </div>
@@ -186,8 +186,8 @@ export default function TodaysMeals({
           </div>
           {/* Diary totals */}
           <div className="flex items-center justify-between bg-surface-container-highest/50 rounded-sm px-4 py-2.5">
-            <span className="text-[9px] font-label font-bold uppercase tracking-widest text-on-surface-variant">{t.home.totalLogged}</span>
-            <div className="flex items-center gap-3 text-[10px] font-headline font-bold uppercase tracking-wider">
+            <span className="text-micro font-label font-bold uppercase tracking-widest text-on-surface-variant">{t.home.totalLogged}</span>
+            <div className="flex items-center gap-3 text-micro font-headline font-bold uppercase tracking-wider">
               <span className="text-primary">{dailyLog.reduce((s, e) => s + e.macros.cal, 0)} kcal</span>
               <span className="text-macro-protein">{dailyLog.reduce((s, e) => s + e.macros.pro, 0).toFixed(0)}g P</span>
               <span className="text-macro-carbs">{dailyLog.reduce((s, e) => s + e.macros.carbs, 0).toFixed(0)}g C</span>
@@ -202,10 +202,10 @@ export default function TodaysMeals({
         <div className="space-y-2">
           {dailyLog.length > 0 && (
             <div className="flex items-center justify-between px-1 pt-2">
-              <span className="font-label text-[10px] uppercase tracking-widest text-on-surface-variant flex items-center gap-1.5">
+              <span className="font-label text-micro uppercase tracking-widest text-on-surface-variant flex items-center gap-1.5">
                 <Calendar className="w-3.5 h-3.5 text-primary" /> {t.home.plannedToday}
               </span>
-              <button type="button" onClick={onNavigateToPlan} className="text-[10px] font-bold text-primary uppercase tracking-widest hover:underline">{t.plan.title}</button>
+              <button type="button" onClick={onNavigateToPlan} className="text-micro font-bold text-primary uppercase tracking-widest hover:underline min-h-11 px-3">{t.plan.title}</button>
             </div>
           )}
           {!dailyLog.length && (
@@ -223,14 +223,14 @@ export default function TodaysMeals({
               </div>
               <div className="flex-1 min-w-0">
                 <div className="flex items-center gap-2">
-                  <span className="text-[9px] font-bold uppercase tracking-wider bg-primary/10 text-primary px-1.5 py-0.5 rounded">{meal.type || meal.time}</span>
+                  <span className="text-micro font-bold uppercase tracking-wider bg-primary/10 text-primary px-1.5 py-0.5 rounded">{meal.type || meal.time}</span>
                 </div>
                 <h3 className="font-headline text-sm font-bold text-tertiary uppercase truncate mt-0.5">{meal.title}</h3>
-                <span className="text-[10px] text-on-surface-variant font-mono">{meal.cal} {t.common.kcal}</span>
+                <span className="text-micro text-on-surface-variant font-mono">{meal.cal} {t.common.kcal}</span>
               </div>
               <button type="button"
                 onClick={(e) => { e.stopPropagation(); onLogMealNow?.(meal, 1); }}
-                className="shrink-0 px-4 py-2 bg-primary text-on-primary rounded-sm text-[10px] font-bold uppercase tracking-widest hover:opacity-90 transition-opacity"
+                className="shrink-0 px-4 min-h-11 bg-primary text-on-primary rounded-sm text-micro font-bold uppercase tracking-widest hover:opacity-90 transition-opacity"
               >
                 {t.home.logIt}
               </button>

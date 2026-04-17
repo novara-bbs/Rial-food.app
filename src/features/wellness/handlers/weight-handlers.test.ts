@@ -1,5 +1,6 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { createHandleLogWeight } from './weight-handlers';
+import { todayLocal } from '../../../lib/dates';
 import type { BodySnapshot } from '../../../contexts/AppStateContext';
 
 describe('createHandleLogWeight', () => {
@@ -29,7 +30,8 @@ describe('createHandleLogWeight', () => {
   });
 
   it('replaces existing entry for the same date', () => {
-    const today = new Date().toISOString().slice(0, 10);
+    // Handler uses todayLocal() — test must align to avoid TZ drift around midnight
+    const today = todayLocal();
     const existing: BodySnapshot[] = [
       { date: today, kg: 70 },
       { date: '2026-01-01', kg: 72 },

@@ -40,7 +40,7 @@ export default function InsightRow({ insight }: Props) {
         <p className="font-headline text-xs font-bold uppercase tracking-widest text-tertiary">
           {insight.title}
         </p>
-        <p className="text-[11px] text-on-surface-variant mt-0.5 leading-relaxed">
+        <p className="text-caption text-on-surface-variant mt-0.5 leading-relaxed">
           {insight.detail}
         </p>
       </div>

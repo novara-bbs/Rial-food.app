@@ -19,17 +19,17 @@ export default function NextMealSuggestion({ suggestion, onTap }: {
     <button
       type="button"
       onClick={onTap}
-      className="bg-surface-container-low border border-outline-variant/20 p-3 rounded-sm flex items-center gap-3 w-full hover:border-primary/30 transition-colors group"
+      className="bg-surface-container border border-outline-variant/30 p-3 rounded-sm flex items-center gap-3 w-full min-h-11 hover:border-primary/30 hover:bg-surface-container-high transition-colors group"
     >
-      <div className="w-9 h-9 bg-primary/10 rounded-full flex items-center justify-center shrink-0">
+      <div className="w-10 h-10 bg-primary/10 rounded-full flex items-center justify-center shrink-0">
         <UtensilsCrossed className="w-4 h-4 text-primary" />
       </div>
       <div className="flex-1 text-left min-w-0">
-        <span className="text-[9px] font-bold uppercase tracking-widest text-primary block">
+        <span className="text-micro font-bold uppercase tracking-widest text-primary block">
           {suggestion.source === 'plan' ? t.home.nextUp : t.home.suggestedForYou}
         </span>
-        <span className="text-xs font-bold text-tertiary uppercase tracking-widest truncate block">{suggestion.title}</span>
-        <span className="text-[10px] text-on-surface-variant font-bold">
+        <span className="text-label font-bold text-tertiary uppercase tracking-widest truncate block">{suggestion.title}</span>
+        <span className="text-micro text-on-surface-variant font-bold">
           {suggestion.cal} kcal · {suggestion.pro}g pro
         </span>
       </div>

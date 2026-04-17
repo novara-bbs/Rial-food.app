@@ -1,5 +1,6 @@
 import { Flame, Plus, CheckCircle2, Droplets, Sparkles, Sun, Moon, ShoppingCart, ChevronRight, BarChart3 } from 'lucide-react';
 import PageShell from '../../../components/PageShell';
+import SectionCard from '../../../components/SectionCard';
 import { useState, useEffect, useRef, useMemo, useCallback } from 'react';
 import RealFeelInline from '../../wellness/components/RealFeelInline';
 import NutritionHero from '../components/NutritionHero';
@@ -141,6 +142,37 @@ export default function Home({
     [setDailyLog, setDailyMacros, nutritionHistory, t]
   );
 
+  // Guided Setup steps — memoized so toggling unrelated state doesn't rebuild.
+  // Reads `rial_recipeViewed` eagerly at render time (flag flips when user
+  // visits RecipeDetail for the first time; see createHandleNavigateToRecipe).
+  const guidedSteps = useMemo(() => {
+    const hasLoggedMeal = dailyLog.length > 0 || (nutritionHistory ?? []).some((h: any) => h.mealCount > 0);
+    const hasPlannedDay = Object.values(mealPlan || {}).some((d: any) => Array.isArray(d) && d.length > 0);
+    const hasViewedRecipe =
+      typeof window !== 'undefined' && !!localStorage.getItem('rial_recipeViewed');
+    return [
+      { id: 'profile', label: t.guidedSetup.configProfile, done: true },
+      { id: 'meal', label: t.guidedSetup.logFirstMeal, done: hasLoggedMeal },
+      { id: 'recipe', label: t.guidedSetup.exploreRecipe, done: hasViewedRecipe },
+      { id: 'plan', label: t.guidedSetup.planFirstDay, done: hasPlannedDay, action: onNavigateToPlan },
+    ];
+  }, [dailyLog.length, nutritionHistory, mealPlan, onNavigateToPlan, t]);
+  const guidedCompleted = useMemo(() => guidedSteps.filter((s) => s.done).length, [guidedSteps]);
+
+  // Smart Insights — memoized; heavy computation over logs + history
+  const insights = useMemo(
+    () =>
+      getInsights({
+        realFeelLogs: realFeelLogs || [],
+        savedRecipes: [],
+        mealPlan: mealPlan || {},
+        dailyMacros,
+        hydration,
+        streakDays,
+      }),
+    [realFeelLogs, mealPlan, dailyMacros, hydration, streakDays]
+  );
+
   // Next meal suggestion — planned meal or best macro-filling recipe
   const nextMealSuggestion = useMemo(() => {
     const hour = new Date().getHours();
@@ -219,15 +251,15 @@ export default function Home({
 
   return (
     <PageShell maxWidth="wide" spacing="lg">
-      {/* 1. Header — greeting + streak */}
-      <section className="pt-6 flex items-center justify-between">
-        <div className="flex items-center gap-3">
-          {timeIcon}
-          <h1 className="font-headline text-3xl font-black text-tertiary uppercase tracking-tight leading-none">
+      {/* 1. Header — greeting + streak (flex-wrap for 320px viewport) */}
+      <section className="pt-6 flex flex-wrap items-center justify-between gap-2">
+        <div className="flex items-center gap-3 min-w-0 flex-1">
+          <span className="shrink-0">{timeIcon}</span>
+          <h1 className="font-headline text-2xl sm:text-3xl font-black text-tertiary uppercase tracking-tight leading-none truncate">
             {greeting}, {userProfile.name?.split(' ')[0] || t.home.friend}
           </h1>
         </div>
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-2 shrink-0">
           {!isSimpleMode && <RealScoreBadge avgVitality={avgVitality} trend={vitalityTrend} onTap={() => onNavigateToProgress?.()} />}
           <button
             type="button"
@@ -242,67 +274,62 @@ export default function Home({
       </section>
 
       {/* 2. Guided Setup — first 7 days */}
-      {!guidedDismissed && (() => {
-        const steps = [
-          { id: 'profile', label: t.guidedSetup?.configProfile || 'Configura tu perfil', done: true },
-          { id: 'meal', label: t.guidedSetup?.logFirstMeal || 'Registra tu primera comida', done: dailyLog.length > 0 || nutritionHistory?.some((h: any) => h.mealCount > 0) },
-          { id: 'recipe', label: t.guidedSetup?.exploreRecipe || 'Explora una receta', done: !!localStorage.getItem('rial_recipeViewed') },
-          { id: 'plan', label: t.guidedSetup?.planFirstDay || 'Planifica tu primer día', done: Object.values(mealPlan || {}).some((d: any) => Array.isArray(d) && d.length > 0), action: onNavigateToPlan },
-        ];
-        const completed = steps.filter(s => s.done).length;
-        return (
-          <section className="bg-surface-container-low border border-primary/30 p-5 rounded-sm space-y-3 animate-in fade-in slide-in-from-top-3">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-2">
-                <Sparkles className="w-4 h-4 text-primary" />
-                <span className="font-headline font-bold text-sm uppercase tracking-widest text-tertiary">{t.guidedSetup?.title || '¡Empieza aquí!'}</span>
-              </div>
-              <span className="font-mono text-[10px] text-primary font-bold">{completed}/{steps.length}</span>
+      {!guidedDismissed && (
+        <section className="bg-surface-container-low border border-primary/30 p-5 rounded-sm space-y-3 animate-in fade-in slide-in-from-top-3">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-2">
+              <Sparkles className="w-4 h-4 text-primary" />
+              <span className="font-headline font-bold text-sm uppercase tracking-widest text-tertiary">{t.guidedSetup.title}</span>
             </div>
-            <div className="h-1.5 bg-surface-container-highest rounded-full overflow-hidden">
-              <div className="h-full bg-primary rounded-full transition-all duration-500" style={{ width: `${(completed / steps.length) * 100}%` }} />
-            </div>
-            <div className="space-y-2">
-              {steps.map(step => (
-                <button
-                  type="button"
-                  key={step.id}
-                  onClick={step.done ? undefined : step.action}
-                  disabled={step.done}
-                  className={`w-full flex items-center gap-3 text-left px-3 py-2 rounded-sm transition-colors ${step.done ? 'opacity-60' : 'hover:bg-surface-container-highest cursor-pointer'}`}
-                >
-                  {step.done
-                    ? <CheckCircle2 className="w-4 h-4 text-primary shrink-0" />
-                    : <div className="w-4 h-4 rounded-full border-2 border-outline-variant/40 shrink-0" />
-                  }
-                  <span className={`text-xs font-bold uppercase tracking-widest ${step.done ? 'text-on-surface-variant line-through' : 'text-tertiary'}`}>{step.label}</span>
-                </button>
-              ))}
-            </div>
-            <button
-              type="button"
-              onClick={() => { localStorage.setItem('rial_guidedSetupDismissed', 'true'); setGuidedDismissed(true); }}
-              className="w-full text-center text-[10px] font-bold text-on-surface-variant uppercase tracking-widest hover:underline pt-1"
-            >
-              {t.guidedSetup?.dismiss || 'Ya sé cómo funciona'}
-            </button>
-          </section>
-        );
-      })()}
+            <span className="font-mono text-micro text-primary font-bold">{guidedCompleted}/{guidedSteps.length}</span>
+          </div>
+          <div className="h-1.5 bg-surface-container-highest rounded-full overflow-hidden">
+            <div className="h-full bg-primary rounded-full transition-all duration-500" style={{ width: `${(guidedCompleted / guidedSteps.length) * 100}%` }} />
+          </div>
+          <div className="space-y-2">
+            {guidedSteps.map((step) => (
+              <button
+                type="button"
+                key={step.id}
+                onClick={step.done ? undefined : step.action}
+                disabled={step.done}
+                className={`w-full flex items-center gap-3 text-left min-h-11 px-3 rounded-sm transition-colors ${step.done ? 'opacity-60' : 'hover:bg-surface-container-highest cursor-pointer'}`}
+              >
+                {step.done ? (
+                  <CheckCircle2 className="w-4 h-4 text-primary shrink-0" />
+                ) : (
+                  <div className="w-4 h-4 rounded-full border-2 border-outline-variant/40 shrink-0" />
+                )}
+                <span className={`text-label font-bold uppercase tracking-widest ${step.done ? 'text-on-surface-variant line-through' : 'text-tertiary'}`}>{step.label}</span>
+              </button>
+            ))}
+          </div>
+          <button
+            type="button"
+            onClick={() => {
+              localStorage.setItem('rial_guidedSetupDismissed', 'true');
+              setGuidedDismissed(true);
+            }}
+            className="w-full text-center text-micro font-bold text-on-surface-variant uppercase tracking-widest hover:underline min-h-11 pt-1"
+          >
+            {t.guidedSetup.dismiss}
+          </button>
+        </section>
+      )}
 
       {/* 2b. Progress card — always visible when history exists */}
       {onNavigateToProgress && nutritionHistory.length > 0 && (
         <button
           type="button"
           onClick={onNavigateToProgress}
-          className="w-full bg-primary/5 border border-primary/20 p-4 rounded-sm flex items-center gap-4 hover:bg-primary/10 transition-colors text-left"
+          className="w-full bg-primary/5 border border-primary/20 p-4 rounded-sm flex items-center gap-4 hover:bg-primary/10 transition-colors text-left min-h-11"
         >
           <div className="w-10 h-10 bg-primary/10 rounded-full flex items-center justify-center shrink-0">
             <BarChart3 className="w-5 h-5 text-primary" />
           </div>
           <div className="flex-1 min-w-0">
-            <p className="font-headline text-xs font-bold uppercase tracking-widest text-tertiary">{t.progress?.title || 'Tu Progreso'}</p>
-            <p className="text-[11px] text-on-surface-variant mt-0.5 leading-relaxed">{t.progress?.desc || 'Ve cómo avanzas esta semana'}</p>
+            <p className="font-headline text-xs font-bold uppercase tracking-widest text-tertiary">{t.progress.title}</p>
+            <p className="text-caption text-on-surface-variant mt-0.5 leading-relaxed">{t.progress.desc}</p>
           </div>
           <ChevronRight className="w-4 h-4 text-primary shrink-0" />
         </button>
@@ -358,14 +385,14 @@ export default function Home({
       )}
 
       {/* 6. Hydration — compact row */}
-      <div className="bg-surface-container-low border border-outline-variant/20 p-4 rounded-sm">
+      <SectionCard padding="md" spacing="md">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 bg-brand-secondary/10 rounded-full flex items-center justify-center shrink-0">
               <Droplets className="w-5 h-5 text-brand-secondary" />
             </div>
             <div>
-              <p className="font-label text-[10px] text-on-surface-variant uppercase tracking-widest">{t.home.water}</p>
+              <p className="font-label text-micro text-on-surface-variant uppercase tracking-widest">{t.home.water}</p>
               <p className="font-headline font-bold text-sm text-tertiary uppercase">{hydration.consumed} / {hydration.target} {t.home.cups}</p>
             </div>
           </div>
@@ -373,24 +400,24 @@ export default function Home({
             <button
               type="button"
               onClick={() => setIsEditingHydration(!isEditingHydration)}
-              className="text-[10px] text-brand-secondary hover:underline font-bold uppercase tracking-widest"
+              className="text-micro text-brand-secondary hover:underline font-bold uppercase tracking-widest min-h-11 px-3"
             >
               {isEditingHydration ? t.home.close : t.home.edit}
             </button>
             <button
               type="button"
               onClick={handleAddWater}
-              className="w-9 h-9 bg-brand-secondary text-on-secondary rounded-full flex items-center justify-center hover:opacity-90 transition-all active:scale-95 shadow-lg shadow-secondary/20 shrink-0"
-              aria-label="Add water"
+              className="w-11 h-11 bg-brand-secondary text-on-secondary rounded-full flex items-center justify-center hover:opacity-90 transition-all active:scale-95 shadow-lg shadow-secondary/20 shrink-0"
+              aria-label={t.home.addWater ?? 'Add water'}
             >
               <Plus className="w-4 h-4" />
             </button>
           </div>
         </div>
         {isEditingHydration && (
-          <div className="pt-3 mt-3 border-t border-outline-variant/10 animate-in fade-in slide-in-from-top-2">
+          <div className="pt-3 border-t border-outline-variant/10 animate-in fade-in slide-in-from-top-2">
             <div className="flex items-center justify-between mb-2">
-              <span className="font-label text-[10px] uppercase tracking-widest text-on-surface-variant">{t.home.dailyTarget} ({t.home.cups})</span>
+              <span className="font-label text-micro uppercase tracking-widest text-on-surface-variant">{t.home.dailyTarget} ({t.home.cups})</span>
               <span className="font-headline font-bold text-sm text-brand-secondary">{hydration.target}</span>
             </div>
             <input
@@ -404,7 +431,7 @@ export default function Home({
             />
           </div>
         )}
-      </div>
+      </SectionCard>
 
       {/* 6b. Progress Preview Card — weight, sparkline, quick-log, deep-link */}
       <ProgressPreviewCard
@@ -448,9 +475,13 @@ export default function Home({
 
       {/* 7c. Shopping Reminder — conditional */}
       {shoppingPendingCount > 0 && (
-        <button type="button" onClick={onNavigateToPlan} className="bg-surface-container-low border border-outline-variant/20 p-3 rounded-sm flex items-center gap-3 w-full hover:border-primary/30 transition-colors">
+        <button
+          type="button"
+          onClick={onNavigateToPlan}
+          className="bg-surface-container border border-outline-variant/30 p-3 rounded-sm flex items-center gap-3 w-full min-h-11 hover:border-primary/30 hover:bg-surface-container-high transition-colors"
+        >
           <ShoppingCart className="w-4 h-4 text-primary" />
-          <span className="text-xs font-bold uppercase tracking-widest text-tertiary flex-1 text-left">
+          <span className="text-label font-bold uppercase tracking-widest text-tertiary flex-1 text-left">
             {(t.home.shoppingPending as string)?.replace('{count}', String(shoppingPendingCount))}
           </span>
           <ChevronRight className="w-4 h-4 text-on-surface-variant" />
@@ -467,28 +498,17 @@ export default function Home({
         />
       )}
 
-      {/* 9. Smart Insights — conditional */}
-      {(() => {
-        const insights = getInsights({
-          realFeelLogs: realFeelLogs || [],
-          savedRecipes: [],
-          mealPlan: mealPlan || {},
-          dailyMacros,
-          hydration,
-          streakDays,
-        });
-        if (!insights.length) return null;
-        return (
-          <section className="space-y-3">
-            <h2 className="font-headline text-sm font-bold tracking-widest uppercase text-tertiary flex items-center gap-2 px-1">
-              <Sparkles className="w-4 h-4 text-primary" /> {t.home.insights}
-            </h2>
-            {insights.slice(0, 3).map(ins => (
-              <InsightRow key={ins.id} insight={ins} />
-            ))}
-          </section>
-        );
-      })()}
+      {/* 9. Smart Insights — conditional (memoized) */}
+      {insights.length > 0 && (
+        <section className="space-y-3">
+          <h2 className="font-headline text-sm font-bold tracking-widest uppercase text-tertiary flex items-center gap-2 px-1">
+            <Sparkles className="w-4 h-4 text-primary" /> {t.home.insights}
+          </h2>
+          {insights.slice(0, 3).map((ins) => (
+            <InsightRow key={ins.id} insight={ins} />
+          ))}
+        </section>
+      )}
     </PageShell>
   );
 }
