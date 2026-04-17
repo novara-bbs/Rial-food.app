@@ -261,40 +261,40 @@ export default function CreateRecipe({
           </div>
 
           <div>
-            <label className="font-label text-[11px] font-bold tracking-widest uppercase text-on-surface-variant mb-2 block">{t.createRecipe.recipeName}</label>
+            <label className="font-label text-caption font-bold tracking-widest uppercase text-on-surface-variant mb-2 block">{t.createRecipe.recipeName}</label>
             <input type="text" value={title} onChange={e => setTitle(e.target.value)} placeholder={t.createRecipe.namePlaceholder}
               className="w-full bg-surface-container-low border border-outline-variant/30 p-4 font-body text-sm text-tertiary rounded-sm focus:outline-none focus:border-primary transition-all placeholder:text-outline-variant" />
           </div>
 
           <div>
-            <label className="font-label text-[11px] font-bold tracking-widest uppercase text-on-surface-variant mb-2 block">{t.createRecipe.description}</label>
+            <label className="font-label text-caption font-bold tracking-widest uppercase text-on-surface-variant mb-2 block">{t.createRecipe.description}</label>
             <textarea value={description} onChange={e => setDescription(e.target.value)} placeholder={t.createRecipe.descPlaceholder} rows={3}
               className="w-full bg-surface-container-low border border-outline-variant/30 p-4 font-body text-sm text-tertiary rounded-sm focus:outline-none focus:border-primary transition-all placeholder:text-outline-variant resize-none" />
           </div>
 
           <div className="grid grid-cols-2 gap-3">
             <div>
-              <label className="font-label text-[11px] font-bold tracking-widest uppercase text-on-surface-variant mb-2 block">{t.createRecipe.prepTime}</label>
+              <label className="font-label text-caption font-bold tracking-widest uppercase text-on-surface-variant mb-2 block">{t.createRecipe.prepTime}</label>
               <div className="relative">
                 <input type="number" inputMode="numeric" min={0} step={5}
                   value={prepTime || ''} onChange={e => setPrepTime(Math.max(0, parseInt(e.target.value, 10) || 0))}
                   placeholder="15"
                   className="w-full bg-surface-container-low border border-outline-variant/30 p-3 pr-12 font-body text-sm text-tertiary rounded-sm focus:outline-none focus:border-primary transition-all placeholder:text-outline-variant" />
-                <span aria-hidden="true" className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 font-label text-[10px] tracking-widest uppercase text-on-surface-variant">min</span>
+                <span aria-hidden="true" className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 font-label text-micro tracking-widest uppercase text-on-surface-variant">min</span>
               </div>
             </div>
             <div>
-              <label className="font-label text-[11px] font-bold tracking-widest uppercase text-on-surface-variant mb-2 block">{t.createRecipe.cookTime}</label>
+              <label className="font-label text-caption font-bold tracking-widest uppercase text-on-surface-variant mb-2 block">{t.createRecipe.cookTime}</label>
               <div className="relative">
                 <input type="number" inputMode="numeric" min={0} step={5}
                   value={cookTime || ''} onChange={e => setCookTime(Math.max(0, parseInt(e.target.value, 10) || 0))}
                   placeholder="20"
                   className="w-full bg-surface-container-low border border-outline-variant/30 p-3 pr-12 font-body text-sm text-tertiary rounded-sm focus:outline-none focus:border-primary transition-all placeholder:text-outline-variant" />
-                <span aria-hidden="true" className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 font-label text-[10px] tracking-widest uppercase text-on-surface-variant">min</span>
+                <span aria-hidden="true" className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 font-label text-micro tracking-widest uppercase text-on-surface-variant">min</span>
               </div>
             </div>
             <div>
-              <label className="font-label text-[11px] font-bold tracking-widest uppercase text-on-surface-variant mb-2 block">{t.recipes.difficulty}</label>
+              <label className="font-label text-caption font-bold tracking-widest uppercase text-on-surface-variant mb-2 block">{t.recipes.difficulty}</label>
               <select value={difficulty} onChange={e => setDifficulty(e.target.value as typeof difficulty)}
                 className="w-full bg-surface-container-low border border-outline-variant/30 p-3 font-body text-sm text-tertiary rounded-sm focus:outline-none focus:border-primary transition-all">
                 <option value="Fácil">{t.recipes.easy}</option>
@@ -303,7 +303,7 @@ export default function CreateRecipe({
               </select>
             </div>
             <div>
-              <label className="font-label text-[11px] font-bold tracking-widest uppercase text-on-surface-variant mb-2 block">{t.recipes.servings}</label>
+              <label className="font-label text-caption font-bold tracking-widest uppercase text-on-surface-variant mb-2 block">{t.recipes.servings}</label>
               <input type="number" value={servings} onChange={e => setServings(Math.max(1, parseInt(e.target.value) || 1))} min={1}
                 className="w-full bg-surface-container-low border border-outline-variant/30 p-3 font-body text-sm text-tertiary rounded-sm focus:outline-none focus:border-primary transition-all" />
             </div>
@@ -312,7 +312,7 @@ export default function CreateRecipe({
           {/* Source & Video — creator-quality fields */}
           <div className="space-y-3 pt-2">
             <div>
-              <label className="font-label text-[11px] font-bold tracking-widest uppercase text-on-surface-variant mb-2 flex items-center gap-1.5">
+              <label className="font-label text-caption font-bold tracking-widest uppercase text-on-surface-variant mb-2 flex items-center gap-1.5">
                 <Video className="w-3.5 h-3.5" />
                 {t.createRecipe.videoLabel}
               </label>
@@ -321,7 +321,7 @@ export default function CreateRecipe({
                 className="w-full bg-surface-container-low border border-outline-variant/30 p-3 font-body text-sm text-tertiary rounded-sm focus:outline-none focus:border-primary transition-all placeholder:text-outline-variant" />
             </div>
             <div>
-              <label className="font-label text-[11px] font-bold tracking-widest uppercase text-on-surface-variant mb-2 flex items-center gap-1.5">
+              <label className="font-label text-caption font-bold tracking-widest uppercase text-on-surface-variant mb-2 flex items-center gap-1.5">
                 <Link2 className="w-3.5 h-3.5" />
                 {t.createRecipe.sourceLabel}
               </label>
@@ -344,8 +344,8 @@ export default function CreateRecipe({
           {/* Running macro total */}
           <div className="bg-surface-container-low p-4 rounded-sm border border-outline-variant/20">
             <div className="flex items-center justify-between mb-2">
-              <span className="font-label text-[10px] font-bold tracking-widest uppercase text-on-surface-variant">{t.createRecipe.totalMacros}</span>
-              <span className="font-label text-[10px] tracking-widest uppercase text-on-surface-variant">
+              <span className="font-label text-micro font-bold tracking-widest uppercase text-on-surface-variant">{t.createRecipe.totalMacros}</span>
+              <span className="font-label text-micro tracking-widest uppercase text-on-surface-variant">
                 {recipeIngredients.length} items
               </span>
             </div>
@@ -358,12 +358,12 @@ export default function CreateRecipe({
               ].map(m => (
                 <div key={m.label} className="bg-surface-container-highest rounded-sm p-2 text-center">
                   <span className={`block font-headline font-bold text-base ${m.color}`}>{m.value}</span>
-                  <span className="text-[8px] font-label uppercase tracking-widest text-on-surface-variant">{m.label}</span>
+                  <span className="text-micro font-label uppercase tracking-widest text-on-surface-variant">{m.label}</span>
                 </div>
               ))}
             </div>
             {servings > 1 && (
-              <p className="text-[10px] font-label uppercase tracking-widest text-on-surface-variant mt-2 text-center">
+              <p className="text-micro font-label uppercase tracking-widest text-on-surface-variant mt-2 text-center">
                 {t.createRecipe.perServing}: {perServing.calories} kcal · {perServing.protein}g P · {perServing.carbs}g C · {perServing.fats}g F
               </p>
             )}
@@ -375,16 +375,22 @@ export default function CreateRecipe({
             if (!ing) return null;
             const sm = scaleMacros(ing.macros, ing.baseAmount, ri.amount);
             return (
-              <div key={ri.id} className="bg-surface-container-low border border-outline-variant/20 rounded-sm p-3 flex items-center gap-2">
-                <div className="flex flex-col gap-0.5">
+              <div key={ri.id} className="bg-surface-container-low rounded-sm border border-outline-variant/20 p-3 flex items-center gap-2">
+                <div className="flex flex-col">
                   <button type="button" onClick={() => setRecipeIngredients(prev => swapped(prev, idx, -1))} disabled={idx === 0}
-                    className="p-0.5 text-on-surface-variant hover:text-primary disabled:opacity-20 transition-colors"><ArrowUp className="w-3 h-3" /></button>
+                    aria-label={locale === 'es' ? 'Subir ingrediente' : 'Move ingredient up'}
+                    className="min-w-11 min-h-11 flex items-center justify-center text-on-surface-variant hover:text-primary disabled:opacity-20 transition-colors">
+                    <ArrowUp className="w-3.5 h-3.5" />
+                  </button>
                   <button type="button" onClick={() => setRecipeIngredients(prev => swapped(prev, idx, 1))} disabled={idx === recipeIngredients.length - 1}
-                    className="p-0.5 text-on-surface-variant hover:text-primary disabled:opacity-20 transition-colors"><ArrowDown className="w-3 h-3" /></button>
+                    aria-label={locale === 'es' ? 'Bajar ingrediente' : 'Move ingredient down'}
+                    className="min-w-11 min-h-11 flex items-center justify-center text-on-surface-variant hover:text-primary disabled:opacity-20 transition-colors">
+                    <ArrowDown className="w-3.5 h-3.5" />
+                  </button>
                 </div>
                 <div className="flex-1 min-w-0">
                   <h4 className="font-headline font-bold text-sm text-tertiary truncate">{ing.name}</h4>
-                  <p className="text-[10px] font-label uppercase tracking-widest text-on-surface-variant">
+                  <p className="text-micro font-label uppercase tracking-widest text-on-surface-variant">
                     {ri.amount}g — {sm.calories} kcal · {sm.protein}g P
                   </p>
                 </div>
@@ -419,7 +425,7 @@ export default function CreateRecipe({
                     >
                       <div className="flex-1 min-w-0">
                         <span className="block font-headline font-bold text-sm text-tertiary truncate">{ing.name}</span>
-                        <span className="block text-[10px] font-label uppercase tracking-widest text-on-surface-variant">
+                        <span className="block text-micro font-label uppercase tracking-widest text-on-surface-variant">
                           {ing.macros.calories} kcal / {ing.baseAmount}{ing.baseUnit} · {ing.macros.protein}g P
                         </span>
                       </div>
@@ -452,7 +458,7 @@ export default function CreateRecipe({
       {/* ═══════════════════ STEP 3: INSTRUCTIONS ═══════════════════ */}
       {step === 3 && (
         <div className="space-y-4">
-          <p className="font-label text-[10px] font-bold tracking-widest uppercase text-on-surface-variant">
+          <p className="font-label text-micro font-bold tracking-widest uppercase text-on-surface-variant">
             {steps.filter(s => s.text.trim()).length} {locale === 'es' ? 'pasos' : 'steps'}
           </p>
 
@@ -479,21 +485,30 @@ export default function CreateRecipe({
                     {/* Per-step photo placeholder */}
                     <button
                       type="button"
-                      className="inline-flex items-center gap-1 text-[10px] font-label uppercase tracking-widest text-on-surface-variant/60 hover:text-primary border border-dashed border-outline-variant/20 hover:border-primary/30 rounded-sm px-2 py-1 transition-colors"
+                      className="inline-flex items-center gap-1 text-micro font-label uppercase tracking-widest text-on-surface-variant/60 hover:text-primary border border-dashed border-outline-variant/20 hover:border-primary/30 rounded-sm px-2 py-1 transition-colors"
                     >
                       <ImagePlus className="w-3 h-3" />
                       {t.createRecipe.photo}
                     </button>
                   </div>
                 </div>
-                <div className="flex flex-col gap-1 shrink-0 mt-1">
+                <div className="flex flex-col shrink-0 mt-1">
                   <button type="button" onClick={() => setSteps(prev => swapped(prev, idx, -1))} disabled={idx === 0}
-                    className="p-1 text-on-surface-variant hover:text-primary disabled:opacity-20 transition-colors"><ArrowUp className="w-3.5 h-3.5" /></button>
+                    aria-label={locale === 'es' ? 'Subir paso' : 'Move step up'}
+                    className="min-w-11 min-h-11 flex items-center justify-center text-on-surface-variant hover:text-primary disabled:opacity-20 transition-colors">
+                    <ArrowUp className="w-4 h-4" />
+                  </button>
                   <button type="button" onClick={() => setSteps(prev => swapped(prev, idx, 1))} disabled={idx === steps.length - 1}
-                    className="p-1 text-on-surface-variant hover:text-primary disabled:opacity-20 transition-colors"><ArrowDown className="w-3.5 h-3.5" /></button>
+                    aria-label={locale === 'es' ? 'Bajar paso' : 'Move step down'}
+                    className="min-w-11 min-h-11 flex items-center justify-center text-on-surface-variant hover:text-primary disabled:opacity-20 transition-colors">
+                    <ArrowDown className="w-4 h-4" />
+                  </button>
                   {steps.length > 1 && (
                     <button type="button" onClick={() => removeStep(idx)}
-                      className="p-1 text-error/60 hover:text-error transition-colors"><Trash2 className="w-3.5 h-3.5" /></button>
+                      aria-label={locale === 'es' ? 'Eliminar paso' : 'Delete step'}
+                      className="min-w-11 min-h-11 flex items-center justify-center text-error/60 hover:text-error transition-colors">
+                      <Trash2 className="w-4 h-4" />
+                    </button>
                   )}
                 </div>
               </div>
@@ -518,7 +533,7 @@ export default function CreateRecipe({
             <div className="p-4 space-y-2">
               <h3 className="font-headline text-lg font-bold uppercase text-tertiary">{title || '—'}</h3>
               {description && <p className="text-sm text-on-surface-variant line-clamp-2">{description}</p>}
-              <div className="flex items-center gap-3 text-[10px] font-label uppercase tracking-widest text-on-surface-variant flex-wrap">
+              <div className="flex items-center gap-3 text-micro font-label uppercase tracking-widest text-on-surface-variant flex-wrap">
                 <span className="flex items-center gap-1"><Clock className="w-3 h-3" /> {prepTime ? `${prepTime} min` : '—'} + {cookTime ? `${cookTime} min` : '—'}</span>
                 <span className="flex items-center gap-1"><UtensilsCrossed className="w-3 h-3" /> {difficulty}</span>
                 <span>{servings} {t.recipes.servings}</span>
@@ -545,6 +560,7 @@ export default function CreateRecipe({
                   src={`https://www.youtube-nocookie.com/embed/${youtubeId}`}
                   title="Recipe video"
                   allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                  sandbox="allow-scripts allow-same-origin allow-presentation"
                   allowFullScreen
                   className="absolute inset-0 w-full h-full"
                 />
@@ -563,7 +579,7 @@ export default function CreateRecipe({
 
           {/* Per-serving macros */}
           <div className="bg-surface-container-low p-4 rounded-sm border border-outline-variant/20">
-            <h4 className="font-label text-[10px] font-bold tracking-widest uppercase text-on-surface-variant mb-3">{t.createRecipe.perServing}</h4>
+            <h4 className="font-label text-micro font-bold tracking-widest uppercase text-on-surface-variant mb-3">{t.createRecipe.perServing}</h4>
             <div className="grid grid-cols-4 gap-2">
               {[
                 { label: 'kcal', value: perServing.calories, color: 'text-primary' },
@@ -573,7 +589,7 @@ export default function CreateRecipe({
               ].map(m => (
                 <div key={m.label} className="bg-surface-container-highest rounded-sm p-2 text-center">
                   <span className={`block font-headline font-bold text-lg ${m.color}`}>{m.value}</span>
-                  <span className="text-[9px] font-label uppercase tracking-widest text-on-surface-variant">{m.label}</span>
+                  <span className="text-micro font-label uppercase tracking-widest text-on-surface-variant">{m.label}</span>
                 </div>
               ))}
             </div>
@@ -582,7 +598,7 @@ export default function CreateRecipe({
           {/* Auto tags */}
           {autoTags.length > 0 && (
             <div className="space-y-2">
-              <h4 className="font-label text-[10px] font-bold tracking-widest uppercase text-on-surface-variant">
+              <h4 className="font-label text-micro font-bold tracking-widest uppercase text-on-surface-variant">
                 {t.createRecipe.suggestedTags}
               </h4>
               <div className="flex flex-wrap gap-1.5">
@@ -595,7 +611,7 @@ export default function CreateRecipe({
 
           {/* Ingredient summary */}
           <div className="space-y-2">
-            <h4 className="font-label text-[10px] font-bold tracking-widest uppercase text-on-surface-variant">
+            <h4 className="font-label text-micro font-bold tracking-widest uppercase text-on-surface-variant">
               {recipeIngredients.length} {t.recipes.ingredients}
             </h4>
             {recipeIngredients.map(ri => {
@@ -612,20 +628,20 @@ export default function CreateRecipe({
           {/* Steps summary */}
           {steps.some(s => s.text.trim()) && (
             <div className="space-y-2">
-              <h4 className="font-label text-[10px] font-bold tracking-widest uppercase text-on-surface-variant">
+              <h4 className="font-label text-micro font-bold tracking-widest uppercase text-on-surface-variant">
                 {steps.filter(s => s.text.trim()).length} {t.recipes.steps}
               </h4>
               {steps.filter(s => s.text.trim()).map((s, idx) => {
                 const timers = detectTimers(s.text);
                 return (
                   <div key={idx} className="flex gap-2 items-start">
-                    <span className="w-5 h-5 rounded-full bg-primary/10 text-primary text-[10px] font-bold flex items-center justify-center shrink-0 mt-0.5">{idx + 1}</span>
+                    <span className="w-5 h-5 rounded-full bg-primary/10 text-primary text-micro font-bold flex items-center justify-center shrink-0 mt-0.5">{idx + 1}</span>
                     <div className="flex-1 min-w-0">
                       <p className="text-sm text-on-surface-variant line-clamp-2">{s.text}</p>
                       {timers.length > 0 && (
                         <div className="flex gap-1 mt-1">
                           {timers.map((m, i) => (
-                            <Badge key={i} variant="outline" className="text-primary border-primary/30 gap-0.5 text-[8px]">
+                            <Badge key={i} variant="outline" className="text-primary border-primary/30 gap-0.5 text-micro">
                               <Clock className="w-2 h-2" /> {m}min
                             </Badge>
                           ))}

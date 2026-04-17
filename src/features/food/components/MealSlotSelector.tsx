@@ -30,7 +30,7 @@ export default function MealSlotSelector({ value, onChange }: Props) {
         <button type="button"
           key={slot.id}
           onClick={() => onChange(slot.id)}
-          className={`flex-1 flex flex-col items-center gap-1 py-2.5 rounded-sm border transition-colors font-headline text-[9px] font-bold uppercase tracking-widest ${
+          className={`flex-1 min-h-11 flex flex-col items-center justify-center gap-1 py-2 rounded-sm border transition-colors font-headline text-micro font-bold uppercase tracking-widest ${
             value === slot.id
               ? 'bg-primary text-on-primary border-primary'
               : 'bg-surface-container-low text-on-surface-variant border-outline-variant/20 hover:border-primary/40 hover:text-tertiary'

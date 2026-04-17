@@ -1279,6 +1279,7 @@ const es = {
     logMeal: 'Registrar Comida',
     addToPlan: 'Añadir al Plan',
     selectDay: 'Seleccionar Día',
+    mealSlotLabel: 'Franja',
     family: 'Familia',
     servings: 'Porciones',
     notes: 'Notas',
@@ -1656,6 +1657,8 @@ const es = {
     ok: 'Confirmar',
     deletePantryItem: 'Eliminar artículo',
     deletePantryItemDesc: '¿Eliminar este artículo de tu despensa?',
+    unsaveRecipe: '¿Desguardar esta receta?',
+    unsaveRecipeDesc: 'La receta saldrá de tu Bóveda. Podrás volver a guardarla en cualquier momento.',
   },
   offline: {
     banner: 'Sin conexión — los datos se guardan localmente',

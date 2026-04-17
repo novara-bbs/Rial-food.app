@@ -59,8 +59,9 @@ function resolveMealSlot(mealType: string | undefined, t: any): { time: string; 
 }
 
 export function createHandleAddToPlan(deps: RecipeHandlerDeps) {
-  return (recipe: any, dayIndex: number) => {
-    const slot = resolveMealSlot(recipe.mealType, deps.t);
+  return (recipe: any, dayIndex: number, mealSlot?: MealSlotKey) => {
+    // Explicit slot (from MealSlotSelector) wins over recipe.mealType.
+    const slot = resolveMealSlot(mealSlot ?? recipe.mealType, deps.t);
 
     deps.setMealPlan((prev: Record<number, any[]>) => ({
       ...prev,

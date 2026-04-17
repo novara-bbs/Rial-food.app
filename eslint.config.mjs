@@ -94,7 +94,6 @@ const q16MigrationAllowlist = [
   'src/features/auth/screens/Signup.tsx',
   'src/features/dev/components/DemoSeedCard.tsx',
   'src/features/food/components/BarcodeScanner.tsx',
-  'src/features/food/components/MealSlotSelector.tsx',
   'src/features/food/components/PortionSelector.tsx',
   'src/features/food/screens/AddMeal.tsx',
   'src/features/food/screens/FoodDictionary.tsx',
@@ -119,12 +118,8 @@ const q16MigrationAllowlist = [
   'src/features/profile/screens/Profile.tsx',
   'src/features/profile/screens/RialPlus.tsx',
   'src/features/profile/screens/Settings.tsx',
-  'src/features/recipes/components/CookMode.tsx',
-  'src/features/recipes/components/RecipeNutritionBar.tsx',
-  'src/features/recipes/components/RecipeSubstitutionPicker.tsx',
-  'src/features/recipes/screens/CreateRecipe.tsx',
-  'src/features/recipes/screens/ImportRecipeURL.tsx',
-  'src/features/recipes/screens/RecipeDetail.tsx',
+  // Cocina tab cleaned in Wave 2 of tab audit (2026-04-18). All recipes/*
+  // screens and components migrated to tokens + SectionCard + HIG taps.
   'src/features/social/components/AvatarRing.tsx',
   'src/features/social/components/PostCard.tsx',
   'src/features/social/components/ProgressPostCard.tsx',

@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
 import { X, ChevronLeft, ChevronRight, UtensilsCrossed, Clock } from 'lucide-react';
 import { useI18n } from '../../../i18n';
+import { Z_TW } from '../../../lib/z-index';
 import CookTimer from './CookTimer';
 
 interface NormalizedStep {
@@ -102,7 +103,7 @@ export default function CookMode({
   if (total === 0) {
     return (
       <div
-        className="fixed inset-0 z-[100] bg-neutral-950 flex flex-col items-center justify-center text-on-overlay p-8 text-center"
+        className={`fixed inset-0 ${Z_TW.FULLSCREEN} bg-neutral-950 flex flex-col items-center justify-center text-on-overlay p-8 text-center`}
         role="dialog"
         aria-modal="true"
       >
@@ -131,14 +132,14 @@ export default function CookMode({
 
   return (
     <div
-      className="fixed inset-0 z-[100] bg-neutral-950 flex flex-col text-on-overlay select-none"
+      className={`fixed inset-0 ${Z_TW.FULLSCREEN} bg-neutral-950 flex flex-col text-on-overlay select-none`}
       onTouchStart={handleTouchStart}
       onTouchEnd={handleTouchEnd}
     >
       {/* Header */}
       <div className="flex items-center justify-between px-6 pt-6 pb-4 border-b border-overlay-border">
         <div>
-          <span className="font-label text-[10px] uppercase tracking-widest text-on-overlay/40 block truncate max-w-[200px]">{title}</span>
+          <span className="font-label text-micro uppercase tracking-widest text-on-overlay/40 block truncate max-w-[200px]">{title}</span>
           <p className="font-headline text-sm font-bold text-on-overlay/70">
             {t.recipeDetail.cookModeStep
               .replace('{current}', String(current + 1))

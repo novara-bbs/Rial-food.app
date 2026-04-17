@@ -27,6 +27,10 @@ import path from 'node:path';
  *         ActivityRow to SectionCard, NextMealSuggestion +
  *         WeeklyMiniDash + QuickActions + Shopping reminder recolored
  *         to bg-surface-container as interactive cards)
+ *    73 — 2026-04-18 Wave 2 Cocina tab polish (RecipeDetail, CreateRecipe,
+ *         ImportRecipeURL, CookMode, RecipeNutritionBar, RecipeSubstitutionPicker
+ *         migrated to <SectionCard> + tokens + HIG 44×44 tap targets; iframe
+ *         sandbox added to 3 embeds; unsave confirm dialog wired)
  *
  * TodaysMeals retains 2 occurrences (list container + meal item card) that
  * don't fit SectionCard's fixed-padding + space-y shape; those need a
@@ -34,7 +38,7 @@ import path from 'node:path';
  *
  * Q16 codemod sprint drops it further; when it reaches 0, delete this test.
  */
-const BASELINE = 84;
+const BASELINE = 73;
 
 const SHAPE = /bg-surface-container-low[^"'`]*\bborder-outline-variant\/20[^"'`]*\brounded-sm/;
 

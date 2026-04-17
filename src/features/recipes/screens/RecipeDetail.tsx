@@ -22,7 +22,7 @@ import { useLocalStorageState } from '../../../hooks/useLocalStorageState';
 import { useI18n } from '../../../i18n';
 import ConfirmDialog from '../../../components/ConfirmDialog';
 
-export default function RecipeDetail({ recipe, onBack, onSaveRecipe, isSaved, onAddToPlan, onLogMealNow, onAddToShoppingList, dictionary = [], userProfile }: { recipe: any, onBack: () => void, onSaveRecipe?: (r: any) => void, isSaved?: boolean, onAddToPlan?: (recipe: any, dayIndex: number) => void, onLogMealNow?: (recipe: any, servings: number) => void, onAddToShoppingList?: (items: any[]) => void, dictionary?: any[], userProfile?: any }) {
+export default function RecipeDetail({ recipe, onBack, onSaveRecipe, isSaved, onAddToPlan, onLogMealNow, onAddToShoppingList, dictionary = [], userProfile }: { recipe: any, onBack: () => void, onSaveRecipe?: (r: any) => void, isSaved?: boolean, onAddToPlan?: (recipe: any, dayIndex: number, slot?: 'breakfast' | 'lunch' | 'dinner' | 'snack') => void, onLogMealNow?: (recipe: any, servings: number) => void, onAddToShoppingList?: (items: any[]) => void, dictionary?: any[], userProfile?: any }) {
   const { t } = useI18n();
   const { navigateTo } = useNavigation();
   const { setSelectedCreatorId, communityPosts, savedRecipes, savedPosts, navigateToRecipe: navToRecipe, handleDeleteRecipe, handleDuplicateRecipe, setRecipeToEdit, isPro } = useAppState();
@@ -38,6 +38,7 @@ export default function RecipeDetail({ recipe, onBack, onSaveRecipe, isSaved, on
   const [showPublishSheet, setShowPublishSheet] = useState(false);
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
   const [showDuplicateConfirm, setShowDuplicateConfirm] = useState(false);
+  const [showUnsaveConfirm, setShowUnsaveConfirm] = useState(false);
 
   // Track recipe view on mount
   useEffect(() => {
@@ -259,7 +260,20 @@ export default function RecipeDetail({ recipe, onBack, onSaveRecipe, isSaved, on
           <button type="button" onClick={() => setShowPublishSheet(true)} aria-label={t.recipeDetail.shareToFeed} className="w-10 h-10 bg-surface/80 backdrop-blur-md rounded-full flex items-center justify-center text-tertiary hover:bg-primary hover:text-on-primary transition-colors">
             <Share2 className="w-5 h-5" />
           </button>
-          <button type="button" onClick={() => onSaveRecipe && onSaveRecipe(getModifiedRecipe())} aria-label={t.common.save} className="w-10 h-10 bg-surface/80 backdrop-blur-md rounded-full flex items-center justify-center text-tertiary hover:bg-primary hover:text-on-primary transition-colors">
+          <button
+            type="button"
+            onClick={() => {
+              if (!onSaveRecipe) return;
+              if (isSaved) {
+                setShowUnsaveConfirm(true);
+              } else {
+                onSaveRecipe(getModifiedRecipe());
+              }
+            }}
+            aria-label={t.common.save}
+            aria-pressed={!!isSaved}
+            className="w-10 h-10 bg-surface/80 backdrop-blur-md rounded-full flex items-center justify-center text-tertiary hover:bg-primary hover:text-on-primary transition-colors"
+          >
             <Bookmark className={`w-5 h-5 ${isSaved ? 'fill-primary text-primary' : ''}`} />
           </button>
         </div>
@@ -292,12 +306,12 @@ export default function RecipeDetail({ recipe, onBack, onSaveRecipe, isSaved, on
                 <img src={creator.avatar} alt={creator.name} className="w-8 h-8 rounded-full object-cover border border-outline-variant/20" referrerPolicy="no-referrer" />
                 <div className="min-w-0">
                   <span className="font-headline font-bold text-xs text-tertiary uppercase hover:text-primary transition-colors block truncate">@{creator.name}</span>
-                  <span className="font-label text-[9px] text-on-surface-variant tracking-widest uppercase block">{t.recipeDetail.createdBy}</span>
+                  <span className="font-label text-micro text-on-surface-variant tracking-widest uppercase block">{t.recipeDetail.createdBy}</span>
                 </div>
               </button>
               <button type="button"
                 onClick={toggleFollowCreator}
-                className={`shrink-0 whitespace-nowrap px-3 py-1.5 rounded-sm text-[9px] font-bold uppercase tracking-widest transition-all ${
+                className={`shrink-0 whitespace-nowrap min-h-11 px-3 py-1.5 rounded-sm text-micro font-bold uppercase tracking-widest transition-all ${
                   isFollowingCreator
                     ? 'bg-surface-container-highest text-on-surface-variant border border-outline-variant/30'
                     : 'bg-primary text-on-primary hover:opacity-90'
@@ -349,13 +363,13 @@ export default function RecipeDetail({ recipe, onBack, onSaveRecipe, isSaved, on
               const original = savedRecipes.find((r: any) => String(r.id) === String(data.forkedFrom.recipeId));
               if (original) navToRecipe(original);
             }}
-            className="flex items-center gap-2 w-full bg-surface-container-low border border-outline-variant/20 rounded-sm px-4 py-2.5 hover:border-primary/30 transition-colors text-left"
+            className="flex items-center gap-2 w-full min-h-11 bg-surface-container-low rounded-sm border border-outline-variant/20 px-4 py-2.5 hover:border-primary/30 transition-colors text-left"
           >
             <GitFork className="w-4 h-4 text-on-surface-variant shrink-0" />
-            <span className="text-[10px] font-label uppercase tracking-widest text-on-surface-variant">
+            <span className="text-micro font-label uppercase tracking-widest text-on-surface-variant">
               {t.recipeDetail.basedOn || 'Basada en'}
             </span>
-            <span className="text-[10px] font-headline font-bold text-primary uppercase tracking-widest truncate">
+            <span className="text-micro font-headline font-bold text-primary uppercase tracking-widest truncate">
               @{data.forkedFrom.creatorName} · {data.forkedFrom.title}
             </span>
             <ChefHat className="w-3.5 h-3.5 text-on-surface-variant/50 ml-auto shrink-0" />
@@ -386,6 +400,7 @@ export default function RecipeDetail({ recipe, onBack, onSaveRecipe, isSaved, on
                     src={`https://www.youtube-nocookie.com/embed/${ytMatch[1]}`}
                     title="Recipe video"
                     allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                    sandbox="allow-scripts allow-same-origin allow-presentation"
                     allowFullScreen
                     className="absolute inset-0 w-full h-full"
                   />
@@ -401,6 +416,7 @@ export default function RecipeDetail({ recipe, onBack, onSaveRecipe, isSaved, on
                     src={`https://www.tiktok.com/embed/v2/${ttMatch[1]}`}
                     title="Recipe video"
                     allow="encrypted-media"
+                    sandbox="allow-scripts allow-same-origin allow-presentation"
                     allowFullScreen
                     className="absolute inset-0 w-full h-full"
                   />
@@ -414,12 +430,12 @@ export default function RecipeDetail({ recipe, onBack, onSaveRecipe, isSaved, on
         {/* ── Source link ── */}
         {data.sourceUrl && (
           <a href={data.sourceUrl} target="_blank" rel="noopener noreferrer"
-            className="flex items-center gap-2 mt-3 bg-surface-container-low p-2.5 rounded-sm border border-outline-variant/20 hover:border-primary/30 transition-colors">
+            className="flex items-center gap-2 mt-3 min-h-11 bg-surface-container-low p-2.5 rounded-sm border border-outline-variant/20 hover:border-primary/30 transition-colors">
             <ExternalLink className="w-4 h-4 text-primary shrink-0" />
-            <span className="text-[10px] font-label uppercase tracking-widest text-on-surface-variant truncate flex-1">
+            <span className="text-micro font-label uppercase tracking-widest text-on-surface-variant truncate flex-1">
               {t.recipeDetail.viewOnPlatform?.replace('{platform}', data.sourceType || 'web') || data.sourceUrl}
             </span>
-            <Badge variant="outline" className="text-on-surface-variant border-outline-variant/30 shrink-0 text-[8px]">{data.sourceType || 'source'}</Badge>
+            <Badge variant="outline" className="text-on-surface-variant border-outline-variant/30 shrink-0 text-micro">{data.sourceType || 'source'}</Badge>
           </a>
         )}
 
@@ -427,12 +443,17 @@ export default function RecipeDetail({ recipe, onBack, onSaveRecipe, isSaved, on
         <div className="flex items-center justify-between mt-4 bg-surface-container-highest/50 p-3 rounded-sm border border-outline-variant/10">
           <span className="font-headline font-bold text-xs uppercase text-tertiary tracking-tight">{t.recipeDetail.servings}</span>
           <div className="flex items-center gap-3">
-            <button type="button" onClick={() => setServings(Math.max(1, servings - 1))} aria-label="Decrease servings" className="w-7 h-7 rounded-full bg-surface-container-low flex items-center justify-center text-on-surface-variant hover:text-primary border border-outline-variant/20">
-              <Minus className="w-3.5 h-3.5" />
+            {/* HIG 44×44 tap targets — visual circle kept at 28px via inner span */}
+            <button type="button" onClick={() => setServings(Math.max(1, servings - 1))} aria-label="Decrease servings" disabled={servings <= 1} className="min-w-11 min-h-11 flex items-center justify-center text-on-surface-variant hover:text-primary disabled:opacity-40 disabled:hover:text-on-surface-variant transition-colors">
+              <span className="w-7 h-7 rounded-full bg-surface-container-low border border-outline-variant/20 flex items-center justify-center">
+                <Minus className="w-3.5 h-3.5" />
+              </span>
             </button>
-            <span className="font-headline font-bold text-lg text-tertiary w-4 text-center">{servings}</span>
-            <button type="button" onClick={() => setServings(servings + 1)} aria-label="Increase servings" className="w-7 h-7 rounded-full bg-surface-container-low flex items-center justify-center text-on-surface-variant hover:text-primary border border-outline-variant/20">
-              <Plus className="w-3.5 h-3.5" />
+            <span className="font-headline font-bold text-lg text-tertiary w-6 text-center tabular-nums">{servings}</span>
+            <button type="button" onClick={() => setServings(servings + 1)} aria-label="Increase servings" className="min-w-11 min-h-11 flex items-center justify-center text-on-surface-variant hover:text-primary transition-colors">
+              <span className="w-7 h-7 rounded-full bg-surface-container-low border border-outline-variant/20 flex items-center justify-center">
+                <Plus className="w-3.5 h-3.5" />
+              </span>
             </button>
           </div>
         </div>
@@ -441,15 +462,15 @@ export default function RecipeDetail({ recipe, onBack, onSaveRecipe, isSaved, on
           <div className="mt-3 p-3 bg-surface-container-low rounded-sm border border-outline-variant/20">
             <div className="flex items-center gap-2 mb-2">
               <Users className="w-3.5 h-3.5 text-primary" />
-              <span className="font-label text-[10px] font-bold tracking-widest uppercase text-tertiary">{t.recipeDetail.family}</span>
+              <span className="font-label text-micro font-bold tracking-widest uppercase text-tertiary">{t.recipeDetail.family}</span>
             </div>
             <div className="flex flex-wrap gap-2">
-              <button type="button" className={`px-2.5 py-1 rounded-sm font-label text-[10px] font-bold tracking-widest uppercase border transition-all ${selectedFamily.length === 0 ? 'bg-primary text-on-primary border-primary' : 'bg-surface-container-highest text-on-surface-variant border-outline-variant/20'}`} onClick={() => setSelectedFamily([])}>{t.recipeDetail.onlyMe}</button>
+              <button type="button" className={`min-h-11 px-2.5 py-1 rounded-sm font-label text-micro font-bold tracking-widest uppercase border transition-all ${selectedFamily.length === 0 ? 'bg-primary text-on-primary border-primary' : 'bg-surface-container-highest text-on-surface-variant border-outline-variant/20'}`} onClick={() => setSelectedFamily([])}>{t.recipeDetail.onlyMe}</button>
               {familyMembers.map((member: any) => (
-                <button type="button" key={member.id} className={`px-2.5 py-1 rounded-sm font-label text-[10px] font-bold tracking-widest uppercase border transition-all ${selectedFamily.includes(member.id) ? 'bg-primary text-on-primary border-primary' : 'bg-surface-container-highest text-on-surface-variant border-outline-variant/20'}`} onClick={() => toggleFamilyMember(member.id)}>+ {member.name}</button>
+                <button type="button" key={member.id} className={`min-h-11 px-2.5 py-1 rounded-sm font-label text-micro font-bold tracking-widest uppercase border transition-all ${selectedFamily.includes(member.id) ? 'bg-primary text-on-primary border-primary' : 'bg-surface-container-highest text-on-surface-variant border-outline-variant/20'}`} onClick={() => toggleFamilyMember(member.id)}>+ {member.name}</button>
               ))}
             </div>
-            <p className="mt-2 font-label text-[9px] text-on-surface-variant uppercase tracking-wider">
+            <p className="mt-2 font-label text-micro text-on-surface-variant uppercase tracking-wider">
               {t.recipeDetail.scalingFor} {totalDiners} {totalDiners === 1 ? t.recipeDetail.person : t.recipeDetail.people}
             </p>
           </div>
@@ -520,7 +541,7 @@ export default function RecipeDetail({ recipe, onBack, onSaveRecipe, isSaved, on
                     if (!isPro) { navigateTo('rial-plus'); return; }
                     setShowDuplicateConfirm(true);
                   }}
-                  className="w-full flex items-center justify-between px-4 py-3 bg-surface-container-low border border-outline-variant/20 rounded-sm hover:border-primary/30 transition-colors group"
+                  className="w-full flex items-center justify-between min-h-11 px-4 py-3 bg-surface-container-low rounded-sm border border-outline-variant/20 hover:border-primary/30 transition-colors group"
                 >
                   <div className="flex items-center gap-3">
                     <GitFork className="w-4 h-4 text-on-surface-variant group-hover:text-primary transition-colors" />
@@ -528,7 +549,7 @@ export default function RecipeDetail({ recipe, onBack, onSaveRecipe, isSaved, on
                       <span className="font-headline font-bold text-xs text-tertiary uppercase tracking-widest block">
                         {t.recipeDetail.createVersion || 'Crear mi versión'}
                       </span>
-                      <span className="font-label text-[9px] text-on-surface-variant tracking-widest uppercase">
+                      <span className="font-label text-micro text-on-surface-variant tracking-widest uppercase">
                         {t.recipeDetail.versionDesc || 'Duplicar y personalizar esta receta'}
                       </span>
                     </div>
@@ -540,7 +561,8 @@ export default function RecipeDetail({ recipe, onBack, onSaveRecipe, isSaved, on
 
             {showDaySelector && (
               <RecipeDaySelectorSheet
-                onSelectDay={(idx) => { onAddToPlan?.(getModifiedRecipe(), idx); setShowDaySelector(false); }}
+                defaultSlot={(data.mealType as any) || 'lunch'}
+                onSelect={(idx, slot) => { onAddToPlan?.(getModifiedRecipe(), idx, slot); setShowDaySelector(false); }}
                 onClose={() => setShowDaySelector(false)}
               />
             )}
@@ -563,13 +585,13 @@ export default function RecipeDetail({ recipe, onBack, onSaveRecipe, isSaved, on
                         {comment.authorImg ? (
                           <img src={comment.authorImg} alt={comment.author} className="w-5 h-5 rounded-full object-cover" referrerPolicy="no-referrer" />
                         ) : (
-                          <div className="w-5 h-5 rounded-full bg-surface-container-highest flex items-center justify-center text-[9px] font-bold text-tertiary">
+                          <div className="w-5 h-5 rounded-full bg-surface-container-highest flex items-center justify-center text-micro font-bold text-tertiary">
                             {comment.author?.charAt(0)}
                           </div>
                         )}
-                        <span className="font-headline font-bold text-[10px] uppercase text-tertiary">{comment.author}</span>
+                        <span className="font-headline font-bold text-micro uppercase text-tertiary">{comment.author}</span>
                       </div>
-                      <p className="text-[11px] text-on-surface-variant leading-relaxed">"{comment.text}"</p>
+                      <p className="text-caption text-on-surface-variant leading-relaxed">"{comment.text}"</p>
                     </div>
                   ))}
                 </section>
@@ -580,7 +602,7 @@ export default function RecipeDetail({ recipe, onBack, onSaveRecipe, isSaved, on
           {/* ── Tab 2: Ingredients ── */}
           <TabsContent value="ingredients" className="space-y-4 pt-4">
             <div className="flex items-center justify-between">
-              <span className="font-label text-[10px] uppercase tracking-widest text-on-surface-variant">
+              <span className="font-label text-micro uppercase tracking-widest text-on-surface-variant">
                 {allIngredientsToDisplay.length} {t.recipeDetail.ingredientsCount}
               </span>
               <div className="flex gap-2">
@@ -636,8 +658,8 @@ export default function RecipeDetail({ recipe, onBack, onSaveRecipe, isSaved, on
                   {ing.isExtra && (
                     <div className="flex items-center gap-1 bg-surface-container-low p-1.5 rounded-sm border border-outline-variant/10">
                       <input type="number" value={ing.amount} onChange={e => updateExtraIngredientAmount(ing.id, e.target.value)} className="w-14 bg-surface-container-highest border-none rounded-sm py-1 px-2 text-sm text-tertiary text-center focus:outline-none focus:ring-1 focus:ring-primary" />
-                      <span className="text-[10px] text-on-surface-variant">{ing.unit}</span>
-                      <button type="button" onClick={() => removeExtraIngredient(ing.id)} aria-label={t.recipes.removeIngredient} className="p-1 text-outline hover:text-error"><X className="w-3.5 h-3.5" aria-hidden="true" /></button>
+                      <span className="text-micro text-on-surface-variant">{ing.unit}</span>
+                      <button type="button" onClick={() => removeExtraIngredient(ing.id)} aria-label={t.recipes.removeIngredient} className="min-w-11 min-h-11 flex items-center justify-center text-outline hover:text-error"><X className="w-3.5 h-3.5" aria-hidden="true" /></button>
                     </div>
                   )}
                 </div>
@@ -648,7 +670,7 @@ export default function RecipeDetail({ recipe, onBack, onSaveRecipe, isSaved, on
           {/* ── Tab 3: Steps ── */}
           <TabsContent value="steps" className="space-y-4 pt-4">
             <div className="flex items-center justify-between mb-2">
-              <span className="font-label text-[10px] uppercase tracking-widest text-on-surface-variant">
+              <span className="font-label text-micro uppercase tracking-widest text-on-surface-variant">
                 {cookSteps.length} {t.recipeDetail.stepsCount}
               </span>
               <Button variant="brand" size="sm" onClick={() => setCookModeActive(true)}>
@@ -700,11 +722,11 @@ export default function RecipeDetail({ recipe, onBack, onSaveRecipe, isSaved, on
 
                 {Object.keys(calculatedTotals.micros.vitamins).length > 0 && (
                   <div>
-                    <span className="font-label text-[10px] uppercase tracking-widest text-on-surface-variant">{t.recipeDetail.vitamins}</span>
+                    <span className="font-label text-micro uppercase tracking-widest text-on-surface-variant">{t.recipeDetail.vitamins}</span>
                     <div className="flex flex-wrap gap-1.5 mt-1">
                       {Object.entries(calculatedTotals.micros.vitamins).map(([key, value]) => (
                         <div key={key} className="bg-surface-container-highest px-2 py-1 rounded-sm">
-                          <span className="font-label text-[9px] uppercase tracking-wider text-on-surface-variant">{key} </span>
+                          <span className="font-label text-micro uppercase tracking-wider text-on-surface-variant">{key} </span>
                           <span className="font-mono text-xs text-tertiary">{Math.round((value as number) * s)}</span>
                         </div>
                       ))}
@@ -714,11 +736,11 @@ export default function RecipeDetail({ recipe, onBack, onSaveRecipe, isSaved, on
 
                 {Object.keys(calculatedTotals.micros.minerals).length > 0 && (
                   <div>
-                    <span className="font-label text-[10px] uppercase tracking-widest text-on-surface-variant">{t.recipeDetail.minerals}</span>
+                    <span className="font-label text-micro uppercase tracking-widest text-on-surface-variant">{t.recipeDetail.minerals}</span>
                     <div className="flex flex-wrap gap-1.5 mt-1">
                       {Object.entries(calculatedTotals.micros.minerals).map(([key, value]) => (
                         <div key={key} className="bg-surface-container-highest px-2 py-1 rounded-sm">
-                          <span className="font-label text-[9px] uppercase tracking-wider text-on-surface-variant">{key} </span>
+                          <span className="font-label text-micro uppercase tracking-wider text-on-surface-variant">{key} </span>
                           <span className="font-mono text-xs text-tertiary">{Math.round((value as number) * s)}mg</span>
                         </div>
                       ))}
@@ -745,13 +767,13 @@ export default function RecipeDetail({ recipe, onBack, onSaveRecipe, isSaved, on
                         {gs.type === 'add' && gs.ingredient && (
                           <>
                             <p className="text-tertiary font-headline font-bold text-xs">+ {gs.ingredient.name}</p>
-                            <p className="text-on-surface-variant text-[10px] mt-0.5">{gs.rationale}</p>
+                            <p className="text-on-surface-variant text-micro mt-0.5">{gs.rationale}</p>
                           </>
                         )}
                         {gs.type === 'swap' && gs.fromIngredient && gs.toIngredient && (
                           <>
                             <p className="text-tertiary font-headline font-bold text-xs">{gs.fromIngredient.name} → {gs.toIngredient.name}</p>
-                            <p className="text-on-surface-variant text-[10px] mt-0.5">{gs.rationale}</p>
+                            <p className="text-on-surface-variant text-micro mt-0.5">{gs.rationale}</p>
                           </>
                         )}
                       </div>
@@ -800,7 +822,7 @@ export default function RecipeDetail({ recipe, onBack, onSaveRecipe, isSaved, on
                 <Bookmark className="w-4 h-4" />
                 <span className="font-label text-xs font-bold">{relatedPosts.reduce((sum: number, p: any) => sum + (p.saves || 0), 0) + totalSaves}</span>
               </div>
-              <span className="font-label text-[9px] tracking-widest text-on-surface-variant uppercase ml-auto">{t.community?.title || 'Community'}</span>
+              <span className="font-label text-micro tracking-widest text-on-surface-variant uppercase ml-auto">{t.community?.title || 'Community'}</span>
             </div>
           );
         })()}
@@ -819,14 +841,14 @@ export default function RecipeDetail({ recipe, onBack, onSaveRecipe, isSaved, on
                   <button type="button"
                     key={r.id}
                     onClick={() => navToRecipe(r)}
-                    className="w-full flex items-center gap-3 p-3 bg-surface-container-low border border-outline-variant/20 rounded-sm hover:border-primary/50 transition-colors text-left"
+                    className="w-full flex items-center gap-3 p-3 bg-surface-container-low rounded-sm border border-outline-variant/20 hover:border-primary/50 transition-colors text-left"
                   >
                     {(r.img || r.image) && (
                       <img src={r.img || r.image} alt={r.title} className="w-12 h-12 rounded-sm object-cover shrink-0" referrerPolicy="no-referrer" />
                     )}
                     <div className="flex-1 min-w-0">
                       <p className="font-headline font-bold text-xs text-tertiary uppercase truncate">{r.title}</p>
-                      <span className="font-label text-[9px] text-on-surface-variant tracking-widest uppercase">
+                      <span className="font-label text-micro text-on-surface-variant tracking-widest uppercase">
                         {r.macros?.calories || r.cal || 0} kcal · {r.macros?.protein || r.pro || 0}g pro
                       </span>
                     </div>
@@ -862,6 +884,16 @@ export default function RecipeDetail({ recipe, onBack, onSaveRecipe, isSaved, on
       confirmLabel={t.recipeDetail.duplicate || 'Duplicar'}
       cancelLabel={t.confirm.cancel}
       onConfirm={() => handleDuplicateRecipe(getModifiedRecipe())}
+    />
+    <ConfirmDialog
+      open={showUnsaveConfirm}
+      onOpenChange={setShowUnsaveConfirm}
+      title={t.confirm.unsaveRecipe || '¿Desguardar esta receta?'}
+      description={t.confirm.unsaveRecipeDesc || 'La receta saldrá de tu Bóveda. Podrás volver a guardarla en cualquier momento.'}
+      confirmLabel={t.confirm.yes}
+      cancelLabel={t.confirm.cancel}
+      variant="destructive"
+      onConfirm={() => onSaveRecipe && onSaveRecipe(getModifiedRecipe())}
     />
     </>
   );

@@ -1237,6 +1237,7 @@ const en: Translations = {
     logMeal: 'Log Meal',
     addToPlan: 'Add to Plan',
     selectDay: 'Select Day',
+    mealSlotLabel: 'Meal slot',
     family: 'Family',
     servings: 'Servings',
     notes: 'Notes',
@@ -1607,6 +1608,8 @@ const en: Translations = {
     ok: 'Confirm',
     deletePantryItem: 'Remove item',
     deletePantryItemDesc: 'Remove this item from your pantry?',
+    unsaveRecipe: 'Remove from saved?',
+    unsaveRecipeDesc: 'The recipe will leave your Vault. You can save it again anytime.',
   },
   offline: {
     banner: 'No connection — data saved locally',

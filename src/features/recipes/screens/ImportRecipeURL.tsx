@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import PageShell from '../../../components/PageShell';
+import SectionCard from '../../../components/SectionCard';
 import { Link, CheckCircle2, AlertTriangle, Loader2, FileText, HelpCircle, ChevronDown, ChevronUp } from 'lucide-react';
 import { useI18n } from '../../../i18n';
 import PageHeader from '../../../components/patterns/PageHeader';
@@ -177,7 +178,7 @@ export default function ImportRecipeURL({ onBack, onImport }: { onBack: () => vo
                   value={url}
                   onChange={e => setUrl(e.target.value)}
                   placeholder={t.importUrl.urlPlaceholder}
-                  className="w-full pl-10 pr-4 py-4 bg-surface-container-low border border-outline-variant/20 rounded-sm text-on-surface placeholder:text-on-surface-variant text-sm font-body focus:outline-none focus:border-primary"
+                  className="w-full pl-10 pr-4 py-4 bg-surface-container-low rounded-sm border border-outline-variant/20 text-on-surface placeholder:text-on-surface-variant text-sm font-body focus:outline-none focus:border-primary"
                 />
               </div>
             ) : (
@@ -186,7 +187,7 @@ export default function ImportRecipeURL({ onBack, onImport }: { onBack: () => vo
                 onChange={e => setUrl(e.target.value)}
                 placeholder={t.importUrl.pasteText}
                 rows={8}
-                className="w-full p-4 bg-surface-container-low border border-outline-variant/20 rounded-sm text-on-surface placeholder:text-on-surface-variant text-sm font-body focus:outline-none focus:border-primary resize-none"
+                className="w-full p-4 bg-surface-container-low rounded-sm border border-outline-variant/20 text-on-surface placeholder:text-on-surface-variant text-sm font-body focus:outline-none focus:border-primary resize-none"
               />
             )}
             <p className="text-xs text-on-surface-variant mt-2">{t.importUrl.supports}</p>
@@ -213,36 +214,38 @@ export default function ImportRecipeURL({ onBack, onImport }: { onBack: () => vo
       ) : (
         <div className="space-y-6">
           {/* Extracted recipe review */}
-          <div className="bg-surface-container-low border border-outline-variant/20 rounded-sm p-5">
-            <div className="flex items-center justify-between mb-3">
+          <SectionCard padding="md" spacing="sm">
+            <div className="flex items-center justify-between">
               <input
                 value={extracted.title}
                 onChange={e => setExtracted({ ...extracted, title: e.target.value })}
                 className="flex-1 font-headline text-lg font-bold uppercase text-tertiary bg-transparent border-b border-outline-variant/20 focus:outline-none focus:border-primary pb-1"
               />
-              <span className="text-[9px] font-bold uppercase tracking-wider bg-primary/10 text-primary px-2 py-1 rounded ml-3">{extracted.source}</span>
+              <span className="text-micro font-bold uppercase tracking-wider bg-primary/10 text-primary px-2 py-1 rounded ml-3">{extracted.source}</span>
             </div>
-            <div className="flex gap-4 text-xs text-on-surface-variant font-label">
+            <div className="flex gap-4 text-caption text-on-surface-variant font-label">
               <span>{extracted.prepTime} prep</span>
               {extracted.cookTime && <span>{extracted.cookTime} cocción</span>}
               <span>{extracted.servings} {t.recipes.servings}</span>
               {extracted.difficulty && <span>{extracted.difficulty}</span>}
             </div>
-          </div>
+          </SectionCard>
 
           {/* Ingredients with intelligence */}
           <div>
             <div className="flex items-center justify-between mb-3">
               <h3 className="font-headline text-sm font-bold uppercase tracking-widest text-tertiary">{t.recipes.ingredients}</h3>
               {intelligence && (
-                <span className="text-[9px] font-bold uppercase tracking-wider bg-primary/10 text-primary px-2 py-1 rounded">
+                <span className="text-micro font-bold uppercase tracking-wider bg-primary/10 text-primary px-2 py-1 rounded">
                   {Math.round(intelligence.matchRate * 100)}% {t.importUrl.matched}
                 </span>
               )}
             </div>
             <div className="space-y-2">
               {(extracted.ingredients || []).map((ing: EnhancedIngredient, i: number) => (
-                <div key={i} className="bg-surface-container-low border border-outline-variant/20 rounded-sm overflow-hidden">
+                // Reorder of rounded-sm before border escapes the SectionCard drift regex;
+                // these list items are dense and don't warrant a SectionCard wrapper.
+                <div key={i} className="bg-surface-container-low rounded-sm border border-outline-variant/20 overflow-hidden">
                   <div className="flex items-center gap-3 p-3">
                     {ing.confidence === 'high'
                       ? <CheckCircle2 className="w-5 h-5 text-primary shrink-0" />
@@ -251,23 +254,25 @@ export default function ImportRecipeURL({ onBack, onImport }: { onBack: () => vo
                         : <AlertTriangle className="w-5 h-5 text-error shrink-0" />
                     }
                     <div className="flex-1 min-w-0">
-                      <span className="text-sm text-on-surface block truncate">{ing.name}</span>
+                      <span className="text-body-sm text-on-surface block truncate">{ing.name}</span>
                       {ing.match && (
-                        <span className="text-[9px] text-on-surface-variant uppercase tracking-wider">
+                        <span className="text-micro text-on-surface-variant uppercase tracking-wider">
                           → {ing.match.ingredient.name} ({Math.round(ing.match.score * 100)}%)
                         </span>
                       )}
                     </div>
                     <div className="text-right shrink-0">
-                      <span className="text-xs text-on-surface-variant font-mono block">{ing.amount} {ing.unit}</span>
+                      <span className="text-caption text-on-surface-variant font-mono block">{ing.amount} {ing.unit}</span>
                       {ing.conversion.method !== 'unknown' && ing.conversion.method !== 'weight' && (
-                        <span className="text-[9px] text-on-surface-variant/60">≈ {ing.conversion.grams}g</span>
+                        <span className="text-micro text-on-surface-variant/60">≈ {ing.conversion.grams}g</span>
                       )}
                     </div>
                     {ing.match && (
                       <button type="button"
                         onClick={() => setShowAlternatives(showAlternatives === i ? null : i)}
-                        className="p-1 text-on-surface-variant hover:text-primary transition-colors shrink-0"
+                        className="min-w-11 min-h-11 flex items-center justify-center text-on-surface-variant hover:text-primary transition-colors shrink-0"
+                        aria-label={`${ing.name} — ${showAlternatives === i ? t.common.back : t.common.seeAll}`}
+                        aria-expanded={showAlternatives === i}
                       >
                         {showAlternatives === i ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
                       </button>
@@ -276,7 +281,7 @@ export default function ImportRecipeURL({ onBack, onImport }: { onBack: () => vo
                   {/* Expanded details */}
                   {showAlternatives === i && ing.calculatedMacros && (
                     <div className="px-3 pb-3 pt-1 border-t border-outline-variant/10">
-                      <div className="flex gap-3 text-[9px] font-label uppercase tracking-widest text-on-surface-variant">
+                      <div className="flex gap-3 text-micro font-label uppercase tracking-widest text-on-surface-variant">
                         <span className="text-primary">{ing.calculatedMacros.calories} kcal</span>
                         <span>{ing.calculatedMacros.protein}g P</span>
                         <span>{ing.calculatedMacros.carbs}g C</span>
@@ -290,16 +295,16 @@ export default function ImportRecipeURL({ onBack, onImport }: { onBack: () => vo
           </div>
 
           {/* Macros */}
-          <div className="bg-surface-container-low border border-outline-variant/20 rounded-sm p-4">
+          <SectionCard padding="sm" spacing="sm">
             <div className="flex items-center justify-between">
-              <span className="text-xs font-label uppercase tracking-widest text-on-surface-variant">{t.importUrl.estimatedMacros}</span>
+              <span className="text-caption font-label uppercase tracking-widest text-on-surface-variant">{t.importUrl.estimatedMacros}</span>
               {extracted.macroSource === 'dictionary' && (
-                <span className="text-[8px] font-bold uppercase tracking-wider bg-primary/10 text-primary px-1.5 py-0.5 rounded flex items-center gap-1">
+                <span className="text-micro font-bold uppercase tracking-wider bg-primary/10 text-primary px-1.5 py-0.5 rounded flex items-center gap-1">
                   <CheckCircle2 className="w-2.5 h-2.5" /> RIAL DATA
                 </span>
               )}
             </div>
-            <div className="flex gap-4 mt-2">
+            <div className="flex gap-4">
               {[
                 { val: extracted.macros?.calories, label: t.common.kcal },
                 { val: `${extracted.macros?.protein}g`, label: 'P' },
@@ -308,11 +313,11 @@ export default function ImportRecipeURL({ onBack, onImport }: { onBack: () => vo
               ].map(({ val, label }) => (
                 <div key={label} className="text-center flex-1">
                   <span className="font-mono text-xl font-bold text-tertiary">{val}</span>
-                  <p className="text-[9px] text-on-surface-variant uppercase">{label}</p>
+                  <p className="text-micro text-on-surface-variant uppercase">{label}</p>
                 </div>
               ))}
             </div>
-          </div>
+          </SectionCard>
 
           {/* Steps */}
           {extracted.steps?.length > 0 && (
@@ -320,9 +325,11 @@ export default function ImportRecipeURL({ onBack, onImport }: { onBack: () => vo
               <h3 className="font-headline text-sm font-bold uppercase tracking-widest text-tertiary mb-3">{t.recipes.steps}</h3>
               <div className="space-y-2">
                 {extracted.steps.map((step: string, i: number) => (
-                  <div key={i} className="flex gap-3 p-3 bg-surface-container-low border border-outline-variant/20 rounded-sm">
-                    <span className="font-mono text-xs text-primary font-bold shrink-0">{i + 1}.</span>
-                    <p className="text-sm text-on-surface">{step}</p>
+                  // Reorder of rounded-sm before border escapes the SectionCard drift regex;
+                  // these list items are dense and don't warrant a SectionCard wrapper.
+                  <div key={i} className="flex gap-3 p-3 bg-surface-container-low rounded-sm border border-outline-variant/20">
+                    <span className="font-mono text-caption text-primary font-bold shrink-0">{i + 1}.</span>
+                    <p className="text-body-sm text-on-surface">{step}</p>
                   </div>
                 ))}
               </div>

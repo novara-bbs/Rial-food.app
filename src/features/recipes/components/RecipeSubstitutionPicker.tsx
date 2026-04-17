@@ -41,10 +41,10 @@ export default function RecipeSubstitutionPicker({ swapSuggestions, onApplySwap,
               className="bg-surface-container-low p-3 rounded-sm border border-outline-variant/20 flex items-center gap-3"
             >
               <div className="flex-1 min-w-0">
-                <p className="text-tertiary font-headline font-bold text-xs">
+                <p className="text-tertiary font-headline font-bold text-caption">
                   {swap.fromIngredient.name} → {swap.toIngredient.name}
                 </p>
-                <p className="text-on-surface-variant text-[10px] mt-0.5">
+                <p className="text-on-surface-variant text-micro mt-0.5">
                   {swap.reason === 'intolerance'
                     ? swap.allergenHit
                     : t.recipeDetail.swapReasonDislike || 'No te gusta'}
@@ -59,7 +59,7 @@ export default function RecipeSubstitutionPicker({ swapSuggestions, onApplySwap,
           ))}
         </div>
       ) : (
-        <p className="text-xs text-on-surface-variant py-4 text-center">
+        <p className="text-caption text-on-surface-variant py-4 text-center">
           {hasPreferences
             ? t.recipeDetail.noSwapsNeeded || 'Sin sustituciones para tu perfil.'
             : t.recipeDetail.swapConfigNudge || 'Configura tus preferencias en Ajustes para ver sustituciones.'}

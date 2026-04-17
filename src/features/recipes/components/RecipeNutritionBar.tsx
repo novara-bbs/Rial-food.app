@@ -1,4 +1,4 @@
-import { Flame, Activity, Droplet, ThumbsUp, AlertTriangle, Minus } from 'lucide-react';
+import { ThumbsUp, AlertTriangle, Minus } from 'lucide-react';
 import { getFoodQuality } from '../../food/utils/nutrition';
 import { useI18n } from '../../../i18n';
 
@@ -21,10 +21,10 @@ interface Props {
 export default function RecipeNutritionBar({ cal, pro, carbs, fats, macros, hasAttribution }: Props) {
   const { t } = useI18n();
   const nutrients = [
-    { label: 'kcal', value: cal, color: 'text-primary', Icon: Flame },
-    { label: 'pro', value: `${pro}g`, color: 'text-macro-protein', Icon: Activity },
-    { label: 'carbs', value: `${carbs}g`, color: 'text-macro-carbs', Icon: Droplet },
-    { label: 'fats', value: `${fats}g`, color: 'text-macro-fats', Icon: undefined },
+    { label: 'kcal', value: String(cal), color: 'text-primary' },
+    { label: 'pro', value: `${pro}g`, color: 'text-macro-protein' },
+    { label: 'carbs', value: `${carbs}g`, color: 'text-macro-carbs' },
+    { label: 'fats', value: `${fats}g`, color: 'text-macro-fats' },
   ] as const;
 
   const quality = macros ? getFoodQuality(macros) : null;
@@ -33,9 +33,12 @@ export default function RecipeNutritionBar({ cal, pro, carbs, fats, macros, hasA
     <div className={hasAttribution ? 'mt-3 relative z-10' : 'mt-4 relative z-10'}>
       <div className="grid grid-cols-4 gap-2">
         {nutrients.map((m) => (
-          <div key={m.label} className="bg-surface-container-low border border-outline-variant/20 rounded-sm p-3 text-center">
+          <div
+            key={m.label}
+            className="bg-surface-container border border-outline-variant/30 rounded-sm p-3 text-center"
+          >
             <span className={`block font-headline font-bold text-lg ${m.color}`}>{m.value}</span>
-            <span className="text-[8px] font-label uppercase tracking-widest text-on-surface-variant">{m.label}</span>
+            <span className="text-micro font-label uppercase tracking-widest text-on-surface-variant">{m.label}</span>
           </div>
         ))}
       </div>
@@ -57,7 +60,7 @@ export default function RecipeNutritionBar({ cal, pro, carbs, fats, macros, hasA
           ) : (
             <Minus className="w-5 h-5 text-brand-secondary" />
           )}
-          <span className="text-xs font-bold uppercase tracking-widest text-on-surface-variant">
+          <span className="text-caption font-bold uppercase tracking-widest text-on-surface-variant">
             {t.recipes.foodQuality[quality]}
           </span>
         </div>
