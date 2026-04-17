@@ -14,6 +14,11 @@ export default defineConfig({
     screenshot: 'only-on-failure',
     // Mobile-first viewport (matching the app's target)
     viewport: { width: 390, height: 844 },
+    // Force ES locale so i18n detectSystemLocale() → 'es' and
+    // test selector anchors (CONSENT_BTN_RE, t.legal.consentAccept, etc.)
+    // match. Linux CI runners default navigator.language to 'en-US'
+    // which silently flipped the app to EN and broke e2e since 2026-04-15.
+    locale: 'es-ES',
   },
   projects: [
     // Primary: mobile Chrome (closest to Capacitor WebView)
