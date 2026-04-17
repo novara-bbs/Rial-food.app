@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import PageShell from '../../../components/PageShell';
+import SectionCard from '../../../components/SectionCard';
 import { TrendingUp, TrendingDown, Minus, Zap, Leaf, Brain, UtensilsCrossed, Trash2 } from 'lucide-react';
 import ConfirmDialog from '../../../components/ConfirmDialog';
 import EmptyState from '../../../components/EmptyState';
@@ -109,7 +110,7 @@ export default function RealFeelDiary({ realFeelLogs = [], onBack }: { realFeelL
       <PageHeader onBack={onBack} label="" title={t.realFeel.diary} />
 
       {/* Real Score */}
-      <div className="bg-surface-container-low border border-outline-variant/20 rounded-sm p-6">
+      <SectionCard padding="lg" spacing="none">
         <div className="flex items-center justify-between mb-4">
           <span className="font-label text-xs uppercase tracking-widest text-on-surface-variant">{t.realFeel.score}</span>
           <span className="font-label text-xs uppercase tracking-widest text-on-surface-variant">
@@ -152,7 +153,7 @@ export default function RealFeelDiary({ realFeelLogs = [], onBack }: { realFeelL
             ))}
           </div>
         )}
-      </div>
+      </SectionCard>
 
       {/* Daily Realities */}
       {dailyRealities.length > 0 && (
@@ -204,22 +205,22 @@ export default function RealFeelDiary({ realFeelLogs = [], onBack }: { realFeelL
           <h2 className="font-headline text-sm font-bold uppercase tracking-widest text-tertiary mb-3">{t.realFeel.weeklyPatterns}</h2>
           <div className="flex gap-3">
             {weeklyPatterns.energy && (
-              <div className="flex-1 bg-surface-container-low border border-outline-variant/20 rounded-sm p-3 flex items-center gap-2">
+              <SectionCard padding="none" spacing="none" className="flex-1 p-3 flex items-center gap-2">
                 <Zap className="w-4 h-4 text-primary shrink-0" />
                 <div>
                   <p className="text-micro font-bold uppercase tracking-widest text-on-surface-variant">{t.realFeel.energy}</p>
                   <p className="font-headline text-xs font-bold text-tertiary uppercase">{ENERGY_LABELS[weeklyPatterns.energy]}</p>
                 </div>
-              </div>
+              </SectionCard>
             )}
             {weeklyPatterns.digestion && (
-              <div className="flex-1 bg-surface-container-low border border-outline-variant/20 rounded-sm p-3 flex items-center gap-2">
+              <SectionCard padding="none" spacing="none" className="flex-1 p-3 flex items-center gap-2">
                 <Leaf className="w-4 h-4 text-primary shrink-0" />
                 <div>
                   <p className="text-micro font-bold uppercase tracking-widest text-on-surface-variant">{t.realFeel.digestion}</p>
                   <p className="font-headline text-xs font-bold text-tertiary uppercase">{DIGESTION_LABELS[weeklyPatterns.digestion]}</p>
                 </div>
-              </div>
+              </SectionCard>
             )}
           </div>
         </div>
@@ -229,18 +230,18 @@ export default function RealFeelDiary({ realFeelLogs = [], onBack }: { realFeelL
       <div>
         <h2 className="font-headline text-sm font-bold uppercase tracking-widest text-tertiary mb-4">{t.realFeel.correlations}</h2>
         {needsMoreData ? (
-          <div className="bg-surface-container-low border border-outline-variant/20 rounded-sm p-8 text-center">
+          <SectionCard padding="none" spacing="none" className="p-8 text-center">
             <div className="text-3xl mb-3">🔍</div>
             <p className="text-on-surface-variant text-sm">{t.realFeel.insights.noDataYet}</p>
             <div className="mt-4 w-full bg-surface-container-highest rounded-full h-2">
               <div className="bg-primary rounded-full h-2 transition-all" style={{ width: `${(realFeelLogs.length / 7) * 100}%` }} />
             </div>
             <p className="text-xs text-on-surface-variant mt-2">{t.realFeel.insights.progress.replace('{current}', String(realFeelLogs.length))}</p>
-          </div>
+          </SectionCard>
         ) : (
           <div className="space-y-3">
             {correlations.map((cor, i) => (
-              <div key={cor.id || i} className="bg-surface-container-low border border-outline-variant/20 rounded-sm p-4 flex items-center gap-4">
+              <SectionCard key={cor.id || i} padding="none" spacing="none" className="p-4 flex items-center gap-4">
                 <div className={`w-10 h-10 rounded-full flex items-center justify-center text-white ${
                   cor.tone === 'warning' ? 'bg-error' : cor.tone === 'positive' ? 'bg-primary' : 'bg-brand-secondary'
                 }`}>
@@ -251,7 +252,7 @@ export default function RealFeelDiary({ realFeelLogs = [], onBack }: { realFeelL
                   <p className="text-xs text-on-surface-variant">{cor.detail}</p>
                 </div>
                 <span className="text-lg">{cor.emoji}</span>
-              </div>
+              </SectionCard>
             ))}
             {correlations.length === 0 && (
               <p className="text-center text-on-surface-variant text-sm py-8">{t.realFeel.insights.noDataYet}</p>
@@ -265,7 +266,7 @@ export default function RealFeelDiary({ realFeelLogs = [], onBack }: { realFeelL
         <h2 className="font-headline text-sm font-bold uppercase tracking-widest text-tertiary mb-4">{t.realFeel.timeline}</h2>
         <div className="space-y-2">
           {realFeelLogs.slice(0, 20).map((log: any, i: number) => (
-            <div key={log.id || i} className="flex items-start gap-4 p-3 bg-surface-container-low border border-outline-variant/20 rounded-sm">
+            <SectionCard key={log.id || i} padding="none" spacing="none" className="flex items-start gap-4 p-3">
               <span className="text-2xl shrink-0">{EMOJI_MAP[(log.level ?? 3) - 1]}</span>
               <div className="flex-1 min-w-0">
                 {/* Structured signals row */}
@@ -308,7 +309,7 @@ export default function RealFeelDiary({ realFeelLogs = [], onBack }: { realFeelL
                   <Trash2 className="w-3.5 h-3.5" />
                 </button>
               </div>
-            </div>
+            </SectionCard>
           ))}
           {realFeelLogs.length === 0 && (
             <EmptyState icon="📓" title={t.empty.diaryEmpty} description={t.empty.diaryEmptyDesc || 'Registra cómo te sientes después de cada comida'} />

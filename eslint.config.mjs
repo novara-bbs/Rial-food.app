@@ -94,8 +94,6 @@ const q16MigrationAllowlist = [
   // with stretched-link focus-within shape — SectionCard renders `<section>`
   // so the semantic doesn't fit. Remove when we add a <ListCard> variant.
   'src/features/social/screens/CreatorProfile.tsx',
-  'src/features/wellness/screens/Progress.tsx',
-  'src/features/wellness/screens/RealFeelDiary.tsx',
 ];
 
 export default tseslint.config(
