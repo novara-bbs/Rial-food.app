@@ -15,6 +15,7 @@ import WeeklyScoreCard from '../components/WeeklyScoreCard';
 import ConsistencyCalendar from '../components/ConsistencyCalendar';
 import InlineReflection from '../components/InlineReflection';
 import WeightTrendCard from '../components/WeightTrendCard';
+import SectionCard from '@/components/SectionCard';
 
 interface WeightEntry { date: string; kg: number; note?: string }
 interface WeeklyEntry {
@@ -279,10 +280,10 @@ export default function Progress({ onBack }: { onBack: () => void }) {
 
           {/* Top Meals This Week */}
           {topMeals.length > 0 && (
-            <section className="bg-surface-container-low border border-outline-variant/20 rounded-sm p-5 space-y-3">
-              <h2 className="font-headline font-bold text-sm uppercase tracking-widest text-tertiary flex items-center gap-2">
-                <UtensilsCrossed className="w-4 h-4 text-primary" /> {p?.topMeals || 'Tus comidas estrella'}
-              </h2>
+            <SectionCard
+              title={p?.topMeals || 'Tus comidas estrella'}
+              icon={<UtensilsCrossed className="w-4 h-4 text-primary" />}
+            >
               <div className="space-y-2">
                 {topMeals.map((meal, i) => {
                   const medal = ['🥇', '🥈', '🥉'][i] || '';
@@ -302,7 +303,7 @@ export default function Progress({ onBack }: { onBack: () => void }) {
               >
                 {p?.viewAllRecipes || 'Ver todas las recetas →'}
               </button>
-            </section>
+            </SectionCard>
           )}
 
           {/* Consistency Calendar */}
@@ -348,11 +349,11 @@ export default function Progress({ onBack }: { onBack: () => void }) {
 
           {/* Bienestar Section (conditional on ≥3 RF entries) — B5 fix: /5 scale */}
           {bienestar && (
-            <section className="bg-surface-container-low border border-outline-variant/20 rounded-sm p-5 space-y-4">
-              <h2 className="font-headline font-bold text-sm uppercase tracking-widest text-tertiary flex items-center gap-2">
-                <Heart className="w-4 h-4 text-brand-secondary" /> {p?.wellbeingTitle || 'Bienestar'}
-              </h2>
-
+            <SectionCard
+              spacing="lg"
+              title={p?.wellbeingTitle || 'Bienestar'}
+              icon={<Heart className="w-4 h-4 text-brand-secondary" />}
+            >
               {/* Score /5 + mini sparkline */}
               <div className="flex items-center gap-4">
                 <div className="flex items-center gap-1.5">
@@ -407,7 +408,7 @@ export default function Progress({ onBack }: { onBack: () => void }) {
               >
                 {p?.viewDiary || 'Ver diario completo →'}
               </button>
-            </section>
+            </SectionCard>
           )}
         </>
       )}

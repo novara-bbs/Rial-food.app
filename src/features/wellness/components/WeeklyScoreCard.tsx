@@ -1,4 +1,5 @@
 import { Droplets, Footprints, Timer, Calendar as CalendarIcon } from 'lucide-react';
+import SectionCard from '@/components/SectionCard';
 
 interface BarData {
   key: string;
@@ -47,11 +48,7 @@ function scoreRingColor(score: number): string {
 
 export default function WeeklyScoreCard({ weeklyScore, weekStats, hydration, movement, barLabels, t }: WeeklyScoreCardProps) {
   return (
-    <section className="bg-surface-container-low border border-outline-variant/20 rounded-sm p-5 space-y-4">
-      <h3 className="font-headline font-bold text-xs uppercase tracking-widest text-tertiary">
-        {t.thisWeekTitle || 'Esta Semana'}
-      </h3>
-
+    <SectionCard padding="md" spacing="lg" title={t.thisWeekTitle || 'Esta Semana'}>
       {/* Score ring + stats */}
       <div className="flex items-center gap-5">
         <div className="relative w-20 h-20 shrink-0">
@@ -147,6 +144,6 @@ export default function WeeklyScoreCard({ weeklyScore, weekStats, hydration, mov
           );
         })}
       </div>
-    </section>
+    </SectionCard>
   );
 }

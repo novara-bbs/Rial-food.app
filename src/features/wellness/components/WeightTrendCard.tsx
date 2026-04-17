@@ -1,4 +1,5 @@
 import { TrendingUp, TrendingDown, Scale, Plus, Check } from 'lucide-react';
+import SectionCard from '@/components/SectionCard';
 import type { UnitSystem } from '../../food/utils/units';
 
 interface WeightTrendCardProps {
@@ -48,22 +49,23 @@ export default function WeightTrendCard({
     weightPath = `M${points.join(' L')}`;
   }
 
-  return (
-    <section className="bg-surface-container-low border border-outline-variant/20 rounded-sm p-6 space-y-4">
-      <div className="flex items-center justify-between">
-        <h2 className="font-headline font-bold text-sm uppercase tracking-widest text-tertiary flex items-center gap-2">
-          <Scale className="w-4 h-4 text-primary" /> {t.weightTrend || 'Tendencia de Peso'}
-        </h2>
-        {weekDelta !== null && (
-          <div className={`flex items-center gap-1 text-micro font-bold uppercase tracking-widest ${
-            weekDelta > 0 ? 'text-brand-secondary' : weekDelta < 0 ? 'text-primary' : 'text-on-surface-variant'
-          }`}>
-            {weekDelta > 0 ? <TrendingUp className="w-3.5 h-3.5" /> : weekDelta < 0 ? <TrendingDown className="w-3.5 h-3.5" /> : null}
-            {weekDelta > 0 ? '+' : ''}{bodyWeightFromKg(Math.abs(weekDelta), unitSystem).toFixed(1)} {weightUnit} {t.thisWeek || 'esta semana'}
-          </div>
-        )}
-      </div>
+  const weekDeltaAction = weekDelta !== null ? (
+    <div className={`flex items-center gap-1 text-micro font-bold uppercase tracking-widest ${
+      weekDelta > 0 ? 'text-brand-secondary' : weekDelta < 0 ? 'text-primary' : 'text-on-surface-variant'
+    }`}>
+      {weekDelta > 0 ? <TrendingUp className="w-3.5 h-3.5" /> : weekDelta < 0 ? <TrendingDown className="w-3.5 h-3.5" /> : null}
+      {weekDelta > 0 ? '+' : ''}{bodyWeightFromKg(Math.abs(weekDelta), unitSystem).toFixed(1)} {weightUnit} {t.thisWeek || 'esta semana'}
+    </div>
+  ) : undefined;
 
+  return (
+    <SectionCard
+      padding="lg"
+      spacing="lg"
+      title={t.weightTrend || 'Tendencia de Peso'}
+      icon={<Scale className="w-4 h-4 text-primary" />}
+      action={weekDeltaAction}
+    >
       {last30.length >= 2 ? (
         <svg viewBox={`0 0 ${chartWidth} ${chartHeight}`} className="w-full h-32">
           <path d={weightPath} fill="none" stroke="var(--primary)" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
@@ -136,6 +138,6 @@ export default function WeightTrendCard({
           <Plus className="w-3.5 h-3.5" /> {t.logWeight || 'Registrar peso'}
         </button>
       )}
-    </section>
+    </SectionCard>
   );
 }

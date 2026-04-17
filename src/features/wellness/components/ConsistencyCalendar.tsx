@@ -1,4 +1,5 @@
 import { Flame, Calendar, XCircle } from 'lucide-react';
+import SectionCard from '@/components/SectionCard';
 
 const EMOJI_MAP = ['😴', '😕', '😐', '😊', '💪'];
 
@@ -42,11 +43,12 @@ export default function ConsistencyCalendar({
   const localeStr = locale === 'en' ? 'en-US' : 'es-ES';
 
   return (
-    <section className="bg-surface-container-low border border-outline-variant/20 rounded-sm p-6 space-y-4">
-      <h2 className="font-headline font-bold text-sm uppercase tracking-widest text-tertiary flex items-center gap-2">
-        <Flame className="w-4 h-4 text-brand-secondary" /> {t.consistency || 'Consistencia'}
-      </h2>
-
+    <SectionCard
+      padding="lg"
+      spacing="lg"
+      title={t.consistency || 'Consistencia'}
+      icon={<Flame className="w-4 h-4 text-brand-secondary" />}
+    >
       <div className="grid grid-cols-2 gap-4">
         <div className="bg-surface-container rounded-sm p-4 text-center">
           <span className="font-headline font-black text-3xl text-primary">{todayStreak}</span>
@@ -162,6 +164,6 @@ export default function ConsistencyCalendar({
           </div>
         )}
       </div>
-    </section>
+    </SectionCard>
   );
 }
