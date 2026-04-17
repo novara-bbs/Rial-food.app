@@ -1,5 +1,27 @@
 # RIAL App - Changelog
 
+## [1.5.26] - 2026-04-17
+
+### feat(recipes) — Fase 2 multi-media (PhotoUploader + compresión client-side)
+
+Segunda capa del sprint multi-media: el uploader que cierra el gap entre "Fase 1 display-only" y las recetas que los creadores quieren publicar con varias fotos del plato. Hoy `CreateRecipe` ya guarda `photos[]` en el payload, y `RecipeDetail` las renderiza vía la `HeroGallery` introducida en Fase 1. La decisión de storage (bucket Supabase vs data URLs) sigue **diferida a Q6**: por ahora las fotos comprimidas persisten en `localStorage → IDB` (la migración lazy de `src/lib/storage.ts:migrateLocalStorageToIDB` ya cubre la cuota). Plan: `.claude/plans/revisa-el-recepi-card-crystalline-moore.md` (addendum Fase 2).
+
+**Added**
+- `src/lib/imageCompress.ts` — módulo canónico de compresión. API posicional idéntica al legacy (`compressImage(file, maxWidth, quality)`) para no romper a los tres llamadores existentes (`LogSnapshotModal`, `SettingsProfile`, social `ImagePicker`). Expone `RECIPE_PHOTO_OPTIONS = { maxWidth: 1200, quality: 0.82 }` (defaults más conservadores que los 800/0.6 del feed social porque el hero de receta se amplía a pantalla completa) y `estimateBase64Bytes(dataUrl)` para checks de cuota antes de persistir.
+- `src/lib/imageCompress.test.ts` — 6 asserts (defaults, padding de base64, estimación de 200KB realista).
+- `src/lib/platform.ts` — `pickImage(source)` helper complementario a `openExternalVideo`. Dynamic import de `@capacitor/camera` en native (`CameraResultType.DataUrl`, `CameraSource.Camera | Photos`, quality 90 antes de la compresión canónica). Web retorna `null` (no hay plugin Camera en browser) y el caller activa el fallback `<input type="file">`. Cualquier error del plugin (incluye cancelación del usuario en iOS) se traga silenciosamente.
+- `src/features/recipes/components/PhotoUploader.tsx` — grid 3-col con thumbnails 1:1 + celda "+" mientras `photos.length < max`. Badge "Portada" en `photos[0]`. X button 44×44 (ADR-003). Native abre action-sheet shadcn Dialog (Cámara / Galería); web dispara file input oculto con `multiple`. Compresión automática vía `RECIPE_PHOTO_OPTIONS`. Cap de `10 MB` por archivo antes de compresión (toast `photoTooLarge`). Haptic `light` al elegir source.
+- 11 claves i18n simétricas ES ↔ EN bajo `createRecipe`: `photosSectionLabel`, `addPhoto`, `removePhoto`, `photosCount`, `coverBadge`, `pickSourceHint`, `pickFromCamera`, `pickFromGallery`, `compressingPhoto`, `photoTooLarge`, `photoError`.
+
+**Changed**
+- `src/features/recipes/screens/CreateRecipe.tsx` — añade `photos: string[]` al form state (hidrata desde `initialRecipe?.photos ?? []` para preservar en edit-mode). El placeholder estático `<Camera />` en el paso 1 se reemplaza por `<PhotoUploader photos={photos} onChange={setPhotos} max={6} />`. `handleSave` ahora usa `photos[0]` como `img` cuando hay fotos (backward-compat con el hero legacy) y propaga `photos: photos.length > 0 ? photos : undefined`.
+- `src/features/social/utils/image-utils.ts` — ahora re-exporta `compressImage` desde el módulo canónico `src/lib/imageCompress.ts`. Los tres llamadores existentes (LogSnapshotModal, SettingsProfile, ImagePicker) siguen compilando sin cambios.
+
+**Notes**
+- **Decisión de storage**: 6 fotos × ~200 KB = ~1.2 MB por receta en `savedRecipes` (data URLs base64). Excede el row-limit típico de Supabase `user_data` (~1 MB JSON). El sync layer sigue **excluyendo savedRecipes con data URLs del push a Supabase hasta Q6**; la persistencia local sobrevive vía `migrateLocalStorageToIDB` (IDB ~GBs). Fase 3 (Q6) migrará `photos[]` a un bucket Supabase Storage + URLs firmadas, y añadirá el threshold de sanitización al `SyncKey`.
+- **Out of scope Fase 2**: reorder drag+drop, upload de video local, galería por-step (`RecipeStep.photoUrl` sigue single), og:image extraction en ImportRecipeURL (requiere nueva Edge function `og-fetch`, queda para Fase 3 = Q6).
+- **Capacitor**: `@capacitor/camera` ^8.0.2 ya estaba instalado desde sprint-q5 para el flujo de avatar/BodySnapshot. El lazy import respeta el patrón de `triggerHaptic`/`shareContent` — no añade bytes al bundle web.
+
 ## [1.5.25] - 2026-04-17
 
 ### feat(q19-meal-taxonomy) — Recipe.mealType (single) → Recipe.suitableFor: MealSlot[] (multi-valued)

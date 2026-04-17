@@ -7,6 +7,7 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import PortionSelector, { scaleMacros } from '../../food/components/PortionSelector';
 import MealSlotMultiSelect from '../../food/components/MealSlotMultiSelect';
+import PhotoUploader from '../components/PhotoUploader';
 import { getRecipeSlots } from '../utils/meal-slot';
 import { getFoodQuality } from '../../food/utils/nutrition';
 import { useAppState } from '../../../contexts/AppStateContext';
@@ -93,6 +94,7 @@ export default function CreateRecipe({
   const [servings, setServings] = useState(initialRecipe?.servings || 4);
   const [sourceUrl, setSourceUrl] = useState(initialRecipe?.sourceUrl || '');
   const [videoUrl, setVideoUrl] = useState(initialRecipe?.videoUrl || '');
+  const [photos, setPhotos] = useState<string[]>(initialRecipe?.photos ?? []);
   // Slots this recipe fits well. Empty = versatile (matches every slot filter).
   // See Q19 meal-taxonomy migration rationale.
   const [suitableFor, setSuitableFor] = useState<MealSlot[]>(
@@ -226,7 +228,8 @@ export default function CreateRecipe({
       micros: totals.micros,
       tags: autoTags,
       suitableFor: suitableFor.length > 0 ? suitableFor : undefined,
-      img: initialRecipe?.img || 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&w=800&q=80',
+      img: photos[0] ?? initialRecipe?.img ?? 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&w=800&q=80',
+      photos: photos.length > 0 ? photos : undefined,
       sourceUrl: sourceUrl || undefined,
       videoUrl: videoUrl || undefined,
       sourceType: sourceUrl ? detectedSourceType : undefined,
@@ -261,12 +264,7 @@ export default function CreateRecipe({
       {/* ═══════════════════ STEP 1: BASICS ═══════════════════ */}
       {step === 1 && (
         <div className="space-y-5">
-          <div className="w-full h-36 bg-surface-container-low border-2 border-dashed border-outline-variant/30 rounded-sm flex flex-col items-center justify-center gap-2 text-on-surface-variant hover:border-primary/50 hover:text-primary transition-colors cursor-pointer group">
-            <Camera className="w-7 h-7 group-hover:scale-110 transition-transform" />
-            <span className="font-label text-xs font-bold uppercase tracking-widest">
-              {t.createRecipe.uploadPhoto}
-            </span>
-          </div>
+          <PhotoUploader photos={photos} onChange={setPhotos} max={6} />
 
           <div>
             <label className="font-label text-caption font-bold tracking-widest uppercase text-on-surface-variant mb-2 block">{t.createRecipe.recipeName}</label>

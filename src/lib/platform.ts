@@ -81,3 +81,29 @@ export async function openExternalVideo(url: string): Promise<void> {
   }
   window.open(url, '_blank', 'noopener,noreferrer');
 }
+
+export type PickSource = 'camera' | 'gallery';
+
+/**
+ * Pick a single image from the native camera or photo library.
+ *
+ * On native: uses `@capacitor/camera` and returns a data URL (JPEG). On web
+ * this resolves to `null` — the caller is expected to fall back to an
+ * `<input type="file" accept="image/*">`, since browsers do not support the
+ * Camera plugin.
+ */
+export async function pickImage(source: PickSource): Promise<string | null> {
+  if (!isNative) return null;
+  const { Camera, CameraResultType, CameraSource } = await import('@capacitor/camera');
+  try {
+    const photo = await Camera.getPhoto({
+      quality: 90,
+      allowEditing: false,
+      resultType: CameraResultType.DataUrl,
+      source: source === 'camera' ? CameraSource.Camera : CameraSource.Photos,
+    });
+    return photo.dataUrl ?? null;
+  } catch {
+    return null;
+  }
+}
