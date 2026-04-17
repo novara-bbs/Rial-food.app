@@ -111,11 +111,7 @@ const q16MigrationAllowlist = [
   'src/features/social/screens/CreatorVerification.tsx',
   'src/features/social/screens/Discover.tsx',
   'src/features/social/screens/PostDetail.tsx',
-  'src/features/wellness/components/BodyCalendar.tsx',
-  'src/features/wellness/components/BodySnapshotCard.tsx',
   'src/features/wellness/components/BodyTimeline.tsx',
-  'src/features/wellness/components/InlineReflection.tsx',
-  'src/features/wellness/components/RitmoSection.tsx',
   'src/features/wellness/screens/Progress.tsx',
   'src/features/wellness/screens/RealFeelDiary.tsx',
 ];
