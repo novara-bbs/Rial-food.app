@@ -32,6 +32,7 @@ RIAL is a mobile-first nutrition product that combines tracking, recipes, meal p
 - Business and logic rules: `docs/RULES.md`
 - Legacy Claude skill notes: `docs/SKILLS.md`
 - Change history: `CHANGELOG.md`
+- Competitive baseline: `docs/market/` — índice, fichas deep-dive, matriz features, UX patterns, rankings (no auto-cargado — consultar por demanda)
 
 ## Design System
 - Spec: `docs/DESIGN-SYSTEM.md` — tokens, themes, do/don't

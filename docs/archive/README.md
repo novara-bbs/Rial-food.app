@@ -1,5 +1,7 @@
 # docs/archive/
 
+> **Para análisis competitivo vivo** ver [`docs/market/`](../market/). Los archivos en esta carpeta son snapshots históricos 2026-Q1 y **no se mantienen**.
+
 Cold-storage for product research, market analysis, and strategy docs that are no longer loaded by development agents.
 
 ## What lives here

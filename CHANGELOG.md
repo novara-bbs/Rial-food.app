@@ -1,5 +1,66 @@
 # RIAL App - Changelog
 
+## [1.5.28] - 2026-04-17
+
+### docs(market) — Priorización competitiva + análisis de pantallas + datos duros (`priority-review.md` + 8 fichas top enriquecidas)
+
+Segunda capa sobre `[1.5.27]`. La baseline 1.5.27 dejó 18 fichas deep-dive **equiparables** — todas con el mismo peso. El equipo pidió pasar de "catálogo" a "material ejecutable": (1) qué 8 apps merecen revisión profunda y por qué, (2) qué pantallas concretas estudiar de cada una, (3) a qué ruta de `src/features/.../screens/*.tsx` aplicar la lección, y (4) datos duros (rating + growth + users + revenue) con fuente y fecha. Plan: `.claude/plans/mejora-toda-la-secci-n-generic-church.md` (v2).
+
+**Added**
+- `docs/market/priority-review.md` — scorecard 6 ejes × 20 apps (rating combinado App+Play, growth 12m, users/MAU, overlap ICP Clara/Marcos/Ana, amenaza geográfica ES/LatAm, UX transferibles). Tie-breaker documentado (Clara). **Top 8 seleccionado**: MyRealFood (24), Yazio (26), Fitia (28), Lifesum (19, contra-ejemplo), MyFitnessPal (23), MacroFactor (23), Paprika (20), Bevel (16+?). Descartados del Top 8 explicados en 1 línea. **5 implicaciones accionables para RIAL** con archivo objetivo concreto:
+  1. MyRealFood → Real Score equivalente en `src/features/food/components/BarcodeScanner.tsx` antes de Q8.
+  2. Fitia → decidir entrada LatAm Q8 vs Q10; `src/features/food/data/seed-recipes.ts` regional.
+  3. Bevel → modelo pricing free-generous + single premium como north-star post-Q6 + ADR-008 en `src/features/profile/screens/RialPlus.tsx`.
+  4. MacroFactor → TDEE adaptativo como Pro feature Q10+ en `src/features/profile/utils/calorie-calc.ts`.
+  5. Paprika → valida MealSlot multi-valued (Q19 `5dab667`); cerrar debate hasta Q20+.
+
+**Changed**
+- `docs/market/deep-dives/myrealfood.md` — header **Hard metrics** (Instagram Carlos Ríos 1.5M, 2M+ usuarios, 160k+ recetas, 4★+ ambos stores) + sección **Pantallas principales** (×5): Home Real Score semanal (copiar a `Home.tsx` + NutritionHero), Barcode NOVA (copiar a `BarcodeScanner.tsx` — **implicación accionable #1**), Social feed UGC (evitar fragmentar en `src/features/social/screens/Community.tsx`), Recipe library NOVA filter (copiar a `Cocina.tsx`), Weekly meal-prep generator (copiar a `Planner.tsx`).
+- `docs/market/deep-dives/yazio.md` — Hard metrics (4.6★ Play 300k reviews, Google Excellence App, 95M-100M users, 10M+ downloads, $9.99/mo Pro) + Pantallas (×5): Onboarding 3-step (copiar a `Onboarding.tsx`), Home ring + fasting inline (copiar a `Home.tsx`), Recipe cards hero-image (paridad `RecipeCard.tsx`), Free fasting timer (mantener `FastingTimer.tsx`), Weekly progress report (copiar a `Progress.tsx`).
+- `docs/market/deep-dives/fitia.md` — Hard metrics (4.9★ ambos stores, 10M+ users, 1M+ MAU, +16.11% Jan 2026, $3.5M rev 2024, launched LATAM+ES 2019) + Pantallas (×5): Country selector onboarding (evaluar ICP LatAm en `Onboarding.tsx`), Plan auto-generated editable (copiar a `Planner.tsx` — **implicación #2**), Macros breakdown regional (copiar `AddMeal.tsx` seed LatAm), Family Plan multi-profile (defer a Q15+), Grocery delivery integrations (ignorar V1).
+- `docs/market/deep-dives/lifesum.md` — Hard metrics + warning (Trustpilot 1.7★ + reviews reverse-trial) + Pantallas (×5): Unified `+ Track` input (copiar al activar photo-recog en `AddMeal.tsx`), Life Score consolidado (validar `WeeklyScoreCard` cubre dimensiones), Diet plan como lente global (copiar parcial a Q10+), Reverse trial paywall (**evitar** en ADR-008 pricing), Recetas filtradas por plan (copiar a `Cocina.tsx`).
+- `docs/market/deep-dives/myfitnesspal.md` — Hard metrics (4.7★ iOS / 4.4★ Play, 200M community, 900k iOS + 530k Play DL/mo, 18M foods DB, Cal AI M&A marzo 2026, $19.99 Premium / $24.99 Premium+) + Pantallas (×5): Diary con suma running (mantener `NutritionHero`), Barcode con histórico porciones (copiar a `BarcodeScanner.tsx` en Q6+), Recipe importer URL (mantener `ImportRecipeURL.tsx`), Quick-add calorías (copiar a `AddMeal.tsx`), Premium vs Premium+ (**evitar** en ADR-008).
+- `docs/market/deep-dives/macrofactor.md` — Hard metrics (82k paid customers Sep 2022, ~100k DL/mo, ~$2M rev/mo, bootstrapped $0 VC, $11.99/mo · ~$72/año, 3× precisión claim) + Pantallas (×5): Weekly TDEE adjustment transparente (copiar Q10+ a `calorie-calc.ts` + `Progress.tsx` — **implicación #4**), Weight trend suavizado (copiar EMA a `WeightTrendCard.tsx`), Quick-add macros no kcal (opción en `AddMeal.tsx`), Zero-shame design (toggle Pro en `SettingsNutrition.tsx`), Contenido educativo integrado (copiar Q15+ a `Discovery.tsx` / `Explore.tsx`).
+- `docs/market/deep-dives/paprika.md` — Hard metrics ($4.99 lifetime iOS+Android, $29.99 desktop, desde 2011 v3 actual, cross-platform) + Pantallas (×5): Web clipper / share-sheet (copiar Q6+ Capacitor Share), Recipe scaling inline (copiar 2-3h a `RecipeDetail.tsx`), Multi-slot recipe placement (**validado** Q19), Meal planning drag-drop (mantener + mejorar `Planner.tsx`), Grocery list manual-friendly (paridad `ShoppingList.tsx`).
+- `docs/market/deep-dives/bevel.md` — Hard metrics + warning (launched mid-2025, Apple Watch Spotlight + New & Noteworthy, core gratis dic 2025, Bevel Intelligence $9.99/mo · $79.99/año, múltiples source-needed por recencia) + Pantallas (×5): Home Dashboard 5 rings (copiar post-Q6 a `Home.tsx` — **implicación #3**), AI Coach cross-módulo (copiar cross-context a `AICoach.tsx` + `gemini-proxy`), Pricing free-generous + single premium (copiar a `RialPlus.tsx` + ADR-008), Module deep-link pattern (**evitar** convertir Progress/Pantry en apps-dentro-de-app), Glucose/CGM integration (**ignorar** V1, monitorear ZOE/Levels 2027).
+
+**Cross-refs**
+- `docs/market/README.md` — nueva entrada en tabla "Pregunta → Archivo" apuntando a `priority-review.md` ("¿Cuáles merecen revisión profunda y por qué?"); nodo `priority-review.md` añadido al árbol de estructura; plantilla ficha actualizada para reflejar secciones **Hard metrics** + **Pantallas principales** solo en Top 8.
+- `docs/market/rial-positioning.md` — nueva sección `§3.1 Priorización competitiva (2026-04-17)` antes de §4 Moats, listando los 8 competidores prioritarios con la razón estratégica (1 línea por app).
+- `docs/market/feature-matrix.md` — nota superior ahora remite a `priority-review.md` para decisiones de producto; matriz feature-a-feature queda como referencia 18-app no-priorizada.
+
+**Notes**
+- **Anti-objetivo cumplido:** cero datos inventados. Cada fila de Hard metrics lleva URL + fecha; cuando no se pudo verificar (muchos casos en Bevel por recencia, o revenue de apps privadas), queda `(source needed)` explícito. Preferible honesto-incompleto que falso-completo.
+- **Out of scope:** cero cambios en `src/`, `supabase/`, tests, CI, i18n, pipeline. Es 100% documentación — TypeScript / lint / tests / build sin diff respecto a `[1.5.27]`.
+- **Ejecutabilidad:** cada una de las 8 fichas responde ahora a 3 preguntas mecánicas: "¿qué pantalla estudiar?", "¿a qué archivo de `src/` aplica?", "¿copiar/evitar/ignorar?". Esto convierte `docs/market/` de catálogo pasivo a input directo del roadmap.
+- **Maintenance gate:** próximo recheck priorización en 2026-10-17 (6 meses) o antes si un competidor cambia de tier (Cal AI absorbido, Simple levanta Serie C, etc.). Hard metrics re-snapshot cuando pricing / rankings cambien.
+
+## [1.5.27] - 2026-04-17
+
+### docs(market) — Competitive baseline `docs/market/` (índice + matriz + posicionamiento + 18 fichas deep-dive)
+
+Capa **viva** de inteligencia de mercado separada de `docs/archive/` (snapshots históricos Q1 2026, cold-storage). El análisis competitivo previo estaba fragmentado en 5 docs archivados + menciones sueltas en `state.md`; competidores clave citados por el equipo (Lifesum, Yazio, Fitia, Fastic, Cal AI, Yuka) quedaban sin ficha propia. Esta entrada cierra el gap con estructura modular cargable por demanda — ningún archivo en `AGENTS.md` / `CLAUDE.md` / `GEMINI.md` / `.cursor/rules/` / `.windsurf/rules/` la auto-importa (evita saturar prompts en el 90% de sesiones que no tocan competidores). Plan: `.claude/plans/mejora-toda-la-secci-n-generic-church.md`.
+
+**Added**
+- `docs/market/README.md` — índice carpeta, cómo leer, plantilla ficha, reglas de mantenimiento (re-snapshot rankings cada 3 meses, fichas 6 meses o ad-hoc en eventos de mercado), mapa de cambios mayores abril 2026 (MFP × Cal AI, Whoop Healthspan + Oura Dexcom Stelo, Simple Serie B $35M).
+- `docs/market/competitors-index.md` — **46 apps** clasificadas por Tier (A directos con ficha / B indirectos entrada corta / C adyacentes monitoreo) × categoría funcional (tracking, planner, ayuno, coaching, all-in-one) + geografía primaria + modelo de negocio + movers 12 meses.
+- `docs/market/feature-matrix.md` — matriz 16 features RIAL × 18 apps Tier A + RIAL (leyenda ✓/⦿/✗/—). Ranking agregado por paridad con RIAL identificando Lifesum + Yazio + Fitia + MyRealFood + MFP + Bevel como threats más altos.
+- `docs/market/ux-patterns.md` — patrones UX clasificados 🟢 copiar / 🟡 adaptar / 🔴 evitar / ⚪ ya hecho, con fuente (app) y archivo repo donde aplica. 13 secciones (onboarding, discovery, log flow, planner, recetas, progreso+wellness, paywall, social, a11y/HIG, anti-patterns) + 12 patrones pendientes priorizados por sprint.
+- `docs/market/rial-positioning.md` — posicionamiento en 1 línea + 3 ICP canónicos (Clara cut / Marcos muscle / Ana health, alineados con `src/features/profile/data/demo-personas.ts`) + 5 moats defensibles + 5 gaps no defensibles + MVP competitivo mínimo (RIAL cumple los 6 requisitos top-10 ES) + hoja de ruta + pricing propuesto + riesgos estratégicos + métricas de éxito north-star.
+- `docs/market/app-store-rankings.md` — snapshot rankings 2026-04-17 (ES + US + DE + UK + LatAm) iOS + Android, Top Free + Top Grossing. Metodología explícita, movers 12 meses, implicaciones estratégicas por mercado, fuentes de re-snapshot.
+- `docs/market/deep-dives/*.md` (×18) — fichas con plantilla fija: header categoría/ICP/geo/pricing/tracción + Qué hace bien + Gaps + Patrones UX + Comparación con RIAL (16 filas fijas consistentes con `feature-matrix.md`) + Lecciones aplicables + Fuentes. Apps: MyFitnessPal, Cal AI, Lifesum, Yazio, Fitia, Cronometer, MacroFactor, MyRealFood, Noom, Fastic, Zero (by MFP), Yuka, Mealime, Eat This Much, Paprika, PlateJoy, Whoop, Bevel.
+
+**Changed**
+- `docs/ai/project.md` — añade línea "Competitive baseline" en sección Key docs apuntando a `docs/market/` (no auto-cargado).
+- `docs/ai/state.md` — añade entrada en "Active repository conventions" con punteros al índice + matriz + posicionamiento. Mantiene el principio de carga por demanda.
+- `docs/archive/README.md` — nota superior redirige a `docs/market/` para análisis vivo; los archivos de archive quedan marcados explícitamente como snapshots históricos Q1 2026 no mantenidos.
+
+**Notes**
+- **Anti-objetivo cumplido:** ninguna ficha inventa datos. Cifras verificadas con fuente pública 2024-2026; lo no verificable queda marcado `(source needed)` en vez de dato falso.
+- **Out of scope deliberado:** cero cambios en `src/`, cero cambios en tests, cero movimientos de pipeline CI. Es 100% documentación — TypeScript / lint / tests / build sin diff respecto a `[1.5.26]`.
+- **Maintenance gate:** re-snapshot rankings en 2026-07-17 (cada 3 meses); fichas deep-dive en 2026-10-17 (6 meses) o antes si el competidor cambia pricing, es adquirido, hace rebrand o cambia equipo. Propietario: quien abra el siguiente sprint de mercado.
+- **Descubribilidad para agentes:** ninguna sesión RIAL auto-carga `docs/market/` — debe mencionarla un prompt sobre competidor / UX benchmark / rankings / posicionamiento. Razón: volumen alto (4000+ líneas) que saturaría prompts en el 90% de tareas de desarrollo puro.
+
 ## [1.5.26] - 2026-04-17
 
 ### feat(recipes) — Fase 2 multi-media (PhotoUploader + compresión client-side)
