@@ -78,50 +78,31 @@ const designSystemRules = [
  * override block below.
  */
 const q16MigrationAllowlist = [
-  'src/App.tsx',
-  'src/components/CreateModal.tsx',
-  'src/components/DayGridCalendar.tsx',
-  'src/components/GlobalHeader.tsx',
-  'src/components/patterns/FilterRow.tsx',
-  // RecipeCard migrated 2026-04-17: hero badges → text-micro, tap-targets 28→36 px, grid title → text-sm.
+  // shadcn/ui primitives retain Tailwind `dark:` prefixes (library convention).
   'src/components/ui/badge.tsx',
   'src/components/ui/input.tsx',
   'src/components/ui/select.tsx',
   'src/components/ui/tabs.tsx',
   'src/components/ui/textarea.tsx',
+  // SectionCard-shape drift remaining post-Q16 B1 (text-[Npx] codemod).
+  // B2 will migrate these with `<SectionCard>` primitive extensions.
   'src/features/ai/screens/AICoach.tsx',
-  'src/features/auth/screens/Login.tsx',
-  'src/features/auth/screens/Signup.tsx',
-  'src/features/dev/components/DemoSeedCard.tsx',
   'src/features/food/components/BarcodeScanner.tsx',
-  'src/features/food/components/PortionSelector.tsx',
-  'src/features/food/screens/AddMeal.tsx',
-  'src/features/food/screens/FoodDictionary.tsx',
   // Hoy tab cleaned in Wave 1 of tab audit (2026-04-18). TodaysMeals retains
   // two intentional SectionCard-shape occurrences (list container + meal item)
   // that don't fit the primitive; remove when we add a <ListCard> variant.
   'src/features/home/components/TodaysMeals.tsx',
-  // Discovery migrated 2026-04-17: PageShell + text-micro for CollectionBanner count.
-  'src/features/home/screens/More.tsx',
-  'src/features/legal/screens/PrivacyPolicy.tsx',
-  'src/features/legal/screens/TermsOfService.tsx',
-  'src/features/planner/components/BatchCookingSuggestions.tsx',
   'src/features/planner/screens/Pantry.tsx',
   'src/features/planner/screens/Planner.tsx',
   'src/features/planner/screens/ShoppingList.tsx',
   'src/features/profile/components/Onboarding.tsx',
-  'src/features/profile/components/settings/SettingsAppearance.tsx',
   'src/features/profile/components/settings/SettingsNutrition.tsx',
   'src/features/profile/components/settings/SettingsProfile.tsx',
-  'src/features/profile/components/settings/SettingsSystem.tsx',
   'src/features/profile/screens/Profile.tsx',
   'src/features/profile/screens/RialPlus.tsx',
-  'src/features/profile/screens/Settings.tsx',
-  // Cocina tab cleaned in Wave 2 of tab audit (2026-04-18). All recipes/*
-  // screens and components migrated to tokens + SectionCard + HIG taps.
   // Explora tab cleaned in Wave 3 of tab audit (2026-04-18). Files below
-  // retain only SectionCard-shape drift (no text-[Npx], no dark:). Q16
-  // codemod will migrate them to <SectionCard>.
+  // retain only SectionCard-shape drift (no text-[Npx], no dark:). Q16 B2
+  // will migrate them to <SectionCard>.
   'src/features/social/screens/ChallengeDetail.tsx',
   'src/features/social/screens/Challenges.tsx',
   'src/features/social/screens/CreatorProfile.tsx',
@@ -132,21 +113,14 @@ const q16MigrationAllowlist = [
   'src/features/wellness/components/BodySnapshotCard.tsx',
   'src/features/wellness/components/BodyTimeline.tsx',
   'src/features/wellness/components/ConsistencyCalendar.tsx',
-  'src/features/wellness/components/DataSourceCaption.tsx',
   'src/features/wellness/components/InlineReflection.tsx',
-  'src/features/wellness/components/LatestReflectionCard.tsx',
-  'src/features/wellness/components/LogSnapshotModal.tsx',
-  'src/features/wellness/components/RealFeelInline.tsx',
   'src/features/wellness/components/RitmoSection.tsx',
-  'src/features/wellness/components/SnapshotDetailModal.tsx',
   'src/features/wellness/components/WeeklyScoreCard.tsx',
   'src/features/wellness/components/WeightTrendCard.tsx',
-  'src/features/wellness/screens/DailyCheckIn.tsx',
   'src/features/wellness/screens/FastingTimer.tsx',
   'src/features/wellness/screens/Progress.tsx',
   'src/features/wellness/screens/RealFeelDiary.tsx',
   'src/features/wellness/screens/WeeklyCheckIn.tsx',
-  // WeeklyReview.tsx removed upstream — reflection form absorbed into Progress.tsx InlineReflection component.
 ];
 
 export default tseslint.config(
