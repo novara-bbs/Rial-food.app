@@ -156,7 +156,7 @@ export default tseslint.config(
   },
   // The primitive that intentionally owns the banned shape.
   {
-    files: ['src/components/SectionCard.tsx'],
+    files: ['src/components/SectionCard.tsx', 'src/components/ui/surface.ts'],
     rules: {
       'no-restricted-syntax': [
         'error',
