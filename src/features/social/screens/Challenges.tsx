@@ -1,5 +1,6 @@
 import { Activity, Check, Clock, Trophy, Flame } from 'lucide-react';
 import PageShell from '../../../components/PageShell';
+import SectionCard from '../../../components/SectionCard';
 import { useI18n } from '../../../i18n';
 import { useNavigation } from '../../../contexts/NavigationContext';
 import { useAppState } from '../../../contexts/AppStateContext';
@@ -88,7 +89,7 @@ export default function Challenges({ onBack }: { onBack: () => void }) {
           const isJoined = joinedChallenges.includes(challenge.id);
           const challengeTitle = t.challenges[challenge.titleKey as keyof typeof t.challenges] as string || challenge.titleKey;
           return (
-            <div key={challenge.id} className="bg-surface-container-low border border-outline-variant/20 rounded-sm p-5 hover:border-primary/50 transition-colors">
+            <SectionCard key={challenge.id} padding="md" spacing="none" className="hover:border-primary/50 transition-colors">
               <div className="flex items-center justify-between gap-3">
                 <button
                   type="button"
@@ -120,7 +121,7 @@ export default function Challenges({ onBack }: { onBack: () => void }) {
                   {isJoined ? <><Check className="w-3 h-3" aria-hidden="true" /> {t.challenges.joined}</> : t.challenges.join}
                 </button>
               </div>
-            </div>
+            </SectionCard>
           );
         })}
       </section>

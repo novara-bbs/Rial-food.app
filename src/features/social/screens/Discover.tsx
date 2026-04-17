@@ -1,6 +1,7 @@
 import { CheckCircle2, Users, BookOpen, TrendingUp, Flame, MessageSquare, Compass, Activity, Check } from 'lucide-react';
 import PageShell from '../../../components/PageShell';
 import SearchInput from '../../../components/patterns/SearchInput';
+import { BUTTON_CARD_SURFACE_CLASSES } from '../../../components/ui/surface';
 import { useState, useMemo } from 'react';
 import { useI18n } from '../../../i18n';
 import { useNavigation } from '../../../contexts/NavigationContext';
@@ -98,7 +99,7 @@ export default function Discover() {
                   key={creator.id}
                   type="button"
                   onClick={() => openCreatorProfile(creator.id)}
-                  className="w-full text-left bg-surface-container-low border border-outline-variant/20 rounded-sm p-4 hover:border-primary/50 transition-all focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
+                  className={`w-full text-left ${BUTTON_CARD_SURFACE_CLASSES} p-4 hover:border-primary/50 transition-all focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary`}
                   aria-label={`@${creator.name}`}
                 >
                   <div className="flex items-center gap-4">
@@ -206,7 +207,7 @@ export default function Discover() {
                 key={post.id}
                 type="button"
                 onClick={() => { setSelectedPostId(post.id); navigateTo('post-detail'); }}
-                className="w-full text-left bg-surface-container-low border border-outline-variant/20 rounded-sm p-4 hover:border-primary/50 transition-all focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
+                className={`w-full text-left ${BUTTON_CARD_SURFACE_CLASSES} p-4 hover:border-primary/50 transition-all focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary`}
               >
                 <div className="flex items-start gap-3">
                   <img src={post.author.img} alt="" className="w-8 h-8 rounded-full object-cover shrink-0" referrerPolicy="no-referrer" />

@@ -101,7 +101,6 @@ const q16MigrationAllowlist = [
   // Explora tab cleaned in Wave 3 of tab audit (2026-04-18). Files below
   // retain only SectionCard-shape drift (no text-[Npx], no dark:). Q16 B2
   // will migrate them to <SectionCard>.
-  'src/features/social/screens/Challenges.tsx',
   // CreatorProfile: profile card + About tab migrated to <SectionCard> in
   // Q16 B2. The post list-item still uses an `<article>` with stretched-link
   // focus-within shape — SectionCard renders `<section>` so the semantic
@@ -109,7 +108,6 @@ const q16MigrationAllowlist = [
   // <ListCard> variant.
   'src/features/social/screens/CreatorProfile.tsx',
   'src/features/social/screens/CreatorVerification.tsx',
-  'src/features/social/screens/Discover.tsx',
   'src/features/social/screens/PostDetail.tsx',
   'src/features/wellness/screens/Progress.tsx',
   'src/features/wellness/screens/RealFeelDiary.tsx',
