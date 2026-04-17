@@ -96,8 +96,6 @@ const q16MigrationAllowlist = [
   'src/features/planner/screens/Planner.tsx',
   'src/features/planner/screens/ShoppingList.tsx',
   'src/features/profile/components/Onboarding.tsx',
-  'src/features/profile/components/settings/SettingsNutrition.tsx',
-  'src/features/profile/components/settings/SettingsProfile.tsx',
   'src/features/profile/screens/Profile.tsx',
   'src/features/profile/screens/RialPlus.tsx',
   // Explora tab cleaned in Wave 3 of tab audit (2026-04-18). Files below
