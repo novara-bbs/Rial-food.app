@@ -48,7 +48,13 @@ Mandatory before opening a PR that adds or substantially restructures a screen.
 
 - [ ] Any new persisted state goes through `useLocalStorageState` via `AppStateContext`
 - [ ] New handlers follow the factory pattern in `src/features/*/handlers/` and are wired in `AppStateContext`
+- [ ] **No inline `useLocalStorageState` in screens or components.** Shared keys go through a factory handler so cross-screen updates stay reactive. (Explora tab audit 2026-04-18 retired 4 inline call sites; don't reintroduce them.)
 - [ ] If a new `rial_*` key is added, update the audit table in `docs/ai/state.md` § localStorage audit and decide on `SyncKey` inclusion
+
+## 6b. Card-level navigation without nested buttons
+
+- [ ] If a card is fully clickable *and* contains inner interactive elements (CTA, like button, delete), use the **stretched-link pattern**: an absolute-inset `<button>` behind a `pointer-events-none` content wrapper, and inner CTAs as `relative z-10 pointer-events-auto` buttons. See `src/features/social/components/PostCard.tsx` for the canonical usage.
+- [ ] Never nest `<button>` inside `<button>` — screen readers and WCAG 1.3.1 fail on it.
 
 ## 7. Theme parity
 

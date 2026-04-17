@@ -1,5 +1,68 @@
 # RIAL App - Changelog
 
+## [1.5.21] - 2026-04-18
+
+### refactor(audit-tab) — Hoy / Cocina / Explora tab audit (5 waves)
+
+Full tab-by-tab audit on the three primary surfaces. Plan: `.claude/plans/replicated-orbiting-coral.md`. Doc: `docs/AUDIT-TAB-2026-04-18.md`. Diccionario, Despensa, More, Progress stay out of scope for the next audit tranche.
+
+**Added**
+- `docs/AUDIT-TAB-2026-04-18.md` — executive + per-wave report.
+- `src/features/social/handlers/creator-handlers.ts` — `createHandleFollowCreator` factory (registered in `AppStateContext`).
+- `src/features/social/handlers/challenge-handlers.ts` — `createHandleJoinChallenge` / `LeaveChallenge` / `CheckInChallenge` factories.
+- `src/lib/z-index.ts` — shared z-index constants (Wave 2).
+- `t.common.close` i18n key (ES+EN).
+- Empty-state + CTA on `ProgressPreviewCard` when `weightHistory.length === 0`.
+- `MealSlotSelector` wired inside `RecipeDaySelectorSheet` (Wave 2).
+- `Cocina` `defaultTab` prop so Home's "Plan" CTA lands on Plan tab.
+- `Explore` subtab persistence via `useLocalStorageState('exploreActiveTab', ...)`.
+- `PostCard` `hideComments` prop for canonical-view dedup.
+
+**Changed**
+- 17 functional bugs fixed across Hoy/Cocina/Explora (scan-barcode no-op, story index, notification badge, import-URL silent fallback, CookMode crash, CookTimer drift, Community follow staleness, hardcoded `'Tú'` / `'Justo ahora'`, TodaysMeals hidden buttons, add-to-plan mealType ignored, PostCard counter cosmetic, Notifications missing click handlers, seed-recipes race, Cocina type cast, CreateRecipe free-form times, PostCard progress-type delegation). Full list in the audit doc.
+- Factory-handler pattern applied across Explora screens — `useLocalStorageState` calls removed from Discover / CreatorProfile / Community / Challenges / ChallengeDetail / CreatorVerification. Cross-screen follow / join state now updates reactively.
+- `features/home/screens/Discover.tsx` → `features/social/screens/Discover.tsx` (feature-first).
+- Stretched-link a11y pattern on `PostCard` (card-level tap + independent recipe CTA without nested buttons).
+- HIG tap-target sweep — every interactive across Hoy/Cocina/Explora ≥44×44.
+- Drift: `text-[Npx]` 0 in `src/features/social/**`; SectionCard shape baseline 93 → 72; 17 files removed from ESLint Q16 allowlist.
+- i18n fallback expressions (`|| 'string'`) eliminated from Guided Setup and all social surfaces; 47 new keys aligned across ES ↔ EN.
+- `handleCreatePost` / `handleAddComment` / `handlePublishStory` use `userProfile.name` + `formatRelative()` instead of hardcoded literals.
+- Iframe sandbox on RecipeDetail + CreateRecipe video embeds (pre-CSP hardening).
+- `handleSaveRecipe` toggle-to-unsave now shows `<ConfirmDialog>`.
+- `ProgressPostCard` migrated to `<SectionCard>` primitive.
+
+**Fixed**
+- `rial_recipeViewed` Guided Setup step now completes (key was read but never written).
+- `StoryRingsRow` tap opens the correct story index.
+- Notifications badge renders only when unread exist.
+- `ImportRecipeURL` surfaces real parse errors instead of silently showing a fake chicken recipe; timeout + URL validation added.
+- `CookMode` survives empty-steps recipes (empty state) and re-acquires WakeLock on `visibilitychange`.
+- `CookTimer` drift-free (RAF + `Date.now()` delta).
+- `Community` follow state reactive across screens (no more stale memo).
+- Seed-recipes race can't clobber user saves (`rial_seedLoaded` flag).
+- `Cocina.tsx` `mealPlan` type cast aligned with declared `Record<number, any[]>`.
+- `CreateRecipe` prep/cook-time numeric input.
+- `PostCard` counters mutate state instead of being cosmetic.
+- `Notifications` rows navigate to `targetType`/`targetId` and mark-read.
+- `PostCard` detects `type === 'progress'` and delegates to `<ProgressPostCard>`.
+
+**Removed**
+- `src/features/social/screens/Creadores.tsx` — orphan, 0 callers.
+- `src/features/home/components/WeightQuickLog.tsx` — `@deprecated Q14`, 0 callers.
+- `Home.tsx` dead props `onNavigateToExplore` + `onCheckIn(status?)`.
+- `ImportRecipeURL` unreachable error branch.
+
+**Metrics**
+- Tests: 481 → 501 (+20).
+- i18n: 1428 → 1475 keys aligned.
+- SectionCard baseline: 93 → 72.
+- `text-[Npx]` in `src/features/social/`: ~55 → 0.
+- Dead files: −2.
+- ESLint allowlist: −17 entries.
+- All size budgets passing: main 239 KB gzip / total 764 KB gzip.
+
+Commits on `main` (not yet pushed): `4d83e94` (Wave 0), `ecb73fa` (Wave 1), `7db26c8` (Wave 2), `26ba1bd` (Wave 3), docs commit pending for Wave 4. Push to `rial-food/main` awaits explicit user approval.
+
 ## [1.5.20] - 2026-04-17
 
 ### merge(rial-food/main) — reconcile Q14/Q15.5/walkthrough with sprint-q/sprint-q18

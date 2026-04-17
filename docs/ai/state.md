@@ -1,16 +1,23 @@
 # RIAL Current State
 
-Last updated: 2026-04-17 (post-merge with rial-food/main)
+Last updated: 2026-04-18 (post Wave 3 commit, Wave 4 in progress)
 
 ## Release snapshot
-- Root branch: `main` (merged with `rial-food/main` — 3 local commits + 2 upstream commits reconciled in a single merge commit)
+- Root branch: `main`. **Ahead of `rial-food/main` by 4 commits** (Waves 0-3 of 2026-04-18 tab audit) + pending Wave 4 docs commit. No pushes performed per governance "no puseamos hasta le final" — awaiting explicit approval.
 - Release remote: `rial-food` (worktree remote: `origin`)
 - Active Vercel project: `rial.app.v1.5`
 - Vercel project id: `prj_t11VHYQjptazjUx7Y2hWLz0IDAjg`
 - **Governance (2026-04-17):** work directly on `main`. No feature branches, no worktrees going forward. Reconcile in-flight divergence by merging directly into `main`.
 
+## Recent commits on `main` (not yet pushed)
+- `(pending)` `docs(wave-4): AUDIT-TAB-2026-04-18 + state + CHANGELOG 1.5.21`
+- `26ba1bd` `refactor(wave-3): Explora tab polish — factory handlers + drift purge + i18n + Discover relocation`
+- `7db26c8` `refactor(wave-2): Cocina tab polish — drift purge, HIG taps, unsave confirm, iframe sandbox, mealSlot picker`
+- `ecb73fa` `refactor(wave-1): Hoy tab polish — drift purge, empty states, HIG taps, memo, i18n, SyncKey`
+- `4d83e94` `fix(wave-0): bug sweep + dead-code purge (Hoy/Cocina/Explora audit)`
+- `2767b97` `merge(rial-food/main): reconcile Q14/Q15.5/walkthrough with sprint-q + sprint-q18`
+
 ## Recent merged commits (Rial-food.app main)
-- `(pending merge commit)` `merge: reconcile Q14/Q15.5/walkthrough with sprint-q/sprint-q18`
 - `37dd18d` `feat(design-audit): tab-by-tab walkthrough — 🔴 blocker fixes (NutritionHero overflow, 4 sub-HIG tap targets, 3 text-[7px]) + Q16 pilot migrations (WeeklyCheckIn, WeeklyReview) — baseline 134→84`
 - `ac492fd` `feat(sprint-q15.5): design-system remediation — tokens, primitives, ESLint guardrails, ADRs, NEW-SCREEN-CHECKLIST, i18n symmetry check`
 - `a067241` `feat(sprint-q14): audit polish — Profile streak fix, multi-ICP seed, empty states, dedup, back-stack`
@@ -38,16 +45,22 @@ Two upstream commits (`8b8a5b5` sprint-q Progress restructure, `155f08b` sprint-
 
 Collateral: my Q16 pilot migration on `WeeklyCheckIn.tsx` + `WeeklyReview.tsx` is wasted work (remote rewrote both). SectionCard baseline recalculated post-merge.
 
-## Quality baseline (2026-04-17)
+## Quality baseline (2026-04-18, post Wave 3)
 - TypeScript: 0 errors (`npx tsc --noEmit`)
-- Tests: 481/481 unit tests passing (measured 2026-04-17 post-walkthrough) — Q13 added 64 (streaks, week-stats, weight-trend), Q14 added 40 (demo-personas shape + correlation integration), Q15.5 added 32 convention tests (`primitives-export`, `design-tokens`, `sectioncard-usage`), plus 20 from in-progress working-tree changes
-- i18n symmetry: **1428** keys aligned ES ↔ EN (`npm run check:i18n`) — post-merge (merges walkthrough's +3 keys with upstream's `weekly.{dayHeaders,mealCount,daysLogged,historyTitle,writeFromProgress,thisWeekTitle,body,nutrition,fats,mealDot,rfDot,wellbeing,wellbeingTitle,reflectionTitle,noReflections,viewHistory,topCorrelations,viewDiary,topMeals,viewAllRecipes}`)
-- Design-system lint: 0 errors, **~972** warnings (was 1016 pre-walkthrough; -44 via NutritionHero redesign + WeeklyCheckIn/WeeklyReview Q16 pilot migrations)
-- Build (measured 2026-04-16 via `npm run build`):
-  - main entry (resolved from `dist/index.html`): **751 KB raw / 234 KB gzip**
-  - vendor-recharts: 331 KB raw / 100 KB gzip
-  - total dist/assets/*.js: 2641 KB raw / 751 KB gzip
-  - _(Prior state.md claimed 284/56 for the main chunk — that was one of several `index-*.js` feature chunks, not the true entry. Current numbers are from `dist/index.html` resolution.)_
+- Tests: **501/501** unit tests passing (+20 since 2026-04-17 via Waves 1-3 handler + guided-setup + recipe import tests)
+- i18n symmetry: **1475** keys aligned ES ↔ EN (`npm run check:i18n`) — +47 since merge (Guided Setup, social i18n sweep, `t.common.close`, StoryViewer labels)
+- Design-system lint: 0 errors, **~862** warnings (-110 since walkthrough — Waves 1-3 drift purge). All Q16 allowlist entries downgraded; new files still error.
+- Build (measured 2026-04-18 via `npm run release:preflight`):
+  - main entry (resolved from `dist/index.html`): **764.6 KB raw / 239.2 KB gzip**
+  - vendor-recharts: 331.5 KB raw / 99.8 KB gzip
+  - total dist/assets/*.js: 2691.7 KB raw / 764.2 KB gzip
+- Drift baselines:
+  - SectionCard shape: **72** (was 93 pre-audit; Waves 1-3 dropped 21)
+  - `text-[Npx]` in `src/features/social/**`: **0** (was ~55)
+  - ESLint Q16 migration allowlist: ~43 files (−17 from 60)
+
+## 2026-04-18 tab audit (Hoy / Cocina / Explora)
+Plan file: `.claude/plans/replicated-orbiting-coral.md`. Close-out doc: `docs/AUDIT-TAB-2026-04-18.md`. 5 waves executed (Wave 4 docs in progress). 17 functional bugs fixed, 2 dead files deleted, drift cleaned across 30+ files, factory-handler pattern completed for social. No pushes — commits staged for single approval-gated push.
 - Lint: 0 errors
 - Bundle budget (enforced via `npm run size:check` in CI):
   - main entry ≤ 900 KB raw / 280 KB gzip (~15% headroom over baseline)
@@ -179,6 +192,8 @@ Execute Supabase sprint ONLY when ALL of these hold:
 - ~~**Q14**~~ ✓ DONE — Audit polish: Profile streak asymmetry fix, multi-ICP seed (Clara/Marcos/Ana), empty states with CTAs, LatestReflection dedup, back-stack fix, 40 new tests
 - ~~**Q15.5**~~ ✓ DONE — Design-system remediation (scope from `docs/DESIGN-AUDIT-2026-04-16.md`): typography + shadow + radius token scales in `src/index.css`; Button HIG-compliant (44×44); Profile dedup to `<SectionCard>`; GlobalHeader demo-gate → shadcn Dialog; BottomNav `focus-visible`; 3 new docs (DESIGN-SYSTEM, PRIMITIVES, NEW-SCREEN-CHECKLIST); 7 ADRs (`docs/adr/ADR-001…ADR-007`); ESLint `no-restricted-syntax` for 3 design-system anti-patterns + Q16 migration allowlist; `scripts/check-i18n-symmetry.mjs` wired into `release:preflight`; 3 convention tests (`primitives-export`, `design-tokens`, `sectioncard-usage`). **Q16 migration deferred** — 445 `text-[Npx]` + 134 SectionCard dup occurrences now under CI guardrail (warn for pre-existing files, error for new).
 - ~~**Walkthrough pass (2026-04-17)**~~ ✓ DONE — live audit against Q15.5 design system documented in `docs/DESIGN-AUDIT-WALKTHROUGH-2026-04-17.md`. Shipped 🔴 blocker fixes: NutritionHero overflow redesign, 4 sub-HIG tap targets (CookTimer, AddMeal ×2, WeeklyCheckIn chevrons, Home streak), 3 `text-[7px]` illegibility fixes (RecipeCard ×2, Profile badge). Q16 pilot migrated WeeklyCheckIn (7 dups) + WeeklyReview (2 dups). Baselines: SectionCard shape 134→**84**, `text-[Npx]` 445→**415**, ESLint warnings 1016→**972**, i18n 1403→**1406**. Validates the Q16 codemod playbook and proves the guardrail drops cleanly when drift is removed.
+- ~~**Tab audit 2026-04-18 (Hoy/Cocina/Explora)**~~ ✓ DONE — 5-wave audit documented in `docs/AUDIT-TAB-2026-04-18.md`. 17 functional bugs fixed (scan-barcode, story index, notification badge, import-URL silent fallback, CookMode crash, CookTimer drift, Community staleness, Tú/Justo ahora literals, TodaysMeals hidden buttons, mealType on add-to-plan, PostCard counters, Notifications click-through, seed race, Cocina type, CreateRecipe free-form time, PostCard progress-type delegation). 2 dead files purged (Creadores, WeightQuickLog). Factory-handler pattern completed for social (4 inline call sites → 0). Discover relocated to social/. 17 files off ESLint allowlist. Baselines: SectionCard 93→**72**, `text-[Npx]` in `src/features/social/**` → **0**, Tests 481→**501**, i18n 1428→**1475**. Commits `4d83e94` + `ecb73fa` + `7db26c8` + `26ba1bd` (+ pending Wave 4 docs). **Not yet pushed** — per user governance hold.
+- **Next audit tranche (candidate)** — Diccionario (FoodDictionary / AddMeal / BarcodeScanner / PortionSelector / MealSlotSelector) + Despensa (Pantry) + More menu + Settings + Profile + legal screens + Progress regression re-check. Same 4-wave shape.
 - **Q15** — ICP-adaptive Progress widgets (Clara/Marcos/Ana persona switches show/hide widget types) + before/after photo compare (Timeline tab, use `BodySnapshot.photoUrl` pairs) + remove deprecated `calculateStreak()` (callers already migrated to `calcStreaks` via Q13 — sweep for stale imports) + custom body measurements (extend `BodySnapshot` with user-defined metric definitions).
 - **Q16** — Codemod sprint. Scope: remaining **415 `text-[Npx]`** + **84 SectionCard shape** occurrences. Plan: jscodeshift transform with literal→token map (7-10px→`text-micro`, 11px→`text-caption`, 12px→`text-label`, 13px→`text-body-sm`, 14px→`text-body`, 16px→`text-body-lg`, 18px→`text-title-sm`, ≥24px→`text-title`/`text-headline`/`text-display` with per-file review). For SectionCard: AST match on the regex shape, infer `title`/`icon`/`padding`/`spacing` props from surrounding JSX, per-file snapshot test to verify no visual diff. Prioritize top offenders (see "Current risks"). Success = `eslint.config.mjs` allowlist empty, `sectioncard-usage.test.ts` baseline = 0 (then delete the test), ESLint warnings = 0.
 - **Q17** — Security + responsive hardening. (1) CSP header in `vercel.json` (deferred from Q15.5) — audit third-party origins: Supabase, Sentry, Google GenAI, RevenueCat, recharts CDN, Capacitor bridges. (2) WCAG AA contrast fix on `theme-orange-light` (`on-surface-variant` 4.4:1 → ≥4.5:1). (3) Responsive tablet/desktop breakpoints — audit `PageShell` variants and current `sm:/md:` usage; promote layouts that rely on mobile-only heuristics.
