@@ -1,15 +1,23 @@
 # RIAL Current State
 
-Last updated: 2026-04-17 (post Q19 meal-taxonomy — `suitableFor[]` multi-slot + migration + i18n canonical; preflight + runtime verification pending)
+Last updated: 2026-04-17 (post Fase 2 multi-media — PhotoUploader + imageCompress + Capacitor Camera; 1 commit ahead of `rial-food/main`, push pending explicit approval)
 
 ## Release snapshot
-- Root branch: `main`, in sync with `rial-food/main`. No pending local commits.
+- Root branch: `main`, **1 commit ahead of `rial-food/main`** (Fase 2 `dd22be8` — awaiting push approval).
 - Release remote: `rial-food` (worktree remote: `origin`)
 - Active Vercel project: `rial.app.v1.5`
 - Vercel project id: `prj_t11VHYQjptazjUx7Y2hWLz0IDAjg`
 - **Governance (2026-04-17):** work directly on `main`. No feature branches, no worktrees going forward. Reconcile in-flight divergence by merging directly into `main`.
 
 ## Recent commits on `main`
+- `dd22be8` `feat(recipes): Fase 2 multi-media — PhotoUploader + imageCompress + Capacitor Camera` (uncommitted → pushed: **pending**)
+- `3e76879` `docs(q19-meal-taxonomy): CHANGELOG 1.5.25 + state.md close-out`
+- `58aa9c7` `feat(recipes): Fase 1 multi-media — hero gallery + lightbox + hybrid video section`
+- `ed1e08b` `chore(gitignore): ignore playwright reports + claude local settings`
+- `5dab667` `feat(sprint-q19): meal-taxonomy migration — mealType string → suitableFor[] MealSlot[]`
+- `24b5925` `chore(lint): purga warnings triviales — ignores Capacitor + console.* via logger`
+- `99305d2` `fix(ui): normaliza shells Cocina+Discovery + RecipeCard tokens + HIG tap-targets`
+- `4656f5d` `docs(state): snapshot post seed-hydration push + .claude/ onboarding fix`
 - `5aca2a8` `chore(agents): track .claude/ shared assets so collaborators get slash commands + subagents + skills`
 - `7065465` `fix(seed-hydration): versioned reseed so existing users receive bumped seed content`
 - `0dd90eb` `fix(e2e): scope nav tests to mobile viewport + unprefixed localStorage seeds`
@@ -49,15 +57,16 @@ Two upstream commits (`8b8a5b5` sprint-q Progress restructure, `155f08b` sprint-
 
 Collateral: my Q16 pilot migration on `WeeklyCheckIn.tsx` + `WeeklyReview.tsx` is wasted work (remote rewrote both). SectionCard baseline recalculated post-merge.
 
-## Quality baseline (2026-04-17, post Cocina/Explora cohesion pass)
+## Quality baseline (2026-04-17, post Fase 2 multi-media)
 - TypeScript: 0 errors (`npx tsc --noEmit`)
-- Tests: **515/515** unit tests passing
-- i18n symmetry: **1475** keys aligned ES ↔ EN (`npm run check:i18n`) — no delta this pass (reused `t.discovery.catQuick`)
-- Design-system lint: 0 errors, **~869** warnings (numeric bump comes from `any` / `no-console` pre-existing warnings re-enumerated, not from drift — **4 fewer `text-[Npx]` violations** in `RecipeCard.tsx` + `Discovery.tsx`). Q16 allowlist: 2 files out (`RecipeCard.tsx`, `Discovery.tsx`); new files still error.
+- Tests: **549/549** unit tests passing (+6 from `imageCompress.test.ts` + otros Q19)
+- i18n symmetry: **1499** keys aligned ES ↔ EN (`npm run check:i18n`) — +11 claves bajo `createRecipe` para PhotoUploader
+- Design-system lint: 0 errors, **883** warnings (Q16 allowlist estable; nuevos componentes de Fase 2 cumplen ADR-002/003/005 sin entrar en la lista)
 - Build (measured 2026-04-17 via `npm run build` + `npm run size:check`):
-  - main entry (resolved from `dist/index.html`): **766.3 KB raw / 239.6 KB gzip** (+1.7 KB raw / +0.4 KB gzip vs Wave 3 baseline — 2× `PageShell` imports)
+  - main entry (resolved from `dist/index.html`): **769.8 KB raw / 240.9 KB gzip** (+3.5 KB raw / +1.3 KB gzip vs Cocina/Explora pass — Fase 1 HeroGallery/Lightbox/VideoSection + Q19 MealSlot helpers; Fase 2 PhotoUploader es lazy en CreateRecipe chunk)
+  - CreateRecipe chunk: **28.5 KB raw / 6.9 KB gzip** (incluye PhotoUploader inline)
   - vendor-recharts: 331.5 KB raw / 99.8 KB gzip (unchanged)
-  - total dist/assets/*.js: 2693.2 KB raw / 764.6 KB gzip
+  - total dist/assets/*.js: 2720.0 KB raw / 773.7 KB gzip
 - Drift baselines:
   - SectionCard shape: **72** (unchanged this pass — no SectionCard touches)
   - `text-[Npx]` in `src/features/social/**`: **0** (unchanged)
@@ -147,6 +156,8 @@ Plan file: `.claude/plans/replicated-orbiting-coral.md`. Close-out doc: `docs/AU
 - Archived product/market docs: `docs/archive/` (not loaded by agents)
 
 ## Current risks to watch
+- **Data URL payload en `savedRecipes` (Fase 2 multi-media)** — cada receta con 6 fotos comprimidas ocupa ~1.2 MB base64. Excede el row-limit típico de Supabase `user_data` (~1 MB JSON). **Mitigación hasta Q6**: persistencia local vía `migrateLocalStorageToIDB` (IDB ~GBs); sync push excluye `savedRecipes` cuando cualquier `photos[i]` es data URL. **Q6 debe**: crear bucket Supabase Storage `recipe-photos` + RLS por `user_id`, migrar `photos[]` data URL → URL firmada, sanitizar `SyncKey` con threshold (≥10 KB/entry = skip hasta bucket) como fallback.
+- **`ImportRecipeURL` no auto-popula `videoUrl`** — importar desde TikTok/Instagram/YouTube pierde el vínculo al video fuente. Defer a Q6 (requiere Edge function `og-fetch` que parsee `og:video` + `twitter:player` + YouTube embed). Hoy el form manual de CreateRecipe cubre el caso.
 - Supabase DB migration not yet applied to remote project (intentionally deferred — apply only after features stable)
 - `useSupabasePersistence` flag not wired (intentionally deferred — full Supabase sprint after feature-complete)
 - vendor-recharts chunk is 102 KB gzip — acceptable but worth monitoring
