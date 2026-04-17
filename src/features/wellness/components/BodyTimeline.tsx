@@ -3,6 +3,7 @@ import { Scale } from 'lucide-react';
 import { useI18n } from '../../../i18n';
 import BodySnapshotCard from './BodySnapshotCard';
 import SnapshotDetailModal from './SnapshotDetailModal';
+import SectionCard from '../../../components/SectionCard';
 import type { BodySnapshot } from '../../../types/wellness';
 import type { UnitSystem } from '../../food/utils/units';
 
@@ -51,7 +52,7 @@ export default function BodyTimeline({ snapshots, unitSystem, onShare, shareLabe
 
   if (sorted.length === 0) {
     return (
-      <div className="bg-surface-container-low border border-outline-variant/20 border-dashed rounded-sm p-10 flex flex-col items-center gap-3 text-center">
+      <SectionCard padding="none" spacing="none" className="border-dashed p-10 flex flex-col items-center gap-3 text-center">
         <Scale className="w-8 h-8 text-on-surface-variant/40" />
         <p className="font-headline font-bold text-sm text-tertiary uppercase tracking-widest">
           {p.noSnapshotsTitle ?? 'Sin registros aún'}
@@ -59,7 +60,7 @@ export default function BodyTimeline({ snapshots, unitSystem, onShare, shareLabe
         <p className="text-xs text-on-surface-variant max-w-[200px]">
           {p.noSnapshotsDesc ?? 'Registra tu peso, fotos y medidas para ver tu evolución.'}
         </p>
-      </div>
+      </SectionCard>
     );
   }
 
