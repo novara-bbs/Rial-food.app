@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import PageShell from '../../../components/PageShell';
+import SectionCard from '../../../components/SectionCard';
 import { Play, Square, Clock, Trophy, Timer, CheckCircle2, StopCircle } from 'lucide-react';
 import { useI18n } from '../../../i18n';
 import { useLocalStorageState } from '../../../hooks/useLocalStorageState';
@@ -136,16 +137,16 @@ export default function FastingTimer({ onBack }: { onBack: () => void }) {
 
       {/* Stats */}
       <div className="flex gap-4">
-        <div className="flex-1 bg-surface-container-low border border-outline-variant/20 rounded-sm p-4 text-center">
+        <SectionCard padding="none" spacing="none" className="flex-1 p-4 text-center">
           <Trophy className="w-5 h-5 text-primary mx-auto mb-2" />
           <span className="font-mono text-2xl font-black text-tertiary">{completedCount}</span>
           <p className="text-micro text-on-surface-variant uppercase tracking-widest mt-1">{t.fasting.completed}</p>
-        </div>
-        <div className="flex-1 bg-surface-container-low border border-outline-variant/20 rounded-sm p-4 text-center">
+        </SectionCard>
+        <SectionCard padding="none" spacing="none" className="flex-1 p-4 text-center">
           <Clock className="w-5 h-5 text-primary mx-auto mb-2" />
           <span className="font-mono text-2xl font-black text-tertiary">{protocol.id}</span>
           <p className="text-micro text-on-surface-variant uppercase tracking-widest mt-1">{t.fasting.protocol}</p>
-        </div>
+        </SectionCard>
       </div>
 
       {/* History */}
@@ -159,14 +160,14 @@ export default function FastingTimer({ onBack }: { onBack: () => void }) {
         ) : (
           <div className="space-y-2">
             {fastingHistory.slice(0, 10).map((h: any) => (
-              <div key={h.id} className="flex items-center gap-4 p-3 bg-surface-container-low border border-outline-variant/20 rounded-sm">
+              <SectionCard key={h.id} padding="none" spacing="none" className="flex items-center gap-4 p-3">
                 {h.completed ? <CheckCircle2 className="w-5 h-5 text-primary shrink-0" /> : <StopCircle className="w-5 h-5 text-on-surface-variant/50 shrink-0" />}
                 <div className="flex-1">
                   <span className="font-headline text-xs font-bold uppercase text-tertiary">{h.protocol}</span>
                   <p className="text-micro text-on-surface-variant">{formatTime(h.durationMs)}</p>
                 </div>
                 <span className="text-micro text-on-surface-variant">{new Date(h.start).toLocaleDateString()}</span>
-              </div>
+              </SectionCard>
             ))}
           </div>
         )}
