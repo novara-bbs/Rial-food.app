@@ -6,6 +6,7 @@ import { calculateDailyTargets, type Goal } from '../../food/utils/nutrition';
 import { getBodyWeightUnit, getHeightUnit } from '../../food/utils/units';
 import type { Theme } from '../../../contexts/ThemeContext';
 import { INPUT_SURFACE_CLASSES } from '@/components/ui/surface';
+import SectionCard from '../../../components/SectionCard';
 
 interface OnboardingData {
   goal: string;
@@ -229,7 +230,7 @@ export default function Onboarding({ isOpen, onClose, onComplete }: {
             <>
               <h3 className="font-headline text-lg font-bold uppercase text-tertiary tracking-tight">{t.onboarding.step3Title}</h3>
               <p className="text-sm text-on-surface-variant">{t.onboarding.basedOnData}</p>
-              <div className="bg-surface-container-low border border-outline-variant/20 rounded-sm p-6">
+              <SectionCard padding="lg" spacing="none">
                 <div className="text-center mb-6">
                   <span className="font-mono text-5xl font-black text-primary">{targets.cal}</span>
                   <p className="text-xs text-on-surface-variant uppercase tracking-widest mt-1">{t.onboarding.dailyCal}</p>
@@ -248,7 +249,7 @@ export default function Onboarding({ isOpen, onClose, onComplete }: {
                     <p className="text-micro text-on-surface-variant uppercase tracking-widest">{t.home.fats}</p>
                   </div>
                 </div>
-              </div>
+              </SectionCard>
               <div>
                 <p className="text-sm text-on-surface-variant mb-3">{t.onboarding.doYouTrain}</p>
                 <div className="flex gap-3">
@@ -352,7 +353,7 @@ export default function Onboarding({ isOpen, onClose, onComplete }: {
               <PartyPopper className="w-14 h-14 text-primary mx-auto" />
               <h3 className="font-headline text-2xl font-bold uppercase text-primary tracking-tight">{t.onboarding.step5Title}</h3>
               <p className="text-on-surface-variant">{t.onboarding.readyMessage}</p>
-              <div className="bg-surface-container-low border border-outline-variant/20 rounded-sm p-5 text-left space-y-3">
+              <SectionCard padding="md" spacing="md" className="text-left">
                 {data.name && <div className="flex justify-between text-sm"><span className="text-on-surface-variant">{t.onboarding.name}</span><span className="font-bold text-tertiary">{data.name}</span></div>}
                 <div className="flex justify-between text-sm"><span className="text-on-surface-variant">{t.onboarding.dailyCal}</span><span className="font-mono font-bold text-primary">{targets.cal} kcal</span></div>
                 <div className="flex justify-between text-sm"><span className="text-on-surface-variant">{t.home.protein}</span><span className="font-mono font-bold text-tertiary">{targets.pro}g</span></div>
@@ -363,7 +364,7 @@ export default function Onboarding({ isOpen, onClose, onComplete }: {
                     ))}
                   </div>
                 )}
-              </div>
+              </SectionCard>
             </div>
           )}
         </div>

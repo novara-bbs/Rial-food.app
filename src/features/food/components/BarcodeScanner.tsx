@@ -10,6 +10,7 @@ import type { Ingredient, ServingSize } from '../../../types';
 import { parseOFFServings } from '../api/open-food-facts';
 import type { UnitSystem } from '../utils/units';
 import { INPUT_SURFACE_CLASSES } from '@/components/ui/surface';
+import SectionCard from '../../../components/SectionCard';
 
 type ScanState = 'idle' | 'scanning' | 'looking-up' | 'found' | 'not-found' | 'error';
 
@@ -276,7 +277,7 @@ export default function BarcodeScanner({ onClose, onProductFound, onSaveToDictio
               </div>
 
               {/* Portion selector — the key enhancement */}
-              <div className="bg-surface-container-low border border-outline-variant/20 rounded-sm p-4 space-y-2">
+              <SectionCard padding="none" spacing="none" className="p-4 space-y-2">
                 <h4 className="text-micro font-label uppercase tracking-widest text-on-surface-variant">
                   {t.portionSelector.adjustPortion}
                 </h4>
@@ -285,7 +286,7 @@ export default function BarcodeScanner({ onClose, onProductFound, onSaveToDictio
                   onChange={setPortionResult}
                   unitSystem={unitSystem}
                 />
-              </div>
+              </SectionCard>
 
               {/* Three CTAs */}
               <div className="space-y-2">

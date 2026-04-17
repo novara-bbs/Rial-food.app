@@ -1,5 +1,6 @@
 import { Plus, Trash2, X, Package } from 'lucide-react';
 import PageShell from '../../../components/PageShell';
+import SectionCard from '../../../components/SectionCard';
 import React, { useState } from 'react';
 import { toast } from 'sonner';
 import { useI18n } from '../../../i18n';
@@ -114,9 +115,11 @@ export default function Pantry({ onBack }: { onBack: () => void }) {
               {items.map(item => {
                 const pantryItem = pantryItems.find(p => p.id === item.id);
                 return (
-                  <div
+                  <SectionCard
                     key={item.id}
-                    className="flex items-center gap-4 p-4 bg-surface-container-low border border-outline-variant/20 rounded-sm group hover:border-primary/30 transition-colors"
+                    padding="none"
+                    spacing="none"
+                    className="flex items-center gap-4 p-4 hover:border-primary/30 transition-colors group"
                   >
                     <Package className="w-5 h-5 text-primary shrink-0" />
                     <div className="flex-1 min-w-0">
@@ -132,7 +135,7 @@ export default function Pantry({ onBack }: { onBack: () => void }) {
                     >
                       <Trash2 className="w-4 h-4" />
                     </button>
-                  </div>
+                  </SectionCard>
                 );
               })}
             </div>

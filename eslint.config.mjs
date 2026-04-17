@@ -86,17 +86,10 @@ const q16MigrationAllowlist = [
   'src/components/ui/textarea.tsx',
   // SectionCard-shape drift remaining post-Q16 B1 (text-[Npx] codemod).
   // B2 will migrate these with `<SectionCard>` primitive extensions.
-  'src/features/ai/screens/AICoach.tsx',
-  'src/features/food/components/BarcodeScanner.tsx',
   // Hoy tab cleaned in Wave 1 of tab audit (2026-04-18). TodaysMeals retains
   // two intentional SectionCard-shape occurrences (list container + meal item)
   // that don't fit the primitive; remove when we add a <ListCard> variant.
   'src/features/home/components/TodaysMeals.tsx',
-  'src/features/planner/screens/Pantry.tsx',
-  'src/features/planner/screens/Planner.tsx',
-  'src/features/planner/screens/ShoppingList.tsx',
-  'src/features/profile/components/Onboarding.tsx',
-  'src/features/profile/screens/Profile.tsx',
   // Social screens. CreatorProfile post list-item still uses an `<article>`
   // with stretched-link focus-within shape — SectionCard renders `<section>`
   // so the semantic doesn't fit. Remove when we add a <ListCard> variant.

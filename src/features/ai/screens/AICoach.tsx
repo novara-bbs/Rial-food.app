@@ -1,5 +1,6 @@
 import { useState, useRef, useEffect } from 'react';
 import { ArrowLeft, Send, Bot, User, Sparkles, Lock, Crown, Zap, Activity, Utensils, Trash2 } from 'lucide-react';
+import SectionCard from '../../../components/SectionCard';
 import ReactMarkdown from 'react-markdown';
 import { useI18n } from '../../../i18n';
 import { generateAIResponse, buildSystemPrompt } from '../lib/gemini';
@@ -171,11 +172,11 @@ export default function AICoach({
             <div className="w-8 h-8 rounded-full bg-primary/20 text-primary flex items-center justify-center shrink-0">
               <Bot className="w-4 h-4" />
             </div>
-            <div className="bg-surface-container-low border border-outline-variant/20 p-4 rounded-sm rounded-tl-none flex items-center gap-2">
+            <SectionCard padding="none" spacing="none" className="p-4 rounded-tl-none flex items-center gap-2">
               <div className="w-2 h-2 bg-primary rounded-full animate-bounce"></div>
               <div className="w-2 h-2 bg-primary rounded-full animate-bounce" style={{ animationDelay: '0.2s' }}></div>
               <div className="w-2 h-2 bg-primary rounded-full animate-bounce" style={{ animationDelay: '0.4s' }}></div>
-            </div>
+            </SectionCard>
           </div>
         )}
         <div ref={messagesEndRef} />

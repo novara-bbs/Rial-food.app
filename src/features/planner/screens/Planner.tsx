@@ -1,4 +1,5 @@
 import { ShoppingCart, Plus, Clock, CheckCircle2, Utensils, BookOpen, LogIn, Trash2 } from 'lucide-react';
+import SectionCard from '../../../components/SectionCard';
 import { useState } from 'react';
 import { toast } from 'sonner';
 import { useI18n } from '../../../i18n';
@@ -262,7 +263,7 @@ export default function Planner({
 
       {/* ── Daily summary ──────────────────────────────────────────────────── */}
       <section className="space-y-6">
-        <div className="bg-surface-container-low border border-outline-variant/20 p-6 rounded-sm space-y-4">
+        <SectionCard padding="lg" spacing="lg">
           <div className="flex flex-col sm:flex-row sm:justify-between sm:items-end gap-2">
             <h3 className="font-headline text-xl font-bold uppercase tracking-tight text-tertiary">{dayNames[activeDay]}</h3>
             <div className="flex gap-4 text-xs font-label tracking-widest uppercase" aria-label={t.planner.dailyTotal}>
@@ -288,7 +289,7 @@ export default function Planner({
               />
             </div>
           </div>
-        </div>
+        </SectionCard>
 
         {/* ── Leftover suggestions for this day ──────────────────────────── */}
         {leftoverSuggestions.filter(s => s.suggestedDayIndex === activeDay).length > 0 && (

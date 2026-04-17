@@ -1,5 +1,6 @@
 import { ArrowLeft, CheckCircle2, Circle, Trash2, Plus, Share2, X, MessageCircle, Package } from 'lucide-react';
 import PageShell from '../../../components/PageShell';
+import SectionCard from '../../../components/SectionCard';
 import React, { useState } from 'react';
 import { toast } from 'sonner';
 import { useI18n } from '../../../i18n';
@@ -123,7 +124,7 @@ export default function ShoppingList({ onBack, shoppingList = [], setShoppingLis
 
       {/* Progress bar */}
       {hasItems && (
-        <div className="bg-surface-container-low border border-outline-variant/20 rounded-sm p-4 space-y-3">
+        <SectionCard padding="none" spacing="none" className="p-4 space-y-3">
           <div className="flex justify-between items-center">
             <span className="font-label text-xs uppercase tracking-widest text-on-surface-variant">{t.shoppingList.title}</span>
             <span className="font-headline text-sm font-bold text-primary">{completedCount}/{aggregated.length}</span>
@@ -141,7 +142,7 @@ export default function ShoppingList({ onBack, shoppingList = [], setShoppingLis
               {t.shoppingList.inPantry.replace('{count}', String(inPantryCount))}
             </div>
           )}
-        </div>
+        </SectionCard>
       )}
 
       {/* Add item form */}
