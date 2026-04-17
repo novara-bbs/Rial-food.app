@@ -1,11 +1,9 @@
 import { CheckCircle2, Calendar, ChefHat, Flame, Settings, UserPlus, UserCheck, Instagram, Youtube, Globe, Music2 } from 'lucide-react';
 import PageShell from '../../../components/PageShell';
 import { useMemo } from 'react';
-import { toast } from 'sonner';
 import { useI18n } from '../../../i18n';
 import { useAppState } from '../../../contexts/AppStateContext';
 import { useNavigation } from '../../../contexts/NavigationContext';
-import { useLocalStorageState } from '../../../hooks/useLocalStorageState';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
 import EmptyState from '../../../components/EmptyState';
 import PageHeader from '../../../components/patterns/PageHeader';
@@ -14,9 +12,17 @@ import { CREATORS_MAP } from '../data/seed-creators';
 
 export default function CreatorProfile({ onBack }: { onBack: () => void }) {
   const { t } = useI18n();
-  const { communityPosts, savedRecipes, userProfile, selectedCreatorId, setSelectedPostId, navigateToRecipe } = useAppState();
+  const {
+    communityPosts,
+    savedRecipes,
+    userProfile,
+    selectedCreatorId,
+    setSelectedPostId,
+    navigateToRecipe,
+    followedCreators,
+    handleFollowCreator,
+  } = useAppState();
   const { navigateTo } = useNavigation();
-  const [followedCreators, setFollowedCreators] = useLocalStorageState<string[]>('followedCreators', []);
   const cp = t.creatorProfile;
 
   const isSelf = !selectedCreatorId || selectedCreatorId === 'self';
@@ -43,11 +49,7 @@ export default function CreatorProfile({ onBack }: { onBack: () => void }) {
 
   const toggleFollow = (e: React.MouseEvent) => {
     e.stopPropagation();
-    const wasFollowing = followedCreators.includes(creator.id);
-    setFollowedCreators((prev: string[]) =>
-      prev.includes(creator.id) ? prev.filter(c => c !== creator.id) : [...prev, creator.id]
-    );
-    toast.success(wasFollowing ? (t.social?.unfollowed || 'Dejaste de seguir') : (t.social?.followed || 'Siguiendo'));
+    handleFollowCreator(creator.id);
   };
 
   const creatorPosts = useMemo(() => {
@@ -77,7 +79,7 @@ export default function CreatorProfile({ onBack }: { onBack: () => void }) {
               {creator.verified && <CheckCircle2 className="w-4 h-4 text-primary shrink-0" />}
             </div>
             {creator.badge && (
-              <span className="text-[9px] font-bold uppercase tracking-wider bg-primary/10 text-primary px-2 py-0.5 rounded inline-block mt-1">{creator.badge}</span>
+              <span className="text-micro font-bold uppercase tracking-wider bg-primary/10 text-primary px-2 py-0.5 rounded inline-block mt-1">{creator.badge}</span>
             )}
             {creator.bio && (
               <p className="text-xs text-on-surface-variant mt-2 leading-relaxed">{creator.bio}</p>
@@ -89,15 +91,15 @@ export default function CreatorProfile({ onBack }: { onBack: () => void }) {
         <div className="grid grid-cols-3 gap-4 mt-5 pt-5 border-t border-outline-variant/10">
           <div className="text-center">
             <span className="font-headline font-black text-lg text-tertiary">{creator.followers >= 1000 ? `${(creator.followers / 1000).toFixed(1)}K` : creator.followers}</span>
-            <span className="font-label text-[9px] uppercase tracking-widest text-on-surface-variant block mt-0.5">{cp.followers}</span>
+            <span className="font-label text-micro uppercase tracking-widest text-on-surface-variant block mt-0.5">{cp.followers}</span>
           </div>
           <div className="text-center">
             <span className="font-headline font-black text-lg text-tertiary">{creatorPosts.length}</span>
-            <span className="font-label text-[9px] uppercase tracking-widest text-on-surface-variant block mt-0.5">{cp.posts}</span>
+            <span className="font-label text-micro uppercase tracking-widest text-on-surface-variant block mt-0.5">{cp.posts}</span>
           </div>
           <div className="text-center">
             <span className="font-headline font-black text-lg text-tertiary">{creator.recipes}</span>
-            <span className="font-label text-[9px] uppercase tracking-widest text-on-surface-variant block mt-0.5">{cp.recipes}</span>
+            <span className="font-label text-micro uppercase tracking-widest text-on-surface-variant block mt-0.5">{cp.recipes}</span>
           </div>
         </div>
 
@@ -138,19 +140,24 @@ export default function CreatorProfile({ onBack }: { onBack: () => void }) {
             <EmptyState icon="📝" title={cp.noPosts} description={isSelf ? cp.noPostsSelf : cp.noPosts} />
           ) : (
             creatorPosts.map((post: any) => (
-              <div key={post.id}
-                onClick={() => { setSelectedPostId(post.id); navigateTo('post-detail'); }}
-                className="bg-surface-container-low border border-outline-variant/20 rounded-sm p-4 cursor-pointer hover:border-primary/50 transition-colors"
-              >
-                <p className="text-sm text-on-surface-variant font-body leading-relaxed">{post.content}</p>
+              <article key={post.id} className="relative bg-surface-container-low border border-outline-variant/20 rounded-sm p-4 hover:border-primary/50 transition-colors focus-within:border-primary/50">
+                {/* Stretched-link button gives the whole card a keyboard-focusable target without nesting buttons in buttons. Recipe CTA below uses stopPropagation + higher z-index to override. */}
+                <button
+                  type="button"
+                  onClick={() => { setSelectedPostId(post.id); navigateTo('post-detail'); }}
+                  className="absolute inset-0 w-full h-full rounded-sm focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
+                  aria-label={post.content?.slice(0, 80) || 'Post'}
+                />
+                <p className="relative text-body text-on-surface-variant font-body leading-relaxed pointer-events-none">{post.content}</p>
                 {post.type === 'recipe' && post.recipe && (
-                  <div
+                  <button
+                    type="button"
                     onClick={(e) => {
                       e.stopPropagation();
                       const full = savedRecipes.find((r: any) => String(r.id) === String(post.recipe.id));
                       navigateToRecipe(full || { ...post.recipe, macros: { calories: post.recipe.cal, protein: post.recipe.pro, carbs: post.recipe.carbs, fats: post.recipe.fats } });
                     }}
-                    className="mt-3 bg-background border border-outline-variant/20 rounded-sm p-3 flex items-center gap-3 cursor-pointer hover:border-primary/30 transition-colors"
+                    className="relative z-10 mt-3 w-full text-left bg-background border border-outline-variant/20 rounded-sm p-3 flex items-center gap-3 hover:border-primary/30 transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
                   >
                     {post.recipe.img ? (
                       <img src={post.recipe.img} alt={post.recipe.title} className="w-12 h-12 rounded-sm object-cover" referrerPolicy="no-referrer" />
@@ -160,16 +167,16 @@ export default function CreatorProfile({ onBack }: { onBack: () => void }) {
                       </div>
                     )}
                     <div>
-                      <span className="font-headline font-bold text-xs uppercase text-tertiary">{post.recipe.title}</span>
-                      <span className="font-label text-[9px] tracking-widest text-on-surface-variant block mt-0.5">{post.recipe.cal} kcal · {post.recipe.pro}g P</span>
+                      <span className="font-headline font-bold text-body-sm uppercase text-tertiary">{post.recipe.title}</span>
+                      <span className="font-label text-micro tracking-widest text-on-surface-variant block mt-0.5">{post.recipe.cal} kcal · {post.recipe.pro}g P</span>
                     </div>
-                  </div>
+                  </button>
                 )}
-                <div className="flex items-center gap-4 mt-3 text-xs text-on-surface-variant">
+                <div className="relative flex items-center gap-4 mt-3 text-body-sm text-on-surface-variant pointer-events-none">
                   <span className="flex items-center gap-1"><Flame className="w-3.5 h-3.5" /> {post.likes}</span>
-                  <span className="font-label text-[9px] tracking-widest uppercase">{post.author?.time || ''}</span>
+                  <span className="font-label text-micro tracking-widest uppercase">{post.author?.time || ''}</span>
                 </div>
-              </div>
+              </article>
             ))
           )}
         </TabsContent>
@@ -195,14 +202,14 @@ export default function CreatorProfile({ onBack }: { onBack: () => void }) {
           <div className="bg-surface-container-low border border-outline-variant/20 rounded-sm p-5 space-y-4">
             {creator.bio && (
               <div>
-                <span className="font-label text-[9px] uppercase tracking-widest text-on-surface-variant block mb-1">{cp.bio}</span>
+                <span className="font-label text-micro uppercase tracking-widest text-on-surface-variant block mb-1">{cp.bio}</span>
                 <p className="text-sm text-on-surface font-body leading-relaxed">{creator.bio}</p>
               </div>
             )}
             {creator.badge && (
               <div className="flex items-center gap-2">
-                <span className="font-label text-[9px] uppercase tracking-widest text-on-surface-variant">{cp.badge}</span>
-                <span className="text-[9px] font-bold uppercase tracking-wider bg-primary/10 text-primary px-2 py-0.5 rounded">{creator.badge}</span>
+                <span className="font-label text-micro uppercase tracking-widest text-on-surface-variant">{cp.badge}</span>
+                <span className="text-micro font-bold uppercase tracking-wider bg-primary/10 text-primary px-2 py-0.5 rounded">{creator.badge}</span>
               </div>
             )}
             <div className="grid grid-cols-2 gap-3 pt-3 border-t border-outline-variant/10">
@@ -210,14 +217,14 @@ export default function CreatorProfile({ onBack }: { onBack: () => void }) {
                 <Flame className="w-4 h-4 text-primary" />
                 <div>
                   <span className="font-headline font-bold text-sm text-tertiary">{creator.streak}</span>
-                  <span className="font-label text-[9px] uppercase tracking-widest text-on-surface-variant block">{cp.streakDays}</span>
+                  <span className="font-label text-micro uppercase tracking-widest text-on-surface-variant block">{cp.streakDays}</span>
                 </div>
               </div>
               <div className="flex items-center gap-2">
                 <Calendar className="w-4 h-4 text-on-surface-variant" />
                 <div>
                   <span className="font-headline font-bold text-sm text-tertiary">{creator.recipes}</span>
-                  <span className="font-label text-[9px] uppercase tracking-widest text-on-surface-variant block">{cp.recipes}</span>
+                  <span className="font-label text-micro uppercase tracking-widest text-on-surface-variant block">{cp.recipes}</span>
                 </div>
               </div>
             </div>
@@ -227,7 +234,7 @@ export default function CreatorProfile({ onBack }: { onBack: () => void }) {
               creator.socialLinks.instagram || creator.socialLinks.youtube || creator.socialLinks.tiktok || creator.socialLinks.website
             ) && (
               <div className="pt-3 border-t border-outline-variant/10">
-                <span className="font-label text-[9px] uppercase tracking-widest text-on-surface-variant block mb-3">{cp.socialLinks}</span>
+                <span className="font-label text-micro uppercase tracking-widest text-on-surface-variant block mb-3">{cp.socialLinks}</span>
                 <div className="flex flex-wrap gap-2">
                   {creator.socialLinks.instagram && (
                     <a href={`https://instagram.com/${creator.socialLinks.instagram}`} target="_blank" rel="noopener noreferrer"

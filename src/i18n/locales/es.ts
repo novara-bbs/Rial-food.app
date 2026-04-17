@@ -862,6 +862,7 @@ const es = {
     notes: 'Notas',
     optional: 'Opcional',
     register: 'Registrar',
+    close: 'Cerrar',
   },
   // DailyCheckIn / Tolerance
   checkIn: {
@@ -959,12 +960,14 @@ const es = {
     calendar: 'Tu progreso',
     streak: 'Racha de {count} días',
     you: 'Tú',
+    youInitial: 'TÚ',
     participants: 'participantes',
     leave: 'Salir del desafío',
     descGreen7: 'Come al menos 3 porciones de verduras cada día durante 7 días',
     descHydration: 'Bebe al menos 3 litros de agua cada día durante 14 días',
     descProtein: 'Alcanza tu objetivo de proteínas cada día durante una semana',
     descNoSugar: 'Evita azúcar añadida durante 5 días consecutivos',
+    left: 'Abandonaste el reto',
   },
   // Discovery
   discovery: {
@@ -1094,6 +1097,12 @@ const es = {
     expired: 'Historia expirada',
     viewedBy: 'Visto por {count}',
     performanceAuto: 'Datos de tu último registro',
+    closeLabel: 'Cerrar historias',
+    timeNow: 'ahora',
+    timeHourAgo: '1h',
+    timeHoursAgo: '{n}h',
+    recovery: 'Recuperación',
+    strain: 'Esfuerzo',
   },
   // Notifications
   notifications: {

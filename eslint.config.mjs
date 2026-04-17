@@ -101,7 +101,6 @@ const q16MigrationAllowlist = [
   // two intentional SectionCard-shape occurrences (list container + meal item)
   // that don't fit the primitive; remove when we add a <ListCard> variant.
   'src/features/home/components/TodaysMeals.tsx',
-  'src/features/home/screens/Discover.tsx',
   'src/features/home/screens/Discovery.tsx',
   'src/features/home/screens/More.tsx',
   'src/features/legal/screens/PrivacyPolicy.tsx',
@@ -120,22 +119,15 @@ const q16MigrationAllowlist = [
   'src/features/profile/screens/Settings.tsx',
   // Cocina tab cleaned in Wave 2 of tab audit (2026-04-18). All recipes/*
   // screens and components migrated to tokens + SectionCard + HIG taps.
-  'src/features/social/components/AvatarRing.tsx',
-  'src/features/social/components/PostCard.tsx',
-  'src/features/social/components/ProgressPostCard.tsx',
-  'src/features/social/components/PublishRecipeSheet.tsx',
-  'src/features/social/components/RecipePicker.tsx',
+  // Explora tab cleaned in Wave 3 of tab audit (2026-04-18). Files below
+  // retain only SectionCard-shape drift (no text-[Npx], no dark:). Q16
+  // codemod will migrate them to <SectionCard>.
   'src/features/social/screens/ChallengeDetail.tsx',
   'src/features/social/screens/Challenges.tsx',
-  'src/features/social/screens/Community.tsx',
-  'src/features/social/screens/CreatePost.tsx',
-  'src/features/social/screens/CreateStory.tsx',
-  'src/features/social/screens/CreatorDashboard.tsx',
   'src/features/social/screens/CreatorProfile.tsx',
   'src/features/social/screens/CreatorVerification.tsx',
-  'src/features/social/screens/Notifications.tsx',
+  'src/features/social/screens/Discover.tsx',
   'src/features/social/screens/PostDetail.tsx',
-  'src/features/social/screens/StoryViewer.tsx',
   'src/features/wellness/components/BodyCalendar.tsx',
   'src/features/wellness/components/BodySnapshotCard.tsx',
   'src/features/wellness/components/BodyTimeline.tsx',

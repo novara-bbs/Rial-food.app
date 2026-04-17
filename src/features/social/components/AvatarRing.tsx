@@ -39,7 +39,7 @@ export default function AvatarRing({ src, name, size = 'md', hasStory, storyView
             </div>
           )}
         </div>
-        <span className="font-label text-[10px] tracking-widest text-on-surface-variant uppercase group-hover:text-primary transition-colors max-w-[70px] truncate text-center">
+        <span className="font-label text-micro tracking-widest text-on-surface-variant uppercase group-hover:text-primary transition-colors max-w-[70px] truncate text-center">
           {name}
         </span>
       </button>
@@ -63,7 +63,7 @@ export default function AvatarRing({ src, name, size = 'md', hasStory, storyView
           </div>
         )}
       </div>
-      <span className="font-label text-[10px] tracking-widest text-on-surface-variant uppercase group-hover:text-primary transition-colors max-w-[70px] truncate text-center">
+      <span className="font-label text-micro tracking-widest text-on-surface-variant uppercase group-hover:text-primary transition-colors max-w-[70px] truncate text-center">
         {name}
       </span>
     </div>

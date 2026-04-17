@@ -31,7 +31,7 @@ export default function PublishRecipeSheet({ recipe, onClose }: PublishRecipeShe
       undefined,
       { recipe: recipePayload }
     );
-    toast.success(t.recipeDetail?.published || 'Published!');
+    toast.success(t.recipeDetail.published);
     onClose();
   };
 
@@ -41,9 +41,9 @@ export default function PublishRecipeSheet({ recipe, onClose }: PublishRecipeShe
         <div className="flex items-center justify-between p-4 border-b border-outline-variant/10">
           <div className="flex items-center gap-2">
             <Globe className="w-5 h-5 text-primary" />
-            <h3 className="font-headline font-bold text-sm uppercase text-tertiary tracking-widest">{t.recipeDetail?.shareToFeed || 'Share to community'}</h3>
+            <h3 className="font-headline font-bold text-caption uppercase text-tertiary tracking-widest">{t.recipeDetail.shareToFeed}</h3>
           </div>
-          <button type="button" onClick={onClose} className="w-8 h-8 rounded-full bg-surface-container-highest flex items-center justify-center text-on-surface-variant hover:text-primary">
+          <button type="button" onClick={onClose} aria-label={t.common.close} className="w-11 h-11 rounded-full bg-surface-container-highest flex items-center justify-center text-on-surface-variant hover:text-primary">
             <X className="w-4 h-4" />
           </button>
         </div>
@@ -55,10 +55,10 @@ export default function PublishRecipeSheet({ recipe, onClose }: PublishRecipeShe
               <img src={recipe.img || recipe.image} alt={recipe.title} className="w-14 h-14 rounded-sm object-cover" referrerPolicy="no-referrer" />
             )}
             <div>
-              <h4 className="font-headline font-bold text-xs uppercase text-tertiary">{recipe.title}</h4>
+              <h4 className="font-headline font-bold text-caption uppercase text-tertiary">{recipe.title}</h4>
               <div className="flex gap-2 mt-1">
-                <span className="font-label text-[9px] tracking-widest text-primary">{recipe.macros?.calories || recipe.cal || 0} kcal</span>
-                <span className="font-label text-[9px] tracking-widest text-on-surface-variant">{recipe.macros?.protein || recipe.pro || 0}g P</span>
+                <span className="font-label text-micro tracking-widest text-primary">{recipe.macros?.calories || recipe.cal || 0} kcal</span>
+                <span className="font-label text-micro tracking-widest text-on-surface-variant">{recipe.macros?.protein || recipe.pro || 0}g P</span>
               </div>
             </div>
           </div>
@@ -69,8 +69,8 @@ export default function PublishRecipeSheet({ recipe, onClose }: PublishRecipeShe
           <textarea
             value={caption}
             onChange={(e) => setCaption(e.target.value)}
-            placeholder={t.recipeDetail?.publishCaption || 'Add a caption...'}
-            className="w-full bg-surface-container-highest border border-outline-variant/30 rounded-sm p-3 text-xs font-body text-tertiary placeholder:text-on-surface-variant/50 focus:outline-none focus:border-primary resize-none min-h-[80px]"
+            placeholder={t.recipeDetail.publishCaption}
+            className="w-full bg-surface-container-highest border border-outline-variant/30 rounded-sm p-3 text-caption font-body text-tertiary placeholder:text-on-surface-variant/50 focus:outline-none focus:border-primary resize-none min-h-[80px]"
             maxLength={300}
           />
         </div>
@@ -78,9 +78,9 @@ export default function PublishRecipeSheet({ recipe, onClose }: PublishRecipeShe
         <div className="px-4 pb-4">
           <button type="button"
             onClick={handlePublish}
-            className="w-full py-3 bg-primary text-on-primary rounded-sm font-headline text-xs font-bold uppercase tracking-widest flex items-center justify-center gap-2 hover:opacity-90 transition-opacity"
+            className="w-full min-h-11 bg-primary text-on-primary rounded-sm font-headline text-caption font-bold uppercase tracking-widest flex items-center justify-center gap-2 hover:opacity-90 transition-opacity"
           >
-            <Send className="w-4 h-4" /> {t.recipeDetail?.shareToFeed || 'Share'}
+            <Send className="w-4 h-4" /> {t.recipeDetail.shareToFeed}
           </button>
         </div>
       </div>

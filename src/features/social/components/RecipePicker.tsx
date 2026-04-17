@@ -27,7 +27,7 @@ export default function RecipePicker({ recipes, onSelect, onClose }: RecipePicke
             <ChefHat className="w-5 h-5 text-primary" />
             <h3 className="font-headline font-bold text-sm uppercase text-tertiary tracking-widest">{t.createPost.selectRecipe}</h3>
           </div>
-          <button type="button" onClick={onClose} className="w-8 h-8 rounded-full bg-surface-container-highest flex items-center justify-center text-on-surface-variant hover:text-primary transition-colors">
+          <button type="button" onClick={onClose} aria-label={t.common.close} className="w-11 h-11 rounded-full bg-surface-container-highest flex items-center justify-center text-on-surface-variant hover:text-primary transition-colors">
             <X className="w-4 h-4" />
           </button>
         </div>
@@ -40,7 +40,7 @@ export default function RecipePicker({ recipes, onSelect, onClose }: RecipePicke
               value={search}
               onChange={(e) => setSearch(e.target.value)}
               placeholder={t.createPost.searchRecipes}
-              className="w-full pl-10 pr-4 py-2.5 bg-surface-container-highest border border-outline-variant/30 rounded-sm text-xs font-label tracking-widest uppercase text-tertiary placeholder:text-on-surface-variant/50 focus:outline-none focus:border-primary"
+              className="w-full pl-10 pr-4 min-h-11 bg-surface-container-highest border border-outline-variant/30 rounded-sm text-caption font-label tracking-widest uppercase text-tertiary placeholder:text-on-surface-variant/50 focus:outline-none focus:border-primary"
             />
           </div>
         </div>
@@ -48,7 +48,7 @@ export default function RecipePicker({ recipes, onSelect, onClose }: RecipePicke
         {/* List */}
         <div className="flex-1 overflow-y-auto px-4 pb-4 space-y-2">
           {filtered.length === 0 ? (
-            <p className="text-center text-xs text-on-surface-variant py-8">{t.createPost.noRecipesFound || 'No recipes found'}</p>
+            <p className="text-center text-caption text-on-surface-variant py-8">{t.createPost.noRecipesFound}</p>
           ) : (
             filtered.map((recipe: any) => (
               <button type="button"
@@ -70,10 +70,10 @@ export default function RecipePicker({ recipes, onSelect, onClose }: RecipePicke
                   <img src={recipe.img || recipe.image} alt={recipe.title} className="w-12 h-12 rounded-sm object-cover shrink-0" referrerPolicy="no-referrer" />
                 )}
                 <div className="flex-1 min-w-0">
-                  <h4 className="font-headline font-bold text-[11px] uppercase text-tertiary truncate">{recipe.title}</h4>
+                  <h4 className="font-headline font-bold text-caption uppercase text-tertiary truncate">{recipe.title}</h4>
                   <div className="flex gap-2 mt-1">
-                    <span className="font-label text-[9px] tracking-widest text-primary">{recipe.macros?.calories || recipe.cal || 0} kcal</span>
-                    <span className="font-label text-[9px] tracking-widest text-on-surface-variant">{recipe.macros?.protein || recipe.pro || 0}g P</span>
+                    <span className="font-label text-micro tracking-widest text-primary">{recipe.macros?.calories || recipe.cal || 0} kcal</span>
+                    <span className="font-label text-micro tracking-widest text-on-surface-variant">{recipe.macros?.protein || recipe.pro || 0}g P</span>
                   </div>
                 </div>
               </button>

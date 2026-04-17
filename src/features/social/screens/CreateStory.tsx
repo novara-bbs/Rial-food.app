@@ -53,23 +53,23 @@ export default function CreateStory({ onBack }: { onBack: () => void }) {
   };
 
   const types: { key: StoryType; icon: React.ReactNode; label: string }[] = [
-    { key: 'text', icon: <Type className="w-4 h-4" />, label: t.stories?.text || 'Text' },
-    { key: 'performance', icon: <Activity className="w-4 h-4" />, label: t.stories?.performance || 'Performance' },
-    { key: 'recipe', icon: <ChefHat className="w-4 h-4" />, label: t.stories?.recipe || 'Recipe' },
+    { key: 'text', icon: <Type className="w-4 h-4" />, label: t.stories.text },
+    { key: 'performance', icon: <Activity className="w-4 h-4" />, label: t.stories.performance },
+    { key: 'recipe', icon: <ChefHat className="w-4 h-4" />, label: t.stories.recipe },
   ];
 
   return (
     <PageShell maxWidth="narrow" spacing="md">
       <PageHeader
         onBack={onBack}
-        title={t.stories?.create || 'Create Story'}
+        title={t.stories.create}
         rightAction={
           <button type="button"
             onClick={handlePublish}
             disabled={!canPublish()}
-            className="bg-primary text-on-primary px-4 py-2 rounded-sm font-label text-xs font-bold tracking-widest uppercase flex items-center gap-2 hover:bg-primary-container transition-colors disabled:opacity-50"
+            className="bg-primary text-on-primary px-4 min-h-11 rounded-sm font-label text-caption font-bold tracking-widest uppercase flex items-center gap-2 hover:bg-primary-container transition-colors disabled:opacity-50"
           >
-            <Send className="w-4 h-4" /> {t.stories?.publish || 'Publish'}
+            <Send className="w-4 h-4" /> {t.stories.publish}
           </button>
         }
       />
@@ -80,7 +80,7 @@ export default function CreateStory({ onBack }: { onBack: () => void }) {
           <button type="button"
             key={key}
             onClick={() => setStoryType(key)}
-            className={`flex items-center gap-2 px-4 py-2.5 rounded-sm font-label text-[10px] font-bold tracking-widest uppercase transition-all ${
+            className={`flex items-center gap-2 px-4 min-h-11 rounded-sm font-label text-micro font-bold tracking-widest uppercase transition-all ${
               storyType === key
                 ? 'bg-primary text-on-primary'
                 : 'bg-surface-container-low text-on-surface-variant border border-outline-variant/20 hover:border-primary/50'
@@ -102,7 +102,7 @@ export default function CreateStory({ onBack }: { onBack: () => void }) {
               <textarea
                 value={textContent}
                 onChange={(e) => setTextContent(e.target.value)}
-                placeholder={t.stories?.writeStory || 'Write your story...'}
+                placeholder={t.stories.writeStory}
                 className="w-full bg-transparent text-on-overlay text-2xl font-headline font-bold text-center focus:outline-none resize-none min-h-[200px] placeholder:text-on-overlay/50"
                 maxLength={200}
               />
@@ -112,7 +112,8 @@ export default function CreateStory({ onBack }: { onBack: () => void }) {
                 <button type="button"
                   key={color}
                   onClick={() => setBgColor(color)}
-                  className={`w-8 h-8 rounded-full border-2 transition-transform ${bgColor === color ? 'border-primary scale-110' : 'border-transparent'}`}
+                  aria-label={t.stories.pickColor}
+                  className={`w-11 h-11 rounded-full border-2 transition-transform ${bgColor === color ? 'border-primary scale-110' : 'border-transparent'}`}
                   style={{ backgroundColor: color }}
                 />
               ))}
@@ -125,14 +126,14 @@ export default function CreateStory({ onBack }: { onBack: () => void }) {
             <div className="flex flex-col items-center text-center">
               <Activity className="w-10 h-10 text-primary mb-3" />
               <span className="font-headline text-4xl font-black text-tertiary">{userPerformance.recovery}%</span>
-              <span className="font-label text-xs tracking-widest text-primary uppercase mt-2">{t.community.recovery}</span>
+              <span className="font-label text-caption tracking-widest text-primary uppercase mt-2">{t.community.recovery}</span>
             </div>
             <div className="flex flex-col items-center text-center">
               <Activity className="w-10 h-10 text-brand-secondary mb-3" />
               <span className="font-headline text-4xl font-black text-tertiary">{userPerformance.strain}</span>
-              <span className="font-label text-xs tracking-widest text-brand-secondary uppercase mt-2">{t.community.strain}</span>
+              <span className="font-label text-caption tracking-widest text-brand-secondary uppercase mt-2">{t.community.strain}</span>
             </div>
-            <p className="col-span-2 text-center text-xs text-on-surface-variant mt-4">{t.stories?.performanceAuto || 'Auto-pulled from your latest data'}</p>
+            <p className="col-span-2 text-center text-caption text-on-surface-variant mt-4">{t.stories.performanceAuto}</p>
           </div>
         )}
 
@@ -146,14 +147,14 @@ export default function CreateStory({ onBack }: { onBack: () => void }) {
                 <div className="p-6">
                   <h3 className="font-headline font-bold text-xl uppercase text-tertiary">{selectedRecipe.title}</h3>
                   <div className="flex gap-4 mt-3">
-                    <span className="font-label text-sm tracking-widest text-primary">{selectedRecipe.cal} kcal</span>
-                    <span className="font-label text-sm tracking-widest text-on-surface-variant">{selectedRecipe.pro}g P</span>
+                    <span className="font-label text-body-sm tracking-widest text-primary">{selectedRecipe.cal} kcal</span>
+                    <span className="font-label text-body-sm tracking-widest text-on-surface-variant">{selectedRecipe.pro}g P</span>
                   </div>
                   <button type="button"
                     onClick={() => setSelectedRecipe(null)}
-                    className="mt-4 text-xs text-on-surface-variant hover:text-error font-label tracking-widest uppercase"
+                    className="mt-4 min-h-11 px-2 text-caption text-on-surface-variant hover:text-error font-label tracking-widest uppercase"
                   >
-                    {t.createPost.removeImage || 'Remove'}
+                    {t.createPost.removeImage}
                   </button>
                 </div>
               </div>
@@ -163,7 +164,7 @@ export default function CreateStory({ onBack }: { onBack: () => void }) {
                 className="w-full py-16 bg-surface-container-low border-2 border-dashed border-outline-variant/30 rounded-sm hover:border-primary/50 transition-colors flex flex-col items-center gap-3"
               >
                 <ChefHat className="w-8 h-8 text-on-surface-variant" />
-                <span className="font-label text-xs tracking-widest text-on-surface-variant uppercase">{t.createPost.selectRecipe}</span>
+                <span className="font-label text-caption tracking-widest text-on-surface-variant uppercase">{t.createPost.selectRecipe}</span>
               </button>
             )}
           </div>
@@ -176,7 +177,8 @@ export default function CreateStory({ onBack }: { onBack: () => void }) {
                 <img src={image} alt="Preview" className="w-full max-h-[400px] object-cover" />
                 <button type="button"
                   onClick={() => setImage(null)}
-                  className="absolute top-3 right-3 w-8 h-8 bg-black/50 rounded-full flex items-center justify-center text-on-overlay hover:bg-black/70 transition-colors"
+                  aria-label={t.createPost.removeImage}
+                  className="absolute top-3 right-3 w-11 h-11 bg-black/50 rounded-full flex items-center justify-center text-on-overlay hover:bg-black/70 transition-colors"
                 >
                   ✕
                 </button>

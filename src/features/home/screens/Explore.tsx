@@ -1,18 +1,39 @@
-import { useState } from 'react';
 import { useI18n } from '../../../i18n';
+import { useLocalStorageState } from '../../../hooks/useLocalStorageState';
 import TabNav from '../../../components/patterns/TabNav';
 import Discovery from './Discovery';
 import Community from '../../social/screens/Community';
-import Discover from './Discover';
+import Discover from '../../social/screens/Discover';
 
-export default function Explore({ onNavigateToRecipe, savedRecipes, onSaveRecipe, communityPosts, onAddComment }: { onNavigateToRecipe: (r: any) => void, savedRecipes?: any[], onSaveRecipe?: (r: any) => void, communityPosts?: any[], onAddComment?: (postId: number, comment: string) => void }) {
+/**
+ * Explore tab host — three subtabs (recipes / feed / discover) share the
+ * container. Subtab selection persists via `rial_exploreActiveTab` so switching
+ * away to Home and back lands the user on the same view (Wave 3).
+ *
+ * Discover was relocated from `features/home/screens/` to `features/social/
+ * screens/` in Wave 3 — feature-first alignment, since Discover is purely a
+ * social discovery surface.
+ */
+export default function Explore({
+  onNavigateToRecipe,
+  savedRecipes,
+  onSaveRecipe,
+  communityPosts,
+  onAddComment,
+}: {
+  onNavigateToRecipe: (r: any) => void;
+  savedRecipes?: any[];
+  onSaveRecipe?: (r: any) => void;
+  communityPosts?: any[];
+  onAddComment?: (postId: number, comment: string) => void;
+}) {
   const { t } = useI18n();
-  const [activeTab, setActiveTab] = useState<'recipes' | 'feed' | 'discover'>('recipes');
+  const [activeTab, setActiveTab] = useLocalStorageState<'recipes' | 'feed' | 'discover'>('exploreActiveTab', 'recipes');
 
   const tabs = [
     { id: 'recipes' as const, label: t.tabs.forYou },
-    { id: 'feed' as const, label: t.tabs.feed || 'Feed' },
-    { id: 'discover' as const, label: t.tabs.discover || 'Descubrir' },
+    { id: 'feed' as const, label: t.tabs.feed },
+    { id: 'discover' as const, label: t.tabs.discover },
   ];
 
   return (

@@ -31,6 +31,9 @@ import path from 'node:path';
  *         ImportRecipeURL, CookMode, RecipeNutritionBar, RecipeSubstitutionPicker
  *         migrated to <SectionCard> + tokens + HIG 44×44 tap targets; iframe
  *         sandbox added to 3 embeds; unsave confirm dialog wired)
+ *    72 — 2026-04-18 Wave 3 Explora tab polish (ProgressPostCard migrated to
+ *         <SectionCard> with flex layout; social drift cleaned across 10 files
+ *         — 0 text-[Npx] remaining in src/features/social/**)
  *
  * TodaysMeals retains 2 occurrences (list container + meal item card) that
  * don't fit SectionCard's fixed-padding + space-y shape; those need a
@@ -38,7 +41,7 @@ import path from 'node:path';
  *
  * Q16 codemod sprint drops it further; when it reaches 0, delete this test.
  */
-const BASELINE = 73;
+const BASELINE = 72;
 
 const SHAPE = /bg-surface-container-low[^"'`]*\bborder-outline-variant\/20[^"'`]*\brounded-sm/;
 

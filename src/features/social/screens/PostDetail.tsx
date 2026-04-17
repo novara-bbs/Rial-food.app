@@ -36,23 +36,25 @@ export default function PostDetail({ onBack }: { onBack: () => void }) {
   if (!post) {
     return (
       <div className="px-6 max-w-2xl mx-auto pt-8 space-y-4">
-        <PageHeader onBack={onBack} label="" title={t.postDetail?.title || 'Post'} />
-        <p className="text-center text-on-surface-variant mt-8">{t.postDetail?.notFound || 'Post not found'}</p>
+        <PageHeader onBack={onBack} label="" title={t.postDetail.title} />
+        <p className="text-center text-on-surface-variant mt-8">{t.postDetail.notFound}</p>
       </div>
     );
   }
 
   return (
     <PageShell maxWidth="narrow" spacing="md">
-      <PageHeader onBack={onBack} title={t.postDetail?.title || 'Post'} />
+      <PageHeader onBack={onBack} title={t.postDetail.title} />
 
-      {/* Post */}
+      {/* Post — hideComments: PostDetail renders the canonical comments list
+          below, so PostCard should not duplicate it. Wave 3 dedup. */}
       <PostCard
         post={post}
         isLiked={likedPosts.includes(post.id)}
         isSaved={savedPosts.includes(post.id)}
         isOwn={isOwn}
         unitSystem={unitSystem}
+        hideComments
         onLike={() => toggleLikePost(post.id)}
         onSave={() => toggleSavePost(post.id)}
         onComment={(text) => handleAddComment(post.id, text)}
@@ -73,10 +75,10 @@ export default function PostDetail({ onBack }: { onBack: () => void }) {
       {/* All comments */}
       {post.commentsList && post.commentsList.length > 0 && (
         <div className="space-y-3">
-          <h3 className="font-headline font-bold text-xs uppercase text-tertiary tracking-widest">{t.postDetail?.allComments || 'All comments'} ({post.commentsList.length})</h3>
+          <h3 className="font-headline font-bold text-caption uppercase text-tertiary tracking-widest">{t.postDetail.allComments} ({post.commentsList.length})</h3>
           {post.commentsList.map((comment: any) => (
             <div key={comment.id} className="flex gap-3 p-3 bg-surface-container-low border border-outline-variant/20 rounded-sm">
-              <div className="w-8 h-8 rounded-full bg-surface-container-highest flex items-center justify-center text-[11px] font-bold text-tertiary shrink-0">
+              <div className="w-8 h-8 rounded-full bg-surface-container-highest flex items-center justify-center text-caption font-bold text-tertiary shrink-0">
                 {comment.authorImg ? (
                   <img src={comment.authorImg} alt={comment.author} className="w-8 h-8 rounded-full object-cover" referrerPolicy="no-referrer" />
                 ) : (
@@ -85,10 +87,10 @@ export default function PostDetail({ onBack }: { onBack: () => void }) {
               </div>
               <div className="flex-1">
                 <div className="flex items-baseline gap-2">
-                  <span className="font-headline text-xs font-bold text-tertiary">{comment.author}</span>
-                  <span className="font-label text-[9px] tracking-widest text-on-surface-variant uppercase">{comment.time}</span>
+                  <span className="font-headline text-caption font-bold text-tertiary">{comment.author}</span>
+                  <span className="font-label text-micro tracking-widest text-on-surface-variant uppercase">{comment.time}</span>
                 </div>
-                <p className="text-xs text-on-surface-variant mt-1 leading-relaxed">{comment.text}</p>
+                <p className="text-caption text-on-surface-variant mt-1 leading-relaxed">{comment.text}</p>
               </div>
             </div>
           ))}
@@ -102,30 +104,37 @@ export default function PostDetail({ onBack }: { onBack: () => void }) {
           value={commentText}
           onChange={(e) => setCommentText(e.target.value)}
           placeholder={t.common.addComment}
-          className="flex-1 bg-surface-container-highest border border-outline-variant/30 py-2.5 px-3 text-xs font-label tracking-widest focus:outline-none focus:border-primary uppercase rounded-sm text-tertiary placeholder:text-on-surface-variant/50"
+          className="flex-1 bg-surface-container-highest border border-outline-variant/30 min-h-11 px-3 text-caption font-label tracking-widest focus:outline-none focus:border-primary uppercase rounded-sm text-tertiary placeholder:text-on-surface-variant/50"
           onKeyDown={(e) => e.key === 'Enter' && handleSubmitComment()}
         />
         <button type="button"
           onClick={handleSubmitComment}
           disabled={!commentText.trim()}
-          className="w-10 h-10 rounded-sm bg-primary text-on-primary flex items-center justify-center disabled:opacity-50 disabled:cursor-not-allowed"
+          aria-label={t.common.send}
+          className="w-11 h-11 rounded-sm bg-primary text-on-primary flex items-center justify-center disabled:opacity-50 disabled:cursor-not-allowed"
         >
           <Send className="w-4 h-4" />
         </button>
       </div>
 
-      {/* More from creator */}
+      {/* More from creator — card converted to <button> to fix nested-button
+          a11y issue (was clickable div inside a page). */}
       {morePosts.length > 0 && (
         <div className="space-y-3">
-          <h3 className="font-headline font-bold text-xs uppercase text-tertiary tracking-widest">{t.postDetail?.moreFromCreator || 'More from this creator'}</h3>
+          <h3 className="font-headline font-bold text-caption uppercase text-tertiary tracking-widest">{t.postDetail.moreFromCreator}</h3>
           {morePosts.map((p: any) => (
-            <div key={p.id} className="bg-surface-container-low border border-outline-variant/20 rounded-sm p-4 cursor-pointer hover:border-primary/50 transition-colors" onClick={() => {
-              setSelectedPostId(p.id);
-              navigateTo('post-detail');
-            }}>
-              <p className="text-sm text-on-surface-variant line-clamp-2">{p.content}</p>
-              <span className="font-label text-[9px] tracking-widest text-on-surface-variant uppercase mt-2 block">{p.author?.time}</span>
-            </div>
+            <button type="button"
+              key={p.id}
+              onClick={() => {
+                setSelectedPostId(p.id);
+                navigateTo('post-detail');
+              }}
+              className="w-full text-left bg-surface-container-low border border-outline-variant/20 rounded-sm p-4 hover:border-primary/50 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary transition-colors"
+              aria-label={p.content?.slice(0, 80)}
+            >
+              <p className="text-body-sm text-on-surface-variant line-clamp-2">{p.content}</p>
+              <span className="font-label text-micro tracking-widest text-on-surface-variant uppercase mt-2 block">{p.author?.time}</span>
+            </button>
           ))}
         </div>
       )}

@@ -15,7 +15,7 @@ interface Requirement {
 
 export default function CreatorVerification({ onBack }: { onBack: () => void }) {
   const { t } = useI18n();
-  const { savedRecipes, communityPosts, userProfile, setUserProfile } = useAppState();
+  const { savedRecipes, communityPosts, userProfile, setUserProfile, followedCreators } = useAppState();
 
   const BADGES = [
     { id: 'chef', label: t.creator.badges.chef, icon: Utensils, desc: t.creator.badges.chefDesc },
@@ -30,8 +30,10 @@ export default function CreatorVerification({ onBack }: { onBack: () => void }) 
   const recipesCount = savedRecipes.length;
   const postsCount = communityPosts.filter((p: any) => p.author?.name !== undefined).length;
 
-  // Compute real metrics from available data
-  const followedCreators: string[] = JSON.parse(localStorage.getItem('followedCreators') || '[]');
+  // Compute real metrics from available data.
+  // `followedCreators` now comes from AppStateContext (Wave 3) instead of a raw
+  // `JSON.parse(localStorage.getItem)` read — same source of truth as every
+  // other screen, so it reflects live toggles.
   const followersCount = followedCreators.length; // simplified: counts how many creators user follows as proxy
   const firstPostDate = communityPosts.length > 0 ? new Date(communityPosts[communityPosts.length - 1]?.date || Date.now()) : new Date();
   const daysActive = Math.max(1, Math.floor((Date.now() - firstPostDate.getTime()) / 86_400_000));
@@ -69,7 +71,7 @@ export default function CreatorVerification({ onBack }: { onBack: () => void }) 
             {t.creator.reviewDescription}
           </p>
           <div className="bg-surface-container-low border border-outline-variant/20 rounded-sm p-4 max-w-xs mx-auto text-left space-y-2">
-            <p className="font-label text-[9px] uppercase tracking-widest text-primary font-bold">{t.creator.applicationSummary}</p>
+            <p className="font-label text-micro uppercase tracking-widest text-primary font-bold">{t.creator.applicationSummary}</p>
             <p className="text-sm font-body text-on-surface">
               {t.creator.badge}: <span className="font-bold">{BADGES.find(b => b.id === selectedBadge)?.label}</span>
             </p>
@@ -121,7 +123,7 @@ export default function CreatorVerification({ onBack }: { onBack: () => void }) 
             <div className="flex-1">
               <p className={`font-body text-sm font-medium ${req.met ? 'text-primary' : 'text-on-surface'}`}>{req.label}</p>
               {!req.met && (
-                <p className="font-label text-[9px] uppercase tracking-widest text-on-surface-variant mt-0.5">
+                <p className="font-label text-micro uppercase tracking-widest text-on-surface-variant mt-0.5">
                   {typeof req.current === 'number' && req.current < req.target
                     ? `${req.current} / ${req.target}`
                     : t.creator.notMet}
@@ -153,7 +155,7 @@ export default function CreatorVerification({ onBack }: { onBack: () => void }) 
               <p className={`font-headline font-bold text-sm uppercase ${selectedBadge === badge.id ? 'text-primary' : 'text-tertiary'}`}>
                 {badge.label}
               </p>
-              <p className="font-label text-[9px] uppercase tracking-widest text-on-surface-variant mt-1 leading-relaxed">
+              <p className="font-label text-micro uppercase tracking-widest text-on-surface-variant mt-1 leading-relaxed">
                 {badge.desc}
               </p>
               {selectedBadge === badge.id && (
@@ -191,7 +193,7 @@ export default function CreatorVerification({ onBack }: { onBack: () => void }) 
           {allMet ? t.creator.applyVerification : `${t.creator.apply} (${metCount}/4 ${t.creator.requirementsCount})`}
         </button>
         {!allMet && (
-          <p className="text-center text-[10px] text-on-surface-variant font-label uppercase tracking-widest">
+          <p className="text-center text-micro text-on-surface-variant font-label uppercase tracking-widest">
             {t.creator.applyMinimum}
           </p>
         )}

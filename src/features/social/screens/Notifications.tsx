@@ -80,12 +80,12 @@ export default function Notifications({ onBack }: { onBack: () => void }) {
 
   const getDescription = (n: NotificationType) => {
     switch (n.type) {
-      case 'like': return notif.liked || 'liked your post';
-      case 'comment': return notif.commented || 'commented on your post';
-      case 'follow': return notif.followed || 'started following you';
-      case 'repost': return notif.reposted || 'reposted your post';
-      case 'recipe_save': return notif.savedRecipe || 'saved your recipe';
-      case 'challenge': return notif.challengeUpdate || 'challenge update';
+      case 'like': return notif.liked;
+      case 'comment': return notif.commented;
+      case 'follow': return notif.followed;
+      case 'repost': return notif.reposted;
+      case 'recipe_save': return notif.savedRecipe;
+      case 'challenge': return notif.challengeUpdate;
       default: return '';
     }
   };
@@ -94,7 +94,7 @@ export default function Notifications({ onBack }: { onBack: () => void }) {
     if (items.length === 0) return null;
     return (
       <div className="space-y-1">
-        <h3 className="font-label text-[9px] tracking-[0.3em] text-on-surface-variant uppercase px-2 py-2">{label}</h3>
+        <h3 className="font-label text-micro tracking-[0.3em] text-on-surface-variant uppercase px-2 py-2">{label}</h3>
         {items.map(n => (
           <button
             key={n.id}
@@ -105,12 +105,12 @@ export default function Notifications({ onBack }: { onBack: () => void }) {
           >
             <img src={n.fromUserAvatar} alt="" className="w-10 h-10 rounded-full object-cover shrink-0" referrerPolicy="no-referrer" />
             <div className="flex-1 min-w-0">
-              <p className="text-xs text-on-surface-variant">
+              <p className="text-caption text-on-surface-variant">
                 <span className="font-headline font-bold text-tertiary">{n.fromUserName}</span>{' '}
                 {getDescription(n)}
               </p>
               {n.targetPreview && (
-                <p className="text-[10px] text-on-surface-variant/70 truncate mt-0.5">{n.targetPreview}</p>
+                <p className="text-micro text-on-surface-variant/70 truncate mt-0.5">{n.targetPreview}</p>
               )}
             </div>
             <div className="flex items-center gap-2 shrink-0">
@@ -127,24 +127,24 @@ export default function Notifications({ onBack }: { onBack: () => void }) {
     <PageShell maxWidth="narrow" spacing="md">
       <PageHeader
         onBack={onBack}
-        title={notif.title || 'Notifications'}
+        title={notif.title}
         rightAction={notifications.some(n => !n.read) ? (
           <button type="button"
             onClick={markAllNotificationsRead}
-            className="flex items-center gap-1.5 text-xs text-primary font-label tracking-widest uppercase hover:underline"
+            className="flex items-center gap-1.5 min-h-11 px-2 text-caption text-primary font-label tracking-widest uppercase hover:underline"
           >
-            <CheckCheck className="w-4 h-4" /> {notif.markAllRead || 'Mark all read'}
+            <CheckCheck className="w-4 h-4" /> {notif.markAllRead}
           </button>
         ) : undefined}
       />
 
       {notifications.length === 0 ? (
-        <EmptyState icon="🔔" title={notif.title || 'Notifications'} description={notif.empty || 'No notifications'} />
+        <EmptyState icon="🔔" title={notif.title} description={notif.empty} />
       ) : (
         <div className="space-y-4">
-          {renderGroup(notif.today || 'Today', grouped.today)}
-          {renderGroup(notif.thisWeek || 'This Week', grouped.thisWeek)}
-          {renderGroup(notif.earlier || 'Earlier', grouped.earlier)}
+          {renderGroup(notif.today, grouped.today)}
+          {renderGroup(notif.thisWeek, grouped.thisWeek)}
+          {renderGroup(notif.earlier, grouped.earlier)}
         </div>
       )}
     </PageShell>

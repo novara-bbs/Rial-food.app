@@ -49,21 +49,21 @@ export default function CreatorDashboard({ onBack }: { onBack: () => void }) {
           <CardContent className="p-4 text-center">
             <Eye className="w-5 h-5 text-primary mx-auto mb-1" />
             <p className="font-headline font-black text-2xl text-tertiary">{(totalViews / 1000).toFixed(1)}k</p>
-            <p className="font-label text-[9px] uppercase tracking-widest text-on-surface-variant">{cd.views}</p>
+            <p className="font-label text-micro uppercase tracking-widest text-on-surface-variant">{cd.views}</p>
           </CardContent>
         </Card>
         <Card className="bg-surface-container-low border-outline-variant/20">
           <CardContent className="p-4 text-center">
             <Bookmark className="w-5 h-5 text-brand-secondary mx-auto mb-1" />
             <p className="font-headline font-black text-2xl text-tertiary">{(totalSaves / 1000).toFixed(1)}k</p>
-            <p className="font-label text-[9px] uppercase tracking-widest text-on-surface-variant">{cd.saves}</p>
+            <p className="font-label text-micro uppercase tracking-widest text-on-surface-variant">{cd.saves}</p>
           </CardContent>
         </Card>
         <Card className="bg-surface-container-low border-outline-variant/20">
           <CardContent className="p-4 text-center">
             <DollarSign className="w-5 h-5 text-primary mx-auto mb-1" />
             <p className="font-headline font-black text-2xl text-tertiary">0€</p>
-            <p className="font-label text-[9px] uppercase tracking-widest text-on-surface-variant">{cd.revenue}</p>
+            <p className="font-label text-micro uppercase tracking-widest text-on-surface-variant">{cd.revenue}</p>
           </CardContent>
         </Card>
       </div>
@@ -88,7 +88,7 @@ export default function CreatorDashboard({ onBack }: { onBack: () => void }) {
                 <Badge variant="outline" className="text-primary border-primary/30">+{0}%</Badge>
               </div>
               <Progress value={68} className="h-2" />
-              <p className="font-label text-[9px] uppercase tracking-widest text-on-surface-variant">{cd.monthlyGoal}</p>
+              <p className="font-label text-micro uppercase tracking-widest text-on-surface-variant">{cd.monthlyGoal}</p>
 
               <Separator className="my-3" />
 
@@ -114,10 +114,10 @@ export default function CreatorDashboard({ onBack }: { onBack: () => void }) {
                 <div className="flex-1 min-w-0">
                   <p className="font-body text-sm font-medium text-on-surface truncate">{recipe.name}</p>
                   <div className="flex gap-3 mt-1">
-                    <span className="font-label text-[9px] uppercase tracking-widest text-on-surface-variant flex items-center gap-1">
+                    <span className="font-label text-micro uppercase tracking-widest text-on-surface-variant flex items-center gap-1">
                       <Eye className="w-3 h-3" /> {(recipe.views / 1000).toFixed(1)}k
                     </span>
-                    <span className="font-label text-[9px] uppercase tracking-widest text-on-surface-variant flex items-center gap-1">
+                    <span className="font-label text-micro uppercase tracking-widest text-on-surface-variant flex items-center gap-1">
                       <Bookmark className="w-3 h-3" /> {recipe.saves}
                     </span>
                   </div>
@@ -139,7 +139,7 @@ export default function CreatorDashboard({ onBack }: { onBack: () => void }) {
               {[{ month: 'Abr', amount: 0 }].map((m, i) => (
                 <div key={i} className="space-y-1">
                   <div className="flex items-center justify-between">
-                    <span className="font-label text-[9px] uppercase tracking-widest text-on-surface-variant">{m.month} 2026</span>
+                    <span className="font-label text-micro uppercase tracking-widest text-on-surface-variant">{m.month} 2026</span>
                     <span className="font-headline font-bold text-sm text-tertiary">{m.amount}€</span>
                   </div>
                   <Progress value={(m.amount / 400) * 100} className="h-1.5" />
@@ -149,7 +149,7 @@ export default function CreatorDashboard({ onBack }: { onBack: () => void }) {
               <Separator className="my-3" />
 
               <div className="bg-primary/10 border border-primary/20 rounded-sm p-4 space-y-2">
-                <p className="font-label text-[9px] uppercase tracking-widest text-primary font-bold">{cd.revenueShare}</p>
+                <p className="font-label text-micro uppercase tracking-widest text-primary font-bold">{cd.revenueShare}</p>
                 <div className="flex justify-between">
                   <span className="font-body text-sm text-on-surface-variant">{cd.yourShare}</span>
                   <span className="font-headline font-black text-tertiary">0.00€</span>

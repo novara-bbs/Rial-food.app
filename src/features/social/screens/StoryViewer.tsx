@@ -41,6 +41,18 @@ export default function StoryViewer({ onBack }: { onBack: () => void }) {
     }
   }, [currentStory?.id]);
 
+  const advanceSlide = useCallback(() => {
+    if (!currentStory) return;
+    if (slideIndex < currentStory.slides.length - 1) {
+      setSlideIndex(prev => prev + 1);
+    } else if (storyIndex < activeStories.length - 1) {
+      setStoryIndex(prev => prev + 1);
+      setSlideIndex(0);
+    } else {
+      onBack();
+    }
+  }, [storyIndex, slideIndex, currentStory, activeStories.length, onBack]);
+
   // Auto-advance timer
   useEffect(() => {
     if (!currentSlide) return;
@@ -55,19 +67,7 @@ export default function StoryViewer({ onBack }: { onBack: () => void }) {
       });
     }, 50);
     return () => clearInterval(interval);
-  }, [storyIndex, slideIndex]);
-
-  const advanceSlide = useCallback(() => {
-    if (!currentStory) return;
-    if (slideIndex < currentStory.slides.length - 1) {
-      setSlideIndex(prev => prev + 1);
-    } else if (storyIndex < activeStories.length - 1) {
-      setStoryIndex(prev => prev + 1);
-      setSlideIndex(0);
-    } else {
-      onBack();
-    }
-  }, [storyIndex, slideIndex, currentStory, activeStories.length, onBack]);
+  }, [storyIndex, slideIndex, advanceSlide, currentSlide]);
 
   const goBack = useCallback(() => {
     if (slideIndex > 0) {
@@ -85,11 +85,19 @@ export default function StoryViewer({ onBack }: { onBack: () => void }) {
     else advanceSlide();
   };
 
+  const formatRelativeTime = (iso: string): string => {
+    const diff = Date.now() - new Date(iso).getTime();
+    const hours = Math.floor(diff / 3600000);
+    if (hours < 1) return t.stories.timeNow;
+    if (hours === 1) return t.stories.timeHourAgo;
+    return t.stories.timeHoursAgo.replace('{n}', String(hours));
+  };
+
   if (!currentStory || !currentSlide) {
     return (
       <div className="fixed inset-0 z-50 bg-black flex items-center justify-center">
-        <p className="text-on-overlay">{t.stories?.expired || 'No stories'}</p>
-        <button type="button" onClick={onBack} className="absolute top-6 right-6 text-on-overlay" aria-label="Close stories"><X className="w-6 h-6" /></button>
+        <p className="text-on-overlay">{t.stories.expired}</p>
+        <button type="button" onClick={onBack} className="absolute top-6 right-6 text-on-overlay" aria-label={t.stories.closeLabel}><X className="w-6 h-6" /></button>
       </div>
     );
   }
@@ -112,32 +120,32 @@ export default function StoryViewer({ onBack }: { onBack: () => void }) {
       <div className="absolute top-8 left-4 z-20 flex items-center gap-3">
         <img src={currentStory.authorAvatar} alt={currentStory.authorName} className="w-8 h-8 rounded-full object-cover border border-on-overlay/50" referrerPolicy="no-referrer" />
         <span className="text-on-overlay font-headline font-bold text-sm uppercase tracking-wider">{currentStory.authorName}</span>
-        <span className="text-on-overlay/50 font-label text-[10px] tracking-widest uppercase">
-          {getRelativeTime(currentStory.createdAt)}
+        <span className="text-on-overlay/50 font-label text-micro tracking-widest uppercase">
+          {formatRelativeTime(currentStory.createdAt)}
         </span>
       </div>
 
       {/* Close */}
-      <button type="button" onClick={(e) => { e.stopPropagation(); onBack(); }} className="absolute top-8 right-4 z-20 text-on-overlay/80 hover:text-on-overlay" aria-label="Close stories">
+      <button type="button" onClick={(e) => { e.stopPropagation(); onBack(); }} className="absolute top-8 right-4 z-20 text-on-overlay/80 hover:text-on-overlay" aria-label={t.stories.closeLabel}>
         <X className="w-6 h-6" />
       </button>
 
       {/* Slide content */}
       <div className="flex-1 flex items-center justify-center p-8">
-        <SlideContent slide={currentSlide} />
+        <SlideContent slide={currentSlide} recoveryLabel={t.stories.recovery} strainLabel={t.stories.strain} />
       </div>
 
       {/* Navigation hints */}
       <div className="absolute bottom-6 left-0 right-0 text-center">
-        <span className="text-on-overlay/40 font-label text-[9px] tracking-[0.3em] uppercase">
-          {t.stories?.tapToAdvance || 'Tap to advance'}
+        <span className="text-on-overlay/40 font-label text-micro tracking-[0.3em] uppercase">
+          {t.stories.tapToAdvance}
         </span>
       </div>
     </div>
   );
 }
 
-function SlideContent({ slide }: { slide: StorySlide }) {
+function SlideContent({ slide, recoveryLabel, strainLabel }: { slide: StorySlide; recoveryLabel: string; strainLabel: string }) {
   switch (slide.type) {
     case 'text':
       return (
@@ -154,12 +162,12 @@ function SlideContent({ slide }: { slide: StorySlide }) {
           <div className="flex flex-col items-center text-center">
             <Activity className="w-10 h-10 text-primary mb-3" />
             <span className="font-headline text-4xl font-black text-on-overlay">{slide.performance?.recovery}%</span>
-            <span className="font-label text-xs tracking-widest text-primary uppercase mt-2">Recovery</span>
+            <span className="font-label text-xs tracking-widest text-primary uppercase mt-2">{recoveryLabel}</span>
           </div>
           <div className="flex flex-col items-center text-center">
             <TrendingUp className="w-10 h-10 text-brand-secondary mb-3" />
             <span className="font-headline text-4xl font-black text-on-overlay">{slide.performance?.strain}</span>
-            <span className="font-label text-xs tracking-widest text-brand-secondary uppercase mt-2">Strain</span>
+            <span className="font-label text-xs tracking-widest text-brand-secondary uppercase mt-2">{strainLabel}</span>
           </div>
         </div>
       );
@@ -185,12 +193,4 @@ function SlideContent({ slide }: { slide: StorySlide }) {
     default:
       return null;
   }
-}
-
-function getRelativeTime(iso: string): string {
-  const diff = Date.now() - new Date(iso).getTime();
-  const hours = Math.floor(diff / 3600000);
-  if (hours < 1) return 'ahora';
-  if (hours === 1) return '1h';
-  return `${hours}h`;
 }

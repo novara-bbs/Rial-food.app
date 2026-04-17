@@ -1,6 +1,7 @@
 import { TrendingDown, TrendingUp, Minus, Camera } from 'lucide-react';
 import type { CommunityPost } from '../../../types/social';
 import { bodyWeightFromKg, getBodyWeightUnit, type UnitSystem } from '../../food/utils/units';
+import SectionCard from '../../../components/SectionCard';
 
 interface ProgressPostCardProps {
   post: CommunityPost;
@@ -25,46 +26,48 @@ export default function ProgressPostCard({ post, unitSystem, currentLabel, since
     : deltaKg < 0 ? 'text-primary' : 'text-brand-secondary';
 
   return (
-    <div className="bg-surface-container-low border border-outline-variant/20 rounded-sm p-4 flex gap-3">
-      {photoUrl ? (
-        <img
-          src={photoUrl}
-          alt=""
-          className="w-20 h-20 rounded-sm object-cover shrink-0"
-        />
-      ) : (
-        <div className="w-20 h-20 rounded-sm bg-primary/10 flex items-center justify-center shrink-0">
-          <Camera className="w-6 h-6 text-primary/60" aria-hidden="true" />
-        </div>
-      )}
-      <div className="flex-1 min-w-0 space-y-2">
-        <div className="flex items-baseline gap-3">
-          <div>
-            <span className="font-label text-[9px] uppercase tracking-widest text-on-surface-variant block">
-              {currentLabel}
-            </span>
-            <span className="font-headline font-black text-lg text-tertiary">
-              {currentDisplay} {unit}
-            </span>
+    <SectionCard padding="sm" spacing="sm">
+      <div className="flex gap-3">
+        {photoUrl ? (
+          <img
+            src={photoUrl}
+            alt=""
+            className="w-20 h-20 rounded-sm object-cover shrink-0"
+          />
+        ) : (
+          <div className="w-20 h-20 rounded-sm bg-primary/10 flex items-center justify-center shrink-0">
+            <Camera className="w-6 h-6 text-primary/60" aria-hidden="true" />
           </div>
-          {deltaDisplay !== null && (
-            <div className={`flex items-center gap-0.5 text-[11px] font-bold ${deltaColor}`}>
-              <DeltaIcon className="w-3.5 h-3.5" aria-hidden="true" />
-              {deltaKg! > 0 ? '+' : deltaKg! < 0 ? '−' : ''}{deltaDisplay} {unit}
+        )}
+        <div className="flex-1 min-w-0 space-y-2">
+          <div className="flex items-baseline gap-3">
+            <div>
+              <span className="font-label text-micro uppercase tracking-widest text-on-surface-variant block">
+                {currentLabel}
+              </span>
+              <span className="font-headline font-black text-lg text-tertiary">
+                {currentDisplay} {unit}
+              </span>
             </div>
+            {deltaDisplay !== null && (
+              <div className={`flex items-center gap-0.5 text-caption font-bold ${deltaColor}`}>
+                <DeltaIcon className="w-3.5 h-3.5" aria-hidden="true" />
+                {deltaKg! > 0 ? '+' : deltaKg! < 0 ? '−' : ''}{deltaDisplay} {unit}
+              </div>
+            )}
+          </div>
+          {sinceDate && (
+            <span className="text-micro text-on-surface-variant/80 block">
+              {sinceLabel} {new Date(sinceDate + 'T12:00:00').toLocaleDateString(undefined, {
+                day: 'numeric', month: 'short',
+              })}
+            </span>
+          )}
+          {post.content && (
+            <p className="text-caption text-on-surface whitespace-pre-wrap">{post.content}</p>
           )}
         </div>
-        {sinceDate && (
-          <span className="text-[10px] text-on-surface-variant/80 block">
-            {sinceLabel} {new Date(sinceDate + 'T12:00:00').toLocaleDateString(undefined, {
-              day: 'numeric', month: 'short',
-            })}
-          </span>
-        )}
-        {post.content && (
-          <p className="text-xs text-on-surface whitespace-pre-wrap">{post.content}</p>
-        )}
       </div>
-    </div>
+    </SectionCard>
   );
 }

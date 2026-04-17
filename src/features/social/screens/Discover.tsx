@@ -5,16 +5,30 @@ import { useState, useMemo } from 'react';
 import { useI18n } from '../../../i18n';
 import { useNavigation } from '../../../contexts/NavigationContext';
 import { useAppState } from '../../../contexts/AppStateContext';
-import { useLocalStorageState } from '../../../hooks/useLocalStorageState';
-import { MOCK_CREATORS } from '../../social/data/seed-creators';
-import { getTrendingFeed } from '../../social/utils/feed-algorithm';
+import { MOCK_CREATORS } from '../data/seed-creators';
+import { getTrendingFeed } from '../utils/feed-algorithm';
 
+/**
+ * Discover — recommends creators, challenges, trending posts and hashtags.
+ *
+ * Wave 3 migration: dropped inline `useLocalStorageState('followedCreators')`
+ * and `useLocalStorageState('joinedChallenges')` in favour of the factory
+ * handlers registered in AppStateContext. This fixes the stale-snapshot bug
+ * where toggling follow here wouldn't propagate to Community/CreatorProfile
+ * until remount. Also migrated card patterns away from `<div onClick>` to
+ * proper `<button>` elements with stopPropagation for nested CTAs (a11y).
+ */
 export default function Discover() {
   const { t } = useI18n();
   const { navigateTo } = useNavigation();
-  const { communityPosts, setSelectedCreatorId, setSelectedPostId } = useAppState();
-  const [followedCreators] = useLocalStorageState<string[]>('followedCreators', []);
-  const [joinedChallenges, setJoinedChallenges] = useLocalStorageState<string[]>('joinedChallenges', []);
+  const {
+    communityPosts,
+    setSelectedCreatorId,
+    setSelectedPostId,
+    followedCreators,
+    joinedChallenges,
+    handleToggleChallenge,
+  } = useAppState();
   const [searchQuery, setSearchQuery] = useState('');
 
   const disc = t.discover;
@@ -48,12 +62,6 @@ export default function Discover() {
     );
   }, [searchQuery, recommendedCreators]);
 
-  const toggleChallenge = (id: string) => {
-    setJoinedChallenges((prev: string[]) =>
-      prev.includes(id) ? prev.filter(c => c !== id) : [...prev, id]
-    );
-  };
-
   const openCreatorProfile = (creatorId: string) => {
     setSelectedCreatorId(creatorId);
     navigateTo('creator-profile');
@@ -63,14 +71,14 @@ export default function Discover() {
     <PageShell maxWidth="default" spacing="lg">
       {/* Header */}
       <section>
-        <span className="font-mono text-[10px] font-bold tracking-[0.3em] text-primary uppercase">{disc.engineTitle || 'Descubrir'}</span>
-        <h2 className="font-headline text-3xl md:text-4xl font-bold tracking-tighter uppercase text-tertiary mt-1">{disc.title || 'Descubrir'}</h2>
+        <span className="font-mono text-micro font-bold tracking-[0.3em] text-primary uppercase">{disc.engineTitle}</span>
+        <h2 className="font-headline text-3xl md:text-4xl font-bold tracking-tighter uppercase text-tertiary mt-1">{disc.title}</h2>
 
         {/* Search */}
         <SearchInput
           value={searchQuery}
           onChange={setSearchQuery}
-          placeholder={disc.searchPlaceholder || 'Buscar creadores, retos...'}
+          placeholder={disc.searchPlaceholder}
           className="mt-6"
         />
       </section>
@@ -80,42 +88,44 @@ export default function Discover() {
         <section>
           <div className="flex items-center gap-2 mb-4">
             <Compass className="w-4 h-4 text-primary" />
-            <h3 className="font-headline text-lg font-bold uppercase text-tertiary tracking-tight">{disc.recommendedCreators || 'Creadores Recomendados'}</h3>
+            <h3 className="font-headline text-lg font-bold uppercase text-tertiary tracking-tight">{disc.recommendedCreators}</h3>
           </div>
           <div className="space-y-3">
             {filteredCreators.map(creator => {
               const isFollowing = followedCreators.includes(creator.id);
               return (
-                <div
+                <button
                   key={creator.id}
+                  type="button"
                   onClick={() => openCreatorProfile(creator.id)}
-                  className="bg-surface-container-low border border-outline-variant/20 rounded-sm p-4 hover:border-primary/50 transition-all cursor-pointer"
+                  className="w-full text-left bg-surface-container-low border border-outline-variant/20 rounded-sm p-4 hover:border-primary/50 transition-all focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
+                  aria-label={`@${creator.name}`}
                 >
                   <div className="flex items-center gap-4">
-                    <img src={creator.avatar} alt={creator.name} className="w-12 h-12 rounded-full object-cover border-2 border-outline-variant/20" referrerPolicy="no-referrer" />
+                    <img src={creator.avatar} alt="" className="w-12 h-12 rounded-full object-cover border-2 border-outline-variant/20" referrerPolicy="no-referrer" />
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center gap-2">
-                        <h4 className="font-headline font-bold text-sm uppercase text-tertiary">@{creator.name}</h4>
+                        <h4 className="font-headline font-bold text-body-sm uppercase text-tertiary">@{creator.name}</h4>
                         {creator.verified && <CheckCircle2 className="w-3.5 h-3.5 text-primary shrink-0" />}
                       </div>
-                      <span className="text-[9px] font-bold uppercase tracking-wider bg-primary/10 text-primary px-1.5 py-0.5 rounded inline-block mt-0.5">{creator.badge}</span>
-                      <p className="text-xs text-on-surface-variant mt-1 line-clamp-1">{creator.bio}</p>
+                      <span className="text-micro font-bold uppercase tracking-wider bg-primary/10 text-primary px-1.5 py-0.5 rounded inline-block mt-0.5">{creator.badge}</span>
+                      <p className="text-body-sm text-on-surface-variant mt-1 line-clamp-1">{creator.bio}</p>
                     </div>
                     <div className="flex flex-col items-end gap-1.5 shrink-0">
-                      <div className="flex items-center gap-3 text-[9px] text-on-surface-variant">
+                      <div className="flex items-center gap-3 text-micro text-on-surface-variant">
                         <span className="flex items-center gap-1"><Users className="w-3 h-3" /> {(creator.followers / 1000).toFixed(1)}K</span>
                         <span className="flex items-center gap-1"><BookOpen className="w-3 h-3" /> {creator.recipes}</span>
                       </div>
-                      <span className={`px-3 py-1 rounded-sm text-[9px] font-bold uppercase tracking-widest ${
+                      <span className={`px-3 py-1 rounded-sm text-micro font-bold uppercase tracking-widest ${
                         isFollowing
                           ? 'bg-surface-container-highest text-on-surface-variant border border-outline-variant/30'
                           : 'bg-primary text-on-primary'
                       }`}>
-                        {isFollowing ? (t.explore?.creators?.following || 'Siguiendo') : (t.explore?.creators?.follow || 'Seguir')}
+                        {isFollowing ? t.explore.creators.following : t.explore.creators.follow}
                       </span>
                     </div>
                   </div>
-                </div>
+                </button>
               );
             })}
           </div>
@@ -124,7 +134,7 @@ export default function Discover() {
 
       {/* Active Challenges */}
       <section className="bg-surface-container-low p-6 rounded-sm border border-outline-variant/20 relative overflow-hidden group">
-        <div className="absolute top-0 right-0 p-4 opacity-5 rotate-12 group-hover:rotate-0 transition-transform duration-700">
+        <div className="absolute top-0 right-0 p-4 opacity-5 rotate-12 group-hover:rotate-0 transition-transform duration-700" aria-hidden="true">
           <Activity className="w-48 h-48 text-primary" />
         </div>
         <div className="relative z-10">
@@ -132,49 +142,51 @@ export default function Discover() {
             <div className="w-8 h-8 bg-primary/20 rounded-full flex items-center justify-center text-primary">
               <Activity className="w-4 h-4" />
             </div>
-            <h3 className="font-headline text-lg font-bold uppercase text-tertiary tracking-tight">{t.challenges?.title || 'Desafios'}</h3>
+            <h3 className="font-headline text-lg font-bold uppercase text-tertiary tracking-tight">{t.challenges.title}</h3>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="bg-background p-4 rounded-sm border border-outline-variant/20 flex justify-between items-center hover:border-primary/50 transition-colors">
               <div>
-                <h4 className="font-headline font-bold text-sm uppercase text-tertiary">{t.community?.greenChallenge || 'Reto Verde de 7 Dias'}</h4>
-                <p className="text-[9px] text-on-surface-variant uppercase tracking-widest mt-1">{(t.community?.challengeParticipants || '{count} Participantes').replace('{count}', '1,240')} · {(t.community?.challengeDaysLeft || 'Quedan {count} Dias').replace('{count}', '3')}</p>
+                <h4 className="font-headline font-bold text-body-sm uppercase text-tertiary">{t.community.greenChallenge}</h4>
+                <p className="text-micro text-on-surface-variant uppercase tracking-widest mt-1">{t.community.challengeParticipants.replace('{count}', '1,240')} · {t.community.challengeDaysLeft.replace('{count}', '3')}</p>
                 <div className="h-1 w-32 bg-surface-container-highest mt-3 rounded-full overflow-hidden">
                   <div className="h-full bg-primary" style={{ width: '65%' }} />
                 </div>
               </div>
               <button
                 type="button"
-                onClick={(e) => { e.stopPropagation(); toggleChallenge('green-7'); }}
-                className={`px-3 py-1.5 rounded-sm font-label text-[9px] font-bold tracking-widest uppercase transition-all flex items-center gap-1 ${
+                onClick={() => handleToggleChallenge('green-7')}
+                aria-pressed={joinedChallenges.includes('green-7')}
+                className={`px-3 min-h-11 rounded-sm font-label text-micro font-bold tracking-widest uppercase transition-all flex items-center gap-1 ${
                   joinedChallenges.includes('green-7')
                     ? 'bg-primary text-on-primary'
                     : 'bg-primary/10 text-primary border border-primary/20 hover:bg-primary hover:text-on-primary'
                 }`}
               >
-                {joinedChallenges.includes('green-7') ? <><Check className="w-3 h-3" /> {t.community?.joined || 'Unido'}</> : (t.community?.join || 'Unirse')}
+                {joinedChallenges.includes('green-7') ? <><Check className="w-3 h-3" /> {t.community.joined}</> : t.community.join}
               </button>
             </div>
 
             <div className="bg-background p-4 rounded-sm border border-outline-variant/20 flex justify-between items-center hover:border-brand-secondary/50 transition-colors">
               <div>
-                <h4 className="font-headline font-bold text-sm uppercase text-tertiary">{t.community?.hydrationChallenge || 'Reto Hidratacion 3L/Dia'}</h4>
-                <p className="text-[9px] text-on-surface-variant uppercase tracking-widest mt-1">{(t.community?.challengeParticipants || '{count} Participantes').replace('{count}', '850')} · {t.community?.challengeOngoing || 'En Curso'}</p>
+                <h4 className="font-headline font-bold text-body-sm uppercase text-tertiary">{t.community.hydrationChallenge}</h4>
+                <p className="text-micro text-on-surface-variant uppercase tracking-widest mt-1">{t.community.challengeParticipants.replace('{count}', '850')} · {t.community.challengeOngoing}</p>
                 <div className="h-1 w-32 bg-surface-container-highest mt-3 rounded-full overflow-hidden">
                   <div className="h-full bg-brand-secondary" style={{ width: '40%' }} />
                 </div>
               </div>
               <button
                 type="button"
-                onClick={(e) => { e.stopPropagation(); toggleChallenge('hydration-3l'); }}
-                className={`px-3 py-1.5 rounded-sm font-label text-[9px] font-bold tracking-widest uppercase transition-all flex items-center gap-1 ${
+                onClick={() => handleToggleChallenge('hydration-3l')}
+                aria-pressed={joinedChallenges.includes('hydration-3l')}
+                className={`px-3 min-h-11 rounded-sm font-label text-micro font-bold tracking-widest uppercase transition-all flex items-center gap-1 ${
                   joinedChallenges.includes('hydration-3l')
                     ? 'bg-brand-secondary text-on-secondary'
                     : 'bg-brand-secondary/10 text-brand-secondary border border-brand-secondary/20 hover:bg-brand-secondary hover:text-on-secondary'
                 }`}
               >
-                {joinedChallenges.includes('hydration-3l') ? <><Check className="w-3 h-3" /> {t.community?.joined || 'Unido'}</> : (t.community?.join || 'Unirse')}
+                {joinedChallenges.includes('hydration-3l') ? <><Check className="w-3 h-3" /> {t.community.joined}</> : t.community.join}
               </button>
             </div>
           </div>
@@ -186,33 +198,34 @@ export default function Discover() {
         <section>
           <div className="flex items-center gap-2 mb-4">
             <TrendingUp className="w-4 h-4 text-primary" />
-            <h3 className="font-headline text-lg font-bold uppercase text-tertiary tracking-tight">{disc.trendingPosts || 'Trending'}</h3>
+            <h3 className="font-headline text-lg font-bold uppercase text-tertiary tracking-tight">{disc.trendingPosts}</h3>
           </div>
           <div className="space-y-3">
             {trendingPosts.map(post => (
-              <div
+              <button
                 key={post.id}
+                type="button"
                 onClick={() => { setSelectedPostId(post.id); navigateTo('post-detail'); }}
-                className="bg-surface-container-low border border-outline-variant/20 rounded-sm p-4 hover:border-primary/50 transition-all cursor-pointer"
+                className="w-full text-left bg-surface-container-low border border-outline-variant/20 rounded-sm p-4 hover:border-primary/50 transition-all focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
               >
                 <div className="flex items-start gap-3">
-                  <img src={post.author.img} alt={post.author.name} className="w-8 h-8 rounded-full object-cover shrink-0" referrerPolicy="no-referrer" />
+                  <img src={post.author.img} alt="" className="w-8 h-8 rounded-full object-cover shrink-0" referrerPolicy="no-referrer" />
                   <div className="flex-1 min-w-0">
                     <div className="flex items-baseline gap-2">
-                      <span className="font-headline text-xs font-bold text-tertiary uppercase">{post.author.name}</span>
-                      <span className="font-label text-[9px] tracking-widest text-on-surface-variant uppercase">{post.author.time}</span>
+                      <span className="font-headline text-body-sm font-bold text-tertiary uppercase">{post.author.name}</span>
+                      <span className="font-label text-micro tracking-widest text-on-surface-variant uppercase">{post.author.time}</span>
                     </div>
-                    <p className="text-xs text-on-surface-variant mt-1 line-clamp-2 font-body">{post.content}</p>
+                    <p className="text-body-sm text-on-surface-variant mt-1 line-clamp-2 font-body">{post.content}</p>
                     <div className="flex items-center gap-4 mt-2">
-                      <span className="flex items-center gap-1 text-[10px] text-on-surface-variant"><Flame className="w-3 h-3" /> {post.likes}</span>
-                      <span className="flex items-center gap-1 text-[10px] text-on-surface-variant"><MessageSquare className="w-3 h-3" /> {post.comments}</span>
+                      <span className="flex items-center gap-1 text-micro text-on-surface-variant"><Flame className="w-3 h-3" /> {post.likes}</span>
+                      <span className="flex items-center gap-1 text-micro text-on-surface-variant"><MessageSquare className="w-3 h-3" /> {post.comments}</span>
                     </div>
                   </div>
                   {post.images && post.images[0] && (
                     <img src={post.images[0]} alt="" className="w-16 h-16 rounded-sm object-cover shrink-0" referrerPolicy="no-referrer" />
                   )}
                 </div>
-              </div>
+              </button>
             ))}
           </div>
         </section>
@@ -223,18 +236,20 @@ export default function Discover() {
         <section>
           <div className="flex items-center gap-2 mb-4">
             <Users className="w-4 h-4 text-primary" />
-            <h3 className="font-headline text-lg font-bold uppercase text-tertiary tracking-tight">{disc.yourCreators || 'Tus Creadores'}</h3>
+            <h3 className="font-headline text-lg font-bold uppercase text-tertiary tracking-tight">{disc.yourCreators}</h3>
           </div>
           <div className="flex gap-4 overflow-x-auto hide-scrollbar pb-2">
             {followedCreatorsList.map(creator => (
-              <div
+              <button
                 key={creator.id}
+                type="button"
                 onClick={() => openCreatorProfile(creator.id)}
-                className="shrink-0 flex flex-col items-center gap-2 cursor-pointer group"
+                className="shrink-0 flex flex-col items-center gap-2 group focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary rounded-sm"
+                aria-label={`@${creator.name}`}
               >
-                <img src={creator.avatar} alt={creator.name} className="w-14 h-14 rounded-full object-cover border-2 border-primary/30 group-hover:border-primary transition-colors" referrerPolicy="no-referrer" />
-                <span className="font-headline text-[10px] font-bold text-tertiary uppercase tracking-tight">@{creator.name}</span>
-              </div>
+                <img src={creator.avatar} alt="" className="w-14 h-14 rounded-full object-cover border-2 border-primary/30 group-hover:border-primary transition-colors" referrerPolicy="no-referrer" />
+                <span className="font-headline text-micro font-bold text-tertiary uppercase tracking-tight">@{creator.name}</span>
+              </button>
             ))}
           </div>
         </section>
@@ -243,14 +258,18 @@ export default function Discover() {
       {/* Popular Hashtags */}
       <section>
         <div className="flex items-center gap-2 mb-4">
-          <span className="text-primary font-bold text-sm">#</span>
-          <h3 className="font-headline text-lg font-bold uppercase text-tertiary tracking-tight">{disc.popularTags || 'Hashtags Populares'}</h3>
+          <span className="text-primary font-bold text-body-sm" aria-hidden="true">#</span>
+          <h3 className="font-headline text-lg font-bold uppercase text-tertiary tracking-tight">{disc.popularTags}</h3>
         </div>
         <div className="flex flex-wrap gap-2">
           {['mealprep', 'altaproteina', 'realfood', 'fitness', 'recetassanas', 'bulking', 'vegan', 'singluten'].map(tag => (
-            <span key={tag} className="bg-surface-container-highest px-3 py-2 rounded-sm text-[10px] font-bold text-on-surface-variant tracking-widest uppercase hover:bg-primary/10 hover:text-primary transition-colors cursor-pointer">
+            <button
+              key={tag}
+              type="button"
+              className="bg-surface-container-highest px-3 min-h-11 rounded-sm text-micro font-bold text-on-surface-variant tracking-widest uppercase hover:bg-primary/10 hover:text-primary transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
+            >
               #{tag}
-            </span>
+            </button>
           ))}
         </div>
       </section>

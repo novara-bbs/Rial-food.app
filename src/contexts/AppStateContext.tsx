@@ -10,6 +10,14 @@ import { useI18n } from '../i18n';
 import { createHandleSaveRecipe, createHandleAddToPlan, createHandleCreateRecipeSubmit, createHandleImportRecipe, createHandleDeleteRecipe, createHandleDuplicateRecipe } from '../features/recipes/handlers/recipe-handlers';
 import { createHandleCreatePost, createHandleAddComment } from '../features/social/handlers/social-handlers';
 import { createHandlePublishStory, createHandleMarkStoryViewed } from '../features/social/handlers/story-handlers';
+import { createHandleFollowCreator } from '../features/social/handlers/creator-handlers';
+import {
+  createHandleJoinChallenge,
+  createHandleLeaveChallenge,
+  createHandleCheckInChallenge,
+  createHandleToggleChallenge,
+  type ChallengeProgress,
+} from '../features/social/handlers/challenge-handlers';
 import type { Story, StorySlide, Notification as NotificationType, SocialLinks } from '../types/social';
 import { createHandleAddToleranceLog, createHandleRealFeelLog, createHandleCheckIn, createHandleCompleteCheckIn } from '../features/wellness/handlers/wellness-handlers';
 import { createHandleLogWeight, createHandleUpdateSnapshot, createHandleDeleteSnapshot, type LogWeightArgs } from '../features/wellness/handlers/weight-handlers';
@@ -110,6 +118,19 @@ interface AppStateContextType {
   markNotificationRead: (notificationId: string) => void;
   selectedChallengeId: string | null;
   setSelectedChallengeId: (id: string | null) => void;
+
+  // Social graph — single writer via factory handler (replaces 5 inline
+  // useLocalStorageState declarations across Discover/CreatorProfile/Community/
+  // Challenges/ChallengeDetail/CreatorVerification). Wave 3.
+  followedCreators: string[];
+  handleFollowCreator: (creatorId: string) => { followed: boolean };
+  joinedChallenges: string[];
+  challengeJoinDates: Record<string, string>;
+  challengeProgress: Record<string, ChallengeProgress>;
+  handleJoinChallenge: (challengeId: string) => void;
+  handleLeaveChallenge: (challengeId: string) => void;
+  handleCheckInChallenge: (challengeId: string) => { alreadyCheckedIn: boolean };
+  handleToggleChallenge: (challengeId: string) => void;
 
   // Handlers
   handleLogMeal: (meal: any) => void;
@@ -387,6 +408,17 @@ export function AppStateProvider({ children }: { children: React.ReactNode }) {
   // Challenge detail
   const [selectedChallengeId, setSelectedChallengeId] = useState<string | null>(null);
 
+  // Social graph + challenge persistence — single writer via factory handler.
+  // Prior to Wave 3 these were declared inline in each screen
+  // (Discover/CreatorProfile/Community/Challenges/ChallengeDetail/
+  // CreatorVerification), which caused stale-snapshot bugs: a toggle from
+  // Discover wasn't reflected in Community until unmount. Centralising the
+  // setters here means every consumer sees the same ref via context.
+  const [followedCreators, setFollowedCreators] = useLocalStorageState<string[]>('followedCreators', []);
+  const [joinedChallenges, setJoinedChallenges] = useLocalStorageState<string[]>('joinedChallenges', []);
+  const [challengeJoinDates, setChallengeJoinDates] = useLocalStorageState<Record<string, string>>('challengeJoinDates', {});
+  const [challengeProgress, setChallengeProgress] = useLocalStorageState<Record<string, ChallengeProgress>>('challengeProgress', {});
+
   // Weight & nutrition history (persistent across days)
   const [weightHistory, setWeightHistory] = useLocalStorageState<BodySnapshot[]>('weightHistory', []);
   const [nutritionHistory, setNutritionHistory] = useLocalStorageState<DailyArchive[]>('nutritionHistory', []);
@@ -516,6 +548,47 @@ export function AppStateProvider({ children }: { children: React.ReactNode }) {
     () => createHandleAddComment({ setCommunityPosts, getUserProfile, getT }),
     [setCommunityPosts, getUserProfile, getT],
   );
+  const notifyToast = useCallback((msg: string) => toast.success(msg), []);
+  const handleFollowCreator = useMemo(
+    () => createHandleFollowCreator({ setFollowedCreators, getT, notify: notifyToast }),
+    [setFollowedCreators, getT, notifyToast],
+  );
+  const handleJoinChallenge = useMemo(
+    () => createHandleJoinChallenge({
+      setJoinedChallenges,
+      setJoinDates: setChallengeJoinDates,
+      setChallengeProgress,
+      getT,
+      notify: notifyToast,
+    }),
+    [setJoinedChallenges, setChallengeJoinDates, setChallengeProgress, getT, notifyToast],
+  );
+  const handleLeaveChallenge = useMemo(
+    () => createHandleLeaveChallenge({
+      setJoinedChallenges,
+      setChallengeProgress,
+      getT,
+      notify: notifyToast,
+    }),
+    [setJoinedChallenges, setChallengeProgress, getT, notifyToast],
+  );
+  const handleCheckInChallenge = useMemo(
+    () => createHandleCheckInChallenge({ setChallengeProgress, getT, notify: notifyToast }),
+    [setChallengeProgress, getT, notifyToast],
+  );
+  // Wrapper toggle — readlinked to a ref of `joinedChallenges` so the handler
+  // always sees the latest list (otherwise toggling right after a join would
+  // still see the pre-join snapshot and double-add).
+  const joinedChallengesRef = useRef(joinedChallenges);
+  useEffect(() => { joinedChallengesRef.current = joinedChallenges; }, [joinedChallenges]);
+  const handleToggleChallenge = useMemo(
+    () => createHandleToggleChallenge({
+      getJoinedChallenges: () => joinedChallengesRef.current,
+      handleJoinChallenge,
+      handleLeaveChallenge,
+    }),
+    [handleJoinChallenge, handleLeaveChallenge],
+  );
   const handleAddToleranceLog = useMemo(
     () => createHandleAddToleranceLog({ setToleranceLogs, navigateTo }),
     [setToleranceLogs, navigateTo],
@@ -624,6 +697,9 @@ export function AppStateProvider({ children }: { children: React.ReactNode }) {
     handlePublishStory, handleMarkStoryViewed,
     notifications, markAllNotificationsRead, markNotificationRead,
     selectedChallengeId, setSelectedChallengeId,
+    followedCreators, handleFollowCreator,
+    joinedChallenges, challengeJoinDates, challengeProgress,
+    handleJoinChallenge, handleLeaveChallenge, handleCheckInChallenge, handleToggleChallenge,
     dictionary: mergedDictionary,
     handleLogMeal,
     handleLogMealNow,
@@ -661,6 +737,9 @@ export function AppStateProvider({ children }: { children: React.ReactNode }) {
     likedPosts, toggleLikePost, savedPosts, toggleSavePost,
     communityStories, setCommunityStories, handlePublishStory, handleMarkStoryViewed,
     notifications, markAllNotificationsRead, markNotificationRead, selectedChallengeId,
+    followedCreators, handleFollowCreator,
+    joinedChallenges, challengeJoinDates, challengeProgress,
+    handleJoinChallenge, handleLeaveChallenge, handleCheckInChallenge, handleToggleChallenge,
     mergedDictionary,
     handleLogMeal, handleLogMealNow, handleSaveRecipe,
     handleCreatePost, handleAddComment, handleAddToleranceLog,
