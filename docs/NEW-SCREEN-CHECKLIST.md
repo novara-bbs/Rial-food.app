@@ -56,6 +56,12 @@ Mandatory before opening a PR that adds or substantially restructures a screen.
 - [ ] If a card is fully clickable *and* contains inner interactive elements (CTA, like button, delete), use the **stretched-link pattern**: an absolute-inset `<button>` behind a `pointer-events-none` content wrapper, and inner CTAs as `relative z-10 pointer-events-auto` buttons. See `src/features/social/components/PostCard.tsx` for the canonical usage.
 - [ ] Never nest `<button>` inside `<button>` — screen readers and WCAG 1.3.1 fail on it.
 
+## 6c. Bottom sheets follow ADR-009
+
+- [ ] Any new bottom sheet uses `<BottomSheet>` primitive (not raw `<Sheet side="bottom">`). If `<BottomSheet>` is not yet available in the current branch, raise the sheet to Bevel anatomy manually: `max-h-[88vh]`, `rounded-t-3xl`, handle pill, overlay `bg-black/25`, sticky header with close + title + action slot.
+- [ ] Status bar + dynamic island remain visible behind the sheet — never use `h-screen` or `max-h-screen`.
+- [ ] Sheet content is scrollable within the sheet; the sheet itself does not grow.
+
 ## 7. Theme parity
 
 - [ ] Smoke-test in the 6 themes: `theme-volt-dark` (default), `theme-light`, `theme-blue-dark`, `theme-blue-light`, `theme-orange-dark`, `theme-orange-light`

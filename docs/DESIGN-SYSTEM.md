@@ -187,4 +187,62 @@ Smoke visual: open `src/App.tsx` in dev, cycle through the 6 themes via `<html c
 - ADR-005: Theme by class, not `dark:`
 - ADR-006: shadcn new-york + unified radix
 - ADR-007: Radius multiplicative scale
+- ADR-008: Pricing model — free-generous core + single premium tier
+- ADR-009: Bottom-sheet anatomy
 - `docs/DESIGN-AUDIT-2026-04-16.md` — origin audit that produced these rules
+- `docs/market/bevel-design-playbook.md` — Bevel competitor analysis + copy/adapt/skip matrix (source of §7)
+
+---
+
+## 7. Light-mode reference: Bevel
+
+`.theme-light` aspires to a Bevel-style "warm-neutral Apple-designed" look. Full rationale + capture catalog + 4-PR roadmap in `docs/market/bevel-design-playbook.md`. Summary of guidelines:
+
+### 7.1 Surfaces in light mode
+
+| Token | Current (pre-Bevel tune) | Target (Bevel tune) | Status |
+|---|---|---|---|
+| `--background` | `#ffffff` | `#fafaf9` (stone-50, warm) | Pending PR 3 |
+| `--surface` | `#ffffff` | `#ffffff` (unchanged) | — |
+| `--outline-variant` | visible `#e5e5e5` | nearly invisible `#f1f1f3` | Pending PR 3 |
+| `--primary` | `#09090b` | `#09090b` (unchanged) | — |
+| Card elevation | `border border-outline-variant/20` + shadow | **borderless**, `shadow-elev-2` only | Pending PR 3 |
+
+Dark themes (`theme-volt-dark`, `theme-blue-dark`, `theme-orange-dark`) and the other light themes (`theme-blue-light`, `theme-orange-light`) keep their personality — Bevel-tune applies **only** to `.theme-light`.
+
+### 7.2 Bottom-sheet anatomy
+
+All new bottom sheets follow **ADR-009**:
+
+- Max height `88vh` → status bar + dynamic island visible behind.
+- Overlay `bg-black/25` (not 50%).
+- Handle pill (4×32 px) centered at top.
+- Sticky header with X + title + action slot.
+- `rounded-t-3xl` top corners.
+- Prefer `<BottomSheet>` primitive over raw `<Sheet side="bottom">`.
+
+### 7.3 Empty states
+
+Sub-sheet empty states follow the informative variant (skeleton + icon + title + description, **no CTA**) — see Bevel IMG_0990. Top-level empty states (first-time Home, user-created lists) retain actionable CTAs.
+
+### 7.4 Information design
+
+Screen module hierarchy follows Bevel transversal pattern:
+
+```
+[Header: título + periodo]
+[Hero: UN elemento dominante]
+[Grid 2×N de sub-metrics]
+[ListRow educativa]
+[Cross-link a módulo relacionado]
+[Tendencias scrollable opcional]
+```
+
+Applied in Home ICP-adaptive hero consolidation (Q15 candidate — feature-flagged).
+
+### 7.5 What is NOT Bevel-style
+
+- JetBrains Mono labels for macros — RIAL-specific differentiator, kept.
+- VOLT / OCEAN / EMBER color themes — Bevel is monochrome; RIAL keeps theme diversity.
+- Recipe UX — Paprika/Yummly are better references (see `docs/market/ux-patterns.md`).
+- CGM/glucose module — out of ICP scope 2026.

@@ -1,5 +1,26 @@
 # RIAL App - Changelog
 
+## [1.5.30] - 2026-04-17
+
+### docs(design) — Bevel design playbook + ADR-008 (pricing) + ADR-009 (bottom-sheet anatomy)
+
+Foundations-only PR (zero code). Consolida 64 capturas Bevel (IMG_0951–IMG_1019) en un playbook accionable con matriz **Copy / Adapt / Skip**, formaliza dos decisiones arquitectónicas (pricing model + sheet anatomy) y alinea `.theme-light` hacia un "color 1" Bevel-style. Plan: `.claude/plans/revisa-todas-las-capturas-ancient-micali.md`.
+
+**Added**
+- `docs/market/bevel-design-playbook.md` — playbook accionable con catálogo de 50 capturas agrupadas en 10 tipologías (A onboarding … J sync), matriz Copy/Adapt/Skip (22 patrones), 9 principios destilados (sistema visual, tipografía, information design, bottom sheets, empty states, pills, pricing, FAB mega-menu, lo que NO copiamos), roadmap 4 PRs, baselines esperadas post-ejecución.
+- `docs/adr/ADR-008-pricing-model.md` — **"Free-generous core + single premium tier"** formalizado. Free = tracking + recetas + planner + wellness + wearable básico + sync. Pro = AI Coach cross-módulo + AI meal planner + photo recognition + import auto URL + wearable insights + share cards + temas premium. Trial 14 días con timeline visual Bevel-style. Precio exacto diferido a Q6+. Descarta explícitamente el modelo MFP (Premium + Premium+) y el tier lifetime.
+- `docs/adr/ADR-009-bottom-sheet-anatomy.md` — anatomía formal de sheets: `max-h-[88vh]`, `rounded-t-3xl`, handle pill 4×32 px, overlay `bg-black/25` (no 50%), sticky header con X + title + action slot, scrollable content, stacking nativo radix. API sketch del `<BottomSheet>` primitive. Migration path progresiva (sheet shadcn legacy permanece). Test de convención a añadir en PR 2.
+
+**Changed**
+- `docs/DESIGN-SYSTEM.md` — §6 References añade ADR-008 + ADR-009 + playbook. Nuevo §7 "Light-mode reference: Bevel" con subsecciones 7.1–7.5: superficies (target `--background` `#fafaf9` + borderless cards en light), bottom-sheet anatomy (remite a ADR-009), empty states (variant `info` sin CTA para sub-sheets), information design (patrón jerárquico módulo), y lista explícita de lo que NO es Bevel-style (JetBrains Mono macros, VOLT/OCEAN/EMBER, recipes, CGM).
+- `docs/NEW-SCREEN-CHECKLIST.md` — nueva sección §6c "Bottom sheets follow ADR-009" con 3 items de gate (primitive `<BottomSheet>` o anatomy manual, status bar visible, contenido scrollable interno).
+
+**Notes**
+- **Out of scope:** cero cambios en `src/`, `supabase/`, tests, CI, i18n, pipeline. Es 100% documentación — TypeScript / lint / tests / build sin diff respecto a `[1.5.29]`.
+- **Roadmap encadenable:** `[1.5.30]` (docs) → `[1.5.31]` (BottomSheet primitive + 2 consumers piloto) → `[1.5.32]` (`.theme-light` Bevel-tune: `--background: #fafaf9` + borderless) → `[1.5.33]` (migration 5 consumers + Home hero consolidation flaggable). Cada PR auto-contenido y revertible.
+- **Open items ADR-009:** detents iOS-style (3 alturas 33/66/88 vh) diferidos — requiere `vaul` o gesture state que radix no expone. Keyboard-aware padding validación en PR 2 durante migration piloto.
+- **Gobernanza:** trabajar directamente en `main`. Push a `rial-food/main` tras aprobación explícita del usuario ("continua").
+
 ## [1.5.29] - 2026-04-17
 
 ### fix(demo-seed) — Clear demo now drops seed-version markers and uses unprefixed keys
