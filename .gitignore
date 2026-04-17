@@ -6,7 +6,10 @@ coverage/
 *.log
 .env*
 !.env.example
-.claude/
+# Claude Code — track shared agent assets, ignore local runtime state
+.claude/launch.json
+.claude/scheduled_tasks.lock
+.claude/worktrees/
 
 .vercel
 .sixth/
