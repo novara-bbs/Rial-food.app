@@ -1,5 +1,27 @@
 # RIAL App - Changelog
 
+## [1.5.31] - 2026-04-17
+
+### feat(ui) — `<BottomSheet>` primitive (ADR-009) + 2 consumer migrations (PortionSheet + PublishRecipeSheet)
+
+PR 2 del roadmap Bevel (`.claude/plans/revisa-todas-las-capturas-ancient-micali.md`). Materializa ADR-009: un único primitive `<BottomSheet>` que centraliza la anatomía Bevel-style de sheets bottom-anchored (`max-h-[88vh]`, `rounded-t-3xl`, handle pill, overlay 25%, sticky header con close + title + action slot, scrollable body, footer con safe-area-inset). Reemplaza dos sheets hand-rolled con markup inconsistente.
+
+**Added**
+- `src/components/ui/bottom-sheet.tsx` — primitive wrapping `radix-ui Dialog` directamente (mismo primitive que shadcn `Sheet`, stacking nativo). Props: `open`, `onOpenChange`, `title`, `description?`, `actionSlot?`, `footer?`, `hideCloseButton?`, `contentClassName?`. Close button HIG 44×44. Handle pill `h-1 w-8 bg-outline-variant/60`. Overlay `bg-black/25` (no 50% — preserva contexto detrás). Safe-area-inset en footer.
+- `src/test/conventions/bottom-sheet.test.ts` — convention test (static file regex) que bloquea regresiones de ADR-009: export default, `max-h-[88vh]`, `rounded-t-3xl`, handle pill con tokens correctos, overlay 25% no 50%, close HIG 44×44, Portal+Overlay+Content radix, `SheetPrimitive.Title`+`.Description` para a11y, `env(safe-area-inset-bottom)`.
+
+**Changed**
+- `src/features/food/components/PortionSheet.tsx` — migrado de sheet hand-rolled (`fixed inset-0` + `bg-black/60` + `rounded-t-2xl` + handle propio + sticky footer manual) a `<BottomSheet>`. API pública (`ingredient`, `onConfirm`, `onClose`, `unitSystem`) sin cambios — drop-in replacement en `AddMeal.tsx:561`. CTA "Log it" como `footer` slot.
+- `src/features/social/components/PublishRecipeSheet.tsx` — migrado de sheet hand-rolled (`fixed inset-0 bg-background/80 backdrop-blur-sm` + `rounded-t-lg`) a `<BottomSheet>`. `<Globe>` en `actionSlot`, `<Send>` CTA como `footer`. `aria-label` añadido al textarea (estaba ausente). API pública (`recipe`, `onClose`) sin cambios — drop-in replacement en `RecipeDetail.tsx:843`.
+- `src/test/conventions/primitives-export.test.ts` — añade `BottomSheet` al grupo "dialog primitives" per PRIMITIVES §4 step 5.
+- `docs/PRIMITIVES.md` — §1 table: `Sheet` marcado como "(shadcn, legacy)" y reservado para left/right/top drawers; nueva row `BottomSheet` apuntando a `src/components/ui/bottom-sheet.tsx` para "Bottom-anchored secondary surfaces (pickers, edit detail, filter groups)". §2 añade ejemplo mínimo con `actionSlot` + `footer` y callout con los defaults de ADR-009.
+
+**Notes**
+- **Piloto pivot.** El plan original apuntaba a `RecipeDaySelectorSheet` + `MealSlotMultiSelect` como piloto — inspección reveló que no son sheets reales (ambos son componentes inline: chip groups / inline cards). Pivotamos a los dos sheets hand-rolled reales más activos: `PortionSheet` (flujo AddMeal) y `PublishRecipeSheet` (flujo share-to-feed desde RecipeDetail). Cobertura UX mayor sin cambiar la intención del PR.
+- **Dead code.** `src/components/social/ShareSheet.tsx` es un sheet hand-rolled real sin callsites. Se deja intacto para un dead-code sweep separado.
+- **Legacy `Sheet`.** `src/components/ui/sheet.tsx` permanece como ruta para left/right/top drawers. Nuevo código de bottom-sheet debe usar `<BottomSheet>`.
+- **Roadmap palette (PR 3 addendum).** El usuario confirmó que el color Bevel se implantará como **paleta 1 con variantes light y dark**, y que las 6 themes actuales (volt / blue / orange × dark / light) se consolidarán a **3 paletas con dark/light automático según `prefers-color-scheme`**. PR 3 debe shippear el par `.theme-light` + `.theme-dark` de paleta 1 desde día 1 para que la futura consolidación encuentre la base lista. Documentado en `docs/market/bevel-design-playbook.md` §4.1 + §5 roadmap.
+
 ## [1.5.30] - 2026-04-17
 
 ### docs(design) — Bevel design playbook + ADR-008 (pricing) + ADR-009 (bottom-sheet anatomy)

@@ -128,6 +128,23 @@ Agrupadas por tipología con IMG más legible del patrón.
 | Sheet overlay | `bg-black/25` | `bg-black/50` | **25%** |
 | Sheet top radius | `rounded-t-3xl` | variable | **24 px** |
 
+#### 4.1.a Paleta 1 con pares light/dark + consolidación 6 → 3 (directiva del owner 2026-04-17)
+
+**Decisión arquitectónica.** El color Bevel no se limita a `.theme-light`. Se adopta como **Paleta 1** con **dos variantes obligatorias** — `paleta-1 light` (aspiración Bevel pura, warm neutrals) y `paleta-1 dark` (la misma identidad traducida a dark mode, no el VOLT actual). Además, las 6 themes actuales (`volt-dark`, `theme-light`, `blue-dark`, `blue-light`, `orange-dark`, `orange-light`) se consolidarán a **3 paletas** donde cada paleta define **ambas variantes** y el sistema elige light/dark automáticamente vía `@media (prefers-color-scheme)`.
+
+**Implicación para PR 3.** El PR 3 debe shippear **el par completo de Paleta 1** (`.theme-light` tuneado Bevel + `.theme-dark` nueva, o el naming que encaje con la consolidación). No es válido entregar solo `.theme-light` — dejaría la paleta manca y forzaría a un PR de retoma. Consecuencias concretas:
+
+- Tokens de `.theme-dark` derivan de los mismos hues que `.theme-light` (no reutilizar la paleta VOLT actual). `--background` dark target: stone-950 warm `#0a0a0b` (no puro `#000`). `--surface`: `#18181b`. `--primary` dark: `#fafafa`. Overlays, macros, anillos: misma familia, distinta luminosidad.
+- El selector actual (probable `data-theme` / clase root) debe permitir **fijar paleta** (`.theme-palette-1`) mientras el sistema aplica **light/dark automáticamente**. Dos ejes ortogonales, no uno.
+- La clase `.theme-light` legacy puede quedarse como alias durante la transición pero el write set canónico a partir de PR 3 es `.theme-palette-1` + media query.
+
+**Consolidación 6 → 3 (diferida a PR post-4 / Q17).** Mapping propuesto:
+- **Paleta 1 (neutral Bevel)** ← `theme-light` + `volt-dark` actuales, reemplazadas por el nuevo par.
+- **Paleta 2 (OCEAN)** ← `blue-dark` + `blue-light` unificados con `prefers-color-scheme`.
+- **Paleta 3 (EMBER)** ← `orange-dark` + `orange-light` unificados con `prefers-color-scheme`.
+
+Las personalidades OCEAN/EMBER se preservan (VOLT se retira, absorbido por Paleta 1 dark).
+
 ### 4.2 Tipografía
 - Títulos pantalla 28–32 px bold sin uppercase (`text-headline` ya OK).
 - Subtítulo 14–15 px medium gris (`text-body` + `text-on-surface-variant` OK).
@@ -188,8 +205,8 @@ Long-press `+` → action grid 3×3 con 9 acciones icon+label (IMG_0997). Candid
 | PR | Scope | Archivos nuevos | Archivos amendment |
 |---|---|---|---|
 | **1** | Docs + ADR foundations | `docs/market/bevel-design-playbook.md`, `docs/adr/ADR-008`, `docs/adr/ADR-009` | `docs/DESIGN-SYSTEM.md`, `docs/NEW-SCREEN-CHECKLIST.md`, `CHANGELOG.md` |
-| **2** | `<BottomSheet>` primitive + 2 consumers pilot | `src/components/ui/bottom-sheet.tsx`, `src/test/conventions/bottom-sheet.test.ts` | `docs/PRIMITIVES.md`, `RecipeDaySelectorSheet`, `MealSlotMultiSelect`, `CHANGELOG.md` |
-| **3** | `.theme-light` Bevel-tune | — | `src/index.css` (bloque `.theme-light`), `SectionCard.tsx`, `docs/DESIGN-SYSTEM.md` §1.5, `CHANGELOG.md` |
+| **2** | `<BottomSheet>` primitive + 2 consumers pilot | `src/components/ui/bottom-sheet.tsx`, `src/test/conventions/bottom-sheet.test.ts` | `docs/PRIMITIVES.md`, `PortionSheet` (piloto real — sustituye `RecipeDaySelectorSheet`, que no es sheet real), `PublishRecipeSheet` (piloto real — sustituye `MealSlotMultiSelect`, que no es sheet real), `src/test/conventions/primitives-export.test.ts`, `CHANGELOG.md` |
+| **3** | Paleta 1 Bevel — par **light + dark** (ver §4.1.a) | — | `src/index.css` (bloque `.theme-light` tuneado Bevel + **nuevo bloque dark Bevel**), `SectionCard.tsx` (borderless en light), `docs/DESIGN-SYSTEM.md` §1.5 + §7, `CHANGELOG.md` |
 | **4** | Migration + Home hero consolidation | — | 5 consumers a BottomSheet (`PhotoUploader`, `LogSnapshotModal`, `AddMeal`, `BarcodeScanner`, `ImportRecipeURL`), `Home.tsx` hero consolidation (feature-flagged), `docs/ai/state.md` |
 
 Governance: trabajar directamente en `main`. Cada PR = commit(s) + `release:preflight` verde + push a `rial-food/main` tras aprobación explícita del user ("continua").

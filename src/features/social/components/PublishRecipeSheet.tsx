@@ -1,8 +1,9 @@
-import { X, Send, Globe } from 'lucide-react';
+import { Send, Globe } from 'lucide-react';
 import { useState } from 'react';
 import { toast } from 'sonner';
 import { useI18n } from '../../../i18n';
 import { useAppState } from '../../../contexts/AppStateContext';
+import BottomSheet from '../../../components/ui/bottom-sheet';
 
 interface PublishRecipeSheetProps {
   recipe: any;
@@ -36,54 +37,53 @@ export default function PublishRecipeSheet({ recipe, onClose }: PublishRecipeShe
   };
 
   return (
-    <div className="fixed inset-0 z-50 bg-background/80 backdrop-blur-sm flex items-end justify-center" onClick={onClose}>
-      <div className="bg-surface-container-low border-t border-outline-variant/20 w-full max-w-md rounded-t-lg overflow-hidden animate-in slide-in-from-bottom duration-300" onClick={e => e.stopPropagation()}>
-        <div className="flex items-center justify-between p-4 border-b border-outline-variant/10">
-          <div className="flex items-center gap-2">
-            <Globe className="w-5 h-5 text-primary" />
-            <h3 className="font-headline font-bold text-caption uppercase text-tertiary tracking-widest">{t.recipeDetail.shareToFeed}</h3>
-          </div>
-          <button type="button" onClick={onClose} aria-label={t.common.close} className="w-11 h-11 rounded-full bg-surface-container-highest flex items-center justify-center text-on-surface-variant hover:text-primary">
-            <X className="w-4 h-4" />
-          </button>
-        </div>
-
-        {/* Recipe preview */}
-        <div className="p-4">
-          <div className="bg-background rounded-sm border border-outline-variant/20 p-3 flex items-center gap-3">
-            {(recipe.img || recipe.image) && (
-              <img src={recipe.img || recipe.image} alt={recipe.title} className="w-14 h-14 rounded-sm object-cover" referrerPolicy="no-referrer" />
-            )}
-            <div>
-              <h4 className="font-headline font-bold text-caption uppercase text-tertiary">{recipe.title}</h4>
-              <div className="flex gap-2 mt-1">
-                <span className="font-label text-micro tracking-widest text-primary">{recipe.macros?.calories || recipe.cal || 0} kcal</span>
-                <span className="font-label text-micro tracking-widest text-on-surface-variant">{recipe.macros?.protein || recipe.pro || 0}g P</span>
-              </div>
+    <BottomSheet
+      open={true}
+      onOpenChange={(o) => { if (!o) onClose(); }}
+      title={t.recipeDetail.shareToFeed}
+      actionSlot={<Globe className="w-5 h-5 text-primary" aria-hidden="true" />}
+      footer={
+        <button
+          type="button"
+          onClick={handlePublish}
+          className="w-full min-h-11 bg-primary text-on-primary rounded-sm font-headline text-caption font-bold uppercase tracking-widest flex items-center justify-center gap-2 hover:opacity-90 transition-opacity"
+        >
+          <Send className="w-4 h-4" /> {t.recipeDetail.shareToFeed}
+        </button>
+      }
+    >
+      <div className="space-y-4 pt-2">
+        <div className="bg-background rounded-sm border border-outline-variant/20 p-3 flex items-center gap-3">
+          {(recipe.img || recipe.image) && (
+            <img
+              src={recipe.img || recipe.image}
+              alt={recipe.title}
+              className="w-14 h-14 rounded-sm object-cover"
+              referrerPolicy="no-referrer"
+            />
+          )}
+          <div>
+            <h4 className="font-headline font-bold text-caption uppercase text-tertiary">{recipe.title}</h4>
+            <div className="flex gap-2 mt-1">
+              <span className="font-label text-micro tracking-widest text-primary">
+                {recipe.macros?.calories || recipe.cal || 0} kcal
+              </span>
+              <span className="font-label text-micro tracking-widest text-on-surface-variant">
+                {recipe.macros?.protein || recipe.pro || 0}g P
+              </span>
             </div>
           </div>
         </div>
 
-        {/* Caption */}
-        <div className="px-4 pb-4">
-          <textarea
-            value={caption}
-            onChange={(e) => setCaption(e.target.value)}
-            placeholder={t.recipeDetail.publishCaption}
-            className="w-full bg-surface-container-highest border border-outline-variant/30 rounded-sm p-3 text-caption font-body text-tertiary placeholder:text-on-surface-variant/50 focus:outline-none focus:border-primary resize-none min-h-[80px]"
-            maxLength={300}
-          />
-        </div>
-
-        <div className="px-4 pb-4">
-          <button type="button"
-            onClick={handlePublish}
-            className="w-full min-h-11 bg-primary text-on-primary rounded-sm font-headline text-caption font-bold uppercase tracking-widest flex items-center justify-center gap-2 hover:opacity-90 transition-opacity"
-          >
-            <Send className="w-4 h-4" /> {t.recipeDetail.shareToFeed}
-          </button>
-        </div>
+        <textarea
+          value={caption}
+          onChange={(e) => setCaption(e.target.value)}
+          placeholder={t.recipeDetail.publishCaption}
+          aria-label={t.recipeDetail.publishCaption}
+          className="w-full bg-surface-container-highest border border-outline-variant/30 rounded-sm p-3 text-caption font-body text-tertiary placeholder:text-on-surface-variant/50 focus:outline-none focus:border-primary resize-none min-h-[80px]"
+          maxLength={300}
+        />
       </div>
-    </div>
+    </BottomSheet>
   );
 }

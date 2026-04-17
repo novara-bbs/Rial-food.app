@@ -18,7 +18,8 @@ Canonical components. Reach for these **before** writing JSX from scratch.
 | `EmptyState` | `src/components/EmptyState.tsx` | Zero-data screens with optional CTA | Loading states (use `Skeleton`) |
 | `ConfirmDialog` | `src/components/ConfirmDialog.tsx` | Destructive confirmations | Content dialogs (use `Dialog`) |
 | `Dialog` | `src/components/ui/dialog.tsx` (shadcn) | Modals with custom content | Quick confirmations (use `ConfirmDialog`) |
-| `Sheet` | `src/components/ui/sheet.tsx` (shadcn) | Slide-out panels, mobile drawers | Tiny menus (use `DropdownMenu` pattern) |
+| `Sheet` | `src/components/ui/sheet.tsx` (shadcn, legacy) | Left/right/top drawers | Bottom sheets — use `BottomSheet` instead |
+| `BottomSheet` | `src/components/ui/bottom-sheet.tsx` | Bottom-anchored secondary surfaces (pickers, edit detail, filter groups) | Full-screen flows (use `PageShell`); destructive confirms (use `ConfirmDialog`); tiny menus (use `DropdownMenu` pattern) |
 | `Button` | `src/components/ui/button.tsx` (shadcn, skinned) | **Every clickable action** | Links (use `<a>`); custom icons inside tiles |
 | `GlobalHeader` | `src/components/GlobalHeader.tsx` | App-wide header (search, notifications, profile) | Screen-level headers (use `PageHeader`) |
 | `BottomNav` | `src/components/BottomNav.tsx` | Mobile primary nav | Tablet/desktop (hidden by `md:hidden`) |
@@ -139,6 +140,24 @@ When `onClick` is provided the tile renders as a `<button>` with hover + focus a
   </SheetContent>
 </Sheet>
 ```
+
+### BottomSheet (ADR-009)
+```tsx
+<BottomSheet
+  open={open}
+  onOpenChange={setOpen}
+  title={t.filters.title}
+  description={t.filters.subtitle}
+  actionSlot={<Settings className="w-5 h-5 text-on-surface-variant" aria-hidden="true" />}
+  footer={
+    <Button className="w-full" onClick={handleApply}>{t.common.apply}</Button>
+  }
+>
+  {/* scrollable body */}
+</BottomSheet>
+```
+
+Defaults baked in by ADR-009: `max-h-[88vh]` (status bar + dynamic island visible behind), `rounded-t-3xl`, handle pill on top, overlay `bg-black/25` (not 50%), sticky header with close X + centered title + optional `actionSlot`, scrollable body, optional `footer` with safe-area-inset padding. For **bottom** anchored sheets use `BottomSheet`; for left/right/top drawers keep the legacy shadcn `Sheet`.
 
 ---
 

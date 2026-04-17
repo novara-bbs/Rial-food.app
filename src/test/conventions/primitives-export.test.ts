@@ -25,6 +25,7 @@ import DayGridCalendar from '@/components/DayGridCalendar';
 import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Sheet, SheetContent } from '@/components/ui/sheet';
+import BottomSheet from '@/components/ui/bottom-sheet';
 
 describe('Primitives — canonical exports (ADR-001)', () => {
   it('exports the screen shells', () => {
@@ -57,6 +58,7 @@ describe('Primitives — canonical exports (ADR-001)', () => {
     expect(DialogTitle).toBeTruthy();
     expect(Sheet).toBeTruthy();
     expect(SheetContent).toBeTruthy();
+    expect(BottomSheet).toBeTruthy();
   });
 
   it('exports the Button primitive (shadcn, skinned)', () => {
