@@ -28,6 +28,7 @@ Object.defineProperty(navigator, 'onLine', {
 });
 
 // ─── Suppress console.warn in tests (schema validation warnings) ──
+// eslint-disable-next-line no-console -- test harness intentionally taps console.warn
 const originalWarn = console.warn.bind(console);
 beforeEach(() => {
   vi.spyOn(console, 'warn').mockImplementation((...args: unknown[]) => {

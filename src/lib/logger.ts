@@ -1,7 +1,11 @@
 /**
  * Structured logger with Sentry integration.
  * Thin wrapper — replaces raw console.* across the codebase.
+ *
+ * This is the single authorized console.* callsite: the whole point of this
+ * module is to centralize output. Everything else routes through `logger.*`.
  */
+/* eslint-disable no-console */
 import * as Sentry from '@sentry/react';
 
 type LogLevel = 'info' | 'warn' | 'error';

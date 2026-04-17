@@ -24,6 +24,7 @@ import { createHandleLogWeight, createHandleUpdateSnapshot, createHandleDeleteSn
 import { createHandleShareProgress } from '../features/wellness/handlers/progress-share-handlers';
 import { createHandleLoadDemoSeed, createHandleClearDemoSeed } from '../features/dev/handlers/demo-seed-handlers';
 import { shouldReseed, setStoredSeedVersion } from '../lib/seedVersion';
+import { logger } from '../lib/logger';
 import type { BodySnapshot } from '../types/wellness';
 import type { CommunityPost } from '../types/social';
 
@@ -341,7 +342,7 @@ export function AppStateProvider({ children }: { children: React.ReactNode }) {
         });
         setStoredSeedVersion('savedRecipes');
       })
-      .catch((err) => console.warn('[seed] savedRecipes load failed', err));
+      .catch((err) => logger.warn('seed.savedRecipes load failed', { err }));
   }, []);
 
   const [mealPlan, setMealPlan] = useLocalStorageState<Record<number, any[]>>('mealPlan', {});
@@ -355,7 +356,7 @@ export function AppStateProvider({ children }: { children: React.ReactNode }) {
         );
         setStoredSeedVersion('mealPlan');
       })
-      .catch((err) => console.warn('[seed] mealPlan load failed', err));
+      .catch((err) => logger.warn('seed.mealPlan load failed', { err }));
   }, []);
 
   const [shoppingList, setShoppingList] = useLocalStorageState<ShoppingItem[]>('shoppingList', []);
@@ -369,7 +370,7 @@ export function AppStateProvider({ children }: { children: React.ReactNode }) {
         );
         setStoredSeedVersion('shoppingList');
       })
-      .catch((err) => console.warn('[seed] shoppingList load failed', err));
+      .catch((err) => logger.warn('seed.shoppingList load failed', { err }));
   }, []);
 
   const [communityPosts, setCommunityPosts] = useLocalStorageState<any[]>('communityPosts', []);
@@ -381,7 +382,7 @@ export function AppStateProvider({ children }: { children: React.ReactNode }) {
         setCommunityPosts(m.SEED_POSTS);
         setStoredSeedVersion('communityPosts');
       })
-      .catch((err) => console.warn('[seed] communityPosts load failed', err));
+      .catch((err) => logger.warn('seed.communityPosts load failed', { err }));
   }, []);
 
   // Toggles for like/save. Kept id-list for per-user state (cross-device sync +
@@ -427,7 +428,7 @@ export function AppStateProvider({ children }: { children: React.ReactNode }) {
         );
         setStoredSeedVersion('toleranceLogs');
       })
-      .catch((err) => console.warn('[seed] toleranceLogs load failed', err));
+      .catch((err) => logger.warn('seed.toleranceLogs load failed', { err }));
   }, []);
 
   const [realFeelLogs, setRealFeelLogs] = useLocalStorageState<any[]>('realFeelLogs', []);
@@ -442,7 +443,7 @@ export function AppStateProvider({ children }: { children: React.ReactNode }) {
         setCommunityStories(m.SEED_STORIES);
         setStoredSeedVersion('communityStories');
       })
-      .catch((err) => console.warn('[seed] communityStories load failed', err));
+      .catch((err) => logger.warn('seed.communityStories load failed', { err }));
   }, []);
 
   // Notifications
@@ -485,7 +486,7 @@ export function AppStateProvider({ children }: { children: React.ReactNode }) {
         );
         setStoredSeedVersion('weightHistory');
       })
-      .catch((err) => console.warn('[seed] weightHistory load failed', err));
+      .catch((err) => logger.warn('seed.weightHistory load failed', { err }));
   }, []);
 
   // Nutrition history — lazy-seeded
@@ -499,7 +500,7 @@ export function AppStateProvider({ children }: { children: React.ReactNode }) {
         );
         setStoredSeedVersion('nutritionHistory');
       })
-      .catch((err) => console.warn('[seed] nutritionHistory load failed', err));
+      .catch((err) => logger.warn('seed.nutritionHistory load failed', { err }));
   }, []);
 
   // RealFeel logs — lazy-seeded
@@ -513,7 +514,7 @@ export function AppStateProvider({ children }: { children: React.ReactNode }) {
         );
         setStoredSeedVersion('realFeelLogs');
       })
-      .catch((err) => console.warn('[seed] realFeelLogs load failed', err));
+      .catch((err) => logger.warn('seed.realFeelLogs load failed', { err }));
   }, []);
 
   // Weekly check-ins — lazy-seeded. Writes directly to localStorage because
@@ -536,7 +537,7 @@ export function AppStateProvider({ children }: { children: React.ReactNode }) {
         }
         setStoredSeedVersion('weeklyCheckIns');
       })
-      .catch((err) => console.warn('[seed] weeklyCheckIns load failed', err));
+      .catch((err) => logger.warn('seed.weeklyCheckIns load failed', { err }));
   }, []);
 
   // Daily food diary log (persisted, cleared manually or on new day)

@@ -31,6 +31,9 @@ if (SENTRY_DSN) {
 // Global unhandled rejection handler
 window.addEventListener('unhandledrejection', (event) => {
   Sentry.captureException(event.reason);
+  // Last-resort global error sink; stays raw because `logger` itself may be
+  // unavailable during very early bootstrap.
+  // eslint-disable-next-line no-console
   console.error('[UnhandledRejection]', event.reason);
 });
 

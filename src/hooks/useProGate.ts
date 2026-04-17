@@ -79,7 +79,7 @@ export function useProGate() {
         // Offline — trust cached value if available
         if (cached !== null && cached !== isPro) setIsPro(cached);
       });
-  }, []); // eslint-disable-line
+  }, []);
 
   const showGate = () => {
     toast(t.rialPlus.upgrade, { action: { label: 'RIAL+', onClick: () => navigateTo('rial-plus') } });

@@ -84,6 +84,7 @@ describe('SectionCard drift monitor (ADR-001)', () => {
   it(`has ≤ ${BASELINE} hand-rolled occurrences (Q16 must not regress)`, () => {
     const { count, files } = countShapeOccurrences();
     if (count > BASELINE) {
+      // eslint-disable-next-line no-console -- test diagnostic surfaced to CI logs
       console.error(
         `\nSectionCard shape regressed: found ${count}, baseline ${BASELINE}. ` +
           `Files:\n  - ${files.join('\n  - ')}\n` +

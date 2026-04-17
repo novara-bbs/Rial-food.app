@@ -28,7 +28,6 @@ export default function StoryViewer({ onBack }: { onBack: () => void }) {
   // re-entry to StoryViewer starts cleanly. Intentionally empty deps.
   useEffect(() => {
     if (selectedStoryAuthorId) setSelectedStoryAuthorId(null);
-    // eslint-disable-next-line
   }, []);
 
   const currentStory = activeStories[storyIndex];

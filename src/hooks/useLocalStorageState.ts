@@ -1,4 +1,5 @@
 import { useState, useEffect, Dispatch, SetStateAction } from 'react';
+import { logger } from '../lib/logger';
 
 export function useLocalStorageState<T>(key: string, defaultValue: T): [T, Dispatch<SetStateAction<T>>] {
   const [state, setState] = useState<T>(() => {
@@ -6,7 +7,7 @@ export function useLocalStorageState<T>(key: string, defaultValue: T): [T, Dispa
       const item = window.localStorage.getItem(key);
       return item ? JSON.parse(item) : defaultValue;
     } catch (error) {
-      console.warn(`Error reading localStorage key "${key}":`, error);
+      logger.warn('useLocalStorageState.read failed', { key, error });
       return defaultValue;
     }
   });
@@ -15,7 +16,7 @@ export function useLocalStorageState<T>(key: string, defaultValue: T): [T, Dispa
     try {
       window.localStorage.setItem(key, JSON.stringify(state));
     } catch (error) {
-      console.warn(`Error setting localStorage key "${key}":`, error);
+      logger.warn('useLocalStorageState.write failed', { key, error });
     }
   }, [key, state]);
 

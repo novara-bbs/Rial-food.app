@@ -58,7 +58,6 @@ export default function ImportRecipeURL({ onBack, onImport }: { onBack: () => vo
     // URL validation (only for url mode)
     if (inputMode === 'url') {
       try {
-        // eslint-disable-next-line no-new
         new URL(trimmed);
       } catch {
         setError(t.importUrl.invalidUrl);
