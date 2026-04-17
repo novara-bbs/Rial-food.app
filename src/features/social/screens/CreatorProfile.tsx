@@ -9,6 +9,7 @@ import EmptyState from '../../../components/EmptyState';
 import PageHeader from '../../../components/patterns/PageHeader';
 import RecipeCard from '../../../components/patterns/RecipeCard';
 import { CREATORS_MAP } from '../data/seed-creators';
+import SectionCard from '../../../components/SectionCard';
 
 export default function CreatorProfile({ onBack }: { onBack: () => void }) {
   const { t } = useI18n();
@@ -70,7 +71,7 @@ export default function CreatorProfile({ onBack }: { onBack: () => void }) {
       <PageHeader onBack={onBack} title={cp.title} />
 
       {/* Profile card */}
-      <div className="bg-surface-container-low border border-outline-variant/20 rounded-sm p-6">
+      <SectionCard padding="lg" spacing="none">
         <div className="flex items-start gap-5">
           <img src={creator.avatar} alt={creator.name} className="w-20 h-20 rounded-full object-cover border-2 border-primary/30" referrerPolicy="no-referrer" />
           <div className="flex-1 min-w-0">
@@ -125,7 +126,7 @@ export default function CreatorProfile({ onBack }: { onBack: () => void }) {
             </button>
           )}
         </div>
-      </div>
+      </SectionCard>
 
       {/* Tabs: Posts | Recipes | About */}
       <Tabs defaultValue="posts">
@@ -199,7 +200,7 @@ export default function CreatorProfile({ onBack }: { onBack: () => void }) {
         </TabsContent>
 
         <TabsContent value="about" className="space-y-4 mt-4">
-          <div className="bg-surface-container-low border border-outline-variant/20 rounded-sm p-5 space-y-4">
+          <SectionCard padding="md" spacing="lg">
             {creator.bio && (
               <div>
                 <span className="font-label text-micro uppercase tracking-widest text-on-surface-variant block mb-1">{cp.bio}</span>
@@ -267,7 +268,7 @@ export default function CreatorProfile({ onBack }: { onBack: () => void }) {
                 </div>
               </div>
             )}
-          </div>
+          </SectionCard>
         </TabsContent>
       </Tabs>
     </PageShell>

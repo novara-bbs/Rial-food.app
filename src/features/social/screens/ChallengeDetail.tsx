@@ -4,6 +4,7 @@ import { useMemo } from 'react';
 import { useI18n } from '../../../i18n';
 import { useAppState } from '../../../contexts/AppStateContext';
 import PageHeader from '../../../components/patterns/PageHeader';
+import SectionCard from '../../../components/SectionCard';
 
 const MOCK_LEADERBOARD = [
   { rank: 1, name: 'ChefMarta', avatar: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?auto=format&fit=crop&w=100&q=80', streak: 7 },
@@ -70,7 +71,7 @@ export default function ChallengeDetail({ onBack, challengeId }: { onBack: () =>
       <PageHeader onBack={onBack} title={ct.detail || 'Challenge'} />
 
       {/* Hero */}
-      <div className="bg-surface-container-low border border-outline-variant/20 rounded-sm p-6 text-center">
+      <SectionCard padding="lg" spacing="none" className="text-center">
         <span className="text-5xl" aria-hidden="true">{challenge.icon}</span>
         <h2 className="font-headline font-bold text-xl uppercase text-tertiary mt-3">{ct[challenge.titleKey] || challengeId}</h2>
         <p className="text-body-sm text-on-surface-variant mt-2">{ct[challenge.descKey] || ''}</p>
@@ -78,7 +79,7 @@ export default function ChallengeDetail({ onBack, challengeId }: { onBack: () =>
           <span className="font-label tracking-widest uppercase">{challenge.days} {ct.days}</span>
           <span className="font-label tracking-widest uppercase">{challenge.participants} {ct.participants}</span>
         </div>
-      </div>
+      </SectionCard>
 
       {/* Join / Check-in action */}
       {!isJoined ? (
@@ -106,8 +107,7 @@ export default function ChallengeDetail({ onBack, challengeId }: { onBack: () =>
 
       {/* Progress calendar */}
       {isJoined && calendarDays.length > 0 && (
-        <div className="bg-surface-container-low border border-outline-variant/20 rounded-sm p-5">
-          <h3 className="font-headline font-bold text-body-sm uppercase text-tertiary tracking-widest mb-4">{ct.calendar}</h3>
+        <SectionCard padding="md" spacing="lg" title={ct.calendar}>
           <div className="grid grid-cols-7 gap-2">
             {calendarDays.map(d => (
               <div
@@ -123,16 +123,15 @@ export default function ChallengeDetail({ onBack, challengeId }: { onBack: () =>
               </div>
             ))}
           </div>
-          <div className="flex items-center gap-2 mt-4">
+          <div className="flex items-center gap-2">
             <Trophy className="w-4 h-4 text-primary" />
             <span className="font-label text-body-sm tracking-widest text-tertiary uppercase">{ct.streak?.replace('{count}', String(streak)) || `${streak} day streak`}</span>
           </div>
-        </div>
+        </SectionCard>
       )}
 
       {/* Leaderboard */}
-      <div className="bg-surface-container-low border border-outline-variant/20 rounded-sm p-5">
-        <h3 className="font-headline font-bold text-body-sm uppercase text-tertiary tracking-widest mb-4">{ct.leaderboard}</h3>
+      <SectionCard padding="md" spacing="lg" title={ct.leaderboard}>
         <div className="space-y-2">
           {MOCK_LEADERBOARD.map((entry) => (
             <div key={entry.rank} className="flex items-center gap-3 p-2">
@@ -153,7 +152,7 @@ export default function ChallengeDetail({ onBack, challengeId }: { onBack: () =>
             </div>
           )}
         </div>
-      </div>
+      </SectionCard>
 
       {/* Leave button */}
       {isJoined && (
