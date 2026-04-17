@@ -1,16 +1,17 @@
 # RIAL Current State
 
-Last updated: 2026-04-17 (post seed-hydration fix, pre-push)
+Last updated: 2026-04-17 (post seed-hydration push + .claude/ onboarding fix)
 
 ## Release snapshot
-- Root branch: `main`, in sync with `rial-food/main`. **1 pending local commit** (`[1.5.22]` seed-hydration fix) awaiting explicit push approval per governance "no puseamos hasta le final".
+- Root branch: `main`, in sync with `rial-food/main`. No pending local commits.
 - Release remote: `rial-food` (worktree remote: `origin`)
 - Active Vercel project: `rial.app.v1.5`
 - Vercel project id: `prj_t11VHYQjptazjUx7Y2hWLz0IDAjg`
 - **Governance (2026-04-17):** work directly on `main`. No feature branches, no worktrees going forward. Reconcile in-flight divergence by merging directly into `main`.
 
-## Recent commits on `main` (pending = not yet pushed)
-- `(pending)` `fix(seed-hydration): versioned re-hydration so existing users receive bumped seeds`
+## Recent commits on `main`
+- `5aca2a8` `chore(agents): track .claude/ shared assets so collaborators get slash commands + subagents + skills`
+- `7065465` `fix(seed-hydration): versioned reseed so existing users receive bumped seed content`
 - `0dd90eb` `fix(e2e): scope nav tests to mobile viewport + unprefixed localStorage seeds`
 - `53e8434` `fix(e2e): force Playwright locale to es-ES so i18n-anchored selectors pass on CI`
 - `e46ec12` `docs(wave-4): AUDIT-TAB-2026-04-18 close-out + CHANGELOG 1.5.21 + state snapshot + NEW-SCREEN-CHECKLIST`
