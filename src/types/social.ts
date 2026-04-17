@@ -46,6 +46,7 @@ export interface CommunityPost {
     time: string;
     img: string;
     tag: string;
+    photos?: string[];
   };
   progress?: ProgressPostPayload;
   repostOf?: number;
