@@ -1,15 +1,18 @@
 # RIAL Current State
 
-Last updated: 2026-04-17 (Q16-B2 COMPLETE — SectionCard-shape drift 22 → 0 real occurrences; ESLint allowlist 18 → 5 shadcn-only · pushed to `rial-food/main` HEAD `350662f`, working tree clean)
+Last updated: 2026-04-18 (Bevel adoption PR 2 shipped — `<BottomSheet>` primitive per ADR-009 + 2 consumer migrations (PortionSheet + PublishRecipeSheet) · pushed to `rial-food/main` HEAD `82d73f8`, working tree clean)
 
 ## Release snapshot
-- Root branch: `main`, **in sync with `rial-food/main`** at HEAD `350662f`. Final Q16-B2 commit: TodaysMeals + CreatorProfile (3 migrations). **Q16-B2 complete: SectionCard-shape drift = 0 real occurrences** (only SectionCard.tsx primitive + 2 helpers in surface.ts remain); **ESLint Q16 allowlist = 5 files** (shadcn/ui only: badge/input/select/tabs/textarea).
+- Root branch: `main`, **in sync with `rial-food/main`** at HEAD `82d73f8`. PR 2 of the Bevel adoption roadmap: new `<BottomSheet>` primitive wrapping radix-ui `Dialog` per ADR-009 (max-h 88vh, rounded-t-3xl, handle pill, overlay `bg-black/25`, sticky close-X + centered title + actionSlot, safe-area footer). 2 real hand-rolled sheets migrated: `PortionSheet` (active in `AddMeal`) + `PublishRecipeSheet` (active in `RecipeDetail` share flow). Convention test `bottom-sheet.test.ts` locks the ADR-009 defaults (10 assertions). Q16-B2 baseline preserved: **SectionCard-shape drift = 0 real occurrences**; **ESLint Q16 allowlist = 5 files** (shadcn/ui only: badge/input/select/tabs/textarea).
 - Release remote: `rial-food` (worktree remote: `origin`)
 - Active Vercel project: `rial.app.v1.5`
 - Vercel project id: `prj_t11VHYQjptazjUx7Y2hWLz0IDAjg`
 - **Governance (2026-04-17):** work directly on `main`. No feature branches, no worktrees going forward. Reconcile in-flight divergence by merging directly into `main`.
 
 ## Recent commits on `main` (in sync with `rial-food/main`)
+- `82d73f8` `feat(ui): BottomSheet primitive (ADR-009) + 2 consumer migrations (PortionSheet + PublishRecipeSheet)`
+- `cc2a30b` `docs(design): Bevel playbook + ADR-008 (pricing) + ADR-009 (bottom-sheet anatomy)`
+- `dc9731d` `docs(state): Q16-B2 complete — SectionCard drift 22->0, allowlist 18->5 shadcn-only`
 - `350662f` `refactor(q16-b2): TodaysMeals + CreatorProfile SectionCard shapes -> primitive (3 migrations)`
 - `8b600c9` `refactor(q16-b2): RealFeelDiary SectionCard shapes -> primitive (6 migrations)`
 - `8f48068` `refactor(q16-b2): Planner+Pantry+ShoppingList+AICoach+BarcodeScanner+Onboarding -> SectionCard/INPUT_SURFACE_CLASSES`
@@ -82,21 +85,31 @@ Two upstream commits (`8b8a5b5` sprint-q Progress restructure, `155f08b` sprint-
 
 Collateral: my Q16 pilot migration on `WeeklyCheckIn.tsx` + `WeeklyReview.tsx` is wasted work (remote rewrote both). SectionCard baseline recalculated post-merge.
 
-## Quality baseline (2026-04-17, Q16-B2 COMPLETE — all SectionCard-shape drift eliminated)
+## Quality baseline (2026-04-18, PR 2 Bevel — `<BottomSheet>` primitive shipped)
 - TypeScript: 0 errors (`npx tsc --noEmit`)
-- Tests: **556/556** unit tests passing
-- i18n symmetry: **1499** keys aligned ES ↔ EN (`npm run check:i18n`)
+- Tests: **566/566** unit tests passing (+10 from `bottom-sheet.test.ts` convention; 556 → 566)
+- i18n symmetry: **1499** keys aligned ES ↔ EN (`npm run check:i18n`) — no new keys in PR 2
 - Design-system lint: 0 errors, warnings pre-existing (type-debt `no-explicit-any` + 5 intentional shadcn allowlist entries)
-- Build (measured 2026-04-17 via `npm run release:preflight`):
-  - main entry: **769.9 KB raw / 241.0 KB gzip**
+- Build (measured 2026-04-18 via `npm run release:preflight`):
+  - main entry: **770.0 KB raw / 241.0 KB gzip** (±0.1 KB vs Q16-B2)
   - vendor-recharts: 331.5 KB raw / 99.8 KB gzip
-  - total dist/assets/*.js: **2714.7 KB raw / 773.2 KB gzip**
+  - total dist/assets/*.js: ~2715 KB raw / ~773 KB gzip
 - Drift baselines (final, post Q16-B2 complete):
   - `text-[Npx]` occurrences across `src/`: **0** (Q16 B1 codemod `78786fc` eliminated all 249)
   - SectionCard shape: **0** real drift. All 22 remaining occurrences migrated across this session's commits. Only legitimate matches remain: `SectionCard.tsx` (primitive itself) + 2 helpers in `surface.ts` (INPUT_SURFACE_CLASSES / BUTTON_CARD_SURFACE_CLASSES).
   - ESLint Q16 migration allowlist: **5 files** (shadcn/ui only: `badge.tsx`, `input.tsx`, `select.tsx`, `tabs.tsx`, `textarea.tsx` — library convention, intentional, not to be removed).
   - `INPUT_SURFACE_CLASSES` helper consumers: **4** (BarcodeScanner, Onboarding, PostDetail, SettingsNutrition).
   - `BUTTON_CARD_SURFACE_CLASSES` helper consumers: **5** (BodySnapshotCard, Discover ×2, PostDetail, Profile).
+
+## 2026-04-17/18 Bevel adoption roadmap (in progress)
+Plan: `.claude/plans/revisa-todas-las-capturas-ancient-micali.md`. Playbook: `docs/market/bevel-design-playbook.md`. Derived from 64 Bevel captures IMG_0951–IMG_1019.
+
+- **PR 1 — `cc2a30b`** (shipped). Docs: `bevel-design-playbook.md`, `ADR-008-pricing-model.md` (free-generous core + single premium tier), `ADR-009-bottom-sheet-anatomy.md` (handle pill, max-h-88vh, rounded-t-3xl, overlay `bg-black/25`, sticky header, safe-area footer). CHANGELOG `[1.5.30]`.
+- **PR 2 — `82d73f8`** (shipped). `<BottomSheet>` primitive at `src/components/ui/bottom-sheet.tsx` wrapping radix `Dialog`. Convention test `src/test/conventions/bottom-sheet.test.ts` (10 assertions locking ADR-009 defaults). 2 consumer migrations — **piloto pivot** vs plan: originally-planned `RecipeDaySelectorSheet` + `MealSlotMultiSelect` turned out to be inline components (chip groups), not real sheets. Migrated instead: `PortionSheet` (active in `AddMeal.tsx:561`) + `PublishRecipeSheet` (active in `RecipeDetail.tsx:843`). Docs: `PRIMITIVES.md` table + example updated; `primitives-export.test.ts` extended; `bevel-design-playbook.md` §4.1.a added capturing the owner directive "implantar Paleta 1 light **y dark** · unificar 6 → 3 con `prefers-color-scheme` auto-switch". CHANGELOG `[1.5.31]`. Verified via `preview_inspect` on real flows: content `max-height: 716.486px` (88% of 813.8px viewport ≈ 88vh ✓), `border-top-*-radius: 24px` ✓, overlay `oklab(0 0 0 / 0.25)` ✓, status bar + parent screen visible behind sheet.
+- **PR 3 (next, awaiting authorization)** — Paleta 1 **dual light/dark** per playbook §4.1.a. Must ship BOTH variants so the future 6 → 3 consolidation (VOLT/OCEAN/EMBER × dark/light → Paleta 1-Bevel / Paleta 2-OCEAN / Paleta 3-EMBER with `@media (prefers-color-scheme)` auto-switch) lands on a complete base. Scope: `src/index.css` `.theme-light` + `.theme-dark` tokens (warm background `#fafaf9`/`#0a0a0b`, borderless cards with `shadow-elev-2`, neutral primary), verify via 6-screen `preview_screenshot` diff in both modes, WCAG AA contrast re-check.
+- **PR 4 (future)** — Migrate 5 remaining hand-rolled bottom sheets to `<BottomSheet>` (`PhotoUploader`, `LogSnapshotModal`, `AddMeal` sheet tab, `ImportRecipeURL` confirmation, `BarcodeScanner` overlay) + Home hero consolidation behind feature flag `featureFlags.homeRingGrid` (Bevel IMG_0974 pattern).
+
+**Governance.** Owner approved push of PR 2 via "continua" directive after green preflight, per stored feedback memory.
 
 ## 2026-04-17 Q19 meal-taxonomy (shipped — `5dab667`)
 Plan: `.claude/plans/analiza-si-tiene-sentido-floating-kurzweil.md`. CHANGELOG: `[1.5.25]`.
