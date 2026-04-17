@@ -1,27 +1,32 @@
 # RIAL Current State
 
-Last updated: 2026-04-17 (post Fase 2 multi-media — PhotoUploader + imageCompress + Capacitor Camera; 1 commit ahead of `rial-food/main`, push pending explicit approval)
+Last updated: 2026-04-17 (post Q16 B1 codemod + B2 helper + SettingsProfile/Nutrition + SectionCard API extension + BarcodeScanner/Onboarding partials; `rial-food/main` HEAD `48def0d`, 3 commits ahead awaiting push)
 
 ## Release snapshot
-- Root branch: `main`, **1 commit ahead of `rial-food/main`** (Fase 2 `dd22be8` — awaiting push approval).
+- Root branch: `main`, **3 commits ahead of `rial-food/main`** (HEAD `27dad43`). B2 batch complete locally (SectionCard `none` variant, BarcodeScanner/Onboarding INPUT_SURFACE_CLASSES, allowlist drop of migrated files) — push gated on explicit approval.
 - Release remote: `rial-food` (worktree remote: `origin`)
 - Active Vercel project: `rial.app.v1.5`
 - Vercel project id: `prj_t11VHYQjptazjUx7Y2hWLz0IDAjg`
 - **Governance (2026-04-17):** work directly on `main`. No feature branches, no worktrees going forward. Reconcile in-flight divergence by merging directly into `main`.
 
-## Recent commits on `main`
-- `dd22be8` `feat(recipes): Fase 2 multi-media — PhotoUploader + imageCompress + Capacitor Camera` (uncommitted → pushed: **pending**)
+## Recent commits on `main` (3 ahead of `rial-food/main`)
+- `27dad43` `chore(q16): drop SettingsProfile + SettingsNutrition from allowlist` *(local)*
+- `4fc53fd` `refactor(q16-b2): BarcodeScanner + Onboarding inputs → INPUT_SURFACE_CLASSES` *(local)*
+- `05b558b` `feat(q16-b2): extend SectionCard with padding='none' + spacing='none'` *(local)*
+- `48def0d` `refactor(q16-b2): SettingsNutrition dislike search → INPUT_SURFACE_CLASSES`
+- `7386c5c` `refactor(q16-b2): SettingsProfile inputs → INPUT_SURFACE_CLASSES`
+- `8054c9d` `chore(q16): shrink allowlist further + extract INPUT_SURFACE_CLASSES`
+- `e442916` `docs(market): competitive baseline + prioritization + hard metrics` (CHANGELOG `[1.5.27]` + `[1.5.28]`)
+- `f00d8d6` `chore(q16): trim 24 clean files from ESLint allowlist post-B1 codemod`
+- `78786fc` `feat(q16-codemod): text-[Npx] → design tokens (249 replacements, 47 files)`
+- `1e18c97` `fix(social): CommunityPost.recipe.photos[] + drift baseline re-medido`
+- `3932669` `docs(state): Fase 2 multi-media snapshot + SyncKey data-URL risk + Q6 handoff`
+- `dd22be8` `feat(recipes): Fase 2 multi-media — PhotoUploader + imageCompress + Capacitor Camera`
 - `3e76879` `docs(q19-meal-taxonomy): CHANGELOG 1.5.25 + state.md close-out`
 - `58aa9c7` `feat(recipes): Fase 1 multi-media — hero gallery + lightbox + hybrid video section`
-- `ed1e08b` `chore(gitignore): ignore playwright reports + claude local settings`
 - `5dab667` `feat(sprint-q19): meal-taxonomy migration — mealType string → suitableFor[] MealSlot[]`
 - `24b5925` `chore(lint): purga warnings triviales — ignores Capacitor + console.* via logger`
 - `99305d2` `fix(ui): normaliza shells Cocina+Discovery + RecipeCard tokens + HIG tap-targets`
-- `4656f5d` `docs(state): snapshot post seed-hydration push + .claude/ onboarding fix`
-- `5aca2a8` `chore(agents): track .claude/ shared assets so collaborators get slash commands + subagents + skills`
-- `7065465` `fix(seed-hydration): versioned reseed so existing users receive bumped seed content`
-- `0dd90eb` `fix(e2e): scope nav tests to mobile viewport + unprefixed localStorage seeds`
-- `53e8434` `fix(e2e): force Playwright locale to es-ES so i18n-anchored selectors pass on CI`
 - `e46ec12` `docs(wave-4): AUDIT-TAB-2026-04-18 close-out + CHANGELOG 1.5.21 + state snapshot + NEW-SCREEN-CHECKLIST`
 - `26ba1bd` `refactor(wave-3): Explora tab polish — factory handlers + drift purge + i18n + Discover relocation`
 - `7db26c8` `refactor(wave-2): Cocina tab polish — drift purge, HIG taps, unsave confirm, iframe sandbox, mealSlot picker`
@@ -57,20 +62,20 @@ Two upstream commits (`8b8a5b5` sprint-q Progress restructure, `155f08b` sprint-
 
 Collateral: my Q16 pilot migration on `WeeklyCheckIn.tsx` + `WeeklyReview.tsx` is wasted work (remote rewrote both). SectionCard baseline recalculated post-merge.
 
-## Quality baseline (2026-04-17, post Fase 2 multi-media)
+## Quality baseline (2026-04-17, post Q16 B1 codemod + B2 helper + SettingsProfile/Nutrition/BarcodeScanner/Onboarding partials)
 - TypeScript: 0 errors (`npx tsc --noEmit`)
-- Tests: **549/549** unit tests passing (+6 from `imageCompress.test.ts` + otros Q19)
-- i18n symmetry: **1499** keys aligned ES ↔ EN (`npm run check:i18n`) — +11 claves bajo `createRecipe` para PhotoUploader
-- Design-system lint: 0 errors, **883** warnings (Q16 allowlist estable; nuevos componentes de Fase 2 cumplen ADR-002/003/005 sin entrar en la lista)
-- Build (measured 2026-04-17 via `npm run build` + `npm run size:check`):
-  - main entry (resolved from `dist/index.html`): **769.8 KB raw / 240.9 KB gzip** (+3.5 KB raw / +1.3 KB gzip vs Cocina/Explora pass — Fase 1 HeroGallery/Lightbox/VideoSection + Q19 MealSlot helpers; Fase 2 PhotoUploader es lazy en CreateRecipe chunk)
-  - CreateRecipe chunk: **28.5 KB raw / 6.9 KB gzip** (incluye PhotoUploader inline)
-  - vendor-recharts: 331.5 KB raw / 99.8 KB gzip (unchanged)
-  - total dist/assets/*.js: 2720.0 KB raw / 773.7 KB gzip
-- Drift baselines:
-  - SectionCard shape: **72** (unchanged this pass — no SectionCard touches)
-  - `text-[Npx]` in `src/features/social/**`: **0** (unchanged)
-  - ESLint Q16 migration allowlist: **~41 files** (−2 from Wave 3 — `RecipeCard.tsx`, `Discovery.tsx` migrated)
+- Tests: **549/549** unit tests passing
+- i18n symmetry: **1499** keys aligned ES ↔ EN (`npm run check:i18n`)
+- Design-system lint: 0 errors, **610** warnings (type-debt `no-explicit-any` only — dropped from 883 post-Q16 B1 codemod `78786fc` and B2 migrations cleaning 24 more)
+- Build (measured 2026-04-17 via `npm run release:preflight`):
+  - main entry: **769.8 KB raw / 240.9 KB gzip**
+  - vendor-recharts: 331.5 KB raw / 99.8 KB gzip
+  - total dist/assets/*.js: **2719.9 KB raw / 773.5 KB gzip**
+- Drift baselines (re-measured 2026-04-17 post B2 batch):
+  - `text-[Npx]` occurrences across `src/`: **0** (Q16 B1 codemod `78786fc` eliminated all 249)
+  - SectionCard shape: **44** real drift (46 grep matches − 2 legit: `SectionCard.tsx` primitive + `surface.ts` helper). Down from 72 pre-B2. Remaining hotspots: `RealFeelDiary` (6), `FastingTimer` (3), `ChallengeDetail` (3), `CreatorProfile` (3), `PostDetail` (3), `WeeklyCheckIn` (3), `Onboarding` (2).
+  - ESLint Q16 migration allowlist: **30 files** (−2 from B2 batch: `SettingsProfile`, `SettingsNutrition`; BarcodeScanner + Onboarding stay listed because residual shape occurrences remain).
+  - `INPUT_SURFACE_CLASSES` helper consumers: **4** (`SettingsProfile`, `SettingsNutrition`, `BarcodeScanner` inputs, `Onboarding` inputs). SectionCard API extended with `padding='none'` / `spacing='none'` variants for list containers.
 
 ## 2026-04-17 Q19 meal-taxonomy (uncommitted)
 Plan: `.claude/plans/analiza-si-tiene-sentido-floating-kurzweil.md`. CHANGELOG: `[1.5.25]`.
@@ -165,10 +170,7 @@ Plan file: `.claude/plans/replicated-orbiting-coral.md`. Close-out doc: `docs/AU
 - Challenges/Creadores card divs still have onClick (complex to fix: nested buttons → needs restructure)
 - **SyncKey covers ~10 of ~35 localStorage keys** — see audit below. Gap must be resolved in Supabase sprint (Q6).
 - **CSP header pending (Q17)** — `vercel.json` now ships HSTS + X-Frame + nosniff + Permissions-Policy + Referrer-Policy, but Content-Security-Policy is deferred until all third-party sources are audited (Supabase, Sentry, Google GenAI, RevenueCat, recharts).
-- **Q14 + Q15.5 + walkthrough + Q16 pilot work uncommitted** — three logical chunks divergent from `main`. Recommended commit strategy before Q15: (a) `feat(sprint-q14)` — audit polish + multi-ICP seed, (b) `feat(sprint-q15.5)` — design-system remediation (tokens, primitives, ADRs, guardrails), (c) `feat(design-audit)` — walkthrough findings + Q16 pilot migrations. Keeps `git log` legible and makes per-wave revert possible.
-- **249 `text-[Npx]` ocurrencias en 47 archivos + 72 SectionCard dup (baseline re-medido 2026-04-17 post-Fase-2 multi-media, previo al Q16 codemod)** — el baseline histórico "445→415" del walkthrough estaba desactualizado: los audits waves 0-4 + cohesion pass + multi-media pipeline redujeron el drift real a **249**. SectionCard se mantiene en **72** (Fase 1+2 no introdujo drift). Q16 codemod drena el resto a 0; new files erroran inmediato vía ESLint allowlist.
-- **Top `text-[Npx]` offenders para Q16 (medición 2026-04-17):** `AddMeal` (15), `SettingsProfile` (15), `Planner` (15), `WeeklyScoreCard` (12), `FoodDictionary` (10), `BarcodeScanner` (10), `SnapshotDetailModal` (10), `LogSnapshotModal` (10), `RealFeelDiary` (9), `Progress` (7), `WeeklyCheckIn` (7), `PortionSelector` (3), `Settings` (5). Recipes (`RecipeDetail`, `CreateRecipe`) salieron del top — los audits cleanearon esos archivos.
-- **Top SectionCard shape offenders para Q16 (heredado, requiere re-medir pre-ejecución):** `SettingsProfile` (11), `BarcodeScanner` (9), `Onboarding` (6), `ImportRecipeURL` (6), `RealFeelDiary` (6).
+- **SectionCard shape drift: 44 occurrences pending B2 migration** — down from 72 after `8054c9d` helper extraction + B2 partial migrations (`SettingsProfile`, `SettingsNutrition`, `BarcodeScanner` inputs, `Onboarding` inputs). Remaining hotspots: `RealFeelDiary` (6), `FastingTimer` (3), `ChallengeDetail` (3), `CreatorProfile` (3), `PostDetail` (3), `WeeklyCheckIn` (3), `Onboarding` (2 residual), `ImportRecipeURL` section wrappers. Strategy: continue `INPUT_SURFACE_CLASSES` pattern for form-input shells; for true card sections, migrate to `<SectionCard>` primitive with per-file visual diff. ESLint guardrail keeps new drift at 0.
 
 ## localStorage audit (2026-04-15)
 All keys below are prefixed with `rial_` by `useLocalStorageState`. Column "Sync?" = whether `src/lib/sync.ts` `SyncKey` type includes it.
@@ -248,7 +250,8 @@ Execute Supabase sprint ONLY when ALL of these hold:
 - ~~**Tab audit 2026-04-18 (Hoy/Cocina/Explora)**~~ ✓ DONE — 5-wave audit documented in `docs/AUDIT-TAB-2026-04-18.md`. 17 functional bugs fixed (scan-barcode, story index, notification badge, import-URL silent fallback, CookMode crash, CookTimer drift, Community staleness, Tú/Justo ahora literals, TodaysMeals hidden buttons, mealType on add-to-plan, PostCard counters, Notifications click-through, seed race, Cocina type, CreateRecipe free-form time, PostCard progress-type delegation). 2 dead files purged (Creadores, WeightQuickLog). Factory-handler pattern completed for social (4 inline call sites → 0). Discover relocated to social/. 17 files off ESLint allowlist. Baselines: SectionCard 93→**72**, `text-[Npx]` in `src/features/social/**` → **0**, Tests 481→**501**, i18n 1428→**1475**. Commits `4d83e94` + `ecb73fa` + `7db26c8` + `26ba1bd` (+ pending Wave 4 docs). **Not yet pushed** — per user governance hold.
 - **Next audit tranche (candidate)** — Diccionario (FoodDictionary / AddMeal / BarcodeScanner / PortionSelector / MealSlotSelector) + Despensa (Pantry) + More menu + Settings + Profile + legal screens + Progress regression re-check. Same 4-wave shape.
 - **Q15** — ICP-adaptive Progress widgets (Clara/Marcos/Ana persona switches show/hide widget types) + before/after photo compare (Timeline tab, use `BodySnapshot.photoUrl` pairs) + remove deprecated `calculateStreak()` (callers already migrated to `calcStreaks` via Q13 — sweep for stale imports) + custom body measurements (extend `BodySnapshot` with user-defined metric definitions).
-- **Q16** — Codemod sprint. Scope: remaining **415 `text-[Npx]`** + **84 SectionCard shape** occurrences. Plan: jscodeshift transform with literal→token map (7-10px→`text-micro`, 11px→`text-caption`, 12px→`text-label`, 13px→`text-body-sm`, 14px→`text-body`, 16px→`text-body-lg`, 18px→`text-title-sm`, ≥24px→`text-title`/`text-headline`/`text-display` with per-file review). For SectionCard: AST match on the regex shape, infer `title`/`icon`/`padding`/`spacing` props from surrounding JSX, per-file snapshot test to verify no visual diff. Prioritize top offenders (see "Current risks"). Success = `eslint.config.mjs` allowlist empty, `sectioncard-usage.test.ts` baseline = 0 (then delete the test), ESLint warnings = 0.
+- ~~**Q16 B1**~~ ✓ DONE — `text-[Npx]` codemod (`78786fc`): 249 replacements across 47 files using literal→token map (7-10px→`text-micro`, 11px→`text-caption`, 12px→`text-label`, 13px→`text-body-sm`, 14px→`text-body`, 16px→`text-body-lg`, 18px→`text-title-sm`, ≥24px→`text-title`/`text-headline`/`text-display`). Follow-up `f00d8d6` trimmed 24 clean files from the ESLint allowlist. Baseline: 249 → **0** occurrences.
+- **Q16 B2** (in progress) — SectionCard shape drift **72 → 44** across commits (`8054c9d` helper + `7386c5c` SettingsProfile + `48def0d` SettingsNutrition + staged batch BarcodeScanner/Onboarding inputs + SectionCard `none` variant). Helper `INPUT_SURFACE_CLASSES` (`src/components/ui/surface.ts`) factors out the form-input shell that duplicates SectionCard elevation but needs `rounded-sm` / custom padding. Next passes: `ImportRecipeURL`, `RealFeelDiary`, `FastingTimer`, `ChallengeDetail`/`CreatorProfile`/`PostDetail` (social). Success = allowlist empty, SectionCard-shape baseline = 0, convention test deleted.
 - **Q17** — Security + responsive hardening. (1) CSP header in `vercel.json` (deferred from Q15.5) — audit third-party origins: Supabase, Sentry, Google GenAI, RevenueCat, recharts CDN, Capacitor bridges. (2) WCAG AA contrast fix on `theme-orange-light` (`on-surface-variant` 4.4:1 → ≥4.5:1). (3) Responsive tablet/desktop breakpoints — audit `PageShell` variants and current `sm:/md:` usage; promote layouts that rely on mobile-only heuristics.
 - **Q6** — Supabase integration (gated — see feature-freeze gate above): apply migration → expand SyncKey per audit (now includes `BodySnapshot.photoUrl` photos → Storage bucket) → wire `syncOnSignIn`/`pushToCloud` in AppStateContext → `useSupabasePersistence` toggle in SettingsSystem → E2E with real Supabase project.
 
