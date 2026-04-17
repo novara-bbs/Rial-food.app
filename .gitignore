@@ -10,6 +10,11 @@ coverage/
 .claude/launch.json
 .claude/scheduled_tasks.lock
 .claude/worktrees/
+.claude/settings.local.json
+
+# Playwright
+playwright-report/
+test-results/
 
 .vercel
 .sixth/
