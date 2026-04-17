@@ -1,6 +1,6 @@
 # RIAL Current State
 
-Last updated: 2026-04-17 (post seed-hydration push + .claude/ onboarding fix)
+Last updated: 2026-04-17 (post Cocina/Explora cohesion pass — RecipeCard tokens + PageShell normalize)
 
 ## Release snapshot
 - Root branch: `main`, in sync with `rial-food/main`. No pending local commits.
@@ -49,19 +49,32 @@ Two upstream commits (`8b8a5b5` sprint-q Progress restructure, `155f08b` sprint-
 
 Collateral: my Q16 pilot migration on `WeeklyCheckIn.tsx` + `WeeklyReview.tsx` is wasted work (remote rewrote both). SectionCard baseline recalculated post-merge.
 
-## Quality baseline (2026-04-18, post Wave 3)
+## Quality baseline (2026-04-17, post Cocina/Explora cohesion pass)
 - TypeScript: 0 errors (`npx tsc --noEmit`)
-- Tests: **515/515** unit tests passing (+14 since 2026-04-18 via `seedVersion.test.ts`)
-- i18n symmetry: **1475** keys aligned ES ↔ EN (`npm run check:i18n`) — +47 since merge (Guided Setup, social i18n sweep, `t.common.close`, StoryViewer labels)
-- Design-system lint: 0 errors, **~862** warnings (-110 since walkthrough — Waves 1-3 drift purge). All Q16 allowlist entries downgraded; new files still error.
-- Build (measured 2026-04-18 via `npm run release:preflight`):
-  - main entry (resolved from `dist/index.html`): **764.6 KB raw / 239.2 KB gzip**
-  - vendor-recharts: 331.5 KB raw / 99.8 KB gzip
-  - total dist/assets/*.js: 2691.7 KB raw / 764.2 KB gzip
+- Tests: **515/515** unit tests passing
+- i18n symmetry: **1475** keys aligned ES ↔ EN (`npm run check:i18n`) — no delta this pass (reused `t.discovery.catQuick`)
+- Design-system lint: 0 errors, **~869** warnings (numeric bump comes from `any` / `no-console` pre-existing warnings re-enumerated, not from drift — **4 fewer `text-[Npx]` violations** in `RecipeCard.tsx` + `Discovery.tsx`). Q16 allowlist: 2 files out (`RecipeCard.tsx`, `Discovery.tsx`); new files still error.
+- Build (measured 2026-04-17 via `npm run build` + `npm run size:check`):
+  - main entry (resolved from `dist/index.html`): **766.3 KB raw / 239.6 KB gzip** (+1.7 KB raw / +0.4 KB gzip vs Wave 3 baseline — 2× `PageShell` imports)
+  - vendor-recharts: 331.5 KB raw / 99.8 KB gzip (unchanged)
+  - total dist/assets/*.js: 2693.2 KB raw / 764.6 KB gzip
 - Drift baselines:
-  - SectionCard shape: **72** (was 93 pre-audit; Waves 1-3 dropped 21)
-  - `text-[Npx]` in `src/features/social/**`: **0** (was ~55)
-  - ESLint Q16 migration allowlist: ~43 files (−17 from 60)
+  - SectionCard shape: **72** (unchanged this pass — no SectionCard touches)
+  - `text-[Npx]` in `src/features/social/**`: **0** (unchanged)
+  - ESLint Q16 migration allowlist: **~41 files** (−2 from Wave 3 — `RecipeCard.tsx`, `Discovery.tsx` migrated)
+
+## 2026-04-17 Cocina/Explora cohesion pass (uncommitted)
+Plan: `.claude/plans/quiero-que-analices-concretamente-effervescent-deer.md`. CHANGELOG: `[1.5.23]`.
+
+**Decisión de producto.** Mantener la asimetría grid (Cocina = biblioteca) vs lanes/carrusel (Explora/Discovery = editorial). Es el patrón industria confirmado en 9 competidores (Yummly, NYT Cooking, Mealime, Instagram, TikTok, Pinterest, Spotify, Apple Music, Paprika). **NO** añadir toggle grid/carrusel en Cocina — no lo hace ningún competidor de comida y genera choice paralysis. Si en Q18+ aparece demanda real, la alternativa correcta es grid↔list (para librerías grandes, pattern Paprika/Apple Music), no grid↔carrusel.
+
+**Write set.**
+- `src/components/patterns/RecipeCard.tsx` — `TITLE.grid` sube a `text-sm` + `mb-1.5` (paridad con carousel; la densidad sigue siendo función del ancho de celda); `infoPad` + `infoBottom` unificados; Save/Share/Delete a 36×36 px (ADR-003, HIG inline-card min); 4 `text-[Npx]` → `text-micro` (ADR-002).
+- `src/features/recipes/screens/Cocina.tsx` — `<PageShell maxWidth="wide" spacing="sm">` elimina drift hand-rolled `px-6 max-w-5xl mx-auto`; mealCategories gana "Rápido" (Zap) para paridad con Discovery; collection pill `quick` eliminado (redundante tras promoción).
+- `src/features/home/screens/Discovery.tsx` — `<PageShell maxWidth="wide" noPadding className="space-y-0">` (preserva bleed full-width de Swimlane); CollectionBanner counter `text-[10px]` → `text-micro`.
+- `eslint.config.mjs` — `RecipeCard.tsx` + `Discovery.tsx` salen del Q16 allowlist.
+
+**Verificación.** `npx tsc --noEmit` ✓, `npm run lint:code` 0 errors ✓, `npm run test` 515/515 ✓, `npm run check:i18n` 1475 ✓, `npm run build` + `npm run size:check` dentro de budget ✓.
 
 ## 2026-04-18 tab audit (Hoy / Cocina / Explora)
 Plan file: `.claude/plans/replicated-orbiting-coral.md`. Close-out doc: `docs/AUDIT-TAB-2026-04-18.md`. 5 waves executed (Wave 4 docs in progress). 17 functional bugs fixed, 2 dead files deleted, drift cleaned across 30+ files, factory-handler pattern completed for social. No pushes — commits staged for single approval-gated push.

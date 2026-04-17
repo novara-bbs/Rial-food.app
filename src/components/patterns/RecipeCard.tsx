@@ -38,7 +38,7 @@ const CONTAINER: Record<string, string> = {
 
 const TITLE: Record<string, string> = {
   carousel: 'font-headline font-bold text-sm text-tertiary leading-tight tracking-tight uppercase mb-1.5',
-  grid:     'font-headline font-bold text-xs text-tertiary leading-tight tracking-tight uppercase mb-1',
+  grid:     'font-headline font-bold text-sm text-tertiary leading-tight tracking-tight uppercase mb-1.5',
   hero:     'text-tertiary text-xl md:text-3xl font-headline font-black leading-tight tracking-tighter uppercase mb-2',
 };
 
@@ -62,8 +62,8 @@ export default function RecipeCard({
 
   const badgeSz = 'text-micro';
   const creatorSz = 'text-micro';
-  const infoPad = variant === 'grid' ? 'px-1 py-0.5' : 'px-1.5 py-0.5';
-  const infoBottom = variant === 'grid' ? 'bottom-2 left-2 right-2' : 'bottom-3 left-3 right-3';
+  const infoPad = 'px-1.5 py-0.5';
+  const infoBottom = 'bottom-3 left-3 right-3';
 
   const matchLabel =
     variant === 'hero'
@@ -104,7 +104,7 @@ export default function RecipeCard({
       {/* ── Hero top badge ── */}
       {variant === 'hero' && recipe.matchScore !== undefined && (
         <div className="absolute top-3 left-3">
-          <span className="bg-primary text-on-primary text-[9px] font-black px-2 py-1 rounded-sm uppercase tracking-widest">
+          <span className="bg-primary text-on-primary text-micro font-black px-2 py-1 rounded-sm uppercase tracking-widest">
             {matchLabel}
           </span>
         </div>
@@ -131,36 +131,36 @@ export default function RecipeCard({
             )}
           </div>
 
-          {/* Right: action buttons */}
+          {/* Right: action buttons — 36px tap targets (ADR-003, inline-card minimum) */}
           <div className="flex gap-1.5">
             {onShare && (
               <button
                 type="button"
                 onClick={onShare}
-                className="w-7 h-7 rounded-full bg-surface/80 backdrop-blur-md flex items-center justify-center text-on-surface-variant hover:text-primary transition-colors"
+                className="w-9 h-9 rounded-full bg-surface/80 backdrop-blur-md flex items-center justify-center text-on-surface-variant hover:text-primary transition-colors"
                 aria-label="Share"
               >
-                <Share2 className="w-3.5 h-3.5" />
+                <Share2 className="w-4 h-4" />
               </button>
             )}
             {onSave && (
               <button
                 type="button"
                 onClick={onSave}
-                className="w-7 h-7 rounded-full bg-surface/80 backdrop-blur-md flex items-center justify-center text-on-surface-variant hover:text-primary transition-colors"
+                className="w-9 h-9 rounded-full bg-surface/80 backdrop-blur-md flex items-center justify-center text-on-surface-variant hover:text-primary transition-colors"
                 aria-label="Save"
               >
-                <Bookmark className={cn('w-3.5 h-3.5', isSaved && 'fill-primary text-primary')} />
+                <Bookmark className={cn('w-4 h-4', isSaved && 'fill-primary text-primary')} />
               </button>
             )}
             {onDelete && (
               <button
                 type="button"
                 onClick={onDelete}
-                className="w-6 h-6 rounded-full bg-surface/80 backdrop-blur-md flex items-center justify-center text-on-surface-variant hover:text-error transition-colors"
+                className="w-9 h-9 rounded-full bg-surface/80 backdrop-blur-md flex items-center justify-center text-on-surface-variant hover:text-error transition-colors"
                 aria-label="Delete"
               >
-                <Trash2 className="w-3 h-3" />
+                <Trash2 className="w-4 h-4" />
               </button>
             )}
           </div>
@@ -171,7 +171,7 @@ export default function RecipeCard({
       {variant === 'hero' && (
         <div className="absolute bottom-0 left-0 right-0 p-5">
           <h3 className={TITLE.hero}>{recipe.title}</h3>
-          <div className="flex items-center gap-4 text-on-surface-variant text-[10px] font-bold uppercase tracking-widest">
+          <div className="flex items-center gap-4 text-on-surface-variant text-micro font-bold uppercase tracking-widest">
             {recipe.time && (
               <span className="flex items-center gap-1.5">
                 <Clock className="w-3 h-3 text-primary" /> {recipe.time}
@@ -183,7 +183,7 @@ export default function RecipeCard({
               </span>
             )}
             {(recipe.pro ?? 0) >= 30 && (
-              <span className="bg-primary/20 text-primary px-1.5 py-0.5 rounded-sm text-[9px] font-black">
+              <span className="bg-primary/20 text-primary px-1.5 py-0.5 rounded-sm text-micro font-black">
                 {recipe.pro}g PRO
               </span>
             )}
@@ -231,9 +231,7 @@ export default function RecipeCard({
             )}
             {(recipe.pro ?? 0) >= 30 && (
               <span
-                className={`bg-primary/20 text-primary text-micro ${
-                  variant === 'grid' ? 'px-1 py-0.5' : 'px-1.5 py-0.5'
-                } font-black rounded-sm uppercase tracking-tighter`}
+                className={`bg-primary/20 text-primary text-micro ${infoPad} font-black rounded-sm uppercase tracking-tighter`}
               >
                 {recipe.pro}g pro
               </span>

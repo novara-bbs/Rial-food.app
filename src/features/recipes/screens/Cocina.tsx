@@ -1,10 +1,11 @@
 import React, { useState, useMemo } from 'react';
-import { Plus, Link, ShoppingCart, Sparkles, Sunrise, Sun, Moon, Cookie } from 'lucide-react';
+import { Plus, Link, ShoppingCart, Sparkles, Sunrise, Sun, Moon, Cookie, Zap } from 'lucide-react';
 import SearchInput from '../../../components/patterns/SearchInput';
 import { useI18n } from '../../../i18n';
 import { useAppState } from '../../../contexts/AppStateContext';
 import { calculateMatchScore } from '../utils/matchScore';
 import EmptyState from '../../../components/EmptyState';
+import PageShell from '../../../components/PageShell';
 import RecipeCard from '../../../components/patterns/RecipeCard';
 import FilterRow from '../../../components/patterns/FilterRow';
 import TabNav from '../../../components/patterns/TabNav';
@@ -62,35 +63,38 @@ export default function Cocina({ onAddMeal, onCreateRecipe, onNavigateToRecipe, 
     [savedRecipes, profileSlice, dictionary],
   );
 
-  // mealType categories
+  // mealType categories — mirrors Discovery (parity: same filter model across Cocina/Explora)
   const mealCategories = [
     { id: 'all', label: t.discovery.catAll, icon: Sparkles },
     { id: 'breakfast', label: t.discovery.catBreakfast, icon: Sunrise },
     { id: 'lunch', label: t.discovery.catLunch, icon: Sun },
     { id: 'dinner', label: t.discovery.catDinner, icon: Moon },
     { id: 'snack', label: t.discovery.catSnack, icon: Cookie },
+    { id: 'quick', label: t.discovery.catQuick, icon: Zap },
   ];
 
-  // Collection pills (fixed "quick" filter)
+  // Collection pills — `quick` promoted to mealCategories above to avoid redundancy.
   const collections = [
     { id: 'all', label: t.recipes.all, count: scoredRecipes.length },
     { id: 'mine', label: t.recipes.myRecipes, count: scoredRecipes.filter(r => r.publishedBy === 'self' && r.tag !== 'IMPORTADA').length },
     { id: 'imported', label: t.recipes.imported, count: scoredRecipes.filter(r => r.tag === 'IMPORTADA').length },
-    { id: 'quick', label: t.recipes.quick, count: scoredRecipes.filter(r => r.totalTime > 0 && r.totalTime <= 20).length },
     { id: 'high-protein', label: t.recipes.highProtein, count: scoredRecipes.filter(r => r.pro >= 30).length },
   ];
 
   // Combined filters: mealType + collection + search
   const filteredRecipes = useMemo(() => {
     let list = scoredRecipes;
-    if (activeMealType !== 'all') list = list.filter(r => r.mealType === activeMealType);
+    if (activeMealType === 'quick') {
+      list = list.filter(r => r.totalTime > 0 && r.totalTime <= 20);
+    } else if (activeMealType !== 'all') {
+      list = list.filter(r => r.mealType === activeMealType);
+    }
     if (searchQuery.trim()) {
       const q = searchQuery.toLowerCase();
       list = list.filter(r => r.title?.toLowerCase().includes(q) || r.tag?.toLowerCase().includes(q) || r.description?.toLowerCase().includes(q));
     }
     if (activeCollection === 'mine') list = list.filter(r => r.publishedBy === 'self' && r.tag !== 'IMPORTADA');
     if (activeCollection === 'imported') list = list.filter(r => r.tag === 'IMPORTADA');
-    if (activeCollection === 'quick') list = list.filter(r => r.totalTime > 0 && r.totalTime <= 20);
     if (activeCollection === 'high-protein') list = list.filter(r => r.pro >= 30);
     return list;
   }, [scoredRecipes, activeMealType, searchQuery, activeCollection]);
@@ -151,7 +155,7 @@ export default function Cocina({ onAddMeal, onCreateRecipe, onNavigateToRecipe, 
       <div className="flex-1 overflow-y-auto pt-4">
         {/* RECIPES TAB */}
         {activeTab === 'recipes' && (
-          <div className="px-6 max-w-5xl mx-auto space-y-4">
+          <PageShell maxWidth="wide" spacing="sm">
             {/* Search + actions */}
             <div className="flex gap-3">
               <SearchInput
@@ -208,7 +212,7 @@ export default function Cocina({ onAddMeal, onCreateRecipe, onNavigateToRecipe, 
                 ))}
               </div>
             )}
-          </div>
+          </PageShell>
         )}
 
         {/* PLAN TAB */}

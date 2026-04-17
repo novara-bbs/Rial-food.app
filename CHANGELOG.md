@@ -1,5 +1,27 @@
 # RIAL App - Changelog
 
+## [1.5.23] - 2026-04-17
+
+### fix(ui/cocina-explora) — normaliza shells, RecipeCard tokens y tap-targets HIG
+
+Cohesion pass entre **Cocina** (grid biblioteca) y **Explora/Discovery** (carrusel editorial). Decisión de producto: mantener la asimetría grid vs lanes (patrón industria — Yummly, NYT Cooking, Spotify, Apple Music, Instagram, TikTok), **no** añadir toggle grid/carrusel en Cocina (choice paralysis sin payoff). Sí normalizar la ejecución: shells, typography y tap-targets del `RecipeCard` compartido. Plan: `.claude/plans/quiero-que-analices-concretamente-effervescent-deer.md`.
+
+**Changed**
+- `src/components/patterns/RecipeCard.tsx` — 4 fixes:
+  - `TITLE.grid` sube de `text-xs` + `mb-1` a `text-sm` + `mb-1.5` (alineado con `carousel`). La densidad sigue diferenciada por el **ancho** de la celda, no por la tipografía.
+  - `infoPad` + `infoBottom` unificados entre `grid` y `carousel` (`px-1.5 py-0.5` / `bottom-3 left-3 right-3`). Elimina 2 ternarios.
+  - Botones Save / Share / Delete a **36×36 px** (ADR-003, mínimo HIG para acción inline en card). Antes eran 28/24 px sub-HIG. Iconos a `w-4 h-4`.
+  - 4 literales `text-[9px]` / `text-[10px]` en variant `hero` y protein badge → `text-micro` (ADR-002). `RecipeCard` sale del Q16 allowlist ESLint.
+- `src/features/recipes/screens/Cocina.tsx` — `<PageShell maxWidth="wide" spacing="sm">` envuelve el tab `recipes` (elimina drift `px-6 max-w-5xl mx-auto space-y-4` hand-rolled contra ADR-001). `FilterRow` de mealTypes gana chip **"Rápido"** (Zap) — paridad con Discovery. Collection pills pierde redundancia `quick` (4 pills en vez de 5). Filtro combinado reescrito: `activeMealType === 'quick'` aplica `totalTime ≤ 20` en lugar de filtrar por `mealType`.
+- `src/features/home/screens/Discovery.tsx` — `<PageShell maxWidth="wide" noPadding className="space-y-0">` (preserva bleed full-width de cada `Swimlane`). `text-[10px]` del counter en `CollectionBanner` → `text-micro`. Discovery sale del Q16 allowlist ESLint.
+- `eslint.config.mjs` — `RecipeCard.tsx` y `Discovery.tsx` removidos de `q16MigrationAllowlist` (cumplen guardrails como errores, ya no como warnings).
+
+**Notes**
+- No hay cambios de i18n (`t.discovery.catQuick` ya existía simétrico ES/EN); 1475 keys alineadas.
+- No hay cambios de handlers, SyncKey, migrations, ni seeds. Zero-risk en datos.
+- TypeScript 0 errors; lint 0 errors; 515/515 tests; i18n 1475 ✓; build + size budgets green (main +1.7 KB raw / +0.4 KB gzip por imports de `PageShell`).
+- Q16 baseline progress: 2 archivos menos en el allowlist; 4 `text-[Npx]` menos en drift total; 3 tap-targets sub-HIG corregidos.
+
 ## [1.5.22] - 2026-04-17
 
 ### fix(seed-hydration) — existing users now receive bumped seed content

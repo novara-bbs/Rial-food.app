@@ -83,7 +83,7 @@ const q16MigrationAllowlist = [
   'src/components/DayGridCalendar.tsx',
   'src/components/GlobalHeader.tsx',
   'src/components/patterns/FilterRow.tsx',
-  'src/components/patterns/RecipeCard.tsx',
+  // RecipeCard migrated 2026-04-17: hero badges → text-micro, tap-targets 28→36 px, grid title → text-sm.
   'src/components/ui/badge.tsx',
   'src/components/ui/input.tsx',
   'src/components/ui/select.tsx',
@@ -101,7 +101,7 @@ const q16MigrationAllowlist = [
   // two intentional SectionCard-shape occurrences (list container + meal item)
   // that don't fit the primitive; remove when we add a <ListCard> variant.
   'src/features/home/components/TodaysMeals.tsx',
-  'src/features/home/screens/Discovery.tsx',
+  // Discovery migrated 2026-04-17: PageShell + text-micro for CollectionBanner count.
   'src/features/home/screens/More.tsx',
   'src/features/legal/screens/PrivacyPolicy.tsx',
   'src/features/legal/screens/TermsOfService.tsx',

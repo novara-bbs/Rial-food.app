@@ -4,6 +4,7 @@ import React, { useState, useMemo } from 'react';
 import { toast } from 'sonner';
 import { useI18n } from '../../../i18n';
 import EmptyState from '../../../components/EmptyState';
+import PageShell from '../../../components/PageShell';
 import RecipeCard from '../../../components/patterns/RecipeCard';
 import Swimlane from '../../../components/patterns/Swimlane';
 import FilterRow from '../../../components/patterns/FilterRow';
@@ -138,7 +139,7 @@ export default function Discovery({ onNavigateToRecipe, savedRecipes = [], onSav
           </div>
           <div className="text-left flex-1">
             <span className="font-headline font-bold text-sm uppercase tracking-widest text-on-primary block">{title}</span>
-            <span className="text-[10px] text-on-primary/70 font-bold">
+            <span className="text-micro text-on-primary/70 font-bold">
               {(t.discovery.recipesCount as string)?.replace('{count}', String(count))}
             </span>
           </div>
@@ -151,20 +152,20 @@ export default function Discovery({ onNavigateToRecipe, savedRecipes = [], onSav
   // --- Empty state ---
   if (savedRecipes.length === 0) {
     return (
-      <div className="max-w-5xl mx-auto pb-20 px-6 pt-8">
+      <PageShell maxWidth="wide" spacing="sm" className="pb-20 pt-8">
         <EmptyState
           icon="🍽️"
           title={t.discovery.emptyState}
           description={t.discovery.goExplore}
         />
-      </div>
+      </PageShell>
     );
   }
 
   const hasAnyResults = forYou.length > 0 || quickMeals.length > 0 || highProtein.length > 0 || mealTimeRecipes.length > 0 || batchCooking.length > 0;
 
   return (
-    <div className="max-w-5xl mx-auto space-y-0">
+    <PageShell maxWidth="wide" noPadding className="space-y-0">
       {/* Title */}
       <div className="px-6 pt-2 pb-3">
         <span className="font-label text-xs tracking-[0.2em] text-primary uppercase block">RIAL</span>
@@ -283,6 +284,6 @@ export default function Discovery({ onNavigateToRecipe, savedRecipes = [], onSav
           />
         ))}
       </Swimlane>
-    </div>
+    </PageShell>
   );
 }
