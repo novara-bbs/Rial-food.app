@@ -177,7 +177,7 @@ export default function PortionSelector({
         <button
           type="button"
           onClick={() => switchMode('serving')}
-          className={`flex-1 flex items-center justify-center gap-1.5 py-2 text-[10px] font-headline font-bold uppercase tracking-widest transition-colors ${
+          className={`flex-1 flex items-center justify-center gap-1.5 py-2 text-micro font-headline font-bold uppercase tracking-widest transition-colors ${
             mode === 'serving'
               ? 'bg-primary text-on-primary'
               : 'bg-surface-container-low text-on-surface-variant hover:text-tertiary'
@@ -189,7 +189,7 @@ export default function PortionSelector({
         <button
           type="button"
           onClick={() => switchMode('weight')}
-          className={`flex-1 flex items-center justify-center gap-1.5 py-2 text-[10px] font-headline font-bold uppercase tracking-widest transition-colors ${
+          className={`flex-1 flex items-center justify-center gap-1.5 py-2 text-micro font-headline font-bold uppercase tracking-widest transition-colors ${
             mode === 'weight'
               ? 'bg-primary text-on-primary'
               : 'bg-surface-container-low text-on-surface-variant hover:text-tertiary'
@@ -329,7 +329,7 @@ export default function PortionSelector({
           ] as const).map(m => (
             <div key={m.label} className="bg-surface-container-highest rounded-sm p-2 text-center">
               <span className={`block font-headline font-bold text-lg ${m.color}`}>{m.value}</span>
-              <span className="text-[9px] font-label uppercase tracking-widest text-on-surface-variant">{m.label}</span>
+              <span className="text-micro font-label uppercase tracking-widest text-on-surface-variant">{m.label}</span>
             </div>
           ))}
         </div>

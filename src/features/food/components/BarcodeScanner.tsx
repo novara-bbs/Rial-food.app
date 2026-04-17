@@ -266,8 +266,8 @@ export default function BarcodeScanner({ onClose, onProductFound, onSaveToDictio
                       </Badge>
                     </div>
                     <h3 className="font-headline text-sm font-bold uppercase text-tertiary leading-tight">{product.name}</h3>
-                    {product.brand && <p className="text-[10px] text-on-surface-variant mt-0.5">{product.brand}</p>}
-                    <p className="text-[9px] text-on-surface-variant/60 mt-1">
+                    {product.brand && <p className="text-micro text-on-surface-variant mt-0.5">{product.brand}</p>}
+                    <p className="text-micro text-on-surface-variant/60 mt-1">
                       {t.scanner.per100g}
                     </p>
                   </div>
@@ -276,7 +276,7 @@ export default function BarcodeScanner({ onClose, onProductFound, onSaveToDictio
 
               {/* Portion selector — the key enhancement */}
               <div className="bg-surface-container-low border border-outline-variant/20 rounded-sm p-4 space-y-2">
-                <h4 className="text-[10px] font-label uppercase tracking-widest text-on-surface-variant">
+                <h4 className="text-micro font-label uppercase tracking-widest text-on-surface-variant">
                   {t.portionSelector.adjustPortion}
                 </h4>
                 <PortionSelector
@@ -361,7 +361,7 @@ export default function BarcodeScanner({ onClose, onProductFound, onSaveToDictio
 
               <div className="space-y-3">
                 <div>
-                  <label className="text-[10px] font-label uppercase tracking-widest text-on-surface-variant block mb-1">{t.scanner.foodName} *</label>
+                  <label className="text-micro font-label uppercase tracking-widest text-on-surface-variant block mb-1">{t.scanner.foodName} *</label>
                   <input
                     type="text"
                     value={customFood.name}
@@ -372,7 +372,7 @@ export default function BarcodeScanner({ onClose, onProductFound, onSaveToDictio
                 </div>
 
                 <div>
-                  <label className="text-[10px] font-label uppercase tracking-widest text-on-surface-variant block mb-1">{t.scanner.brand}</label>
+                  <label className="text-micro font-label uppercase tracking-widest text-on-surface-variant block mb-1">{t.scanner.brand}</label>
                   <input
                     type="text"
                     value={customFood.brand}
@@ -383,7 +383,7 @@ export default function BarcodeScanner({ onClose, onProductFound, onSaveToDictio
                 </div>
 
                 <div>
-                  <label className="text-[10px] font-label uppercase tracking-widest text-on-surface-variant block mb-1">{t.scanner.servingSize}</label>
+                  <label className="text-micro font-label uppercase tracking-widest text-on-surface-variant block mb-1">{t.scanner.servingSize}</label>
                   <input
                     type="number"
                     inputMode="decimal"
@@ -395,7 +395,7 @@ export default function BarcodeScanner({ onClose, onProductFound, onSaveToDictio
 
                 <div className="grid grid-cols-2 gap-3">
                   <div>
-                    <label className="text-[10px] font-label uppercase tracking-widest text-on-surface-variant block mb-1">{t.scanner.calories} *</label>
+                    <label className="text-micro font-label uppercase tracking-widest text-on-surface-variant block mb-1">{t.scanner.calories} *</label>
                     <input
                       type="number"
                       inputMode="decimal"
@@ -406,7 +406,7 @@ export default function BarcodeScanner({ onClose, onProductFound, onSaveToDictio
                     />
                   </div>
                   <div>
-                    <label className="text-[10px] font-label uppercase tracking-widest text-on-surface-variant block mb-1">{t.scanner.protein}</label>
+                    <label className="text-micro font-label uppercase tracking-widest text-on-surface-variant block mb-1">{t.scanner.protein}</label>
                     <input
                       type="number"
                       inputMode="decimal"
@@ -417,7 +417,7 @@ export default function BarcodeScanner({ onClose, onProductFound, onSaveToDictio
                     />
                   </div>
                   <div>
-                    <label className="text-[10px] font-label uppercase tracking-widest text-on-surface-variant block mb-1">{t.scanner.carbs}</label>
+                    <label className="text-micro font-label uppercase tracking-widest text-on-surface-variant block mb-1">{t.scanner.carbs}</label>
                     <input
                       type="number"
                       inputMode="decimal"
@@ -428,7 +428,7 @@ export default function BarcodeScanner({ onClose, onProductFound, onSaveToDictio
                     />
                   </div>
                   <div>
-                    <label className="text-[10px] font-label uppercase tracking-widest text-on-surface-variant block mb-1">{t.scanner.fats}</label>
+                    <label className="text-micro font-label uppercase tracking-widest text-on-surface-variant block mb-1">{t.scanner.fats}</label>
                     <input
                       type="number"
                       inputMode="decimal"

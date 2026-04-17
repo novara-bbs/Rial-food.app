@@ -136,7 +136,7 @@ export default function ShoppingList({ onBack, shoppingList = [], setShoppingLis
           </div>
           {/* Pantry summary */}
           {inPantryCount > 0 && (
-            <div className="flex items-center gap-2 text-[10px] font-label uppercase tracking-widest text-primary font-bold">
+            <div className="flex items-center gap-2 text-micro font-label uppercase tracking-widest text-primary font-bold">
               <Package className="w-3.5 h-3.5" />
               {t.shoppingList.inPantry.replace('{count}', String(inPantryCount))}
             </div>
@@ -187,7 +187,7 @@ export default function ShoppingList({ onBack, shoppingList = [], setShoppingLis
             <section key={category}>
               <h3 className="font-headline text-base font-bold tracking-tight uppercase text-on-surface-variant mb-3 border-b border-outline-variant/20 pb-2 flex justify-between items-center">
                 <span>{category}</span>
-                <span className="text-[10px] font-black opacity-40">{unchecked.length}/{items.length}</span>
+                <span className="text-micro font-black opacity-40">{unchecked.length}/{items.length}</span>
               </h3>
               <div className="space-y-2">
                 {[...unchecked, ...checked].map((item: any) => {
@@ -217,12 +217,12 @@ export default function ShoppingList({ onBack, shoppingList = [], setShoppingLis
                           {item.name}
                         </span>
                         {item.quantity && (
-                          <span className="text-[9px] font-bold uppercase tracking-wider bg-surface-container-highest text-on-surface-variant px-2 py-0.5 rounded-full">
+                          <span className="text-micro font-bold uppercase tracking-wider bg-surface-container-highest text-on-surface-variant px-2 py-0.5 rounded-full">
                             {item.quantity}{item.unit || ''}
                           </span>
                         )}
                         {inPantry && !item.checked && (
-                          <span className="text-[8px] font-bold uppercase tracking-wider bg-primary/15 text-primary px-1.5 py-0.5 rounded flex items-center gap-0.5">
+                          <span className="text-micro font-bold uppercase tracking-wider bg-primary/15 text-primary px-1.5 py-0.5 rounded flex items-center gap-0.5">
                             <Package className="w-2 h-2" /> {t.shoppingList.youHaveIt}
                           </span>
                         )}
@@ -231,12 +231,12 @@ export default function ShoppingList({ onBack, shoppingList = [], setShoppingLis
                       {item.source && item.source.length > 0 && (
                         <div className="flex flex-wrap gap-1 mt-1">
                           {item.source.slice(0, 2).map((src: string, idx: number) => (
-                            <span key={idx} className="text-[8px] font-bold uppercase tracking-wider bg-primary/10 text-primary px-1.5 py-0.5 rounded">
+                            <span key={idx} className="text-micro font-bold uppercase tracking-wider bg-primary/10 text-primary px-1.5 py-0.5 rounded">
                               {src}
                             </span>
                           ))}
                           {item.source.length > 2 && (
-                            <span className="text-[8px] font-bold uppercase tracking-wider text-on-surface-variant">+{item.source.length - 2}</span>
+                            <span className="text-micro font-bold uppercase tracking-wider text-on-surface-variant">+{item.source.length - 2}</span>
                           )}
                         </div>
                       )}

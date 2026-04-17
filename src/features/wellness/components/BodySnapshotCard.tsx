@@ -56,7 +56,7 @@ export default function BodySnapshotCard({ snapshot, previousKg, unitSystem, onT
         {/* Right: body */}
         <div className="flex-1 min-w-0 space-y-1">
         <div className="flex items-center justify-between gap-2">
-          <span className="font-label text-[10px] text-on-surface-variant uppercase tracking-widest">
+          <span className="font-label text-micro text-on-surface-variant uppercase tracking-widest">
             {dateLabel}
           </span>
           <div className="flex items-center gap-1">
@@ -70,7 +70,7 @@ export default function BodySnapshotCard({ snapshot, previousKg, unitSystem, onT
             {displayKg !== null ? `${displayKg} ${unit}` : '—'}
           </span>
           {delta !== null && delta !== 0 && (
-            <span className={`text-[10px] font-bold ${deltaColor}`}>
+            <span className={`text-micro font-bold ${deltaColor}`}>
               {delta > 0 ? '+' : ''}{delta}
             </span>
           )}
@@ -79,22 +79,22 @@ export default function BodySnapshotCard({ snapshot, previousKg, unitSystem, onT
         {hasMeasurements && (
           <div className="flex flex-wrap gap-1.5 pt-0.5">
             {m.chestCm != null && (
-              <span className="text-[9px] font-bold uppercase tracking-widest bg-surface-container-highest text-on-surface-variant px-1.5 py-0.5 rounded-sm">
+              <span className="text-micro font-bold uppercase tracking-widest bg-surface-container-highest text-on-surface-variant px-1.5 py-0.5 rounded-sm">
                 P {m.chestCm}
               </span>
             )}
             {m.waistCm != null && (
-              <span className="text-[9px] font-bold uppercase tracking-widest bg-surface-container-highest text-on-surface-variant px-1.5 py-0.5 rounded-sm">
+              <span className="text-micro font-bold uppercase tracking-widest bg-surface-container-highest text-on-surface-variant px-1.5 py-0.5 rounded-sm">
                 C {m.waistCm}
               </span>
             )}
             {m.hipsCm != null && (
-              <span className="text-[9px] font-bold uppercase tracking-widest bg-surface-container-highest text-on-surface-variant px-1.5 py-0.5 rounded-sm">
+              <span className="text-micro font-bold uppercase tracking-widest bg-surface-container-highest text-on-surface-variant px-1.5 py-0.5 rounded-sm">
                 Ca {m.hipsCm}
               </span>
             )}
             {m.bodyFatPct != null && (
-              <span className="text-[9px] font-bold uppercase tracking-widest bg-primary/10 text-primary px-1.5 py-0.5 rounded-sm">
+              <span className="text-micro font-bold uppercase tracking-widest bg-primary/10 text-primary px-1.5 py-0.5 rounded-sm">
                 {m.bodyFatPct}%
               </span>
             )}
@@ -102,7 +102,7 @@ export default function BodySnapshotCard({ snapshot, previousKg, unitSystem, onT
         )}
 
         {snapshot.note && (
-          <p className="text-[10px] text-on-surface-variant/80 italic line-clamp-2">
+          <p className="text-micro text-on-surface-variant/80 italic line-clamp-2">
             {snapshot.note}
           </p>
         )}

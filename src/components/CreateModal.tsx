@@ -51,7 +51,7 @@ export default function CreateModal({ isOpen, onClose, onSelect }: { isOpen: boo
               <div className={`w-12 h-12 rounded-full bg-${action.color}/10 flex items-center justify-center text-${action.color} group-hover:scale-110 transition-transform`}>
                 <action.icon className="w-6 h-6" />
               </div>
-              <span className="font-headline font-bold text-[11px] uppercase tracking-widest text-tertiary text-center leading-tight">{action.label}</span>
+              <span className="font-headline font-bold text-caption uppercase tracking-widest text-tertiary text-center leading-tight">{action.label}</span>
             </button>
           ))}
         </div>

@@ -129,7 +129,7 @@ export default function DayGridCalendar<T>({
 
         <div className="grid grid-cols-7 gap-1.5" role="grid">
           {labels.map(d => (
-            <span key={d} className="text-center text-[8px] font-bold text-on-surface-variant uppercase">{d}</span>
+            <span key={d} className="text-center text-micro font-bold text-on-surface-variant uppercase">{d}</span>
           ))}
           {Array.from({ length: offset }).map((_, i) => <div key={`pad-${i}`} aria-hidden="true" />)}
           {Array.from({ length: daysInMonth }).map((_, i) => {
@@ -139,7 +139,7 @@ export default function DayGridCalendar<T>({
             const isToday = dateStr === todayStr;
             const isFuture = dateStr > todayStr;
 
-            const base = `aspect-square rounded-sm flex items-center justify-center text-[9px] font-bold transition-colors relative ${
+            const base = `aspect-square rounded-sm flex items-center justify-center text-micro font-bold transition-colors relative ${
               isToday ? 'ring-1 ring-primary ring-offset-1 ring-offset-surface-container-low' : ''
             } ${isFuture ? 'bg-surface-container-highest/40 text-on-surface-variant/30' : 'hover:bg-primary/10'}`;
             const extra = cellClassName?.({ date: dateStr, payload, isToday, isFuture }) ?? '';
@@ -190,7 +190,7 @@ export default function DayGridCalendar<T>({
       <div className="grid grid-cols-7 gap-1.5" role="grid">
         {days.map(({ date, isToday, isFuture }) => {
           const payload = data.get(date);
-          const base = `aspect-square rounded-sm flex items-center justify-center text-[9px] font-bold transition-colors relative ${
+          const base = `aspect-square rounded-sm flex items-center justify-center text-micro font-bold transition-colors relative ${
             isToday ? 'ring-1 ring-primary ring-offset-1 ring-offset-surface-container-low' : ''
           } ${isFuture ? 'bg-surface-container-highest/40 text-on-surface-variant/30' : 'hover:bg-primary/10'}`;
           const extra = cellClassName?.({ date, payload, isToday, isFuture }) ?? '';

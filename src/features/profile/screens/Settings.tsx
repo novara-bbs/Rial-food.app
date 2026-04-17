@@ -121,7 +121,7 @@ export default function Settings({
             icon={<Users className="w-4 h-4 text-brand-secondary" aria-hidden="true" />}
             title={t.settings.developer}
           >
-            <p className="text-[10px] text-on-surface-variant mb-3">{t.settings.loadDemoPersona}</p>
+            <p className="text-micro text-on-surface-variant mb-3">{t.settings.loadDemoPersona}</p>
             <div className="space-y-2">
               {PERSONA_OPTIONS.map(({ id, key }) => (
                 <button
@@ -141,7 +141,7 @@ export default function Settings({
                 type="button"
                 onClick={handleClearPersona}
                 disabled={!!loadingPersona}
-                className="w-full flex items-center justify-center gap-2 px-4 py-2 text-error text-[10px] font-bold uppercase tracking-widest hover:bg-error/5 rounded-sm transition-colors disabled:opacity-50"
+                className="w-full flex items-center justify-center gap-2 px-4 py-2 text-error text-micro font-bold uppercase tracking-widest hover:bg-error/5 rounded-sm transition-colors disabled:opacity-50"
               >
                 <Trash2 className="w-3 h-3" aria-hidden="true" />
                 {t.settings.clearDemoData}
@@ -156,7 +156,7 @@ export default function Settings({
         <button
           type="button"
           onClick={() => navigateTo('privacy-policy')}
-          className="font-label text-[10px] uppercase tracking-widest text-on-surface-variant/60 hover:text-primary transition-colors"
+          className="font-label text-micro uppercase tracking-widest text-on-surface-variant/60 hover:text-primary transition-colors"
         >
           {t.legal.privacyLink}
         </button>
@@ -164,12 +164,12 @@ export default function Settings({
         <button
           type="button"
           onClick={() => navigateTo('terms-of-service')}
-          className="font-label text-[10px] uppercase tracking-widest text-on-surface-variant/60 hover:text-primary transition-colors"
+          className="font-label text-micro uppercase tracking-widest text-on-surface-variant/60 hover:text-primary transition-colors"
         >
           {t.legal.termsLink}
         </button>
         <span className="text-outline-variant/40">·</span>
-        <span className="font-label text-[10px] uppercase tracking-widest text-on-surface-variant/40">v1.5.0</span>
+        <span className="font-label text-micro uppercase tracking-widest text-on-surface-variant/40">v1.5.0</span>
       </div>
     </PageShell>
   );

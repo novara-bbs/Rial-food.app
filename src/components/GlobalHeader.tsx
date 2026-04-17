@@ -131,8 +131,8 @@ export default function GlobalHeader({ onOpenSettings, onOpenProfile, onOpenNoti
             aria-label={t.profile.title}
           >
             <div className="text-right hidden sm:block">
-              <p className="text-[10px] font-bold text-tertiary uppercase tracking-tight leading-none">{userName || 'User'}</p>
-              <p className="text-[8px] font-mono text-primary uppercase tracking-widest mt-1">{isPro ? t.header.proMember : t.header.member}</p>
+              <p className="text-micro font-bold text-tertiary uppercase tracking-tight leading-none">{userName || 'User'}</p>
+              <p className="text-micro font-mono text-primary uppercase tracking-widest mt-1">{isPro ? t.header.proMember : t.header.member}</p>
             </div>
             <div className="w-8 h-8 rounded-full bg-surface-container-highest border border-outline-variant/20 overflow-hidden group-hover:border-primary/50 transition-all flex items-center justify-center">
               {userAvatar ? (
@@ -165,7 +165,7 @@ export default function GlobalHeader({ onOpenSettings, onOpenProfile, onOpenNoti
 
           {!demoUnlocked ? (
             <>
-              <p className="text-[11px] text-on-surface-variant leading-relaxed">
+              <p className="text-caption text-on-surface-variant leading-relaxed">
                 {t.globalHeader.demoGate.codePrompt}
               </p>
               <input
@@ -187,13 +187,13 @@ export default function GlobalHeader({ onOpenSettings, onOpenProfile, onOpenNoti
                 aria-invalid={codeError}
               />
               {codeError && (
-                <p className="text-[10px] text-error">{t.globalHeader.demoGate.codeInvalid}</p>
+                <p className="text-micro text-error">{t.globalHeader.demoGate.codeInvalid}</p>
               )}
               <button
                 type="button"
                 onClick={verifyCode}
                 disabled={codeInput.length !== 4}
-                className="w-full bg-primary text-on-primary py-2 rounded-sm text-[10px] font-bold uppercase tracking-widest hover:opacity-90 disabled:opacity-40 transition-opacity focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/50"
+                className="w-full bg-primary text-on-primary py-2 rounded-sm text-micro font-bold uppercase tracking-widest hover:opacity-90 disabled:opacity-40 transition-opacity focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/50"
               >
                 {t.globalHeader.demoGate.unlock}
               </button>

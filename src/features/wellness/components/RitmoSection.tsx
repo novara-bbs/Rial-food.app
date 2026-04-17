@@ -117,7 +117,7 @@ export default function RitmoSection({
                 values={series.vitality}
                 colorVar="var(--tertiary)"
               />
-              <p className="text-[10px] text-on-surface-variant/80 pt-1">
+              <p className="text-micro text-on-surface-variant/80 pt-1">
                 {series.days.length} {daysLabel}
               </p>
             </>
@@ -147,7 +147,7 @@ function RitmoRow({
 
   return (
     <div className="space-y-1">
-      <div className="flex items-center justify-between text-[10px]">
+      <div className="flex items-center justify-between text-micro">
         <span className="flex items-center gap-1.5 font-label uppercase tracking-widest text-on-surface-variant">
           {icon}
           {label}

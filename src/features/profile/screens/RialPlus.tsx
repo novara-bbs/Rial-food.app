@@ -149,13 +149,13 @@ export default function RialPlus({ onBack }: { onBack: () => void }) {
               }`}
             >
               {plan.savings && (
-                <span className="absolute -top-3 left-4 bg-primary text-on-primary text-[9px] font-black px-2 py-0.5 rounded-full uppercase tracking-widest">
+                <span className="absolute -top-3 left-4 bg-primary text-on-primary text-micro font-black px-2 py-0.5 rounded-full uppercase tracking-widest">
                   {plan.savings}
                 </span>
               )}
               <p className="font-headline font-bold text-sm uppercase text-tertiary">{plan.label}</p>
               <p className="font-headline font-black text-2xl text-primary mt-1">{plan.price}</p>
-              <p className="font-label text-[9px] uppercase tracking-widest text-on-surface-variant">{plan.period}</p>
+              <p className="font-label text-micro uppercase tracking-widest text-on-surface-variant">{plan.period}</p>
               {selectedPlan === plan.id && (
                 <div className="absolute top-3 right-3 w-5 h-5 bg-primary rounded-full flex items-center justify-center">
                   <Check className="w-3 h-3 text-on-primary" />
@@ -178,14 +178,14 @@ export default function RialPlus({ onBack }: { onBack: () => void }) {
                     {f.free === false ? (
                       <Lock className="w-4 h-4 text-on-surface-variant mx-auto" />
                     ) : (
-                      <span className="text-[9px] font-bold uppercase tracking-wide text-on-surface-variant">{f.free === true ? '✓' : f.free}</span>
+                      <span className="text-micro font-bold uppercase tracking-wide text-on-surface-variant">{f.free === true ? '✓' : f.free}</span>
                     )}
                   </div>
                   <div className="text-center w-14">
                     {f.pro === true ? (
                       <Check className="w-4 h-4 text-primary mx-auto" />
                     ) : (
-                      <span className="text-[9px] font-bold uppercase tracking-wide text-primary">{f.pro}</span>
+                      <span className="text-micro font-bold uppercase tracking-wide text-primary">{f.pro}</span>
                     )}
                   </div>
                 </div>
@@ -194,10 +194,10 @@ export default function RialPlus({ onBack }: { onBack: () => void }) {
           </div>
           <div className="flex justify-end gap-6 mt-2">
             <div className="text-center w-14">
-              <span className="text-[9px] font-bold uppercase tracking-widest text-on-surface-variant">Free</span>
+              <span className="text-micro font-bold uppercase tracking-widest text-on-surface-variant">Free</span>
             </div>
             <div className="text-center w-14">
-              <span className="text-[9px] font-bold uppercase tracking-widest text-primary">Pro</span>
+              <span className="text-micro font-bold uppercase tracking-widest text-primary">Pro</span>
             </div>
           </div>
         </div>
@@ -210,7 +210,7 @@ export default function RialPlus({ onBack }: { onBack: () => void }) {
           <p className="text-sm font-body text-on-surface-variant italic leading-relaxed">
             {t.rialPlus.testimonial}
           </p>
-          <p className="font-label text-[9px] uppercase tracking-widest text-on-surface-variant mt-3">{t.rialPlus.testimonialAuthor}</p>
+          <p className="font-label text-micro uppercase tracking-widest text-on-surface-variant mt-3">{t.rialPlus.testimonialAuthor}</p>
         </div>
 
         {/* CTA */}
@@ -228,7 +228,7 @@ export default function RialPlus({ onBack }: { onBack: () => void }) {
               )}
             </button>
             <div className="flex items-center justify-between">
-              <p className="text-[9px] text-on-surface-variant uppercase tracking-widest">
+              <p className="text-micro text-on-surface-variant uppercase tracking-widest">
                 {t.rialPlus.cancelAnytime}
               </p>
               {/* Restore purchases — required by Apple App Store */}
@@ -236,7 +236,7 @@ export default function RialPlus({ onBack }: { onBack: () => void }) {
                 type="button"
                 onClick={handleRestore}
                 disabled={isUpgrading || isRestoring}
-                className="text-[9px] text-on-surface-variant uppercase tracking-widest hover:text-primary flex items-center gap-1 disabled:opacity-40"
+                className="text-micro text-on-surface-variant uppercase tracking-widest hover:text-primary flex items-center gap-1 disabled:opacity-40"
               >
                 <RotateCcw className="w-3 h-3" />
                 {isRestoring ? t.rialPlus.restoring : t.rialPlus.restorePurchases}

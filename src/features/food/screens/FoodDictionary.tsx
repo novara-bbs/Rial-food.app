@@ -132,7 +132,7 @@ export default function FoodDictionary({ navigateTo }: Props) {
 
       {/* Allergen exclusion chips */}
       <div className="space-y-1.5">
-        <span className="text-[9px] font-label uppercase tracking-widest text-on-surface-variant">
+        <span className="text-micro font-label uppercase tracking-widest text-on-surface-variant">
           {t.foodDictionary.allergenFilter}
         </span>
         <div className="flex gap-1.5 flex-wrap">
@@ -143,7 +143,7 @@ export default function FoodDictionary({ navigateTo }: Props) {
                 type="button"
                 key={a}
                 onClick={() => toggleAllergen(a)}
-                className={`inline-flex items-center gap-1 px-2 py-1 rounded-sm text-[10px] font-headline font-bold uppercase tracking-widest transition-colors ${
+                className={`inline-flex items-center gap-1 px-2 py-1 rounded-sm text-micro font-headline font-bold uppercase tracking-widest transition-colors ${
                   active
                     ? 'bg-error/15 text-error border border-error/30'
                     : 'bg-surface-container-highest text-on-surface-variant border border-transparent hover:bg-surface-container-high'
@@ -173,7 +173,7 @@ export default function FoodDictionary({ navigateTo }: Props) {
               <h3 className="font-headline font-bold text-sm uppercase tracking-widest text-on-surface-variant flex items-center gap-2 pt-2">
                 <span>{meta.icon}</span>
                 <span>{locale === 'es' ? meta.name : meta.nameEn}</span>
-                <span className="text-[10px] font-label text-on-surface-variant/60">{group.items.length}</span>
+                <span className="text-micro font-label text-on-surface-variant/60">{group.items.length}</span>
               </h3>
 
               <div className="space-y-1">
@@ -196,7 +196,7 @@ export default function FoodDictionary({ navigateTo }: Props) {
                           <span className="font-headline font-bold text-sm text-on-surface block truncate">
                             {locale === 'es' ? item.name : item.nameEn}
                           </span>
-                          <span className="text-[10px] font-label text-on-surface-variant tracking-wide">
+                          <span className="text-micro font-label text-on-surface-variant tracking-wide">
                             {item.macros.calories} kcal · {item.macros.protein}g pro · {item.macros.carbs}g carbs · {item.macros.fats}g fat
                           </span>
                         </div>
@@ -220,7 +220,7 @@ export default function FoodDictionary({ navigateTo }: Props) {
                           {item.tags.length > 0 && (
                             <div className="flex flex-wrap gap-1">
                               {item.tags.map(tag => (
-                                <Badge key={tag} variant="secondary" className="text-[8px]">
+                                <Badge key={tag} variant="secondary" className="text-micro">
                                   {tag}
                                 </Badge>
                               ))}
@@ -230,9 +230,9 @@ export default function FoodDictionary({ navigateTo }: Props) {
                           {/* Allergens */}
                           {item.allergens.length > 0 && (
                             <div className="flex items-center gap-2">
-                              <span className="text-[9px] font-label uppercase tracking-widest text-on-surface-variant">{t.foodDictionary.allergens}:</span>
+                              <span className="text-micro font-label uppercase tracking-widest text-on-surface-variant">{t.foodDictionary.allergens}:</span>
                               {item.allergens.map(a => (
-                                <Badge key={a} variant="destructive" className="text-[8px]">
+                                <Badge key={a} variant="destructive" className="text-micro">
                                   {a}
                                 </Badge>
                               ))}
@@ -241,7 +241,7 @@ export default function FoodDictionary({ navigateTo }: Props) {
 
                           {/* Portion selector */}
                           <div className="space-y-2">
-                            <h4 className="text-[10px] font-label uppercase tracking-widest text-on-surface-variant">
+                            <h4 className="text-micro font-label uppercase tracking-widest text-on-surface-variant">
                               {t.foodDictionary.servings}
                             </h4>
                             <PortionSelector ingredient={item} unitSystem={unitSystem} />
@@ -307,14 +307,14 @@ function MicroHighlights({ item }: { item: Ingredient }) {
 
   return (
     <div className="space-y-1">
-      <h4 className="text-[10px] font-label uppercase tracking-widest text-on-surface-variant">
+      <h4 className="text-micro font-label uppercase tracking-widest text-on-surface-variant">
         {t.foodDictionary.highlightedMicros}
       </h4>
       <div className="grid grid-cols-3 sm:grid-cols-4 gap-1">
         {highlights.slice(0, 8).map(h => (
           <div key={h.label} className="bg-surface-container-highest rounded-sm px-2 py-1 text-center">
             <span className="block text-xs font-bold text-on-surface">{h.value}</span>
-            <span className="text-[8px] font-label uppercase tracking-wider text-on-surface-variant">{h.label}</span>
+            <span className="text-micro font-label uppercase tracking-wider text-on-surface-variant">{h.label}</span>
           </div>
         ))}
       </div>

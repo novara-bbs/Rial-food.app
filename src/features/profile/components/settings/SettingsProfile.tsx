@@ -102,11 +102,11 @@ export default function SettingsProfile({ userProfile, setUserProfile, setDailyM
         <div className="flex-1">
           <h3 className="font-headline text-xl font-bold text-tertiary uppercase">{userProfile?.name || 'User'}</h3>
           {isPro ? (
-            <span className="bg-primary/10 text-primary text-[10px] px-2 py-0.5 rounded-sm font-label font-bold uppercase tracking-widest inline-flex items-center gap-1 w-fit mt-1">
+            <span className="bg-primary/10 text-primary text-micro px-2 py-0.5 rounded-sm font-label font-bold uppercase tracking-widest inline-flex items-center gap-1 w-fit mt-1">
               <Crown className="w-3 h-3" /> {t.settings.proMember}
             </span>
           ) : (
-            <span className="bg-surface-container-highest text-on-surface-variant text-[10px] px-2 py-0.5 rounded-sm font-label font-bold uppercase tracking-widest inline-block mt-1">
+            <span className="bg-surface-container-highest text-on-surface-variant text-micro px-2 py-0.5 rounded-sm font-label font-bold uppercase tracking-widest inline-block mt-1">
               {t.settings.freePlan}
             </span>
           )}
@@ -160,27 +160,27 @@ export default function SettingsProfile({ userProfile, setUserProfile, setDailyM
         </div>
         <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
           <div>
-            <label className="block font-label text-[10px] tracking-widest uppercase text-on-surface-variant mb-2">{t.settings.age}</label>
+            <label className="block font-label text-micro tracking-widest uppercase text-on-surface-variant mb-2">{t.settings.age}</label>
             <input type="number" value={userProfile?.age || 32}
               onChange={(e) => updateBiometric('age', parseInt(e.target.value))}
               className="w-full bg-surface-container-low border border-outline-variant/20 rounded-sm py-2 px-3 text-tertiary text-sm focus:outline-none focus:border-primary" />
           </div>
           <div>
-            <label className="block font-label text-[10px] tracking-widest uppercase text-on-surface-variant mb-2">{t.settings.heightLabel} ({getHeightUnit(userProfile?.unitSystem ?? 'metric')})</label>
+            <label className="block font-label text-micro tracking-widest uppercase text-on-surface-variant mb-2">{t.settings.heightLabel} ({getHeightUnit(userProfile?.unitSystem ?? 'metric')})</label>
             <input type="number" step="0.1" inputMode="decimal"
               value={heightFromCm(userProfile?.height || 175, userProfile?.unitSystem ?? 'metric')}
               onChange={(e) => updateBiometric('height', heightToCm(parseFloat(e.target.value) || 0, userProfile?.unitSystem ?? 'metric'))}
               className="w-full bg-surface-container-low border border-outline-variant/20 rounded-sm py-2 px-3 text-tertiary text-sm focus:outline-none focus:border-primary" />
           </div>
           <div>
-            <label className="block font-label text-[10px] tracking-widest uppercase text-on-surface-variant mb-2">{t.settings.weightLabel} ({getBodyWeightUnit(userProfile?.unitSystem ?? 'metric')})</label>
+            <label className="block font-label text-micro tracking-widest uppercase text-on-surface-variant mb-2">{t.settings.weightLabel} ({getBodyWeightUnit(userProfile?.unitSystem ?? 'metric')})</label>
             <input type="number" step="0.1" inputMode="decimal"
               value={bodyWeightFromKg(userProfile?.weight || 78, userProfile?.unitSystem ?? 'metric')}
               onChange={(e) => updateBiometric('weight', bodyWeightToKg(parseFloat(e.target.value) || 0, userProfile?.unitSystem ?? 'metric'))}
               className="w-full bg-surface-container-low border border-outline-variant/20 rounded-sm py-2 px-3 text-tertiary text-sm focus:outline-none focus:border-primary" />
           </div>
           <div>
-            <label className="block font-label text-[10px] tracking-widest uppercase text-on-surface-variant mb-2">{t.settings.targetWeight || 'Peso objetivo'} ({getBodyWeightUnit(userProfile?.unitSystem ?? 'metric')})</label>
+            <label className="block font-label text-micro tracking-widest uppercase text-on-surface-variant mb-2">{t.settings.targetWeight || 'Peso objetivo'} ({getBodyWeightUnit(userProfile?.unitSystem ?? 'metric')})</label>
             <input type="number" step="0.1" inputMode="decimal"
               value={userProfile?.targetWeight ? bodyWeightFromKg(userProfile.targetWeight, userProfile?.unitSystem ?? 'metric') : ''}
               onChange={(e) => {
@@ -191,7 +191,7 @@ export default function SettingsProfile({ userProfile, setUserProfile, setDailyM
               className="w-full bg-surface-container-low border border-outline-variant/20 rounded-sm py-2 px-3 text-tertiary text-sm focus:outline-none focus:border-primary" />
           </div>
           <div>
-            <label className="block font-label text-[10px] tracking-widest uppercase text-on-surface-variant mb-2">{t.settings.gender}</label>
+            <label className="block font-label text-micro tracking-widest uppercase text-on-surface-variant mb-2">{t.settings.gender}</label>
             <select value={userProfile?.gender || 'female'}
               onChange={(e) => updateBiometric('gender', e.target.value)}
               className="w-full bg-surface-container-low border border-outline-variant/20 rounded-sm py-2 px-3 text-tertiary uppercase text-xs focus:outline-none focus:border-primary">
@@ -201,7 +201,7 @@ export default function SettingsProfile({ userProfile, setUserProfile, setDailyM
             </select>
           </div>
           <div className="col-span-full">
-            <label className="block font-label text-[10px] tracking-widest uppercase text-on-surface-variant mb-2">{t.settings.name}</label>
+            <label className="block font-label text-micro tracking-widest uppercase text-on-surface-variant mb-2">{t.settings.name}</label>
             <input type="text" value={userProfile?.name || ''}
               onChange={(e) => updateBiometric('name', e.target.value)}
               className="w-full bg-surface-container-low border border-outline-variant/20 rounded-sm py-2 px-3 text-tertiary text-sm focus:outline-none focus:border-primary" />
@@ -218,7 +218,7 @@ export default function SettingsProfile({ userProfile, setUserProfile, setDailyM
           </div>
           <button type="button"
             onClick={() => setIsAddingMember(true)}
-            className="text-primary font-label text-[10px] font-bold tracking-widest uppercase hover:underline flex items-center gap-1">
+            className="text-primary font-label text-micro font-bold tracking-widest uppercase hover:underline flex items-center gap-1">
             <Plus className="w-4 h-4" /> {t.settings.addMember}
           </button>
         </div>
@@ -232,7 +232,7 @@ export default function SettingsProfile({ userProfile, setUserProfile, setDailyM
                 </div>
                 <div>
                   <h4 className="font-headline font-bold text-sm uppercase text-tertiary">{member.name}</h4>
-                  <p className="font-label text-[10px] tracking-widest uppercase text-on-surface-variant">
+                  <p className="font-label text-micro tracking-widest uppercase text-on-surface-variant">
                     {member.age} {t.settings.years} • {goalLabels[member.goal] || member.goal}
                   </p>
                 </div>
@@ -250,20 +250,20 @@ export default function SettingsProfile({ userProfile, setUserProfile, setDailyM
             <div className="bg-surface-container-highest p-4 rounded-sm border border-primary/30 col-span-full">
               <div className="grid grid-cols-2 gap-4 mb-4">
                 <div className="col-span-full">
-                  <label className="block font-label text-[10px] tracking-widest uppercase text-on-surface-variant mb-2">{t.settings.memberName}</label>
+                  <label className="block font-label text-micro tracking-widest uppercase text-on-surface-variant mb-2">{t.settings.memberName}</label>
                   <input type="text" value={newMember.name}
                     onChange={(e) => setNewMember({ ...newMember, name: e.target.value })}
                     className="w-full bg-surface-container-low border border-outline-variant/20 rounded-sm py-2 px-3 text-tertiary text-sm focus:outline-none focus:border-primary"
                     placeholder={t.settings.memberNamePlaceholder} />
                 </div>
                 <div>
-                  <label className="block font-label text-[10px] tracking-widest uppercase text-on-surface-variant mb-2">{t.settings.memberAge}</label>
+                  <label className="block font-label text-micro tracking-widest uppercase text-on-surface-variant mb-2">{t.settings.memberAge}</label>
                   <input type="number" value={newMember.age}
                     onChange={(e) => setNewMember({ ...newMember, age: parseInt(e.target.value) })}
                     className="w-full bg-surface-container-low border border-outline-variant/20 rounded-sm py-2 px-3 text-tertiary text-sm focus:outline-none focus:border-primary" />
                 </div>
                 <div>
-                  <label className="block font-label text-[10px] tracking-widest uppercase text-on-surface-variant mb-2">{t.settings.memberGoal}</label>
+                  <label className="block font-label text-micro tracking-widest uppercase text-on-surface-variant mb-2">{t.settings.memberGoal}</label>
                   <select value={newMember.goal}
                     onChange={(e) => setNewMember({ ...newMember, goal: e.target.value })}
                     className="w-full bg-surface-container-low border border-outline-variant/20 rounded-sm py-2 px-3 text-tertiary uppercase text-xs focus:outline-none focus:border-primary">
@@ -296,7 +296,7 @@ export default function SettingsProfile({ userProfile, setUserProfile, setDailyM
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div>
-            <label className="block font-label text-[10px] tracking-widest uppercase text-on-surface-variant mb-2">{t.settings.mainGoal}</label>
+            <label className="block font-label text-micro tracking-widest uppercase text-on-surface-variant mb-2">{t.settings.mainGoal}</label>
             <select value={userProfile?.goal || 'maintain'}
               onChange={(e) => updateBiometric('goal', e.target.value)}
               className="w-full bg-surface-container-low border border-outline-variant/20 rounded-sm py-2 px-3 text-tertiary uppercase text-xs focus:outline-none focus:border-primary">
@@ -306,7 +306,7 @@ export default function SettingsProfile({ userProfile, setUserProfile, setDailyM
             </select>
           </div>
           <div>
-            <label className="block font-label text-[10px] tracking-widest uppercase text-on-surface-variant mb-2">{t.settings.activityLevel}</label>
+            <label className="block font-label text-micro tracking-widest uppercase text-on-surface-variant mb-2">{t.settings.activityLevel}</label>
             <select value={userProfile?.activity || 'active'}
               onChange={(e) => updateBiometric('activity', e.target.value)}
               className="w-full bg-surface-container-low border border-outline-variant/20 rounded-sm py-2 px-3 text-tertiary uppercase text-xs focus:outline-none focus:border-primary">

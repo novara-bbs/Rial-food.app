@@ -147,7 +147,7 @@ export default function RealFeelDiary({ realFeelLogs = [], onBack }: { realFeelL
             {Array.from({ length: 7 }).map((_, i) => (
               <div key={i} className="flex-1 flex flex-col items-center gap-1">
                 <div className="w-full rounded-t bg-outline-variant/20" style={{ height: '10%', minHeight: 4 }} />
-                <span className="text-[8px] text-on-surface-variant">{t.realFeel.dayAbbr[i]}</span>
+                <span className="text-micro text-on-surface-variant">{t.realFeel.dayAbbr[i]}</span>
               </div>
             ))}
           </div>
@@ -188,7 +188,7 @@ export default function RealFeelDiary({ realFeelLogs = [], onBack }: { realFeelL
                   <p className="font-headline text-sm font-bold uppercase text-tertiary truncate">{fi.ingredientName}</p>
                   <p className="text-xs text-on-surface-variant">
                     {t.realFeel.insightLogs.replace('{count}', String(fi.count))} · avg {fi.avgLevel.toFixed(1)}/5
-                    {fi.dominantTag && <span className="ml-1 text-[9px] bg-surface-container-highest px-1.5 py-0.5 rounded">{fi.dominantTag}</span>}
+                    {fi.dominantTag && <span className="ml-1 text-micro bg-surface-container-highest px-1.5 py-0.5 rounded">{fi.dominantTag}</span>}
                   </p>
                 </div>
                 <span className="text-lg shrink-0">{fi.tone === 'positive' ? '🟢' : fi.tone === 'warning' ? '🔴' : '🟡'}</span>
@@ -207,7 +207,7 @@ export default function RealFeelDiary({ realFeelLogs = [], onBack }: { realFeelL
               <div className="flex-1 bg-surface-container-low border border-outline-variant/20 rounded-sm p-3 flex items-center gap-2">
                 <Zap className="w-4 h-4 text-primary shrink-0" />
                 <div>
-                  <p className="text-[9px] font-bold uppercase tracking-widest text-on-surface-variant">{t.realFeel.energy}</p>
+                  <p className="text-micro font-bold uppercase tracking-widest text-on-surface-variant">{t.realFeel.energy}</p>
                   <p className="font-headline text-xs font-bold text-tertiary uppercase">{ENERGY_LABELS[weeklyPatterns.energy]}</p>
                 </div>
               </div>
@@ -216,7 +216,7 @@ export default function RealFeelDiary({ realFeelLogs = [], onBack }: { realFeelL
               <div className="flex-1 bg-surface-container-low border border-outline-variant/20 rounded-sm p-3 flex items-center gap-2">
                 <Leaf className="w-4 h-4 text-primary shrink-0" />
                 <div>
-                  <p className="text-[9px] font-bold uppercase tracking-widest text-on-surface-variant">{t.realFeel.digestion}</p>
+                  <p className="text-micro font-bold uppercase tracking-widest text-on-surface-variant">{t.realFeel.digestion}</p>
                   <p className="font-headline text-xs font-bold text-tertiary uppercase">{DIGESTION_LABELS[weeklyPatterns.digestion]}</p>
                 </div>
               </div>
@@ -272,17 +272,17 @@ export default function RealFeelDiary({ realFeelLogs = [], onBack }: { realFeelL
                 {(log.energy || log.digestion || log.mindset) && (
                   <div className="flex flex-wrap gap-1.5 mb-1.5">
                     {log.energy && (
-                      <span className="text-[9px] font-bold uppercase tracking-wider bg-primary/10 text-primary px-2 py-0.5 rounded-full flex items-center gap-1">
+                      <span className="text-micro font-bold uppercase tracking-wider bg-primary/10 text-primary px-2 py-0.5 rounded-full flex items-center gap-1">
                         <Zap className="w-2.5 h-2.5" /> {ENERGY_LABELS[log.energy]}
                       </span>
                     )}
                     {log.digestion && (
-                      <span className="text-[9px] font-bold uppercase tracking-wider bg-brand-secondary/10 text-brand-secondary px-2 py-0.5 rounded-full flex items-center gap-1">
+                      <span className="text-micro font-bold uppercase tracking-wider bg-brand-secondary/10 text-brand-secondary px-2 py-0.5 rounded-full flex items-center gap-1">
                         <Leaf className="w-2.5 h-2.5" /> {DIGESTION_LABELS[log.digestion]}
                       </span>
                     )}
                     {log.mindset && (
-                      <span className="text-[9px] font-bold uppercase tracking-wider bg-surface-container-highest text-on-surface-variant px-2 py-0.5 rounded-full flex items-center gap-1">
+                      <span className="text-micro font-bold uppercase tracking-wider bg-surface-container-highest text-on-surface-variant px-2 py-0.5 rounded-full flex items-center gap-1">
                         <Brain className="w-2.5 h-2.5" /> {MINDSET_LABELS[log.mindset]}
                       </span>
                     )}
@@ -290,13 +290,13 @@ export default function RealFeelDiary({ realFeelLogs = [], onBack }: { realFeelL
                 )}
                 <div className="flex flex-wrap gap-1">
                   {(log.tags || []).map((tag: string, j: number) => (
-                    <span key={j} className="text-[9px] font-bold uppercase tracking-wider bg-surface-container-highest px-2 py-0.5 rounded text-on-surface-variant">{tag}</span>
+                    <span key={j} className="text-micro font-bold uppercase tracking-wider bg-surface-container-highest px-2 py-0.5 rounded text-on-surface-variant">{tag}</span>
                   ))}
                 </div>
                 {log.note && <p className="text-xs text-on-surface-variant mt-1 truncate">{log.note}</p>}
               </div>
               <div className="flex flex-col items-end gap-1 shrink-0">
-                <span className="text-[10px] text-on-surface-variant">
+                <span className="text-micro text-on-surface-variant">
                   {log.date ? new Date(log.date).toLocaleDateString() : ''}
                 </span>
                 <button

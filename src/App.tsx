@@ -227,7 +227,7 @@ export default function App() {
         <div className="flex-1 flex flex-col overflow-hidden relative">
           {/* Offline banner */}
           {!isOnline && (
-            <div className="flex items-center justify-center gap-2 px-4 py-2 bg-amber-500/15 border-b border-amber-500/30 text-amber-500 font-label text-[11px] uppercase tracking-widest">
+            <div className="flex items-center justify-center gap-2 px-4 py-2 bg-amber-500/15 border-b border-amber-500/30 text-amber-500 font-label text-caption uppercase tracking-widest">
               <WifiOff className="w-3.5 h-3.5 shrink-0" />
               <span>{t.offline.banner}</span>
             </div>

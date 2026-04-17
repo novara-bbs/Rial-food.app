@@ -28,7 +28,7 @@ export default function PrivacyPolicy({ onBack }: Props) {
       </div>
 
       <div className="prose prose-sm max-w-none space-y-6 font-body text-on-surface-variant text-sm leading-relaxed">
-        <p className="font-label text-[10px] uppercase tracking-widest text-on-surface-variant/60">
+        <p className="font-label text-micro uppercase tracking-widest text-on-surface-variant/60">
           {t.legal.lastUpdated}: 12 Abril 2026
         </p>
 

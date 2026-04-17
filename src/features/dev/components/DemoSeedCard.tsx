@@ -58,7 +58,7 @@ export default function DemoSeedCard({ forceVisible = false }: DemoSeedCardProps
           <h2 className="font-headline font-bold text-sm uppercase tracking-widest text-tertiary">
             Modo demo · Rial
           </h2>
-          <p className="text-[11px] text-on-surface-variant mt-1 leading-relaxed">
+          <p className="text-caption text-on-surface-variant mt-1 leading-relaxed">
             Carga 30 días coherentes con <strong>Clara</strong> (ICP Cut): peso 72.4 → 69.1 kg,
             macros, hidratación, movimiento, fotos de progreso, reflexiones semanales y posts.
             Sobrescribe tus datos actuales.
@@ -71,7 +71,7 @@ export default function DemoSeedCard({ forceVisible = false }: DemoSeedCardProps
           type="button"
           onClick={onLoad}
           disabled={busy !== null}
-          className="flex items-center justify-center gap-2 bg-brand-secondary text-on-primary px-3 py-2 rounded-sm text-[10px] font-bold uppercase tracking-widest hover:opacity-90 transition-opacity disabled:opacity-40"
+          className="flex items-center justify-center gap-2 bg-brand-secondary text-on-primary px-3 py-2 rounded-sm text-micro font-bold uppercase tracking-widest hover:opacity-90 transition-opacity disabled:opacity-40"
         >
           {busy === 'load' ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Sparkles className="w-3.5 h-3.5" />}
           Cargar demo
@@ -80,7 +80,7 @@ export default function DemoSeedCard({ forceVisible = false }: DemoSeedCardProps
           type="button"
           onClick={onClear}
           disabled={busy !== null}
-          className="flex items-center justify-center gap-2 bg-surface-container border border-outline-variant/30 text-on-surface-variant px-3 py-2 rounded-sm text-[10px] font-bold uppercase tracking-widest hover:border-error/40 hover:text-error transition-colors disabled:opacity-40"
+          className="flex items-center justify-center gap-2 bg-surface-container border border-outline-variant/30 text-on-surface-variant px-3 py-2 rounded-sm text-micro font-bold uppercase tracking-widest hover:border-error/40 hover:text-error transition-colors disabled:opacity-40"
         >
           {busy === 'clear' ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Trash2 className="w-3.5 h-3.5" />}
           Limpiar

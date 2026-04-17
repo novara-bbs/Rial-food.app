@@ -83,10 +83,10 @@ export default function Profile({ userProfile, onBack, realFeelLogs = [], savedR
         <div>
           <h2 className="font-headline text-2xl font-black text-tertiary uppercase tracking-tight">{userProfile?.name || 'User'}</h2>
           <div className="flex items-center gap-3 mt-1">
-            <span className="bg-primary/10 text-primary text-[9px] px-2 py-0.5 rounded font-bold uppercase tracking-widest">
+            <span className="bg-primary/10 text-primary text-micro px-2 py-0.5 rounded font-bold uppercase tracking-widest">
               {(t.gamification.levels as Record<string, string>)[level.name] || level.name}
             </span>
-            <span className="text-[10px] text-on-surface-variant font-mono">{points} pts</span>
+            <span className="text-micro text-on-surface-variant font-mono">{points} pts</span>
           </div>
         </div>
       </div>
@@ -97,7 +97,7 @@ export default function Profile({ userProfile, onBack, realFeelLogs = [], savedR
         title={`${t.gamification.level} ${level.level}`}
         action={
           nextLevel ? (
-            <span className="text-[10px] text-on-surface-variant font-mono">
+            <span className="text-micro text-on-surface-variant font-mono">
               {points}/{nextLevel.minPoints} pts
             </span>
           ) : undefined
@@ -107,7 +107,7 @@ export default function Profile({ userProfile, onBack, realFeelLogs = [], savedR
           <div className="h-full bg-primary rounded-full transition-all" style={{ width: `${Math.min(levelProgress, 100)}%` }} />
         </div>
         {nextLevel && (
-          <p className="text-[9px] text-on-surface-variant uppercase tracking-widest">
+          <p className="text-micro text-on-surface-variant uppercase tracking-widest">
             {(t.gamification.levels as Record<string, string>)[nextLevel.name]} — {nextLevel.minPoints - points} pts
           </p>
         )}
@@ -124,7 +124,7 @@ export default function Profile({ userProfile, onBack, realFeelLogs = [], savedR
           <Flame className="w-6 h-6 text-brand-secondary" />
           <div>
             <span className="font-headline text-sm font-bold uppercase text-tertiary tracking-widest">{t.gamification.streak}</span>
-            <p className="text-[10px] text-on-surface-variant">{t.profile.realFeelMeals}</p>
+            <p className="text-micro text-on-surface-variant">{t.profile.realFeelMeals}</p>
           </div>
         </div>
         <div className="flex items-center gap-2">
@@ -138,7 +138,7 @@ export default function Profile({ userProfile, onBack, realFeelLogs = [], savedR
         <div className="flex items-center gap-2 mb-4">
           <Trophy className="w-5 h-5 text-primary" />
           <h3 className="font-headline text-sm font-bold uppercase tracking-widest text-tertiary">{t.gamification.badges}</h3>
-          <span className="text-[10px] text-on-surface-variant font-mono">{earned.length}/{BADGES.length}</span>
+          <span className="text-micro text-on-surface-variant font-mono">{earned.length}/{BADGES.length}</span>
         </div>
         <div className="grid grid-cols-4 sm:grid-cols-7 gap-3">
           {BADGES.map(badge => {
@@ -174,7 +174,7 @@ export default function Profile({ userProfile, onBack, realFeelLogs = [], savedR
         {userProfile?.dietaryPreferences?.length > 0 && (
           <div className="flex flex-wrap gap-1.5">
             {userProfile.dietaryPreferences.map((p: string) => (
-              <span key={p} className="text-[9px] font-bold uppercase tracking-wider bg-primary/10 text-primary px-2 py-0.5 rounded">{p}</span>
+              <span key={p} className="text-micro font-bold uppercase tracking-wider bg-primary/10 text-primary px-2 py-0.5 rounded">{p}</span>
             ))}
           </div>
         )}

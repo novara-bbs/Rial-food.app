@@ -53,7 +53,7 @@ export default function LatestReflectionCard({ entries }: LatestReflectionCardPr
         <button
           type="button"
           onClick={() => navigateTo('weekly-check-in')}
-          className="mt-1 inline-flex items-center gap-1.5 bg-primary text-on-primary px-3 py-1.5 rounded-sm text-[10px] font-bold uppercase tracking-widest hover:opacity-90 transition-opacity"
+          className="mt-1 inline-flex items-center gap-1.5 bg-primary text-on-primary px-3 py-1.5 rounded-sm text-micro font-bold uppercase tracking-widest hover:opacity-90 transition-opacity"
         >
           {p.openWeeklyCheckIn ?? 'Ver reflexión completa'}
           <ArrowRight className="w-3 h-3" aria-hidden="true" />
@@ -68,7 +68,7 @@ export default function LatestReflectionCard({ entries }: LatestReflectionCardPr
       title={p.latestReflectionTitle ?? 'Última reflexión'}
       caption={<DataSourceCaption kind="manual" label={p.dataSourceManualReflection ?? 'completa tu domingo de reflexión'} />}
       action={
-        <span className="font-label text-[9px] uppercase tracking-widest text-primary">
+        <span className="font-label text-micro uppercase tracking-widest text-primary">
           {formatWeekLabel(latest.weekStart)}
         </span>
       }
@@ -81,7 +81,7 @@ export default function LatestReflectionCard({ entries }: LatestReflectionCardPr
 
       {latest.avgVitality != null && (
         <div className="flex items-center gap-2 pt-1">
-          <span className="font-label text-[9px] uppercase tracking-widest text-on-surface-variant">
+          <span className="font-label text-micro uppercase tracking-widest text-on-surface-variant">
             {p.ritmoVitality ?? 'Real Feel'}
           </span>
           <span className="font-headline font-bold text-sm text-primary">{latest.avgVitality}</span>
@@ -92,7 +92,7 @@ export default function LatestReflectionCard({ entries }: LatestReflectionCardPr
         <button
           type="button"
           onClick={() => navigateTo('weekly-check-in')}
-          className="inline-flex items-center gap-1.5 bg-primary text-on-primary px-3 py-1.5 rounded-sm text-[10px] font-bold uppercase tracking-widest hover:opacity-90 transition-opacity"
+          className="inline-flex items-center gap-1.5 bg-primary text-on-primary px-3 py-1.5 rounded-sm text-micro font-bold uppercase tracking-widest hover:opacity-90 transition-opacity"
         >
           {p.openWeeklyCheckIn ?? 'Ver reflexión completa'}
           <ArrowRight className="w-3 h-3" aria-hidden="true" />
@@ -100,7 +100,7 @@ export default function LatestReflectionCard({ entries }: LatestReflectionCardPr
         <button
           type="button"
           onClick={() => navigateTo('weekly-review')}
-          className="inline-flex items-center gap-1.5 border border-outline-variant/30 text-tertiary px-3 py-1.5 rounded-sm text-[10px] font-bold uppercase tracking-widest hover:border-primary/50 hover:text-primary transition-colors"
+          className="inline-flex items-center gap-1.5 border border-outline-variant/30 text-tertiary px-3 py-1.5 rounded-sm text-micro font-bold uppercase tracking-widest hover:border-primary/50 hover:text-primary transition-colors"
         >
           {p.openWeeklyReview ?? 'Resumen de la semana'}
         </button>

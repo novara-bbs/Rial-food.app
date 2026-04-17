@@ -65,16 +65,16 @@ export default function WeeklyScoreCard({ weeklyScore, weekStats, hydration, mov
           </svg>
           <div className="absolute inset-0 flex flex-col items-center justify-center">
             <span className={`font-headline font-black text-xl leading-none ${scoreColor(weeklyScore)}`}>{weeklyScore}</span>
-            <span className="text-[8px] text-on-surface-variant">/100</span>
+            <span className="text-micro text-on-surface-variant">/100</span>
           </div>
         </div>
 
         <div className="flex-1 space-y-1.5">
           <div className="flex items-center gap-1.5">
             <span className="font-headline font-bold text-sm text-tertiary">{weekStats.thisAvg.cal}</span>
-            <span className="font-label text-[9px] uppercase tracking-widest text-on-surface-variant">kcal</span>
+            <span className="font-label text-micro uppercase tracking-widest text-on-surface-variant">kcal</span>
             {weekStats.calDelta !== 0 && (
-              <span className={`text-[9px] font-bold ${weekStats.calDelta > 0 ? 'text-brand-secondary' : 'text-primary'}`}>
+              <span className={`text-micro font-bold ${weekStats.calDelta > 0 ? 'text-brand-secondary' : 'text-primary'}`}>
                 {weekStats.calDelta > 0 ? '▲' : '▼'}{Math.abs(weekStats.calDelta)}%
               </span>
             )}
@@ -83,14 +83,14 @@ export default function WeeklyScoreCard({ weeklyScore, weekStats, hydration, mov
             <span className="font-headline font-bold text-sm text-primary">
               {weekStats.proteinHitDays}/{weekStats.daysLogged || '—'}
             </span>
-            <span className="font-label text-[9px] uppercase tracking-widest text-on-surface-variant">
+            <span className="font-label text-micro uppercase tracking-widest text-on-surface-variant">
               {t.proteinTarget || 'Proteína'}
             </span>
           </div>
           <div className="flex items-center gap-1.5">
             <CalendarIcon className="w-3.5 h-3.5 text-brand-secondary" />
             <span className="font-headline font-bold text-sm text-tertiary">{weekStats.daysLogged}/7</span>
-            <span className="font-label text-[9px] uppercase tracking-widest text-on-surface-variant">
+            <span className="font-label text-micro uppercase tracking-widest text-on-surface-variant">
               {t.daysLogged || 'días'}
             </span>
           </div>
@@ -101,19 +101,19 @@ export default function WeeklyScoreCard({ weeklyScore, weekStats, hydration, mov
       <div className="flex items-center gap-4 pt-2 border-t border-outline-variant/10">
         <div className="flex items-center gap-1">
           <Droplets className="w-3.5 h-3.5 text-blue-400" />
-          <span className="font-label text-[9px] font-bold text-on-surface-variant">
+          <span className="font-label text-micro font-bold text-on-surface-variant">
             {hydration?.consumed ?? 0}/{hydration?.target ?? 8}
           </span>
         </div>
         <div className="flex items-center gap-1">
           <Footprints className="w-3.5 h-3.5 text-brand-secondary" />
-          <span className="font-label text-[9px] font-bold text-on-surface-variant">
+          <span className="font-label text-micro font-bold text-on-surface-variant">
             {(movement?.steps ?? 0).toLocaleString()}/{(movement?.target ?? 8000).toLocaleString()}
           </span>
         </div>
         <div className="flex items-center gap-1">
           <Timer className="w-3.5 h-3.5 text-tertiary" />
-          <span className="font-label text-[9px] font-bold text-on-surface-variant">
+          <span className="font-label text-micro font-bold text-on-surface-variant">
             {movement?.activeMinutes ?? 0}/{movement?.activeTarget ?? 30} min
           </span>
         </div>
@@ -127,19 +127,19 @@ export default function WeeklyScoreCard({ weeklyScore, weekStats, hydration, mov
           const unit = bar.key === 'cal' ? '' : 'g';
           return (
             <div key={bar.key} className="flex items-center gap-2">
-              <span className="font-label text-[8px] uppercase tracking-widest text-on-surface-variant w-10">{barLabels[bar.key]}</span>
-              <span className="font-label text-[9px] font-bold text-tertiary w-10 text-right">{bar.avg}{unit}</span>
+              <span className="font-label text-micro uppercase tracking-widest text-on-surface-variant w-10">{barLabels[bar.key]}</span>
+              <span className="font-label text-micro font-bold text-tertiary w-10 text-right">{bar.avg}{unit}</span>
               <div className="flex-1 h-2 bg-surface-container-highest rounded-full overflow-hidden">
                 <div
                   className={`h-full rounded-full transition-all ${adherenceBarColor(bar.pct)}`}
                   style={{ width: `${Math.min(100, bar.pct)}%` }}
                 />
               </div>
-              <span className={`font-label text-[9px] font-bold w-8 text-right ${adherenceTextColor(bar.pct)}`}>
+              <span className={`font-label text-micro font-bold w-8 text-right ${adherenceTextColor(bar.pct)}`}>
                 {bar.pct}%
               </span>
               {delta !== 0 && (
-                <span className={`text-[8px] font-bold w-8 ${delta > 0 ? 'text-brand-secondary' : 'text-primary'}`}>
+                <span className={`text-micro font-bold w-8 ${delta > 0 ? 'text-brand-secondary' : 'text-primary'}`}>
                   {delta > 0 ? '+' : ''}{delta}%
                 </span>
               )}

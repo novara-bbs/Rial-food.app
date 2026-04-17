@@ -33,7 +33,7 @@ export default function SettingsAppearance({ userProfile, setUserProfile }: Prop
             const pair = themes.filter((th) => th.family === family);
             return (
               <div key={family}>
-                <span className="font-mono text-[9px] tracking-[0.3em] text-on-surface-variant uppercase block mb-2">{family}</span>
+                <span className="font-mono text-micro tracking-[0.3em] text-on-surface-variant uppercase block mb-2">{family}</span>
                 <div className="grid grid-cols-2 gap-3">
                   {pair.map((th) => (
                     <button type="button" key={th.id}
@@ -58,7 +58,7 @@ export default function SettingsAppearance({ userProfile, setUserProfile }: Prop
                       <div className="px-2.5 pb-2.5 flex items-center justify-between">
                         <div className="flex items-center gap-1">
                           {th.mode === 'light' ? <Sun className="w-3 h-3" style={{ color: th.textMuted }} /> : <Moon className="w-3 h-3" style={{ color: th.textMuted }} />}
-                          <span className="font-headline font-bold text-[9px] uppercase tracking-widest" style={{ color: th.text }}>{th.modeLabel}</span>
+                          <span className="font-headline font-bold text-micro uppercase tracking-widest" style={{ color: th.text }}>{th.modeLabel}</span>
                         </div>
                         {theme === th.id && (
                           <div className="w-3.5 h-3.5 rounded-full flex items-center justify-center" style={{ backgroundColor: th.primary }}>
@@ -122,7 +122,7 @@ export default function SettingsAppearance({ userProfile, setUserProfile }: Prop
                 <span className="font-headline font-bold text-sm text-tertiary uppercase">{sys.label}</span>
                 {(userProfile?.unitSystem ?? 'metric') === sys.id && <Check className="w-5 h-5 text-primary" />}
               </div>
-              <span className="text-[10px] font-label tracking-widest uppercase text-on-surface-variant mt-1">{sys.desc}</span>
+              <span className="text-micro font-label tracking-widest uppercase text-on-surface-variant mt-1">{sys.desc}</span>
             </button>
           ))}
         </div>

@@ -23,7 +23,7 @@ export default function DataSourceCaption({ kind, label, className = '' }: DataS
   const color = kind === 'auto' ? 'text-primary' : 'text-brand-secondary';
 
   return (
-    <p className={`flex items-center gap-1 text-[10px] font-label tracking-widest uppercase text-on-surface-variant ${className}`}>
+    <p className={`flex items-center gap-1 text-micro font-label tracking-widest uppercase text-on-surface-variant ${className}`}>
       <Icon className={`w-3 h-3 ${color}`} aria-hidden="true" />
       <span className={`${color} font-bold`}>{kind === 'auto' ? 'Auto' : 'Manual'}</span>
       <span className="opacity-60">·</span>

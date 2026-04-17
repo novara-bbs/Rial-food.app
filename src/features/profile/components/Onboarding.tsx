@@ -236,15 +236,15 @@ export default function Onboarding({ isOpen, onClose, onComplete }: {
                 <div className="grid grid-cols-3 gap-4 text-center">
                   <div>
                     <span className="font-mono text-2xl font-bold text-tertiary">{targets.pro}g</span>
-                    <p className="text-[9px] text-on-surface-variant uppercase tracking-widest">{t.home.protein}</p>
+                    <p className="text-micro text-on-surface-variant uppercase tracking-widest">{t.home.protein}</p>
                   </div>
                   <div>
                     <span className="font-mono text-2xl font-bold text-tertiary">{targets.carbs}g</span>
-                    <p className="text-[9px] text-on-surface-variant uppercase tracking-widest">{t.home.carbs}</p>
+                    <p className="text-micro text-on-surface-variant uppercase tracking-widest">{t.home.carbs}</p>
                   </div>
                   <div>
                     <span className="font-mono text-2xl font-bold text-tertiary">{targets.fats}g</span>
-                    <p className="text-[9px] text-on-surface-variant uppercase tracking-widest">{t.home.fats}</p>
+                    <p className="text-micro text-on-surface-variant uppercase tracking-widest">{t.home.fats}</p>
                   </div>
                 </div>
               </div>
@@ -298,7 +298,7 @@ export default function Onboarding({ isOpen, onClose, onComplete }: {
               <div className="space-y-4">
                 {paletteFamilies.map(({ family, themes: familyThemes }) => (
                   <div key={family}>
-                    <span className="font-mono text-[9px] tracking-[0.3em] text-on-surface-variant uppercase block mb-2">{family}</span>
+                    <span className="font-mono text-micro tracking-[0.3em] text-on-surface-variant uppercase block mb-2">{family}</span>
                     <div className="grid grid-cols-2 gap-2">
                       {familyThemes.map(th => (
                         <button type="button"
@@ -327,7 +327,7 @@ export default function Onboarding({ isOpen, onClose, onComplete }: {
                           <div className="px-2.5 pb-2.5 flex items-center justify-between">
                             <div className="flex items-center gap-1">
                               {th.mode === 'light' ? <Sun className="w-3 h-3" style={{ color: th.textMuted }} /> : <Moon className="w-3 h-3" style={{ color: th.textMuted }} />}
-                              <span className="font-headline font-bold text-[9px] uppercase tracking-widest" style={{ color: th.text }}>{th.modeLabel}</span>
+                              <span className="font-headline font-bold text-micro uppercase tracking-widest" style={{ color: th.text }}>{th.modeLabel}</span>
                             </div>
                             {theme === th.id && (
                               <div className="w-3.5 h-3.5 rounded-full flex items-center justify-center" style={{ backgroundColor: th.primary }}>
@@ -358,7 +358,7 @@ export default function Onboarding({ isOpen, onClose, onComplete }: {
                 {data.restrictions.length > 0 && (
                   <div className="flex flex-wrap gap-1 pt-1">
                     {data.restrictions.map(r => (
-                      <span key={r} className="text-[9px] font-bold uppercase tracking-wider bg-primary/10 text-primary px-2 py-0.5 rounded">{r}</span>
+                      <span key={r} className="text-micro font-bold uppercase tracking-wider bg-primary/10 text-primary px-2 py-0.5 rounded">{r}</span>
                     ))}
                   </div>
                 )}

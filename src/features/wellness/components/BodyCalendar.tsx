@@ -41,7 +41,7 @@ export default function BodyCalendar({ snapshots, unitSystem }: BodyCalendarProp
   const selectedSnapshot = selectedDate ? snapshotsByDate.get(selectedDate) ?? null : null;
 
   const legend = (
-    <div className="flex flex-wrap items-center gap-3 justify-center text-[8px]">
+    <div className="flex flex-wrap items-center gap-3 justify-center text-micro">
       <span className="flex items-center gap-1 text-on-surface-variant">
         <span className="w-2.5 h-2.5 rounded-full bg-primary" /> {p.weight ?? 'Peso'}
       </span>
@@ -74,7 +74,7 @@ export default function BodyCalendar({ snapshots, unitSystem }: BodyCalendarProp
             const day = Number(date.slice(-2));
             return (
               <>
-                <span className="absolute top-1 left-1 text-[8px] opacity-60">{day}</span>
+                <span className="absolute top-1 left-1 text-micro opacity-60">{day}</span>
                 {hasPhoto ? (
                   <img src={payload!.photoUrl} alt="" className="w-6 h-6 rounded-full object-cover" />
                 ) : hasMeasurements ? (
@@ -92,7 +92,7 @@ export default function BodyCalendar({ snapshots, unitSystem }: BodyCalendarProp
               <button
                 type="button"
                 onClick={() => setLogDate(todayLocal())}
-                className="inline-flex items-center gap-1.5 bg-primary text-on-primary px-3 py-1.5 rounded-sm text-[10px] font-bold uppercase tracking-widest hover:opacity-90 transition-opacity"
+                className="inline-flex items-center gap-1.5 bg-primary text-on-primary px-3 py-1.5 rounded-sm text-micro font-bold uppercase tracking-widest hover:opacity-90 transition-opacity"
               >
                 {p.logFirstSnapshot ?? 'Registrar primer snapshot'}
               </button>

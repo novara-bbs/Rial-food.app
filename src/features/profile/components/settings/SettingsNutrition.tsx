@@ -134,7 +134,7 @@ export default function SettingsNutrition({ dailyMacros, setDailyMacros, userPro
 
         {/* Dislikes */}
         <div className="mb-6">
-          <label className="block font-label text-[10px] tracking-widest uppercase text-on-surface-variant mb-2">{t.settings.foodDislikes}</label>
+          <label className="block font-label text-micro tracking-widest uppercase text-on-surface-variant mb-2">{t.settings.foodDislikes}</label>
           <div className="relative">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-on-surface-variant pointer-events-none" />
             <input type="text" value={dislikeSearch}
@@ -166,7 +166,7 @@ export default function SettingsNutrition({ dailyMacros, setDailyMacros, userPro
 
         {/* Intolerances */}
         <div>
-          <label className="block font-label text-[10px] tracking-widest uppercase text-on-surface-variant mb-2">{t.settings.intolerances}</label>
+          <label className="block font-label text-micro tracking-widest uppercase text-on-surface-variant mb-2">{t.settings.intolerances}</label>
           <div className="flex flex-wrap gap-3">
             {allergenOptions.map((opt) => (
               <button type="button" key={opt.key}

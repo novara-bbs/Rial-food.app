@@ -118,7 +118,7 @@ export default function LogSnapshotModal({
         <div className="space-y-4 py-2">
           {/* Date */}
           <div>
-            <label className="block font-label text-[10px] tracking-widest uppercase text-on-surface-variant mb-1.5">
+            <label className="block font-label text-micro tracking-widest uppercase text-on-surface-variant mb-1.5">
               {p.snapshotDate ?? 'Fecha'}
             </label>
             <input
@@ -133,7 +133,7 @@ export default function LogSnapshotModal({
 
           {/* Weight */}
           <div>
-            <label className="block font-label text-[10px] tracking-widest uppercase text-on-surface-variant mb-1.5">
+            <label className="block font-label text-micro tracking-widest uppercase text-on-surface-variant mb-1.5">
               {p.weight ?? 'Peso'} ({unit}) *
             </label>
             <input
@@ -153,7 +153,7 @@ export default function LogSnapshotModal({
               onClick={() => setPhotoExpanded(v => !v)}
               className="w-full flex items-center justify-between py-1.5 border-b border-outline-variant/10"
             >
-              <span className="font-label text-[10px] tracking-widest uppercase text-on-surface-variant flex items-center gap-2">
+              <span className="font-label text-micro tracking-widest uppercase text-on-surface-variant flex items-center gap-2">
                 <Camera className="w-3 h-3" aria-hidden="true" />
                 {p.photoOptional ?? 'Foto (opcional)'}
                 {photoUrl && <span className="text-primary">●</span>}
@@ -179,14 +179,14 @@ export default function LogSnapshotModal({
                     <input ref={photoInputRef} type="file" accept="image/*" capture="environment" className="hidden"
                       onChange={e => handlePhotoUpload(e.target.files?.[0])} />
                     <button type="button" onClick={() => photoInputRef.current?.click()}
-                      className="flex-1 flex items-center justify-center gap-1.5 bg-primary/10 text-primary py-2 rounded-sm text-[10px] font-bold uppercase tracking-widest hover:bg-primary/20 transition-colors">
+                      className="flex-1 flex items-center justify-center gap-1.5 bg-primary/10 text-primary py-2 rounded-sm text-micro font-bold uppercase tracking-widest hover:bg-primary/20 transition-colors">
                       <Camera className="w-3.5 h-3.5" aria-hidden="true" />
                       {p.takePhoto ?? 'Cámara'}
                     </button>
                     <input ref={galleryInputRef} type="file" accept="image/*" className="hidden"
                       onChange={e => handlePhotoUpload(e.target.files?.[0])} />
                     <button type="button" onClick={() => galleryInputRef.current?.click()}
-                      className="flex-1 flex items-center justify-center gap-1.5 bg-surface-container-highest text-on-surface-variant py-2 rounded-sm text-[10px] font-bold uppercase tracking-widest hover:text-tertiary transition-colors">
+                      className="flex-1 flex items-center justify-center gap-1.5 bg-surface-container-highest text-on-surface-variant py-2 rounded-sm text-micro font-bold uppercase tracking-widest hover:text-tertiary transition-colors">
                       <ImageIcon className="w-3.5 h-3.5" aria-hidden="true" />
                       {p.choosePhoto ?? 'Galería'}
                     </button>
@@ -203,7 +203,7 @@ export default function LogSnapshotModal({
               onClick={() => setMeasureExpanded(v => !v)}
               className="w-full flex items-center justify-between py-1.5 border-b border-outline-variant/10"
             >
-              <span className="font-label text-[10px] tracking-widest uppercase text-on-surface-variant">
+              <span className="font-label text-micro tracking-widest uppercase text-on-surface-variant">
                 {p.measurementsOptional ?? 'Medidas (opcional)'}
                 {Object.values(measurements).some(v => v != null) && <span className="text-primary ml-1">●</span>}
               </span>
@@ -218,7 +218,7 @@ export default function LogSnapshotModal({
                   { key: 'bodyFatPct', label: p.bodyFat ?? 'Grasa %' },
                 ] as { key: keyof BodyMeasurements; label: string }[]).map(({ key, label }) => (
                   <div key={key}>
-                    <label className="block font-label text-[9px] uppercase tracking-widest text-on-surface-variant mb-1">{label}</label>
+                    <label className="block font-label text-micro uppercase tracking-widest text-on-surface-variant mb-1">{label}</label>
                     <input
                       type="number" step="0.1" inputMode="decimal"
                       value={measurements[key] ?? ''}
@@ -236,7 +236,7 @@ export default function LogSnapshotModal({
 
           {/* Note */}
           <div>
-            <label className="block font-label text-[10px] tracking-widest uppercase text-on-surface-variant mb-1.5">
+            <label className="block font-label text-micro tracking-widest uppercase text-on-surface-variant mb-1.5">
               {p.noteOptional ?? 'Nota (opcional)'}
             </label>
             <input
@@ -253,14 +253,14 @@ export default function LogSnapshotModal({
           <button
             type="button"
             onClick={() => onOpenChange(false)}
-            className="flex-1 py-2.5 text-[11px] font-bold uppercase tracking-widest text-on-surface-variant hover:text-tertiary border border-outline-variant/30 rounded-sm transition-colors"
+            className="flex-1 py-2.5 text-caption font-bold uppercase tracking-widest text-on-surface-variant hover:text-tertiary border border-outline-variant/30 rounded-sm transition-colors"
           >
             {p.cancel ?? 'Cancelar'}
           </button>
           <button
             type="button"
             onClick={handleSave}
-            className="flex-1 py-2.5 text-[11px] font-bold uppercase tracking-widest bg-primary text-on-primary rounded-sm hover:opacity-90 transition-opacity flex items-center justify-center gap-1.5"
+            className="flex-1 py-2.5 text-caption font-bold uppercase tracking-widest bg-primary text-on-primary rounded-sm hover:opacity-90 transition-opacity flex items-center justify-center gap-1.5"
           >
             <Check className="w-3.5 h-3.5" aria-hidden="true" />
             {p.save ?? 'Guardar'}

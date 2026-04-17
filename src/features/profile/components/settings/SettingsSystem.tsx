@@ -109,7 +109,7 @@ export default function SettingsSystem({ userProfile, setUserProfile, showAIBot,
         <div className="flex items-center justify-between p-4 bg-surface-container-highest rounded-sm border border-outline-variant/10">
           <div className="flex flex-col">
             <h4 className="font-headline font-bold text-sm uppercase text-tertiary">{t.settings.aiFloatingBtn}</h4>
-            <p className="font-label text-[10px] tracking-widest uppercase text-on-surface-variant mt-1">
+            <p className="font-label text-micro tracking-widest uppercase text-on-surface-variant mt-1">
               {showAIBot ? t.settings.aiVisibleAll : t.settings.aiHidden}
             </p>
           </div>
@@ -130,7 +130,7 @@ export default function SettingsSystem({ userProfile, setUserProfile, showAIBot,
                 <div className={`w-8 h-8 rounded-full ${badge.bg} flex items-center justify-center ${badge.text} font-bold text-xs`}>{badge.char}</div>
                 <div>
                   <h4 className="font-headline font-bold text-sm uppercase text-tertiary">{label}</h4>
-                  <p className={`font-label text-[10px] tracking-widest uppercase ${connectedDevices[key] ? 'text-primary' : 'text-on-surface-variant'}`}>
+                  <p className={`font-label text-micro tracking-widest uppercase ${connectedDevices[key] ? 'text-primary' : 'text-on-surface-variant'}`}>
                     {connectedDevices[key] ? t.settings.connected : t.settings.notConnected}
                   </p>
                 </div>
@@ -153,7 +153,7 @@ export default function SettingsSystem({ userProfile, setUserProfile, showAIBot,
             { key: 'tiktok', label: t.settings.tiktokUsername, prefix: '@', placeholder: 'username' },
           ] as const).map(({ key, label, prefix, placeholder }) => (
             <div key={key}>
-              <label className="block font-label text-[10px] tracking-widest uppercase text-on-surface-variant mb-1">{label}</label>
+              <label className="block font-label text-micro tracking-widest uppercase text-on-surface-variant mb-1">{label}</label>
               <div className="flex items-center gap-2 bg-surface-container-highest rounded-sm border border-outline-variant/20 px-3 py-2">
                 <span className="text-xs text-on-surface-variant">{prefix}</span>
                 <input type="text"
@@ -169,7 +169,7 @@ export default function SettingsSystem({ userProfile, setUserProfile, showAIBot,
             { key: 'website', label: t.settings.websiteUrl, placeholder: 'https://example.com' },
           ] as const).map(({ key, label, placeholder }) => (
             <div key={key}>
-              <label className="block font-label text-[10px] tracking-widest uppercase text-on-surface-variant mb-1">{label}</label>
+              <label className="block font-label text-micro tracking-widest uppercase text-on-surface-variant mb-1">{label}</label>
               <input type="url"
                 value={userProfile?.socialLinks?.[key] || ''}
                 onChange={(e) => setUserProfile((prev: any) => ({ ...prev, socialLinks: { ...prev.socialLinks, [key]: e.target.value || undefined } }))}

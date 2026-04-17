@@ -42,7 +42,7 @@ export default function DailyCheckIn({ initialStatus, onBack, onComplete }: { in
             >
               <Zap className="w-6 h-6" />
               <span className="font-label text-xs font-bold tracking-widest uppercase">{t.checkIn.optimal}</span>
-              <span className="text-[10px] text-center opacity-80 leading-tight">{t.checkIn.highEnergy}</span>
+              <span className="text-micro text-center opacity-80 leading-tight">{t.checkIn.highEnergy}</span>
             </button>
             <button type="button" 
               onClick={() => setStatus('stable')}
@@ -54,7 +54,7 @@ export default function DailyCheckIn({ initialStatus, onBack, onComplete }: { in
             >
               <CheckCircle className="w-6 h-6" />
               <span className="font-label text-xs font-bold tracking-widest uppercase">{t.checkIn.good}</span>
-              <span className="text-[10px] text-center opacity-80 leading-tight">{t.checkIn.feelingNormal}</span>
+              <span className="text-micro text-center opacity-80 leading-tight">{t.checkIn.feelingNormal}</span>
             </button>
             <button type="button" 
               onClick={() => setStatus('sluggish')}
@@ -66,7 +66,7 @@ export default function DailyCheckIn({ initialStatus, onBack, onComplete }: { in
             >
               <Battery className="w-6 h-6" />
               <span className="font-label text-xs font-bold tracking-widest uppercase">{t.checkIn.tired}</span>
-              <span className="text-[10px] text-center opacity-80 leading-tight">{t.checkIn.lowEnergy}</span>
+              <span className="text-micro text-center opacity-80 leading-tight">{t.checkIn.lowEnergy}</span>
             </button>
             <button type="button" 
               onClick={() => setStatus('bloated')}
@@ -78,7 +78,7 @@ export default function DailyCheckIn({ initialStatus, onBack, onComplete }: { in
             >
               <AlertTriangle className="w-6 h-6" />
               <span className="font-label text-xs font-bold tracking-widest uppercase">{t.checkIn.bad}</span>
-              <span className="text-[10px] text-center opacity-80 leading-tight">{t.checkIn.painBloating}</span>
+              <span className="text-micro text-center opacity-80 leading-tight">{t.checkIn.painBloating}</span>
             </button>
           </div>
         </section>

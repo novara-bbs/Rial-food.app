@@ -43,12 +43,12 @@ export default function BatchCookingSuggestions({ mealPlan }: BatchCookingSugges
           <p className="font-headline text-xs font-bold uppercase tracking-widest text-tertiary">
             {tc.batchTitle}
           </p>
-          <p className="text-[10px] text-on-surface-variant mt-0.5 leading-relaxed">
+          <p className="text-micro text-on-surface-variant mt-0.5 leading-relaxed">
             {tc.batchDesc.replace('{mins}', String(analysis.totalTimeSavedMins))}
           </p>
         </div>
         <div className="flex items-center gap-2 shrink-0">
-          <span className="font-label text-[9px] font-bold uppercase tracking-widest bg-brand-secondary/20 text-brand-secondary px-2 py-0.5 rounded">
+          <span className="font-label text-micro font-bold uppercase tracking-widest bg-brand-secondary/20 text-brand-secondary px-2 py-0.5 rounded">
             {analysis.sessions.length}
           </span>
           {expanded
@@ -71,17 +71,17 @@ export default function BatchCookingSuggestions({ mealPlan }: BatchCookingSugges
                   <p className="font-headline text-xs font-bold uppercase tracking-widest text-tertiary">
                     {session.baseIngredient}
                   </p>
-                  <p className="text-[10px] text-on-surface-variant mt-0.5 leading-relaxed truncate">
+                  <p className="text-micro text-on-surface-variant mt-0.5 leading-relaxed truncate">
                     {session.recipeNames.slice(0, 3).join(' · ')}
                     {session.recipeNames.length > 3 && ` +${session.recipeNames.length - 3}`}
                   </p>
-                  <p className="text-[9px] text-on-surface-variant/60 mt-0.5">
+                  <p className="text-micro text-on-surface-variant/60 mt-0.5">
                     {formatDays(session.dayIndices, tc.dayAbbr)}
                   </p>
                 </div>
                 <div className="shrink-0 flex items-center gap-1 text-brand-secondary">
                   <Clock className="w-3 h-3" />
-                  <span className="font-label text-[9px] font-bold uppercase tracking-widest">
+                  <span className="font-label text-micro font-bold uppercase tracking-widest">
                     {tc.batchTimeSaved.replace('{mins}', String(session.timeSavedMins))}
                   </span>
                 </div>
@@ -91,7 +91,7 @@ export default function BatchCookingSuggestions({ mealPlan }: BatchCookingSugges
 
           {/* Footer tip */}
           <div className="px-4 py-2.5 bg-brand-secondary/5">
-            <p className="text-[9px] text-on-surface-variant font-label uppercase tracking-widest">
+            <p className="text-micro text-on-surface-variant font-label uppercase tracking-widest">
               {tc.batchTip}
             </p>
           </div>

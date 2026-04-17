@@ -290,15 +290,15 @@ export default function Progress({ onBack }: { onBack: () => void }) {
                     <div key={meal.name} className="flex items-center gap-3 p-2.5 bg-surface-container rounded-sm">
                       <span className="text-base shrink-0">{medal}</span>
                       <span className="flex-1 font-headline text-xs font-bold uppercase text-tertiary truncate">{meal.name}</span>
-                      <span className="font-label text-[9px] text-on-surface-variant shrink-0">×{meal.count}</span>
-                      <span className="font-label text-[9px] font-bold text-primary shrink-0">{Math.round(meal.totalCal / meal.count)} kcal</span>
+                      <span className="font-label text-micro text-on-surface-variant shrink-0">×{meal.count}</span>
+                      <span className="font-label text-micro font-bold text-primary shrink-0">{Math.round(meal.totalCal / meal.count)} kcal</span>
                     </div>
                   );
                 })}
               </div>
               <button type="button"
                 onClick={() => navigateTo('food-dictionary')}
-                className="w-full text-center text-[10px] font-bold text-primary uppercase tracking-widest hover:underline pt-2 border-t border-outline-variant/10"
+                className="w-full text-center text-micro font-bold text-primary uppercase tracking-widest hover:underline pt-2 border-t border-outline-variant/10"
               >
                 {p?.viewAllRecipes || 'Ver todas las recetas →'}
               </button>
@@ -383,7 +383,7 @@ export default function Progress({ onBack }: { onBack: () => void }) {
               {/* Top 2 correlations */}
               {bienestar.correlations.length > 0 && (
                 <div className="space-y-2 pt-3 border-t border-outline-variant/10">
-                  <span className="font-label text-[9px] uppercase tracking-widest text-on-surface-variant">
+                  <span className="font-label text-micro uppercase tracking-widest text-on-surface-variant">
                     {p?.topCorrelations || 'Top correlaciones'}
                   </span>
                   {bienestar.correlations.map((cor: any) => (
@@ -391,9 +391,9 @@ export default function Progress({ onBack }: { onBack: () => void }) {
                       <span className="text-lg shrink-0">{cor.emoji}</span>
                       <div className="flex-1 min-w-0">
                         <p className="font-headline text-xs font-bold uppercase text-tertiary truncate">{cor.title}</p>
-                        <p className="text-[10px] text-on-surface-variant truncate">{cor.detail}</p>
+                        <p className="text-micro text-on-surface-variant truncate">{cor.detail}</p>
                       </div>
-                      <span className={`font-label text-[9px] font-bold ${cor.confidence >= 0.7 ? 'text-primary' : 'text-on-surface-variant'}`}>
+                      <span className={`font-label text-micro font-bold ${cor.confidence >= 0.7 ? 'text-primary' : 'text-on-surface-variant'}`}>
                         {Math.round(cor.confidence * 100)}%
                       </span>
                     </div>
@@ -403,7 +403,7 @@ export default function Progress({ onBack }: { onBack: () => void }) {
 
               <button type="button"
                 onClick={() => navigateTo('real-feel-diary')}
-                className="w-full text-center text-[10px] font-bold text-primary uppercase tracking-widest hover:underline pt-2 border-t border-outline-variant/10"
+                className="w-full text-center text-micro font-bold text-primary uppercase tracking-widest hover:underline pt-2 border-t border-outline-variant/10"
               >
                 {p?.viewDiary || 'Ver diario completo →'}
               </button>

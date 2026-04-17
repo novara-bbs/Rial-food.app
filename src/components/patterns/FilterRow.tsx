@@ -48,7 +48,7 @@ export default function FilterRow({
               )}
             >
               {Icon && <Icon className="w-5 h-5" />}
-              <span className="text-[9px] font-black tracking-widest uppercase">{opt.label}</span>
+              <span className="text-micro font-black tracking-widest uppercase">{opt.label}</span>
             </button>
           );
         })}

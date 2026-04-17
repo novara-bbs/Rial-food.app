@@ -39,7 +39,7 @@ export default function More({ navigateTo }: { navigateTo: (screen: string) => v
               </div>
               <div className="flex-1 text-left">
                 <span className="font-headline font-bold text-lg uppercase text-tertiary block">{item.label}</span>
-                <span className="font-label text-[10px] uppercase tracking-widest text-on-surface-variant">{item.desc}</span>
+                <span className="font-label text-micro uppercase tracking-widest text-on-surface-variant">{item.desc}</span>
               </div>
               <ChevronRight className="w-5 h-5 text-on-surface-variant group-hover:text-primary transition-colors" />
             </button>

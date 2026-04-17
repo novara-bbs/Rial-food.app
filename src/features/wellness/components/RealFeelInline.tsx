@@ -83,7 +83,7 @@ export default function RealFeelInline({ onSubmit, onDismiss }: {
   ) => (
     <button type="button"
       onClick={onClick}
-      className={`flex-1 py-2 text-[10px] font-bold uppercase tracking-wider rounded-sm border transition-all ${
+      className={`flex-1 py-2 text-micro font-bold uppercase tracking-wider rounded-sm border transition-all ${
         active ? `${color} border-transparent` : 'border-outline-variant/20 text-on-surface-variant hover:border-primary/30'
       }`}
     >
@@ -115,7 +115,7 @@ export default function RealFeelInline({ onSubmit, onDismiss }: {
             }`}
           >
             <span className="text-2xl">{e.emoji}</span>
-            <span className="text-[8px] font-label uppercase tracking-wider text-on-surface-variant">
+            <span className="text-micro font-label uppercase tracking-wider text-on-surface-variant">
               {(t.realFeel.levels as Record<string, string>)[e.key]}
             </span>
           </button>
@@ -129,7 +129,7 @@ export default function RealFeelInline({ onSubmit, onDismiss }: {
           <div>
             <div className="flex items-center gap-1.5 mb-1.5">
               <Zap className="w-3 h-3 text-primary" />
-              <span className="text-[9px] font-bold uppercase tracking-widest text-on-surface-variant">{t.realFeel.energy}</span>
+              <span className="text-micro font-bold uppercase tracking-widest text-on-surface-variant">{t.realFeel.energy}</span>
             </div>
             <div className="flex gap-1.5">
               {signalBtn(energy === 'high', () => setEnergy(energy === 'high' ? null : 'high'), t.realFeel.signals.energyHigh, 'bg-primary/20 text-primary')}
@@ -142,7 +142,7 @@ export default function RealFeelInline({ onSubmit, onDismiss }: {
           <div>
             <div className="flex items-center gap-1.5 mb-1.5">
               <Leaf className="w-3 h-3 text-primary" />
-              <span className="text-[9px] font-bold uppercase tracking-widest text-on-surface-variant">{t.realFeel.digestion}</span>
+              <span className="text-micro font-bold uppercase tracking-widest text-on-surface-variant">{t.realFeel.digestion}</span>
             </div>
             <div className="flex gap-1.5">
               {signalBtn(digestion === 'clean', () => setDigestion(digestion === 'clean' ? null : 'clean'), t.realFeel.signals.digestionClean, 'bg-primary/20 text-primary')}
@@ -155,7 +155,7 @@ export default function RealFeelInline({ onSubmit, onDismiss }: {
           <div>
             <div className="flex items-center gap-1.5 mb-1.5">
               <Brain className="w-3 h-3 text-primary" />
-              <span className="text-[9px] font-bold uppercase tracking-widest text-on-surface-variant">{t.realFeel.mindset}</span>
+              <span className="text-micro font-bold uppercase tracking-widest text-on-surface-variant">{t.realFeel.mindset}</span>
             </div>
             <div className="flex gap-1.5">
               {signalBtn(mindset === 'calm', () => setMindset(mindset === 'calm' ? null : 'calm'), t.realFeel.signals.mindsetCalm, 'bg-primary/20 text-primary')}
@@ -172,7 +172,7 @@ export default function RealFeelInline({ onSubmit, onDismiss }: {
                 <button type="button"
                   key={key}
                   onClick={() => toggleTag(key)}
-                  className={`px-3 py-1.5 rounded-full text-[10px] font-bold uppercase tracking-wider border transition-all ${
+                  className={`px-3 py-1.5 rounded-full text-micro font-bold uppercase tracking-wider border transition-all ${
                     selected
                       ? 'border-primary bg-primary/10 text-primary'
                       : 'border-outline-variant/20 text-on-surface-variant hover:border-primary/50'

@@ -72,7 +72,7 @@ export default function BodyTimeline({ snapshots, unitSystem, onShare, shareLabe
             key={f.id}
             type="button"
             onClick={() => setFilter(f.id)}
-            className={`shrink-0 px-3 py-1.5 rounded-full text-[10px] font-bold uppercase tracking-widest transition-colors border ${
+            className={`shrink-0 px-3 py-1.5 rounded-full text-micro font-bold uppercase tracking-widest transition-colors border ${
               filter === f.id
                 ? 'bg-primary text-on-primary border-primary'
                 : 'bg-surface-container-highest text-on-surface-variant border-outline-variant/20 hover:border-primary/50'

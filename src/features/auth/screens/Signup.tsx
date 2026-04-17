@@ -131,7 +131,7 @@ export default function Signup({ onNavigateToLogin }: SignupProps) {
           </div>
 
           {/* Password hint */}
-          <p className="font-label text-[10px] text-on-surface-variant/60 uppercase tracking-widest px-1">
+          <p className="font-label text-micro text-on-surface-variant/60 uppercase tracking-widest px-1">
             {t.auth.passwordHint}
           </p>
 
@@ -150,7 +150,7 @@ export default function Signup({ onNavigateToLogin }: SignupProps) {
           </button>
 
           {/* Legal note */}
-          <p className="font-label text-[9px] text-on-surface-variant/50 uppercase tracking-widest text-center leading-relaxed px-2">
+          <p className="font-label text-micro text-on-surface-variant/50 uppercase tracking-widest text-center leading-relaxed px-2">
             {t.auth.legalNote}
           </p>
         </form>

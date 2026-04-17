@@ -61,7 +61,7 @@ export default function InlineReflection({
         </div>
       )}
       {!reflectionOpen && !latestEntry && (
-        <p className="text-[10px] text-on-surface-variant uppercase tracking-widest">
+        <p className="text-micro text-on-surface-variant uppercase tracking-widest">
           {t.noReflections || 'Sin reflexiones aún. Escribe tu primera.'}
         </p>
       )}
@@ -116,7 +116,7 @@ export default function InlineReflection({
             </button>
             <button type="button"
               onClick={onNavigateHistory}
-              className="text-[10px] font-bold text-primary uppercase tracking-widest hover:underline"
+              className="text-micro font-bold text-primary uppercase tracking-widest hover:underline"
             >
               {t.viewHistory || 'Historial →'}
             </button>

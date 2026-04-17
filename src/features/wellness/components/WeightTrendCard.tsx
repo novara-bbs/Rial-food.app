@@ -55,7 +55,7 @@ export default function WeightTrendCard({
           <Scale className="w-4 h-4 text-primary" /> {t.weightTrend || 'Tendencia de Peso'}
         </h2>
         {weekDelta !== null && (
-          <div className={`flex items-center gap-1 text-[10px] font-bold uppercase tracking-widest ${
+          <div className={`flex items-center gap-1 text-micro font-bold uppercase tracking-widest ${
             weekDelta > 0 ? 'text-brand-secondary' : weekDelta < 0 ? 'text-primary' : 'text-on-surface-variant'
           }`}>
             {weekDelta > 0 ? <TrendingUp className="w-3.5 h-3.5" /> : weekDelta < 0 ? <TrendingDown className="w-3.5 h-3.5" /> : null}
@@ -84,19 +84,19 @@ export default function WeightTrendCard({
 
       <div className="grid grid-cols-3 gap-4 pt-2 border-t border-outline-variant/10">
         <div className="text-center">
-          <span className="font-label text-[9px] uppercase tracking-widest text-on-surface-variant block">{t.current || 'Actual'}</span>
+          <span className="font-label text-micro uppercase tracking-widest text-on-surface-variant block">{t.current || 'Actual'}</span>
           <span className="font-headline font-black text-lg text-tertiary">
             {currentWeight ? `${bodyWeightFromKg(currentWeight, unitSystem)} ${weightUnit}` : '—'}
           </span>
         </div>
         <div className="text-center">
-          <span className="font-label text-[9px] uppercase tracking-widest text-on-surface-variant block">{t.start || 'Inicio'}</span>
+          <span className="font-label text-micro uppercase tracking-widest text-on-surface-variant block">{t.start || 'Inicio'}</span>
           <span className="font-headline font-black text-lg text-on-surface-variant">
             {firstWeight ? `${bodyWeightFromKg(firstWeight, unitSystem)} ${weightUnit}` : '—'}
           </span>
         </div>
         <div className="text-center">
-          <span className="font-label text-[9px] uppercase tracking-widest text-on-surface-variant block">{t.change || 'Cambio'}</span>
+          <span className="font-label text-micro uppercase tracking-widest text-on-surface-variant block">{t.change || 'Cambio'}</span>
           <span className={`font-headline font-black text-lg ${
             currentWeight && firstWeight
               ? (currentWeight - firstWeight > 0 ? 'text-brand-secondary' : 'text-primary')
@@ -131,7 +131,7 @@ export default function WeightTrendCard({
       ) : (
         <button type="button"
           onClick={() => { setIsEditingWeight(true); setWeightInput(currentWeight ? String(bodyWeightFromKg(currentWeight, unitSystem)) : ''); }}
-          className="w-full pt-3 border-t border-outline-variant/10 text-center text-[10px] font-bold text-primary uppercase tracking-widest hover:underline flex items-center justify-center gap-1.5"
+          className="w-full pt-3 border-t border-outline-variant/10 text-center text-micro font-bold text-primary uppercase tracking-widest hover:underline flex items-center justify-center gap-1.5"
         >
           <Plus className="w-3.5 h-3.5" /> {t.logWeight || 'Registrar peso'}
         </button>

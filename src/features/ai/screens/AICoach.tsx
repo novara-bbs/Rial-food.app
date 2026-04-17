@@ -132,9 +132,9 @@ export default function AICoach({
           <div className="relative">
             {showClearConfirm ? (
               <div className="flex items-center gap-2">
-                <span className="text-[10px] font-label text-on-surface-variant uppercase tracking-widest">{t.aiCoach.clearChatConfirm}</span>
-                <button type="button" onClick={clearChat} className="px-2 py-1 bg-error/20 text-error rounded-sm text-[10px] font-bold uppercase">Sí</button>
-                <button type="button" onClick={() => setShowClearConfirm(false)} className="px-2 py-1 bg-surface-container-highest text-on-surface-variant rounded-sm text-[10px] font-bold uppercase">No</button>
+                <span className="text-micro font-label text-on-surface-variant uppercase tracking-widest">{t.aiCoach.clearChatConfirm}</span>
+                <button type="button" onClick={clearChat} className="px-2 py-1 bg-error/20 text-error rounded-sm text-micro font-bold uppercase">Sí</button>
+                <button type="button" onClick={() => setShowClearConfirm(false)} className="px-2 py-1 bg-surface-container-highest text-on-surface-variant rounded-sm text-micro font-bold uppercase">No</button>
               </div>
             ) : (
               <button type="button"
@@ -198,7 +198,7 @@ export default function AICoach({
             </div>
           )}
           {!isPro && (
-            <p className="text-[10px] font-label text-on-surface-variant uppercase tracking-widest text-center">
+            <p className="text-micro font-label text-on-surface-variant uppercase tracking-widest text-center">
               {remainingMessages() > 0
                 ? `${remainingMessages()}/5 ${t.aiCoach.messagesRemaining}`
                 : t.aiCoach.dailyLimitReached}

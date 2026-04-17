@@ -190,13 +190,13 @@ export default function Planner({
                 <Clock className="w-4 h-4 text-primary" />
               </div>
               <div>
-                <p className="font-label text-[9px] uppercase tracking-widest text-primary font-bold">{t.planner.batchCooking}</p>
+                <p className="font-label text-micro uppercase tracking-widest text-primary font-bold">{t.planner.batchCooking}</p>
                 <p className="font-headline font-bold text-sm text-tertiary">
                   {t.planner.batchSaveTime.replace('{mins}', String(batchAnalysis.totalTimeSavedMins))}
                 </p>
               </div>
             </div>
-            <span className="text-[9px] font-bold uppercase tracking-widest text-on-surface-variant">
+            <span className="text-micro font-bold uppercase tracking-widest text-on-surface-variant">
               {showBatchInsights ? t.planner.batchClose : t.planner.batchViewOpportunities}
             </span>
           </div>
@@ -210,7 +210,7 @@ export default function Planner({
                     <p className="font-label text-xs font-bold text-tertiary">
                       {session.baseIngredient} — {t.planner.batchPrepareOnce.replace('{count}', String(session.recipeNames.length))}
                     </p>
-                    <p className="font-label text-[9px] text-on-surface-variant mt-0.5">
+                    <p className="font-label text-micro text-on-surface-variant mt-0.5">
                       {session.recipeNames.join(' · ')} · {t.planner.batchSave.replace('{mins}', String(session.timeSavedMins))}
                     </p>
                   </div>
@@ -277,7 +277,7 @@ export default function Planner({
             </div>
           </div>
           <div className="space-y-1.5">
-            <div className="flex justify-between text-[10px] font-bold uppercase tracking-widest text-on-surface-variant">
+            <div className="flex justify-between text-micro font-bold uppercase tracking-widest text-on-surface-variant">
               <span>{t.planner.dailyTotal}</span>
               <span>{Math.round((totalCals / 2000) * 100)}%</span>
             </div>
@@ -293,7 +293,7 @@ export default function Planner({
         {/* ── Leftover suggestions for this day ──────────────────────────── */}
         {leftoverSuggestions.filter(s => s.suggestedDayIndex === activeDay).length > 0 && (
           <div className="space-y-2">
-            <p className="font-label text-[9px] uppercase tracking-widest text-on-surface-variant font-bold">
+            <p className="font-label text-micro uppercase tracking-widest text-on-surface-variant font-bold">
               {t.planner.leftoverSuggestion}
             </p>
             {leftoverSuggestions
@@ -305,13 +305,13 @@ export default function Planner({
                 >
                   <div>
                     <p className="font-label text-xs font-bold text-tertiary">{s.mealTitle}</p>
-                    <p className="font-label text-[9px] text-on-surface-variant">
+                    <p className="font-label text-micro text-on-surface-variant">
                       {t.planner.leftoverFrom.replace('{day}', dayNames[s.sourceDayIndex])} · {t.planner.leftoverGoodFor.replace('{days}', String(s.freshnessWindowDays))}
                     </p>
                   </div>
                   <button type="button"
                     onClick={() => addLeftover(s)}
-                    className="text-[9px] font-bold uppercase tracking-widest text-brand-secondary bg-brand-secondary/10 px-3 py-1.5 rounded-full hover:bg-brand-secondary/20 transition-colors"
+                    className="text-micro font-bold uppercase tracking-widest text-brand-secondary bg-brand-secondary/10 px-3 py-1.5 rounded-full hover:bg-brand-secondary/20 transition-colors"
                   >
                     + {t.planner.leftoverAdd}
                   </button>
@@ -355,20 +355,20 @@ export default function Planner({
                     {/* Info */}
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center gap-2 flex-wrap mb-0.5">
-                        <p className="font-label text-[9px] tracking-widest text-primary uppercase font-bold">
+                        <p className="font-label text-micro tracking-widest text-primary uppercase font-bold">
                           {meal.time} · {meal.type}
                         </p>
                         {meal.tag && meal.tag !== 'PLANEADO' && (
-                          <span className="text-[8px] font-bold uppercase tracking-wider bg-surface-container-highest text-on-surface-variant px-1.5 py-0.5 rounded">
+                          <span className="text-micro font-bold uppercase tracking-wider bg-surface-container-highest text-on-surface-variant px-1.5 py-0.5 rounded">
                             {meal.tag}
                           </span>
                         )}
                       </div>
                       <h4 className="font-headline font-bold text-sm uppercase text-tertiary leading-tight">{meal.title}</h4>
                       <div className="flex items-center gap-2 mt-1 flex-wrap">
-                        <span className="text-[9px] font-bold text-primary">{meal.cal} {t.common.kcal}</span>
-                        <span className="text-[9px] text-on-surface-variant">·</span>
-                        <span className="text-[9px] text-brand-secondary font-bold">{meal.pro || 0}g P</span>
+                        <span className="text-micro font-bold text-primary">{meal.cal} {t.common.kcal}</span>
+                        <span className="text-micro text-on-surface-variant">·</span>
+                        <span className="text-micro text-brand-secondary font-bold">{meal.pro || 0}g P</span>
                       </div>
                     </div>
 
@@ -377,7 +377,7 @@ export default function Planner({
                       {/* Status badge — tap to cycle */}
                       <button type="button"
                         onClick={() => cycleStatus(meal.id)}
-                        className={`flex items-center gap-1 px-2 py-1 rounded-full text-[8px] font-bold uppercase tracking-wider transition-colors ${statusCfg.color}`}
+                        className={`flex items-center gap-1 px-2 py-1 rounded-full text-micro font-bold uppercase tracking-wider transition-colors ${statusCfg.color}`}
                         title={t.planner.tapToChangeStatus}
                       >
                         {statusCfg.icon}
@@ -389,7 +389,7 @@ export default function Planner({
                         {execStatus !== 'logged' && (
                           <button type="button"
                             onClick={() => handleLog(meal)}
-                            className="flex items-center gap-1 text-[8px] font-bold uppercase tracking-wider text-on-surface-variant hover:text-primary transition-colors"
+                            className="flex items-center gap-1 text-micro font-bold uppercase tracking-wider text-on-surface-variant hover:text-primary transition-colors"
                           >
                             <LogIn className="w-3 h-3" />
                             {t.planner.logMeal}
@@ -399,7 +399,7 @@ export default function Planner({
                         {/* Delete from plan */}
                         <button type="button"
                           onClick={() => setMealToDelete(meal)}
-                          className="flex items-center gap-1 text-[8px] font-bold uppercase tracking-wider text-on-surface-variant hover:text-error transition-colors"
+                          className="flex items-center gap-1 text-micro font-bold uppercase tracking-wider text-on-surface-variant hover:text-error transition-colors"
                           title={t.planner.deleteMeal}
                         >
                           <Trash2 className="w-3 h-3" />

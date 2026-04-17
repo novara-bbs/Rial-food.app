@@ -292,17 +292,17 @@ export default function AddMeal({
         <section className="bg-surface-container-low p-4 rounded-sm border border-outline-variant/20">
           <div className="flex justify-between items-center mb-3">
             <div>
-              <p className="font-label text-[10px] tracking-widest text-on-surface-variant uppercase">{t.home.dailyProgress}</p>
+              <p className="font-label text-micro tracking-widest text-on-surface-variant uppercase">{t.home.dailyProgress}</p>
               <span className="font-headline text-2xl font-bold text-primary">{remainingCal}</span>
-              <span className="font-label text-[9px] tracking-widest text-on-surface-variant uppercase ml-1">{t.common.kcal} {t.home.remaining}</span>
+              <span className="font-label text-micro tracking-widest text-on-surface-variant uppercase ml-1">{t.common.kcal} {t.home.remaining}</span>
             </div>
             <div className="text-right">
-              <p className="font-label text-[9px] text-on-surface-variant uppercase tracking-widest">{calPct}% {t.home.consumed}</p>
+              <p className="font-label text-micro text-on-surface-variant uppercase tracking-widest">{calPct}% {t.home.consumed}</p>
             </div>
           </div>
           <div className="space-y-2">
             <div>
-              <div className="flex justify-between text-[9px] font-label font-bold tracking-widest uppercase mb-1 text-on-surface-variant">
+              <div className="flex justify-between text-micro font-label font-bold tracking-widest uppercase mb-1 text-on-surface-variant">
                 <span>{t.portionSelector.protein}</span>
                 <span>{Math.max(0, macros.target.pro - macros.consumed.pro)}g</span>
               </div>
@@ -311,7 +311,7 @@ export default function AddMeal({
               </div>
             </div>
             <div>
-              <div className="flex justify-between text-[9px] font-label font-bold tracking-widest uppercase mb-1 text-on-surface-variant">
+              <div className="flex justify-between text-micro font-label font-bold tracking-widest uppercase mb-1 text-on-surface-variant">
                 <span>{t.portionSelector.carbs}</span>
                 <span>{Math.max(0, macros.target.carbs - macros.consumed.carbs)}g</span>
               </div>
@@ -384,7 +384,7 @@ export default function AddMeal({
                 <div className={`w-2 h-2 rounded-full shrink-0 ${food.confidence === 'high' ? 'bg-green-500' : food.confidence === 'medium' ? 'bg-yellow-500' : 'bg-orange-500'}`} />
                 <div className="flex-1 min-w-0">
                   <span className="font-headline font-bold text-xs uppercase text-tertiary block truncate">{food.nameEs || food.name}</span>
-                  <span className="text-[9px] font-label tracking-widest text-on-surface-variant uppercase">
+                  <span className="text-micro font-label tracking-widest text-on-surface-variant uppercase">
                     ~{food.estimatedGrams}g · {food.macros.cal} {t.common.kcal} · {food.macros.pro}g P
                   </span>
                 </div>
@@ -394,7 +394,7 @@ export default function AddMeal({
                 </button>
               </div>
             ))}
-            <div className="flex items-center justify-between text-[9px] font-label tracking-widest uppercase text-on-surface-variant pt-1">
+            <div className="flex items-center justify-between text-micro font-label tracking-widest uppercase text-on-surface-variant pt-1">
               <span>Total: {photoResults.reduce((s, f) => s + f.macros.cal, 0)} {t.common.kcal} · {photoResults.reduce((s, f) => s + f.macros.pro, 0).toFixed(0)}g P</span>
             </div>
             <button type="button" onClick={logPhotoResults}
@@ -415,7 +415,7 @@ export default function AddMeal({
           />
           <button type="button"
             onClick={() => { setMultiMode(!multiMode); if (multiMode) setMultiQueue([]); }}
-            className={`px-3 rounded-sm border font-label text-[9px] font-bold uppercase tracking-widest transition-colors flex items-center gap-1.5 shrink-0 ${
+            className={`px-3 rounded-sm border font-label text-micro font-bold uppercase tracking-widest transition-colors flex items-center gap-1.5 shrink-0 ${
               multiMode ? 'bg-primary text-on-primary border-primary' : 'bg-surface-container-low text-on-surface-variant border-outline-variant/30 hover:border-primary/50'
             }`}
             aria-label={t.addMealScreen?.multiAdd || 'Multi-add'}
@@ -481,15 +481,15 @@ export default function AddMeal({
                   <div className="flex items-center gap-2 mb-1 flex-wrap">
                     <h4 className="font-headline font-bold text-sm uppercase text-tertiary truncate">{food.title ?? food.name}</h4>
                     {food.isApiResult && (
-                      <span className="text-[8px] font-bold uppercase tracking-wider bg-surface-container-highest text-on-surface-variant px-1.5 py-0.5 rounded flex items-center gap-0.5 shrink-0">
+                      <span className="text-micro font-bold uppercase tracking-wider bg-surface-container-highest text-on-surface-variant px-1.5 py-0.5 rounded flex items-center gap-0.5 shrink-0">
                         <Globe className="w-2 h-2" /> OFF
                       </span>
                     )}
                     {food.servingSizes?.length > 0 && (
-                      <span className="text-[8px] font-bold uppercase tracking-wider bg-primary/10 text-primary px-1.5 py-0.5 rounded shrink-0">DB</span>
+                      <span className="text-micro font-bold uppercase tracking-wider bg-primary/10 text-primary px-1.5 py-0.5 rounded shrink-0">DB</span>
                     )}
                   </div>
-                  <div className="flex items-center gap-2 text-[10px] font-label tracking-widest uppercase text-on-surface-variant flex-wrap">
+                  <div className="flex items-center gap-2 text-micro font-label tracking-widest uppercase text-on-surface-variant flex-wrap">
                     <span className="text-primary font-bold">{food.cal ?? food.macros?.calories ?? 0} {t.common.kcal}</span>
                     <span>·</span>
                     <span>{food.pro ?? food.macros?.protein ?? 0}g P</span>
@@ -497,10 +497,10 @@ export default function AddMeal({
                     <span>{food.carbs ?? food.macros?.carbs ?? 0}g C</span>
                     {food.macros && <span className="ml-1">{FOOD_QUALITY_EMOJI[getFoodQuality(food.macros, food.micros?.others?.fiber)]}</span>}
                     {food.servingSizes?.length > 0 && (
-                      <span className="text-on-surface-variant/50 italic normal-case text-[9px]">{t.addMealScreen.adjustablePortion}</span>
+                      <span className="text-on-surface-variant/50 italic normal-case text-micro">{t.addMealScreen.adjustablePortion}</span>
                     )}
                     {historyEntry && (
-                      <span className="text-on-surface-variant/50 italic normal-case text-[9px]">
+                      <span className="text-on-surface-variant/50 italic normal-case text-micro">
                         {t.addMealScreen.timesLogged.replace('{count}', String(historyEntry.useCount))}
                       </span>
                     )}
@@ -540,7 +540,7 @@ export default function AddMeal({
               <span className="font-headline text-xs font-bold uppercase tracking-widest text-tertiary block">
                 {multiQueue.length} {multiQueue.length === 1 ? 'item' : 'items'}
               </span>
-              <span className="text-[9px] font-label tracking-widest text-on-surface-variant uppercase">
+              <span className="text-micro font-label tracking-widest text-on-surface-variant uppercase">
                 {multiTotals.cal} {t.common.kcal} · {multiTotals.pro.toFixed(0)}g P · {multiTotals.carbs.toFixed(0)}g C · {multiTotals.fats.toFixed(0)}g F
               </span>
             </div>
@@ -549,7 +549,7 @@ export default function AddMeal({
               <Trash2 className="w-4 h-4" />
             </button>
             <button type="button" onClick={logMultiQueue}
-              className="bg-primary text-on-primary px-4 py-2.5 rounded-sm font-headline text-[10px] font-bold uppercase tracking-widest hover:opacity-90 transition-opacity">
+              className="bg-primary text-on-primary px-4 py-2.5 rounded-sm font-headline text-micro font-bold uppercase tracking-widest hover:opacity-90 transition-opacity">
               {t.addMealScreen?.logAll?.replace('{count}', String(multiQueue.length)) || `Registrar (${multiQueue.length})`}
             </button>
           </div>

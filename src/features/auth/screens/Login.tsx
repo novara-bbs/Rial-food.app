@@ -131,7 +131,7 @@ export default function Login({ onNavigateToSignup, onForgotPassword }: LoginPro
         {/* Divider */}
         <div className="w-full max-w-sm flex items-center gap-3 my-5">
           <div className="flex-1 h-px bg-outline-variant/30" />
-          <span className="font-label text-[10px] uppercase tracking-widest text-on-surface-variant">{t.auth.orContinueWith}</span>
+          <span className="font-label text-micro uppercase tracking-widest text-on-surface-variant">{t.auth.orContinueWith}</span>
           <div className="flex-1 h-px bg-outline-variant/30" />
         </div>
 

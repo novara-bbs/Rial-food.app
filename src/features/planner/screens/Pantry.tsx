@@ -108,7 +108,7 @@ export default function Pantry({ onBack }: { onBack: () => void }) {
           <section key={category}>
             <h3 className="font-headline text-base font-bold tracking-tight uppercase text-on-surface-variant mb-3 border-b border-outline-variant/20 pb-2 flex justify-between items-center">
               <span>{category}</span>
-              <span className="text-[10px] font-black opacity-40">{items.length}</span>
+              <span className="text-micro font-black opacity-40">{items.length}</span>
             </h3>
             <div className="space-y-2">
               {items.map(item => {
@@ -122,7 +122,7 @@ export default function Pantry({ onBack }: { onBack: () => void }) {
                     <div className="flex-1 min-w-0">
                       <p className="font-headline font-bold text-base uppercase text-tertiary">{item.name}</p>
                       {pantryItem?.quantity && pantryItem.quantity !== '—' && (
-                        <p className="font-label text-[10px] uppercase tracking-widest text-on-surface-variant mt-0.5">{pantryItem.quantity}</p>
+                        <p className="font-label text-micro uppercase tracking-widest text-on-surface-variant mt-0.5">{pantryItem.quantity}</p>
                       )}
                     </div>
                     <button type="button"
