@@ -23,12 +23,15 @@ async function skipOnboarding(page: import('@playwright/test').Page) {
 }
 
 test.beforeEach(async ({ page }) => {
-  // Seed localStorage to bypass onboarding and consent
+  // Seed localStorage to bypass onboarding and consent.
+  // Only `rial_gdpr_consent_v1` uses the prefix explicitly
+  // (GdprConsent.tsx); AppStateContext keys flow through
+  // useLocalStorageState which does NOT prefix.
   await page.goto('/');
   await page.evaluate(() => {
     localStorage.setItem('rial_gdpr_consent_v1', 'true');
-    localStorage.setItem('rial_isFirstTime', 'false');
-    localStorage.setItem('rial_userProfile', JSON.stringify({ name: 'Test User', age: 30 }));
+    localStorage.setItem('isFirstTime', 'false');
+    localStorage.setItem('userProfile', JSON.stringify({ name: 'Test User', age: 30 }));
   });
   await page.reload();
   await dismissConsent(page);
@@ -38,29 +41,37 @@ test.beforeEach(async ({ page }) => {
 test('home tab loads with macro rings', async ({ page }) => {
   // Should be on home by default
   await expect(page).toHaveURL('/');
-  // Macro ring or progress element should be visible
-  const content = page.locator('main, [data-testid="home-screen"], .font-mono');
-  await expect(content.first()).toBeVisible({ timeout: 5000 });
+  // The <main> wrapper in App.tsx is the canonical home content container
+  // — unique, always visible. Prefer it over ambiguous class-based selectors
+  // that also match hidden Sidebar elements (e.g. `.font-mono` → Sidebar's
+  // "Miembro" badge which is `hidden md:flex` at mobile viewport).
+  await expect(page.locator('main')).toBeVisible({ timeout: 5000 });
 });
 
+// BottomNav (mobile) and Sidebar (desktop) coexist in the DOM.
+// Sidebar is `hidden md:flex` — invisible at the mobile Playwright viewport
+// but still matches generic `nav button` selectors. Scope to the BottomNav's
+// `fixed bottom-0` class so we only click the visible tab on mobile projects.
+const BOTTOM_NAV = 'nav.fixed.bottom-0';
+
 test('bottom nav: Cocina tab', async ({ page }) => {
-  const cocinaTab = page.getByRole('button', { name: /cocina|recipes/i })
-    .or(page.locator('nav a, nav button').filter({ hasText: /cocina/i }));
+  const cocinaTab = page.locator(`${BOTTOM_NAV} button`).filter({ hasText: /cocina|recipes/i });
   await cocinaTab.first().click();
-  // Recipes content should appear
-  await expect(page.getByText(/recetas|recipes/i).first()).toBeVisible({ timeout: 5000 });
+  // Recipes content should appear. Scope to <main> — Sidebar (hidden on
+  // mobile) contains the marketing tagline "Nutrición real. Recetas reales."
+  // which `getByText(/recetas/)` would otherwise pick up as a hidden match.
+  await expect(page.locator('main').getByText(/recetas|recipes/i).first())
+    .toBeVisible({ timeout: 5000 });
 });
 
 test('bottom nav: Explorar tab', async ({ page }) => {
-  const explorarTab = page.locator('nav button, nav a')
-    .filter({ hasText: /explorar|explore/i });
+  const explorarTab = page.locator(`${BOTTOM_NAV} button`).filter({ hasText: /explorar|explore/i });
   await explorarTab.first().click();
   await expect(page.locator('body')).not.toHaveText(/error|crash/i, { timeout: 5000 });
 });
 
 test('bottom nav: Más tab opens menu', async ({ page }) => {
-  const masTab = page.locator('nav button, nav a')
-    .filter({ hasText: /más|mas|more/i });
+  const masTab = page.locator(`${BOTTOM_NAV} button`).filter({ hasText: /más|mas|more/i });
   await masTab.first().click();
   // "Más" opens a menu with various options
   await expect(page.getByText(/diario|perfil|ajustes|coach|fasting/i).first())

@@ -7,10 +7,14 @@ import { test, expect } from '@playwright/test';
 test.beforeEach(async ({ page }) => {
   await page.goto('/');
   await page.evaluate(() => {
+    // Only the GDPR consent key uses the `rial_` prefix explicitly
+    // (see src/components/GdprConsent.tsx). Everything else flows
+    // through useLocalStorageState which stores the raw key as-is
+    // (see src/hooks/useLocalStorageState.ts — no prefix added).
     localStorage.setItem('rial_gdpr_consent_v1', 'true');
-    localStorage.setItem('rial_isFirstTime', 'false');
-    localStorage.setItem('rial_userProfile', JSON.stringify({ name: 'Test User', age: 30 }));
-    localStorage.setItem('rial_dailyMacros', JSON.stringify({
+    localStorage.setItem('isFirstTime', 'false');
+    localStorage.setItem('userProfile', JSON.stringify({ name: 'Test User', age: 30 }));
+    localStorage.setItem('dailyMacros', JSON.stringify({
       consumed: { cal: 0, pro: 0, carbs: 0, fats: 0 },
       target: { cal: 2000, pro: 150, carbs: 200, fats: 65 },
     }));
@@ -24,8 +28,10 @@ test.beforeEach(async ({ page }) => {
 });
 
 test('home screen shows macro targets', async ({ page }) => {
-  // Should display calorie target
-  await expect(page.getByText(/2000|2\.000/)).toBeVisible({ timeout: 5000 });
+  // Should display calorie target. `.first()` dodges strict-mode:
+  // NutritionHero renders the target as <remaining> big number,
+  // <target> in the dd, AND "0 / 2000kcal" in the macro bar — 3 matches.
+  await expect(page.getByText(/2000|2\.000/).first()).toBeVisible({ timeout: 5000 });
 });
 
 test('navigating to add meal shows search input', async ({ page }) => {
