@@ -4,20 +4,25 @@ import PageShell from '../../../components/PageShell';
 import { useI18n } from '../../../i18n';
 import { useAppState } from '../../../contexts/AppStateContext';
 import { useNavigation } from '../../../contexts/NavigationContext';
-import { getLoggingStreak, type DailyArchive } from '../../../hooks/useDailyReset';
+import { type DailyArchive } from '../../../hooks/useDailyReset';
 import { useLocalStorageState } from '../../../hooks/useLocalStorageState';
 import { calcVitality } from '../../home/utils/homeWidgets';
 import { getCorrelations } from '../utils/correlations';
 import PageHeader from '../../../components/patterns/PageHeader';
-import { bodyWeightFromKg, bodyWeightToKg, getBodyWeightUnit } from '../../food/utils/units';
 import { toast } from 'sonner';
 import WeeklyScoreCard from '../components/WeeklyScoreCard';
 import ConsistencyCalendar from '../components/ConsistencyCalendar';
 import InlineReflection from '../components/InlineReflection';
 import WeightTrendCard from '../components/WeightTrendCard';
+import BodyTimeline from '../components/BodyTimeline';
+import BodyCalendar from '../components/BodyCalendar';
+import RitmoSection from '../components/RitmoSection';
 import SectionCard from '@/components/SectionCard';
+import { calcStreaks } from '../utils/streaks';
+import { calcWeekMacros, type MacroTarget } from '../utils/week-stats';
+import { useLogSnapshot } from '../hooks/useLogSnapshot';
+import type { BodySnapshot } from '../../../types/wellness';
 
-interface WeightEntry { date: string; kg: number; note?: string }
 interface WeeklyEntry {
   id: number;
   weekStart: string;
@@ -31,7 +36,7 @@ interface WeeklyEntry {
 
 const EMOJI_MAP = ['😴', '😕', '😐', '😊', '💪'];
 
-/** B1 fix: DST-safe week start using Date math instead of multiplication */
+/** DST-safe week start using Date math. */
 function getWeekStartISO(date: Date): string {
   const ws = new Date(date);
   ws.setDate(date.getDate() - date.getDay());
@@ -42,13 +47,15 @@ function getWeekStartISO(date: Date): string {
 export default function Progress({ onBack }: { onBack: () => void }) {
   const { t, locale } = useI18n();
   const { navigateTo } = useNavigation();
-  const { nutritionHistory, weightHistory, setWeightHistory, dailyMacros, dailyLog, realFeelLogs, userProfile, hydration, movement } = useAppState();
+  const {
+    nutritionHistory, weightHistory, dailyMacros, dailyLog, realFeelLogs,
+    userProfile, hydration, movement, handleShareProgress,
+  } = useAppState();
   const unitSystem = userProfile?.unitSystem ?? 'metric';
-  const weightUnit = getBodyWeightUnit(unitSystem);
+  const { openWithDate } = useLogSnapshot();
 
   const [tab, setTab] = useState<'body' | 'nutrition'>('nutrition');
-  const [isEditingWeight, setIsEditingWeight] = useState(false);
-  const [weightInput, setWeightInput] = useState('');
+  const [bodySubTab, setBodySubTab] = useState<'summary' | 'history' | 'calendar'>('summary');
   const [reflectionOpen, setReflectionOpen] = useState(false);
   const [workedWell, setWorkedWell] = useState('');
   const [whatWasHard, setWhatWasHard] = useState('');
@@ -57,33 +64,41 @@ export default function Progress({ onBack }: { onBack: () => void }) {
   const [selectedDay, setSelectedDay] = useState<string | null>(null);
 
   const history = nutritionHistory as DailyArchive[];
-  const weights = weightHistory as WeightEntry[];
-  const streak = getLoggingStreak(history);
-  const todayStreak = dailyLog.length > 0 ? streak.current + 1 : streak.current;
+  const snapshots = weightHistory as BodySnapshot[];
   const now = new Date();
   const todayDate = now.toISOString().slice(0, 10);
 
-  // ─── This Week Stats ────────────────────────────────────────────────────────
+  // ─── Canonical streaks (Q13 coherence) ──────────────────────────────────────
+  const todayHasRealFeel = (realFeelLogs || []).some(
+    (l: any) => l.date && l.date.slice(0, 10) === todayDate,
+  );
+  const streaks = useMemo(
+    () => calcStreaks({
+      history,
+      realFeelLogs: realFeelLogs || [],
+      todayHasMeals: dailyLog.length > 0,
+      todayHasRealFeel,
+      now,
+    }),
+    [history, realFeelLogs, dailyLog.length, todayHasRealFeel],
+  );
+
+  // ─── This Week Stats via canonical helper (Q13 coherence) ───────────────────
   const weekStats = useMemo(() => {
-    const thisWeekStart = getWeekStartISO(now);
-    const lastWeekDate = new Date(now);
-    lastWeekDate.setDate(lastWeekDate.getDate() - 7);
-    const lastWeekStart = getWeekStartISO(lastWeekDate);
+    const target: MacroTarget = dailyMacros.target ?? { cal: 2400, pro: 180, carbs: 250, fats: 65 };
+    const curr = calcWeekMacros(history, target, 0, now);
+    const prev = calcWeekMacros(history, target, 1, now);
 
-    const thisWeekDays = history.filter(h => h.date >= thisWeekStart);
-    const lastWeekDays = history.filter(h => h.date >= lastWeekStart && h.date < thisWeekStart);
+    const thisAvg = curr.avg;
+    const lastAvg = prev.avg;
 
-    const avg = (entries: DailyArchive[], key: 'cal' | 'pro' | 'carbs' | 'fats') => {
-      if (entries.length === 0) return 0;
-      return Math.round(entries.reduce((s, e) => s + (e.macros.consumed[key] || 0), 0) / entries.length);
-    };
+    // proteinHitDays keeps the 90%-of-target threshold that WeeklyScoreCard expects.
+    const proteinHitDays = history
+      .filter(h => h.date >= curr.weekStart && h.date <= curr.weekEnd)
+      .filter(h => (h.macros?.consumed?.pro || 0) >= (target.pro || 180) * 0.9)
+      .length;
 
-    const thisAvg = { cal: avg(thisWeekDays, 'cal'), pro: avg(thisWeekDays, 'pro'), carbs: avg(thisWeekDays, 'carbs'), fats: avg(thisWeekDays, 'fats') };
-    const lastAvg = { cal: avg(lastWeekDays, 'cal'), pro: avg(lastWeekDays, 'pro'), carbs: avg(lastWeekDays, 'carbs'), fats: avg(lastWeekDays, 'fats') };
-
-    const target = dailyMacros.target ?? { cal: 2400, pro: 180, carbs: 250, fats: 65 };
-    const proteinHitDays = thisWeekDays.filter(h => h.macros.consumed.pro >= (target.pro || 180) * 0.9).length;
-    const calDelta = lastAvg.cal > 0 ? Math.round(((thisAvg.cal - lastAvg.cal) / lastAvg.cal) * 100) : 0;
+    const calDelta = curr.deltaVsPrev.cal ?? 0;
 
     const bars = (['cal', 'pro', 'carbs', 'fats'] as const).map(key => {
       const targetVal = target[key] || 1;
@@ -91,7 +106,7 @@ export default function Progress({ onBack }: { onBack: () => void }) {
       return { key, pct, avg: thisAvg[key], target: targetVal };
     });
 
-    return { thisAvg, lastAvg, calDelta, proteinHitDays, daysLogged: thisWeekDays.length, bars };
+    return { thisAvg, lastAvg, calDelta, proteinHitDays, daysLogged: curr.daysLogged, bars };
   }, [history, dailyMacros]);
 
   // ─── Weekly Score (0-100) ───────────────────────────────────────────────────
@@ -119,7 +134,6 @@ export default function Progress({ onBack }: { onBack: () => void }) {
         counts[name].totalCal += entry.macros?.cal || 0;
       }
     }
-    // Also count today's log (not yet archived)
     for (const entry of dailyLog) {
       const name = (entry as any).title || (entry as any).name;
       if (!name) continue;
@@ -149,7 +163,6 @@ export default function Progress({ onBack }: { onBack: () => void }) {
   }, [selectedDay, history, dailyLog, realFeelLogs]);
 
   // ─── Bienestar (conditional on RF data) ─────────────────────────────────────
-  // B5 fix: standardize on rawAvg (1-5 scale) everywhere
   const bienestar = useMemo(() => {
     const logs = realFeelLogs || [];
     if (logs.length < 3) return null;
@@ -161,34 +174,16 @@ export default function Progress({ onBack }: { onBack: () => void }) {
     return { rawAvg, trend, correlations, sparkData };
   }, [realFeelLogs]);
 
-  // ─── Weight ─────────────────────────────────────────────────────────────────
-  const sortedWeights = [...weights].sort((a, b) => a.date.localeCompare(b.date));
-  const currentWeight = sortedWeights.length > 0 ? sortedWeights[sortedWeights.length - 1].kg : null;
-  const firstWeight = sortedWeights.length > 0 ? sortedWeights[0].kg : null;
-  const weekAgo = new Date(now.getTime() - 7 * 86_400_000).toISOString().slice(0, 10);
-  const recentWeights = sortedWeights.filter(w => w.date >= weekAgo);
-  const weekDelta = recentWeights.length >= 2 ? recentWeights[recentWeights.length - 1].kg - recentWeights[0].kg : null;
-
-  const handleLogWeight = () => {
-    const val = parseFloat(weightInput);
-    if (isNaN(val) || !setWeightHistory) return;
-    const kg = bodyWeightToKg(val, unitSystem);
-    if (kg < 20 || kg > 300) return;
-    setWeightHistory((prev: any[]) => {
-      const filtered = prev.filter((w: any) => w.date !== todayDate);
-      return [...filtered, { date: todayDate, kg }];
-    });
-    setIsEditingWeight(false);
-    setWeightInput('');
-  };
-
   // ─── Calendar Data ──────────────────────────────────────────────────────────
   const loggedDates = useMemo(() => {
     const set = new Set(history.filter(h => h.mealCount > 0).map(h => h.date));
     if (dailyLog.length > 0) set.add(todayDate);
     return set;
   }, [history, dailyLog]);
-  const rfDates = useMemo(() => new Set((realFeelLogs || []).map((l: any) => l.date ? l.date.slice(0, 10) : null).filter(Boolean)), [realFeelLogs]);
+  const rfDates = useMemo(
+    () => new Set((realFeelLogs || []).map((l: any) => l.date ? l.date.slice(0, 10) : null).filter(Boolean)),
+    [realFeelLogs],
+  );
 
   // ─── Reflection ─────────────────────────────────────────────────────────────
   const weekStartDate = useMemo(() => {
@@ -205,7 +200,6 @@ export default function Progress({ onBack }: { onBack: () => void }) {
       toast.error(t.weekly?.fillOneField || 'Completa al menos un campo');
       return;
     }
-    // B4 fix: count meals from history, not RF logs
     const thisWeekStart = getWeekStartISO(now);
     const thisWeekArchives = history.filter(h => h.date >= thisWeekStart);
     const mealsLogged = thisWeekArchives.reduce((s, h) => s + h.mealCount, 0) + dailyLog.length;
@@ -235,15 +229,39 @@ export default function Progress({ onBack }: { onBack: () => void }) {
   };
 
   const p = t.progress;
+
+  // ─── Share a snapshot (routes through canonical handleShareProgress) ────────
+  const shareSnapshot = (snap: BodySnapshot) => {
+    const sorted = [...snapshots].sort((a, b) => a.date.localeCompare(b.date));
+    const idx = sorted.findIndex(s => s.date === snap.date);
+    const reference = idx > 0 ? sorted[idx - 1] : undefined;
+    handleShareProgress({
+      snapshot: snap,
+      referenceSnapshot: reference,
+      content: '',
+      author: {
+        id: 'self',
+        name: userProfile?.name,
+        img: userProfile?.avatar,
+      },
+    });
+    toast.success(p?.shared || 'Progreso compartido');
+    navigateTo('community');
+  };
+
   const barLabels: Record<string, string> = { cal: 'kcal', pro: 'Prot', carbs: 'Carbs', fats: p?.fats || 'Grasas' };
-  // B3 fix: i18n day headers
   const dayHeaders: string[] = (p as any)?.dayHeaders || (locale === 'en' ? ['S', 'M', 'T', 'W', 'T', 'F', 'S'] : ['D', 'L', 'M', 'X', 'J', 'V', 'S']);
+
+  const bodySubTabs = [
+    { id: 'summary' as const, label: p?.bodySummary || 'Resumen' },
+    { id: 'history' as const, label: p?.bodyHistory || 'Historial' },
+    { id: 'calendar' as const, label: p?.bodyCalendar || 'Calendario' },
+  ];
 
   return (
     <PageShell maxWidth="narrow" spacing="lg">
       <PageHeader onBack={onBack} label="" title={p?.title || 'Tu Progreso'} />
 
-      {/* ─── Esta Semana (merged: score + stats + activity + adherence w/ deltas) ─── */}
       <WeeklyScoreCard
         weeklyScore={weeklyScore}
         weekStats={weekStats}
@@ -276,9 +294,6 @@ export default function Progress({ onBack }: { onBack: () => void }) {
       {/* ═══ NUTRITION TAB ═══ */}
       {tab === 'nutrition' && (
         <>
-          {/* R2: Nutrition Summary section REMOVED — merged into WeeklyScoreCard adherence bars */}
-
-          {/* Top Meals This Week */}
           {topMeals.length > 0 && (
             <SectionCard
               title={p?.topMeals || 'Tus comidas estrella'}
@@ -306,10 +321,9 @@ export default function Progress({ onBack }: { onBack: () => void }) {
             </SectionCard>
           )}
 
-          {/* Consistency Calendar */}
           <ConsistencyCalendar
-            todayStreak={todayStreak}
-            bestStreak={streak.best}
+            todayStreak={streaks.mealLog.current}
+            bestStreak={streaks.mealLog.best}
             loggedDates={loggedDates}
             rfDates={rfDates}
             selectedDay={selectedDay}
@@ -330,7 +344,6 @@ export default function Progress({ onBack }: { onBack: () => void }) {
             }}
           />
 
-          {/* Inline Reflection */}
           <InlineReflection
             latestEntry={latestEntry}
             reflectionOpen={reflectionOpen}
@@ -347,14 +360,12 @@ export default function Progress({ onBack }: { onBack: () => void }) {
             tWeekly={t.weekly || {}}
           />
 
-          {/* Bienestar Section (conditional on ≥3 RF entries) — B5 fix: /5 scale */}
           {bienestar && (
             <SectionCard
               spacing="lg"
               title={p?.wellbeingTitle || 'Bienestar'}
               icon={<Heart className="w-4 h-4 text-brand-secondary" />}
             >
-              {/* Score /5 + mini sparkline */}
               <div className="flex items-center gap-4">
                 <div className="flex items-center gap-1.5">
                   <span className="text-2xl">{EMOJI_MAP[Math.round(bienestar.rawAvg) - 1] || '😐'}</span>
@@ -381,7 +392,6 @@ export default function Progress({ onBack }: { onBack: () => void }) {
                 </div>
               </div>
 
-              {/* Top 2 correlations */}
               {bienestar.correlations.length > 0 && (
                 <div className="space-y-2 pt-3 border-t border-outline-variant/10">
                   <span className="font-label text-micro uppercase tracking-widest text-on-surface-variant">
@@ -415,29 +425,77 @@ export default function Progress({ onBack }: { onBack: () => void }) {
 
       {/* ═══ BODY TAB ═══ */}
       {tab === 'body' && (
-        <WeightTrendCard
-          weights={weights}
-          currentWeight={currentWeight}
-          firstWeight={firstWeight}
-          weekDelta={weekDelta}
-          isEditingWeight={isEditingWeight}
-          setIsEditingWeight={setIsEditingWeight}
-          weightInput={weightInput}
-          setWeightInput={setWeightInput}
-          onLogWeight={handleLogWeight}
-          unitSystem={unitSystem}
-          weightUnit={weightUnit}
-          bodyWeightFromKg={bodyWeightFromKg}
-          t={{
-            weightTrend: p?.weightTrend,
-            thisWeek: p?.thisWeek,
-            current: p?.current,
-            start: p?.start,
-            change: p?.change,
-            noWeightData: p?.noWeightData,
-            logWeight: p?.logWeight,
-          }}
-        />
+        <>
+          {/* Sub-tabs: Resumen | Historial | Calendario */}
+          <div
+            role="tablist"
+            aria-label={p?.body || 'Cuerpo'}
+            className="flex border border-outline-variant/20 rounded-sm overflow-hidden"
+          >
+            {bodySubTabs.map(st => (
+              <button
+                key={st.id}
+                type="button"
+                role="tab"
+                aria-selected={bodySubTab === st.id}
+                onClick={() => setBodySubTab(st.id)}
+                className={`flex-1 min-h-11 py-2.5 font-headline text-xs font-bold uppercase tracking-widest transition-colors ${
+                  bodySubTab === st.id ? 'bg-primary text-on-primary' : 'bg-surface-container-low text-on-surface-variant'
+                }`}
+              >
+                {st.label}
+              </button>
+            ))}
+          </div>
+
+          {bodySubTab === 'summary' && (
+            <>
+              <WeightTrendCard
+                snapshots={snapshots}
+                targetKg={userProfile?.targetWeight ?? null}
+                unitSystem={unitSystem}
+                onLog={() => openWithDate()}
+                t={{
+                  weightTrend: p?.weightTrend,
+                  thisWeek: p?.thisWeek,
+                  weightRawLabel: p?.weightRawLabel,
+                  trend7d: p?.trend7d,
+                  trendHint: p?.trendHint,
+                  start: p?.start,
+                  change: p?.change,
+                  noWeightData: p?.noWeightData,
+                  logWeight: p?.logWeight,
+                }}
+              />
+              <RitmoSection
+                history={history}
+                realFeelLogs={realFeelLogs || []}
+                title={p?.ritmoTitle || 'Ritmo diario'}
+                captionLabel={p?.dataSourceAutoRitmo || 'sumado desde Home'}
+                labels={{
+                  hydration: p?.ritmoHydration || 'Hidratación',
+                  movement: p?.ritmoMovement || 'Movimiento',
+                  vitality: p?.ritmoVitality || 'Real Feel',
+                }}
+                emptyLabel={p?.ritmoEmpty || 'Sin datos aún'}
+                daysLabel={p?.days || 'días'}
+              />
+            </>
+          )}
+
+          {bodySubTab === 'history' && (
+            <BodyTimeline
+              snapshots={snapshots}
+              unitSystem={unitSystem}
+              onShare={shareSnapshot}
+              shareLabel={p?.shareSnapshot}
+            />
+          )}
+
+          {bodySubTab === 'calendar' && (
+            <BodyCalendar snapshots={snapshots} unitSystem={unitSystem} />
+          )}
+        </>
       )}
     </PageShell>
   );

@@ -30,6 +30,30 @@ export interface WeightTrend {
    * Null when target or first is missing, or start and target are equal.
    */
   targetProgressPct: number | null;
+  /** EMA-7d smoothed series aligned to `sorted` (same length). */
+  emaSeries: number[];
+  /** Latest EMA — the "trend" reading, less noisy than `current`. */
+  currentEma: number | null;
+  /** EMA delta over the last 7 days (latest EMA vs. EMA 7 days ago). */
+  emaWeekDelta: number | null;
+}
+
+/**
+ * Half-life 7-day EMA:
+ *   alpha = 1 − 2^(−1/7)  ≈  0.0943
+ *   => (1 − alpha)^7 = 0.5
+ * Matches MacroFactor / Yazio "trend line" semantics — a new reading
+ * decays to 50 % weight after one week.
+ */
+export const EMA_ALPHA_7D = 1 - Math.pow(2, -1 / 7);
+
+export function calcEmaSeries(values: number[], alpha: number = EMA_ALPHA_7D): number[] {
+  if (!values || values.length === 0) return [];
+  const out: number[] = [values[0]];
+  for (let i = 1; i < values.length; i++) {
+    out.push(alpha * values[i] + (1 - alpha) * out[i - 1]);
+  }
+  return out;
 }
 
 export function calcWeightTrend(
@@ -49,6 +73,9 @@ export function calcWeightTrend(
       first: null,
       weekDelta: null,
       targetProgressPct: null,
+      emaSeries: [],
+      currentEma: null,
+      emaWeekDelta: null,
     };
   }
 
@@ -74,5 +101,26 @@ export function calcWeightTrend(
     targetProgressPct = Math.max(0, Math.min(1, pct));
   }
 
-  return { sorted, last30, current, first, weekDelta, targetProgressPct };
+  const emaSeries = calcEmaSeries(sorted.map(s => s.kg));
+  const currentEma = emaSeries[emaSeries.length - 1] ?? null;
+  // Compare latest EMA to EMA seven days earlier — smoothed, honest trend.
+  let emaWeekDelta: number | null = null;
+  if (last7.length >= 2 && emaSeries.length >= 2) {
+    const firstIdxInWindow = sorted.findIndex(s => s.date >= cutoff7);
+    if (firstIdxInWindow >= 0 && firstIdxInWindow < emaSeries.length - 1) {
+      emaWeekDelta = +(currentEma! - emaSeries[firstIdxInWindow]).toFixed(2);
+    }
+  }
+
+  return {
+    sorted,
+    last30,
+    current,
+    first,
+    weekDelta,
+    targetProgressPct,
+    emaSeries,
+    currentEma,
+    emaWeekDelta,
+  };
 }
