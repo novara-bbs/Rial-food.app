@@ -1,5 +1,21 @@
 # RIAL App - Changelog
 
+## [1.5.41] - 2026-04-19
+
+### feat(ui) — S1.2 Bevel: HIGH migrations dogfood ADR-009 V3 (SnapshotDetailModal + GdprConsent)
+
+Primera ejecución del decision framework de 5 criterios formalizado en ADR-009 V3 (`[1.5.39]`). Dos migraciones 0-risk que validan el framework sobre surfaces reales antes de escalar a los MEDIUM candidates de S1.3.
+
+**Changed**
+- `src/features/wellness/components/SnapshotDetailModal.tsx` — radix `Dialog max-w-md max-h-[90vh]` → `<BottomSheet size="focus" headerLayout="title-centered">`. Framework criterio: C5 no aplica (1 sección); C3 no aplica (es detail-view, no confirmación); ninguno de C1/C2/C4 aplica → BottomSheet. `size="focus"` porque incluye acciones de edit/delete (work-on-something). Edit + Delete pasan al `footer` del sheet como `grid-cols-2` sticky; ambos botones adquieren `min-h-11` + `focus-visible` ring (antes solo `py-2.5`). Inline 2-tap confirm pattern de Eliminar preservado.
+- `src/components/GdprConsent.tsx` — manual `fixed inset-0 z-[200]` overlay → `<BottomSheet size="compact" headerLayout="title-centered" hideCloseButton hideHandle>`. Framework criterio: C3 no aplica (es gate, no confirmación bidireccional); C4 no aplica (es 1 step, no wizard) → BottomSheet. `hideCloseButton` + `hideHandle` + `onOpenChange={() => {}}` hacen el sheet no-dismisible hasta que Accept dispare el cierre vía `onAccept` del parent (mandatorio por ley EU / App Store privacy nutrition label). Accept migra a `footer` con `min-h-11` + `focus-visible` ring. Body centrado (icon badge agrandado a 14×14), copy y links de privacidad/términos preservados.
+
+**Notes**
+- **Por qué este par primero.** Ambos son 0-risk: SnapshotDetailModal ya era `max-h-[90vh]` (≈ 92vh = `focus`); GdprConsent ya era sheet-shaped en mobile (`items-end sm:items-center`). El framework los clasificó HIGH en ADR-009 V3 §4.4.b. Si un caso difícil rompe el framework, queremos descubrirlo acá — no en los 3 MEDIUM candidates de S1.3 que tienen plumbing dual sheet/route.
+- **Verificación preview.** Seeded consent-not-accepted state, verificado en viewport 363×366: GdprConsent rinde `max-h-[88vh] = 322.78px` ✓, `border-top-left-radius: 24px` ✓, overlay `oklab(0 0 0 / 0.25)` ✓. Tras `handleAccept`, sheet se dismisa limpio. Navegado a Progress → Cuerpo → Historial → tap snapshot `11 abr 2026`: SnapshotDetailModal rinde `max-h-[92vh] = 337.44px` ✓, `data-size="focus"` + `data-header-layout="title-centered"` ✓. Tap en Eliminar arma confirm (text `¿Confirmar?` + `bg-error`); segundo tap dispara delete + cierre. Edit path abre `LogSnapshotModal` anidado limpio.
+- **Budget.** Sin cambios en tests (651), i18n (1561), ni bundle. Cambios de markup-only reemplazando Dialog/overlay con el primitive ya existente.
+- **No migrado en este PR.** Los 3 MEDIUM candidates (`BarcodeScanner` split, `ImportRecipeURL` dual, `DailyCheckIn` dual) caen en S1.3 porque requieren plumbing de call-sites + nueva prop `presentation?: 'sheet' | 'route'`. No son 0-risk.
+
 ## [1.5.40] - 2026-04-19
 
 ### feat(wellness) — PR 6c Bevel: WeeklyInsight goalType hardening + BeforeAfterCompare auto-seed/scroll/log-CTA/goal-aware delta color

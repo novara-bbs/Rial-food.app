@@ -4,6 +4,7 @@
  * Required by EU law and Apple App Store privacy nutrition label.
  */
 import { Shield } from 'lucide-react';
+import BottomSheet from '@/components/ui/bottom-sheet';
 import { useI18n } from '../i18n';
 
 const CONSENT_KEY = 'rial_gdpr_consent_v1';
@@ -31,25 +32,39 @@ export default function GdprConsent({ onAccept, onNavigatePrivacy, onNavigateTer
   };
 
   return (
-    <div className="fixed inset-0 z-[200] bg-background/95 backdrop-blur-sm flex items-end sm:items-center justify-center p-4">
-      <div className="w-full max-w-sm bg-surface-container-highest border border-outline-variant/30 rounded-2xl p-6 shadow-2xl space-y-5">
-        {/* Icon */}
-        <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-xl bg-primary/15 flex items-center justify-center shrink-0">
-            <Shield className="w-5 h-5 text-primary" />
+    <BottomSheet
+      open={true}
+      onOpenChange={() => { /* consent is mandatory — only Accept closes */ }}
+      title={t.legal.consentTitle}
+      size="compact"
+      headerLayout="title-centered"
+      hideCloseButton
+      hideHandle
+      footer={
+        <button
+          type="button"
+          onClick={handleAccept}
+          className="w-full min-h-11 py-3.5 bg-primary text-on-primary rounded-xl font-headline text-xs font-bold uppercase tracking-widest hover:bg-primary/90 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/60 focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+        >
+          {t.legal.consentAccept}
+        </button>
+      }
+    >
+      <div className="space-y-5">
+        {/* Icon badge */}
+        <div className="flex items-center justify-center pt-2">
+          <div className="w-14 h-14 rounded-xl bg-primary/15 flex items-center justify-center shrink-0">
+            <Shield className="w-7 h-7 text-primary" aria-hidden="true" />
           </div>
-          <h2 className="font-headline text-base font-black uppercase tracking-widest text-tertiary">
-            {t.legal.consentTitle}
-          </h2>
         </div>
 
         {/* Body */}
-        <p className="font-body text-sm text-on-surface-variant leading-relaxed">
+        <p className="font-body text-sm text-on-surface-variant leading-relaxed text-center">
           {t.legal.consentBody}{' '}
           <button
             type="button"
             onClick={onNavigatePrivacy}
-            className="text-primary underline hover:no-underline"
+            className="text-primary underline hover:no-underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/60 focus-visible:ring-offset-2 focus-visible:ring-offset-background rounded-sm"
           >
             {t.legal.privacyLink}
           </button>
@@ -57,22 +72,13 @@ export default function GdprConsent({ onAccept, onNavigatePrivacy, onNavigateTer
           <button
             type="button"
             onClick={onNavigateTerms}
-            className="text-primary underline hover:no-underline"
+            className="text-primary underline hover:no-underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/60 focus-visible:ring-offset-2 focus-visible:ring-offset-background rounded-sm"
           >
             {t.legal.termsLink}
           </button>
           .
         </p>
-
-        {/* Accept */}
-        <button
-          type="button"
-          onClick={handleAccept}
-          className="w-full py-3.5 bg-primary text-on-primary rounded-xl font-headline text-xs font-bold uppercase tracking-widest hover:bg-primary/90 transition-colors"
-        >
-          {t.legal.consentAccept}
-        </button>
       </div>
-    </div>
+    </BottomSheet>
   );
 }
