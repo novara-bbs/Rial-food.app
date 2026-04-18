@@ -1,5 +1,24 @@
 # RIAL App - Changelog
 
+## [1.5.36] - 2026-04-18
+
+### feat(wellness) — PR 6b: Before/after photo compare inside BodyTimeline
+
+Market-gap close-out. MacroFactor, Yazio y Cronometer llevan tiempo shipando un comparador side-by-side de fotos de progreso; RIAL ya almacenaba `BodySnapshot.photoUrl` desde Q10/Q11 pero no tenía ninguna UI para poner dos juntas con delta de peso + días transcurridos. Esta PR cierra el hueco como **vista hermana** dentro de `<BodyTimeline>` (Progress → Body → History) — sin nueva ruta, sin nuevo modal, sin cambios en el shell. Share routing reutiliza el canonical `handleShareProgress({ snapshot, referenceSnapshot })` de `AppStateContext` sin nueva plumbing.
+
+**Added**
+- `src/features/wellness/components/BeforeAfterCompare.tsx` — nuevo primitive de wellness local (no primitive global, por ahora). Tres branches de estado: `not-enough` (<2 fotos), `picker` (before XOR after todavía vacío; grid 3-col de thumbnails con pressed/disabled state) y `viewing` (side-by-side 2-col con delta de peso en la unidad del user + días transcurridos + botones Swap/Reset/Share). Transiente — la "pareja elegida" es UI state, no se persiste. HIG 44×44 en toda la tap surface (min-h-11 en botones + tap targets de 44×44 para la X de exit).
+- `src/features/wellness/components/BeforeAfterCompare.test.ts` — 6 assertions de `daysBetweenISO` (mismo día → 0, consecutivos → 1, semana → 7, direction-agnostic, month boundary, y **DST boundary** via midday anchor — el spring-forward de España 2026-03-29 no debe hacer que 2 días se cuenten como 1 o 3).
+- `src/features/wellness/components/BodyTimeline.tsx` — pill-chip "Comparar" (aparece sólo con ≥2 fotos, `aria-pressed` toggle) junto a los filter chips. Cuando `compareMode=true` el body renderea `<BeforeAfterCompare>`; el resto del contenido (filter chips + modal de detalle) se mantiene estable — cambiar de modo no desmonta el SnapshotDetailModal.
+- `src/features/wellness/screens/Progress.tsx` — nueva función `shareComparePair(before, after)` que delega a `handleShareProgress` con `referenceSnapshot=before` y `snapshot=after`. La propagación del handler al timeline se hace vía el nuevo prop `onShareCompare`. Fallback automático: si el consumer no provee `onShareCompare` pero sí `onShare`, BodyTimeline degrada a `onShare(after)` (Q17-style graceful degradation — nunca romper la UX del compartir).
+- i18n +11 keys × 2 locales simétricas (`compareCta`, `compareTitle`, `compareExit`, `compareNotEnough`, `compareSelectBefore`, `compareSelectAfter`, `compareBeforeLabel`, `compareAfterLabel`, `compareDaysPattern` con template `{{n}} días`, `compareSwap`, `compareReset`).
+
+**Notes**
+- **Por qué no es un primitive global.** `BeforeAfterCompare` es semánticamente wellness-local — la entidad `BodySnapshot`, las unidades de peso (`bodyWeightFromKg` / `getBodyWeightUnit`), y el contexto "fotos de evolución corporal" no generalizan fuera del dominio Progress. Meterlo en `src/components/` sería sobreingeniería. Si otra feature (recetas antes/después de cocinar? challenges before/after?) lo reclamara, se extraería a primitive con props genéricos.
+- **Por qué state transient, no persistido.** La pareja before/after es una decisión momentánea del user para "contar una historia". Persistirla en localStorage añadiría sync complexity (SyncKey entry) sin beneficio — cada sesión el user quiere elegir qué mostrar. El peso y las fotos sí se persisten, obviamente, pero son propiedades del snapshot, no de la comparación.
+- **DST-safe date math.** `daysBetweenISO` usa anchor `T12:00:00` (midday) en vez de `T00:00:00` (midnight). Midnight anchors son vulnerables a DST: la transición spring-forward hace que un día sea de 23h, que el cálculo `(b − a) / 86_400_000` redondee 1.96 días → 2 pero también 1.04 días → 1, consistente sólo en un sentido. Midday absorbe la variación — el error máximo queda acotado a ±0.5h, muy por debajo del umbral de redondeo a días.
+- **Share UX.** El share pair llega al feed con `referenceSnapshot=before` — el `handleShareProgress` ya computa delta peso vs reference + `sinceDate` para el post card. Esto significa que el feed pre-existente renderea automáticamente posts before/after sin cambios adicionales en `PostCard`. Cero plumbing nuevo en la capa social.
+
 ## [1.5.35] - 2026-04-18
 
 ### feat(ui) — PR 6 Bevel: `<BottomSheet>` V2 — focus size variant + 3 header layouts

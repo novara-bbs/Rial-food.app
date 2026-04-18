@@ -261,6 +261,22 @@ export default function Progress({ onBack }: { onBack: () => void }) {
     navigateTo('community');
   };
 
+  // ─── Share a before/after pair (PR 6b) ─────────────────────────────────────
+  const shareComparePair = (before: BodySnapshot, after: BodySnapshot) => {
+    handleShareProgress({
+      snapshot: after,
+      referenceSnapshot: before,
+      content: '',
+      author: {
+        id: 'self',
+        name: userProfile?.name,
+        img: userProfile?.avatar,
+      },
+    });
+    toast.success(p?.shared || 'Progreso compartido');
+    navigateTo('community');
+  };
+
   const barLabels: Record<string, string> = { cal: 'kcal', pro: 'Prot', carbs: 'Carbs', fats: p?.fats || 'Grasas' };
   const dayHeaders: string[] = (p as any)?.dayHeaders || (locale === 'en' ? ['S', 'M', 'T', 'W', 'T', 'F', 'S'] : ['D', 'L', 'M', 'X', 'J', 'V', 'S']);
 
@@ -505,6 +521,7 @@ export default function Progress({ onBack }: { onBack: () => void }) {
               snapshots={snapshots}
               unitSystem={unitSystem}
               onShare={shareSnapshot}
+              onShareCompare={shareComparePair}
               shareLabel={p?.shareSnapshot}
             />
           )}
