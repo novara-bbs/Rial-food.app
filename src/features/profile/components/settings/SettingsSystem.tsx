@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Smartphone, Sparkles, Globe, Bell, Users, Download, AlertTriangle, LogOut, UserX, Cloud } from 'lucide-react';
+import { Smartphone, Sparkles, Bell, Users, Download, AlertTriangle, LogOut, UserX, Cloud } from 'lucide-react';
 import { toast } from 'sonner';
 import { Switch } from '@/components/ui/switch';
 import { Button } from '@/components/ui/button';
@@ -14,13 +14,11 @@ import { exportUserData } from '../../../../lib/sync';
 import { SUPABASE_URL, SUPABASE_ANON_KEY } from '../../../../config/env';
 
 interface Props {
-  userProfile: any;
-  setUserProfile: any;
   showAIBot: boolean;
   setShowAIBot: any;
 }
 
-export default function SettingsSystem({ userProfile, setUserProfile, showAIBot, setShowAIBot }: Props) {
+export default function SettingsSystem({ showAIBot, setShowAIBot }: Props) {
   const { t } = useI18n();
   const { user, isSupabaseEnabled } = useAuth();
 
@@ -136,45 +134,6 @@ export default function SettingsSystem({ userProfile, setUserProfile, showAIBot,
                 </div>
               </div>
               <Switch checked={connectedDevices[key]} onCheckedChange={() => toggleDevice(key)} />
-            </div>
-          ))}
-        </div>
-      </div>
-
-      {/* Social Links */}
-      <div className="bg-surface-container-low p-6 rounded-sm border border-outline-variant/20 space-y-4">
-        <div className="flex items-center gap-3 mb-4">
-          <Globe className="w-5 h-5 text-primary" />
-          <h3 className="font-headline text-xl font-bold text-tertiary uppercase">{t.settings.socialLinksTitle}</h3>
-        </div>
-        <div className="space-y-3">
-          {([
-            { key: 'instagram', label: t.settings.instagramUsername, prefix: '@', placeholder: 'username' },
-            { key: 'tiktok', label: t.settings.tiktokUsername, prefix: '@', placeholder: 'username' },
-          ] as const).map(({ key, label, prefix, placeholder }) => (
-            <div key={key}>
-              <label className="block font-label text-micro tracking-widest uppercase text-on-surface-variant mb-1">{label}</label>
-              <div className="flex items-center gap-2 bg-surface-container-highest rounded-sm border border-outline-variant/20 px-3 py-2">
-                <span className="text-xs text-on-surface-variant">{prefix}</span>
-                <input type="text"
-                  value={userProfile?.socialLinks?.[key] || ''}
-                  onChange={(e) => setUserProfile((prev: any) => ({ ...prev, socialLinks: { ...prev.socialLinks, [key]: e.target.value || undefined } }))}
-                  placeholder={placeholder}
-                  className="bg-transparent text-sm text-on-surface flex-1 outline-none" />
-              </div>
-            </div>
-          ))}
-          {([
-            { key: 'youtube', label: t.settings.youtubeChannel, placeholder: 'https://youtube.com/@channel' },
-            { key: 'website', label: t.settings.websiteUrl, placeholder: 'https://example.com' },
-          ] as const).map(({ key, label, placeholder }) => (
-            <div key={key}>
-              <label className="block font-label text-micro tracking-widest uppercase text-on-surface-variant mb-1">{label}</label>
-              <input type="url"
-                value={userProfile?.socialLinks?.[key] || ''}
-                onChange={(e) => setUserProfile((prev: any) => ({ ...prev, socialLinks: { ...prev.socialLinks, [key]: e.target.value || undefined } }))}
-                placeholder={placeholder}
-                className="w-full bg-surface-container-highest rounded-sm border border-outline-variant/20 px-3 py-2 text-sm text-on-surface outline-none" />
             </div>
           ))}
         </div>

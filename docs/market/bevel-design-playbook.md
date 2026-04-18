@@ -128,22 +128,32 @@ Agrupadas por tipología con IMG más legible del patrón.
 | Sheet overlay | `bg-black/25` | `bg-black/50` | **25%** |
 | Sheet top radius | `rounded-t-3xl` | variable | **24 px** |
 
-#### 4.1.a Paleta 1 con pares light/dark + consolidación 6 → 3 (directiva del owner 2026-04-17)
+#### 4.1.a 4 paletas × 3 modos — arquitectura shipped en PR 3 (2026-04-18)
 
-**Decisión arquitectónica.** El color Bevel no se limita a `.theme-light`. Se adopta como **Paleta 1** con **dos variantes obligatorias** — `paleta-1 light` (aspiración Bevel pura, warm neutrals) y `paleta-1 dark` (la misma identidad traducida a dark mode, no el VOLT actual). Además, las 6 themes actuales (`volt-dark`, `theme-light`, `blue-dark`, `blue-light`, `orange-dark`, `orange-light`) se consolidarán a **3 paletas** donde cada paleta define **ambas variantes** y el sistema elige light/dark automáticamente vía `@media (prefers-color-scheme)`.
+**Decisión del owner (2026-04-17).** Mantener las **4 paletas completas** (no consolidar a 3): `VOLT` · `OCEAN` · `EMBER` · `NEUTRAL` (nueva, Bevel-inspired). Cada paleta tiene variantes **light** y **dark**. A esto se suma un **eje de modo ortogonal** con 3 valores: `auto` (sigue `prefers-color-scheme`), `light` (fuerza día), `dark` (fuerza noche).
 
-**Implicación para PR 3.** El PR 3 debe shippear **el par completo de Paleta 1** (`.theme-light` tuneado Bevel + `.theme-dark` nueva, o el naming que encaje con la consolidación). No es válido entregar solo `.theme-light` — dejaría la paleta manca y forzaría a un PR de retoma. Consecuencias concretas:
+**Diferenciación competitiva por paleta.**
+- **VOLT** (verde lima sobre negro) — para el atleta de rendimiento. Diferencia vs WHOOP rojo/negro y Strava naranja: acento `#dcfd05` agresivo y "técnico" que ninguno ocupa.
+- **OCEAN** (azul cian) — para el ritmo disciplinado, analítico. Convive con MyFitnessPal/Cronometer (azules calmados) pero con más saturación para no confundirse con "medical app".
+- **EMBER** (naranja cálido) — para el creativo cotidiano, inspiración de cocina. Espacio compartido con Paprika/Yummly (earthy), pero con `#ea580c` más vivo → señal "apetitoso" vs "book-style".
+- **NEUTRAL** (warm neutrals estilo Apple Health / Bevel) — para el día a día adulto sin tribu. Llena un hueco donde nadie juega bien en fitness: la mayoría va con azul médico o verde vibrante; el warm neutral comunica "wellness maduro" sin clínica.
 
-- Tokens de `.theme-dark` derivan de los mismos hues que `.theme-light` (no reutilizar la paleta VOLT actual). `--background` dark target: stone-950 warm `#0a0a0b` (no puro `#000`). `--surface`: `#18181b`. `--primary` dark: `#fafafa`. Overlays, macros, anillos: misma familia, distinta luminosidad.
-- El selector actual (probable `data-theme` / clase root) debe permitir **fijar paleta** (`.theme-palette-1`) mientras el sistema aplica **light/dark automáticamente**. Dos ejes ortogonales, no uno.
-- La clase `.theme-light` legacy puede quedarse como alias durante la transición pero el write set canónico a partir de PR 3 es `.theme-palette-1` + media query.
+**Polish de paletas aplicado en PR 3 (basado en teoría del color + posicionamiento).**
+- **EMBER light** `--brand-secondary`: `#b45309` (amber-700 "muddy") → `#d97706` (amber-600) — más limpio, mismo hue, luminosidad +1 step.
+- **EMBER dark** `--tertiary`: `#ffffff` puro → `#fafaf9` (stone-50) — coherencia warm dentro de la paleta (el hot white chocaba con la base stone warm).
+- **NEUTRAL** (ambas variantes) — `--brand-secondary` emerald (`#10b981` dark / `#059669` light) como "active signal" distinto del primary negro/blanco. Evita que primary y accent se pisen cuando primary = neutro puro.
+- **Macros locked a `#f87171` / `#fbbf24` / `#38bdf8`** en las 4 paletas (coral / amber / sky). Food-is-food: los macros son dato, no personalidad de marca.
 
-**Consolidación 6 → 3 (diferida a PR post-4 / Q17).** Mapping propuesto:
-- **Paleta 1 (neutral Bevel)** ← `theme-light` + `volt-dark` actuales, reemplazadas por el nuevo par.
-- **Paleta 2 (OCEAN)** ← `blue-dark` + `blue-light` unificados con `prefers-color-scheme`.
-- **Paleta 3 (EMBER)** ← `orange-dark` + `orange-light` unificados con `prefers-color-scheme`.
+**Arquitectura técnica shipped.**
+- Estado persistido en `localStorage` bajo `rial-theme-v2` como `{palette, mode}` (dos strings ortogonales). Migración automática desde legacy `rial-theme` (map: `dark→{volt,dark}`, `light→{volt,light}`, `blue-*→ocean-*`, `orange-*→ember-*`).
+- `ThemeContext` resuelve `{palette, mode}` → `resolvedMode` (`light|dark`) con `window.matchMedia('(prefers-color-scheme: dark)')` cuando `mode === 'auto'`, escucha `change` para swap runtime.
+- Clase aplicada al `<html>`: `theme-{palette}-{resolvedMode}` → **8 clases posibles** (`theme-volt-dark`, `theme-volt-light`, `theme-ocean-dark`, `theme-ocean-light`, `theme-ember-dark`, `theme-ember-light`, `theme-neutral-dark`, `theme-neutral-light`).
+- `:root` bloque duplica a `.theme-volt-dark` para cubrir el initial-paint antes de la hidratación React.
+- UI de selección: 2 secciones en Settings → Apariencia. (1) `Paleta` — grid 2×2 con NEUTRAL primero, preview en `resolvedMode` actual. (2) `Apariencia` — segmented control 3 chips (Auto · Light · Dark) con hint "Sigue la configuración del sistema" bajo el chip Auto.
+- Defaults nuevos usuarios: `{palette:'neutral', mode:'auto'}`. Usuarios existentes: migrados 1:1 desde legacy.
+- Convention test `src/test/conventions/theme-palettes.test.ts` lockea las 8 clases CSS + los 4 palettes + los 3 modes + helpers `resolveMode` / `themeClassName`.
 
-Las personalidades OCEAN/EMBER se preservan (VOLT se retira, absorbido por Paleta 1 dark).
+**Lo que NO se hizo (y por qué).** No se consolidó a 3 paletas ni se colapsaron las variantes con `@media (prefers-color-scheme)` a nivel CSS. Razón: con el eje `mode` manual (`light|dark`) habilitado en la UI, el CSS-media-query-only approach impide que el user fuerce modo contra el sistema. La arquitectura actual (clase runtime + matchMedia listener) resuelve ambos casos con un único source of truth en JS.
 
 ### 4.2 Tipografía
 - Títulos pantalla 28–32 px bold sin uppercase (`text-headline` ya OK).
@@ -196,7 +206,7 @@ Long-press `+` → action grid 3×3 con 9 acciones icon+label (IMG_0997). Candid
 - **Anillo-heavy Home**: 3–5 rings simultáneos sobrecargan. RIAL consolida 1–2.
 - **Recetas**: Bevel débil, Paprika/Yummly mejor referencia.
 - **Glucosa/CGM**: fuera ICP 2026.
-- **Monocromo casi total**: solo `.theme-light`. VOLT/OCEAN/EMBER conservan personalidad.
+- **Monocromo casi total**: solo la paleta `NEUTRAL`. `VOLT`/`OCEAN`/`EMBER` conservan personalidad.
 
 ---
 
@@ -206,7 +216,7 @@ Long-press `+` → action grid 3×3 con 9 acciones icon+label (IMG_0997). Candid
 |---|---|---|---|
 | **1** | Docs + ADR foundations | `docs/market/bevel-design-playbook.md`, `docs/adr/ADR-008`, `docs/adr/ADR-009` | `docs/DESIGN-SYSTEM.md`, `docs/NEW-SCREEN-CHECKLIST.md`, `CHANGELOG.md` |
 | **2** | `<BottomSheet>` primitive + 2 consumers pilot | `src/components/ui/bottom-sheet.tsx`, `src/test/conventions/bottom-sheet.test.ts` | `docs/PRIMITIVES.md`, `PortionSheet` (piloto real — sustituye `RecipeDaySelectorSheet`, que no es sheet real), `PublishRecipeSheet` (piloto real — sustituye `MealSlotMultiSelect`, que no es sheet real), `src/test/conventions/primitives-export.test.ts`, `CHANGELOG.md` |
-| **3** | Paleta 1 Bevel — par **light + dark** (ver §4.1.a) | — | `src/index.css` (bloque `.theme-light` tuneado Bevel + **nuevo bloque dark Bevel**), `SectionCard.tsx` (borderless en light), `docs/DESIGN-SYSTEM.md` §1.5 + §7, `CHANGELOG.md` |
+| **3** ✓ shipped | 4 paletas × 3 modos (VOLT/OCEAN/EMBER/NEUTRAL × auto/light/dark) — ver §4.1.a | `src/test/conventions/theme-palettes.test.ts` | `src/contexts/ThemeContext.tsx` (rewrite — `{palette, mode}` + matchMedia + legacy migration), `src/index.css` (rename 5 classes + add `theme-volt-dark` combined selector + add `theme-neutral-dark` + `theme-neutral-light` + polish EMBER accent), `src/App.tsx` (consume `themeClassName`/`resolvedMode`), `src/features/profile/components/settings/SettingsAppearance.tsx` (rewrite 2-section picker), `src/features/profile/components/Onboarding.tsx` (4-tile palette step), i18n 13 keys × 2 locales, `docs/DESIGN-SYSTEM.md`, `CHANGELOG.md` |
 | **4** | Migration + Home hero consolidation | — | 5 consumers a BottomSheet (`PhotoUploader`, `LogSnapshotModal`, `AddMeal`, `BarcodeScanner`, `ImportRecipeURL`), `Home.tsx` hero consolidation (feature-flagged), `docs/ai/state.md` |
 
 Governance: trabajar directamente en `main`. Cada PR = commit(s) + `release:preflight` verde + push a `rial-food/main` tras aprobación explícita del user ("continua").

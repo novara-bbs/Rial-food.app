@@ -1,5 +1,5 @@
-import { Palette, Moon, Sun, Check, Globe, Scale } from 'lucide-react';
-import { useTheme, type Theme } from '../../../../contexts/ThemeContext';
+import { Palette, Moon, Sun, Check, Globe, Scale, Monitor } from 'lucide-react';
+import { useTheme, type Palette as PaletteId, type ColorMode } from '../../../../contexts/ThemeContext';
 import { useI18n, type Locale } from '../../../../i18n';
 
 interface Props {
@@ -7,71 +7,156 @@ interface Props {
   setUserProfile: any;
 }
 
+interface PaletteSwatch {
+  id: PaletteId;
+  label: string;
+  desc: string;
+  dark: { primary: string; bg: string; surface: string; text: string; textMuted: string };
+  light: { primary: string; bg: string; surface: string; text: string; textMuted: string };
+}
+
 export default function SettingsAppearance({ userProfile, setUserProfile }: Props) {
-  const { theme, setTheme } = useTheme();
+  const { palette, mode, resolvedMode, setPalette, setMode } = useTheme();
   const { t, locale, setLocale } = useI18n();
 
-  const themes = [
-    { id: 'dark', family: 'VOLT', mode: 'dark', modeLabel: t.settings.themeNight, primary: '#dcfd05', bg: '#09090b', surface: '#18181b', text: '#ffffff', textMuted: '#a1a1aa' },
-    { id: 'light', family: 'VOLT', mode: 'light', modeLabel: t.settings.themeDay, primary: '#09090b', bg: '#ffffff', surface: '#f4f4f5', text: '#09090b', textMuted: '#71717a' },
-    { id: 'blue-dark', family: 'OCEAN', mode: 'dark', modeLabel: t.settings.themeNight, primary: '#38bdf8', bg: '#020617', surface: '#0f172a', text: '#f0f9ff', textMuted: '#94a3b8' },
-    { id: 'blue-light', family: 'OCEAN', mode: 'light', modeLabel: t.settings.themeDay, primary: '#0284c7', bg: '#f8fafc', surface: '#f1f5f9', text: '#0f172a', textMuted: '#64748b' },
-    { id: 'orange-dark', family: 'EMBER', mode: 'dark', modeLabel: t.settings.themeNight, primary: '#fdac6c', bg: '#0c0a09', surface: '#1c1917', text: '#ffffff', textMuted: '#a8a29e' },
-    { id: 'orange-light', family: 'EMBER', mode: 'light', modeLabel: t.settings.themeDay, primary: '#ea580c', bg: '#fafaf9', surface: '#f5f5f4', text: '#292524', textMuted: '#78716c' },
+  const palettes: PaletteSwatch[] = [
+    {
+      id: 'neutral',
+      label: t.settings.paletteNeutral,
+      desc: t.settings.paletteNeutralDesc,
+      dark: { primary: '#fafafa', bg: '#0a0a0b', surface: '#18181b', text: '#fafafa', textMuted: '#a1a1aa' },
+      light: { primary: '#09090b', bg: '#fafaf9', surface: '#ffffff', text: '#09090b', textMuted: '#404040' },
+    },
+    {
+      id: 'volt',
+      label: t.settings.paletteVolt,
+      desc: t.settings.paletteVoltDesc,
+      dark: { primary: '#dcfd05', bg: '#09090b', surface: '#18181b', text: '#fafafa', textMuted: '#a1a1aa' },
+      light: { primary: '#09090b', bg: '#ffffff', surface: '#f4f4f5', text: '#09090b', textMuted: '#333333' },
+    },
+    {
+      id: 'ocean',
+      label: t.settings.paletteOcean,
+      desc: t.settings.paletteOceanDesc,
+      dark: { primary: '#38bdf8', bg: '#020617', surface: '#0f172a', text: '#f8fafc', textMuted: '#94a3b8' },
+      light: { primary: '#0284c7', bg: '#f8fafc', surface: '#ffffff', text: '#0f172a', textMuted: '#1e293b' },
+    },
+    {
+      id: 'ember',
+      label: t.settings.paletteEmber,
+      desc: t.settings.paletteEmberDesc,
+      dark: { primary: '#fdac6c', bg: '#0c0a09', surface: '#1c1917', text: '#fafaf9', textMuted: '#a8a29e' },
+      light: { primary: '#ea580c', bg: '#fafaf9', surface: '#ffffff', text: '#1c1917', textMuted: '#292524' },
+    },
+  ];
+
+  const modes: Array<{ id: ColorMode; label: string; icon: React.ReactNode }> = [
+    { id: 'auto', label: t.settings.modeAuto, icon: <Monitor className="w-4 h-4" aria-hidden="true" /> },
+    { id: 'light', label: t.settings.modeLight, icon: <Sun className="w-4 h-4" aria-hidden="true" /> },
+    { id: 'dark', label: t.settings.modeDark, icon: <Moon className="w-4 h-4" aria-hidden="true" /> },
   ];
 
   return (
     <>
-      {/* Appearance */}
+      {/* Appearance — palette + mode */}
       <div className="bg-surface-container-low p-6 rounded-sm border border-outline-variant/20">
         <div className="flex items-center gap-3 mb-6">
           <Palette className="w-6 h-6 text-primary" />
           <h3 className="font-headline text-xl font-bold text-tertiary uppercase">{t.settings.appearance}</h3>
         </div>
-        <div className="space-y-4">
-          {(['VOLT', 'OCEAN', 'EMBER'] as const).map((family) => {
-            const pair = themes.filter((th) => th.family === family);
-            return (
-              <div key={family}>
-                <span className="font-mono text-micro tracking-[0.3em] text-on-surface-variant uppercase block mb-2">{family}</span>
-                <div className="grid grid-cols-2 gap-3">
-                  {pair.map((th) => (
-                    <button type="button" key={th.id}
-                      onClick={() => setTheme(th.id as Theme)}
-                      className={`relative rounded-sm overflow-hidden border transition-all text-left ${
-                        theme === th.id ? 'border-primary ring-1 ring-primary' : 'border-outline-variant/30 hover:border-outline-variant/60'
-                      }`}
-                      style={{ backgroundColor: th.bg }}>
-                      <div className="p-2.5">
-                        <div className="flex items-center gap-1 mb-2">
-                          <div className="w-3 h-3 rounded-full" style={{ backgroundColor: th.primary }} />
-                          <div className="h-1.5 rounded flex-1" style={{ backgroundColor: th.textMuted, opacity: 0.4 }} />
-                        </div>
-                        <div className="rounded p-1.5 mb-1.5" style={{ backgroundColor: th.surface }}>
-                          <div className="h-1.5 rounded mb-1" style={{ backgroundColor: th.text, opacity: 0.8, width: '70%' }} />
-                          <div className="h-1 rounded" style={{ backgroundColor: th.textMuted, opacity: 0.5, width: '90%' }} />
-                        </div>
-                        <div className="rounded px-2 py-1 text-center" style={{ backgroundColor: th.primary }}>
-                          <div className="h-1.5 rounded mx-auto" style={{ backgroundColor: th.bg, width: '60%', opacity: 0.9 }} />
-                        </div>
+
+        {/* Palette */}
+        <div className="mb-6">
+          <span className="font-mono text-micro tracking-[0.3em] text-on-surface-variant uppercase block mb-3">
+            {t.settings.palette}
+          </span>
+          <div className="grid grid-cols-2 gap-3" role="radiogroup" aria-label={t.settings.palette}>
+            {palettes.map((p) => {
+              const selected = palette === p.id;
+              const swatch = resolvedMode === 'dark' ? p.dark : p.light;
+              return (
+                <button
+                  type="button"
+                  key={p.id}
+                  role="radio"
+                  aria-checked={selected}
+                  onClick={() => setPalette(p.id)}
+                  className={`relative rounded-sm overflow-hidden border transition-all text-left min-h-[120px] ${
+                    selected
+                      ? 'border-primary ring-1 ring-primary'
+                      : 'border-outline-variant/30 hover:border-outline-variant/60'
+                  }`}
+                  style={{ backgroundColor: swatch.bg }}
+                >
+                  <div className="p-3">
+                    <div className="flex items-center gap-1.5 mb-2">
+                      <div className="w-3 h-3 rounded-full" style={{ backgroundColor: swatch.primary }} />
+                      <div className="h-1.5 rounded flex-1" style={{ backgroundColor: swatch.textMuted, opacity: 0.4 }} />
+                    </div>
+                    <div className="rounded p-2 mb-2" style={{ backgroundColor: swatch.surface }}>
+                      <div className="h-1.5 rounded mb-1" style={{ backgroundColor: swatch.text, opacity: 0.85, width: '70%' }} />
+                      <div className="h-1 rounded" style={{ backgroundColor: swatch.textMuted, opacity: 0.5, width: '90%' }} />
+                    </div>
+                    <div className="rounded px-2 py-1 text-center" style={{ backgroundColor: swatch.primary }}>
+                      <div className="h-1.5 rounded mx-auto" style={{ backgroundColor: swatch.bg, width: '60%', opacity: 0.9 }} />
+                    </div>
+                  </div>
+                  <div className="px-3 pb-3 flex items-center justify-between">
+                    <span
+                      className="font-headline font-bold text-label uppercase tracking-widest"
+                      style={{ color: swatch.text }}
+                    >
+                      {p.label}
+                    </span>
+                    {selected && (
+                      <div
+                        className="w-4 h-4 rounded-full flex items-center justify-center"
+                        style={{ backgroundColor: swatch.primary }}
+                      >
+                        <Check className="w-2.5 h-2.5" style={{ color: swatch.bg }} strokeWidth={3} />
                       </div>
-                      <div className="px-2.5 pb-2.5 flex items-center justify-between">
-                        <div className="flex items-center gap-1">
-                          {th.mode === 'light' ? <Sun className="w-3 h-3" style={{ color: th.textMuted }} /> : <Moon className="w-3 h-3" style={{ color: th.textMuted }} />}
-                          <span className="font-headline font-bold text-micro uppercase tracking-widest" style={{ color: th.text }}>{th.modeLabel}</span>
-                        </div>
-                        {theme === th.id && (
-                          <div className="w-3.5 h-3.5 rounded-full flex items-center justify-center" style={{ backgroundColor: th.primary }}>
-                            <div className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: th.bg }} />
-                          </div>
-                        )}
-                      </div>
-                    </button>
-                  ))}
-                </div>
-              </div>
-            );
-          })}
+                    )}
+                  </div>
+                </button>
+              );
+            })}
+          </div>
+        </div>
+
+        {/* Mode */}
+        <div>
+          <span className="font-mono text-micro tracking-[0.3em] text-on-surface-variant uppercase block mb-3">
+            {t.settings.appearance}
+          </span>
+          <div
+            className="inline-flex w-full rounded-sm border border-outline-variant/30 p-1 bg-surface-container"
+            role="radiogroup"
+            aria-label={t.settings.appearance}
+          >
+            {modes.map((m) => {
+              const selected = mode === m.id;
+              return (
+                <button
+                  type="button"
+                  key={m.id}
+                  role="radio"
+                  aria-checked={selected}
+                  onClick={() => setMode(m.id)}
+                  className={`flex-1 min-h-11 flex items-center justify-center gap-2 rounded-sm font-headline font-bold text-label uppercase tracking-widest transition-all ${
+                    selected
+                      ? 'bg-primary text-on-primary'
+                      : 'text-on-surface-variant hover:text-tertiary'
+                  }`}
+                >
+                  {m.icon}
+                  <span>{m.label}</span>
+                </button>
+              );
+            })}
+          </div>
+          {mode === 'auto' && (
+            <p className="text-micro font-body text-on-surface-variant mt-2">{t.settings.modeAutoHint}</p>
+          )}
         </div>
       </div>
 

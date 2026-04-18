@@ -1,15 +1,16 @@
 # RIAL Current State
 
-Last updated: 2026-04-18 (Bevel adoption PR 2 shipped — `<BottomSheet>` primitive per ADR-009 + 2 consumer migrations (PortionSheet + PublishRecipeSheet) · pushed to `rial-food/main` HEAD `82d73f8`, working tree clean)
+Last updated: 2026-04-18 (Bevel adoption PR 3 staged — 4 palettes × 3 modes theme rewrite + NEUTRAL palette shipped, i18n 1499→1523, tests 566→580. Awaiting preflight + push.)
 
 ## Release snapshot
-- Root branch: `main`, **in sync with `rial-food/main`** at HEAD `82d73f8`. PR 2 of the Bevel adoption roadmap: new `<BottomSheet>` primitive wrapping radix-ui `Dialog` per ADR-009 (max-h 88vh, rounded-t-3xl, handle pill, overlay `bg-black/25`, sticky close-X + centered title + actionSlot, safe-area footer). 2 real hand-rolled sheets migrated: `PortionSheet` (active in `AddMeal`) + `PublishRecipeSheet` (active in `RecipeDetail` share flow). Convention test `bottom-sheet.test.ts` locks the ADR-009 defaults (10 assertions). Q16-B2 baseline preserved: **SectionCard-shape drift = 0 real occurrences**; **ESLint Q16 allowlist = 5 files** (shadcn/ui only: badge/input/select/tabs/textarea).
+- Root branch: `main`, **pending commit** for PR 3 on top of HEAD `82d73f8`. PR 3 of the Bevel adoption roadmap: theme system rewritten to **`{palette, mode}` state machine** with 4 palettes (`volt` · `ocean` · `ember` · `neutral`) × 3 modes (`auto` · `light` · `dark`). NEUTRAL is the new Bevel-inspired palette (warm neutrals, emerald accent). `mode: 'auto'` subscribes to `matchMedia('(prefers-color-scheme: dark)')` and swaps class at runtime. Legacy `rial-theme` values migrated automatically to `rial-theme-v2`. Default for new users: `{palette:'neutral', mode:'auto'}`. 2-section Settings picker rewritten (Paleta grid 2×2 + Apariencia segmented control). Onboarding step 5 simplified to 4-tile palette (mode stays auto). i18n 13 new keys × 2 locales (1499 → 1523). Convention test `theme-palettes.test.ts` locks the 8 CSS classes + pure helpers (14 assertions). Q16-B2 baseline preserved: **SectionCard-shape drift = 0**; **ESLint Q16 allowlist = 5 files** (shadcn/ui only).
 - Release remote: `rial-food` (worktree remote: `origin`)
 - Active Vercel project: `rial.app.v1.5`
 - Vercel project id: `prj_t11VHYQjptazjUx7Y2hWLz0IDAjg`
 - **Governance (2026-04-17):** work directly on `main`. No feature branches, no worktrees going forward. Reconcile in-flight divergence by merging directly into `main`.
 
 ## Recent commits on `main` (in sync with `rial-food/main`)
+- _(staged — not yet committed)_ `feat(theme): 4 palettes × 3 modes (VOLT/OCEAN/EMBER/NEUTRAL × auto/light/dark) — PR 3 Bevel adoption`
 - `82d73f8` `feat(ui): BottomSheet primitive (ADR-009) + 2 consumer migrations (PortionSheet + PublishRecipeSheet)`
 - `cc2a30b` `docs(design): Bevel playbook + ADR-008 (pricing) + ADR-009 (bottom-sheet anatomy)`
 - `dc9731d` `docs(state): Q16-B2 complete — SectionCard drift 22->0, allowlist 18->5 shadcn-only`
@@ -85,13 +86,13 @@ Two upstream commits (`8b8a5b5` sprint-q Progress restructure, `155f08b` sprint-
 
 Collateral: my Q16 pilot migration on `WeeklyCheckIn.tsx` + `WeeklyReview.tsx` is wasted work (remote rewrote both). SectionCard baseline recalculated post-merge.
 
-## Quality baseline (2026-04-18, PR 2 Bevel — `<BottomSheet>` primitive shipped)
+## Quality baseline (2026-04-18, PR 3 Bevel — 4 palettes × 3 modes theme rewrite)
 - TypeScript: 0 errors (`npx tsc --noEmit`)
-- Tests: **566/566** unit tests passing (+10 from `bottom-sheet.test.ts` convention; 556 → 566)
-- i18n symmetry: **1499** keys aligned ES ↔ EN (`npm run check:i18n`) — no new keys in PR 2
-- Design-system lint: 0 errors, warnings pre-existing (type-debt `no-explicit-any` + 5 intentional shadcn allowlist entries)
-- Build (measured 2026-04-18 via `npm run release:preflight`):
-  - main entry: **770.0 KB raw / 241.0 KB gzip** (±0.1 KB vs Q16-B2)
+- Tests: **580/580** unit tests passing (+14 from `theme-palettes.test.ts` convention; 566 → 580)
+- i18n symmetry: **1523** keys aligned ES ↔ EN (`npm run check:i18n`) — +24 keys in PR 3 (13 × 2 locales; palette names + descriptions + mode labels + auto hint)
+- Design-system lint: 0 errors, 567 warnings pre-existing (type-debt `no-explicit-any` + 5 intentional shadcn allowlist entries)
+- Build baseline (last measured 2026-04-18 post-PR-2 via `npm run release:preflight`; PR 3 touches tokens + a context + 2 screens, expected ±1 KB on main entry):
+  - main entry: **~770 KB raw / ~241 KB gzip**
   - vendor-recharts: 331.5 KB raw / 99.8 KB gzip
   - total dist/assets/*.js: ~2715 KB raw / ~773 KB gzip
 - Drift baselines (final, post Q16-B2 complete):
@@ -106,10 +107,10 @@ Plan: `.claude/plans/revisa-todas-las-capturas-ancient-micali.md`. Playbook: `do
 
 - **PR 1 — `cc2a30b`** (shipped). Docs: `bevel-design-playbook.md`, `ADR-008-pricing-model.md` (free-generous core + single premium tier), `ADR-009-bottom-sheet-anatomy.md` (handle pill, max-h-88vh, rounded-t-3xl, overlay `bg-black/25`, sticky header, safe-area footer). CHANGELOG `[1.5.30]`.
 - **PR 2 — `82d73f8`** (shipped). `<BottomSheet>` primitive at `src/components/ui/bottom-sheet.tsx` wrapping radix `Dialog`. Convention test `src/test/conventions/bottom-sheet.test.ts` (10 assertions locking ADR-009 defaults). 2 consumer migrations — **piloto pivot** vs plan: originally-planned `RecipeDaySelectorSheet` + `MealSlotMultiSelect` turned out to be inline components (chip groups), not real sheets. Migrated instead: `PortionSheet` (active in `AddMeal.tsx:561`) + `PublishRecipeSheet` (active in `RecipeDetail.tsx:843`). Docs: `PRIMITIVES.md` table + example updated; `primitives-export.test.ts` extended; `bevel-design-playbook.md` §4.1.a added capturing the owner directive "implantar Paleta 1 light **y dark** · unificar 6 → 3 con `prefers-color-scheme` auto-switch". CHANGELOG `[1.5.31]`. Verified via `preview_inspect` on real flows: content `max-height: 716.486px` (88% of 813.8px viewport ≈ 88vh ✓), `border-top-*-radius: 24px` ✓, overlay `oklab(0 0 0 / 0.25)` ✓, status bar + parent screen visible behind sheet.
-- **PR 3 (next, awaiting authorization)** — Paleta 1 **dual light/dark** per playbook §4.1.a. Must ship BOTH variants so the future 6 → 3 consolidation (VOLT/OCEAN/EMBER × dark/light → Paleta 1-Bevel / Paleta 2-OCEAN / Paleta 3-EMBER with `@media (prefers-color-scheme)` auto-switch) lands on a complete base. Scope: `src/index.css` `.theme-light` + `.theme-dark` tokens (warm background `#fafaf9`/`#0a0a0b`, borderless cards with `shadow-elev-2`, neutral primary), verify via 6-screen `preview_screenshot` diff in both modes, WCAG AA contrast re-check.
+- **PR 3 — staged (pending commit + push)**. Pivot vs plan: owner directed **4 palettes** (not 3 — VOLT preserved) + **manual mode axis** (`auto` / `light` / `dark`). Implemented as a runtime `{palette, mode}` state machine in `ThemeContext` with matchMedia listener (vs CSS `@media (prefers-color-scheme)` only). Write set: `ThemeContext.tsx` rewrite (new exports `Palette`, `ColorMode`, `PALETTES`, `COLOR_MODES`, `resolveMode`, `themeClassName`, legacy `rial-theme` → `rial-theme-v2` migration map), `src/index.css` (rename 5 classes to `theme-{palette}-{mode}` family + new `.theme-neutral-dark` + `.theme-neutral-light` blocks + EMBER polish: `--brand-secondary` amber-700→amber-600 in light, `--tertiary` pure white → stone-50 in dark), `App.tsx` (consume `themeClassName` + `resolvedMode`), `SettingsAppearance.tsx` rewrite (2-section picker: Paleta 2×2 grid with NEUTRAL first + Apariencia segmented control Auto/Light/Dark with `modeAutoHint`), `Onboarding.tsx` step 5 (simplified 4-tile picker), i18n 13 keys × 2 locales, `theme-palettes.test.ts` (14 assertions). Verified via preview: 8 combinations render correct tokens, legacy `orange-dark` migrates to `{ember,dark}`, `auto` mode resolves via matchMedia (system prefers light → `theme-neutral-light`). CHANGELOG `[1.5.32]`.
 - **PR 4 (future)** — Migrate 5 remaining hand-rolled bottom sheets to `<BottomSheet>` (`PhotoUploader`, `LogSnapshotModal`, `AddMeal` sheet tab, `ImportRecipeURL` confirmation, `BarcodeScanner` overlay) + Home hero consolidation behind feature flag `featureFlags.homeRingGrid` (Bevel IMG_0974 pattern).
 
-**Governance.** Owner approved push of PR 2 via "continua" directive after green preflight, per stored feedback memory.
+**Governance.** Owner approved push of PR 2 via "continua" directive after green preflight, per stored feedback memory. Same pattern expected for PR 3.
 
 ## 2026-04-17 Q19 meal-taxonomy (shipped — `5dab667`)
 Plan: `.claude/plans/analiza-si-tiene-sentido-floating-kurzweil.md`. CHANGELOG: `[1.5.25]`.

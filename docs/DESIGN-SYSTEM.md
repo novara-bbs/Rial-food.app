@@ -90,18 +90,20 @@ All color is theme-aware. The single class `theme-{name}` on `<html>` swaps an e
 
 ## 2. Themes (ADR-005)
 
-6 themes, activated by a single class on `<html>`:
+**4 palettes × 2 modes = 8 theme classes**, resolved at runtime from `{palette, mode}` state (see `src/contexts/ThemeContext.tsx`):
 
-| Class | Product line | Surface mood |
-|---|---|---|
-| _(default)_ | VOLT PRO Dark | Zinc 950, Volt Green primary |
-| `.theme-light` | VOLT PRO Light | White, Black primary |
-| `.theme-blue-dark` | OCEAN PRO Dark | Slate 950, Sky Blue |
-| `.theme-blue-light` | OCEAN PRO Light | Slate 50, Professional Blue |
-| `.theme-orange-dark` | EMBER PRO Dark | Stone 950, Ember Orange |
-| `.theme-orange-light` | EMBER PRO Light | Stone 50, Burnt Orange |
+| Palette | Dark class | Light class | Identity |
+|---|---|---|---|
+| `volt` | `.theme-volt-dark` (default `:root`) | `.theme-volt-light` | Zinc 950 / Volt green `#dcfd05` — performance athlete |
+| `ocean` | `.theme-ocean-dark` | `.theme-ocean-light` | Slate 950 / Sky blue — analytical, disciplined |
+| `ember` | `.theme-ember-dark` | `.theme-ember-light` | Stone 950 / Ember orange — warm creative |
+| `neutral` | `.theme-neutral-dark` | `.theme-neutral-light` | Warm neutrals Bevel-style — adult wellness, emerald accent |
 
-**Rule (ADR-005):** never use Tailwind's `dark:` prefix. It only toggles two palettes and breaks 5 of 6 themes. Theme-specific overrides go in `@layer base .theme-*` in `src/index.css`.
+Plus a separate **mode axis** with 3 values exposed in the UI: `auto` (follows `prefers-color-scheme`), `light` (force day), `dark` (force night). `auto` is the default for new users.
+
+State is persisted under `rial-theme-v2` as `{palette, mode}`. Legacy `rial-theme` values (`dark`, `light`, `blue-dark`, etc.) are migrated once on load. `ThemeContext` subscribes to `matchMedia('(prefers-color-scheme: dark)')` and swaps the class on `<html>` at runtime.
+
+**Rule (ADR-005):** never use Tailwind's `dark:` prefix. It only toggles two palettes and breaks the other 6 classes. Theme-specific overrides go in `@layer base .theme-*` in `src/index.css`.
 
 ---
 
@@ -174,7 +176,7 @@ npm run check:i18n          # ES/EN key symmetry (Wave 3)
 npm run release:preflight   # tsc + lint + test + build + size
 ```
 
-Smoke visual: open `src/App.tsx` in dev, cycle through the 6 themes via `<html class="theme-X">`, check the modified surface in each.
+Smoke visual: open `src/App.tsx` in dev, cycle through the 8 theme classes (4 palettes × 2 modes) either via the Settings → Apariencia picker or by writing to `localStorage.rial-theme-v2`. Check the modified surface in each, and check `mode: 'auto'` honors the OS `prefers-color-scheme` change.
 
 ---
 

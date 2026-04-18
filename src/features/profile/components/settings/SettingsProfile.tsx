@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { User, Users, Target, Sparkles, Plus, Trash2, Crown, Camera } from 'lucide-react';
+import { User, Users, Target, Sparkles, Plus, Trash2, Crown, Camera, Globe } from 'lucide-react';
 import { Switch } from '@/components/ui/switch';
 import { useI18n } from '../../../../i18n';
 import { useAppState } from '../../../../contexts/AppStateContext';
@@ -7,6 +7,7 @@ import { bodyWeightFromKg, bodyWeightToKg, heightFromCm, heightToCm, getBodyWeig
 import { calculateDailyTargets, type Goal, type ActivityLevel, type Sex } from '../../../food/utils/nutrition';
 import { compressImage } from '../../../social/utils/image-utils';
 import { INPUT_SURFACE_CLASSES } from '@/components/ui/surface';
+import SectionCard from '../../../../components/SectionCard';
 
 interface Props {
   userProfile: any;
@@ -326,6 +327,42 @@ export default function SettingsProfile({ userProfile, setUserProfile, setDailyM
           </div>
         </div>
       </div>
+
+      {/* Social Links */}
+      <SectionCard
+        icon={<Globe className="w-4 h-4 text-primary" aria-hidden="true" />}
+        title={t.settings.socialLinksTitle}
+      >
+        {([
+          { key: 'instagram', label: t.settings.instagramUsername, prefix: '@', placeholder: 'username' },
+          { key: 'tiktok', label: t.settings.tiktokUsername, prefix: '@', placeholder: 'username' },
+        ] as const).map(({ key, label, prefix, placeholder }) => (
+          <div key={key}>
+            <label className="block font-label text-micro tracking-widest uppercase text-on-surface-variant mb-1">{label}</label>
+            <div className={`${INPUT_SURFACE_CLASSES} flex items-center gap-2 px-3 py-2`}>
+              <span className="text-xs text-on-surface-variant">{prefix}</span>
+              <input type="text"
+                value={userProfile?.socialLinks?.[key] || ''}
+                onChange={(e) => setUserProfile((prev: any) => ({ ...prev, socialLinks: { ...prev.socialLinks, [key]: e.target.value || undefined } }))}
+                placeholder={placeholder}
+                className="bg-transparent text-sm text-on-surface flex-1 outline-none" />
+            </div>
+          </div>
+        ))}
+        {([
+          { key: 'youtube', label: t.settings.youtubeChannel, placeholder: 'https://youtube.com/@channel' },
+          { key: 'website', label: t.settings.websiteUrl, placeholder: 'https://example.com' },
+        ] as const).map(({ key, label, placeholder }) => (
+          <div key={key}>
+            <label className="block font-label text-micro tracking-widest uppercase text-on-surface-variant mb-1">{label}</label>
+            <input type="url"
+              value={userProfile?.socialLinks?.[key] || ''}
+              onChange={(e) => setUserProfile((prev: any) => ({ ...prev, socialLinks: { ...prev.socialLinks, [key]: e.target.value || undefined } }))}
+              placeholder={placeholder}
+              className={`${INPUT_SURFACE_CLASSES} w-full px-3 py-2 text-sm text-on-surface outline-none focus:border-primary`} />
+          </div>
+        ))}
+      </SectionCard>
     </>
   );
 }

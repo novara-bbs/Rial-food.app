@@ -1,5 +1,31 @@
 # RIAL App - Changelog
 
+## [1.5.32] - 2026-04-18
+
+### feat(theme) — 4 palettes × 3 modes (VOLT/OCEAN/EMBER/NEUTRAL × auto/light/dark) + Bevel-inspired NEUTRAL palette
+
+PR 3 del roadmap Bevel (`.claude/plans/revisa-todas-las-capturas-ancient-micali.md`). Rediseña el sistema de themes: separa la decisión **paleta** (VOLT · OCEAN · EMBER · NEUTRAL) de la decisión **modo** (`auto` / `light` / `dark`). Añade `NEUTRAL` como paleta nueva Bevel-style (warm neutrals, emerald accent), preserva VOLT/OCEAN/EMBER con sus pares light/dark. Modo `auto` resuelve vía `matchMedia('(prefers-color-scheme: dark)')` y reacciona en runtime al cambio del sistema.
+
+**Added**
+- `src/contexts/ThemeContext.tsx` — rewrite: `Palette = 'volt' | 'ocean' | 'ember' | 'neutral'`, `ColorMode = 'auto' | 'light' | 'dark'`, `ResolvedMode = 'light' | 'dark'`. Exports `PALETTES`, `COLOR_MODES`, helpers puros `resolveMode(mode, systemMode)` y `themeClassName(palette, resolvedMode)` para testear sin React. `ThemeProvider` lee `rial-theme-v2` (`{palette, mode}`), migra legacy `rial-theme` una vez (`dark→{volt,dark}`, `light→{volt,light}`, `blue-*→ocean-*`, `orange-*→ember-*`), suscribe a `prefers-color-scheme` y swapea la clase en `<html>` al cambiar. Default nuevos usuarios: `{palette:'neutral', mode:'auto'}`.
+- `src/index.css` — nuevos bloques `.theme-neutral-dark` (bg `#0a0a0b`, surface `#18181b`, primary `#fafafa`, brand-secondary emerald `#10b981`, error `#ef4444`) y `.theme-neutral-light` (bg `#fafaf9`, surface `#ffffff`, primary `#09090b`, brand-secondary emerald `#059669`, error `#dc2626`, outline-variant `#f1f1f3` casi invisible para el look borderless Bevel).
+- `src/test/conventions/theme-palettes.test.ts` — 14 assertions que lockean las 8 clases CSS, el `:root + .theme-volt-dark` combined selector (initial-paint fallback), la lista canónica de `PALETTES`/`COLOR_MODES`, el passthrough de `resolveMode` con/sin auto, y que `themeClassName` produce exactamente las 8 clases esperadas.
+
+**Changed**
+- `src/index.css` — rename de 5 clases heredadas a la familia `theme-{palette}-{mode}`: `:root` → `:root, .theme-volt-dark` (combined selector); `.theme-light` → `.theme-volt-light`; `.theme-blue-dark` → `.theme-ocean-dark`; `.theme-blue-light` → `.theme-ocean-light`; `.theme-orange-dark` → `.theme-ember-dark`; `.theme-orange-light` → `.theme-ember-light`. Los tokens internos quedan intactos — solo cambia el selector.
+- `src/index.css` — polish basado en teoría del color + posicionamiento competitivo: EMBER light `--brand-secondary` `#b45309` (amber-700 muddy) → `#d97706` (amber-600 clean); EMBER dark `--tertiary` `#ffffff` → `#fafaf9` (coherencia warm dentro de la paleta). Macros locked a `#f87171` / `#fbbf24` / `#38bdf8` en las 4 paletas (food-is-food consistency).
+- `src/App.tsx` — consume `themeClassName` (aplicado como `className` al shell root) y `resolvedMode` (alimenta `<AuthScreens>` como `'light'|'dark'`). El acceso `theme.includes('dark')` queda obsoleto.
+- `src/features/profile/components/settings/SettingsAppearance.tsx` — rewrite del picker: 2 secciones. (1) **Paleta** — grid 2×2 con NEUTRAL primero, luego VOLT/OCEAN/EMBER. Cada tile renderiza preview en `resolvedMode` actual, `role="radio"` + `aria-checked`, `min-h-[120px]`. (2) **Apariencia** — segmented control 3 chips (Auto con icono `Monitor` · Light con `Sun` · Dark con `Moon`), `min-h-11` HIG-compliant, hint "Sigue la configuración del sistema" bajo el chip Auto.
+- `src/features/profile/components/Onboarding.tsx` — step 5 rewrite: sustituye el grid 3×2 VOLT/OCEAN/EMBER × Day/Night por un picker 4-tile (NEUTRAL/VOLT/OCEAN/EMBER). Modo queda en `auto` por defecto — el user lo puede cambiar desde Settings. Elimina dependency en el type `Theme` legacy (ya no existe).
+- `src/i18n/locales/{es,en}.ts` — 13 keys nuevas por locale bajo `settings`: `palette`, `paletteVolt`/`Ocean`/`Ember`/`Neutral`, cuatro `*Desc` con narrativa por ICP, `modeAuto`/`Light`/`Dark`, `modeAutoHint`. Total i18n 1499 → 1523 keys simétricas.
+
+**Notes**
+- **Pivote arquitectónico vs plan original.** El plan apuntaba a consolidar 6 → 3 paletas con `@media (prefers-color-scheme)` a nivel CSS. Decisión del owner (2026-04-17): mantener **4 paletas** (VOLT se preserva) y añadir **eje de modo manual** (`auto` / `light` / `dark`) para que el user pueda forzar modo contra el sistema. Esto descarta el approach CSS-only y lo implementa en JS (clase runtime + matchMedia listener).
+- **Migración legacy.** Usuarios con `rial-theme = 'blue-dark'` aterrizan en `{palette:'ocean', mode:'dark'}` en el primer mount post-update. La clave legacy se elimina tras la migración. Testeado en preview: reload con `rial-theme='orange-dark'` → DOM class `theme-ember-dark` aplicada + `rial-theme-v2` escrito + legacy key eliminada.
+- **Diferenciación competitiva por paleta.** VOLT `#dcfd05` (atleta performance — hueco vs WHOOP rojo y Strava naranja). OCEAN sky blue saturado (ritmo analítico — distinguible de MFP/Cronometer medical blue). EMBER `#ea580c` vivid (creativo cocina — "apetitoso" vs Paprika/Yummly "book-style"). NEUTRAL warm neutrals + emerald (adulto wellness — hueco sin competencia en fitness, dominado por blue/green). Documentado en `docs/market/bevel-design-playbook.md` §4.1.a.
+- **Convention guardrail.** `theme-palettes.test.ts` falla si cualquiera de las 8 clases desaparece o si `PALETTES`/`COLOR_MODES` mutan sin ADR.
+- **No tocado.** ADR-005 (theme by class, no `dark:` prefix) sigue vigente. El bloque `:root` sigue como initial-paint fallback (ahora combined selector con `.theme-volt-dark` para coincidir con el default runtime).
+
 ## [1.5.31] - 2026-04-17
 
 ### feat(ui) — `<BottomSheet>` primitive (ADR-009) + 2 consumer migrations (PortionSheet + PublishRecipeSheet)

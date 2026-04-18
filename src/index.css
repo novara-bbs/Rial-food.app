@@ -120,7 +120,8 @@
 }
 
 @layer base {
-  :root {
+  :root,
+  .theme-volt-dark {
     /* --- VOLT PRO (Dark Technical) --- */
     --background: #09090b; /* Zinc 950 */
     --on-background: #fafafa;
@@ -184,7 +185,7 @@
   }
 
   /* --- VOLT PRO (Light Technical) --- */
-  .theme-light {
+  .theme-volt-light {
     --background: #ffffff;
     --on-background: #09090b;
     --surface: #ffffff;
@@ -246,7 +247,7 @@
   }
 
   /* --- OCEAN PRO (Dark Atmospheric) --- */
-  .theme-blue-dark {
+  .theme-ocean-dark {
     --background: #020617; /* Slate 950 */
     --on-background: #f8fafc;
     --surface: #020617;
@@ -307,7 +308,7 @@
   }
 
   /* --- OCEAN PRO (Light Professional) --- */
-  .theme-blue-light {
+  .theme-ocean-light {
     --background: #f8fafc; /* Slate 50 */
     --on-background: #0f172a;
     --surface: #ffffff;
@@ -368,7 +369,7 @@
   }
 
   /* --- EMBER PRO (Dark Creative) --- */
-  .theme-orange-dark {
+  .theme-ember-dark {
     --background: #0c0a09; /* Stone 950 */
     --on-background: #fafaf9;
     --surface: #0c0a09;
@@ -384,7 +385,7 @@
     --on-primary-container: #fdac6c;
     --brand-secondary: #f59e0b; /* Amber 500 — distinct from primary */
     --on-brand-secondary: #0c0a09;
-    --tertiary: #ffffff;
+    --tertiary: #fafaf9; /* Stone 50 — warm white, not pure #fff, coherent with ember palette */
     --error: #ef4444;
     --on-error: #ffffff;
     --outline: #44403c;
@@ -429,7 +430,7 @@
   }
 
   /* --- EMBER PRO (Light Organic) --- */
-  .theme-orange-light {
+  .theme-ember-light {
     --background: #fafaf9; /* Stone 50 */
     --on-background: #1c1917;
     --surface: #ffffff;
@@ -443,7 +444,7 @@
     --on-primary: #ffffff;
     --primary-container: #fb923c;
     --on-primary-container: #0c0a09;
-    --brand-secondary: #b45309; /* Darkened Amber */
+    --brand-secondary: #d97706; /* Amber 600 — cleaner than muddy #b45309, still earthy */
     --on-brand-secondary: #ffffff;
     --tertiary: #1c1917;
     --error: #dc2626;
@@ -454,6 +455,130 @@
     --chart-grid: #e7e5e4;
     --chart-text: #78716c;
     --chart-recovery: #ea580c;
+    --chart-strain: #dc2626;
+
+    /* Semantic macro & overlay */
+    --macro-protein: #f87171;
+    --macro-carbs: #fbbf24;
+    --macro-fats: #38bdf8;
+    --on-overlay: #ffffff;
+    --on-overlay-muted: rgba(255,255,255,0.4);
+    --overlay-border: rgba(255,255,255,0.1);
+
+    /* shadcn bridge */
+    --foreground: var(--on-surface);
+    --card: var(--surface-container-low);
+    --card-foreground: var(--on-surface);
+    --popover: var(--surface-container);
+    --popover-foreground: var(--on-surface);
+    --primary-foreground: var(--on-primary);
+    --secondary: var(--surface-container-highest);
+    --secondary-foreground: var(--on-surface);
+    --muted: var(--surface-container);
+    --muted-foreground: var(--on-surface-variant);
+    --accent: var(--surface-container-high);
+    --accent-foreground: var(--on-surface);
+    --destructive: var(--error);
+    --destructive-foreground: var(--on-error);
+    --border: var(--outline-variant);
+    --input: var(--outline-variant);
+    --ring: var(--primary);
+    --sidebar: var(--surface-container-low);
+    --sidebar-foreground: var(--on-surface);
+    --sidebar-accent: var(--surface-container-high);
+    --sidebar-accent-foreground: var(--on-surface);
+    --sidebar-border: var(--outline-variant);
+  }
+
+  /* --- NEUTRAL (Dark — Bevel-inspired warm neutral) --- */
+  .theme-neutral-dark {
+    --background: #0a0a0b; /* Warm near-black, between zinc-950 and stone-950 */
+    --on-background: #fafafa;
+    --surface: #18181b; /* Zinc 900 — lifts cards off the background */
+    --on-surface: #fafafa;
+    --surface-container-low: #18181b;
+    --surface-container: #27272a; /* Zinc 800 */
+    --surface-container-high: #3f3f46; /* Zinc 700 */
+    --surface-container-highest: #52525b; /* Zinc 600 */
+    --on-surface-variant: #a1a1aa; /* Zinc 400 */
+    --primary: #fafafa; /* Warm off-white — CTAs, rings */
+    --on-primary: #09090b;
+    --primary-container: #27272a;
+    --on-primary-container: #fafafa;
+    --brand-secondary: #10b981; /* Emerald — Bevel "activo" signal */
+    --on-brand-secondary: #09090b;
+    --tertiary: #fafafa;
+    --on-tertiary: #09090b;
+    --error: #ef4444;
+    --on-error: #ffffff;
+    --outline: #3f3f46;
+    --outline-variant: #27272a;
+
+    --chart-grid: #27272a;
+    --chart-text: #71717a;
+    --chart-recovery: #10b981;
+    --chart-strain: #ef4444;
+
+    /* Semantic macro & overlay */
+    --macro-protein: #f87171;
+    --macro-carbs: #fbbf24;
+    --macro-fats: #38bdf8;
+    --on-overlay: #ffffff;
+    --on-overlay-muted: rgba(255,255,255,0.4);
+    --overlay-border: rgba(255,255,255,0.1);
+
+    /* shadcn bridge */
+    --foreground: var(--on-surface);
+    --card: var(--surface-container-low);
+    --card-foreground: var(--on-surface);
+    --popover: var(--surface-container);
+    --popover-foreground: var(--on-surface);
+    --primary-foreground: var(--on-primary);
+    --secondary: var(--surface-container-highest);
+    --secondary-foreground: var(--on-surface);
+    --muted: var(--surface-container);
+    --muted-foreground: var(--on-surface-variant);
+    --accent: var(--surface-container-high);
+    --accent-foreground: var(--on-surface);
+    --destructive: var(--error);
+    --destructive-foreground: var(--on-error);
+    --border: var(--outline-variant);
+    --input: var(--outline-variant);
+    --ring: var(--primary);
+    --sidebar: var(--surface-container-low);
+    --sidebar-foreground: var(--on-surface);
+    --sidebar-accent: var(--surface-container-high);
+    --sidebar-accent-foreground: var(--on-surface);
+    --sidebar-border: var(--outline-variant);
+  }
+
+  /* --- NEUTRAL (Light — Bevel-inspired warm neutral) --- */
+  .theme-neutral-light {
+    --background: #fafaf9; /* Stone 50 warm — not pure white */
+    --on-background: #09090b;
+    --surface: #ffffff; /* Cards lift above warm background via shadow */
+    --on-surface: #09090b;
+    --surface-container-low: #f5f5f4; /* Stone 100 */
+    --surface-container: #e7e5e4; /* Stone 200 */
+    --surface-container-high: #d6d3d1; /* Stone 300 */
+    --surface-container-highest: #a8a29e; /* Stone 400 */
+    --on-surface-variant: #404040; /* Neutral 700 — 9:1 on #fafaf9 */
+    --primary: #09090b; /* Near-black */
+    --on-primary: #ffffff;
+    --primary-container: #27272a;
+    --on-primary-container: #fafafa;
+    --brand-secondary: #059669; /* Emerald 600 — AAA on warm white */
+    --on-brand-secondary: #ffffff;
+    --tertiary: #18181b;
+    --on-tertiary: #ffffff;
+    --error: #dc2626;
+    --on-error: #ffffff;
+    --outline: #e5e5e4; /* Stone 200 */
+    --outline-variant: #f1f1f3; /* Near-invisible — borderless Bevel feel */
+
+    --chart-grid: #e5e5e4;
+    --chart-text: #71717a;
+    --chart-recovery: #059669;
     --chart-strain: #dc2626;
 
     /* Semantic macro & overlay */

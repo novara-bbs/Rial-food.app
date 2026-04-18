@@ -47,7 +47,7 @@ function LoadingSkeleton() {
 }
 
 export default function App() {
-  const { theme } = useTheme();
+  const { themeClassName, resolvedMode } = useTheme();
   const { t } = useI18n();
   const isOnline = useOnlineStatus();
   const { status: authStatus, isSupabaseEnabled } = useAuth();
@@ -136,7 +136,7 @@ export default function App() {
       case 'home': return <Home onNavigateToRecipe={navigateToRecipe} onCheckIn={handleCheckIn} onAddMeal={() => navigateTo('add-meal')} onNavigateToPlan={() => navigateTo('cocina')} onNavigateToProgress={() => navigateTo('progress')} dailyMacros={dailyMacros} setDailyMacros={setDailyMacros} checkInStatus={checkInStatus} onLogMealNow={handleLogMealNow} mealPlan={mealPlan} hydration={hydration} setHydration={setHydration} movement={movement} setMovement={setMovement} userProfile={userProfile} realFeelLogs={realFeelLogs} onRealFeelLog={handleRealFeelLog} dailyLog={dailyLog} setDailyLog={setDailyLog} nutritionHistory={nutritionHistory} />;
       case 'cocina': return <Cocina onAddMeal={(dayIndex) => { setTargetPlanDay(dayIndex); navigateTo('add-meal'); }} onCreateRecipe={() => navigateTo('create-recipe')} onNavigateToRecipe={navigateToRecipe} savedRecipes={savedRecipes} setSavedRecipes={setSavedRecipes} mealPlan={mealPlan} setMealPlan={setMealPlan} shoppingList={shoppingList} setShoppingList={setShoppingList} onLogMeal={handleLogMeal} isPro={isPro} onImportUrl={() => navigateTo('import-url')} />;
       case 'explore': return <Explore onNavigateToRecipe={navigateToRecipe} savedRecipes={savedRecipes} onSaveRecipe={handleSaveRecipe} communityPosts={communityPosts} onAddComment={handleAddComment} />;
-      case 'more': return <More navigateTo={navigateTo} />;
+      case 'more': return <More navigateTo={navigateTo} userProfile={userProfile} realFeelLogs={realFeelLogs} nutritionHistory={nutritionHistory} dailyLogHasEntries={dailyLog.length > 0} />;
       case 'recipe-detail': return <RecipeDetail recipe={selectedRecipe} onBack={() => navigateTo(previousScreen)} onSaveRecipe={handleSaveRecipe} isSaved={savedRecipes.some((r: any) => r.id === selectedRecipe?.id)} onAddToPlan={handleAddToPlan} onLogMealNow={handleLogMealNow} onAddToShoppingList={(items: any) => setShoppingList((prev: any) => [...prev, ...items])} dictionary={dictionary} userProfile={userProfile} />;
       case 'add-meal': return <AddMeal onBack={() => { setTargetPlanDay(null); navigateTo(previousScreen); }} onLogMeal={handleLogMeal} dailyMacros={dailyMacros} savedRecipes={savedRecipes} dictionary={dictionary} />;
       case 'add-tolerance': return <AddTolerance onBack={() => navigateTo(previousScreen)} onAddLog={handleAddToleranceLog} />;
@@ -174,7 +174,7 @@ export default function App() {
   // ── Auth loading splash ──────────────────────────────────────────────────
   if (authStatus === 'loading') {
     return (
-      <div className={`flex h-dvh items-center justify-center bg-background ${theme}`}>
+      <div className={`flex h-dvh items-center justify-center bg-background ${themeClassName}`}>
         <div className="flex flex-col items-center gap-4">
           <div className="w-16 h-16 rounded-2xl bg-primary flex items-center justify-center">
             <span className="font-headline text-2xl font-black text-on-primary">R</span>
@@ -188,8 +188,8 @@ export default function App() {
   // ── Auth screens (only shown if Supabase is configured + user chose to log in) ─
   if (isSupabaseEnabled && authScreen) {
     return (
-      <div className={`${theme}`}>
-        <Toaster theme={theme.includes('dark') ? 'dark' : 'light'} position="top-center" />
+      <div className={`${themeClassName}`}>
+        <Toaster theme={resolvedMode} position="top-center" />
         <Suspense fallback={<div className="h-screen bg-background" />}>
           {authScreen === 'signup' && (
             <Signup onNavigateToLogin={() => setAuthScreen('login')} />
@@ -219,8 +219,8 @@ export default function App() {
         }
         setIsFirstTime(false);
       }} />
-      <div className={`flex h-dvh overflow-hidden bg-background text-on-surface font-body selection:bg-primary selection:text-on-primary ${theme}`}>
-        <Toaster theme={theme.includes('dark') ? 'dark' : 'light'} position="top-center" toastOptions={{
+      <div className={`flex h-dvh overflow-hidden bg-background text-on-surface font-body selection:bg-primary selection:text-on-primary ${themeClassName}`}>
+        <Toaster theme={resolvedMode} position="top-center" toastOptions={{
           className: 'bg-surface-container-highest border border-outline-variant/20 text-tertiary font-headline font-bold uppercase tracking-widest rounded-sm',
         }} />
         <Sidebar currentScreen={currentScreen} setCurrentScreen={navigateTo} onOpenCreate={() => setIsCreateModalOpen(true)} />

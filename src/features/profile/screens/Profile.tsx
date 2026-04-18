@@ -1,4 +1,4 @@
-import { Mail, Shield, CreditCard, LogOut, ChevronRight, Flame, Trophy, Star, Pencil } from 'lucide-react';
+import { LogOut, ChevronRight, Flame, Trophy, Star, Pencil } from 'lucide-react';
 import PageShell from '../../../components/PageShell';
 import SectionCard from '../../../components/SectionCard';
 import { BUTTON_CARD_SURFACE_CLASSES } from '../../../components/ui/surface';
@@ -10,6 +10,16 @@ import PageHeader from '../../../components/patterns/PageHeader';
 import { bodyWeightFromKg, getBodyWeightUnit, heightFromCm, getHeightUnit } from '../../food/utils/units';
 import { useNavigation } from '../../../contexts/NavigationContext';
 import { Button } from '@/components/ui/button';
+import {
+  Dialog,
+  DialogClose,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from '@/components/ui/dialog';
 
 export default function Profile({ userProfile, onBack, realFeelLogs = [], savedRecipes = [], communityPosts = [], nutritionHistory = [], dailyLogHasEntries = false }: {
   userProfile: any;
@@ -181,35 +191,36 @@ export default function Profile({ userProfile, onBack, realFeelLogs = [], savedR
         )}
       </SectionCard>
 
-      {/* Menu items */}
-      <div className="space-y-3">
-        {[
-          { label: t.settings.notifications, icon: Mail, action: () => navigateTo('notifications') },
-          { label: t.settings.privacy, icon: Shield, action: () => navigateTo('settings') },
-          { label: t.settings.export, icon: CreditCard, action: () => navigateTo('settings') },
-        ].map((item, idx) => (
-          <button type="button" key={idx} onClick={item.action} className={`w-full flex items-center justify-between p-4 ${BUTTON_CARD_SURFACE_CLASSES} hover:border-primary/50 transition-all group text-left`}>
-            <div className="flex items-center gap-4">
-              <item.icon className="w-5 h-5 text-on-surface-variant group-hover:text-primary transition-colors" />
-              <span className="font-headline font-bold text-sm text-tertiary uppercase tracking-widest">{item.label}</span>
-            </div>
-            <ChevronRight className="w-5 h-5 text-on-surface-variant/50 group-hover:text-primary" />
-          </button>
-        ))}
-      </div>
-
-      {/* Logout */}
-      <Button
-        variant="outline"
-        className="w-full"
-        onClick={() => {
-          localStorage.clear();
-          window.location.reload();
-        }}
-      >
-        <LogOut className="w-4 h-4 mr-2" />
-        {t.profile.logout || 'Cerrar sesión'}
-      </Button>
+      {/* Logout (confirm dialog) */}
+      <Dialog>
+        <DialogTrigger asChild>
+          <Button variant="outline" className="w-full">
+            <LogOut className="w-4 h-4 mr-2" />
+            {t.profile.logout || 'Cerrar sesión'}
+          </Button>
+        </DialogTrigger>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>{t.profile.logoutConfirmTitle}</DialogTitle>
+            <DialogDescription>{t.profile.logoutConfirmBody}</DialogDescription>
+          </DialogHeader>
+          <DialogFooter>
+            <DialogClose asChild>
+              <Button variant="outline">{t.profile.logoutConfirmCancel}</Button>
+            </DialogClose>
+            <Button
+              variant="destructive"
+              onClick={() => {
+                localStorage.clear();
+                window.location.reload();
+              }}
+            >
+              <LogOut className="w-4 h-4 mr-2" />
+              {t.profile.logoutConfirmAction}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </PageShell>
   );
 }
