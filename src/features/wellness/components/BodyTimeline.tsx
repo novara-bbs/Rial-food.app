@@ -4,7 +4,7 @@ import { useI18n } from '../../../i18n';
 import BodySnapshotCard from './BodySnapshotCard';
 import SnapshotDetailModal from './SnapshotDetailModal';
 import SectionCard from '../../../components/SectionCard';
-import BeforeAfterCompare from './BeforeAfterCompare';
+import BeforeAfterCompare, { type CompareGoalType } from './BeforeAfterCompare';
 import type { BodySnapshot } from '../../../types/wellness';
 import type { UnitSystem } from '../../food/utils/units';
 
@@ -17,9 +17,13 @@ interface BodyTimelineProps {
   shareLabel?: string;
   /** Share 2 snapshots as a before/after pair (falls back to `onShare(after)` when unset). */
   onShareCompare?: (before: BodySnapshot, after: BodySnapshot) => void;
+  /** Drives delta color semantics in BeforeAfterCompare. Default `'loss'`. */
+  goalType?: CompareGoalType;
+  /** CTA for the "not enough photos" empty state inside BeforeAfterCompare. */
+  onLogSnapshot?: () => void;
 }
 
-export default function BodyTimeline({ snapshots, unitSystem, onShare, shareLabel, onShareCompare }: BodyTimelineProps) {
+export default function BodyTimeline({ snapshots, unitSystem, onShare, shareLabel, onShareCompare, goalType, onLogSnapshot }: BodyTimelineProps) {
   const { t } = useI18n();
   const [filter, setFilter] = useState<Filter>('all');
   const [selectedDate, setSelectedDate] = useState<string | null>(null);
@@ -119,10 +123,13 @@ export default function BodyTimeline({ snapshots, unitSystem, onShare, shareLabe
           unitSystem={unitSystem}
           onExit={() => setCompareMode(false)}
           onShare={shareCompareHandler}
+          onLogSnapshot={onLogSnapshot}
+          goalType={goalType}
           copy={{
             title: p.compareTitle,
             exit: p.compareExit,
             notEnough: p.compareNotEnough,
+            notEnoughCta: p.compareNotEnoughCta,
             pickBefore: p.compareSelectBefore,
             pickAfter: p.compareSelectAfter,
             beforeLabel: p.compareBeforeLabel,

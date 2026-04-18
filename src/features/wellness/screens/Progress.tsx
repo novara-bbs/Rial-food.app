@@ -545,6 +545,8 @@ export default function Progress({ onBack }: { onBack: () => void }) {
               onShare={shareSnapshot}
               onShareCompare={shareComparePair}
               shareLabel={p?.shareSnapshot}
+              goalType={(userProfile as any)?.goalType}
+              onLogSnapshot={() => openWithDate()}
             />
           )}
 

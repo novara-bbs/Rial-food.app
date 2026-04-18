@@ -1,5 +1,34 @@
 # RIAL App - Changelog
 
+## [1.5.40] - 2026-04-19
+
+### feat(wellness) — PR 6c Bevel: WeeklyInsight goalType hardening + BeforeAfterCompare auto-seed/scroll/log-CTA/goal-aware delta color
+
+Refinamiento de las PRs A (`cb674b9` WeeklyInsightsCard) y B (`d9d7b77` BeforeAfterCompare) tras un re-review. Cinco issues reales en ~40 líneas netas — 2 bugs + 3 polish — blindados con 5 asserts de convention test (+1 semántico en `week-insights.test.ts`, +4 en `BeforeAfterCompare.test.ts` sobre el helper puro extraído).
+
+**Changed**
+- `src/features/wellness/utils/week-insights.ts` — **A1 fix**: `trendMatchesGoal()` devolvía `Math.abs(deltaKg) >= 0.1` en el branch de `goalType` desconocido, lo que podía elevar un drift +0.5 kg (interpretación ambigua) a tone `positive` renderizando "Buena semana, Marcos" sobre un movimiento que el usuario podría leer como negativo. Ahora retorna `false` — la adherencia ≥ 70 es la única vía a `positive` cuando el `goalType` falta. Docstring actualizado.
+- `src/features/wellness/components/BeforeAfterCompare.tsx` — reescritura via Write tool con 4 mejoras:
+  - **B13 fix** (goal-aware delta color): el delta kg/lb se pinta ahora con `deltaColorClass(delta, goalType)` — export puro para testability. `loss` + caída = `text-primary` (deseado); `gain` + subida = `text-primary`; `maintain` = siempre neutro; delta 0 = neutro. Antes todo delta negativo era `text-primary` automáticamente, lo que para un ICP en bulk (`goalType='gain'`) mostraba su pérdida de peso en verde — señal errónea.
+  - **B8** (auto-seed pair): al montar con ≥2 fotos, el estado inicial ya trae `{before: photos[0], after: photos[N-1]}`. Viewing branch es 1 tap (toggle Comparar) en vez de 3 (Comparar → pick before → pick after). `useEffect` re-seed si el par queda inválido (snapshot borrado entre renders).
+  - **B4** (scrollable picker): container del grid de thumbs añade `max-h-[60vh] overflow-y-auto scrollbar-thin`. Con 15+ snapshots el picker dejaba de ser operable sin scroll global de screen; ahora el scroll vive dentro del sheet.
+  - **B7** (empty-state CTA): si el caller pasa `onLogSnapshot`, la branch `not-enough` renderiza un botón pill "Registrar foto" con `Camera` icon que deeplink al `LogSnapshotModal`. Mobile HIG (44×44) via `min-h-11`, `rounded-full`, `text-micro font-bold uppercase tracking-widest`. Sin caller, el branch queda igual a PR 6b.
+  - Props nuevos: `onLogSnapshot?: () => void`, `goalType?: CompareGoalType`, `copy.notEnoughCta?: string`.
+  - Export nuevo: `type CompareGoalType = 'loss' | 'gain' | 'maintain'` + pure helper `deltaColorClass(delta, goalType?)`.
+  - Refactor: 3 branches comparten un `exitButton` JSX inline (DRY).
+- `src/features/wellness/components/BodyTimeline.tsx` — prop passthrough de `goalType` + `onLogSnapshot` + `copy.notEnoughCta` hacia `<BeforeAfterCompare>`. Import extendido con `CompareGoalType`.
+- `src/features/wellness/screens/Progress.tsx` — el consumer de `<BodyTimeline>` (history sub-tab) pasa `goalType={(userProfile as any)?.goalType}` y `onLogSnapshot={() => openWithDate()}`. `openWithDate` ya estaba destructurado de `useLogSnapshot()` para el share-progress handler.
+- `src/i18n/locales/es.ts` + `src/i18n/locales/en.ts` — +1 key × 2 locales: `compareNotEnoughCta` ("Registrar foto" / "Log photo"). Total 1560 → **1561** simétricas.
+- `src/features/wellness/utils/week-insights.test.ts` — +1 assert: "does NOT upgrade to positive on ambiguous drift when goalType is undefined (A1 fallback)" — lockea la regresión con `emaWeekDelta = +0.5`, adherence 50/40, goalType omitido → `tone: 'neutral'`.
+- `src/features/wellness/components/BeforeAfterCompare.test.ts` — +4 asserts sobre `deltaColorClass`: zero delta = neutral (cualquier goal), maintainer = neutral (cualquier delta), loss-seeker: caída = primary / subida = brand-secondary, gain-seeker: subida = primary / caída = brand-secondary.
+
+**Notes**
+- **Por qué este PR en vez de bundled en A/B.** Las dos PRs originales fueron shipped en ciclos separados (recap + fotopair). El re-review post-ship surfaced 5 gaps que no son breaking, pero que refinan ambos features al mismo tiempo — el alcance sigue acotado (Progress Body/History sub-tab + WeeklyInsights sintetizador) así que empaquetarlos en una sola PR mantiene el reviewer gasto bajo.
+- **`goalType` como `any`.** `UserProfile` no declara formalmente `goalType` (tiene `goal: 'cut'|'bulk'|'maintain'` que es un vocabulario parcial orthogonal). Usar `(userProfile as any)?.goalType` es deliberado — normalizar los dos vocabularios es un refactor futuro y PR 6c solo consume la propiedad cuando existe (default `'loss'` dentro del componente). El día que se unifique, solo cambia la línea del consumer.
+- **Por qué `deltaColorClass` como helper exportado.** Testability barata (4 asserts puras sobre strings) y reutilización futura si otro componente necesita la misma semántica (e.g. summary card, share snippet). No es utility prematura — el color se calcula en 1 callsite hoy y el helper reduce cognitive load en viewing branch de 3 líneas a 1.
+- **Preview verification.** Seeded `userProfile.goalType='gain'`, navegué a Progress → Cuerpo → Historial → Comparar. El delta `-1.4 kg` (caída, indeseada para un gainer) pintó correctamente `text-brand-secondary` (antes de PR 6c pintaba `text-primary`). Console limpio de errores nuevos (solo las advertencias pre-existentes de RecipeCard nested-buttons, sin cambios).
+- **Budget.** Tests 645 → **651** (+6 total: +1 week-insights + 4 deltaColorClass + 1 del actionSlot-min-width de PR 6.5). i18n 1560 → **1561**. Bundle ±0.1 KB vs PR 7.
+
 ## [1.5.39] - 2026-04-19
 
 ### docs(design) — popup/sheet/modal inventory + decision framework (ADR-009 V3)

@@ -1560,6 +1560,7 @@ const es = {
     compareTitle: 'Antes y después',
     compareExit: 'Salir',
     compareNotEnough: 'Necesitas al menos 2 fotos para comparar. Registra más snapshots con foto para ver tu evolución.',
+    compareNotEnoughCta: 'Registrar foto',
     compareSelectBefore: 'Elige la foto "antes"',
     compareSelectAfter: 'Elige la foto "después"',
     compareBeforeLabel: 'ANTES',

@@ -1510,6 +1510,7 @@ const en: Translations = {
     compareTitle: 'Before and after',
     compareExit: 'Exit',
     compareNotEnough: 'You need at least 2 photos to compare. Log more snapshots with photos to see your evolution.',
+    compareNotEnoughCta: 'Log photo',
     compareSelectBefore: "Pick the 'before' photo",
     compareSelectAfter: "Pick the 'after' photo",
     compareBeforeLabel: 'BEFORE',

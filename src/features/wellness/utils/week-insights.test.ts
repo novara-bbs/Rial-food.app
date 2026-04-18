@@ -101,6 +101,24 @@ describe('buildWeekInsight', () => {
     expect(res.headline).toBe('Steady week, Marcos.');
   });
 
+  it('does NOT upgrade to positive on ambiguous drift when goalType is undefined (A1 fallback)', () => {
+    // Previous logic treated any |delta| ≥ 0.1 as "trend aligned" when goalType
+    // was missing, which could surface "Good week" on a +0.5 kg drift the user
+    // might read as bad. Now the unknown-goal branch requires adherence ≥ 70
+    // to reach 'positive'.
+    const res = buildWeekInsight({
+      weekStats: makeWeekStats(5, 50, 40),
+      trend: makeTrend(0.5),
+      mealStreak: NO_STREAK,
+      topMeal: null,
+      userName: 'Sam',
+      // goalType intentionally omitted
+      copy: COPY,
+      formatWeightDelta: fmtKg,
+    });
+    expect(res.tone).toBe('neutral');
+  });
+
   it('aligns tone to goalType: loss + negative emaDelta → positive', () => {
     const res = buildWeekInsight({
       weekStats: makeWeekStats(5, 40, 30),

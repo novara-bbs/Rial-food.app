@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { daysBetweenISO } from './BeforeAfterCompare';
+import { daysBetweenISO, deltaColorClass } from './BeforeAfterCompare';
 
 describe('daysBetweenISO', () => {
   it('returns 0 for the same date', () => {
@@ -26,5 +26,29 @@ describe('daysBetweenISO', () => {
     // Spain DST spring-forward is the last Sunday of March (2026-03-29).
     // Midday anchor on both sides absorbs the 23h day without rounding to 0 or 2.
     expect(daysBetweenISO('2026-03-28', '2026-03-30')).toBe(2);
+  });
+});
+
+describe('deltaColorClass', () => {
+  it('returns neutral color for zero delta regardless of goal', () => {
+    expect(deltaColorClass(0, 'loss')).toBe('text-on-surface-variant');
+    expect(deltaColorClass(0, 'gain')).toBe('text-on-surface-variant');
+    expect(deltaColorClass(0, 'maintain')).toBe('text-on-surface-variant');
+  });
+
+  it('returns neutral color for maintainers on any non-zero delta', () => {
+    expect(deltaColorClass(-1.2, 'maintain')).toBe('text-on-surface-variant');
+    expect(deltaColorClass(1.2, 'maintain')).toBe('text-on-surface-variant');
+  });
+
+  it('rewards weight loss for loss-seekers (default)', () => {
+    expect(deltaColorClass(-1.4)).toBe('text-primary');
+    expect(deltaColorClass(-1.4, 'loss')).toBe('text-primary');
+    expect(deltaColorClass(1.4, 'loss')).toBe('text-brand-secondary');
+  });
+
+  it('flips semantics for gain-seekers: +delta is desired, -delta undesired', () => {
+    expect(deltaColorClass(1.4, 'gain')).toBe('text-primary');
+    expect(deltaColorClass(-1.4, 'gain')).toBe('text-brand-secondary');
   });
 });

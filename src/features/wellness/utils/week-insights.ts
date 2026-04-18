@@ -81,14 +81,14 @@ function truncate(s: string, n: number = 22): string {
  * - `loss` + delta < 0   → desired
  * - `gain` + delta > 0   → desired
  * - `maintain` + |delta| < 0.2 → desired
+ * - unknown → never (adherence is the only path to `positive` in that branch,
+ *   so an ambiguous +0.5 kg/week drift doesn't render as "Good week").
  */
 function trendMatchesGoal(deltaKg: number, goalType: BuildWeekInsightArgs['goalType']): boolean {
   if (goalType === 'loss') return deltaKg < 0;
   if (goalType === 'gain') return deltaKg > 0;
   if (goalType === 'maintain') return Math.abs(deltaKg) < 0.2;
-  // Unknown goal → any non-zero directional trend is "positive signal" because
-  // movement > stagnation. Still soft — caller's headline is the tie-breaker.
-  return Math.abs(deltaKg) >= 0.1;
+  return false;
 }
 
 export function buildWeekInsight(args: BuildWeekInsightArgs): WeekInsight {
