@@ -17,6 +17,7 @@ import InlineReflection from '../components/InlineReflection';
 import WeightTrendCard from '../components/WeightTrendCard';
 import BodyTimeline from '../components/BodyTimeline';
 import BodyCalendar from '../components/BodyCalendar';
+import BodyConstantsGrid from '../components/BodyConstantsGrid';
 import RitmoSection from '../components/RitmoSection';
 import SectionCard from '@/components/SectionCard';
 import { calcStreaks } from '../utils/streaks';
@@ -513,6 +514,27 @@ export default function Progress({ onBack }: { onBack: () => void }) {
                 emptyLabel={p?.ritmoEmpty || 'Sin datos aún'}
                 daysLabel={p?.days || 'días'}
               />
+              <SectionCard title={p?.constants?.sectionTitle || 'Constantes'}>
+                <BodyConstantsGrid
+                  snapshots={snapshots}
+                  heightCm={userProfile?.height}
+                  unitSystem={unitSystem}
+                  labels={{
+                    weight: p?.constants?.weight || 'Peso',
+                    bmi: p?.constants?.bmi || 'IMC',
+                    bodyFat: p?.constants?.bodyFat || 'Grasa corporal',
+                    waist: p?.constants?.waist || 'Cintura',
+                    hips: p?.constants?.hips || 'Caderas',
+                    chest: p?.constants?.chest || 'Pecho',
+                  }}
+                  copy={{
+                    noData: p?.constants?.noData,
+                    noRange: p?.constants?.noRange,
+                    noTrends: p?.constants?.noTrends,
+                    stable: p?.constants?.stable,
+                  }}
+                />
+              </SectionCard>
             </>
           )}
 

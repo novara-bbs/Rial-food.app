@@ -119,9 +119,16 @@ export default tseslint.config(
       'no-restricted-syntax': ['error', ...designSystemRules],
     },
   },
-  // The primitive that intentionally owns the banned shape.
+  // Primitives that intentionally own the tile-surface shape.
+  // SectionCard is the canonical container (ADR-001); ConstantTile is the
+  // biometric tile primitive (ADR-009 V2 §4.10) — both use the same
+  // surface/border/radius tokens by design.
   {
-    files: ['src/components/SectionCard.tsx', 'src/components/ui/surface.ts'],
+    files: [
+      'src/components/SectionCard.tsx',
+      'src/components/ConstantTile.tsx',
+      'src/components/ui/surface.ts',
+    ],
     rules: {
       'no-restricted-syntax': [
         'error',

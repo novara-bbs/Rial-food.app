@@ -14,6 +14,7 @@ Canonical components. Reach for these **before** writing JSX from scratch.
 | `PageHeader` | `src/components/patterns/PageHeader.tsx` | Screen title + back button + right action slot | Top-level nav (use `GlobalHeader`) |
 | `SectionCard` | `src/components/SectionCard.tsx` | Any grouping with a title/icon/action | Interactive tiles (use `StatTile`); full-screen overlays |
 | `StatTile` | `src/components/StatTile.tsx` | A metric (number + label + optional trend) | Form inputs; text blocks |
+| `ConstantTile` | `src/components/ConstantTile.tsx` | Biometric tile w/ 6 canonical states (loading/empty-no-template/empty-no-data/value-stable/value-trending-up/value-trending-down) | Non-metric tiles (use `StatTile`); always-has-data metrics (use `StatTile`) |
 | `SegmentedTabs` | `src/components/SegmentedTabs.tsx` | 2–5 exclusive view toggles | >5 items (use `Tabs` from shadcn) |
 | `EmptyState` | `src/components/EmptyState.tsx` | Zero-data screens with optional CTA | Loading states (use `Skeleton`) |
 | `ConfirmDialog` | `src/components/ConfirmDialog.tsx` | Destructive confirmations | Content dialogs (use `Dialog`) |
@@ -69,6 +70,38 @@ The header is optional — if no `title`/`icon`/`caption`/`action` is passed, on
 ```
 
 When `onClick` is provided the tile renders as a `<button>` with hover + focus affordance. No `<div onClick>` — that is an anti-pattern.
+
+### ConstantTile
+```tsx
+// Value with trend
+<ConstantTile
+  icon={Scale}
+  label="PESO"
+  state="value-trending-down"
+  value="72.4"
+  unit="kg"
+  trendValue="-0.3 kg"
+/>
+
+// Empty, user doesn't track this dimension yet
+<ConstantTile icon={Ruler} label="CINTURA" state="empty-no-template" />
+
+// Has data, no trend yet (only 1 sample)
+<ConstantTile icon={Percent} label="GRASA" state="empty-no-data" />
+```
+
+6 canonical states (ADR-009 V2 §4.10):
+
+| State | Hero line | Sub line | Color |
+|---|---|---|---|
+| `loading` | pulse skeleton | pulse skeleton | — |
+| `empty-no-template` | "No hay datos" | "Sin rango" | muted |
+| `empty-no-data` | "No hay datos" | "Sin tendencias" | muted |
+| `value-stable` | number + unit | "Estable" + `—` icon | `text-on-surface-variant` |
+| `value-trending-up` | number + unit | trendValue + `↑` icon | `text-brand-secondary` |
+| `value-trending-down` | number + unit | trendValue + `↓` icon | `text-primary` |
+
+Defaults can be overridden via the `copy` prop (`{ noData, noRange, noTrends, stable }`). Emits `data-state={state}` for testing. Interactive when `onClick` is provided (renders as `<button>` with focus ring).
 
 ### SegmentedTabs
 ```tsx
