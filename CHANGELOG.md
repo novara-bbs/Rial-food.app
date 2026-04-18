@@ -1,5 +1,37 @@
 # RIAL App - Changelog
 
+## [1.5.33] - 2026-04-18
+
+### feat(ui) — PR 4 Bevel sheet migrations: CreateModal + LogSnapshotModal + RecipePicker + ShareSheet dead-code purge
+
+PR 4 del roadmap Bevel (`.claude/plans/revisa-todas-las-capturas-ancient-micali.md`). Completa la adopción de `<BottomSheet>` en las superficies real-bottom-sheet que quedaban con markup hand-rolled o `Dialog`-wrapped, y purga dead code descubierto durante el audit. **Scope pivot vs plan:** los 5 targets originales (`PhotoUploader`/`LogSnapshotModal`/`AddMeal`/`ImportRecipeURL`/`BarcodeScanner`) resultaron ser no-sheets tras audit — solo `LogSnapshotModal` es un sheet real. Se migraron los 3 sheets reales descubiertos en el audit + deleción de 1 dead file. Home hero consolidation deferida a PR 5 (requiere crear `src/lib/featureFlags.ts` primero).
+
+**Changed**
+- `src/features/wellness/components/LogSnapshotModal.tsx` — migrado de radix `Dialog` + `DialogContent className="max-w-md max-h-[90vh]"` + `DialogHeader` manual a `<BottomSheet>` con slot `footer` que contiene los botones Cancelar/Guardar sticky. Fix sub-HIG en el botón de eliminar foto (`w-7 h-7` → `w-11 h-11`). Convert `text-sm` → `text-body-sm` tokens. Añade `min-h-11` a los botones Cámara/Galería. Esta es la migración de mayor impacto visible: `LogSnapshotModal` se mounta globalmente como `GlobalLogSnapshotModal` en App root y es invocado desde Home → ProgressPreviewCard + Progress → Body + empty calendar cells via `useLogSnapshot()`.
+- `src/features/social/components/RecipePicker.tsx` — migrado de sheet raw-div (`fixed inset-0 bg-background/80 rounded-t-lg max-h-[70vh]` + slide-in animation manual) a `<BottomSheet>` con `actionSlot={<ChefHat/>}`. **API migrada de conditional-mount a controlled-open**: `{recipes, onSelect, onClose}` → `{open, onOpenChange, recipes, onSelect}` para que radix maneje animaciones de exit. El search + lista filtrada sin cambio.
+- `src/features/social/screens/CreatePost.tsx` — actualiza consumer: `{showRecipePicker && <RecipePicker ... onClose={...} />}` → `<RecipePicker open={showRecipePicker} onOpenChange={setShowRecipePicker} ... />`.
+- `src/features/social/screens/CreateStory.tsx` — mismo cambio consumer.
+- `src/components/CreateModal.tsx` — migrado de radix `Dialog` + `DialogContent rounded-t-sm md:rounded-sm` (centered modal, not a real sheet) a `<BottomSheet>`. API pública (`{isOpen, onClose, onSelect}`) preservada para no romper el call-site único en `App.tsx` — internamente mapea `onOpenChange={(open) => { if (!open) onClose(); }}`. Añade `min-h-11` a los 6 action buttons (log-meal, create-recipe, import-url, log-tolerance, post-update, scan-barcode). Este es el sheet que aparece al pulsar el `+` del `BottomNav` — superficie de altísima visibilidad.
+
+**Removed**
+- `src/features/social/components/ShareSheet.tsx` — eliminado (68 líneas). `Grep` confirmó cero imports/consumers en todo `src/` (ni siquiera el propio feature social) — dead code desde feature inception, jamás se wireó al `PostDetail` ni al `StoryViewer`. Decisión: deleción directa siguiendo precedente Q14/Q18 (no dejar componentes huérfanos por si acaso).
+
+**Notes**
+- **Verificación en preview (pre-preflight)** — 3 migraciones validadas con `preview_inspect` sobre flows reales:
+  - `CreateModal`: click `nav button[aria-label="Crear"]` → content reporta `border-top-left-radius: 24px`, `max-height: 322.8px` sobre viewport 366.8px (≈88vh ✓), overlay `background-color: oklab(0 0 0 / 0.25)` ✓, content `y=44` dejando status bar visible ✓.
+  - `LogSnapshotModal`: click `Registrar peso` desde ProgressPreviewCard (Home) → mismos 24px + 88vh + overlay 25%, footer Cancelar/Guardar sticky ✓, body scrollable con collapsibles Foto/Medidas ✓.
+  - `RecipePicker`: FAB → Publicar actualización → CreatePost → `Adjuntar receta` → mismos defaults + `actionSlot` ChefHat top-right + search + lista filtrada ✓.
+  - `preview_console_logs --level error` → 0 errors durante las 3 aperturas.
+- **Scope pivot documentado.** El plan original listaba 5 targets (`PhotoUploader`, `LogSnapshotModal`, `AddMeal`, `ImportRecipeURL`, `BarcodeScanner`). Audit reveló:
+  - `PhotoUploader` es un Dialog picker inline que abre `fileInput` nativo, no una sheet.
+  - `AddMeal` no contiene ninguna sheet propia (las tabs `Buscar`/`Mis alimentos` son inline).
+  - `ImportRecipeURL` es un flow inline step-by-step, no sheet.
+  - `BarcodeScanner` es un full-screen overlay (cámara), no una sheet. Arquitectura distinta.
+  - `LogSnapshotModal` **sí** es sheet real — migrado.
+  - Descubiertos 3 nuevos reales: `CreateModal` (disfrazado de Dialog center-modal pero UX-wise era sheet), `RecipePicker` (sheet hand-rolled sin primitive), `ShareSheet` (dead).
+- **No tocado.** Tests (todos verdes), convention guardrails (ADR-009 locked en `bottom-sheet.test.ts`), primitives, tokens, i18n (0 keys nuevas — los labels los aporta el consumer vía `title` prop).
+- **Siguiente en la roadmap.** PR 5 = Home hero consolidation (Bevel IMG_0974 ring pattern) detrás de feature-flag — requiere crear `src/lib/featureFlags.ts` primero, scope propio.
+
 ## [1.5.32] - 2026-04-18
 
 ### feat(theme) — 4 palettes × 3 modes (VOLT/OCEAN/EMBER/NEUTRAL × auto/light/dark) + Bevel-inspired NEUTRAL palette

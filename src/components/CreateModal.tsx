@@ -1,12 +1,6 @@
 import { Utensils, Activity, BookOpen, MessageSquare, Link, Camera } from 'lucide-react';
 import { useI18n } from '../i18n';
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-} from '@/components/ui/dialog';
-import { Button } from '@/components/ui/button';
+import BottomSheet from '@/components/ui/bottom-sheet';
 
 export default function CreateModal({ isOpen, onClose, onSelect }: { isOpen: boolean, onClose: () => void, onSelect: (action: string) => void }) {
   const { t } = useI18n();
@@ -21,41 +15,26 @@ export default function CreateModal({ isOpen, onClose, onSelect }: { isOpen: boo
   ];
 
   return (
-    <Dialog open={isOpen} onOpenChange={(open) => { if (!open) onClose(); }}>
-      <DialogContent
-        showCloseButton={false}
-        className="bg-surface-container w-full max-w-md rounded-t-sm md:rounded-sm border border-outline-variant/20 shadow-2xl p-0 gap-0"
-      >
-        <DialogHeader className="p-4 border-b border-outline-variant/10 flex-row justify-between items-center space-y-0">
-          <DialogTitle className="font-headline text-lg font-bold uppercase text-tertiary tracking-tight">
-            {t.nav.create}
-          </DialogTitle>
-          <Button
-            variant="ghost"
-            size="icon-sm"
-            onClick={onClose}
-            className="rounded-full bg-surface-container-highest text-on-surface-variant hover:text-primary"
+    <BottomSheet
+      open={isOpen}
+      onOpenChange={(open) => { if (!open) onClose(); }}
+      title={t.nav.create}
+    >
+      <div className="grid grid-cols-2 gap-3 pt-2">
+        {actions.map(action => (
+          <button
+            type="button"
+            key={action.id}
+            onClick={() => onSelect(action.id)}
+            className="bg-surface-container-low p-4 rounded-sm border border-outline-variant/20 hover:border-primary/50 hover:bg-surface-container-highest transition-all flex flex-col items-center justify-center gap-3 group min-h-11"
           >
-            <span className="sr-only">Close</span>
-            &times;
-          </Button>
-        </DialogHeader>
-        <div className="p-4 grid grid-cols-2 gap-3">
-          {actions.map(action => (
-            <button
-              type="button"
-              key={action.id}
-              onClick={() => onSelect(action.id)}
-              className="bg-surface-container-low p-4 rounded-sm border border-outline-variant/20 hover:border-primary/50 hover:bg-surface-container-highest transition-all flex flex-col items-center justify-center gap-3 group"
-            >
-              <div className={`w-12 h-12 rounded-full bg-${action.color}/10 flex items-center justify-center text-${action.color} group-hover:scale-110 transition-transform`}>
-                <action.icon className="w-6 h-6" />
-              </div>
-              <span className="font-headline font-bold text-caption uppercase tracking-widest text-tertiary text-center leading-tight">{action.label}</span>
-            </button>
-          ))}
-        </div>
-      </DialogContent>
-    </Dialog>
+            <div className={`w-12 h-12 rounded-full bg-${action.color}/10 flex items-center justify-center text-${action.color} group-hover:scale-110 transition-transform`}>
+              <action.icon className="w-6 h-6" />
+            </div>
+            <span className="font-headline font-bold text-caption uppercase tracking-widest text-tertiary text-center leading-tight">{action.label}</span>
+          </button>
+        ))}
+      </div>
+    </BottomSheet>
   );
 }

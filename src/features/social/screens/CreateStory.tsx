@@ -192,13 +192,12 @@ export default function CreateStory({ onBack }: { onBack: () => void }) {
         )}
       </div>
 
-      {showRecipePicker && (
-        <RecipePicker
-          recipes={savedRecipes}
-          onSelect={(recipe) => { setSelectedRecipe(recipe); setShowRecipePicker(false); }}
-          onClose={() => setShowRecipePicker(false)}
-        />
-      )}
+      <RecipePicker
+        open={showRecipePicker}
+        onOpenChange={setShowRecipePicker}
+        recipes={savedRecipes}
+        onSelect={(recipe) => { setSelectedRecipe(recipe); setShowRecipePicker(false); }}
+      />
     </PageShell>
   );
 }

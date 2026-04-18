@@ -217,13 +217,13 @@ Long-press `+` → action grid 3×3 con 9 acciones icon+label (IMG_0997). Candid
 | **1** | Docs + ADR foundations | `docs/market/bevel-design-playbook.md`, `docs/adr/ADR-008`, `docs/adr/ADR-009` | `docs/DESIGN-SYSTEM.md`, `docs/NEW-SCREEN-CHECKLIST.md`, `CHANGELOG.md` |
 | **2** | `<BottomSheet>` primitive + 2 consumers pilot | `src/components/ui/bottom-sheet.tsx`, `src/test/conventions/bottom-sheet.test.ts` | `docs/PRIMITIVES.md`, `PortionSheet` (piloto real — sustituye `RecipeDaySelectorSheet`, que no es sheet real), `PublishRecipeSheet` (piloto real — sustituye `MealSlotMultiSelect`, que no es sheet real), `src/test/conventions/primitives-export.test.ts`, `CHANGELOG.md` |
 | **3** ✓ shipped | 4 paletas × 3 modos (VOLT/OCEAN/EMBER/NEUTRAL × auto/light/dark) — ver §4.1.a | `src/test/conventions/theme-palettes.test.ts` | `src/contexts/ThemeContext.tsx` (rewrite — `{palette, mode}` + matchMedia + legacy migration), `src/index.css` (rename 5 classes + add `theme-volt-dark` combined selector + add `theme-neutral-dark` + `theme-neutral-light` + polish EMBER accent), `src/App.tsx` (consume `themeClassName`/`resolvedMode`), `src/features/profile/components/settings/SettingsAppearance.tsx` (rewrite 2-section picker), `src/features/profile/components/Onboarding.tsx` (4-tile palette step), i18n 13 keys × 2 locales, `docs/DESIGN-SYSTEM.md`, `CHANGELOG.md` |
-| **4** | Migration + Home hero consolidation | — | 5 consumers a BottomSheet (`PhotoUploader`, `LogSnapshotModal`, `AddMeal`, `BarcodeScanner`, `ImportRecipeURL`), `Home.tsx` hero consolidation (feature-flagged), `docs/ai/state.md` |
+| **4** ✓ shipped | Bevel sheet migrations (scope pivot) | — | `LogSnapshotModal` (radix `Dialog` → `BottomSheet` + footer Cancelar/Guardar + 7×7→44×44 tap target + `text-sm`→tokens), `RecipePicker` (raw div → `BottomSheet` + API `{recipes, onSelect, onClose}` → `{open, onOpenChange, recipes, onSelect}`), `CreateModal` (radix `Dialog` → `BottomSheet`, preserva `{isOpen, onClose, onSelect}` externo), `ShareSheet.tsx` **eliminado** (0 consumers — dead code desde feature inception), `CreatePost.tsx` + `CreateStory.tsx` (actualizan consumers de `RecipePicker` a controlled-open). **Scope pivot vs plan:** los 5 consumers originales (`PhotoUploader`/`AddMeal`/`ImportRecipeURL`/`BarcodeScanner`) resultaron ser no-sheets tras auditoría (PhotoUploader=Dialog picker; AddMeal no tiene sheet propio; ImportRecipeURL=inline flow; BarcodeScanner=full-screen overlay). Se migraron los 3 reales que sí eran sheets. **Home hero consolidation deferida a PR 5** (requiere infra `featureFlags.ts` inexistente + restructure NutritionHero+ProgressPreviewCard — scope propio). |
 
 Governance: trabajar directamente en `main`. Cada PR = commit(s) + `release:preflight` verde + push a `rial-food/main` tras aprobación explícita del user ("continua").
 
 ---
 
-## 6. Verificación end-to-end (post PR 4)
+## 6. Verificación end-to-end (post PR 4 shipped)
 
 ```bash
 npm run release:preflight
@@ -237,12 +237,15 @@ preview_start
 # Sheets abiertas en cada theme → status bar visible
 ```
 
-Baselines esperadas post-PR4:
-- SectionCard drift 22 → ≤10 (objetivo <5).
-- ESLint Q16 allowlist 18 → <10.
-- i18n 1499 → +3–6 (BottomSheet labels default si los hay).
-- Tests 556 → +3–5 (convention BottomSheet + regresión Home hero).
-- WCAG AA contrast en `.theme-light` sigue pasando.
+Baselines medidas post-PR4 (verificadas en preview antes de preflight):
+- **3 migraciones a `<BottomSheet>`** verificadas con `preview_inspect`: `CreateModal` + `LogSnapshotModal` + `RecipePicker` — todas reportan `border-top-left-radius: 24px`, `max-height: ≈88vh` del viewport actual (322.8 px sobre 366.8 px), overlay `oklab(0 0 0 / 0.25)`, status bar visible detrás (content `y=44`).
+- **1 dead file eliminado** (`ShareSheet.tsx`, 68 líneas, 0 consumers históricos).
+- **Scope pivot vs plan** documentado en §5 — 5 consumers originales resultaron no-sheets reales tras audit, se migraron los 3 reales que sí eran sheets.
+- **Home hero consolidation** deferida a PR 5 (requiere crear `src/lib/featureFlags.ts` + restructure — scope propio).
+- SectionCard drift: sin cambio (baseline 0 post Q16-B2 — PR 4 no toca primitivas).
+- ESLint Q16 allowlist: sin cambio (baseline 5 shadcn-only).
+- i18n: sin cambio (PR 4 no añade keys — los labels de `<BottomSheet>` los provee el consumer vía `title`/`actionSlot`).
+- Tests: convention `bottom-sheet.test.ts` sigue verde (baseline ADR-009 defaults locked).
 
 ---
 

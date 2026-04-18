@@ -122,13 +122,12 @@ export default function CreatePost({ onBack, onCreatePost }: { onBack: () => voi
         </div>
       </div>
 
-      {showRecipePicker && (
-        <RecipePicker
-          recipes={savedRecipes}
-          onSelect={(recipe) => { setAttachedRecipe(recipe); setShowRecipePicker(false); }}
-          onClose={() => setShowRecipePicker(false)}
-        />
-      )}
+      <RecipePicker
+        open={showRecipePicker}
+        onOpenChange={setShowRecipePicker}
+        recipes={savedRecipes}
+        onSelect={(recipe) => { setAttachedRecipe(recipe); setShowRecipePicker(false); }}
+      />
     </PageShell>
   );
 }
