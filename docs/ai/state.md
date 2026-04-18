@@ -1,16 +1,17 @@
 # RIAL Current State
 
-Last updated: 2026-04-18 (Bevel adoption PR 3 staged — 4 palettes × 3 modes theme rewrite + NEUTRAL palette shipped, i18n 1499→1523, tests 566→580. Awaiting preflight + push.)
+Last updated: 2026-04-18 (Bevel adoption PR 3 shipped — 4 palettes × 3 modes theme rewrite + NEUTRAL palette + Más/Perfil/Ajustes navigation reorg · pushed to `rial-food/main` HEAD `18938a6`, working tree clean · i18n 1499→1523, tests 566→580)
 
 ## Release snapshot
-- Root branch: `main`, **pending commit** for PR 3 on top of HEAD `82d73f8`. PR 3 of the Bevel adoption roadmap: theme system rewritten to **`{palette, mode}` state machine** with 4 palettes (`volt` · `ocean` · `ember` · `neutral`) × 3 modes (`auto` · `light` · `dark`). NEUTRAL is the new Bevel-inspired palette (warm neutrals, emerald accent). `mode: 'auto'` subscribes to `matchMedia('(prefers-color-scheme: dark)')` and swaps class at runtime. Legacy `rial-theme` values migrated automatically to `rial-theme-v2`. Default for new users: `{palette:'neutral', mode:'auto'}`. 2-section Settings picker rewritten (Paleta grid 2×2 + Apariencia segmented control). Onboarding step 5 simplified to 4-tile palette (mode stays auto). i18n 13 new keys × 2 locales (1499 → 1523). Convention test `theme-palettes.test.ts` locks the 8 CSS classes + pure helpers (14 assertions). Q16-B2 baseline preserved: **SectionCard-shape drift = 0**; **ESLint Q16 allowlist = 5 files** (shadcn/ui only).
+- Root branch: `main`, **in sync with `rial-food/main`** at HEAD `18938a6`. Bundle commit: PR 3 of the Bevel adoption roadmap + Más/Perfil/Ajustes navigation reorg (same screens touched by both, shipped together). PR 3 rewrites theme system to **`{palette, mode}` state machine** with 4 palettes (`volt` · `ocean` · `ember` · `neutral`) × 3 modes (`auto` · `light` · `dark`). NEUTRAL is the new Bevel-inspired palette (warm neutrals, emerald accent). `mode: 'auto'` subscribes to `matchMedia('(prefers-color-scheme: dark)')` and swaps class at runtime. Legacy `rial-theme` values migrated automatically to `rial-theme-v2`. Default for new users: `{palette:'neutral', mode:'auto'}`. 2-section Settings picker rewritten (Paleta grid 2×2 + Apariencia segmented control). Onboarding step 5 simplified to 4-tile palette (mode stays auto). Reorg ships hero card + 4 semantic groups (Nutrición/Bienestar/Creador-conditional/Cuenta) in More, dual gear+item entry to Settings, `SegmentedTabs` Perfil/Comida/Tema/Sistema in Settings, Dialog-confirmed logout in Profile, Social Links relocated SettingsSystem→SettingsProfile inside SectionCard. i18n 13 theme keys + 15 reorg keys × 2 locales (1499 → 1523, net +24 after dropping 4 orphans). Convention test `theme-palettes.test.ts` locks the 8 CSS classes + pure helpers (14 assertions). Q16-B2 baseline preserved: **SectionCard-shape drift = 0**; **ESLint Q16 allowlist = 5 files** (shadcn/ui only).
 - Release remote: `rial-food` (worktree remote: `origin`)
 - Active Vercel project: `rial.app.v1.5`
 - Vercel project id: `prj_t11VHYQjptazjUx7Y2hWLz0IDAjg`
 - **Governance (2026-04-17):** work directly on `main`. No feature branches, no worktrees going forward. Reconcile in-flight divergence by merging directly into `main`.
 
 ## Recent commits on `main` (in sync with `rial-food/main`)
-- _(staged — not yet committed)_ `feat(theme): 4 palettes × 3 modes (VOLT/OCEAN/EMBER/NEUTRAL × auto/light/dark) — PR 3 Bevel adoption`
+- `18938a6` `feat: PR 3 Bevel theme (4 palettes × 3 modes) + Más/Perfil/Ajustes reorg`
+- `e848e86` `docs(state): post-push snapshot — PR 2 Bevel BottomSheet primitive shipped`
 - `82d73f8` `feat(ui): BottomSheet primitive (ADR-009) + 2 consumer migrations (PortionSheet + PublishRecipeSheet)`
 - `cc2a30b` `docs(design): Bevel playbook + ADR-008 (pricing) + ADR-009 (bottom-sheet anatomy)`
 - `dc9731d` `docs(state): Q16-B2 complete — SectionCard drift 22->0, allowlist 18->5 shadcn-only`
