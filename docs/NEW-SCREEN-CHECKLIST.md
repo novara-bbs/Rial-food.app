@@ -56,11 +56,27 @@ Mandatory before opening a PR that adds or substantially restructures a screen.
 - [ ] If a card is fully clickable *and* contains inner interactive elements (CTA, like button, delete), use the **stretched-link pattern**: an absolute-inset `<button>` behind a `pointer-events-none` content wrapper, and inner CTAs as `relative z-10 pointer-events-auto` buttons. See `src/features/social/components/PostCard.tsx` for the canonical usage.
 - [ ] Never nest `<button>` inside `<button>` — screen readers and WCAG 1.3.1 fail on it.
 
-## 6c. Bottom sheets follow ADR-009
+## 6c. Popup / modal / sheet — decide tipología primero (ADR-009 V3)
 
-- [ ] Any new bottom sheet uses `<BottomSheet>` primitive (not raw `<Sheet side="bottom">`). If `<BottomSheet>` is not yet available in the current branch, raise the sheet to Bevel anatomy manually: `max-h-[88vh]`, `rounded-t-3xl`, handle pill, overlay `bg-black/25`, sticky header with close + title + action slot.
-- [ ] Status bar + dynamic island remain visible behind the sheet — never use `h-screen` or `max-h-screen`.
-- [ ] Sheet content is scrollable within the sheet; the sheet itself does not grow.
+Antes de implementar, aplica los 5 criterios en orden. El primer match determina la tipología:
+
+- [ ] **C1.** Tab de bottom-nav / pantalla raíz → **Route + `<PageShell>`** (Hoy, Cocina, Explora, Progress, Profile, More).
+- [ ] **C2.** UX inmersiva sin contexto detrás (WakeLock, auto-advance, pinch-zoom, camera) → **Full-screen `fixed inset-0`** (CookMode, StoryViewer, MediaLightbox, BarcodeScanner camera).
+- [ ] **C3.** Confirmación corta con 2 CTAs → **`<ConfirmDialog>` centered** (destructive confirms, "Are you sure?").
+- [ ] **C4.** Flow first-run sin app state detrás → **Full-screen overlay** (solo Onboarding wizard).
+- [ ] **C5.** Form con > 3 secciones semánticas → **Route full-screen** (CreateRecipe, CreatePost, CreateStory, AddMeal).
+- [ ] Si ninguno matchea → **usar `<BottomSheet>`**.
+
+Si es `<BottomSheet>`, aplicar también:
+
+- [ ] `size`: `compact` (88vh, "elegir algo") o `focus` (92vh, "trabajar en algo")
+- [ ] `headerLayout`: `title-centered` (pick-and-close), `cancel-action` (form con descarte explícito), o `back-title-action` (navigation-stack)
+- [ ] `hideHandle` solo si keyboard-first o navigation-stack
+- [ ] Status bar + dynamic island visibles detrás — nunca usar `h-screen` / `max-h-screen`
+- [ ] Contenido scrollable dentro del sheet; el sheet no crece
+- [ ] NO usar `<Sheet side="bottom">` raw — siempre `<BottomSheet>`
+
+**Referencia completa**: `docs/market/bevel-design-playbook.md` §4.4.b (matriz de surfaces existentes) + §4.4.c (framework detallado). ADR-009 V3 para la versión resumida que aplica el reviewer.
 
 ## 7. Theme parity
 

@@ -239,6 +239,88 @@ Formalizado en **ADR-009**. Anatomy compact (V1) + focus (V2, pendiente).
 
 Esta migración NO es obligatoria — muchas screens actuales funcionan bien full-screen. La recomendación es **adoptar focus sheet progresivamente** cuando el user se beneficie de ver el contexto de fondo (p.ej., al escanear un código de barras es valioso saber desde dónde vienes; al añadir un alimento es valioso ver el `dailyLog` del día detrás del sheet).
 
+#### 4.4.b RIAL popup/sheet/modal inventory — migration matrix (auditoría 2026-04-19)
+
+Auditoría exhaustiva de todas las surfaces que ocupan la pantalla total o parcialmente: radix `Dialog`-based modals, manual `fixed inset-0` overlays, y full-screen routes que *podrían* ser sheets. Clasifica cada surface por **decisión** (Migrate / Stay / Defer) con razón.
+
+##### Migrar a `<BottomSheet>` — HIGH priority
+
+| Surface | Path | Tipología actual | Target | Razón |
+|---|---|---|---|---|
+| `SnapshotDetailModal` | `src/features/wellness/components/SnapshotDetailModal.tsx:52` | radix `Dialog` centered `max-w-md max-h-[90vh]` | `<BottomSheet size="focus" headerLayout="title-centered" actionSlot={<Trash/>}>` | Content density matches focus intent (photo + peso + measurements + note). `max-h-[90vh]` ≈ `focus` 92vh → zero-risk migration. Consistencia con RecipePicker/LogSnapshotModal ya migrados en PR 6.5. Abrir este sheet desde Progress→Body→Timeline beneficia sense of place. |
+| `GdprConsent` | `src/components/GdprConsent.tsx:34` | manual `fixed inset-0 z-[200]` + `flex items-end sm:items-center` (sheet-like en mobile, centered en sm+) | `<BottomSheet size="compact" headerLayout="title-centered">` + footer con Rechazar/Aceptar | Consent decision es "elegir algo" (compact intent). Ya adopta forma de sheet en mobile — migrar elimina CSS custom. Z-stacking preservado por radix Portal. |
+
+##### Migrar a `<BottomSheet>` — MEDIUM priority
+
+| Surface | Path | Tipología actual | Target | Razón |
+|---|---|---|---|---|
+| `BarcodeScanner` result panel | `src/features/food/components/BarcodeScanner.tsx:213` | manual `fixed inset-0 z-[100]` (cámara + results en mismo overlay) | **Split:** cámara viewport **stays** full-screen; panel de resultados tras escanear → `<BottomSheet size="focus" headerLayout="back-title-action">` | IMG_1015 pattern exacto — camera feed como "contexto detrás" + sheet con detalle escaneado. Back-chevron mantiene cámara caliente (re-scan sin re-open). |
+| `ImportRecipeURL` | `src/features/recipes/screens/ImportRecipeURL.tsx` | full-screen route con `PageShell` | `<BottomSheet size="focus" headerLayout="cancel-action">` cuando se abre desde Cocina/Explora | User se beneficia de ver lista de recetas detrás mientras pega URL + revisa preview. Flow corto (3 steps). Mantener route cuando se abre desde Profile como standalone. |
+| `DailyCheckIn` | `src/features/wellness/screens/DailyCheckIn.tsx` | full-screen route | `<BottomSheet size="focus" headerLayout="cancel-action">` desde Hoy rail | Activación desde Hoy rail beneficia no perder contexto del `dailyLog`. Stay route cuando se accede desde Progress o deep-link. |
+
+##### Migrar a `<BottomSheet>` — LOW priority (defer)
+
+| Surface | Path | Decisión | Razón del defer |
+|---|---|---|---|
+| `AddTolerance` | `src/features/wellness/screens/AddTolerance.tsx` | focus sheet **opcional** | Flow corto que funciona como route; ROI bajo sin justificación UX clara. |
+| `PhotoUploader` source picker | `src/features/recipes/components/PhotoUploader.tsx:195` | Stay radix `Dialog` **O** `<BottomSheet size="compact">` si se busca coherencia visual total | Choice muy corto (cámara vs galería); Dialog centered es correcto Material 3 / iOS-native. Solo migrar en un pase de unificación popup-language. |
+
+##### Stay full-screen o `Dialog` — JUSTIFIED (NO migrar)
+
+| Surface | Path | Tipología | Razón del stay |
+|---|---|---|---|
+| `MediaLightbox` | `src/features/recipes/components/MediaLightbox.tsx` | fullscreen gallery | Convención transversal (Instagram/Bevel/iOS Fotos). Pinch-zoom + swipe entre fotos requiere canvas total. |
+| `CookMode` | `src/features/recipes/components/CookMode.tsx:106,135` | `fixed inset-0` + `wakeLock` | WakeLock mantiene pantalla viva; inmersión sin distracciones; pattern Paprika/NYT Cooking. El contexto "detrás" es irrelevante al cocinar. |
+| `StoryViewer` | `src/features/social/screens/StoryViewer.tsx` | fullscreen auto-advance | Convention Instagram/TikTok/Facebook. Auto-advance + tap-to-advance requiere canvas total. |
+| `ConfirmDialog` | `src/components/ConfirmDialog.tsx` | radix `Dialog` centered | Sí/No corto no es "elegir algo" ni "trabajar en algo" — es "confirmar". Material 3 / iOS convention = centered dialog. |
+| GlobalHeader demo-gate + Profile logout | `src/components/GlobalHeader.tsx`, `src/features/profile/screens/Profile.tsx` | radix `Dialog` | Confirmaciones cortas; mismo criterio que ConfirmDialog. |
+| `Onboarding` wizard | `src/features/profile/components/Onboarding.tsx:130` | `fixed inset-0 z-[100]` overlay full-screen | Flow first-run; no hay "home" al que volver que preservar como contexto. Sheet chrome sería artificial. Refactor de primitives internas en PR 9 (§4.11). |
+| `CreateRecipe` | `src/features/recipes/screens/CreateRecipe.tsx` | full-screen route | Form multi-sección (nombre + macros + ingredientes + instrucciones + fotos). Complejidad justifica scroll independiente. Sheet introduciría doble scroll-chrome. |
+| `CreatePost` / `CreateStory` | `src/features/social/screens/` | full-screen route | Social content creation multi-step (media + caption + tags). Full-screen es convención universal. |
+| `AddMeal` | `src/features/food/screens/AddMeal.tsx` | full-screen route | Search + list + drill-into detalle alimento es flow profundo. Playbook §4.4.a lo propone como candidato focus-sheet futuro — dejar hasta completar HIGH/MEDIUM. |
+| `WeeklyCheckIn` | `src/features/wellness/screens/WeeklyCheckIn.tsx` | full-screen route | History browser + reflection form; reached desde Progress tab. Contexto "Progress atrás" no es relevante al user mientras llena el check-in. |
+| `Progress` | `src/features/wellness/screens/Progress.tsx` | full-screen tab | Es **tab de bottom-nav**, no modal — no aplica la decisión sheet vs route. |
+| `RealFeelDiary` ("diario diario") | `src/features/wellness/screens/RealFeelDiary.tsx` | full-screen route con `PageShell + PageHeader` | Es un **módulo completo** (timeline histórico + entry form + reflection cards), no acción puntual. Bevel IMG_0973 confirma que Diary se resuelve como **tab/route**, no sheet — el scroll histórico por fecha necesita header sticky y full canvas. **Nota**: los sub-modals internos (add/edit entry) **sí** son candidatos a focus sheet (deferido a Q15). |
+
+##### Patterns Bevel aún NO presentes en RIAL
+
+| Bevel pattern | Captura | Cuándo considerar |
+|---|---|---|
+| Share-card carrusel | 0975, 0999, 1017 | Q15+ — `<ShareCard>` primitive para export-to-social |
+| Modal-stacked-over-Home | 1001 | Q15+ — AI Coach upsell desde Home |
+| Process-status sheet 40% | 1013, 1014 | Q6 — ImportRecipeURL + PhotoRecog async status |
+| Full-screen post-save confirmation | 0964, 0961 | PR 9 — Onboarding refactor |
+
+#### 4.4.c Decision framework — cuándo NO usar `<BottomSheet>`
+
+Aplicar los **5 criterios en orden**. El primero que matche determina la tipología — no evaluar los posteriores.
+
+**Criterio 1 — ¿Es una tab de bottom-nav o pantalla raíz?**
+→ **Route + `<PageShell>`**, NO sheet. Aplica a: Hoy, Cocina, Explora, Progress, Profile, More.
+
+**Criterio 2 — ¿La UX es inmersiva sin contexto detrás?**
+Señales: WakeLock activo, auto-advance content, pinch-zoom con canvas total, camera viewport.
+→ **Full-screen `fixed inset-0`**, NO sheet. Aplica a: CookMode, StoryViewer, MediaLightbox, BarcodeScanner (camera viewport — el panel de resultados sí puede ser sheet).
+
+**Criterio 3 — ¿Es confirmación corta con 2 CTAs?**
+→ **`<ConfirmDialog>` centered**, NO sheet. Aplica a: destructive confirmations, permission prompts cortas, "Are you sure?" flows.
+
+**Criterio 4 — ¿Es flow first-run (onboarding) sin app state detrás?**
+→ **Full-screen overlay** `fixed inset-0`. El user no tiene "home" al que volver que preservar como contexto. Aplica a: Onboarding wizard.
+
+**Criterio 5 — ¿Form con > 3 secciones semánticas distintas?**
+Ejemplos: CreateRecipe (nombre + macros + ingredientes + instrucciones + fotos), CreatePost (media + caption + tags + recipe link).
+→ **Route full-screen**. Sheet de 92vh + scroll interno + sub-secciones introduce scroll dual.
+
+**Si ninguna de las 5 aplica → usar `<BottomSheet>`.** Elegir `size` + `headerLayout` por ADR-009 V2:
+
+- **`size: compact` (88vh)** si el contenido es "elegir algo": picker, toggle group, lista corta, confirm-action.
+- **`size: focus` (92vh)** si el contenido es "trabajar en algo": form multi-field, búsqueda con lista larga, input+keyboard, detail-edit, review-before-commit.
+- **`headerLayout: title-centered`** — close-X + título + opcional action. Para pickers pick-and-close.
+- **`headerLayout: cancel-action`** — "Cancelar" + título + "Siguiente"/"Guardar". Para forms donde el user **descarta cambios** explícitamente.
+- **`headerLayout: back-title-action`** — back-chevron + título + action. Para sheets navigation-stack (detail dentro de flow).
+- **`hideHandle: true`** solo si keyboard-first (teclado ya comunica "editando") o navigation-stack (back-chevron reemplaza swipe).
+
 ### 4.5 Empty states
 - **Bevel**: skeleton gris + icon neutro + título + descripción. **Sin CTA**.
 - **RIAL hoy**: `EmptyState` tiende a incluir CTA.

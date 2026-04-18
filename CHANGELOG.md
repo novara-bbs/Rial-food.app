@@ -1,5 +1,23 @@
 # RIAL App - Changelog
 
+## [1.5.39] - 2026-04-19
+
+### docs(design) — popup/sheet/modal inventory + decision framework (ADR-009 V3)
+
+Pase de documentación disparado por la pregunta del owner: "¿dónde más afectan estos pop-ups de casi toda la pantalla? p.ej. el diario diario, ventanas de métricas". Auditoría exhaustiva de todas las surfaces que ocupan total o parcialmente la pantalla en RIAL — radix `Dialog`-based modals, manual `fixed inset-0` overlays, y full-screen routes — y formalización de un framework de decisión que un reviewer puede aplicar en 5 pasos para elegir entre `<BottomSheet>`, `<ConfirmDialog>`, route + `<PageShell>`, o full-screen overlay.
+
+**Changed**
+- `docs/market/bevel-design-playbook.md` — nuevas sub-secciones §4.4.b (migration matrix de 18 surfaces clasificadas HIGH/MEDIUM/LOW/STAY con rationale individual) + §4.4.c (decision framework con 5 criterios en orden + sub-decisiones `size` / `headerLayout` / `hideHandle`).
+- `docs/adr/ADR-009-bottom-sheet-anatomy.md` — V3 addendum con la versión "reviewer rule" del framework (tabla compacta de 5 criterios + resumen de migration priorities + regla explícita para request-changes ante `Dialog` / `fixed inset-0` sin rationale).
+- `docs/NEW-SCREEN-CHECKLIST.md` — §6c reescrita como decision tree de 5 checks secuenciales, con referencias cruzadas al playbook y ADR-009 V3.
+
+**Notes**
+- **Por qué no es un PR de código**. El owner pidió "razona y revisa las ventanas de bevel vs rial y mejora la documentación" — la auditoría identifica 2 HIGH + 3 MEDIUM migraciones candidatas, pero convertirlas en PRs de código se ejecuta selectivamente por beneficio UX, no blanket. La doc deja claras las prioridades para el próximo sprint sin pre-commit a scope.
+- **HIGH candidates** identificados: `SnapshotDetailModal` (Dialog centered → `focus + title-centered`) y `GdprConsent` (manual overlay z-[200] → `compact + title-centered`). Ambos son 0-risk (`max-h-[90vh]` ya ≈ 92vh; GdprConsent ya es sheet-shaped en mobile).
+- **MEDIUM candidates**: `BarcodeScanner` result panel (split camera viewport + sheet), `ImportRecipeURL` (conditional sheet/route según entry point), `DailyCheckIn` (idem).
+- **STAY justified** explicitados 13 surfaces con razón por surface: `MediaLightbox` (pinch-zoom canvas), `CookMode` (WakeLock immersive), `StoryViewer` (auto-advance convention), `ConfirmDialog`, GlobalHeader demo-gate, Profile logout, `Onboarding` (first-run sin context), `CreateRecipe` / `CreatePost` / `CreateStory` / `AddMeal` (forms > 3 secciones), `WeeklyCheckIn`, `Progress` (bottom-nav tab), `RealFeelDiary` ("diario diario" — es módulo, no acción puntual; Bevel IMG_0973 confirma diary-as-tab).
+- **Criterio 5 formalizado** ("form con > 3 secciones semánticas → route"): racionaliza por qué `CreateRecipe` con 5 secciones (nombre/macros/ingredientes/instrucciones/fotos) no debería wrap-earse en sheet — el scroll dual (sheet scroll + sección scroll) introduce fricción que un full-screen route no tiene.
+
 ## [1.5.38] - 2026-04-18
 
 ### refactor(ui) — PR 6.5 Bevel: RecipePicker `size="focus"` + LogSnapshotModal `cancel-action` layout

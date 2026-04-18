@@ -1,9 +1,9 @@
 # ADR-009 — Bottom-sheet anatomy
 
-- Status: Accepted (V1) · Amended (V2, 2026-04-18)
-- Date: 2026-04-17 (V1) · 2026-04-18 (V2 addendum)
+- Status: Accepted (V1) · Amended (V2, 2026-04-18) · Amended (V3, 2026-04-19)
+- Date: 2026-04-17 (V1) · 2026-04-18 (V2 addendum) · 2026-04-19 (V3 addendum)
 - Supersedes: —
-- Related: ADR-001 (primitives), ADR-003 (HIG 44×44), playbook `docs/market/bevel-design-playbook.md` §4.4 + §4.4.a
+- Related: ADR-001 (primitives), ADR-003 (HIG 44×44), playbook `docs/market/bevel-design-playbook.md` §4.4 + §4.4.a + §4.4.b + §4.4.c
 
 ## Context
 
@@ -173,3 +173,41 @@ Consumer adoption es **selectiva por beneficio UX** (PR 6.5+), no blanket. Candi
 - `CreateRecipe` (cuando se abre desde `CreateModal`) → `size="focus" + headerLayout="cancel-action"`.
 - `BarcodeScanner` preview-tras-escaneo → `size="focus" + headerLayout="back-title-action"` (IMG_1015 pattern).
 - `ImportRecipeURL` step-by-step wizard → `size="focus" + headerLayout="cancel-action"`.
+
+## V3 addendum (2026-04-19) — when NOT to use `<BottomSheet>`
+
+### Motivación
+
+Auditoría exhaustiva 2026-04-19 de TODAS las surfaces que ocupan la pantalla total o parcialmente en RIAL (radix `Dialog` + manual `fixed inset-0` overlays + full-screen routes). Resultado: la matriz de migración + el framework de decisión quedan formalizados en el playbook (`docs/market/bevel-design-playbook.md` §4.4.b + §4.4.c). Este V3 addendum captura la **regla mínima que un reviewer debe aplicar** para rechazar o aprobar un nuevo popup/modal/sheet.
+
+### Decision framework (5 criterios en orden)
+
+Aplicar estos criterios en orden. El primero que matche determina la tipología — no evaluar los posteriores.
+
+| # | Criterio | Tipología correcta | Ejemplos RIAL |
+|---|---|---|---|
+| **1** | ¿Es tab de bottom-nav o pantalla raíz? | **Route + `<PageShell>`** | Hoy, Cocina, Explora, Progress, Profile, More |
+| **2** | ¿UX inmersiva sin contexto detrás? (WakeLock, auto-advance, pinch-zoom canvas total, camera viewport) | **Full-screen `fixed inset-0`** | CookMode, StoryViewer, MediaLightbox, BarcodeScanner camera |
+| **3** | ¿Confirmación corta con 2 CTAs? | **`<ConfirmDialog>` centered** | Destructive confirms, permission prompts, "Are you sure?" |
+| **4** | ¿Flow first-run (onboarding) sin app state detrás? | **Full-screen overlay** | Onboarding wizard |
+| **5** | ¿Form con > 3 secciones semánticas distintas? (introduce scroll dual en sheet) | **Route full-screen** | CreateRecipe, CreatePost, CreateStory, AddMeal |
+
+**Si ninguna de las 5 matchea → usar `<BottomSheet>`** y resolver `size` + `headerLayout` por V2.
+
+### Migration matrix (referencia rápida)
+
+La matriz completa (surface-by-surface, con rationale individual) vive en el playbook §4.4.b. Resumen de prioridades 2026-04-19:
+
+- **HIGH** (2 surfaces): `SnapshotDetailModal` (`Dialog` → `focus + title-centered`), `GdprConsent` (manual overlay → `compact + title-centered`).
+- **MEDIUM** (3 surfaces): `BarcodeScanner` result panel (split: camera stays + result → `focus + back-title-action`), `ImportRecipeURL` (conditional — sheet desde Cocina/Explora, route desde Profile), `DailyCheckIn` (conditional — sheet desde Hoy rail, route desde Progress).
+- **LOW / defer**: `AddTolerance`, `PhotoUploader` source picker.
+- **STAY justified**: `MediaLightbox`, `CookMode`, `StoryViewer`, `ConfirmDialog`, demo-gate, logout dialog, `Onboarding`, `CreateRecipe`, `CreatePost`, `CreateStory`, `AddMeal`, `WeeklyCheckIn`, `Progress`, `RealFeelDiary`.
+
+### Reviewer rule
+
+Cuando un PR introduce un nuevo popup/modal/sheet, el reviewer aplica el framework en orden y valida:
+1. El PR documenta cuál de los 5 criterios aplica (o explicita que ninguno → usa `<BottomSheet>`).
+2. Si `<BottomSheet>`: `size` y `headerLayout` justificados con referencia V2.
+3. Si el PR migra una surface existente, referencia la entrada correspondiente en la matriz del playbook.
+
+Un PR que añade un `Dialog` o `fixed inset-0` sin razonar contra el framework es candidato a request-changes.
