@@ -2,6 +2,7 @@ import { useState, useEffect, useRef, useMemo } from 'react';
 import { X, Loader2, AlertTriangle, CheckCircle2, UtensilsCrossed, BookOpen, Save, RotateCcw, Plus } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
+import BottomSheet from '@/components/ui/bottom-sheet';
 import { useI18n } from '../../../i18n';
 import { logger } from '../../../lib/logger';
 import PortionSelector from './PortionSelector';
@@ -40,7 +41,6 @@ interface Props {
 
 /** Convert a scanned product to a temporary Ingredient for PortionSelector */
 function productToIngredient(product: ScannedProduct): Ingredient {
-  // Use real OFF serving sizes when available, otherwise fallback to generic
   const servingSizes: ServingSize[] = product.servingSizes && product.servingSizes.length > 0
     ? product.servingSizes
     : [
@@ -140,7 +140,6 @@ export default function BarcodeScanner({ onClose, onProductFound, onSaveToDictio
         const p = data.product;
         const n = p.nutriments || {};
 
-        // Parse real serving sizes from OFF data
         const servingSizes = parseOFFServings({
           serving_size: p.serving_size,
           serving_quantity: p.serving_quantity,
@@ -183,6 +182,7 @@ export default function BarcodeScanner({ onClose, onProductFound, onSaveToDictio
     setProduct(null);
     setPortionResult(null);
     setManualCode('');
+    setShowCustomForm(false);
     // Re-trigger scanner
     setTimeout(() => {
       const startAgain = async () => {
@@ -209,298 +209,298 @@ export default function BarcodeScanner({ onClose, onProductFound, onSaveToDictio
     }, 100);
   };
 
+  const sheetOpen = showCustomForm || state === 'found' || state === 'not-found';
+
+  const sheetTitle = showCustomForm
+    ? t.scanner.customFoodTitle
+    : state === 'found' && product
+      ? product.name
+      : state === 'not-found'
+        ? t.scanner.notFound
+        : '';
+
+  const handleSheetBack = () => {
+    if (showCustomForm) {
+      setShowCustomForm(false);
+      return;
+    }
+    handleScanAnother();
+  };
+
   return (
-    <div className="fixed inset-0 z-[100] bg-background/95 backdrop-blur-md flex flex-col animate-in fade-in duration-200">
+    <div className="fixed inset-0 z-40 bg-background/95 backdrop-blur-md flex flex-col animate-in fade-in duration-200">
       {/* Header */}
       <div className="flex items-center justify-between p-4 shrink-0">
         <h2 className="font-headline text-lg font-bold uppercase text-tertiary tracking-tight">{t.fab.scanBarcode}</h2>
-        <button type="button" onClick={onClose} className="w-10 h-10 rounded-full bg-surface-container-highest flex items-center justify-center text-on-surface-variant hover:text-primary">
+        <button
+          type="button"
+          onClick={onClose}
+          aria-label={t.common.close}
+          className="w-11 h-11 rounded-full bg-surface-container-highest flex items-center justify-center text-on-surface-variant hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/60 focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+        >
           <X className="w-5 h-5" />
         </button>
       </div>
 
-      {/* Content — scrollable for the post-scan detail view */}
+      {/* Camera viewport + manual fallback stay mounted underneath the sheet. */}
       <div className="flex-1 overflow-y-auto px-6 pb-8">
         <div className="flex flex-col items-center gap-6 max-w-sm mx-auto">
-
-          {/* Scanner viewport */}
-          {(state === 'idle' || state === 'scanning') && (
-            <>
-              <div
-                ref={scannerRef}
-                id="barcode-reader"
-                className="w-full aspect-[4/3] bg-surface-container-low rounded-sm border-2 border-dashed border-outline-variant/30 overflow-hidden"
-              />
-              {state === 'scanning' && (
-                <p className="text-xs text-on-surface-variant font-label uppercase tracking-widest animate-pulse">
-                  {t.scanner.pointAtBarcode}
-                </p>
-              )}
-            </>
+          <div
+            ref={scannerRef}
+            id="barcode-reader"
+            className="w-full aspect-[4/3] bg-surface-container-low rounded-sm border-2 border-dashed border-outline-variant/30 overflow-hidden"
+          />
+          {state === 'scanning' && (
+            <p className="text-xs text-on-surface-variant font-label uppercase tracking-widest animate-pulse">
+              {t.scanner.pointAtBarcode}
+            </p>
           )}
 
-          {/* Loading */}
           {state === 'looking-up' && (
-            <div className="flex flex-col items-center gap-4 py-12">
-              <Loader2 className="w-12 h-12 text-primary animate-spin" />
+            <div className="flex flex-col items-center gap-4 py-6">
+              <Loader2 className="w-10 h-10 text-primary animate-spin" />
               <p className="text-sm text-on-surface-variant font-label uppercase tracking-widest">
                 {t.scanner.lookingUp}
               </p>
             </div>
           )}
 
-          {/* ════════════════════════════════════════════
-              FOUND — Food Detail Sheet with PortionSelector
-             ════════════════════════════════════════════ */}
-          {state === 'found' && product && pseudoIngredient && (
-            <div className="w-full space-y-4">
-              {/* Product header */}
-              <div className="bg-surface-container-low border border-green-500/30 rounded-sm p-4">
-                <div className="flex items-start gap-3">
-                  {product.image && (
-                    <img src={product.image} alt="" className="w-16 h-16 rounded-sm object-cover shrink-0" referrerPolicy="no-referrer" />
-                  )}
-                  <div className="flex-1 min-w-0">
-                    <div className="flex items-center gap-2 mb-1">
-                      <CheckCircle2 className="w-3.5 h-3.5 text-primary shrink-0" />
-                      <Badge variant="outline" className="text-primary border-primary/30">
-                        {t.scanner.scanned}
-                      </Badge>
-                    </div>
-                    <h3 className="font-headline text-sm font-bold uppercase text-tertiary leading-tight">{product.name}</h3>
-                    {product.brand && <p className="text-micro text-on-surface-variant mt-0.5">{product.brand}</p>}
-                    <p className="text-micro text-on-surface-variant/60 mt-1">
-                      {t.scanner.per100g}
-                    </p>
+          {/* Manual input fallback */}
+          <div className="w-full space-y-3">
+            {errorMsg && <p className="text-xs text-brand-secondary text-center">{errorMsg}</p>}
+            <div className="flex gap-2">
+              <input
+                type="text"
+                value={manualCode}
+                onChange={e => setManualCode(e.target.value)}
+                placeholder={t.scanner.barcodePlaceholder}
+                className={`${INPUT_SURFACE_CLASSES} flex-1 px-4 py-3 text-on-surface text-sm font-mono focus:outline-none focus:border-primary`}
+                onKeyDown={e => e.key === 'Enter' && handleManualSubmit()}
+              />
+              <Button
+                onClick={handleManualSubmit}
+                disabled={manualCode.trim().length < 8}
+              >
+                OK
+              </Button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Post-scan result panel — BottomSheet size=focus with back-title-action header. */}
+      <BottomSheet
+        open={sheetOpen}
+        onOpenChange={v => { if (!v) handleSheetBack(); }}
+        title={sheetTitle}
+        size="focus"
+        headerLayout="back-title-action"
+        onBack={handleSheetBack}
+      >
+        {/* FOUND — Product detail + portion selector + CTAs */}
+        {!showCustomForm && state === 'found' && product && pseudoIngredient && (
+          <div className="space-y-4">
+            <div className="bg-surface-container-low border border-green-500/30 rounded-sm p-4">
+              <div className="flex items-start gap-3">
+                {product.image && (
+                  <img src={product.image} alt="" className="w-16 h-16 rounded-sm object-cover shrink-0" referrerPolicy="no-referrer" />
+                )}
+                <div className="flex-1 min-w-0">
+                  <div className="flex items-center gap-2 mb-1">
+                    <CheckCircle2 className="w-3.5 h-3.5 text-primary shrink-0" />
+                    <Badge variant="outline" className="text-primary border-primary/30">
+                      {t.scanner.scanned}
+                    </Badge>
                   </div>
+                  {product.brand && <p className="text-micro text-on-surface-variant mt-0.5">{product.brand}</p>}
+                  <p className="text-micro text-on-surface-variant/60 mt-1">
+                    {t.scanner.per100g}
+                  </p>
                 </div>
               </div>
+            </div>
 
-              {/* Portion selector — the key enhancement */}
-              <SectionCard padding="none" spacing="none" className="p-4 space-y-2">
-                <h4 className="text-micro font-label uppercase tracking-widest text-on-surface-variant">
-                  {t.portionSelector.adjustPortion}
-                </h4>
-                <PortionSelector
-                  ingredient={pseudoIngredient}
-                  onChange={setPortionResult}
-                  unitSystem={unitSystem}
-                />
-              </SectionCard>
+            <SectionCard padding="none" spacing="none" className="p-4 space-y-2">
+              <h4 className="text-micro font-label uppercase tracking-widest text-on-surface-variant">
+                {t.portionSelector.adjustPortion}
+              </h4>
+              <PortionSelector
+                ingredient={pseudoIngredient}
+                onChange={setPortionResult}
+                unitSystem={unitSystem}
+              />
+            </SectionCard>
 
-              {/* Three CTAs */}
-              <div className="space-y-2">
-                <Button
-                  variant="brand"
-                  className="w-full"
-                  onClick={() => onProductFound(product, portionResult ?? undefined)}
-                >
-                  <UtensilsCrossed className="w-4 h-4 mr-2" />
-                  {t.portionSelector.addToMeal}
-                </Button>
+            <div className="space-y-2">
+              <Button
+                variant="brand"
+                className="w-full"
+                onClick={() => onProductFound(product, portionResult ?? undefined)}
+              >
+                <UtensilsCrossed className="w-4 h-4 mr-2" />
+                {t.portionSelector.addToMeal}
+              </Button>
 
+              {(onAddToRecipe || onSaveToDictionary) && (
                 <div className="grid grid-cols-2 gap-2">
                   {onAddToRecipe && (
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      onClick={() => onAddToRecipe(product)}
-                    >
+                    <Button variant="outline" size="sm" onClick={() => onAddToRecipe(product)}>
                       <BookOpen className="w-3.5 h-3.5 mr-1.5" />
                       {t.portionSelector.addToRecipe}
                     </Button>
                   )}
                   {onSaveToDictionary && (
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      onClick={() => onSaveToDictionary(product)}
-                    >
+                    <Button variant="outline" size="sm" onClick={() => onSaveToDictionary(product)}>
                       <Save className="w-3.5 h-3.5 mr-1.5" />
                       {t.scanner.save}
                     </Button>
                   )}
                 </div>
+              )}
+            </div>
+
+            <Button variant="ghost" className="w-full" onClick={handleScanAnother}>
+              <RotateCcw className="w-3.5 h-3.5 mr-2" />
+              {t.scanner.scanAnother}
+            </Button>
+          </div>
+        )}
+
+        {/* NOT FOUND — explain + offer custom food creation or retry */}
+        {!showCustomForm && state === 'not-found' && (
+          <div className="space-y-4 text-center py-2">
+            <AlertTriangle className="w-10 h-10 text-brand-secondary mx-auto" />
+            <p className="text-sm text-on-surface-variant">
+              {t.scanner.notFound}
+            </p>
+            <Button variant="brand" className="w-full" onClick={() => setShowCustomForm(true)}>
+              <Plus className="w-4 h-4 mr-2" />
+              {t.scanner.createCustom}
+            </Button>
+            <Button variant="outline" className="w-full" onClick={handleScanAnother}>
+              <RotateCcw className="w-4 h-4 mr-2" />
+              {t.scanner.retry}
+            </Button>
+            <Button variant="ghost" className="w-full" onClick={onClose}>
+              {t.scanner.searchManually}
+            </Button>
+          </div>
+        )}
+
+        {/* CUSTOM FOOD FORM */}
+        {showCustomForm && (
+          <div className="space-y-4">
+            <div className="space-y-3">
+              <div>
+                <label className="text-micro font-label uppercase tracking-widest text-on-surface-variant block mb-1">{t.scanner.foodName} *</label>
+                <input
+                  type="text"
+                  value={customFood.name}
+                  onChange={e => setCustomFood(prev => ({ ...prev, name: e.target.value }))}
+                  placeholder={t.scanner.foodNamePlaceholder}
+                  className={`${INPUT_SURFACE_CLASSES} w-full px-3 py-2.5 text-on-surface text-sm focus:outline-none focus:border-primary`}
+                />
               </div>
 
-              {/* Scan another */}
-              <Button
-                variant="ghost"
-                className="w-full"
-                onClick={handleScanAnother}
-              >
-                <RotateCcw className="w-3.5 h-3.5 mr-2" />
-                {t.scanner.scanAnother}
-              </Button>
-            </div>
-          )}
+              <div>
+                <label className="text-micro font-label uppercase tracking-widest text-on-surface-variant block mb-1">{t.scanner.brand}</label>
+                <input
+                  type="text"
+                  value={customFood.brand}
+                  onChange={e => setCustomFood(prev => ({ ...prev, brand: e.target.value }))}
+                  placeholder={t.scanner.brandPlaceholder}
+                  className={`${INPUT_SURFACE_CLASSES} w-full px-3 py-2.5 text-on-surface text-sm focus:outline-none focus:border-primary`}
+                />
+              </div>
 
-          {/* Not found */}
-          {state === 'not-found' && !showCustomForm && (
-            <div className="w-full space-y-4 text-center py-6">
-              <AlertTriangle className="w-12 h-12 text-brand-secondary mx-auto" />
-              <p className="text-sm text-on-surface-variant">
-                {t.scanner.notFound}
-              </p>
-              <Button variant="brand" className="w-full" onClick={() => setShowCustomForm(true)}>
-                <Plus className="w-4 h-4 mr-2" />
-                {t.scanner.createCustom}
-              </Button>
-              <Button variant="outline" className="w-full" onClick={handleScanAnother}>
-                <RotateCcw className="w-4 h-4 mr-2" />
-                {t.scanner.retry}
-              </Button>
-              <Button variant="ghost" className="w-full" onClick={onClose}>
-                {t.scanner.searchManually}
-              </Button>
-            </div>
-          )}
+              <div>
+                <label className="text-micro font-label uppercase tracking-widest text-on-surface-variant block mb-1">{t.scanner.servingSize}</label>
+                <input
+                  type="number"
+                  inputMode="decimal"
+                  value={customFood.serving}
+                  onChange={e => setCustomFood(prev => ({ ...prev, serving: e.target.value }))}
+                  className={`${INPUT_SURFACE_CLASSES} w-full px-3 py-2.5 text-on-surface text-sm focus:outline-none focus:border-primary`}
+                />
+              </div>
 
-          {/* Custom food creation form */}
-          {showCustomForm && (
-            <div className="w-full space-y-4">
-              <h3 className="font-headline text-sm font-bold uppercase text-tertiary tracking-tight">{t.scanner.customFoodTitle}</h3>
-
-              <div className="space-y-3">
+              <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label className="text-micro font-label uppercase tracking-widest text-on-surface-variant block mb-1">{t.scanner.foodName} *</label>
-                  <input
-                    type="text"
-                    value={customFood.name}
-                    onChange={e => setCustomFood(prev => ({ ...prev, name: e.target.value }))}
-                    placeholder={t.scanner.foodNamePlaceholder}
-                    className={`${INPUT_SURFACE_CLASSES} w-full px-3 py-2.5 text-on-surface text-sm focus:outline-none focus:border-primary`}
-                  />
-                </div>
-
-                <div>
-                  <label className="text-micro font-label uppercase tracking-widest text-on-surface-variant block mb-1">{t.scanner.brand}</label>
-                  <input
-                    type="text"
-                    value={customFood.brand}
-                    onChange={e => setCustomFood(prev => ({ ...prev, brand: e.target.value }))}
-                    placeholder={t.scanner.brandPlaceholder}
-                    className={`${INPUT_SURFACE_CLASSES} w-full px-3 py-2.5 text-on-surface text-sm focus:outline-none focus:border-primary`}
-                  />
-                </div>
-
-                <div>
-                  <label className="text-micro font-label uppercase tracking-widest text-on-surface-variant block mb-1">{t.scanner.servingSize}</label>
+                  <label className="text-micro font-label uppercase tracking-widest text-on-surface-variant block mb-1">{t.scanner.calories} *</label>
                   <input
                     type="number"
                     inputMode="decimal"
-                    value={customFood.serving}
-                    onChange={e => setCustomFood(prev => ({ ...prev, serving: e.target.value }))}
+                    value={customFood.cal}
+                    onChange={e => setCustomFood(prev => ({ ...prev, cal: e.target.value }))}
+                    placeholder="0"
                     className={`${INPUT_SURFACE_CLASSES} w-full px-3 py-2.5 text-on-surface text-sm focus:outline-none focus:border-primary`}
                   />
                 </div>
-
-                <div className="grid grid-cols-2 gap-3">
-                  <div>
-                    <label className="text-micro font-label uppercase tracking-widest text-on-surface-variant block mb-1">{t.scanner.calories} *</label>
-                    <input
-                      type="number"
-                      inputMode="decimal"
-                      value={customFood.cal}
-                      onChange={e => setCustomFood(prev => ({ ...prev, cal: e.target.value }))}
-                      placeholder="0"
-                      className={`${INPUT_SURFACE_CLASSES} w-full px-3 py-2.5 text-on-surface text-sm focus:outline-none focus:border-primary`}
-                    />
-                  </div>
-                  <div>
-                    <label className="text-micro font-label uppercase tracking-widest text-on-surface-variant block mb-1">{t.scanner.protein}</label>
-                    <input
-                      type="number"
-                      inputMode="decimal"
-                      value={customFood.pro}
-                      onChange={e => setCustomFood(prev => ({ ...prev, pro: e.target.value }))}
-                      placeholder="0"
-                      className={`${INPUT_SURFACE_CLASSES} w-full px-3 py-2.5 text-on-surface text-sm focus:outline-none focus:border-primary`}
-                    />
-                  </div>
-                  <div>
-                    <label className="text-micro font-label uppercase tracking-widest text-on-surface-variant block mb-1">{t.scanner.carbs}</label>
-                    <input
-                      type="number"
-                      inputMode="decimal"
-                      value={customFood.carbs}
-                      onChange={e => setCustomFood(prev => ({ ...prev, carbs: e.target.value }))}
-                      placeholder="0"
-                      className={`${INPUT_SURFACE_CLASSES} w-full px-3 py-2.5 text-on-surface text-sm focus:outline-none focus:border-primary`}
-                    />
-                  </div>
-                  <div>
-                    <label className="text-micro font-label uppercase tracking-widest text-on-surface-variant block mb-1">{t.scanner.fats}</label>
-                    <input
-                      type="number"
-                      inputMode="decimal"
-                      value={customFood.fats}
-                      onChange={e => setCustomFood(prev => ({ ...prev, fats: e.target.value }))}
-                      placeholder="0"
-                      className={`${INPUT_SURFACE_CLASSES} w-full px-3 py-2.5 text-on-surface text-sm focus:outline-none focus:border-primary`}
-                    />
-                  </div>
+                <div>
+                  <label className="text-micro font-label uppercase tracking-widest text-on-surface-variant block mb-1">{t.scanner.protein}</label>
+                  <input
+                    type="number"
+                    inputMode="decimal"
+                    value={customFood.pro}
+                    onChange={e => setCustomFood(prev => ({ ...prev, pro: e.target.value }))}
+                    placeholder="0"
+                    className={`${INPUT_SURFACE_CLASSES} w-full px-3 py-2.5 text-on-surface text-sm focus:outline-none focus:border-primary`}
+                  />
+                </div>
+                <div>
+                  <label className="text-micro font-label uppercase tracking-widest text-on-surface-variant block mb-1">{t.scanner.carbs}</label>
+                  <input
+                    type="number"
+                    inputMode="decimal"
+                    value={customFood.carbs}
+                    onChange={e => setCustomFood(prev => ({ ...prev, carbs: e.target.value }))}
+                    placeholder="0"
+                    className={`${INPUT_SURFACE_CLASSES} w-full px-3 py-2.5 text-on-surface text-sm focus:outline-none focus:border-primary`}
+                  />
+                </div>
+                <div>
+                  <label className="text-micro font-label uppercase tracking-widest text-on-surface-variant block mb-1">{t.scanner.fats}</label>
+                  <input
+                    type="number"
+                    inputMode="decimal"
+                    value={customFood.fats}
+                    onChange={e => setCustomFood(prev => ({ ...prev, fats: e.target.value }))}
+                    placeholder="0"
+                    className={`${INPUT_SURFACE_CLASSES} w-full px-3 py-2.5 text-on-surface text-sm focus:outline-none focus:border-primary`}
+                  />
                 </div>
               </div>
-
-              <Button
-                variant="brand"
-                className="w-full"
-                disabled={!customFood.name.trim() || !customFood.cal}
-                onClick={() => {
-                  if (!customFood.name.trim() || !customFood.cal) return;
-                  const serving = parseFloat(customFood.serving) || 100;
-                  const customProduct: ScannedProduct = {
-                    name: customFood.name.trim(),
-                    brand: customFood.brand.trim(),
-                    calories: Math.round((parseFloat(customFood.cal) || 0) / serving * 100),
-                    protein: Math.round(((parseFloat(customFood.pro) || 0) / serving * 100) * 10) / 10,
-                    carbs: Math.round(((parseFloat(customFood.carbs) || 0) / serving * 100) * 10) / 10,
-                    fats: Math.round(((parseFloat(customFood.fats) || 0) / serving * 100) * 10) / 10,
-                    barcode: `custom_${Date.now()}`,
-                    servingSizes: [
-                      { id: 'serving', name: `1 ración (${serving}g)`, nameEn: `1 serving (${serving}g)`, grams: serving, isDefault: true },
-                      { id: '100g', name: '100g', nameEn: '100g', grams: 100 },
-                    ],
-                  };
-                  onProductFound(customProduct);
-                }}
-              >
-                <Save className="w-4 h-4 mr-2" />
-                {t.scanner.saveAndLog}
-              </Button>
-
-              <Button variant="ghost" className="w-full" onClick={() => setShowCustomForm(false)}>
-                <X className="w-3.5 h-3.5 mr-2" />
-                {t.common.cancel}
-              </Button>
             </div>
-          )}
 
-          {/* Manual input fallback */}
-          {(state === 'idle' || state === 'scanning' || errorMsg) && (
-            <div className="w-full space-y-3">
-              {errorMsg && <p className="text-xs text-brand-secondary text-center">{errorMsg}</p>}
-              <div className="flex gap-2">
-                <input
-                  type="text"
-                  value={manualCode}
-                  onChange={e => setManualCode(e.target.value)}
-                  placeholder={t.scanner.barcodePlaceholder}
-                  className={`${INPUT_SURFACE_CLASSES} flex-1 px-4 py-3 text-on-surface text-sm font-mono focus:outline-none focus:border-primary`}
-                  onKeyDown={e => e.key === 'Enter' && handleManualSubmit()}
-                />
-                <Button
-                  onClick={handleManualSubmit}
-                  disabled={manualCode.trim().length < 8}
-                >
-                  OK
-                </Button>
-              </div>
-            </div>
-          )}
-        </div>
-      </div>
+            <Button
+              variant="brand"
+              className="w-full"
+              disabled={!customFood.name.trim() || !customFood.cal}
+              onClick={() => {
+                if (!customFood.name.trim() || !customFood.cal) return;
+                const serving = parseFloat(customFood.serving) || 100;
+                const customProduct: ScannedProduct = {
+                  name: customFood.name.trim(),
+                  brand: customFood.brand.trim(),
+                  calories: Math.round((parseFloat(customFood.cal) || 0) / serving * 100),
+                  protein: Math.round(((parseFloat(customFood.pro) || 0) / serving * 100) * 10) / 10,
+                  carbs: Math.round(((parseFloat(customFood.carbs) || 0) / serving * 100) * 10) / 10,
+                  fats: Math.round(((parseFloat(customFood.fats) || 0) / serving * 100) * 10) / 10,
+                  barcode: `custom_${Date.now()}`,
+                  servingSizes: [
+                    { id: 'serving', name: `1 ración (${serving}g)`, nameEn: `1 serving (${serving}g)`, grams: serving, isDefault: true },
+                    { id: '100g', name: '100g', nameEn: '100g', grams: 100 },
+                  ],
+                };
+                onProductFound(customProduct);
+              }}
+            >
+              <Save className="w-4 h-4 mr-2" />
+              {t.scanner.saveAndLog}
+            </Button>
+          </div>
+        )}
+      </BottomSheet>
     </div>
   );
 }

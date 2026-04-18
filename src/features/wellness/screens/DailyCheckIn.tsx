@@ -1,10 +1,21 @@
 import { Zap, CheckCircle, Battery, AlertTriangle, Moon, Activity } from 'lucide-react';
 import PageShell from '../../../components/PageShell';
+import BottomSheet from '@/components/ui/bottom-sheet';
 import { useState } from 'react';
 import { useI18n } from '../../../i18n';
 import PageHeader from '../../../components/patterns/PageHeader';
 
-export default function DailyCheckIn({ initialStatus, onBack, onComplete }: { initialStatus: string | null, onBack: () => void, onComplete?: (data: any) => void }) {
+export default function DailyCheckIn({
+  initialStatus,
+  onBack,
+  onComplete,
+  presentation = 'route',
+}: {
+  initialStatus: string | null;
+  onBack: () => void;
+  onComplete?: (data: any) => void;
+  presentation?: 'sheet' | 'route';
+}) {
   const { t } = useI18n();
   const [status, setStatus] = useState<string | null>(initialStatus);
   const [sleep, setSleep] = useState<number>(7);
@@ -24,11 +35,8 @@ export default function DailyCheckIn({ initialStatus, onBack, onComplete }: { in
     }
   };
 
-  return (
-    <PageShell maxWidth="default" spacing="lg">
-      <PageHeader onBack={onBack} label={t.checkIn.title} title={t.checkIn.morningReport} />
-
-      <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
+  const body = (
+    <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
         <section>
           <h3 className="font-headline text-lg font-bold tracking-tight uppercase text-tertiary mb-4">{t.checkIn.generalStatus}</h3>
           <div className="grid grid-cols-2 gap-3">
@@ -163,7 +171,28 @@ export default function DailyCheckIn({ initialStatus, onBack, onComplete }: { in
         >
           {t.checkIn.register}
         </button>
-      </div>
+    </div>
+  );
+
+  if (presentation === 'sheet') {
+    return (
+      <BottomSheet
+        open={true}
+        onOpenChange={v => { if (!v) onBack(); }}
+        title={t.checkIn.morningReport}
+        size="focus"
+        headerLayout="back-title-action"
+        onBack={onBack}
+      >
+        {body}
+      </BottomSheet>
+    );
+  }
+
+  return (
+    <PageShell maxWidth="default" spacing="lg">
+      <PageHeader onBack={onBack} label={t.checkIn.title} title={t.checkIn.morningReport} />
+      {body}
     </PageShell>
   );
 }

@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import PageShell from '../../../components/PageShell';
 import SectionCard from '../../../components/SectionCard';
+import BottomSheet from '@/components/ui/bottom-sheet';
 import { Link, CheckCircle2, AlertTriangle, Loader2, FileText, HelpCircle, ChevronDown, ChevronUp } from 'lucide-react';
 import { useI18n } from '../../../i18n';
 import PageHeader from '../../../components/patterns/PageHeader';
@@ -64,7 +65,15 @@ If you cannot access the URL, try to infer from context. Return ONLY the JSON ob
 URL or content to extract from:
 `;
 
-export default function ImportRecipeURL({ onBack, onImport }: { onBack: () => void; onImport: (recipe: any) => void }) {
+export default function ImportRecipeURL({
+  onBack,
+  onImport,
+  presentation = 'route',
+}: {
+  onBack: () => void;
+  onImport: (recipe: any) => void;
+  presentation?: 'sheet' | 'route';
+}) {
   const { t } = useI18n();
   const [url, setUrl] = useState('');
   const [loading, setLoading] = useState(false);
@@ -166,10 +175,8 @@ export default function ImportRecipeURL({ onBack, onImport }: { onBack: () => vo
     });
   };
 
-  return (
-    <PageShell maxWidth="narrow" spacing="md">
-      <PageHeader onBack={onBack} label="" title={t.importUrl.title} />
-
+  const body = (
+    <>
       {!extracted ? (
         <div className="space-y-6">
           {/* Mode toggle */}
@@ -387,6 +394,28 @@ export default function ImportRecipeURL({ onBack, onImport }: { onBack: () => vo
           </div>
         </div>
       )}
+    </>
+  );
+
+  if (presentation === 'sheet') {
+    return (
+      <BottomSheet
+        open={true}
+        onOpenChange={v => { if (!v) onBack(); }}
+        title={t.importUrl.title}
+        size="focus"
+        headerLayout="back-title-action"
+        onBack={onBack}
+      >
+        {body}
+      </BottomSheet>
+    );
+  }
+
+  return (
+    <PageShell maxWidth="narrow" spacing="md">
+      <PageHeader onBack={onBack} label="" title={t.importUrl.title} />
+      {body}
     </PageShell>
   );
 }
