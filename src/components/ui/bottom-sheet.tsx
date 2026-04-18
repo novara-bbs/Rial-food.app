@@ -176,7 +176,7 @@ export default function BottomSheet({
               )}
             </div>
 
-            <div className="w-11 h-11 -mr-2 flex items-center justify-end shrink-0">
+            <div className="min-w-11 h-11 -mr-2 flex items-center justify-end shrink-0">
               {actionSlot}
             </div>
           </div>

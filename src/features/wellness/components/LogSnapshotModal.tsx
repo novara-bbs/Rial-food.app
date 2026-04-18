@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
-import { Camera, Image as ImageIcon, ChevronDown, ChevronUp, X, Check } from 'lucide-react';
+import { Camera, Image as ImageIcon, ChevronDown, ChevronUp, X } from 'lucide-react';
 import BottomSheet from '@/components/ui/bottom-sheet';
 import { useI18n } from '../../../i18n';
 import { useAppState } from '../../../contexts/AppStateContext';
@@ -111,24 +111,17 @@ export default function LogSnapshotModal({
       open={open}
       onOpenChange={onOpenChange}
       title={title}
-      footer={
-        <div className="flex gap-2">
-          <button
-            type="button"
-            onClick={() => onOpenChange(false)}
-            className="flex-1 min-h-11 py-2.5 text-caption font-bold uppercase tracking-widest text-on-surface-variant hover:text-tertiary border border-outline-variant/30 rounded-sm transition-colors"
-          >
-            {p.cancel ?? 'Cancelar'}
-          </button>
-          <button
-            type="button"
-            onClick={handleSave}
-            className="flex-1 min-h-11 py-2.5 text-caption font-bold uppercase tracking-widest bg-primary text-on-primary rounded-sm hover:opacity-90 transition-opacity flex items-center justify-center gap-1.5"
-          >
-            <Check className="w-3.5 h-3.5" aria-hidden="true" />
-            {p.save ?? 'Guardar'}
-          </button>
-        </div>
+      size="focus"
+      headerLayout="cancel-action"
+      cancelLabel={p.cancel ?? 'Cancelar'}
+      actionSlot={
+        <button
+          type="button"
+          onClick={handleSave}
+          className="min-h-11 px-2 -mr-2 flex items-center rounded-md text-primary font-label text-body-sm font-bold hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/60 focus-visible:ring-offset-2 focus-visible:ring-offset-background transition-colors"
+        >
+          {p.save ?? 'Guardar'}
+        </button>
       }
     >
       <div className="space-y-4 py-2">

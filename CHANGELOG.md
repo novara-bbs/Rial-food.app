@@ -1,5 +1,25 @@
 # RIAL App - Changelog
 
+## [1.5.38] - 2026-04-18
+
+### refactor(ui) — PR 6.5 Bevel: RecipePicker `size="focus"` + LogSnapshotModal `cancel-action` layout
+
+PR 6.5 del roadmap Bevel. Migración **selectiva** (no blanket) de dos consumers que encajan con los patterns canónicos del V2 addendum de ADR-009. Criterio aplicado: `compact` (88vh) para pickers/listas cortas; `focus` (92vh) para forms multi-field + búsquedas con lista larga + keyboard-first. Los otros 3 consumers (`PortionSheet`, `PublishRecipeSheet`, `CreateModal`) se quedan `compact` por semántica (pickers cortos, no "trabajar en algo").
+
+Durante la auditoría se descubrió un bug latente en la primitiva: el wrapper de `actionSlot` tenía `w-11 h-11` (fijo 44×44), lo que **clipeaba text buttons** como "Guardar" / "Siguiente" que el V2 specifica para el header `cancel-action`. Fix incluido en la misma PR — `min-w-11 h-11` preserva el mínimo HIG pero deja que el contenido se auto-dimensione.
+
+**Changed**
+- `src/components/ui/bottom-sheet.tsx` — actionSlot wrapper: `w-11 h-11 -mr-2 …` → `min-w-11 h-11 -mr-2 …`. Fix de 1 línea que desbloquea text-button actionSlots sin tocar el layout del icon-button fallback (ChefHat/Globe siguen encajando porque los iconos son w-5 h-5 < 44×44, el wrapper crece a 44×44 por `min-w-11`).
+- `src/features/social/components/RecipePicker.tsx` — añadido `size="focus"`. Header sigue `title-centered` (pick-and-close, no multi-step). La +4vh deja ver un ítem más en la lista sin scroll adicional, lo que en un picker de recetas es el beneficio más directo.
+- `src/features/wellness/components/LogSnapshotModal.tsx` — añadido `size="focus"` + `headerLayout="cancel-action"`. El footer con Cancelar+Guardar se **elimina** y ambas acciones pasan al header: Cancel como text button izq (native radix Close) y Guardar como text-button actionSlot der que dispara `handleSave`. El patrón IMG_1004/1005/0988 de Bevel es literalmente este — review-then-commit form con acción principal en el top-right. Gana ~56px de contenido útil (el footer con safe-area padding ya no consume altura) y elimina la duplicación visual del close-X + Cancelar footer. `Check` import de lucide-react removido (ya no hay icono decorativo en el CTA).
+- `src/test/conventions/bottom-sheet.test.ts` — nuevo describe block "actionSlot fits text buttons" con 1 assertion que lockea `min-w-11 h-11 …-mr-2 …justify-end …shrink-0` en el wrapper. Previene regresión a `w-11 h-11` fijo.
+
+**Notes**
+- **Por qué sólo 2 migraciones.** Los otros 3 consumers tienen contenido que no justifica `focus`: `PortionSheet` es un picker corto (serving + slider), `PublishRecipeSheet` tiene 1 textarea + preview, `CreateModal` es un action grid 2×3 sin input. El beneficio de +4vh es marginal y `cancel-action` no encaja semánticamente (pick-and-close vs multi-step commit).
+- **Por qué RecipePicker mantiene `title-centered`.** IMG_1004 lleva "Cancelar" izq + "Siguiente" der porque seleccionar un alimento en Bevel es el primer paso de un flujo multi-step (pick food → configure portion → save). Nuestro `RecipePicker` es click-to-pick (seleccionar cierra el sheet), así que `cancel-action` con actionSlot vacío sería asimétrico. Mantener el close-X + ChefHat icon es coherente con el flujo real.
+- **Por qué LogSnapshotModal migra completo.** Es el uso canónico de `focus` — 4 inputs visibles + 2 collapsibles (photo + measurements con 4 campos), review-data pattern IMG_0988, scroll necesario con el teclado abierto. La eliminación del footer cancel-save resuelve la duplicación con el header close-X (ambos cerraban sin guardar) y empuja la primary action al top-right estilo iOS native.
+- **No migraciones full-screen → sheet en esta PR.** Los candidatos del ADR V2 addendum (`AddMeal` search tab, `CreateRecipe` desde CreateModal, `BarcodeScanner` preview post-scan, `ImportRecipeURL` wizard) son pantallas full-screen hoy, no sheets — migrarlas es un refactor de ~200–400 LOC cada uno y merecen PRs separadas (PR 6.5b/c/d/e futuras). Esta PR solo cubre los consumers que ya son BottomSheets.
+
 ## [1.5.37] - 2026-04-18
 
 ### feat(wellness) — PR 7 Bevel: `<ConstantTile>` biometric primitive + Progress Body > Summary grid

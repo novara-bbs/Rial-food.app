@@ -152,3 +152,13 @@ describe('BottomSheet — ADR-009 anatomy (V2 — leftSlot escape hatch)', () =>
     expect(SRC).toMatch(/leftSlot\s*\?\?/);
   });
 });
+
+describe('BottomSheet — ADR-009 anatomy (V2 — actionSlot fits text buttons)', () => {
+  it('actionSlot wrapper uses `min-w-11` (not `w-11`) so text buttons like "Guardar"/"Siguiente" are not clipped', () => {
+    // ADR-009 V2 cancel-action layout pairs a Cancel text button (left) with a
+    // primary text button (right, via actionSlot). A fixed `w-11` wrapper clips
+    // anything wider than 44px. `min-w-11` preserves the HIG-compliant minimum
+    // touch target while letting text buttons size to their content.
+    expect(SRC).toMatch(/min-w-11 h-11[^"'`]*-mr-2[^"'`]*justify-end[^"'`]*shrink-0/);
+  });
+});

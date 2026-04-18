@@ -25,6 +25,7 @@ export default function RecipePicker({ open, onOpenChange, recipes, onSelect }: 
       open={open}
       onOpenChange={onOpenChange}
       title={t.createPost.selectRecipe}
+      size="focus"
       actionSlot={<ChefHat className="w-5 h-5 text-primary" aria-hidden="true" />}
     >
       <div className="space-y-3">
