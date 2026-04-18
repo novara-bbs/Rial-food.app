@@ -4,7 +4,7 @@
 >
 > Alcance: extraer las prácticas de diseño visible en 64 capturas Bevel (IMG_0951–IMG_1019) que merece la pena **copiar, adaptar o descartar** para RIAL. Enfocado a `.theme-light` como "color 1" de referencia.
 >
-> Última revisión: 2026-04-17. Capturas en `docs/market/Competitor Images/Bevel/Imágenes app/`.
+> Última revisión: 2026-04-18 (re-audit — cerradas las 9 capturas pendientes + identificada la segunda tipología de sheet "focus"). Capturas en `docs/market/Competitor Images/Bevel/Imágenes app/`.
 
 ---
 
@@ -28,7 +28,18 @@ Tomar su vocabulario **ahora** (pre-Q15/Q17) evita rehacer decisiones de color y
 |---|---|---|---|
 | Fondo warm `#fafaf9` en light mode | 0974 / 0994 | **Copy** | `.theme-light` en `src/index.css` |
 | Cards borderless con `shadow-elev-2` sutil | 0974 / 0976 / 0977 | **Copy** | `SectionCard` en light mode |
-| Handle bar + `rounded-t-3xl` + sheet no-full-height | 0984–0990 / 1004–1009 | **Copy** | nuevo `<BottomSheet>` (ADR-009) |
+| Handle bar + `rounded-t-3xl` + sheet no-full-height (compact ~60vh) | 0984–0990 / 0995 / 0996 | **Copy** | `<BottomSheet size="compact">` (ADR-009) |
+| **Focus sheet casi-fullscreen ~92vh** (status bar band visible, sheet cubre resto) | **0988 / 1004 / 1011 / 1016** | **Copy** | `<BottomSheet size="focus">` (ADR-009 v2) |
+| Header sticky `Cancelar` / `Siguiente` — focus sheets input-heavy | 1004 / 1011 | **Copy** | `<BottomSheet headerLayout="cancel-next">` |
+| Hidden handle + keyboard-first en focus sheets | 1011 / 1012 | **Copy** | `<BottomSheet hideHandle size="focus">` |
+| Onboarding: hero visual centered + title + subtitle + black pill CTA + text-link bajo CTA | 0953 / 0956 / 0957 / 0958 | **Copy** | `OnboardingScaffold` primitive |
+| Wearable device list con 6 opciones + chevrons | 0958 | **Copy** | `SelectList` pattern en Settings |
+| Radio-card selector (Imperial/Métrico) con desc interna + hint disclaimer | 0962 | **Copy** | `RadioCardGroup` primitive |
+| Inline progress badge "Ha subido / Ha bajado" + mini sparkline | 0993 | **Adapt** | `ConstantTile` variant con trend indicator |
+| Constantes grid 2 cols con estado por tile ("Sin rango" / "Sin tendencias" / valor) | 0994 / 0993 | **Copy** | `ConstantTile` primitive nuevo |
+| Meal-edit inline con donut + macros + porción `- / +` + ingredientes + Eliminar/Guardar | 1015 / 1016 | **Copy** | focus sheet reusa pattern |
+| Sheet sobre StoreKit native (apilamiento tier 3) | 1010 | **Copy** | stacking nativo radix ya soportado |
+| Preview-link en sheet compartir con ingreso chat | 1017 / 1019 | **Adapt** | V2 — requiere OG fetch + shared text input |
 | Overlay sheet 20–30% (no 50%) | 0984 / 1010 | **Copy** | `<BottomSheet>` defaults |
 | Status bar + dynamic island visibles detrás de sheet | 0984 / 0985 / 0995 | **Copy** | `max-h-[88vh]` |
 | Sheets apilables (paywall → sheet → StoreKit) | 1010 | **Copy** | `<BottomSheet>` acepta stacking nativo radix |
@@ -50,14 +61,20 @@ Tomar su vocabulario **ahora** (pre-Q15/Q17) evita rehacer decisiones de color y
 
 ---
 
-## 3. Catálogo de capturas (50 de 64 leídas)
+## 3. Catálogo de capturas (64 de 64 leídas — cierre de auditoría 2026-04-18)
 
 Agrupadas por tipología con IMG más legible del patrón.
 
 ### A. Onboarding + science explainers
 - **IMG_0951** splash minimalista: logotipo fantasma + paginador dots + CTA negro full-width.
 - **IMG_0952** card 3-D "Fitness" (BPM + timer + peso muerto). Título + subtítulo + demo-card + dots + CTA.
+- **IMG_0953** "Privacidad por diseño" — 3D-effect card centrada (dispositivo abstracto con cámara) + title 28px + subtitle + CTA negro `Continuar con Apple` con icono + link secundario "Usar el correo electrónico en su lugar". Back chevron top-left. Pattern: **hero visual + 2-CTAs (primary black + secondary text-link)**.
+- **IMG_0954** "Iniciar sesión con Apple" native sheet SUPERPUESTO al step 0953 — evidencia stacking nativo iOS. Dynamic island queda visible, sheet StoreKit-like cubre ~55% inferior con close-X + lista items con iconos + check verde bottom.
 - **IMG_0955** pregunta única centrada ("¿Cuál es tu nombre de pila?") con campo underline. Sin card, sin chrome.
+- **IMG_0956** "¡Encantado de conocerte, Vicente!" — emoji 👋 centered + H1 + subtitle 15px + CTA negro pill. Después del name input (0955). Pattern: **milestone confirmation mid-onboarding** (no final, solo reconoce + continúa).
+- **IMG_0957** "Mejora tu salud día tras día" — chart comparativo "Con seguimiento" (línea verde exponencial ↑) vs "Sin seguimiento" (naranja descendente) + ejes `Salud` (y) / `Cronología` (x) con pills label. CTA negro. Pattern: **value-prop visual antes de pedir permisos/pago**.
+- **IMG_0958** "¿Qué dispositivo ponible usas?" — 6 opciones (Apple Watch / Garmin / Helio Strap / Salud de Apple / Oura / No tengo) como cards separados con chevron-right. Cada card es independiente (radius, shadow, gap de 10px entre cards). Pattern: **SelectList vertical con cards independientes** — distinto del pattern `RadioCardGroup` (0962) donde hay visual selección radio.
+- **IMG_0962** "¿Cómo te gustaría medir tus métricas?" — 2 radio-cards `Sistema imperial` / `Métrico` con label bold + desc inline + radio-dot derecho + active state `border` sutil. Disclaimer "Puedes reajustarlo más tarde en los Ajustes" bajo el grupo. Pattern: **RadioCardGroup binary** con hint.
 - **IMG_0964** confirmación verde "Ya está todo listo" con checkmark glow + disclaimer médico.
 - **IMG_0968–0972** cards "¿cómo funciona Esfuerzo/Recuperación/Sueño?" con anillo semi-gradient top-right + title/subtitle + sub-cards icon + lista vertical. Dos CTAs inferiores `← →` circulares ≥44×44.
 - **IMG_0967** "sincronizando datos 31%" como pill, no overlay modal.
@@ -70,6 +87,7 @@ Agrupadas por tipología con IMG más legible del patrón.
 ### C. Home dashboard
 - **IMG_0974** header "Hoy, 17 de abril" + chip "Activo/a" + chip "24°C Madrid". Banner warning naranja. **3 anillos horizontales** (Esfuerzo / Recuperación / Sueño). Promo Pro banner colapsable. "Estrés y Energía" con anillo grande + Max/Min/Avg.
 - **IMG_0976** scroll: "Nutrición" `SectionCard` con anillo bloqueado + macros vacías + caption. Grid 2×N "Monitor de salud" (FR / FCR / SpO2) con sparkline vertical por tile.
+- **IMG_0993** "Constantes" tab inferior — Grid 2 cols. Tiles por estado: (1) `VO₂ máx` empty "No hay datos / Sin rango" + skeleton lines; (2) `VFC histórico` empty solo; (3) `Históricos FCR` empty + mini-speedometer arc decorativo ("− / +"); (4) `Peso 71.0 kg` + dot-indicator morado "Ha subido" + bar gauge horizontal (el único tile con valor — subtle inline sparkline/gauge integration). Tabs inferior: Inicio / Diario / Fitness / Constantes (active) / `+`. Pattern: **ConstantTile con 3 estados canónicos** (empty / trend-down / trend-up / valor-stable).
 - **IMG_0994** "Constantes" grid 2 cols (VO₂ / VFC / FCR / Peso / Masa magra / Grasa). Cada tile extiende StatTile con unidad + estado.
 
 ### D. Timeline / Diario
@@ -95,8 +113,10 @@ Agrupadas por tipología con IMG más legible del patrón.
 - **IMG_0995–0996** "Peso" chart histórico + tabs temporales + calendario. "Análisis de tendencias" grid 2×1 + tabla. Lock-pill "Desbloquear con Pro" flotando.
 - **IMG_1004–1009** buscador alimentos con tabs `Buscar` / `Mis alimentos`, header pegajoso `Cancelar` / `Siguiente`, lista thumb 40px + verified blue + kcal + porción + `+`.
 - **IMG_1006** edit-detail alimento: foto + verified + "Datos nutricionales" + inline macros + donut + porción editable + "Añadir ingrediente" + CTAs `Personalizar` / `Añadir alimento`. Footer `Informar de un problema`.
-- **IMG_1011–1012 / 1018** "¿Qué comes?" free-text + CTAs `Tomar foto` / `Importar foto` + badge counter. Sheet ~80%.
-- **IMG_1016** edit-meal (pizza) con macros hero + donut + ingredientes + toolbar `Eliminar` / `Guardar`.
+- **IMG_1011–1012 / 1018** "¿Qué comes?" free-text + CTAs `Tomar foto` / `Importar foto` + badge counter. **Sheet ~92% (focus variant)** — solo deja ~40 px de status bar visible, handle pill visible pero NO header sticky (el sheet es input-first: keyboard emerge desde abajo y ocupa la mitad inferior; el "Continuar" queda sobre el keyboard). Pattern: **`size="focus"` + `hideHandle={false}` + keyboard-first**.
+- **IMG_1015** "Registrar alimento" — focus sheet (~92vh). Header tri-column: basura roja izquierda (delete) + título centrado + `+` derecha (add). Card pizza con thumb + `Común · 1248 kcal` + chips `1 porción` + `Eliminar` / `Editar` inline. Footer vertical: `1,25K kcal · 54g · 129g · 55g` resumen macros chevron + `Fecha · Hoy a las 19:54` + CTA negro pill `Añadir al registro`. Pattern: **detail-review sheet** previo al commit final.
+- **IMG_1016** edit-meal (pizza) con macros hero + donut + ingredientes + toolbar `Eliminar` / `Guardar`. Focus sheet — header mínimo back-chevron + título + star-fav + body largo + footer dos CTAs. **Sin handle** (por ser navegación hacia atrás, no modal).
+- **IMG_1019** "Kit de Ramen Udon Kania" — focus sheet ~92vh, estructura similar a 1015/1016 pero con **hero preview-card externa arriba** (TikTok/IG-like imagen + caption " NOVEDADES DEL SUPERMERCADO LIDL ..."). Luego label icon-row `586 kcal Calorías / 14,9g Grasas / 95g Carbos / 14,4g Proteína` en 2×2 grid compacto. Dos items más: `1 porción` chevron + Banner `Calibración de la glucosa · Registra 20 ingestas…` con lock-pill `Desbloquear con Pro`. Pattern: **externally-sourced food detail sheet** — distinto del 1015 que es user-created.
 
 ### H. Modales sobre Home
 - **IMG_0997–0998** long-press `+` → action grid 3×3 (Describir · Importar · Tomar foto / Escanear · Preguntar · Buscar / Generar plantillas · Ver plantillas · Registrar actividad). Fondo gris claro translúcido. BottomNav visible con X.
@@ -176,7 +196,9 @@ Patrón transversal Bevel:
 **Diferencia vs RIAL hoy:** Home mezcla `NutritionHero` + `ProgressPreviewCard` sin hero dominante único. Bevel consolida un "status del día" arriba y todo lo demás scrollea. Candidato Q15 (ICP-adaptive).
 
 ### 4.4 Bottom sheets — "second-level surface"
-Formalizado en **ADR-009**. Anatomy:
+Formalizado en **ADR-009**. Anatomy compact (V1) + focus (V2, pendiente).
+
+**Defaults compact (V1 shipped en PR 2):**
 - **Max height** `88vh` (deja ~80 px fondo visible, status bar + dynamic island visibles).
 - **Top radius** `rounded-t-3xl` (24 px).
 - **Handle bar** pill 4×32 px gris centrado, ~8 px del borde.
@@ -185,6 +207,37 @@ Formalizado en **ADR-009**. Anatomy:
 - **Contenido scrollable** dentro del sheet; el sheet no crece.
 - **Cierre** tap overlay + swipe down handle + botón X.
 - **Stacking** soportado nativamente por radix (paywall → sheet → StoreKit como IMG_1010).
+
+#### 4.4.a Dos tipologías de sheet — `size: 'compact' | 'focus'` (ADR-009 v2, pendiente PR 6)
+
+**Hallazgo del re-audit 2026-04-18.** Bevel no usa un único "bottom sheet" — usa **dos variantes bien diferenciadas** por densidad de contenido y tipo de tarea. El PR 2 implementó la compact; la focus requiere una extensión de primitive.
+
+| Prop | `compact` (V1) | `focus` (V2) |
+|---|---|---|
+| **`max-h`** | `88vh` (~80 px fondo visible) | `92vh` (~40 px status-bar band visible) |
+| **Captura referencia** | 0984, 0985, 0990, 0995, 0996 | **0988, 1004, 1005, 1011, 1015, 1016, 1019** |
+| **Cuándo usar** | Pickers, toggle groups, lista corta, confirm-action | Forms multi-field, búsquedas con lista larga, input + keyboard, detail-edit, review-before-commit |
+| **Header típico** | Close-X izq + título centrado + action derecha | `Cancelar` izq + `Siguiente` / `Guardar` der (titular sticky bajo), o back-chevron + título + star |
+| **Handle** | Visible (handle pill top) | Visible para "editable/dismissable" (0988, 1004); **oculto** en keyboard-first (1011) o navigation-stack (1016) |
+| **Body** | Lista corta | Lista larga scrollable, teclado emerge debajo |
+| **Footer** | Opcional (primary CTA sticky) | Típico (primary + destructive / secondary par) |
+| **Intent semántico** | "elegir algo" | "trabajar en algo" |
+
+**Implementación propuesta** (PR 6):
+- Añadir prop `size?: 'compact' | 'focus'` al `<BottomSheet>`. Default `compact`.
+- Añadir prop `hideHandle?: boolean` (default `false`) — para focus sheets keyboard-first o navigation-stack.
+- Añadir prop `headerLayout?: 'title-centered' | 'cancel-action' | 'back-title-action' | 'custom'` — con children slot si `custom`.
+- Mantener stacking (tres niveles Bevel IMG_1010 prueba que el radix primitive ya lo soporta).
+- Convention test `bottom-sheet.test.ts` se expande para locker ambas variantes + header layouts.
+- `PRIMITIVES.md` §1 tabla añade filas para las 3 header layouts con referencia IMG_XXXX.
+
+**Consumers candidatos a `size="focus"`:**
+- `AddMeal.tsx` search tab — hoy es pantalla full-screen embebida en `PageShell`; podría ser focus sheet como IMG_1004.
+- `CreateRecipe.tsx` — hoy pantalla full; podría ser focus sheet abriendo desde CreateModal con `size="focus"` + `headerLayout="cancel-action"` (Cancelar / Guardar).
+- `ImportRecipeURL.tsx` — hoy pantalla full step-by-step; focus sheet podría presentar todos los steps sin cambiar contexto.
+- `BarcodeScanner.tsx` modal preview tras escanear — hoy full-screen; focus sheet con imagen + datos + CTA `Añadir al registro` (IMG_1015 pattern exacto).
+
+Esta migración NO es obligatoria — muchas screens actuales funcionan bien full-screen. La recomendación es **adoptar focus sheet progresivamente** cuando el user se beneficie de ver el contexto de fondo (p.ej., al escanear un código de barras es valioso saber desde dónde vienes; al añadir un alimento es valioso ver el `dailyLog` del día detrás del sheet).
 
 ### 4.5 Empty states
 - **Bevel**: skeleton gris + icon neutro + título + descripción. **Sin CTA**.
@@ -202,6 +255,77 @@ Formalizado en **ADR-008**: free-generous core + single premium tier. Timeline t
 ### 4.8 FAB mega-menu
 Long-press `+` → action grid 3×3 con 9 acciones icon+label (IMG_0997). Candidato Q15+ separado — requiere rediseñar `BottomNav` `+` + lógica long-press + 9 handlers.
 
+### 4.10 Constantes — `<ConstantTile>` biometric tile (nuevo primitive)
+
+**Hallazgo del re-audit.** Bevel resuelve "constantes biométricas" (VO₂, VFC, FCR, Peso, Masa magra, Grasa corporal) con un **componente uniforme** que se repite en Home (IMG_0976), Constantes tab (IMG_0993, IMG_0994), y secundariamente en sheets de análisis (IMG_0995–0996). La uniformidad es el valor — el user aprende el pattern una vez y lo reconoce en todos los módulos.
+
+**Anatomy (`ConstantTile`):**
+- Grid 2 cols `gap-2`, aspect ~1.2:1.
+- Top-row: icon 16px left + label 11px uppercase tracking-widest left. Padding `pt-3 px-3`.
+- Hero-row: valor grande 24–28 px bold (si data) O "No hay datos" 14 px gris (si empty).
+- Sub-row: unidad 12 px gray (si data) O "Sin rango" / "Sin tendencias" 11 px gris caption (si empty).
+- Optional bottom-row decorator:
+  - Sparkline horizontal de 30 días si trending (IMG_0976 FCR tile).
+  - Mini speedometer arc decorativo si no-data pero hay template (IMG_0993 FCR tile).
+  - Dot badge "Ha subido / Ha bajado" + bar gauge gradient si valor stable con delta (IMG_0993 Peso tile).
+- Borderless en `.theme-*-light`, con `shadow-elev-2` suave.
+- Touch target toda la tile (≥44×44 OK dado el aspect); click expande a sheet detalle (focus variant, IMG_0995 pattern).
+
+**Estados canónicos:**
+- `loading` — skeleton 3 líneas grises pulsantes.
+- `empty-no-template` — "No hay datos / Sin rango".
+- `empty-no-data` — "No hay datos / Sin tendencias" + decorator visible (indica que el template existe, solo falta sample).
+- `value-stable` — valor + unidad + subtle "estable / mantenido / —".
+- `value-trending-up` — valor + unidad + `Ha subido` badge cálido + gauge.
+- `value-trending-down` — valor + unidad + `Ha bajado` badge frío + gauge.
+
+**Consumers candidatos RIAL:**
+- Progress → Body → Summary sub-tab (HEAD `8c86b40` ya monta `WeightTrendCard` + `RitmoSection` + `LatestReflectionCard`; añadir grid `<ConstantTile>` debajo con [Peso / Masa magra / Grasa corporal / IMC / Cintura / Medidas-personalizadas] — Q15 ICP-adaptive).
+- Home secondary rail bajo `ProgressPreviewCard` cuando `featureFlags.homeRingGrid` esté activo (PR 8).
+- Settings → Datos (cuando HealthKit se integre post-Q6) con [VO₂ máx / VFC / FC reposo / SpO2].
+
+**Relación con primitivas existentes.**
+- `StatTile` actual (`src/components/StatTile.tsx`) es más simple — `label + valor + delta` sin los 6 estados ni los decorators. Dos opciones:
+  - (a) **Extender `StatTile`** con variant `constant` + empty states → mismo primitive, más responsabilidades.
+  - (b) **Nuevo primitive `ConstantTile`** que compone internamente `StatTile` para el caso simple.
+  - **Decisión propuesta para PR 7**: (b) — `ConstantTile` distinto. Razón: el empty-state coherente y los decorators son propios de biométricas; forzar `StatTile` a cubrir ambos sesga el API. Mejor dos primitives bien enfocados que uno ambiguo.
+
+### 4.11 Onboarding design system — `<OnboardingScaffold>` + `<RadioCardGroup>` + `<SelectList>`
+
+**Hallazgo del re-audit.** IMG_0951, 0952, 0953, 0955, 0956, 0957, 0958, 0962, 0964, 0968–0972 revelan **4 step-types canónicos** con un scaffold común:
+
+```
+[back-chevron circular top-left + status-bar natural iOS]
+[spacer flex]
+[hero visual — 3D card / emoji / graph / illustration, centered]
+[title 24–28 px bold black, center]
+[subtitle 14–15 px medium gray, center, 2 líneas max]
+[interactive content — varía por step-type]
+[spacer flex]
+[primary CTA pill negro full-width]
+[optional secondary text-link gray, bajo el CTA]
+```
+
+**4 step-types:**
+1. **Presentation** (0951, 0952, 0956, 0957, 0964) — hero + title + subtitle + primary CTA. Sin interactivo.
+2. **Input single-field** (0955) — hero opcional + pregunta + input underline o pill + primary CTA. Sin chrome/card.
+3. **Selection** (0958, 0962) — hero opcional + grupo de cards.
+   - **0958** `SelectList` — cards verticales con chevron-right, todas destacadas iguales.
+   - **0962** `RadioCardGroup` — cards con label + desc interno + radio visual derecha; uno activo por defecto.
+4. **Auth / permission / done** (0953, 0954, 0960, 0961) — similar a presentation pero con CTAs específicos (Apple/Google/HealthKit grant/etc.). Suele llevar stacking nativo (sheet StoreKit superpuesta, IMG_0954).
+
+**Primitives propuestos:**
+- `<OnboardingScaffold>` — layout shell con slots `heroSlot`, `title`, `subtitle`, `children` (interactive zone), `primaryCta`, `secondaryLink?`.
+- `<RadioCardGroup>` — binary/ternary selector con semantic roles `radiogroup` + `radio`, active-border subtle + `aria-checked`.
+- `<SelectList>` — card list con ítems clickables (no radios), chevron-right automático.
+
+**Consumers RIAL actual (`src/features/profile/components/Onboarding.tsx`):**
+- El Onboarding existente implementa 5 steps hand-rolled sin primitive compartido.
+- Step 5 (paleta picker) ya se rediseñó en PR 3 con un grid 4-tile.
+- La migración a `<OnboardingScaffold>` + `<RadioCardGroup>` + `<SelectList>` unificaría los 5 steps bajo el mismo layout, reduciría CSS/markup duplicado, y prepararía el terreno para añadir steps de **HealthKit grant** + **Apple Sign-In** + **permissions camera/notifications** cuando toque integrar (Q6+ Supabase + wearables).
+
+**Decisión propuesta para PR 9** (distinto de PR 6/7/8): refactor Onboarding sin cambiar UX, solo sustituyendo markup por primitives. ROI medio — el sprint Q6 se beneficiará, pero no es bloqueante hoy.
+
 ### 4.9 Lo que NO copiamos
 - **Anillo-heavy Home**: 3–5 rings simultáneos sobrecargan. RIAL consolida 1–2.
 - **Recetas**: Bevel débil, Paprika/Yummly mejor referencia.
@@ -210,42 +334,45 @@ Long-press `+` → action grid 3×3 con 9 acciones icon+label (IMG_0997). Candid
 
 ---
 
-## 5. Roadmap de ejecución — 4 PRs
+## 5. Roadmap de ejecución — 9 PRs
 
 | PR | Scope | Archivos nuevos | Archivos amendment |
 |---|---|---|---|
-| **1** | Docs + ADR foundations | `docs/market/bevel-design-playbook.md`, `docs/adr/ADR-008`, `docs/adr/ADR-009` | `docs/DESIGN-SYSTEM.md`, `docs/NEW-SCREEN-CHECKLIST.md`, `CHANGELOG.md` |
-| **2** | `<BottomSheet>` primitive + 2 consumers pilot | `src/components/ui/bottom-sheet.tsx`, `src/test/conventions/bottom-sheet.test.ts` | `docs/PRIMITIVES.md`, `PortionSheet` (piloto real — sustituye `RecipeDaySelectorSheet`, que no es sheet real), `PublishRecipeSheet` (piloto real — sustituye `MealSlotMultiSelect`, que no es sheet real), `src/test/conventions/primitives-export.test.ts`, `CHANGELOG.md` |
-| **3** ✓ shipped | 4 paletas × 3 modos (VOLT/OCEAN/EMBER/NEUTRAL × auto/light/dark) — ver §4.1.a | `src/test/conventions/theme-palettes.test.ts` | `src/contexts/ThemeContext.tsx` (rewrite — `{palette, mode}` + matchMedia + legacy migration), `src/index.css` (rename 5 classes + add `theme-volt-dark` combined selector + add `theme-neutral-dark` + `theme-neutral-light` + polish EMBER accent), `src/App.tsx` (consume `themeClassName`/`resolvedMode`), `src/features/profile/components/settings/SettingsAppearance.tsx` (rewrite 2-section picker), `src/features/profile/components/Onboarding.tsx` (4-tile palette step), i18n 13 keys × 2 locales, `docs/DESIGN-SYSTEM.md`, `CHANGELOG.md` |
-| **4** ✓ shipped | Bevel sheet migrations (scope pivot) | — | `LogSnapshotModal` (radix `Dialog` → `BottomSheet` + footer Cancelar/Guardar + 7×7→44×44 tap target + `text-sm`→tokens), `RecipePicker` (raw div → `BottomSheet` + API `{recipes, onSelect, onClose}` → `{open, onOpenChange, recipes, onSelect}`), `CreateModal` (radix `Dialog` → `BottomSheet`, preserva `{isOpen, onClose, onSelect}` externo), `ShareSheet.tsx` **eliminado** (0 consumers — dead code desde feature inception), `CreatePost.tsx` + `CreateStory.tsx` (actualizan consumers de `RecipePicker` a controlled-open). **Scope pivot vs plan:** los 5 consumers originales (`PhotoUploader`/`AddMeal`/`ImportRecipeURL`/`BarcodeScanner`) resultaron ser no-sheets tras auditoría (PhotoUploader=Dialog picker; AddMeal no tiene sheet propio; ImportRecipeURL=inline flow; BarcodeScanner=full-screen overlay). Se migraron los 3 reales que sí eran sheets. **Home hero consolidation deferida a PR 5** (requiere infra `featureFlags.ts` inexistente + restructure NutritionHero+ProgressPreviewCard — scope propio). |
+| **1** ✓ shipped (`cc2a30b`) | Docs + ADR foundations | `docs/market/bevel-design-playbook.md`, `docs/adr/ADR-008`, `docs/adr/ADR-009` | `docs/DESIGN-SYSTEM.md`, `docs/NEW-SCREEN-CHECKLIST.md`, `CHANGELOG.md` |
+| **2** ✓ shipped (`82d73f8`) | `<BottomSheet>` primitive (compact V1) + 2 consumers pilot | `src/components/ui/bottom-sheet.tsx`, `src/test/conventions/bottom-sheet.test.ts` | `docs/PRIMITIVES.md`, `PortionSheet` (piloto real — sustituye `RecipeDaySelectorSheet`, que no es sheet real), `PublishRecipeSheet` (piloto real — sustituye `MealSlotMultiSelect`, que no es sheet real), `src/test/conventions/primitives-export.test.ts`, `CHANGELOG.md` |
+| **3** ✓ shipped (`18938a6`) | 4 paletas × 3 modos (VOLT/OCEAN/EMBER/NEUTRAL × auto/light/dark) — ver §4.1.a | `src/test/conventions/theme-palettes.test.ts` | `src/contexts/ThemeContext.tsx` (rewrite — `{palette, mode}` + matchMedia + legacy migration), `src/index.css` (rename 5 classes + add `theme-volt-dark` combined selector + add `theme-neutral-dark` + `theme-neutral-light` + polish EMBER accent), `src/App.tsx` (consume `themeClassName`/`resolvedMode`), `src/features/profile/components/settings/SettingsAppearance.tsx` (rewrite 2-section picker), `src/features/profile/components/Onboarding.tsx` (4-tile palette step), i18n 13 keys × 2 locales, `docs/DESIGN-SYSTEM.md`, `CHANGELOG.md` |
+| **4** ✓ shipped (`4622f76`) | Bevel sheet migrations (scope pivot) | — | `LogSnapshotModal` (radix `Dialog` → `BottomSheet` + footer Cancelar/Guardar + 7×7→44×44 tap target + `text-sm`→tokens), `RecipePicker` (raw div → `BottomSheet` + API `{recipes, onSelect, onClose}` → `{open, onOpenChange, recipes, onSelect}`), `CreateModal` (radix `Dialog` → `BottomSheet`, preserva `{isOpen, onClose, onSelect}` externo), `ShareSheet.tsx` **eliminado** (0 consumers — dead code desde feature inception), `CreatePost.tsx` + `CreateStory.tsx` (actualizan consumers de `RecipePicker` a controlled-open). **Scope pivot vs plan:** los 5 consumers originales (`PhotoUploader`/`AddMeal`/`ImportRecipeURL`/`BarcodeScanner`) resultaron ser no-sheets tras auditoría. |
+| **5** ✓ shipped (`8c86b40`) | 7d EMA weight-trend overlay + Progress Body sub-tabs (scope pivot) | `src/test/conventions/weight-ema.test.ts` | `src/features/wellness/utils/weight-trend.ts` (+ `EMA_ALPHA_7D` + `calcEmaSeries` + extend `WeightTrend`), `src/features/wellness/components/WeightTrendCard.tsx` (rewrite API + 3-layer SVG overlay + delega `onLog`), `src/features/wellness/screens/Progress.tsx` (Body `SegmentedTabs` summary/history/calendar), i18n 7 keys × 2 locales, `CHANGELOG.md`. **Scope pivot vs plan:** originalmente Home ring-grid → consolidar el trabajo EMA uncommitted del owner (MacroFactor/Yazio semantics). Home ring-grid deferido a PR 8. |
+| **6** ← **next** | `<BottomSheet>` **focus variant** (ADR-009 V2) — sin migrar consumers | — | `src/components/ui/bottom-sheet.tsx` (añade `size: 'compact'\|'focus'`, `hideHandle`, `headerLayout`), `src/test/conventions/bottom-sheet.test.ts` (expande a ambas variantes + 3 header layouts), `docs/PRIMITIVES.md` (tabla + ejemplo), `docs/adr/ADR-009-bottom-sheet-anatomy.md` (V2 addendum), `CHANGELOG.md` `[1.5.35]`. Consumer migrations se defieren a PR 6.5 (selectivas por beneficio UX, no blanket). |
+| **7** | `<ConstantTile>` biometric tile primitive + Progress Body grid | `src/components/ConstantTile.tsx`, `src/test/conventions/constant-tile.test.ts` | `src/features/wellness/screens/Progress.tsx` (monta grid bajo `WeightTrendCard` en Body→Summary), `docs/PRIMITIVES.md`, i18n keys para los 6 estados canónicos, `CHANGELOG.md` `[1.5.36]`. Ver §4.10. |
+| **8** | Home ring-grid consolidation (IMG_0974 pattern) tras feature flag | `src/lib/featureFlags.ts` | `src/features/home/screens/Home.tsx` (layout opt-in 1-3 anillos Bevel-style bajo `featureFlags.homeRingGrid`, fallback al layout actual), `NutritionHero`/`ProgressPreviewCard` (respect flag), `CHANGELOG.md` `[1.5.37]`. |
+| **9** | Onboarding refactor — `<OnboardingScaffold>` + `<RadioCardGroup>` + `<SelectList>` | `src/components/OnboardingScaffold.tsx`, `src/components/RadioCardGroup.tsx`, `src/components/SelectList.tsx`, `src/test/conventions/onboarding-primitives.test.ts` | `src/features/profile/components/Onboarding.tsx` (5 steps migrados — UX igual, markup unificado), `docs/PRIMITIVES.md`, `CHANGELOG.md` `[1.5.38]`. Ver §4.11. |
 
 Governance: trabajar directamente en `main`. Cada PR = commit(s) + `release:preflight` verde + push a `rial-food/main` tras aprobación explícita del user ("continua").
 
 ---
 
-## 6. Verificación end-to-end (post PR 4 shipped)
+## 6. Verificación end-to-end (post PR 5 shipped)
 
 ```bash
 npm run release:preflight
 # tsc + lint + lint:code + check:i18n + test + build + size:check
 
 preview_start
-# 3 themes × 5 pantallas clave:
-#   VOLT dark (default)     → verificar NO regresa
-#   .theme-light            → verificar look Bevel aplicado
-#   .theme-blue-light       → personalidad OCEAN conservada
-# Sheets abiertas en cada theme → status bar visible
+# 8 combinaciones theme (4 paletas × 2 modos) × pantallas clave
+# Sheets abiertas en cada theme → status bar visible detrás
 ```
 
-Baselines medidas post-PR4 (verificadas en preview antes de preflight):
-- **3 migraciones a `<BottomSheet>`** verificadas con `preview_inspect`: `CreateModal` + `LogSnapshotModal` + `RecipePicker` — todas reportan `border-top-left-radius: 24px`, `max-height: ≈88vh` del viewport actual (322.8 px sobre 366.8 px), overlay `oklab(0 0 0 / 0.25)`, status bar visible detrás (content `y=44`).
-- **1 dead file eliminado** (`ShareSheet.tsx`, 68 líneas, 0 consumers históricos).
-- **Scope pivot vs plan** documentado en §5 — 5 consumers originales resultaron no-sheets reales tras audit, se migraron los 3 reales que sí eran sheets.
-- **Home hero consolidation** deferida a PR 5 (requiere crear `src/lib/featureFlags.ts` + restructure — scope propio).
-- SectionCard drift: sin cambio (baseline 0 post Q16-B2 — PR 4 no toca primitivas).
-- ESLint Q16 allowlist: sin cambio (baseline 5 shadcn-only).
-- i18n: sin cambio (PR 4 no añade keys — los labels de `<BottomSheet>` los provee el consumer vía `title`/`actionSlot`).
-- Tests: convention `bottom-sheet.test.ts` sigue verde (baseline ADR-009 defaults locked).
+Baselines medidas post-PR5 (`8c86b40` in sync con `rial-food/main`):
+- TypeScript: 0 errors.
+- Tests: **589/589** (+9 vs PR 4 — 8 del convention `weight-ema.test.ts` + 1 expansión Progress).
+- i18n symmetry: **1530** (1523 → 1530, +7 keys × 2 locales en PR 5).
+- Design-system lint: 0 errors, warnings pre-existentes.
+- Build: main **774.4 KB raw / 242.4 KB gzip** (+1.2 KB raw vs PR 4), `size:check` PASS.
+- SectionCard drift: **0** (sin cambio post Q16-B2).
+- ESLint Q16 allowlist: **5** files shadcn-only (sin cambio).
+
+Foco próximo (PR 6): extender `<BottomSheet>` con `size="focus"` sin migrar consumers todavía. El convention test debe validar ambas variantes y los 3 `headerLayout` antes de que cualquier consumer los use, de modo que las migraciones PR 6.5+ tengan un guardrail en CI desde el primer commit.
 
 ---
 
