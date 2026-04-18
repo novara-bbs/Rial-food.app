@@ -11,6 +11,7 @@ import { getCorrelations } from '../utils/correlations';
 import PageHeader from '../../../components/patterns/PageHeader';
 import { toast } from 'sonner';
 import WeeklyScoreCard from '../components/WeeklyScoreCard';
+import WeeklyInsightsCard from '../components/WeeklyInsightsCard';
 import ConsistencyCalendar from '../components/ConsistencyCalendar';
 import InlineReflection from '../components/InlineReflection';
 import WeightTrendCard from '../components/WeightTrendCard';
@@ -20,6 +21,10 @@ import RitmoSection from '../components/RitmoSection';
 import SectionCard from '@/components/SectionCard';
 import { calcStreaks } from '../utils/streaks';
 import { calcWeekMacros, type MacroTarget } from '../utils/week-stats';
+import { calcWeightTrend } from '../utils/weight-trend';
+import { calcTopMeals } from '../utils/top-meals';
+import { buildWeekInsight } from '../utils/week-insights';
+import { bodyWeightFromKg, getBodyWeightUnit } from '../../food/utils/units';
 import { useLogSnapshot } from '../hooks/useLogSnapshot';
 import type { BodySnapshot } from '../../../types/wellness';
 
@@ -118,34 +123,41 @@ export default function Progress({ onBack }: { onBack: () => void }) {
     return Math.round(adherence * 0.4 + consistency * 0.3 + proteinPct * 0.3);
   }, [weekStats]);
 
-  // ─── Top Meals This Week ────────────────────────────────────────────────────
-  const topMeals = useMemo(() => {
-    const thisWeekStart = getWeekStartISO(now);
-    const weekArchives = history.filter(h => h.date >= thisWeekStart);
-    const counts: Record<string, { name: string; count: number; totalCal: number }> = {};
+  // ─── Top Meals This Week (canonical util — shared with WeeklyInsightsCard) ──
+  const topMeals = useMemo(
+    () => calcTopMeals(history, dailyLog as any[], now, 0, 3),
+    [history, dailyLog],
+  );
 
-    for (const archive of weekArchives) {
-      const entries = archive.dailyLog || [];
-      for (const entry of entries) {
-        const name = entry.title || entry.name;
-        if (!name) continue;
-        if (!counts[name]) counts[name] = { name, count: 0, totalCal: 0 };
-        counts[name].count += 1;
-        counts[name].totalCal += entry.macros?.cal || 0;
-      }
-    }
-    for (const entry of dailyLog) {
-      const name = (entry as any).title || (entry as any).name;
-      if (!name) continue;
-      if (!counts[name]) counts[name] = { name, count: 0, totalCal: 0 };
-      counts[name].count += 1;
-      counts[name].totalCal += (entry as any).macros?.cal || 0;
-    }
-
-    return Object.values(counts)
-      .sort((a, b) => b.count - a.count || b.totalCal - a.totalCal)
-      .slice(0, 3);
-  }, [history, dailyLog]);
+  // ─── Weekly Insight (narrative recap — PR 6a) ──────────────────────────────
+  const weightTrend = useMemo(
+    () => calcWeightTrend(snapshots, userProfile?.targetWeight ?? null, now),
+    [snapshots, userProfile?.targetWeight],
+  );
+  const weekInsight = useMemo(() => {
+    const target: MacroTarget = dailyMacros.target ?? { cal: 2400, pro: 180, carbs: 250, fats: 65 };
+    const canonicalWeekStats = calcWeekMacros(history, target, 0, now);
+    const unit = getBodyWeightUnit(unitSystem);
+    const p2 = t.progress;
+    return buildWeekInsight({
+      weekStats: canonicalWeekStats,
+      trend: weightTrend,
+      mealStreak: streaks.mealLog,
+      topMeal: topMeals[0] ?? null,
+      userName: userProfile?.name,
+      goalType: (userProfile as any)?.goalType,
+      copy: {
+        positive: p2?.weekInsightPositive,
+        neutral: p2?.weekInsightNeutral,
+        lowData: p2?.weekInsightLowData,
+        lowDataWithName: p2?.weekInsightLowDataWithName,
+        trendLabel: p2?.trendChip,
+        streakLabel: p2?.streakChip,
+        topMealLabel: p2?.topMealChip,
+      },
+      formatWeightDelta: (kg: number) => `${bodyWeightFromKg(kg, unitSystem).toFixed(1)} ${unit}`,
+    });
+  }, [history, dailyMacros, weightTrend, streaks.mealLog, topMeals, userProfile, unitSystem, t.progress]);
 
   // ─── Day Detail (for calendar tap) ──────────────────────────────────────────
   const selectedDayData = useMemo(() => {
@@ -269,6 +281,11 @@ export default function Progress({ onBack }: { onBack: () => void }) {
         movement={movement}
         barLabels={barLabels}
         t={{ thisWeekTitle: p?.thisWeekTitle, proteinTarget: p?.proteinTarget, daysLogged: p?.days }}
+      />
+
+      <WeeklyInsightsCard
+        insight={weekInsight}
+        title={p?.weeklyInsights || 'Resumen semanal'}
       />
 
       {/* ─── Tabs (Nutrition first — app core) ─── */}
