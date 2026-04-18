@@ -1,5 +1,33 @@
 # RIAL App - Changelog
 
+## [1.5.35] - 2026-04-18
+
+### feat(ui) — PR 6 Bevel: `<BottomSheet>` V2 — focus size variant + 3 header layouts
+
+PR 6 del roadmap Bevel (`docs/market/bevel-design-playbook.md` §4.4.a). Extensión no-breaking del primitive `<BottomSheet>` (ADR-009 V1 shipped en PR 2) para soportar la **segunda tipología de sheet** que emerge tras re-auditar las 64 capturas Bevel en 2026-04-18. El user explícitamente señaló el patrón "sheet al 90%, redondeado al final" — las focus sheets (IMG_0988, 1004, 1005, 1011, 1015, 1016, 1019) que la V1 no cubría. Sin migraciones de consumers en esta PR — extensión pura del primitive + guardrail de convención. Las migraciones selectivas por beneficio UX se defieren a PR 6.5+.
+
+**Added**
+- `src/components/ui/bottom-sheet.tsx` — nuevos props:
+  - `size?: 'compact' | 'focus'` (default `compact`). `compact` mantiene `max-h-[88vh]` de V1 (status bar + dynamic island visibles); `focus` sube a `max-h-[92vh]` (solo ~40 px de status-bar band visibles) para forms / búsquedas con lista larga / keyboard-first / detail-edit.
+  - `headerLayout?: 'title-centered' | 'cancel-action' | 'back-title-action'` (default `title-centered`). Selecciona cuál default renderiza en el slot izquierdo del header sticky: X icon (V1), "Cancelar" text button (IMG_1004/1005/0988), o back chevron (IMG_1015/1016/1019).
+  - `hideHandle?: boolean` (default `false`). Oculta el swipe-handle pill en keyboard-first focus sheets (IMG_1011) o navigation-stack focus sheets (IMG_1016), donde el affordance "dismissable por swipe" es semánticamente incorrecto.
+  - `leftSlot?: ReactNode` — escape hatch para casos fuera de los 3 header layouts (IMG_1015 tri-column: trash destructive left + title + add right).
+  - `cancelLabel?: string` / `backLabel?: string` / `onBack?: () => void` — overrides i18n + handlers para los defaults `cancel-action` / `back-title-action`.
+- `src/components/ui/bottom-sheet.tsx` — exports `BottomSheetSize` y `BottomSheetHeaderLayout` types para consumers que quieran tipar props propagados.
+- `src/components/ui/bottom-sheet.tsx` — atributos `data-size={size}` + `data-header-layout={headerLayout}` en el `SheetPrimitive.Content` para permitir que consumers / tests / Playwright introspeccionen la variante sin acceder a refs.
+
+**Changed**
+- `src/test/conventions/bottom-sheet.test.ts` — expandido de 10 → 25 assertions. V1 defaults siguen lockeados intactos (no regression). 15 assertions nuevas cubren los tipos exactos de `size` / `headerLayout`, los defaults de cada uno, la presencia de `max-h-[92vh]`, `data-size` + `data-header-layout`, el gate `!hideHandle` sobre el render del handle pill, y el nullish coalescing de `leftSlot` sobre el header-layout default.
+- `docs/PRIMITIVES.md` — sección `BottomSheet (ADR-009)` ampliada con 3 ejemplos (compact V1, focus+cancel-action, focus+back-title-action+hideHandle), tabla comparativa de size variants, y tabla de los 3 header layouts con referencias IMG_XXXX.
+- `docs/adr/ADR-009-bottom-sheet-anatomy.md` — sección "V2 addendum" añadida al final del ADR. Documenta la motivación (re-audit 64 capturas reveló 2 tipologías), la tabla comparativa compact vs focus, el API añadido, los 3 canonical header layouts con rationale de por qué NO colapsar los 3 en un solo slot, el casos de uso de `hideHandle`, el `leftSlot` escape hatch, y los consumers candidatos a migración selectiva (AddMeal / CreateRecipe / BarcodeScanner / ImportRecipeURL) en PR 6.5+.
+
+**Notes**
+- **No-breaking por diseño.** Los 5 consumers V1 (`PortionSheet`, `PublishRecipeSheet`, `LogSnapshotModal`, `RecipePicker`, `CreateModal`) renderean idénticamente sin modificaciones — los nuevos props tienen defaults (`size='compact'`, `headerLayout='title-centered'`, `hideHandle=false`) que preservan el comportamiento V1 exacto. `npx tsc --noEmit` pasa sin errores en toda la surface de consumers.
+- **Por qué 3 header layouts y no "un slot flex".** Los tres comunican **intenciones distintas** para UX y screen readers: X = "cerrar"; "Cancelar" = "descartar cambios en este flow"; back chevron = "volver al paso anterior". Colapsar los 3 en un único `leftSlot` obligaría a cada consumer a reimplementar semántica + accesibilidad desde cero, con drift predecible. Mantenerlos nombrados en el API es guardrail preventivo.
+- **Focus variant ≠ full-screen.** `max-h-[92vh]` preserva ~40 px del status bar visible — el user sigue viendo la hora, la barra de batería y el dynamic island. Es la diferencia visual que separa un "bottom sheet grande" (contexto preservado) de un "full-screen takeover" (app feels hijacked). Bevel nunca cruza esa línea; RIAL tampoco debe cruzarla sin intención explícita.
+- **Dos features mejoran gradualmente.** `hideHandle` + `leftSlot` son del tipo "props que pocos consumers usarán pero cuando las necesitas no hay sustituto razonable" — mejor exponerlas ahora (convention-tested) que esperar a que un consumer las reimplemente mal.
+- **PR 6.5+ (deferido).** Las migraciones de consumers a `size="focus"` son selectivas por beneficio UX concreto, no blanket. Se evalúan caso a caso: `AddMeal` search → `focus + cancel-action` (IMG_1004 exacto); `BarcodeScanner` preview-tras-escanear → `focus + back-title-action` (IMG_1015 exacto); `CreateRecipe` desde `CreateModal` → `focus + cancel-action`; `ImportRecipeURL` wizard → `focus + cancel-action`.
+
 ## [1.5.34] - 2026-04-18
 
 ### feat(wellness) — 7d EMA trend line on WeightTrendCard + Progress Body sub-tabs

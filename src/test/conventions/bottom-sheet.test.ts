@@ -1,5 +1,5 @@
 /**
- * BottomSheet anatomy — ADR-009.
+ * BottomSheet anatomy — ADR-009 (V1 + V2).
  *
  * Locks the Bevel-style bottom-sheet defaults declared in ADR-009 so that a
  * future refactor cannot silently drop handle-pill, max-height, top radius,
@@ -22,13 +22,13 @@ const SRC = fs.readFileSync(
   'utf8',
 );
 
-describe('BottomSheet — ADR-009 anatomy', () => {
+describe('BottomSheet — ADR-009 anatomy (V1)', () => {
   it('exports a default component', () => {
     expect(BottomSheet).toBeTruthy();
     expect(typeof BottomSheet).toBe('function');
   });
 
-  it('caps height at 88vh (status bar + dynamic island visible behind)', () => {
+  it('caps compact height at 88vh (status bar + dynamic island visible behind)', () => {
     expect(SRC).toMatch(/max-h-\[88vh\]/);
   });
 
@@ -36,7 +36,7 @@ describe('BottomSheet — ADR-009 anatomy', () => {
     expect(SRC).toMatch(/rounded-t-3xl/);
   });
 
-  it('renders a handle pill (visual swipe-to-close affordance)', () => {
+  it('renders a handle pill (visual swipe-to-close affordance) by default', () => {
     // Pill = w-8 h-1 rounded-full bg-outline-variant/60
     expect(SRC).toMatch(/h-1 w-8[^"'`]*rounded-full[^"'`]*bg-outline-variant\/60/);
   });
@@ -71,5 +71,84 @@ describe('BottomSheet — ADR-009 anatomy', () => {
 
   it('footer slot applies safe-area-inset padding for iOS', () => {
     expect(SRC).toMatch(/env\(safe-area-inset-bottom\)/);
+  });
+});
+
+describe('BottomSheet — ADR-009 anatomy (V2 — size variants)', () => {
+  it('exposes a `size` prop typed as "compact" | "focus"', () => {
+    expect(SRC).toMatch(/BottomSheetSize\s*=\s*'compact'\s*\|\s*'focus'/);
+  });
+
+  it('default size is `compact` (non-breaking — existing consumers unaffected)', () => {
+    expect(SRC).toMatch(/size\s*=\s*['"]compact['"]/);
+  });
+
+  it('caps focus height at 92vh (only ~40 px status-bar band visible for input-heavy sheets)', () => {
+    expect(SRC).toMatch(/max-h-\[92vh\]/);
+  });
+
+  it('emits `data-size` attribute so consumers / tests can introspect the variant', () => {
+    expect(SRC).toMatch(/data-size=\{size\}/);
+  });
+});
+
+describe('BottomSheet — ADR-009 anatomy (V2 — header layouts)', () => {
+  it('exposes a `headerLayout` prop with the 3 canonical Bevel layouts', () => {
+    expect(SRC).toMatch(
+      /BottomSheetHeaderLayout\s*=\s*'title-centered'\s*\|\s*'cancel-action'\s*\|\s*'back-title-action'/,
+    );
+  });
+
+  it('default headerLayout is `title-centered` (V1 behavior preserved)', () => {
+    expect(SRC).toMatch(/headerLayout\s*=\s*['"]title-centered['"]/);
+  });
+
+  it('`cancel-action` layout renders a text button (not an icon) on the left', () => {
+    // Bevel IMG_1004 / 1005 / 0988 — left = "Cancelar" text, not X icon.
+    expect(SRC).toMatch(/headerLayout === 'cancel-action'/);
+    expect(SRC).toMatch(/resolvedCancel/);
+  });
+
+  it('`back-title-action` layout renders a back chevron icon on the left', () => {
+    // Bevel IMG_1015 / 1016 / 1019 — left = back chevron, not X.
+    expect(SRC).toMatch(/headerLayout === 'back-title-action'/);
+    expect(SRC).toMatch(/ChevronLeftIcon/);
+  });
+
+  it('emits `data-header-layout` attribute so consumers / tests can introspect the layout', () => {
+    expect(SRC).toMatch(/data-header-layout=\{headerLayout\}/);
+  });
+
+  it('exposes `cancelLabel` / `backLabel` / `onBack` props for i18n + navigation overrides', () => {
+    expect(SRC).toMatch(/cancelLabel\?:\s*string/);
+    expect(SRC).toMatch(/backLabel\?:\s*string/);
+    expect(SRC).toMatch(/onBack\?:\s*\(\)\s*=>\s*void/);
+  });
+});
+
+describe('BottomSheet — ADR-009 anatomy (V2 — hideHandle)', () => {
+  it('exposes a `hideHandle` prop for keyboard-first / navigation-stack focus sheets', () => {
+    // Bevel IMG_1011 (keyboard-first) and IMG_1016 (navigation-stack) hide the handle.
+    expect(SRC).toMatch(/hideHandle\?:\s*boolean/);
+  });
+
+  it('default hideHandle is false (handle is shown — V1 behavior preserved)', () => {
+    expect(SRC).toMatch(/hideHandle\s*=\s*false/);
+  });
+
+  it('handle pill render is gated by `hideHandle` flag', () => {
+    expect(SRC).toMatch(/!hideHandle/);
+  });
+});
+
+describe('BottomSheet — ADR-009 anatomy (V2 — leftSlot escape hatch)', () => {
+  it('exposes a `leftSlot` prop to override the default left-header content', () => {
+    // Escape hatch for consumers that need a custom left control (e.g. destructive action like the trash icon in IMG_1015).
+    expect(SRC).toMatch(/leftSlot\?:\s*React\.ReactNode/);
+  });
+
+  it('leftSlot takes precedence over the headerLayout default', () => {
+    // leftSlot ?? (...) — nullish coalescing so a consumer-provided node overrides the header-layout default.
+    expect(SRC).toMatch(/leftSlot\s*\?\?/);
   });
 });

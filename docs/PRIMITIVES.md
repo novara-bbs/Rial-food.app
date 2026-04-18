@@ -141,8 +141,9 @@ When `onClick` is provided the tile renders as a `<button>` with hover + focus a
 </Sheet>
 ```
 
-### BottomSheet (ADR-009)
+### BottomSheet (ADR-009, V1 compact + V2 focus)
 ```tsx
+// V1 default — compact picker (pickers, toggle groups, short lists)
 <BottomSheet
   open={open}
   onOpenChange={setOpen}
@@ -155,9 +156,60 @@ When `onClick` is provided the tile renders as a `<button>` with hover + focus a
 >
   {/* scrollable body */}
 </BottomSheet>
+
+// V2 focus — cancel-action header (forms, searches, input-heavy)
+<BottomSheet
+  open={open}
+  onOpenChange={setOpen}
+  size="focus"
+  headerLayout="cancel-action"
+  title={t.foodSearch.title}
+  actionSlot={
+    <Button size="sm" onClick={handleNext} disabled={!selected}>{t.common.next}</Button>
+  }
+>
+  {/* long scrollable list + keyboard emerges below */}
+</BottomSheet>
+
+// V2 focus — back-title-action header (navigation-stack / detail-edit)
+<BottomSheet
+  open={open}
+  onOpenChange={setOpen}
+  size="focus"
+  headerLayout="back-title-action"
+  hideHandle
+  title={recipe.title}
+  actionSlot={<StarFavToggle recipeId={recipe.id} />}
+  footer={
+    <div className="flex gap-3">
+      <Button variant="destructive" className="flex-1" onClick={handleDelete}>{t.common.delete}</Button>
+      <Button className="flex-1" onClick={handleSave}>{t.common.save}</Button>
+    </div>
+  }
+>
+  {/* edit form */}
+</BottomSheet>
 ```
 
-Defaults baked in by ADR-009: `max-h-[88vh]` (status bar + dynamic island visible behind), `rounded-t-3xl`, handle pill on top, overlay `bg-black/25` (not 50%), sticky header with close X + centered title + optional `actionSlot`, scrollable body, optional `footer` with safe-area-inset padding. For **bottom** anchored sheets use `BottomSheet`; for left/right/top drawers keep the legacy shadcn `Sheet`.
+**V1 defaults** (`size="compact"`, `headerLayout="title-centered"`): `max-h-[88vh]` (status bar + dynamic island visible behind), `rounded-t-3xl`, handle pill on top, overlay `bg-black/25` (not 50%), sticky header with close X + centered title + optional `actionSlot`, scrollable body, optional `footer` with safe-area-inset padding.
+
+**V2 size variants** (ADR-009 v2):
+
+| Prop | `compact` (default) | `focus` |
+|---|---|---|
+| `max-h` | `88vh` (status bar + dynamic island visible) | `92vh` (only ~40 px status-bar band visible) |
+| Bevel reference | IMG_0984, 0995, 0990 | IMG_0988, 1004, 1011, 1015, 1016, 1019 |
+| Use for | pickers, toggle groups, short lists, confirm-action | forms multi-field, long search lists, keyboard-first input, detail-edit |
+
+**V2 header layouts** (ADR-009 v2):
+
+| `headerLayout` | Left | Right | Bevel reference |
+|---|---|---|---|
+| `title-centered` (default) | Close X | `actionSlot` | IMG_0984, 0995 |
+| `cancel-action` | "Cancel" text button | `actionSlot` (typically primary text button) | IMG_1004, 1005, 0988 |
+| `back-title-action` | Back chevron | `actionSlot` (star, share, etc.) | IMG_1015, 1016, 1019 |
+
+Custom left-header content: pass `leftSlot` (overrides the default from `headerLayout`). Hide the swipe handle for keyboard-first (IMG_1011) or navigation-stack (IMG_1016) sheets: `hideHandle`. For **bottom** anchored sheets use `BottomSheet`; for left/right/top drawers keep the legacy shadcn `Sheet`.
 
 ---
 
