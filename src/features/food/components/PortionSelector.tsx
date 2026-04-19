@@ -172,10 +172,16 @@ export default function PortionSelector({
 
   return (
     <div className="space-y-3">
-      {/* Mode toggle */}
-      <div className="flex rounded-sm overflow-hidden border border-outline-variant/30">
+      {/* Mode toggle — two mutually-exclusive options → radiogroup semantics. */}
+      <div
+        role="radiogroup"
+        aria-label={t.portionSelector.modeGroupLabel}
+        className="flex rounded-sm overflow-hidden border border-outline-variant/30"
+      >
         <button
           type="button"
+          role="radio"
+          aria-checked={mode === 'serving'}
           onClick={() => switchMode('serving')}
           className={`flex-1 flex items-center justify-center gap-1.5 py-2 text-micro font-headline font-bold uppercase tracking-widest transition-colors ${
             mode === 'serving'
@@ -188,6 +194,8 @@ export default function PortionSelector({
         </button>
         <button
           type="button"
+          role="radio"
+          aria-checked={mode === 'weight'}
           onClick={() => switchMode('weight')}
           className={`flex-1 flex items-center justify-center gap-1.5 py-2 text-micro font-headline font-bold uppercase tracking-widest transition-colors ${
             mode === 'weight'

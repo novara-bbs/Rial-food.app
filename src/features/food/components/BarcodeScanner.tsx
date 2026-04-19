@@ -166,7 +166,12 @@ export default function BarcodeScanner({ onClose, onProductFound, onSaveToDictio
       } else {
         setState('not-found');
       }
-    } catch {
+    } catch (error) {
+      // Network error vs unknown-barcode are the same UX ("not-found") because
+      // the sheet always offers "create custom" as the escape hatch. But we
+      // log the root cause so production telemetry can distinguish offline /
+      // OFF outage / malformed response from a genuine miss.
+      logger.warn('BarcodeScanner OFF lookup failed', { barcode, error });
       setState('not-found');
     }
   };
@@ -267,7 +272,11 @@ export default function BarcodeScanner({ onClose, onProductFound, onSaveToDictio
 
           {/* Manual input fallback */}
           <div className="w-full space-y-3">
-            {errorMsg && <p className="text-xs text-brand-secondary text-center">{errorMsg}</p>}
+            {errorMsg && (
+              <p role="alert" className="text-xs text-brand-secondary text-center">
+                {errorMsg}
+              </p>
+            )}
             <div className="flex gap-2">
               <input
                 type="text"

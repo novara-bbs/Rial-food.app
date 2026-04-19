@@ -1252,6 +1252,7 @@ const es = {
     servingMode: 'Porción',
     weightMode: 'Peso',
     adjustPortion: 'Ajustar porción',
+    modeGroupLabel: 'Modo de medida',
   },
   // BarcodeScanner
   scanner: {

@@ -77,13 +77,16 @@ export default function AddMeal({
   }, [openScannerOnAddMeal, setOpenScannerOnAddMeal]);
 
   // ─── Open Food Facts debounced search ──────────────────────
-  // Fires for any query >= 3 chars (tab-independent so unified results include API)
+  // Fires for any query >= 3 chars (tab-independent so unified results include API).
+  // Always cancel the prior timer on any rerun so backspacing below the 3-char
+  // threshold aborts an inflight lookup programmed for a longer string; without
+  // this, a stale `searchOpenFoodFacts(oldQuery)` would still fire once.
   useEffect(() => {
+    if (searchTimerRef.current) clearTimeout(searchTimerRef.current);
     if (searchQuery.length < 3) {
       setApiResults([]);
       return;
     }
-    if (searchTimerRef.current) clearTimeout(searchTimerRef.current);
     searchTimerRef.current = setTimeout(async () => {
       setIsSearchingApi(true);
       setApiResults(await searchOpenFoodFacts(searchQuery));
@@ -472,9 +475,13 @@ export default function AddMeal({
             const foodId = String(food.id);
             const isFav = favoriteIds.includes(foodId);
             const historyEntry = food._historyEntry;
+            // Prefix the React key by source so a locally-stored ingredient and
+            // an OFF API product that happen to collide on the numeric id
+            // don't swap DOM nodes when the search set changes.
+            const keyPrefix = food.isApiResult ? 'off' : 'loc';
             return (
               <div
-                key={food.id}
+                key={`${keyPrefix}-${foodId}`}
                 className="bg-surface-container-low p-4 rounded-sm border border-outline-variant/20 flex items-center justify-between group hover:border-primary/30 transition-colors"
               >
                 <div className="min-w-0 flex-1 mr-3">
@@ -532,10 +539,11 @@ export default function AddMeal({
         </div>
       </PageShell>
 
-      {/* Multi-add running total banner */}
+      {/* Multi-add running total banner — announced to assistive tech when
+          items are added/removed (polite: doesn't interrupt a running narration). */}
       {multiMode && multiQueue.length > 0 && (
         <div className="fixed left-0 right-0 z-40 px-4 md:bottom-20" style={{ bottom: 'calc(env(safe-area-inset-bottom, 0px) + 7rem)' }}>
-          <div className="max-w-lg mx-auto bg-surface-container-highest border border-primary/30 rounded-sm p-3 shadow-xl flex items-center gap-3">
+          <div role="status" aria-live="polite" className="max-w-lg mx-auto bg-surface-container-highest border border-primary/30 rounded-sm p-3 shadow-xl flex items-center gap-3">
             <div className="flex-1 min-w-0">
               <span className="font-headline text-xs font-bold uppercase tracking-widest text-tertiary block">
                 {multiQueue.length} {multiQueue.length === 1 ? 'item' : 'items'}

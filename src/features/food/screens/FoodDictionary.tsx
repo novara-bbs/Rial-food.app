@@ -20,7 +20,12 @@ const ALL_ALLERGENS: Allergen[] = [
 ];
 
 interface Props {
-  navigateTo: (screen: string, data?: Record<string, unknown>) => void;
+  // `navigateTo` in NavigationContext only accepts a screen name (no data
+  // payload). Historical drafts of this component signalled a data object to
+  // preload AddMeal / CreateRecipe, but the router never plumbed it — the
+  // second argument was silently dropped. Keep the signature honest so the
+  // call sites below don't reintroduce phantom "prefill" behaviour.
+  navigateTo: (screen: string) => void;
 }
 
 const CATEGORY_ORDER = Object.entries(INGREDIENT_CATEGORIES)
@@ -256,7 +261,7 @@ export default function FoodDictionary({ navigateTo }: Props) {
                               variant="brand"
                               size="sm"
                               className="flex-1"
-                              onClick={() => navigateTo('add-meal', { prefillIngredient: item.id })}
+                              onClick={() => navigateTo('add-meal')}
                             >
                               <UtensilsCrossed className="w-3.5 h-3.5 mr-1.5" />
                               {t.portionSelector.addToMeal}
@@ -265,7 +270,7 @@ export default function FoodDictionary({ navigateTo }: Props) {
                               variant="outline"
                               size="sm"
                               className="flex-1"
-                              onClick={() => navigateTo('create-recipe', { prefillIngredient: item.id })}
+                              onClick={() => navigateTo('create-recipe')}
                             >
                               <ShoppingCart className="w-3.5 h-3.5 mr-1.5" />
                               {t.portionSelector.addToRecipe}

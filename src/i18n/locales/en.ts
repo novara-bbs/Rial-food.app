@@ -1212,6 +1212,7 @@ const en: Translations = {
     servingMode: 'Serving',
     weightMode: 'Weight',
     adjustPortion: 'Adjust portion',
+    modeGroupLabel: 'Measurement mode',
   },
   scanner: {
     pointAtBarcode: 'Point at the barcode...',
