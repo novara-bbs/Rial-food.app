@@ -105,7 +105,7 @@ export default function SettingsProfile({ userProfile, setUserProfile, setDailyM
           <h3 className="font-headline text-xl font-bold text-tertiary uppercase">{userProfile?.name || 'User'}</h3>
           {isPro ? (
             <span className="bg-primary/10 text-primary text-micro px-2 py-0.5 rounded-sm font-label font-bold uppercase tracking-widest inline-flex items-center gap-1 w-fit mt-1">
-              <Crown className="w-3 h-3" /> {t.settings.proMember}
+              <Crown className="w-3 h-3" aria-hidden="true" /> {t.settings.proMember}
             </span>
           ) : (
             <span className="bg-surface-container-highest text-on-surface-variant text-micro px-2 py-0.5 rounded-sm font-label font-bold uppercase tracking-widest inline-block mt-1">
@@ -128,7 +128,7 @@ export default function SettingsProfile({ userProfile, setUserProfile, setDailyM
       {/* Dashboard Mode Section */}
       <div className="bg-surface-container-low p-6 rounded-sm border border-outline-variant/20 space-y-6">
         <div className="flex items-center gap-3 mb-4">
-          <Sparkles className="w-5 h-5 text-primary" />
+          <Sparkles className="w-5 h-5 text-primary" aria-hidden="true" />
           <h3 className="font-headline text-xl font-bold text-tertiary uppercase tracking-tight">{t.settings.userExperience}</h3>
         </div>
         <div className="flex items-center justify-between p-4 bg-surface-container-highest rounded-sm border border-outline-variant/10">
@@ -157,7 +157,7 @@ export default function SettingsProfile({ userProfile, setUserProfile, setDailyM
       {/* Biometrics Section */}
       <div className="bg-surface-container-low p-6 rounded-sm border border-outline-variant/20">
         <div className="flex items-center gap-3 mb-6">
-          <User className="w-6 h-6 text-primary" />
+          <User className="w-6 h-6 text-primary" aria-hidden="true" />
           <h3 className="font-headline text-xl font-bold text-tertiary uppercase">{t.settings.biometrics}</h3>
         </div>
         <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
@@ -182,14 +182,14 @@ export default function SettingsProfile({ userProfile, setUserProfile, setDailyM
               className={`${INPUT_SURFACE_CLASSES} w-full py-2 px-3 text-tertiary text-sm focus:outline-none focus:border-primary`} />
           </div>
           <div>
-            <label className="block font-label text-micro tracking-widest uppercase text-on-surface-variant mb-2">{t.settings.targetWeight || 'Peso objetivo'} ({getBodyWeightUnit(userProfile?.unitSystem ?? 'metric')})</label>
+            <label className="block font-label text-micro tracking-widest uppercase text-on-surface-variant mb-2">{t.settings.targetWeight} ({getBodyWeightUnit(userProfile?.unitSystem ?? 'metric')})</label>
             <input type="number" step="0.1" inputMode="decimal"
               value={userProfile?.targetWeight ? bodyWeightFromKg(userProfile.targetWeight, userProfile?.unitSystem ?? 'metric') : ''}
               onChange={(e) => {
                 const val = parseFloat(e.target.value);
                 updateBiometric('targetWeight', val ? bodyWeightToKg(val, userProfile?.unitSystem ?? 'metric') : undefined);
               }}
-              placeholder={t.settings.optional || 'Opcional'}
+              placeholder={t.settings.optional}
               className={`${INPUT_SURFACE_CLASSES} w-full py-2 px-3 text-tertiary text-sm focus:outline-none focus:border-primary`} />
           </div>
           <div>
@@ -215,21 +215,21 @@ export default function SettingsProfile({ userProfile, setUserProfile, setDailyM
       <div className="bg-surface-container-low p-6 rounded-sm border border-outline-variant/20">
         <div className="flex items-center justify-between mb-6">
           <div className="flex items-center gap-3">
-            <Users className="w-6 h-6 text-primary" />
+            <Users className="w-6 h-6 text-primary" aria-hidden="true" />
             <h3 className="font-headline text-xl font-bold text-tertiary uppercase">{t.settings.familyProfiles}</h3>
           </div>
           <button type="button"
             onClick={() => setIsAddingMember(true)}
             className="text-primary font-label text-micro font-bold tracking-widest uppercase hover:underline flex items-center gap-1">
-            <Plus className="w-4 h-4" /> {t.settings.addMember}
+            <Plus className="w-4 h-4" aria-hidden="true" /> {t.settings.addMember}
           </button>
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           {(userProfile?.family || []).map((member: any) => (
-            <div key={member.id} className="bg-surface-container-highest p-4 rounded-sm border border-outline-variant/10 flex items-center justify-between group">
+            <div key={member.id} className="bg-surface-container-highest p-4 rounded-sm border border-outline-variant/10 flex items-center justify-between">
               <div className="flex items-center gap-3">
-                <div className="size-10 rounded-full bg-primary/20 flex items-center justify-center text-primary">
+                <div className="size-10 rounded-full bg-primary/20 flex items-center justify-center text-primary" aria-hidden="true">
                   <User className="w-5 h-5" />
                 </div>
                 <div>
@@ -241,9 +241,9 @@ export default function SettingsProfile({ userProfile, setUserProfile, setDailyM
               </div>
               <button type="button"
                 onClick={() => removeFamilyMember(member.id)}
-                className="text-outline hover:text-error transition-colors opacity-0 group-hover:opacity-100 p-2"
+                className="w-11 h-11 flex items-center justify-center rounded-full text-outline hover:text-error focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/60 focus-visible:ring-offset-2 focus-visible:ring-offset-background transition-colors"
                 aria-label={t.settings.removeMember.replace('{name}', member.name)}>
-                <Trash2 className="w-4 h-4" />
+                <Trash2 className="w-4 h-4" aria-hidden="true" />
               </button>
             </div>
           ))}
@@ -293,7 +293,7 @@ export default function SettingsProfile({ userProfile, setUserProfile, setDailyM
       {/* Goals Section */}
       <div className="bg-surface-container-low p-6 rounded-sm border border-outline-variant/20">
         <div className="flex items-center gap-3 mb-6">
-          <Target className="w-6 h-6 text-primary" />
+          <Target className="w-6 h-6 text-primary" aria-hidden="true" />
           <h3 className="font-headline text-xl font-bold text-tertiary uppercase">{t.settings.goalsActivity}</h3>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">

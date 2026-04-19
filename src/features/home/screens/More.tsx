@@ -76,7 +76,7 @@ export default function More({ navigateTo, userProfile, realFeelLogs = [], nutri
       header: t.more.groupWellness,
       visible: true,
       items: [
-        { id: 'progress', label: t.progress?.title || 'Tu Progreso', icon: TrendingUp, screen: 'progress' },
+        { id: 'progress', label: t.progress.title, icon: TrendingUp, screen: 'progress' },
         { id: 'real-feel-diary', label: t.more.realFeelDiary, icon: Heart, screen: 'real-feel-diary' },
         { id: 'weekly-check-in', label: t.more.reflectionHistory, icon: CalendarCheck, screen: 'weekly-check-in' },
         { id: 'fasting', label: t.more.fasting, icon: Timer, screen: 'fasting-timer' },
@@ -151,7 +151,7 @@ export default function More({ navigateTo, userProfile, realFeelLogs = [], nutri
             )}
           </div>
         </div>
-        <ChevronRight className="w-5 h-5 text-on-surface-variant/60 group-hover:text-primary transition-colors shrink-0" />
+        <ChevronRight className="w-5 h-5 text-on-surface-variant/60 group-hover:text-primary transition-colors shrink-0" aria-hidden="true" />
       </button>
 
       {/* Groups */}
@@ -176,7 +176,7 @@ export default function More({ navigateTo, userProfile, realFeelLogs = [], nutri
                   <span className="flex-1 font-headline text-body font-bold uppercase tracking-wider text-tertiary">
                     {item.label}
                   </span>
-                  <ChevronRight className="w-4 h-4 text-on-surface-variant/60 group-hover:text-primary transition-colors shrink-0" />
+                  <ChevronRight className="w-4 h-4 text-on-surface-variant/60 group-hover:text-primary transition-colors shrink-0" aria-hidden="true" />
                 </button>
               ))}
             </div>

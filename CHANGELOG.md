@@ -1,5 +1,40 @@
 # RIAL App - Changelog
 
+## [1.5.50] - 2026-04-19
+
+### fix(audit-wave-0-1) — S3 More + Settings partial: dead-code i18n fallbacks + a11y icon hardening + mobile-invisible delete bug
+
+Tercer y cuarto clusters del S3 audit tranche del plan `revisa-todas-las-capturas-ancient-micali.md` (§S3): **More menu** + **Settings partial** (SettingsProfile + SettingsNutrition + SettingsSystem). `SettingsAppearance` está excluido porque convive con un WIP staged del owner (VOLT LIGHT re-balance `[1.5.46]` aún en working tree); se audita por separado cuando se fusione ese WIP.
+
+Los 4 archivos comparten el mismo patrón de defectos: (a) **defensive i18n fallbacks que son dead code** — `t.section.key || 'fallback ES/EN'` o `?? 'fallback'` donde la clave sí existe en ambos locales, introduciendo literales hardcoded + noise en el diff + inconsistencia across locales si la clave desapareciera; (b) **iconos decorativos sin `aria-hidden="true"`** que screen readers anuncian como "gráfico" junto al label textual que ya los acompaña (doble-anuncio verboso); (c) **delete button `opacity-0 group-hover:opacity-100`** (patrón hover-to-reveal) que deja a usuarios móviles sin forma de invocar la acción — mismo bug que `[1.5.49]` Pantry, reaparecido en la card de miembro familiar.
+
+Wave 0 (bug sweep) + Wave 1 (a11y hardening) se consolidan en este commit dado que el scope por archivo es acotado (cero refactors estructurales).
+
+**Bugs reales detectados + corregidos.**
+
+*More.tsx (`src/features/home/screens/More.tsx`)*
+- 🐛 **Dead-code defensive fallback.** Línea 79 (pre-fix): `label: t.progress?.title || 'Tu Progreso'`. `t.progress.title` existe en ambos locales (`es.ts` línea 143; `en.ts` análogo). Fix: `label: t.progress.title`.
+- a11y **2 ChevronRight sin `aria-hidden`** — línea 154 (hero profile card) + línea 179 (menu items ×11 instancias). Inconsistencia con el `item.icon` adyacente que sí tenía `aria-hidden`. Fix: ambos marcados.
+
+*SettingsProfile.tsx (`src/features/profile/components/settings/SettingsProfile.tsx`)*
+- 🐛 **Family member delete button invisible en móvil.** Línea 244 (pre-fix): `opacity-0 group-hover:opacity-100 p-2`. Hover-to-reveal no dispara en dispositivos táctiles — idéntico al bug reportado en Pantry `[1.5.49]`. Fix: eliminado `opacity-0 group-hover:opacity-100` + wrapper del padre deja de usar `group`; botón ahora siempre visible con `w-11 h-11` (HIG 44×44) + focus-visible ring canónico.
+- 🐛 **2 dead-code i18n fallbacks.** Líneas 185 + 192 (pre-fix): `t.settings.targetWeight || 'Peso objetivo'` + `t.settings.optional || 'Opcional'`. Ambas claves existen (`es.ts` 742+743). Fix: chains eliminadas.
+- a11y **6 iconos decorativos sin `aria-hidden`** — `Crown` (badge Pro), `Sparkles` (section Dashboard Mode), `User` + `Users` + `Target` (section headers), `Plus` (Add Member button junto al label). Más **`User` interno de la family avatar** (línea 233-234): wrapper gana `aria-hidden="true"` para que el avatar-icon no se anuncie junto al nombre del miembro. Más `Trash2` en el delete button (botón ya tiene aria-label).
+
+*SettingsNutrition.tsx (`src/features/profile/components/settings/SettingsNutrition.tsx`)*
+- 🐛 **11 dead-code i18n fallbacks.** Las 6 etiquetas de intolerancias (líneas 69–74 pre-fix: `t.settings.intoleranceDairy || 'Dairy'`, `intoleranceEggs || 'Eggs'`, `intoleranceNuts || 'Nuts'`, `intoleranceFish || 'Fish'`, `intoleranceShellfish || 'Shellfish'`, `intoleranceSoy || 'Soy'`) todas existen en `es.ts` 800–805. Más 5 `??` en la subsección Activity & Hydration: `activityGoals ?? 'Objetivos'`, `hydrationTarget ?? 'Hidratación diaria'` (×2 — label + aria-label), `home.cups ?? 'vasos'`, `stepsTarget ?? 'Objetivo pasos'` (×2), `activeMinTarget ?? 'Min. activos objetivo'` (×2). Todas las claves existen (`es.ts` 52, 713–716, 800–805). Fix: 13 chains eliminadas; el label ES hardcoded desaparece de la superficie EN.
+- a11y **4 iconos decorativos sin `aria-hidden`** — `Target` (Daily Goals section), `Leaf` (Dietary Preferences), `ShieldAlert` (Food Preferences), `Droplets` (Activity Goals), `Search` (dislike search input).
+
+*SettingsSystem.tsx (`src/features/profile/components/settings/SettingsSystem.tsx`)*
+- 🐛 **Silent `catch {}` en JSON export.** Línea 180 pre-fix: `} catch { toast.error(t.settings.exportError); }` descartaba el error sin telemetría. Precedente Wave 0 Diccionario `[1.5.45]` — BarcodeScanner OFF lookup. Fix: `catch (error) { logger.warn('SettingsSystem JSON export failed', { error: ... }); toast.error(...) }`. Sentry ahora distingue timeouts de `exportUserData()` de errores de `URL.createObjectURL`.
+- a11y **9 iconos decorativos sin `aria-hidden`** — section headers (`Sparkles`, `Smartphone`), inline feedback (`Bell`, `Users`), CTAs con texto (`Download`, `Cloud`, `AlertTriangle`, `LogOut`, `UserX`), más el **badge char wearable** (W/O/G) que el screen reader anunciaba junto al `label` ("W Whoop"). Wrapper `<div>` del badge gana `aria-hidden="true"` para eliminar el doble-anuncio.
+
+**Notes**
+- **Scope: SettingsAppearance.tsx intencional excluido.** El file convive con un WIP staged del owner (VOLT LIGHT `[1.5.46]` re-balance tokens). Reauditar en un commit posterior cuando el owner fusione su cambio, para evitar conflictos de merge en swatches/hooks que toca la WIP.
+- **Cross-cluster deferrals identificados (no Wave 0+1).** (1) `userProfile?.name || 'User'` EN-only fallback en 3 archivos (`More.tsx` línea 140, `Profile.tsx`, `SettingsProfile.tsx` línea 105) — cross-cluster, se aborda en sweep dedicado de name-fallback i18n. (2) `More.tsx` stats hardcoded a zeros (líneas 42–56: `recipesCreated: 0`, `mealsLogged: 0`, `postsPublished: 0`, `plansCreated: 0`) → `getUserLevel(calculatePoints(stats))` siempre devuelve el nivel más bajo, haciendo el badge de nivel cosmético sin información real. Bug real pero **invasive** — requiere pipear counters desde `AppStateContext` (derivables de `savedRecipes.filter(r=>r.origin==='user').length`, `dailyLog` aggregates, `communityPosts.filter(p=>p.authorId===userProfile.id)`, `mealPlan` keys-count); fuera del scope de un audit tab. (3) `More.tsx` header hand-rolled `text-3xl md:text-4xl` (línea 109) en vez del primitive `<PageHeader>` — refactor scope. (4) Hero button de `More.tsx` con `aria-label={t.more.heroTapHint}` que reemplaza la lectura del contenido rico (nombre+nivel+streak) — decisión de UX mantener porque `heroTapHint` incluye la acción que el contenido no verbaliza; mejora `aria-describedby`-based queda para iteración futura. (5) `SettingsNutrition.tsx` label literal `'Gluten'` (línea 68) — como `gluten` se escribe igual en ES↔EN no hay gap funcional; i18n key `t.settings.intoleranceGluten` no existe (sí existe `t.foodDictionary.allergenLabels.gluten` tras `[1.5.47]`). Extracción clean requiere decidir scope: ¿añadir alias `t.settings.intoleranceGluten` o migrar la sección completa a reutilizar `t.foodDictionary.allergenLabels.*`? Fuera de Wave 0+1. (6) `SettingsSystem.tsx` `connectedDevices` con `useState` literal (línea 27) en vez de `useLocalStorageState` — toggles de wearables no persisten a través de re-renders/refreshes. Intencional temporalmente: wearables aren't actually integrated yet; el toggle es mock. Cuando shippee real wearable integration, convertir a persistent state.
+- **Rollback path.** Revert restaura los 16 dead-code fallbacks + los 22 iconos sin `aria-hidden` + la invisibilidad en móvil del family-member delete + el silent catch del JSON export. Cero impacto funcional (los fallbacks se re-aplicarían por default de las claves que sí existen, los screen readers re-empezarían a anunciar los iconos decorativos, el botón de delete seguiría invisible en móvil).
+- **Baselines.** tsc 0, lint 0 errors esperado (573 warnings pre-existentes), tests **715/715** sin cambios (Wave 0+1 es polish sin lógica nueva), i18n **1576 simétrico** sin cambios (cero keys nuevas — todas las claves ya existían en ambos locales), bundle main esperado sin delta medible (cambio es pura removal de dead-code + attributes HTML, no cambia runtime).
+
 ## [1.5.49] - 2026-04-19
 
 ### fix(audit-wave-0-1) — S3 Despensa: Pantry HIG + a11y + token drift

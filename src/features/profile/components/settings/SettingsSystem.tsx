@@ -101,7 +101,7 @@ export default function SettingsSystem({ showAIBot, setShowAIBot }: Props) {
       {/* AI Coach Settings */}
       <div className="bg-surface-container-low p-6 rounded-sm border border-outline-variant/20">
         <div className="flex items-center gap-3 mb-6">
-          <Sparkles className="w-6 h-6 text-primary" />
+          <Sparkles className="w-6 h-6 text-primary" aria-hidden="true" />
           <h3 className="font-headline text-xl font-bold text-tertiary uppercase">{t.settings.aiAssistant}</h3>
         </div>
         <div className="flex items-center justify-between p-4 bg-surface-container-highest rounded-sm border border-outline-variant/10">
@@ -118,14 +118,14 @@ export default function SettingsSystem({ showAIBot, setShowAIBot }: Props) {
       {/* Wearable Integrations */}
       <div className="bg-surface-container-low p-6 rounded-sm border border-outline-variant/20">
         <div className="flex items-center gap-3 mb-6">
-          <Smartphone className="w-6 h-6 text-primary" />
+          <Smartphone className="w-6 h-6 text-primary" aria-hidden="true" />
           <h3 className="font-headline text-xl font-bold text-tertiary uppercase">{t.settings.connectedDevices}</h3>
         </div>
         <div className="space-y-4">
           {wearables.map(({ key, label, badge }) => (
             <div key={key} className="flex items-center justify-between p-4 bg-surface-container-highest rounded-sm border border-outline-variant/10">
               <div className="flex items-center gap-3">
-                <div className={`w-8 h-8 rounded-full ${badge.bg} flex items-center justify-center ${badge.text} font-bold text-xs`}>{badge.char}</div>
+                <div className={`w-8 h-8 rounded-full ${badge.bg} flex items-center justify-center ${badge.text} font-bold text-xs`} aria-hidden="true">{badge.char}</div>
                 <div>
                   <h4 className="font-headline font-bold text-sm uppercase text-tertiary">{label}</h4>
                   <p className={`font-label text-micro tracking-widest uppercase ${connectedDevices[key] ? 'text-primary' : 'text-on-surface-variant'}`}>
@@ -144,14 +144,14 @@ export default function SettingsSystem({ showAIBot, setShowAIBot }: Props) {
         <h3 className="font-headline text-sm font-bold uppercase tracking-widest text-tertiary">{t.settings.notificationsPrivacy}</h3>
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <Bell className="w-4 h-4 text-on-surface-variant" />
+            <Bell className="w-4 h-4 text-on-surface-variant" aria-hidden="true" />
             <span className="text-sm font-body text-on-surface">{t.settings.notifications}</span>
           </div>
           <Switch checked={notificationsEnabled} onCheckedChange={setNotificationsEnabled} />
         </div>
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <Users className="w-4 h-4 text-on-surface-variant" />
+            <Users className="w-4 h-4 text-on-surface-variant" aria-hidden="true" />
             <span className="text-sm font-body text-on-surface">{t.settings.publicProfile}</span>
           </div>
           <Switch checked={profilePublic} onCheckedChange={setProfilePublic} />
@@ -163,7 +163,7 @@ export default function SettingsSystem({ showAIBot, setShowAIBot }: Props) {
         <h3 className="font-headline text-sm font-bold uppercase tracking-widest text-tertiary">{t.settings.dataSection}</h3>
         <button type="button" onClick={exportCSV}
           className="w-full py-3 bg-surface-container-highest rounded-sm font-headline text-xs font-bold uppercase tracking-widest text-tertiary hover:bg-primary/10 hover:text-primary transition-colors flex items-center justify-center gap-2">
-          <Download className="w-4 h-4" /> {t.settings.exportCSV}
+          <Download className="w-4 h-4" aria-hidden="true" /> {t.settings.exportCSV}
         </button>
         <button type="button"
           onClick={async () => {
@@ -177,15 +177,16 @@ export default function SettingsSystem({ showAIBot, setShowAIBot }: Props) {
               a.click();
               URL.revokeObjectURL(url);
               toast.success(t.settings.exportSuccess);
-            } catch {
+            } catch (error) {
+              logger.warn('SettingsSystem JSON export failed', { error: error instanceof Error ? error.message : String(error) });
               toast.error(t.settings.exportError);
             }
           }}
           className="w-full py-3 bg-surface-container-highest rounded-sm font-headline text-xs font-bold uppercase tracking-widest text-tertiary hover:bg-primary/10 hover:text-primary transition-colors flex items-center justify-center gap-2">
-          <Cloud className="w-4 h-4" /> {t.settings.exportJSON}
+          <Cloud className="w-4 h-4" aria-hidden="true" /> {t.settings.exportJSON}
         </button>
         <Button variant="destructive" onClick={() => setShowDeleteAllConfirm(true)} className="w-full">
-          <AlertTriangle className="w-4 h-4" /> {t.settings.deleteData}
+          <AlertTriangle className="w-4 h-4" aria-hidden="true" /> {t.settings.deleteData}
         </Button>
       </div>
 
@@ -201,11 +202,11 @@ export default function SettingsSystem({ showAIBot, setShowAIBot }: Props) {
                   await signOut();
                   toast.success(t.settings.signedOut);
                 }}>
-                <LogOut className="w-4 h-4" /> {t.settings.signOut}
+                <LogOut className="w-4 h-4" aria-hidden="true" /> {t.settings.signOut}
               </Button>
               <Button variant="destructive" className="w-full"
                 onClick={() => setShowDeleteAccountConfirm(true)} disabled={isDeletingAccount}>
-                <UserX className="w-4 h-4" />
+                <UserX className="w-4 h-4" aria-hidden="true" />
                 {isDeletingAccount ? t.settings.deleteAccountDeleting : t.settings.deleteAccount}
               </Button>
             </>

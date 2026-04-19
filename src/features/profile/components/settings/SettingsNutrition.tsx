@@ -66,12 +66,12 @@ export default function SettingsNutrition({ dailyMacros, setDailyMacros, userPro
 
   const allergenOptions: { key: Allergen; label: string }[] = [
     { key: 'gluten', label: 'Gluten' },
-    { key: 'dairy', label: t.settings.intoleranceDairy || 'Dairy' },
-    { key: 'eggs', label: t.settings.intoleranceEggs || 'Eggs' },
-    { key: 'nuts', label: t.settings.intoleranceNuts || 'Nuts' },
-    { key: 'fish', label: t.settings.intoleranceFish || 'Fish' },
-    { key: 'shellfish', label: t.settings.intoleranceShellfish || 'Shellfish' },
-    { key: 'soy', label: t.settings.intoleranceSoy || 'Soy' },
+    { key: 'dairy', label: t.settings.intoleranceDairy },
+    { key: 'eggs', label: t.settings.intoleranceEggs },
+    { key: 'nuts', label: t.settings.intoleranceNuts },
+    { key: 'fish', label: t.settings.intoleranceFish },
+    { key: 'shellfish', label: t.settings.intoleranceShellfish },
+    { key: 'soy', label: t.settings.intoleranceSoy },
   ];
 
   const macroSliders = [
@@ -86,7 +86,7 @@ export default function SettingsNutrition({ dailyMacros, setDailyMacros, userPro
       {/* Macro Targets */}
       <div className="bg-surface-container-low p-6 rounded-sm border border-outline-variant/20">
         <div className="flex items-center gap-3 mb-6">
-          <Target className="w-6 h-6 text-primary" />
+          <Target className="w-6 h-6 text-primary" aria-hidden="true" />
           <h3 className="font-headline text-xl font-bold text-tertiary uppercase">{t.settings.dailyGoals}</h3>
         </div>
         <div className="space-y-6">
@@ -108,7 +108,7 @@ export default function SettingsNutrition({ dailyMacros, setDailyMacros, userPro
       {/* Dietary Preferences */}
       <div className="bg-surface-container-low p-6 rounded-sm border border-outline-variant/20">
         <div className="flex items-center gap-3 mb-6">
-          <Leaf className="w-6 h-6 text-primary" />
+          <Leaf className="w-6 h-6 text-primary" aria-hidden="true" />
           <h3 className="font-headline text-xl font-bold text-tertiary uppercase">{t.settings.dietaryPreferences}</h3>
         </div>
         <div className="flex flex-wrap gap-3">
@@ -129,7 +129,7 @@ export default function SettingsNutrition({ dailyMacros, setDailyMacros, userPro
       {/* Food Preferences — Dislikes + Intolerances */}
       <div className="bg-surface-container-low p-6 rounded-sm border border-outline-variant/20">
         <div className="flex items-center gap-3 mb-6">
-          <ShieldAlert className="w-6 h-6 text-primary" />
+          <ShieldAlert className="w-6 h-6 text-primary" aria-hidden="true" />
           <h3 className="font-headline text-xl font-bold text-tertiary uppercase">{t.settings.foodPreferences}</h3>
         </div>
 
@@ -137,7 +137,7 @@ export default function SettingsNutrition({ dailyMacros, setDailyMacros, userPro
         <div className="mb-6">
           <label className="block font-label text-micro tracking-widest uppercase text-on-surface-variant mb-2">{t.settings.foodDislikes}</label>
           <div className="relative">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-on-surface-variant pointer-events-none" />
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-on-surface-variant pointer-events-none" aria-hidden="true" />
             <input type="text" value={dislikeSearch}
               onChange={(e) => setDislikeSearch(e.target.value)}
               placeholder={t.settings.foodDislikesPlaceholder}
@@ -188,16 +188,16 @@ export default function SettingsNutrition({ dailyMacros, setDailyMacros, userPro
       {(setHydration || setMovement) && (
         <div className="bg-surface-container-low p-6 rounded-sm border border-outline-variant/20 space-y-6">
           <div className="flex items-center gap-3">
-            <Droplets className="w-6 h-6 text-primary" />
-            <h3 className="font-headline text-xl font-bold text-tertiary uppercase">{t.settings.activityGoals ?? 'Objetivos'}</h3>
+            <Droplets className="w-6 h-6 text-primary" aria-hidden="true" />
+            <h3 className="font-headline text-xl font-bold text-tertiary uppercase">{t.settings.activityGoals}</h3>
           </div>
 
           {/* Hydration target */}
           {setHydration && hydration && (
             <div>
               <div className="flex justify-between text-xs font-label font-bold tracking-widest uppercase mb-2">
-                <span className="text-on-surface-variant">{t.settings.hydrationTarget ?? 'Hidratación diaria'}</span>
-                <span className="text-tertiary">{hydration.target} {t.home.cups ?? 'vasos'}</span>
+                <span className="text-on-surface-variant">{t.settings.hydrationTarget}</span>
+                <span className="text-tertiary">{hydration.target} {t.home.cups}</span>
               </div>
               <input
                 type="range"
@@ -209,7 +209,7 @@ export default function SettingsNutrition({ dailyMacros, setDailyMacros, userPro
                   setHydration((prev: any) => ({ ...prev, target: parseInt(e.target.value) }))
                 }
                 className="w-full h-2 bg-surface-container-highest rounded-full appearance-none cursor-pointer accent-secondary"
-                aria-label={t.settings.hydrationTarget ?? 'Hydration target'}
+                aria-label={t.settings.hydrationTarget}
               />
             </div>
           )}
@@ -221,7 +221,7 @@ export default function SettingsNutrition({ dailyMacros, setDailyMacros, userPro
                 <div className="flex justify-between text-xs font-label font-bold tracking-widest uppercase mb-2">
                   <span className="text-on-surface-variant flex items-center gap-1.5">
                     <Footprints className="w-3 h-3" aria-hidden="true" />
-                    {t.settings.stepsTarget ?? 'Objetivo pasos'}
+                    {t.settings.stepsTarget}
                   </span>
                   <span className="text-tertiary">{movement.target.toLocaleString()}</span>
                 </div>
@@ -235,12 +235,12 @@ export default function SettingsNutrition({ dailyMacros, setDailyMacros, userPro
                     setMovement((prev: any) => ({ ...prev, target: parseInt(e.target.value) }))
                   }
                   className="w-full h-2 bg-surface-container-highest rounded-full appearance-none cursor-pointer accent-primary"
-                  aria-label={t.settings.stepsTarget ?? 'Steps target'}
+                  aria-label={t.settings.stepsTarget}
                 />
               </div>
               <div>
                 <div className="flex justify-between text-xs font-label font-bold tracking-widest uppercase mb-2">
-                  <span className="text-on-surface-variant">{t.settings.activeMinTarget ?? 'Min. activos objetivo'}</span>
+                  <span className="text-on-surface-variant">{t.settings.activeMinTarget}</span>
                   <span className="text-tertiary">{movement.activeTarget} min</span>
                 </div>
                 <input
@@ -253,7 +253,7 @@ export default function SettingsNutrition({ dailyMacros, setDailyMacros, userPro
                     setMovement((prev: any) => ({ ...prev, activeTarget: parseInt(e.target.value) }))
                   }
                   className="w-full h-2 bg-surface-container-highest rounded-full appearance-none cursor-pointer accent-primary"
-                  aria-label={t.settings.activeMinTarget ?? 'Active minutes target'}
+                  aria-label={t.settings.activeMinTarget}
                 />
               </div>
             </>
