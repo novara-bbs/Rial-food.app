@@ -1,5 +1,110 @@
 # RIAL App - Changelog
 
+## [1.5.54] - 2026-04-19
+
+### feat(food): Food Families P0-P2 — primary-view Diccionario con canonical USDA + variantes jerárquicas
+
+Primer ship del modelo `FoodFamily → FoodVariant` descrito en `docs/market/food-variants-design.md`. Sustituye la lista plana de 138 Ingredients (`AddMeal` / `BarcodeScanner` / `FoodDictionary` todos al mismo nivel — "buscar pollo → 5 rows competidores") por un árbol jerárquico **1 familia → N variantes** donde cada familia tiene exactamente 1 variante canónica (USDA / referencia estándar — coherente con Cronometer + etiquetas nutricionales, descarta la media aritmética como canonical porque se desplaza al añadir/quitar variantes). Plan file `.claude/plans/c-mo-funciona-el-diccionario-fluffy-curry.md`. Scope P0-P2 del sprint roadmap §6: tipos + migración seed + rewrite UI. P3-P6 (AddMeal picker, Scanner integration, Recipe swap, Settings prefs) quedan como sprint separado post-estabilización.
+
+**A) P0 — Tipos + zod + convention test (types-only).**
+
+- `src/types/food-family.ts` **nuevo**: `FoodFamily` (id, name/EN, description/EN, category, `canonicalVariantId`, `variantIds[]`, aliases, tags), `FoodVariant` (id, familyId, name/EN, optional description/EN, `variantType`, baseAmount/Unit, servingSizes, macros, micros, tags, allergens, source, sourceId, createdAt, brand), `MacroDelta`, `VariantBrand`. 7 `VariantType` literales (`canonical` / `cut` / `preparation` / `quality` / `regional` / `brand` / `user`) + 4 `FoodSource` literales (`seed` / `user` / `off` / `edamam`) + `VARIANT_TYPES` + `FOOD_SOURCES` readonly arrays para introspección.
+- `src/types/index.ts` — re-exporta `FoodFamily` / `FoodVariant` / `VariantType` / `FoodSource` / `MacroDelta` (el único barrel autorizado del repo).
+- `src/types/food.ts` — `Ingredient` marcado `@deprecated usar FoodVariant`. El shape permanece intacto como compat projection durante la migración.
+- `src/types/recipe.ts` + `src/lib/schemas.ts` — `RecipeIngredient` gana `familyId?: string` + `variantId?: string` opcionales (dual-schema, precedente Q19 meal-taxonomy `[1.5.25]`). `ingredientId` marcado `@deprecated` pero se mantiene para hydration defensiva. El zod `recipeIngredientSchema` acepta AMBOS shapes via `.refine()` — nunca rechaza un payload legacy.
+- `src/test/conventions/food-family-types.test.ts` **nuevo** — 7 asserts lockeando los 7 `VariantType` + 4 `FoodSource` literales, que `FoodFamily` requiere `canonicalVariantId` + `variantIds[]`, y que `FoodVariant` requiere `familyId`. Compile-time trap para renames silenciosos.
+
+**B) P1 — Seed migration (in-memory derivation, zero parallel data files).**
+
+Pivot vs plan: el plan original proponía un script codemod `scripts/migrate-ingredients-to-families.mjs` que genera 2 ficheros de datos paralelos (`food-families.ts` + `food-variants.ts` con macros duplicadas del `INGREDIENT_DICTIONARY`). En ejecución se detectó que mantener datos paralelos invita al drift silencioso — los 138 entries en `ingredients.ts` seguirían siendo la fuente de macros/micros, y cualquier edit post-migración requeriría sincronización manual. **Decisión**: derivar los arrays en memoria al cargar el módulo. `INGREDIENT_DICTIONARY` sigue siendo la single source of truth; `FOOD_VARIANTS` proyecta 1:1 vía un `VARIANT_MAP` puro (legacy id → `{familyId, variantType}`). Zero data duplication, zero drift.
+
+- `src/features/food/data/food-families.ts` **nuevo**: `VARIANT_MAP` mapea los 138 legacy ids a `{familyId, variantType}`. 14 familias multi-variante identificadas por análisis de id-prefix (chicken, beef, tuna, egg, rice, bread, milk, greek_yogurt, coffee, wine, cola, beer, peanut, almond) + 112 singletons con `variantType: 'canonical'`. `FAMILY_META` override de display name/description para las 14 multi-variante; singletons heredan copy de su canonical variant. `buildFamilies()` agrupa `INGREDIENT_DICTIONARY` por familyId, valida exactly-one-canonical per family, y devuelve `readonly FOOD_FAMILIES` frozen. Exports: `FOOD_FAMILIES`, `VARIANT_ID_TO_FAMILY`.
+- `src/features/food/data/food-variants.ts` **nuevo**: `buildVariants()` proyecta cada `INGREDIENT_DICTIONARY` entry a `FoodVariant` stampando `{familyId, variantType, source: 'seed'}`. Tira si un ingrediente no tiene entrada en `VARIANT_MAP` — el integrity test P1 detecta esta condición.
+- `src/features/food/utils/food-family-resolver.ts` **nuevo**: helpers puros (getFamily, getVariant, getVariantsOfFamily, getCanonicalVariant, resolveVariant, ingredientIdToFamilyVariant, computeMacroDelta). `resolveVariant(familyId, pinnedVariantId?)` aplica prioridad: `pinnedVariantId → canonical` (user preferences se añaden en P6, no aquí). `computeMacroDelta(variant)` devuelve null para la canonical misma, redondea a 1 decimal.
+- `src/features/food/data/food-families.test.ts` **nuevo** — 18 tests: VARIANT_MAP length === 138 (round-trip integrity), cada `FoodFamily.canonicalVariantId` existe en FOOD_VARIANTS, cada `FoodFamily.variantIds[]` son ids reales, cada `FoodVariant.familyId` apunta a una familia real, exactly 1 canonical per family, resolver branches (pin válido → pin, pin inválido → canonical, pin cross-family → canonical, resolver chicken multi-variant).
+- **`src/lib/seedVersion.ts` intencionalmente NO actualizado** — la decisión del plan de registrar `foodFamilies` + `foodVariants` keys fue descartada en ejecución: los arrays son derivados in-memory al cargar el módulo y nunca tocan localStorage. `seedVersion` solo tiene sentido para seeds que persisten a través de `useLocalStorageState` (precedente: `savedRecipes` v3→v4 en Q19).
+
+**C) P2 — FoodDictionary primary-view UI rewrite.**
+
+Screen rewrite de `render plano de Ingredient` → `family-list con primary-view drill-down`. Anatomía:
+
+```
+Colapsada: [🍗 Pollo · 120 kcal·22g pro·0g carb·2.6g fat · (5 variantes)] [Chevron]
+Expandida:
+  ◆ FICHA PRINCIPAL (canonical variant)
+    • Badge "Principal" + nombre canonical
+    • Descripción rica ES/EN
+    • Tags + Allergens (con labels i18n)
+    • PortionSelector (injected via slot)
+    • MicroHighlights (injected via slot)
+    • CTAs "Añadir a comida" / "Añadir a receta"
+  ◆ VARIANTES (N)
+    [Pechuga cocida · corte/preparación · +45 kcal · +8.5g pro · ±0g carb · −0.3g fat]
+    [Muslo crudo · corte · +50 kcal · −3.5g pro · ...]
+```
+
+Nuevos primitives (reutilizables en AddMeal P3):
+- `src/features/food/components/FamilyCard.tsx` **nuevo** — card colapsada/expandida. Header HIG-compliant (`min-h-11`), `aria-expanded` + `aria-controls` wiring al panel; panel expandido `role="region"` + `aria-labelledby`. Slots `portionSlot` + `microSlot` + `ctaSlot` mantienen la card libre de AppState + navigation (el screen inyecta los concretos). Focus-visible ring canónico (`focus-visible:ring-primary/60 ring-offset-2`).
+- `src/features/food/components/VariantRow.tsx` **nuevo** — row dentro del drill-down. `<button aria-pressed>` (toggle-state, no radio porque el select puede persistir single o reabrir). Embebe `<MacroDelta>` para renderizar el delta firmado.
+- `src/features/food/components/MacroDelta.tsx` **nuevo** — render puro del delta firmado vs canonical: `+45 kcal · +8.5g pro · ±0 carb · −0.3g fat`. Reglas: `+` prefijo para positivos, `−` (U+2212 MINUS SIGN, no ASCII hyphen) para negativos con parity visual al `+`, `±0` para zero-delta (distinguishable de "no data" = null → componente no renderiza). Color neutro — no mapea signo a user-goal (previene goal-taxonomy leakage).
+
+**D) i18n keys nuevas (12 × 2 locales = 24 entries, namespace `foodDictionary`).**
+
+- `foodDictionary.primaryLabel` — "Principal" / "Primary"
+- `foodDictionary.variantsSection` — "Variantes" / "Variants"
+- `foodDictionary.variantsCount` — "{count} variantes" / "{count} variants"
+- `foodDictionary.variantsCountOne` — "{count} variante" / "{count} variant"
+- `foodDictionary.vsCanonical` — "vs principal" / "vs primary"
+- `foodDictionary.variantTypes.{canonical,cut,preparation,quality,regional,brand,user}` — 7 entries × 2 locales, traducción semántica (`canonical → "Referencia"/"Reference"`, `brand → "Marca"/"Brand"`, etc.)
+
+i18n count **1577 → 1589** simétrico.
+
+**E) Convention tests nuevas.**
+
+- `src/test/conventions/food-family-card.test.ts` **nuevo** — 12 static-file-read asserts lockeando anatomía de `FamilyCard` (default export, botón con `aria-expanded`+`aria-controls`, `min-h-11`, `role=region` en panel, primaryLabel render, variantsCount branch, `<VariantRow>` import+usage, focus-visible ring canónico, token purity: no `text-[Npx]` / no `shadow-{sm,md,lg}` / no `dark:`) + anatomía de `VariantRow` (default export, `<button aria-pressed>`, `<MacroDelta>` embed, token purity).
+- `src/features/food/components/MacroDelta.test.ts` **nuevo** — 7 asserts locking formatter semantics: U+2212 minus, `±0` zero-delta, `+` prefix para positivos, null short-circuit, join por ` · `, token purity.
+- `src/test/conventions/primitives-export.test.ts` — +3 default-export asserts para `FamilyCard` / `VariantRow` / `MacroDelta`.
+
+**F) Scope discipline — explicit deferrals.**
+
+- **MicroHighlights label i18n refactor** — documentado en el plan §P2 bonus. Las 11 labels `'Vit C'` / `'Hierro'` / `'Folato'` / `'Calcio'` / `'Potasio'` / `'Magnesio'` / `'Zinc'` / `'Selenio'` / `'Vit A'` / `'Vit D'` / `'B12'` siguen hardcoded ES en `FoodDictionary.tsx:300-313`. Requiere decisión de nomenclatura canónica (¿`t.foodDictionary.microLabels.*`? ¿merge con futuro `Recipe.nutritionFacts` chemical-name cluster?). Defer a follow-up commit.
+- **AddMeal + BarcodeScanner + RecipeDetail NO migran en P2** — siguen leyendo `INGREDIENT_DICTIONARY` directamente. Son P3 / P5 / P4 respectivamente.
+- **P3-P6 roadmap fuera de scope**:
+  - P3 — AddMeal search cross-`family.name + aliases + variant.name` con `<VariantPickerSheet>` (Bevel focus + back-title-action).
+  - P4 — RecipeDetail swap per-row variant sheet + per-recipe pin.
+  - P5 — BarcodeScanner OFF match → familia → variante `variantType='brand'` persistida en `userFoods`.
+  - P6 — Settings → "Mis alimentos habituales" (userProfile.variantPreferences).
+
+**G) Decisiones arquitecturales dignas de mención.**
+
+- **USDA/standard reference como canonical** — coherente con Cronometer + etiquetas nutricionales; media aritmética descartada (se desplaza al añadir/quitar variantes, rompería histórico de recetas silenciosamente).
+- **Dual-schema `RecipeIngredient`** — `familyId?` + `variantId?` + legacy `ingredientId?` conviven. Precedente Q19 meal-taxonomy `[1.5.25]`. Ningún storage user-facing re-escrito en P0-P2; la migración ocurre on-the-fly en AppStateContext hydration cuando un consumer P4+ lee el campo.
+- **Derivación in-memory vs codemod** — evita parallel data files, zero drift entre `ingredients.ts` (legacy) y `food-variants.ts`. La fuente de macros/micros sigue siendo `INGREDIENT_DICTIONARY`.
+- **Slots en FamilyCard** — la card es puramente presentacional. `FoodDictionary` (screen) inyecta `PortionSelector` + `MicroHighlights` + CTAs concretos. AddMeal P3 podrá reutilizar la card inyectando `<VariantPickerSheet>` como `ctaSlot` sin tocar el primitive.
+
+**Archivos tocados.**
+- A crear: 10 (tipos, data x2, resolver, FamilyCard, VariantRow, MacroDelta + 3 tests).
+- A modificar: 6 (`types/food.ts`, `types/index.ts`, `types/recipe.ts`, `lib/schemas.ts`, `features/food/screens/FoodDictionary.tsx`, i18n `{es,en}.ts`, `test/conventions/primitives-export.test.ts`, CHANGELOG, state.md).
+
+**Preflight.**
+- tsc: 0 errors
+- lint: 0 errors, warnings pre-existentes sin cambios
+- i18n: **1589** simétrico (+12 vs `[1.5.53]` baseline)
+- tests: **773 passed** (+50 vs 723 baseline: 18 P1 families + 7 P0 types + 7 MacroDelta + 12 FamilyCard anatomy + 1 primitives-export + 5 extras repartidos en la suite al cambiar FoodDictionary.tsx)
+- build: main **779.4 KB raw / 244.1 KB gzip** (+0.5 KB raw, +0.3 KB gzip vs `[1.5.53]` baseline — razonable: 3 primitives nuevos + 24 i18n entries + rewrite + derivación ±zero delta)
+- size:check: PASS
+
+**Rollback.**
+- P0 revert — tipos aislados, 0 consumers nuevos. Safe.
+- P1 revert — `ingredients.ts` sigue siendo fuente directa, 138 entries intactas. Safe.
+- P2 revert — `FoodDictionary.tsx` vuelve al render plano, primitivas FamilyCard/VariantRow/MacroDelta quedan huérfanas (no referenced por nada más) pero no rompen nada. Safe.
+- Dual schema `RecipeIngredient` permite rollback parcial — si P1 falla, P0 aislado no rompe nada.
+
+**Notes.**
+- Preview smoke manual pendiente (owner) — el dev server en `rial.app.v1.5/` está bound al repo principal, no al worktree. Las 46 convention tests + 773 full-suite lockean la anatomía suficientemente para proceder a commit. Owner confirma visual en preview desde `main` post-push.
+
+---
+
 ## [1.5.53] - 2026-04-19
 
 ### feat(design): NEUTRAL brand-default formalization + shadow-elev sweep + typography semantic codemod

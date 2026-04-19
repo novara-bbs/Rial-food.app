@@ -24,6 +24,9 @@ import DayGridCalendar from '@/components/DayGridCalendar';
 import OnboardingScaffold from '@/components/OnboardingScaffold';
 import RadioCardGroup from '@/components/RadioCardGroup';
 import SelectList from '@/components/SelectList';
+import FamilyCard from '@/features/food/components/FamilyCard';
+import VariantRow from '@/features/food/components/VariantRow';
+import MacroDelta from '@/features/food/components/MacroDelta';
 
 import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
@@ -72,5 +75,11 @@ describe('Primitives — canonical exports (ADR-001)', () => {
     expect(OnboardingScaffold).toBeTruthy();
     expect(RadioCardGroup).toBeTruthy();
     expect(SelectList).toBeTruthy();
+  });
+
+  it('exports the food-family primary-view primitives (P2)', () => {
+    expect(FamilyCard).toBeTruthy();
+    expect(VariantRow).toBeTruthy();
+    expect(MacroDelta).toBeTruthy();
   });
 });

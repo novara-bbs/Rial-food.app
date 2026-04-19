@@ -1,15 +1,21 @@
 import { useState, useMemo } from 'react';
 import PageShell from '../../../components/PageShell';
-import { ChevronDown, ChevronUp, UtensilsCrossed, ShoppingCart, ThumbsUp, Minus, AlertTriangle, X } from 'lucide-react';
+import { UtensilsCrossed, ShoppingCart, X } from 'lucide-react';
 import SearchInput from '../../../components/patterns/SearchInput';
 import PageHeader from '../../../components/patterns/PageHeader';
-import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { useI18n } from '../../../i18n';
 import { INGREDIENT_DICTIONARY, INGREDIENT_CATEGORIES } from '../data/ingredients';
+import { FOOD_FAMILIES } from '../data/food-families';
+import {
+  getVariantsOfFamily,
+  getCanonicalVariant,
+  resolveVariant,
+} from '../utils/food-family-resolver';
 import PortionSelector from '../components/PortionSelector';
-import { getFoodQuality } from '../utils/nutrition';
-import type { Ingredient, IngredientCategory, Allergen } from '../../../types';
+import FamilyCard from '../components/FamilyCard';
+import type { IngredientCategory, Allergen, Ingredient } from '../../../types';
+import type { FoodFamily, FoodVariant } from '../../../types/food-family';
 import { useAppState } from '../../../contexts/AppStateContext';
 import EmptyState from '../../../components/EmptyState';
 
@@ -20,11 +26,6 @@ const ALL_ALLERGENS: Allergen[] = [
 ];
 
 interface Props {
-  // `navigateTo` in NavigationContext only accepts a screen name (no data
-  // payload). Historical drafts of this component signalled a data object to
-  // preload AddMeal / CreateRecipe, but the router never plumbed it — the
-  // second argument was silently dropped. Keep the signature honest so the
-  // call sites below don't reintroduce phantom "prefill" behaviour.
   navigateTo: (screen: string) => void;
 }
 
@@ -32,14 +33,21 @@ const CATEGORY_ORDER = Object.entries(INGREDIENT_CATEGORIES)
   .sort(([, a], [, b]) => a.order - b.order)
   .map(([key]) => key as IngredientCategory);
 
+// Variants share ids with the legacy Ingredient dictionary, so consumers that
+// still take `Ingredient` (PortionSelector, MicroHighlights) resolve by lookup.
+const INGREDIENT_BY_ID: Record<string, Ingredient> = Object.fromEntries(
+  INGREDIENT_DICTIONARY.map(i => [i.id, i]),
+);
+
 export default function FoodDictionary({ navigateTo }: Props) {
   const { t, locale } = useI18n();
   const { userProfile } = useAppState();
   const unitSystem = userProfile.unitSystem ?? 'metric';
   const [query, setQuery] = useState('');
   const [activeCategory, setActiveCategory] = useState<IngredientCategory | null>(null);
-  const [expandedId, setExpandedId] = useState<string | null>(null);
+  const [expandedFamilyId, setExpandedFamilyId] = useState<string | null>(null);
   const [excludedAllergens, setExcludedAllergens] = useState<Set<Allergen>>(new Set());
+  const [selectedByFamily, setSelectedByFamily] = useState<Record<string, string>>({});
 
   const toggleAllergen = (a: Allergen) => {
     setExcludedAllergens(prev => {
@@ -49,53 +57,57 @@ export default function FoodDictionary({ navigateTo }: Props) {
     });
   };
 
-  const filtered = useMemo(() => {
-    let items = INGREDIENT_DICTIONARY;
+  const filteredFamilies = useMemo(() => {
+    const q = query.toLowerCase().trim();
+    return FOOD_FAMILIES.filter(family => {
+      if (activeCategory && family.category !== activeCategory) return false;
 
-    if (activeCategory) {
-      items = items.filter(i => i.category === activeCategory);
-    }
+      // Allergen filter: family passes if at least one variant has no excluded allergen
+      if (excludedAllergens.size > 0) {
+        const variants = getVariantsOfFamily(family.id);
+        const anyClean = variants.some(v => !v.allergens.some(a => excludedAllergens.has(a)));
+        if (!anyClean) return false;
+      }
 
-    if (excludedAllergens.size > 0) {
-      items = items.filter(i => !i.allergens.some(a => excludedAllergens.has(a)));
-    }
-
-    if (query.trim()) {
-      const q = query.toLowerCase().trim();
-      items = items.filter(i =>
-        i.name.toLowerCase().includes(q) ||
-        i.nameEn.toLowerCase().includes(q) ||
-        i.description.toLowerCase().includes(q) ||
-        i.tags.some(tag => tag.includes(q)),
+      if (!q) return true;
+      if (family.name.toLowerCase().includes(q)) return true;
+      if (family.nameEn.toLowerCase().includes(q)) return true;
+      if (family.description.toLowerCase().includes(q)) return true;
+      if (family.descriptionEn.toLowerCase().includes(q)) return true;
+      if (family.aliases?.some(a => a.toLowerCase().includes(q))) return true;
+      const variants = getVariantsOfFamily(family.id);
+      return variants.some(v =>
+        v.name.toLowerCase().includes(q) ||
+        v.nameEn.toLowerCase().includes(q) ||
+        v.tags?.some(tag => tag.includes(q)),
       );
-    }
-
-    return items;
+    });
   }, [query, activeCategory, excludedAllergens]);
 
-  // Group by category for display
   const grouped = useMemo(() => {
-    const map = new Map<IngredientCategory, Ingredient[]>();
-    for (const item of filtered) {
-      const list = map.get(item.category) ?? [];
-      list.push(item);
-      map.set(item.category, list);
+    const map = new Map<IngredientCategory, FoodFamily[]>();
+    for (const family of filteredFamilies) {
+      const list = map.get(family.category) ?? [];
+      list.push(family);
+      map.set(family.category, list);
     }
-    // Sort categories by defined order
     return CATEGORY_ORDER
       .filter(cat => map.has(cat))
-      .map(cat => ({ category: cat, items: map.get(cat)! }));
-  }, [filtered]);
+      .map(cat => ({ category: cat, families: map.get(cat)! }));
+  }, [filteredFamilies]);
 
   const toggleExpand = (id: string) => {
-    setExpandedId(prev => prev === id ? null : id);
+    setExpandedFamilyId(prev => prev === id ? null : id);
+  };
+
+  const handleSelectVariant = (familyId: string, variant: FoodVariant) => {
+    setSelectedByFamily(prev => ({ ...prev, [familyId]: variant.id }));
   };
 
   return (
     <PageShell maxWidth="default" spacing="md">
       <PageHeader onBack={() => navigateTo('more')} label="" title={t.foodDictionary.title} />
 
-      {/* Search bar */}
       <SearchInput
         value={query}
         onChange={setQuery}
@@ -103,12 +115,11 @@ export default function FoodDictionary({ navigateTo }: Props) {
         onClear={() => setQuery('')}
       />
 
-      {/* Category chips */}
       <div className="flex gap-2 overflow-x-auto pb-1 -mx-4 px-4 scrollbar-none">
         <button
           type="button"
           onClick={() => setActiveCategory(null)}
-          className={`shrink-0 px-3 py-1.5 rounded-sm text-xs font-headline font-bold uppercase tracking-widest transition-colors ${
+          className={`shrink-0 px-3 py-1.5 rounded-sm text-label font-headline font-bold uppercase tracking-widest transition-colors ${
             activeCategory === null
               ? 'bg-primary text-on-primary'
               : 'bg-surface-container-highest text-on-surface-variant hover:bg-surface-container-high'
@@ -123,7 +134,7 @@ export default function FoodDictionary({ navigateTo }: Props) {
               type="button"
               key={cat}
               onClick={() => setActiveCategory(activeCategory === cat ? null : cat)}
-              className={`shrink-0 px-3 py-1.5 rounded-sm text-xs font-headline font-bold uppercase tracking-widest transition-colors ${
+              className={`shrink-0 px-3 py-1.5 rounded-sm text-label font-headline font-bold uppercase tracking-widest transition-colors ${
                 activeCategory === cat
                   ? 'bg-primary text-on-primary'
                   : 'bg-surface-container-highest text-on-surface-variant hover:bg-surface-container-high'
@@ -135,9 +146,6 @@ export default function FoodDictionary({ navigateTo }: Props) {
         })}
       </div>
 
-      {/* Allergen exclusion chips — multi-toggle group. `aria-pressed`
-          communicates the on/off state per chip; group wrapper gets
-          `role="group"` so assistive tech narrates the cluster. */}
       <div className="space-y-1.5">
         <span id="allergen-filter-label" className="text-micro font-label uppercase tracking-widest text-on-surface-variant">
           {t.foodDictionary.allergenFilter}
@@ -166,12 +174,10 @@ export default function FoodDictionary({ navigateTo }: Props) {
         </div>
       </div>
 
-      {/* Results count */}
-      <p className="text-xs text-on-surface-variant font-label tracking-widest uppercase">
-        {(filtered.length === 1 ? t.foodDictionary.foodCountOne : t.foodDictionary.foodCount).replace('{count}', String(filtered.length))}
+      <p className="text-label text-on-surface-variant font-label tracking-widest uppercase">
+        {(filteredFamilies.length === 1 ? t.foodDictionary.foodCountOne : t.foodDictionary.foodCount).replace('{count}', String(filteredFamilies.length))}
       </p>
 
-      {/* Grouped list */}
       {grouped.length === 0 ? (
         <EmptyState icon="🔍" title={t.foodDictionary.noResults} description={t.foodDictionary.tryAnother} />
       ) : (
@@ -179,110 +185,65 @@ export default function FoodDictionary({ navigateTo }: Props) {
           const meta = INGREDIENT_CATEGORIES[group.category];
           return (
             <section key={group.category} className="space-y-2">
-              <h3 className="font-headline font-bold text-sm uppercase tracking-widest text-on-surface-variant flex items-center gap-2 pt-2">
-                <span>{meta.icon}</span>
+              <h3 className="font-headline font-bold text-body-sm uppercase tracking-widest text-on-surface-variant flex items-center gap-2 pt-2">
+                <span aria-hidden="true">{meta.icon}</span>
                 <span>{locale === 'es' ? meta.name : meta.nameEn}</span>
-                <span className="text-micro font-label text-on-surface-variant/60">{group.items.length}</span>
+                <span className="text-micro font-label text-on-surface-variant/60">{group.families.length}</span>
               </h3>
 
               <div className="space-y-1">
-                {group.items.map(item => {
-                  const isExpanded = expandedId === item.id;
-                  const quality = getFoodQuality(item.macros);
-                  const QualityIcon = quality === 'good' ? ThumbsUp : quality === 'poor' ? AlertTriangle : Minus;
-                  const qualityColor = quality === 'good' ? 'text-primary' : quality === 'poor' ? 'text-error' : 'text-brand-secondary';
+                {group.families.map(family => {
+                  const canonical = getCanonicalVariant(family.id);
+                  if (!canonical) return null;
+                  const variants = getVariantsOfFamily(family.id);
+                  const selectedVariantId = selectedByFamily[family.id];
+                  const activeVariant = resolveVariant(family.id, selectedVariantId) ?? canonical;
+                  const activeIngredient = INGREDIENT_BY_ID[activeVariant.id];
 
                   return (
-                    <div key={item.id} className="bg-surface-container-low rounded-sm border border-outline-variant/20 overflow-hidden">
-                      {/* Collapsed row */}
-                      <button
-                        type="button"
-                        onClick={() => toggleExpand(item.id)}
-                        className="w-full flex items-center p-3 text-left hover:bg-surface-container-highest/50 transition-colors"
-                      >
-                        <QualityIcon className={`w-4 h-4 mr-2.5 shrink-0 ${qualityColor}`} />
-                        <div className="flex-1 min-w-0">
-                          <span className="font-headline font-bold text-sm text-on-surface block truncate">
-                            {locale === 'es' ? item.name : item.nameEn}
-                          </span>
-                          <span className="text-micro font-label text-on-surface-variant tracking-wide">
-                            {item.macros.calories} {t.common.kcal} · {item.macros.protein}g {t.portionSelector.protein} · {item.macros.carbs}g {t.portionSelector.carbs} · {item.macros.fats}g {t.portionSelector.fats}
-                          </span>
-                        </div>
-                        {item.tags.length > 0 && (
-                          <Badge variant="outline" className="mr-2 shrink-0 hidden sm:inline-flex">
-                            {item.tags[0]}
-                          </Badge>
-                        )}
-                        {isExpanded ? <ChevronUp className="w-4 h-4 text-on-surface-variant shrink-0" /> : <ChevronDown className="w-4 h-4 text-on-surface-variant shrink-0" />}
-                      </button>
-
-                      {/* Expanded detail */}
-                      {isExpanded && (
-                        <div className="px-3 pb-4 pt-1 space-y-4 border-t border-outline-variant/20">
-                          {/* Description */}
-                          <p className="text-sm text-on-surface-variant">
-                            {locale === 'es' ? item.description : item.descriptionEn}
-                          </p>
-
-                          {/* Tags */}
-                          {item.tags.length > 0 && (
-                            <div className="flex flex-wrap gap-1">
-                              {item.tags.map(tag => (
-                                <Badge key={tag} variant="secondary" className="text-micro">
-                                  {tag}
-                                </Badge>
-                              ))}
-                            </div>
-                          )}
-
-                          {/* Allergens */}
-                          {item.allergens.length > 0 && (
-                            <div className="flex items-center gap-2">
-                              <span className="text-micro font-label uppercase tracking-widest text-on-surface-variant">{t.foodDictionary.allergens}:</span>
-                              {item.allergens.map(a => (
-                                <Badge key={a} variant="destructive" className="text-micro">
-                                  {a}
-                                </Badge>
-                              ))}
-                            </div>
-                          )}
-
-                          {/* Portion selector */}
+                    <FamilyCard
+                      key={family.id}
+                      family={family}
+                      canonicalVariant={canonical}
+                      variants={variants}
+                      expanded={expandedFamilyId === family.id}
+                      onToggle={() => toggleExpand(family.id)}
+                      selectedVariantId={selectedVariantId}
+                      onSelectVariant={v => handleSelectVariant(family.id, v)}
+                      portionSlot={
+                        activeIngredient && (
                           <div className="space-y-2">
                             <h4 className="text-micro font-label uppercase tracking-widest text-on-surface-variant">
                               {t.foodDictionary.servings}
                             </h4>
-                            <PortionSelector ingredient={item} unitSystem={unitSystem} />
+                            <PortionSelector ingredient={activeIngredient} unitSystem={unitSystem} />
                           </div>
-
-                          {/* Micronutrient highlights */}
-                          <MicroHighlights item={item} />
-
-                          {/* CTAs */}
-                          <div className="flex gap-2">
-                            <Button
-                              variant="brand"
-                              size="sm"
-                              className="flex-1"
-                              onClick={() => navigateTo('add-meal')}
-                            >
-                              <UtensilsCrossed className="w-3.5 h-3.5 mr-1.5" />
-                              {t.portionSelector.addToMeal}
-                            </Button>
-                            <Button
-                              variant="outline"
-                              size="sm"
-                              className="flex-1"
-                              onClick={() => navigateTo('create-recipe')}
-                            >
-                              <ShoppingCart className="w-3.5 h-3.5 mr-1.5" />
-                              {t.portionSelector.addToRecipe}
-                            </Button>
-                          </div>
+                        )
+                      }
+                      microSlot={activeIngredient && <MicroHighlights item={activeIngredient} />}
+                      ctaSlot={
+                        <div className="flex gap-2">
+                          <Button
+                            variant="brand"
+                            size="sm"
+                            className="flex-1"
+                            onClick={() => navigateTo('add-meal')}
+                          >
+                            <UtensilsCrossed className="w-3.5 h-3.5 mr-1.5" aria-hidden="true" />
+                            {t.portionSelector.addToMeal}
+                          </Button>
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            className="flex-1"
+                            onClick={() => navigateTo('create-recipe')}
+                          >
+                            <ShoppingCart className="w-3.5 h-3.5 mr-1.5" aria-hidden="true" />
+                            {t.portionSelector.addToRecipe}
+                          </Button>
                         </div>
-                      )}
-                    </div>
+                      }
+                    />
                   );
                 })}
               </div>
@@ -295,6 +256,9 @@ export default function FoodDictionary({ navigateTo }: Props) {
 }
 
 // ── Micro highlights ──────────────────────────
+// NOTE: labels still hardcoded ES (Vit C / Hierro / Folato...). Deferred to
+// a follow-up commit per plan §P2 bonus — requires 11 i18n keys × 2 locales
+// and the canonical key naming still needs owner sign-off.
 function MicroHighlights({ item }: { item: Ingredient }) {
   const { t } = useI18n();
   const highlights: { label: string; value: string }[] = [];
@@ -322,7 +286,7 @@ function MicroHighlights({ item }: { item: Ingredient }) {
       <div className="grid grid-cols-3 sm:grid-cols-4 gap-1">
         {highlights.slice(0, 8).map(h => (
           <div key={h.label} className="bg-surface-container-highest rounded-sm px-2 py-1 text-center">
-            <span className="block text-xs font-bold text-on-surface">{h.value}</span>
+            <span className="block text-label font-bold text-on-surface">{h.value}</span>
             <span className="text-micro font-label uppercase tracking-wider text-on-surface-variant">{h.label}</span>
           </div>
         ))}

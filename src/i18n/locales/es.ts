@@ -1314,6 +1314,20 @@ const es = {
       mustard: 'Mostaza',
       sulfites: 'Sulfitos',
     },
+    primaryLabel: 'Principal',
+    variantsSection: 'Variantes',
+    variantsCount: '{count} variantes',
+    variantsCountOne: '{count} variante',
+    vsCanonical: 'vs principal',
+    variantTypes: {
+      canonical: 'Referencia',
+      cut: 'Corte',
+      preparation: 'Preparación',
+      quality: 'Calidad',
+      regional: 'Regional',
+      brand: 'Marca',
+      user: 'Personalizada',
+    },
   },
   // RecipeDetail
   recipeDetail: {

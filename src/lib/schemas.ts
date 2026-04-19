@@ -70,13 +70,22 @@ export const RecipeSchema = z.object({
   mealType: z.string().optional(),
   tag: z.string().optional(),
   ingredients: z.array(z.string()).optional(),
+  // Dual-shape during food-family migration: the new canonical form carries
+  // `familyId` (+ optional `variantId`); pre-migration payloads only carry
+  // `ingredientId`. We accept either — at least one must be present, enforced
+  // by a `refine` predicate so silent empty entries still surface in dev.
   recipeIngredients: z.array(z.object({
     id: z.string(),
-    ingredientId: z.string(),
+    familyId: z.string().optional(),
+    variantId: z.string().optional(),
+    ingredientId: z.string().optional(),
     amount: z.number(),
     unit: z.string(),
     ingredient: z.unknown().optional(),
-  })).optional(),
+  }).refine(
+    v => Boolean(v.familyId || v.ingredientId),
+    { message: 'RecipeIngredient requires familyId or legacy ingredientId' },
+  )).optional(),
   steps: z.array(z.object({
     text: z.string(),
     photoUrl: z.string().optional(),

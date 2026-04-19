@@ -63,6 +63,15 @@ export interface ServingSize {
   isDefault?: boolean;
 }
 
+/**
+ * Flat nutrition entity. Kept for back-compat during the food-family
+ * migration — see `FoodVariant` in `./food-family.ts`. New code should consume
+ * variants via the resolver helpers in `features/food/utils/food-family-resolver.ts`.
+ * The legacy `INGREDIENT_DICTIONARY` array in `features/food/data/ingredients.ts`
+ * is a compat projection derived from `FOOD_VARIANTS`.
+ *
+ * @deprecated prefer `FoodVariant` + `FoodFamily` from `./food-family.ts`.
+ */
 export interface Ingredient {
   id: string;
   name: string;
@@ -79,9 +88,28 @@ export interface Ingredient {
   allergens: Allergen[];
 }
 
+/**
+ * Recipe ingredient reference. Dual-shape during the food-family migration:
+ *
+ * - `familyId` (+ optional `variantId`) is the new canonical shape. Resolution
+ *   order at render time: `variantId` → `userProfile.variantPreferences[familyId]`
+ *   (future P6) → `family.canonicalVariantId`.
+ * - `ingredientId` is the legacy single-pointer shape. Still accepted by the
+ *   zod schema for hydration of pre-migration user data; consumers should
+ *   resolve it through `ingredientIdToFamilyVariant()` to derive `familyId`.
+ *
+ * At least one of `familyId` or `ingredientId` must be present. Both are
+ * optional at the type level so progressive migration is ergonomic.
+ */
 export interface RecipeIngredient {
   id: string; // unique id for the recipe ingredient entry
-  ingredientId: string;
+  familyId?: string;
+  variantId?: string;
+  /**
+   * @deprecated use `familyId` + `variantId`. Retained for hydration of
+   * pre-migration `savedRecipes` payloads.
+   */
+  ingredientId?: string;
   amount: number;
   unit: string;
   ingredient?: Ingredient; // Populated at runtime
