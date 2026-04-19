@@ -73,3 +73,25 @@ describe('Theme palettes — themeClassName', () => {
     expect([...produced].sort()).toEqual([...EXPECTED_CLASSES].sort());
   });
 });
+
+describe('Theme palettes — NEUTRAL refinement (ADR-011)', () => {
+  it('NEUTRAL DARK fixes depth bug with surface-container-low #1c1c1f (+4pts lift)', () => {
+    expect(/\.theme-neutral-dark\s*\{[^}]*--surface-container-low:\s*#1c1c1f/.test(css)).toBe(true);
+  });
+
+  it('NEUTRAL DARK declares surface-container-lowest for hundido inputs', () => {
+    expect(/\.theme-neutral-dark\s*\{[^}]*--surface-container-lowest:\s*#0f0f11/.test(css)).toBe(true);
+  });
+
+  it('NEUTRAL LIGHT temperature-matches chart-text to warm Stone 500 #78716c', () => {
+    expect(/\.theme-neutral-light\s*\{[^}]*--chart-text:\s*#78716c/.test(css)).toBe(true);
+  });
+
+  it('NEUTRAL LIGHT keeps Emerald 600 #059669 as brand-secondary (not primary)', () => {
+    expect(/\.theme-neutral-light\s*\{[^}]*--brand-secondary:\s*#059669/.test(css)).toBe(true);
+  });
+
+  it('NEUTRAL LIGHT keeps primary near-black #09090b (monochrome identity)', () => {
+    expect(/\.theme-neutral-light\s*\{[^}]*--primary:\s*#09090b/.test(css)).toBe(true);
+  });
+});

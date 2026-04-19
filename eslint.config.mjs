@@ -58,6 +58,51 @@ const noArbitraryTextSizeTpl = {
     'Do not use arbitrary text sizes (text-[Npx]). Use typography tokens. See docs/DESIGN-SYSTEM.md § 1.2.',
 };
 
+/**
+ * Ban Tailwind default shadow utilities outside the shadcn/ui allowlist
+ * (ADR-010 § 2026-04-19 addendum). Use `shadow-elev-{0,1,2,3}` instead.
+ *
+ * Mapping: sm → elev-1, md → elev-2, lg/xl/2xl → elev-3, none → elev-0.
+ * Excluded: `src/components/ui/**` (shadcn primitives) + `src/App.tsx`
+ * (dev-only demo ribbon).
+ */
+const noTailwindShadow = {
+  selector:
+    "Literal[value=/(^|\\s)shadow-(sm|md|lg|xl|2xl)\\b/]",
+  message:
+    'Do not use Tailwind default shadows. Use the elevation scale: shadow-elev-{0,1,2,3} (sm→1, md→2, lg/xl/2xl→3). See ADR-010 and docs/DESIGN-SYSTEM.md § 1.4.',
+};
+
+const noTailwindShadowTpl = {
+  selector:
+    "TemplateElement[value.raw=/(^|\\s)shadow-(sm|md|lg|xl|2xl)\\b/]",
+  message:
+    'Do not use Tailwind default shadows. Use the elevation scale: shadow-elev-{0,1,2,3}. See ADR-010.',
+};
+
+/**
+ * Require `font-headline` whenever `text-{xl|2xl|3xl|4xl}` is paired with
+ * `font-bold` (ADR-011 § 2026-04-19 typography semantic rule). Prevents
+ * headlines from falling back to Inter when Space Grotesk is intended.
+ *
+ * Matches: literal contains both text-Xl + font-bold AND does NOT contain
+ * font-headline. (Positive lookaheads for text-* and font-bold, negative
+ * lookahead for font-headline, all non-greedy inside the same string.)
+ */
+const noHeadlineWithoutFont = {
+  selector:
+    "Literal[value=/^(?=[^\"'`]*text-(xl|2xl|3xl|4xl)\\b)(?=[^\"'`]*font-bold\\b)(?![^\"'`]*font-(headline|mono)\\b).+/]",
+  message:
+    'Headlines (text-{xl,2xl,3xl,4xl} + font-bold) must include font-headline (or font-mono for numerical displays). For canonical headlines prefer text-headline or text-display. See ADR-011 and docs/DESIGN-SYSTEM.md § 1.1.',
+};
+
+const noHeadlineWithoutFontTpl = {
+  selector:
+    "TemplateElement[value.raw=/^(?=[^`]*text-(xl|2xl|3xl|4xl)\\b)(?=[^`]*font-bold\\b)(?![^`]*font-(headline|mono)\\b).+/]",
+  message:
+    'Headlines (text-{xl,2xl,3xl,4xl} + font-bold) must include font-headline (or font-mono). See ADR-011.',
+};
+
 const designSystemRules = [
   noArbitraryTextSize,
   noArbitraryTextSizeTpl,
@@ -65,6 +110,10 @@ const designSystemRules = [
   noSectionCardDupTpl,
   noDarkPrefix,
   noDarkPrefixTpl,
+  noTailwindShadow,
+  noTailwindShadowTpl,
+  noHeadlineWithoutFont,
+  noHeadlineWithoutFontTpl,
 ];
 
 /**
@@ -136,6 +185,10 @@ export default tseslint.config(
         noArbitraryTextSizeTpl,
         noDarkPrefix,
         noDarkPrefixTpl,
+        noTailwindShadow,
+        noTailwindShadowTpl,
+        noHeadlineWithoutFont,
+        noHeadlineWithoutFontTpl,
       ],
     },
   },
@@ -152,6 +205,60 @@ export default tseslint.config(
     files: q16MigrationAllowlist,
     rules: {
       'no-restricted-syntax': ['warn', ...designSystemRules],
+    },
+  },
+  // Shadow allowlist (ADR-010 § 2026-04-19 addendum): App.tsx owns the
+  // dev-only demo-mode ribbon — opt out of the Tailwind shadow ban only.
+  {
+    files: ['src/App.tsx'],
+    rules: {
+      'no-restricted-syntax': [
+        'error',
+        noArbitraryTextSize,
+        noArbitraryTextSizeTpl,
+        noSectionCardDup,
+        noSectionCardDupTpl,
+        noDarkPrefix,
+        noDarkPrefixTpl,
+        noHeadlineWithoutFont,
+        noHeadlineWithoutFontTpl,
+      ],
+    },
+  },
+  // Shadow + dark: allowlist for shadcn/ui primitives. They ship with
+  // `shadow-sm|lg` and `dark:` prefixes aligned with upstream convention.
+  // Downgraded to `warn` like the Q16 allowlist so preflight stays green
+  // while migrations happen. surface.ts is covered by the primitives-
+  // exception block above (it already opts out of the SectionCard-dup ban
+  // and inherits the base shadow ban — it contains zero Tailwind shadows).
+  {
+    files: [
+      'src/components/ui/badge.tsx',
+      'src/components/ui/button.tsx',
+      'src/components/ui/input.tsx',
+      'src/components/ui/select.tsx',
+      'src/components/ui/tabs.tsx',
+      'src/components/ui/textarea.tsx',
+      'src/components/ui/card.tsx',
+      'src/components/ui/dialog.tsx',
+      'src/components/ui/popover.tsx',
+      'src/components/ui/bottom-sheet.tsx',
+      'src/components/ui/sheet.tsx',
+      'src/components/ui/alert-dialog.tsx',
+      'src/components/ui/slider.tsx',
+    ],
+    rules: {
+      'no-restricted-syntax': [
+        'warn',
+        noArbitraryTextSize,
+        noArbitraryTextSizeTpl,
+        noSectionCardDup,
+        noSectionCardDupTpl,
+        noDarkPrefix,
+        noDarkPrefixTpl,
+        noHeadlineWithoutFont,
+        noHeadlineWithoutFontTpl,
+      ],
     },
   },
 );

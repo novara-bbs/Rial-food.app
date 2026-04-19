@@ -103,7 +103,7 @@ export default function ShoppingList({ onBack, shoppingList = [], setShoppingLis
           )}
           <div>
             <span className="font-label text-xs tracking-[0.2em] text-primary uppercase block">{t.shoppingList.title}</span>
-            <h2 className="font-headline text-3xl font-bold tracking-tighter uppercase text-tertiary">{t.shoppingList.title}</h2>
+            <h2 className="font-headline text-headline font-bold tracking-tighter uppercase text-tertiary">{t.shoppingList.title}</h2>
           </div>
         </div>
         <div className="flex items-center gap-2">
@@ -116,7 +116,7 @@ export default function ShoppingList({ onBack, shoppingList = [], setShoppingLis
           <button type="button" onClick={() => setPendingClearAction('all')} disabled={!hasItems} aria-label={t.shoppingList.clearAll} className="w-10 h-10 bg-surface-container-low rounded-full flex items-center justify-center text-on-surface-variant hover:text-error transition-colors border border-outline-variant/20 disabled:opacity-30">
             <Trash2 className="w-4 h-4" />
           </button>
-          <button type="button" onClick={() => setIsAdding(true)} aria-label={t.shoppingList.addItem} className="w-10 h-10 bg-primary text-on-primary rounded-full flex items-center justify-center hover:bg-primary-container transition-colors shadow-lg">
+          <button type="button" onClick={() => setIsAdding(true)} aria-label={t.shoppingList.addItem} className="w-10 h-10 bg-primary text-on-primary rounded-full flex items-center justify-center hover:bg-primary-container transition-colors shadow-elev-3">
             <Plus className="w-5 h-5" />
           </button>
         </div>
@@ -274,7 +274,7 @@ export default function ShoppingList({ onBack, shoppingList = [], setShoppingLis
         <div className="fixed left-1/2 -translate-x-1/2 w-full max-w-md px-6 z-50 md:bottom-8" style={{ bottom: 'calc(env(safe-area-inset-bottom, 0px) + 6rem)' }}>
           <button type="button"
             onClick={() => setPendingClearAction('completed')}
-            className="w-full bg-surface-container-highest text-error border border-error/20 py-4 rounded-full font-headline font-bold text-sm uppercase tracking-widest hover:bg-error/10 transition-colors flex items-center justify-center gap-2 shadow-xl backdrop-blur-md"
+            className="w-full bg-surface-container-highest text-error border border-error/20 py-4 rounded-full font-headline font-bold text-sm uppercase tracking-widest hover:bg-error/10 transition-colors flex items-center justify-center gap-2 shadow-elev-3 backdrop-blur-md"
           >
             <Trash2 className="w-4 h-4" /> {t.shoppingList.clearCompleted}
           </button>

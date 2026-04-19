@@ -101,7 +101,7 @@ export default function AICoach({
           <div className="w-24 h-24 rounded-full bg-surface-container-highest flex items-center justify-center mb-4">
             <Lock className="w-10 h-10 text-on-surface-variant" />
           </div>
-          <h3 className="font-headline text-3xl font-bold text-tertiary uppercase">{t.aiCoach.proRequired}</h3>
+          <h3 className="font-headline text-headline font-bold text-tertiary uppercase">{t.aiCoach.proRequired}</h3>
           <p className="text-on-surface-variant max-w-md">{t.aiCoach.proMessage}</p>
           <button type="button"
             onClick={onBack}

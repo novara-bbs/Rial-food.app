@@ -1,5 +1,86 @@
 # RIAL App - Changelog
 
+## [1.5.53] - 2026-04-19
+
+### feat(design): NEUTRAL brand-default formalization + shadow-elev sweep + typography semantic codemod
+
+Cierre de 3 deudas del design system en un PR integrador — **NEUTRAL promovida a paleta de marca canónica**, **shadow sweep** Tailwind default → escala `shadow-elev-*`, y **typography semantic codemod** locking que todo headline corra sobre Space Grotesk. Plan file `.claude/plans/revisar-las-4-paletas-staged-snowglobe.md`. Research 2026 (Vercel/Linear/Notion/Bevel/Stripe) confirma warm-neutral + green accent como patrón dominante para SaaS wellness premium — reafirma la decisión NEUTRAL. 2 nuevos ADRs (ADR-011 + addenda ADR-005/010), 2 nuevas convention tests, 4 nuevas reglas ESLint, 5 tokens refinados en NEUTRAL (4 LIGHT + 2 DARK con 1 nuevo).
+
+**A) NEUTRAL como paleta de marca (ADR-011).**
+
+- `DEFAULT_STATE.palette = 'neutral'` ya era el default técnico desde `[1.5.32]` — ADR-011 formaliza la decisión como *narrativa de marca*. Copy i18n rewritten: `t.settings.paletteNeutralDesc` ES `"Monocromática cálida con acento verde — la paleta canónica de RIAL."` / EN `"Warm monochromatic with green accent — the canonical RIAL palette."`. Las otras 3 paletas (`volt` / `ocean` / `ember`) son "personalidades alternativas", igualmente soportadas, no marca.
+- Badge "Recomendada" / "Recommended" sobre la tile NEUTRAL en Onboarding step 5 + SettingsAppearance. Nueva key i18n `t.settings.paletteRecommended` × 2 locales. Pill con `bg={swatch.primary}` + `color={swatch.bg}` (inline-style porque el color depende de la paleta aplicada, no del tema activo del picker).
+
+**B) NEUTRAL LIGHT temperature-match polish.**
+
+Cuatro valores refinados en `.theme-neutral-light` para coherencia con la escala warm-Stone del resto del bloque:
+- `--on-surface-variant` Neutral 700 `#404040` → Stone 700 `#44403c` (AAA 8.9:1 sobre `#fafaf9`)
+- `--primary-container` Zinc 800 `#27272a` → Stone 800 `#292524`
+- `--on-primary-container` Neutral 50 `#fafafa` → Stone 50 `#fafaf9`
+- `--chart-text` Zinc 500 `#71717a` → Stone 500 `#78716c`
+
+Zero cambios en `--primary` (`#09090b` near-black), `--brand-secondary` (`#059669` Emerald 600), o la escala `--surface-container-*`. La identidad monocromática + acento Emerald queda intacta.
+
+**C) NEUTRAL DARK depth fix + new lowest token.**
+
+- `--surface-container-low` `#18181b` → `#1c1c1f` (+4 pts luminosity). Era idéntico a `--surface` — bug de jerarquía silencioso (`bg-surface-container-low` sobre `bg-surface` no liftaba).
+- `--surface-container-lowest: #0f0f11` **nuevo** (no existía en NEUTRAL DARK; las otras 3 paletas DARK sí lo declaran). Depth-below-background para elementos "hundidos" (inputs, insets).
+
+**D) Shadow sweep Tailwind → elev scale (ADR-010 § 2026-04-19 addendum).**
+
+11 ocurrencias de `shadow-{sm,md,lg,xl,2xl}` Tailwind default migradas al scale `shadow-elev-{1,2,3}` según mapping `sm→1 · md→2 · lg/xl/2xl→3`. Files tocados: `SegmentedTabs.tsx`, `Home.tsx`, `AddMeal.tsx`, `CreatePost.tsx` (×2), `RealScoreBadge.tsx`, `Onboarding.tsx`, `SettingsProfile.tsx`, `Pantry.tsx`, `ShoppingList.tsx` (×2).
+
+Allowlist (excluidos del ban): `src/components/ui/**` (shadcn primitives — dialog/popover/sheet/select/tabs/card/slider vienen con `shadow-lg`/`shadow-md` baked-in, alinear con upstream > replicar elev tokens) + `src/App.tsx` (demo-mode ribbon, dev-only). Colored shadow tints (`shadow-primary/25`, etc.) — fuera de scope, son overlays decorativos no parte del scale de elevación.
+
+Adoption counter: 2 consumers (`SectionCard` + `BottomSheet`) → ≈13 consumers post-sweep.
+
+**E) Typography semantic codemod (ADR-011 § 1.1).**
+
+Regla nueva en DESIGN-SYSTEM.md §1.1: todo `text-{xl,2xl,3xl,4xl}` + `font-bold` **debe** incluir `font-headline` en el mismo string. Investigación preparatoria con grep confirmó que las 46 ocurrencias del repo ya tienen `font-headline` o `font-mono` — el codemod fue efectivamente no-op **para el estado actual**. El valor de esta entry es el **locking del invariante** para prevenir regresión.
+
+Promociones manuales de tokens semánticos (3 archivos):
+- `AICoach.tsx:104` `text-3xl` → `text-headline` (32px token, pantalla Pro-lock title)
+- `ShoppingList.tsx:106` `text-3xl` → `text-headline`
+- `RialPlus.tsx:108` `text-3xl` → `text-headline`
+
+Patrones responsive `text-3xl md:text-4xl` permanecen intactos — promover rompería el breakpoint.
+
+**F) ESLint guardrails (4 nuevas reglas).**
+
+`eslint.config.mjs`:
+- `noTailwindShadow` + `noTailwindShadowTpl` — bloquean `shadow-(sm|md|lg|xl|2xl)` en `Literal.value` + `TemplateElement.value.raw` fuera del allowlist.
+- `noHeadlineWithoutFont` + `noHeadlineWithoutFontTpl` — regex con positive + negative lookaheads: matchea strings que contengan `text-(xl|2xl|3xl|4xl)` + `font-bold` **y no** `font-headline`.
+
+Nuevo override block LAST-wins para `src/components/ui/**` + `src/App.tsx` (opta-out del shadow ban, mantiene el resto de guardrails). Primitives override (SectionCard/ConstantTile/surface.ts) extendido con las 4 nuevas reglas.
+
+**G) Convention tests (2 nuevos + 1 extendido).**
+
+- `src/test/conventions/typography-semantic.test.ts` **nuevo** — walks `src/**` excluyendo `test/conventions/` + `components/ui/`, parsea strings "quoted" con contenido ≥ 4 chars, falla si alguno matchea `text-(xl|2xl|3xl|4xl)` + `font-bold` sin `font-headline` o `font-mono`. BASELINE = 0.
+- `src/test/conventions/shadow-elevation.test.ts` **nuevo** — mismo pattern, walks excluyendo `components/ui/` + `App.tsx`, BASELINE = 0 para `shadow-(sm|md|lg|xl|2xl)`.
+- `src/test/conventions/theme-palettes.test.ts` — **+5 asserts** locking los valores NEUTRAL refinados (DARK `--surface-container-low #1c1c1f` + `--surface-container-lowest #0f0f11`; LIGHT `--chart-text #78716c` + `--brand-secondary #059669` + `--primary #09090b`).
+
+**H) i18n.**
+
+`src/i18n/locales/es.ts` + `en.ts`:
+- +1 key `t.settings.paletteRecommended` × 2 locales (ES "Recomendada" / EN "Recommended")
+- 1 rewrite `t.settings.paletteNeutralDesc` (value-only, key existente)
+
+Total: **1576 → 1577 symmetric** (+1 new key; the rewrite reuses its existing key so count only rises by one).
+
+**I) Docs.**
+
+- `docs/adr/ADR-011-neutral-brand-default.md` **nuevo** — Status: Accepted. Supersedes: —. Related: ADR-005, ADR-010.
+- `docs/adr/ADR-010-surface-elevation-adoption.md` — addendum 2026-04-19 (shadow sweep completion + allowlist).
+- `docs/adr/ADR-005-theme-by-class-not-tailwind-dark.md` — 3 addenda 2026-04-19 (NEUTRAL brand default formalized + LIGHT temperature-match + DARK depth fix).
+- `docs/DESIGN-SYSTEM.md` — §1.1 regla semántica, §1.4 migration table + allowlist, §2 reescrita como "NEUTRAL es la paleta de marca canónica" + tabla de tokens clave NEUTRAL.
+
+**Notes**
+
+- **Zero cambio técnico de default.** Usuarios existentes mantienen su palette elegida. `ThemeContext` default ya era `neutral` desde `[1.5.32]`.
+- **Zero cambio de asset.** Space Grotesk + Inter + JetBrains Mono intactos (decisión explícita owner — no reopened).
+- **Scope excluido.** VOLT/OCEAN/EMBER token changes = 0. Spacing refactor = 0 (audit confirmó healthy). Radius refactor = 0 (audit excellent). Marketing site fuera de `src/` = fuera de scope.
+- **Rollback.** Revert del commit basta — todo el cambio está localizado: 1 CSS file, 2 JS swatches, 1 i18n key + 1 rewrite, 11 shadow class swaps, 3 text-3xl promotions, 4 ESLint rules, 2 tests + 1 extension, 4 docs.
+
 ## [1.5.52] - 2026-04-19
 
 ### fix(audit-wave-0-1) — S3 Legal cluster: HIG back-button + a11y icon hardening (PrivacyPolicy + TermsOfService)

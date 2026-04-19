@@ -20,6 +20,8 @@ All tokens are declared in `src/index.css` under `@theme` and resolved by Tailwi
 
 Loaded via Google Fonts in `src/index.css:1`. If you use `text-xs` inside a `<span className="font-label">` it renders JetBrains Mono — that is intentional.
 
+**Regla semántica (ADR-011, 2026-04-19).** Todo `className` que combine `text-{xl,2xl,3xl,4xl}` + `font-bold` **debe** incluir `font-headline` en el mismo string — sin él, el texto cae en Inter bold por default y los titulares pierden la firma visual de Space Grotesk. Para titulares canónicos de pantalla prefiere `text-headline` (32 px) o `text-display` (40 px) sobre los tamaños Tailwind directos. Excepciones: `font-mono` (JetBrains Mono numérico) es válido en hero tiles de métricas. La regla se aplica via ESLint `no-restricted-syntax` + convention test `src/test/conventions/typography-semantic.test.ts` (BASELINE = 0 post-`[1.5.53]`).
+
 ### 1.2 Typography scale (ADR-002)
 
 Semantic names with fixed pixel values. Use `text-{token}` utilities.
@@ -63,7 +65,20 @@ Base token + multiplicative scale. Resolved values preserve Tailwind v4 defaults
 | `shadow-elev-2` | Floating surface — cards over content |
 | `shadow-elev-3` | Dialogs, popovers, command palettes |
 
-Tailwind defaults (`shadow`, `shadow-md`, etc.) remain available but prefer elevation tokens for semantic consistency.
+**Regla (ADR-010 § 2026-04-19 addendum).** Los utilities Tailwind default `shadow-{sm,md,lg,xl,2xl}` están **prohibidos** fuera del allowlist shadcn. Usa la escala semántica `shadow-elev-{0,1,2,3}`. Migration table:
+
+| Tailwind utility | Target elev token | Rationale |
+|---|---|---|
+| `shadow-sm` | `shadow-elev-1` | Mismo nivel perceptual (`0 1 2 rgb/0.05`) |
+| `shadow-md` | `shadow-elev-2` | Tokens matchean (`0 4 6 -1 rgb/0.1`) |
+| `shadow-lg` | `shadow-elev-3` | Match (`0 10 15 -3 rgb/0.1`) |
+| `shadow-xl` | `shadow-elev-3` | Cap — RIAL no necesita el nivel xl |
+| `shadow-2xl` | `shadow-elev-3` | Idem cap |
+| `shadow-none` | `shadow-elev-0` | Explicitar intención |
+
+**Allowlist (excluidos del ban):** `src/components/ui/**/*.{ts,tsx}` (shadcn primitives retain Tailwind shadows aligned with upstream — dialog / popover / sheet / select / tabs / card / slider) + `src/App.tsx` (dev-only demo-mode ribbon). Los colored shadow tints `shadow-{color}/N` (`shadow-primary/25`, etc.) son overlays decorativos, **no** parte del scale de elevación — permanecen fuera de scope.
+
+La regla se aplica via ESLint `no-restricted-syntax` + convention test `src/test/conventions/shadow-elevation.test.ts` (BASELINE = 0 post-`[1.5.53]`).
 
 **Elevation en primitives (ADR-010):** `SectionCard` aplica `shadow-elev-1` por default para diferenciar tarjetas del background en modos light. En modos dark el shadow es imperceptible (`rgb(0 0 0 / 0.05)` sobre casi-negro ≈ 0 delta); en modos light aporta depth mínima sin crear skeuomorfismo, complementaria al border `outline-variant/20` y al tint delta `bg ↔ surface-container-low`. Nuevos primitives deben considerar este patrón "belt-and-suspenders" (border + tint + shadow muy sutil) antes de introducir elevación propia.
 
@@ -90,16 +105,28 @@ All color is theme-aware. The single class `theme-{name}` on `<html>` swaps an e
 
 ---
 
-## 2. Themes (ADR-005)
+## 2. Themes (ADR-005 + ADR-011)
 
-**4 palettes × 2 modes = 8 theme classes**, resolved at runtime from `{palette, mode}` state (see `src/contexts/ThemeContext.tsx`):
+RIAL ships **4 palettes × 2 modes = 8 theme classes**, resolved at runtime from `{palette, mode}` state (see `src/contexts/ThemeContext.tsx`). Since **ADR-011 (2026-04-19)**, **NEUTRAL es la paleta de marca canónica** — la identidad RIAL por default (monocromática cálida + acento Emerald). Las otras 3 (`volt` · `ocean` · `ember`) son **personalidades alternativas** igualmente soportadas, pero no son la voz de marca. `DEFAULT_STATE.palette = 'neutral'` en `ThemeContext`; el picker (Onboarding step 5 + SettingsAppearance) renderiza un badge `t.settings.paletteRecommended` sobre la tile NEUTRAL.
 
 | Palette | Dark class | Light class | Identity |
 |---|---|---|---|
-| `volt` | `.theme-volt-dark` (default `:root`) | `.theme-volt-light` | Dark: Zinc 950 / Volt green `#dcfd05`. Light: warm-neutral Stone `#faf9f6` / Lime 600 `#65a30d` (symmetric, black `on-primary`) — performance athlete, electric |
+| **`neutral` (marca)** | `.theme-neutral-dark` | `.theme-neutral-light` | Warm Stone + Emerald 600 (LIGHT) / 500 (DARK) — identidad RIAL canónica, adult wellness |
+| `volt` | `.theme-volt-dark` (default `:root`) | `.theme-volt-light` | Dark: Zinc 950 / Volt green `#dcfd05`. Light: warm-neutral Stone `#faf9f6` / Lime 600 `#65a30d` — performance athlete, electric |
 | `ocean` | `.theme-ocean-dark` | `.theme-ocean-light` | Slate 950 / Sky blue — analytical, disciplined |
 | `ember` | `.theme-ember-dark` | `.theme-ember-light` | Stone 950 / Ember orange — warm creative |
-| `neutral` | `.theme-neutral-dark` | `.theme-neutral-light` | Warm neutrals Bevel-style — adult wellness, emerald accent |
+
+**NEUTRAL token key values (locked via `theme-palettes.test.ts`):**
+
+| Token | LIGHT | DARK |
+|---|---|---|
+| `--background` | `#fafaf9` Stone 50 warm | `#0a0a0b` warm near-black |
+| `--primary` | `#09090b` near-black | `#fafafa` warm off-white |
+| `--brand-secondary` | `#059669` Emerald 600 | `#10b981` Emerald 500 |
+| `--surface-container-low` | `#f1f0ec` warm Stone 100 | `#1c1c1f` (+4 pts vs surface) |
+| `--surface-container-lowest` | — | `#0f0f11` (new, ADR-011) |
+| `--on-surface-variant` | `#44403c` Stone 700 (AAA 8.9:1) | `#a1a1aa` Zinc 400 |
+| `--chart-text` | `#78716c` Stone 500 warm | `#71717a` Zinc 500 |
 
 Plus a separate **mode axis** with 3 values exposed in the UI: `auto` (follows `prefers-color-scheme`), `light` (force day), `dark` (force night). `auto` is the default for new users.
 

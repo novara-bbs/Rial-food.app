@@ -266,7 +266,7 @@ export default function Home({
             type="button"
             onClick={() => onNavigateToProgress?.()}
             aria-label={t.header?.streakAria ?? `${t.home.streak}: ${streakDays} ${t.home.days}`}
-            className="flex items-center gap-1.5 bg-brand-secondary/10 text-brand-secondary min-h-11 px-4 rounded-full border border-brand-secondary/20 shadow-sm hover:bg-brand-secondary/15 hover:border-brand-secondary/40 transition-colors"
+            className="flex items-center gap-1.5 bg-brand-secondary/10 text-brand-secondary min-h-11 px-4 rounded-full border border-brand-secondary/20 shadow-elev-1 hover:bg-brand-secondary/15 hover:border-brand-secondary/40 transition-colors"
           >
             <Flame className="w-4 h-4" aria-hidden="true" />
             <span className="font-bold text-micro uppercase tracking-widest">{t.home.streak}: {streakDays} {t.home.days}</span>
@@ -355,7 +355,7 @@ export default function Home({
         <button
           type="button"
           onClick={onAddMeal}
-          className="bg-primary text-on-primary p-5 rounded-sm flex flex-col items-center justify-center gap-3 hover:bg-primary/90 transition-all shadow-lg shadow-primary/10 group"
+          className="bg-primary text-on-primary p-5 rounded-sm flex flex-col items-center justify-center gap-3 hover:bg-primary/90 transition-all shadow-elev-3 shadow-primary/10 group"
         >
           <Plus className="w-6 h-6 group-hover:scale-110 transition-transform" />
           <span className="font-headline font-bold text-xs uppercase tracking-widest">{t.fab.logMeal}</span>
@@ -408,7 +408,7 @@ export default function Home({
             <button
               type="button"
               onClick={handleAddWater}
-              className="w-11 h-11 bg-brand-secondary text-on-secondary rounded-full flex items-center justify-center hover:opacity-90 transition-all active:scale-95 shadow-lg shadow-secondary/20 shrink-0"
+              className="w-11 h-11 bg-brand-secondary text-on-secondary rounded-full flex items-center justify-center hover:opacity-90 transition-all active:scale-95 shadow-elev-3 shadow-secondary/20 shrink-0"
               aria-label={t.home.addWater ?? 'Add water'}
             >
               <Plus className="w-4 h-4" />

@@ -105,7 +105,7 @@ export default function RialPlus({ onBack }: { onBack: () => void }) {
           <div className="w-24 h-24 bg-primary/20 rounded-full flex items-center justify-center mx-auto">
             <Crown className="w-12 h-12 text-primary" aria-hidden="true" />
           </div>
-          <h2 className="font-headline text-3xl font-bold uppercase text-tertiary">{t.rialPlus.alreadyPro}</h2>
+          <h2 className="font-headline text-headline font-bold uppercase text-tertiary">{t.rialPlus.alreadyPro}</h2>
           <p className="text-on-surface-variant max-w-md mx-auto font-body">
             {t.rialPlus.proDescription}
           </p>
@@ -225,7 +225,7 @@ export default function RialPlus({ onBack }: { onBack: () => void }) {
             <button type="button"
               onClick={handleUpgrade}
               disabled={isUpgrading || isRestoring}
-              className="w-full py-5 bg-primary text-on-primary rounded-sm font-headline font-black text-lg uppercase tracking-widest hover:opacity-90 transition-opacity disabled:opacity-50 flex items-center justify-center gap-3 shadow-2xl shadow-primary/30"
+              className="w-full py-5 bg-primary text-on-primary rounded-sm font-headline font-black text-lg uppercase tracking-widest hover:opacity-90 transition-opacity disabled:opacity-50 flex items-center justify-center gap-3 shadow-elev-3 shadow-primary/30"
             >
               {isUpgrading ? (
                 <><Sparkles className="w-6 h-6 animate-pulse" aria-hidden="true" /> {t.rialPlus.processing}</>

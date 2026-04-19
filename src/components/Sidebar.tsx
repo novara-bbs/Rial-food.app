@@ -22,7 +22,7 @@ export default function Sidebar({ currentScreen, setCurrentScreen, onOpenCreate 
         <button
           type="button"
           onClick={onOpenCreate}
-          className="w-full bg-primary text-on-primary py-3 rounded-sm font-headline font-bold text-sm uppercase tracking-widest hover:bg-primary-container transition-colors flex items-center justify-center gap-2 shadow-lg shadow-primary/10"
+          className="w-full bg-primary text-on-primary py-3 rounded-sm font-headline font-bold text-sm uppercase tracking-widest hover:bg-primary-container transition-colors flex items-center justify-center gap-2 shadow-elev-3 shadow-primary/10"
         >
           <Plus className="w-5 h-5" aria-hidden="true" /> {t.nav.create}
         </button>

@@ -11,7 +11,7 @@ export default function RealScoreBadge({ avgVitality, trend, onTap }: {
     <button
       type="button"
       onClick={onTap}
-      className="flex items-center gap-1.5 bg-primary/10 text-primary px-4 min-h-11 rounded-full border border-primary/20 shadow-sm hover:bg-primary/15 transition-colors"
+      className="flex items-center gap-1.5 bg-primary/10 text-primary px-4 min-h-11 rounded-full border border-primary/20 shadow-elev-1 hover:bg-primary/15 transition-colors"
       aria-label={`Real Score: ${avgVitality}`}
     >
       <Heart className="w-3.5 h-3.5" />

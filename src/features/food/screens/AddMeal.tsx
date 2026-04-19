@@ -520,7 +520,7 @@ export default function AddMeal({
           items are added/removed (polite: doesn't interrupt a running narration). */}
       {multiMode && multiQueue.length > 0 && (
         <div className="fixed left-0 right-0 z-40 px-4 md:bottom-20" style={{ bottom: 'calc(env(safe-area-inset-bottom, 0px) + 7rem)' }}>
-          <div role="status" aria-live="polite" className="max-w-lg mx-auto bg-surface-container-highest border border-primary/30 rounded-sm p-3 shadow-xl flex items-center gap-3">
+          <div role="status" aria-live="polite" className="max-w-lg mx-auto bg-surface-container-highest border border-primary/30 rounded-sm p-3 shadow-elev-3 flex items-center gap-3">
             <div className="flex-1 min-w-0">
               <span className="font-headline text-xs font-bold uppercase tracking-widest text-tertiary block">
                 {multiQueue.length} {multiQueue.length === 1 ? 'item' : 'items'}

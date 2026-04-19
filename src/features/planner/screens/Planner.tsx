@@ -172,7 +172,7 @@ export default function Planner({
         <button type="button"
           onClick={onOpenShoppingList}
           aria-label={t.planner.shoppingListBtn}
-          className="bg-primary text-on-primary px-5 py-3 font-label text-xs font-bold tracking-widest uppercase flex items-center justify-center gap-2 rounded-full hover:bg-primary/90 transition-all shadow-lg shadow-primary/20"
+          className="bg-primary text-on-primary px-5 py-3 font-label text-xs font-bold tracking-widest uppercase flex items-center justify-center gap-2 rounded-full hover:bg-primary/90 transition-all shadow-elev-3 shadow-primary/20"
         >
           <ShoppingCart className="w-4 h-4" aria-hidden="true" />
           {t.planner.shoppingListBtn}
@@ -241,7 +241,7 @@ export default function Planner({
                   aria-pressed={activeDay === index}
                   className={`w-10 h-10 md:w-12 md:h-12 rounded-full flex items-center justify-center font-headline font-bold text-sm md:text-base cursor-pointer transition-all ${
                     activeDay === index
-                      ? 'bg-primary text-on-primary shadow-md shadow-primary/20 scale-110'
+                      ? 'bg-primary text-on-primary shadow-elev-2 shadow-primary/20 scale-110'
                       : 'bg-surface-container-highest text-on-surface-variant hover:text-tertiary hover:bg-surface-container-high'
                   }`}
                 >

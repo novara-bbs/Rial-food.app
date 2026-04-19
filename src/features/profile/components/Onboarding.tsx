@@ -48,7 +48,7 @@ export default function Onboarding({ isOpen, onClose, onComplete }: {
       label: t.settings.paletteNeutral,
       desc: t.settings.paletteNeutralDesc,
       dark: { primary: '#fafafa', bg: '#0a0a0b', surface: '#18181b', text: '#fafafa', textMuted: '#a1a1aa' },
-      light: { primary: '#09090b', bg: '#fafaf9', surface: '#ffffff', text: '#09090b', textMuted: '#404040' },
+      light: { primary: '#09090b', bg: '#fafaf9', surface: '#ffffff', text: '#09090b', textMuted: '#44403c' },
     },
     {
       id: 'volt',
@@ -130,7 +130,7 @@ export default function Onboarding({ isOpen, onClose, onComplete }: {
 
   return (
     <div className="fixed inset-0 z-[100] flex items-center justify-center bg-background/95 backdrop-blur-md p-4 animate-in fade-in duration-300">
-      <div className="bg-surface-container w-full max-w-lg max-h-[90dvh] rounded-sm border border-outline-variant/20 shadow-2xl overflow-hidden flex flex-col animate-in zoom-in-95 duration-300">
+      <div className="bg-surface-container w-full max-w-lg max-h-[90dvh] rounded-sm border border-outline-variant/20 shadow-elev-3 overflow-hidden flex flex-col animate-in zoom-in-95 duration-300">
         {/* Header with progress */}
         <div className="p-5 border-b border-outline-variant/10 shrink-0">
           <div className="flex items-center justify-between mb-3">
@@ -309,6 +309,17 @@ export default function Onboarding({ isOpen, onClose, onComplete }: {
                       }`}
                       style={{ backgroundColor: swatch.bg }}
                     >
+                      {p.id === 'neutral' && (
+                        <span
+                          className="absolute top-2 right-2 z-10 px-2 py-0.5 rounded-full font-mono text-micro tracking-widest uppercase"
+                          style={{
+                            backgroundColor: swatch.primary,
+                            color: swatch.bg,
+                          }}
+                        >
+                          {t.settings.paletteRecommended}
+                        </span>
+                      )}
                       <div className="p-3">
                         <div className="flex items-center gap-1.5 mb-2">
                           <div className="w-3 h-3 rounded-full" style={{ backgroundColor: swatch.primary }} />

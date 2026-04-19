@@ -143,7 +143,7 @@ export default function SettingsProfile({ userProfile, setUserProfile, setDailyM
                 onClick={() => updateBiometric('mode', mode)}
                 className={`px-4 py-2 rounded-full text-xs font-bold uppercase tracking-widest transition-all ${
                   (userProfile?.mode === mode || (!userProfile?.mode && mode === 'simple'))
-                    ? 'bg-primary text-on-primary shadow-md'
+                    ? 'bg-primary text-on-primary shadow-elev-2'
                     : 'text-on-surface-variant hover:text-tertiary'
                 }`}
               >

@@ -49,7 +49,7 @@ export default function SegmentedTabs<T extends string>({
             onClick={() => onChange(opt.id)}
             className={`${sz.btn} flex items-center justify-center gap-1.5 font-bold uppercase tracking-widest rounded-sm transition-all focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-primary ${
               active
-                ? 'bg-primary text-on-primary shadow-sm'
+                ? 'bg-primary text-on-primary shadow-elev-1'
                 : 'text-on-surface-variant hover:text-tertiary'
             }`}
           >

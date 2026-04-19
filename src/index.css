@@ -496,7 +496,8 @@
     --on-background: #fafafa;
     --surface: #18181b; /* Zinc 900 — lifts cards off the background */
     --on-surface: #fafafa;
-    --surface-container-low: #18181b;
+    --surface-container-lowest: #0f0f11; /* Depth-below-background for hundido inputs (ADR-011) */
+    --surface-container-low: #1c1c1f; /* +4pts luminosity vs surface for real lift (ADR-011) */
     --surface-container: #27272a; /* Zinc 800 */
     --surface-container-high: #3f3f46; /* Zinc 700 */
     --surface-container-highest: #52525b; /* Zinc 600 */
@@ -562,11 +563,11 @@
     --surface-container: #e5e4df; /* warm Stone 200 */
     --surface-container-high: #d5d4cd; /* warm Stone 300 */
     --surface-container-highest: #a8a59d; /* warm Stone 400 */
-    --on-surface-variant: #404040; /* Neutral 700 — 9:1 on #fafaf9 */
+    --on-surface-variant: #44403c; /* Stone 700 warm — 8.9:1 AAA on #fafaf9, temp-match (ADR-011) */
     --primary: #09090b; /* Near-black */
     --on-primary: #ffffff;
-    --primary-container: #27272a;
-    --on-primary-container: #fafafa;
+    --primary-container: #292524; /* Stone 800 warm — temp-match (ADR-011) */
+    --on-primary-container: #fafaf9; /* Stone 50 warm — temp-match (ADR-011) */
     --brand-secondary: #059669; /* Emerald 600 — AAA on warm white */
     --on-brand-secondary: #ffffff;
     --tertiary: #18181b;
@@ -577,7 +578,7 @@
     --outline-variant: #e7e5dc; /* warm Stone 200 — visible borderless feel */
 
     --chart-grid: #e7e5dc;
-    --chart-text: #71717a;
+    --chart-text: #78716c; /* Stone 500 warm — temp-match with chart-grid (ADR-011) */
     --chart-recovery: #059669;
     --chart-strain: #dc2626;
 

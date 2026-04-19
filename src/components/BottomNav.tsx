@@ -27,7 +27,7 @@ export default function BottomNav({ currentScreen, setCurrentScreen, onOpenCreat
               className="flex flex-col items-center justify-center w-16 -mt-6 mb-2 focus-visible:outline-none focus-visible:[&>div]:ring-2 focus-visible:[&>div]:ring-primary/60 focus-visible:[&>div]:ring-offset-2 focus-visible:[&>div]:ring-offset-background"
               aria-label={t.nav.create}
             >
-              <div className="w-14 h-14 rounded-full bg-primary text-on-primary flex items-center justify-center shadow-lg shadow-primary/20 hover:scale-105 transition-transform">
+              <div className="w-14 h-14 rounded-full bg-primary text-on-primary flex items-center justify-center shadow-elev-3 shadow-primary/20 hover:scale-105 transition-transform">
                 <Icon className="w-7 h-7" aria-hidden="true" />
               </div>
             </button>

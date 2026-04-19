@@ -69,7 +69,7 @@ export default function CreatePost({ onBack, onCreatePost }: { onBack: () => voi
         {attachedRecipe && (
           <div className="px-6 pb-4">
             <div className="bg-background rounded-sm border border-primary/30 p-3 flex items-center gap-3 relative">
-              <button type="button" onClick={() => setAttachedRecipe(null)} aria-label={t.common.delete} className="absolute -top-2 -right-2 w-6 h-6 bg-error text-on-error rounded-full flex items-center justify-center text-micro font-bold shadow-lg">X</button>
+              <button type="button" onClick={() => setAttachedRecipe(null)} aria-label={t.common.delete} className="absolute -top-2 -right-2 w-6 h-6 bg-error text-on-error rounded-full flex items-center justify-center text-micro font-bold shadow-elev-3">X</button>
               {attachedRecipe.img && (
                 <img src={attachedRecipe.img} alt={attachedRecipe.title} className="w-12 h-12 rounded-sm object-cover" referrerPolicy="no-referrer" />
               )}
@@ -85,7 +85,7 @@ export default function CreatePost({ onBack, onCreatePost }: { onBack: () => voi
         {attachPerformance && (
           <div className="px-6 pb-6">
             <div className="bg-background rounded-sm border border-primary/30 p-4 grid grid-cols-2 gap-4 relative">
-              <button type="button" onClick={() => setAttachPerformance(false)} aria-label={t.common.delete} className="absolute -top-2 -right-2 w-6 h-6 bg-error text-on-error rounded-full flex items-center justify-center text-micro font-bold shadow-lg">X</button>
+              <button type="button" onClick={() => setAttachPerformance(false)} aria-label={t.common.delete} className="absolute -top-2 -right-2 w-6 h-6 bg-error text-on-error rounded-full flex items-center justify-center text-micro font-bold shadow-elev-3">X</button>
               <div className="flex flex-col items-center justify-center text-center p-2">
                 <Activity className="w-5 h-5 text-primary mb-1" />
                 <span className="font-headline text-xl font-bold text-tertiary">{userPerformance.recovery}%</span>

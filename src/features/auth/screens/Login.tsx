@@ -59,7 +59,7 @@ export default function Login({ onNavigateToSignup, onForgotPassword }: LoginPro
       <div className="flex-1 flex flex-col items-center justify-center px-6 pt-16 pb-8">
         {/* Logo */}
         <div className="mb-10 flex flex-col items-center gap-3">
-          <div className="w-20 h-20 rounded-2xl bg-primary flex items-center justify-center shadow-lg shadow-primary/25">
+          <div className="w-20 h-20 rounded-2xl bg-primary flex items-center justify-center shadow-elev-3 shadow-primary/25">
             <span className="font-headline text-3xl font-black text-on-primary">R</span>
           </div>
           <div className="text-center">
