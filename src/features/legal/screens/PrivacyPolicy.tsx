@@ -19,8 +19,13 @@ export default function PrivacyPolicy({ onBack }: Props) {
   return (
     <PageShell maxWidth="default" spacing="lg">
       <div className="flex items-center gap-3 mb-8">
-        <button type="button" onClick={onBack} className="p-2 rounded-xl hover:bg-surface-container-low transition-colors">
-          <ArrowLeft className="w-5 h-5 text-on-surface" />
+        <button
+          type="button"
+          onClick={onBack}
+          aria-label={t.common.back}
+          className="w-11 h-11 flex items-center justify-center rounded-sm hover:bg-surface-container-low focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/60 focus-visible:ring-offset-2 focus-visible:ring-offset-background transition-colors"
+        >
+          <ArrowLeft className="w-5 h-5 text-on-surface" aria-hidden="true" />
         </button>
         <h1 className="font-headline text-xl font-black uppercase tracking-widest text-tertiary">
           {t.legal.privacyTitle}

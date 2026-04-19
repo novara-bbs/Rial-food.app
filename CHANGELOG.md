@@ -1,5 +1,28 @@
 # RIAL App - Changelog
 
+## [1.5.52] - 2026-04-19
+
+### fix(audit-wave-0-1) — S3 Legal cluster: HIG back-button + a11y icon hardening (PrivacyPolicy + TermsOfService)
+
+Sexto y último cluster del S3 audit tranche del plan `revisa-todas-las-capturas-ancient-micali.md` (§S3): **Legal screens** (`PrivacyPolicy.tsx` + `TermsOfService.tsx`). `GdprConsent` ya migrado en S1.2 `[1.5.41]` (no entra en Wave 0+1, ya saneado). Mismo patrón 4-wave del resto del tranche, consolidando Wave 0 (bug sweep) + Wave 1 (a11y + HIG) en un único commit dado que el scope por archivo es ínfimo y los fixes son idénticos entre las dos pantallas (copy-paste twins estructurales).
+
+**Bugs + HIG (Wave 0 + Wave 1).**
+
+Los dos archivos comparten cabeza idéntica — `<div className="flex items-center gap-3 mb-8">` + back button + `<h1>` título. El patrón defectuoso es común:
+- 🐛 **Back button sub-HIG.** Línea 22 (Privacy) + línea 21 (Terms) pre-fix: `className="p-2 rounded-xl hover:bg-surface-container-low transition-colors"` con `<ArrowLeft className="w-5 h-5 text-on-surface">` dentro → ~36×36 total tap. Debajo del mínimo HIG 44×44. Precedente idéntico `[1.5.51]` RialPlus hero back button. Fix: `w-11 h-11 flex items-center justify-center rounded-sm` (también normaliza `rounded-xl → rounded-sm`, consistente con `RialPlus.tsx:129` + el resto de botones circulares del app).
+- 🐛 **Back button sin `aria-label`.** Screen readers anuncian "button, graphic" sin contexto. Fix: `aria-label={t.common.back}` (reusa clave existente `es.ts:877 → 'Atrás'` / `en.ts:855 → 'Back'`, cero nuevos keys i18n).
+- a11y **focus-visible ausente.** Sin ring visible al tabular — usuarios de teclado no saben dónde está el foco. Fix: ring canónico `focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/60 focus-visible:ring-offset-2 focus-visible:ring-offset-background`.
+- a11y **`ArrowLeft` sin `aria-hidden`.** Ícono decorativo junto al aria-label del botón produce doble-anuncio. Fix: `aria-hidden="true"`.
+
+**Notes**
+
+- **Deferral mayor cross-cluster — Legal i18n body copy.** Todo el cuerpo de `<Section>` (párrafos + listas de bullets) está hardcoded en español en ambos archivos (p.ej. `PrivacyPolicy.tsx:36-94` — 10 secciones × ~1-2 párrafos + bullets cada una; `TermsOfService.tsx:35-84` — 9 secciones análogas). Un usuario EN abriendo Privacy/Terms lee párrafos y bullets en español en una pantalla GDPR + App Store-required. Fix correcto requiere: (a) ~70-80 claves nuevas × 2 locales; (b) traducción legal revisada (no es copy-translatable mecánicamente — "derechos RGPD", "legislación española", "Tribunales de Madrid" son decisiones jurídicas). **Defer a Wave 2 legal separada cuando el owner decida aprobar la traducción revisada.** Wave 0+1 no toca el copy para no crear versiones legales a medio traducir en producción. También hardcoded: fecha `"12 Abril 2026"` (mes ES) en ambos archivos — deferible con la misma pasada.
+- **Scope explícito excluido.** `Section` helper-component (estilo común del h2 título) se mantiene idéntico en ambos archivos — duplicación intencional que se resolvería con extracción a `src/features/legal/components/Section.tsx` como parte de la Wave 2 si el copy se parametriza. No worth ahora (DRY prematuro con 2 consumers).
+- **Rollback path.** Revert commit restaura 2 back-buttons sub-HIG (36×36) + 2 botones sin `aria-label` + 2 `ArrowLeft` sin `aria-hidden` + 2 botones sin focus-visible ring + 2 `rounded-xl` drift.
+- **Baselines.** tsc 0, lint 0 errores (573 warnings pre-existentes intactos), tests **715/715** (polish-only, cero lógica nueva), i18n **1576 symmetric** (reusa `t.common.back`, cero keys nuevos), build main **778.5 KB raw / 243.8 KB gzip** unchanged, size:check PASS. Por-chunk: `PrivacyPolicy-*.js` 6.0 KB raw / 2.0 KB gzip (delta ±0), `TermsOfService-*.js` 4.5 KB raw / 1.9 KB gzip (delta ±0).
+
+**S3 audit tranche cierre.** Con este commit, el §S3 del plan `revisa-todas-las-capturas-ancient-micali.md` queda cerrado — los 6 clusters previstos shipped: Diccionario `[1.5.45/47/48]` (Wave 0 + Wave 1 + Wave 2), Despensa `[1.5.49]` (Wave 0+1), More + Settings partial `[1.5.50]`, Profile `[1.5.51]`, Legal `[1.5.52]`. Pendientes documentados como deferrals cross-cluster: tag-taxonomy ES-literal (Q19), `userProfile?.name || 'User'` sweep, SettingsAppearance (owner WIP blocker), legal body-copy i18n extraction (decisión legal del owner), `meal-handlers.ts` data-layer literals.
+
 ## [1.5.51] - 2026-04-19
 
 ### fix(audit-wave-0-1) — S3 Profile cluster: HIG back-button + a11y icon hardening + dead-code i18n fallbacks + silent-catch telemetry
