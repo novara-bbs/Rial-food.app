@@ -135,7 +135,10 @@ export default function AddMeal({
     [isSearching, searchQuery, dictionary, savedRecipes],
   );
 
-  const displayFoods: any[] = (() => {
+  // Memoized so rerenders driven by unrelated state (e.g. multi-queue totals,
+  // favorite toggles) don't re-allocate the whole list array + hand new
+  // reference identities down to child nodes.
+  const displayFoods: any[] = useMemo(() => {
     if (isSearching) {
       // Unified: local fuzzy results + API results appended after
       return [...unifiedLocalResults, ...apiResults];
@@ -144,7 +147,7 @@ export default function AddMeal({
     if (browseMode === 'recents') return recentFoods;
     if (browseMode === 'favorites') return favoriteFoods;
     return activeTab === 'ingredients' ? dictionary : savedRecipes;
-  })();
+  }, [isSearching, unifiedLocalResults, apiResults, browseMode, recentFoods, favoriteFoods, activeTab, dictionary, savedRecipes]);
 
   // ─── Helpers ────────────────────────────────────────────────
 

@@ -92,43 +92,6 @@ export default function BarcodeScanner({ onClose, onProductFound, onSaveToDictio
     [product],
   );
 
-  useEffect(() => {
-    let scanner: any = null;
-
-    const startScanner = async () => {
-      try {
-        const { Html5Qrcode } = await import('html5-qrcode');
-        if (!scannerRef.current) return;
-
-        scanner = new Html5Qrcode('barcode-reader');
-        html5QrRef.current = scanner;
-        setState('scanning');
-
-        await scanner.start(
-          { facingMode: 'environment' },
-          { fps: 10, qrbox: { width: 250, height: 120 }, aspectRatio: 1.5 },
-          (decodedText: string) => {
-            scanner.stop().catch(() => {});
-            lookupBarcode(decodedText);
-          },
-          () => {},
-        );
-      } catch (err: any) {
-        logger.warn('Camera not available', { error: err instanceof Error ? err.message : String(err) });
-        setState('idle');
-        setErrorMsg(t.scanner.cameraNotAvailable);
-      }
-    };
-
-    startScanner();
-
-    return () => {
-      if (html5QrRef.current) {
-        html5QrRef.current.stop().catch(() => {});
-      }
-    };
-  }, []);
-
   const lookupBarcode = async (barcode: string) => {
     setState('looking-up');
 
@@ -176,6 +139,52 @@ export default function BarcodeScanner({ onClose, onProductFound, onSaveToDictio
     }
   };
 
+  /**
+   * Shared scanner bootstrap used by both the mount effect and `handleScanAnother`.
+   * Before Wave 1 this logic lived in two places — the retry path silently
+   * swallowed camera-permission failures while the mount path surfaced them
+   * via `errorMsg`. Unifying here means Sentry sees every failure through the
+   * same `logger.warn('Camera not available', …)` breadcrumb and the UI
+   * message is consistent whether scanning was triggered by mount or retry.
+   */
+  const startScanner = async () => {
+    try {
+      const { Html5Qrcode } = await import('html5-qrcode');
+      if (!scannerRef.current) return;
+
+      const scanner = new Html5Qrcode('barcode-reader');
+      html5QrRef.current = scanner;
+      setState('scanning');
+
+      await scanner.start(
+        { facingMode: 'environment' },
+        { fps: 10, qrbox: { width: 250, height: 120 }, aspectRatio: 1.5 },
+        (decodedText: string) => {
+          scanner.stop().catch(() => {});
+          lookupBarcode(decodedText);
+        },
+        () => {},
+      );
+    } catch (err) {
+      logger.warn('Camera not available', { error: err instanceof Error ? err.message : String(err) });
+      setState('idle');
+      setErrorMsg(t.scanner.cameraNotAvailable);
+    }
+  };
+
+  useEffect(() => {
+    startScanner();
+
+    return () => {
+      if (html5QrRef.current) {
+        html5QrRef.current.stop().catch(() => {});
+      }
+    };
+    // Intentional mount-only effect: startScanner + lookupBarcode are
+    // re-created every render but the camera only boots once on mount;
+    // html5-qrcode teardown lives in the cleanup above.
+  }, []);
+
   const handleManualSubmit = () => {
     if (manualCode.trim().length >= 8) {
       lookupBarcode(manualCode.trim());
@@ -188,30 +197,9 @@ export default function BarcodeScanner({ onClose, onProductFound, onSaveToDictio
     setPortionResult(null);
     setManualCode('');
     setShowCustomForm(false);
-    // Re-trigger scanner
-    setTimeout(() => {
-      const startAgain = async () => {
-        try {
-          const { Html5Qrcode } = await import('html5-qrcode');
-          if (!scannerRef.current) return;
-          const scanner = new Html5Qrcode('barcode-reader');
-          html5QrRef.current = scanner;
-          setState('scanning');
-          await scanner.start(
-            { facingMode: 'environment' },
-            { fps: 10, qrbox: { width: 250, height: 120 }, aspectRatio: 1.5 },
-            (decodedText: string) => {
-              scanner.stop().catch(() => {});
-              lookupBarcode(decodedText);
-            },
-            () => {},
-          );
-        } catch {
-          setState('idle');
-        }
-      };
-      startAgain();
-    }, 100);
+    // Brief delay lets the prior scanner teardown settle before we boot a new
+    // instance on the same `#barcode-reader` DOM node.
+    setTimeout(() => { startScanner(); }, 100);
   };
 
   const sheetOpen = showCustomForm || state === 'found' || state === 'not-found';

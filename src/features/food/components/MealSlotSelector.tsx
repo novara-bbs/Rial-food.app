@@ -20,27 +20,39 @@ const SLOTS: SlotDef[] = [
 interface Props {
   value: MealSlot;
   onChange: (slot: MealSlot) => void;
+  ariaLabel?: string;
 }
 
-export default function MealSlotSelector({ value, onChange }: Props) {
+/**
+ * Exclusive 1-of-4 meal-slot selector. Uses WAI-ARIA `radiogroup` + `radio`
+ * semantics so assistive tech announces the group and current selection.
+ * Wave 1 hardening, mirrors PortionSelector mode toggle (Wave 0) and
+ * RadioCardGroup (PR 9).
+ */
+export default function MealSlotSelector({ value, onChange, ariaLabel }: Props) {
   const { t } = useI18n();
 
   return (
-    <div className="flex gap-2">
-      {SLOTS.map(slot => (
-        <button type="button"
-          key={slot.id}
-          onClick={() => onChange(slot.id)}
-          className={`flex-1 min-h-11 flex flex-col items-center justify-center gap-1 py-2 rounded-sm border transition-colors font-headline text-micro font-bold uppercase tracking-widest ${
-            value === slot.id
-              ? 'bg-primary text-on-primary border-primary'
-              : 'bg-surface-container-low text-on-surface-variant border-outline-variant/20 hover:border-primary/40 hover:text-tertiary'
-          }`}
-        >
-          {slot.icon}
-          {slot.label(t)}
-        </button>
-      ))}
+    <div role="radiogroup" aria-label={ariaLabel ?? t.mealSlot.selectorLabel} className="flex gap-2">
+      {SLOTS.map(slot => {
+        const isOn = value === slot.id;
+        return (
+          <button type="button"
+            key={slot.id}
+            role="radio"
+            aria-checked={isOn}
+            onClick={() => onChange(slot.id)}
+            className={`flex-1 min-h-11 flex flex-col items-center justify-center gap-1 py-2 rounded-sm border transition-colors font-headline text-micro font-bold uppercase tracking-widest ${
+              isOn
+                ? 'bg-primary text-on-primary border-primary'
+                : 'bg-surface-container-low text-on-surface-variant border-outline-variant/20 hover:border-primary/40 hover:text-tertiary'
+            }`}
+          >
+            {slot.icon}
+            {slot.label(t)}
+          </button>
+        );
+      })}
     </div>
   );
 }

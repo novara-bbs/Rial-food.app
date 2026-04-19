@@ -135,18 +135,22 @@ export default function FoodDictionary({ navigateTo }: Props) {
         })}
       </div>
 
-      {/* Allergen exclusion chips */}
+      {/* Allergen exclusion chips — multi-toggle group. `aria-pressed`
+          communicates the on/off state per chip; group wrapper gets
+          `role="group"` so assistive tech narrates the cluster. */}
       <div className="space-y-1.5">
-        <span className="text-micro font-label uppercase tracking-widest text-on-surface-variant">
+        <span id="allergen-filter-label" className="text-micro font-label uppercase tracking-widest text-on-surface-variant">
           {t.foodDictionary.allergenFilter}
         </span>
-        <div className="flex gap-1.5 flex-wrap">
+        <div role="group" aria-labelledby="allergen-filter-label" className="flex gap-1.5 flex-wrap">
           {ALL_ALLERGENS.map(a => {
             const active = excludedAllergens.has(a);
+            const label = t.foodDictionary.allergenLabels[a];
             return (
               <button
                 type="button"
                 key={a}
+                aria-pressed={active}
                 onClick={() => toggleAllergen(a)}
                 className={`inline-flex items-center gap-1 px-2 py-1 rounded-sm text-micro font-headline font-bold uppercase tracking-widest transition-colors ${
                   active
@@ -154,8 +158,8 @@ export default function FoodDictionary({ navigateTo }: Props) {
                     : 'bg-surface-container-highest text-on-surface-variant border border-transparent hover:bg-surface-container-high'
                 }`}
               >
-                {active && <X className="w-3 h-3" />}
-                {a}
+                {active && <X className="w-3 h-3" aria-hidden="true" />}
+                {label}
               </button>
             );
           })}
@@ -202,7 +206,7 @@ export default function FoodDictionary({ navigateTo }: Props) {
                             {locale === 'es' ? item.name : item.nameEn}
                           </span>
                           <span className="text-micro font-label text-on-surface-variant tracking-wide">
-                            {item.macros.calories} kcal · {item.macros.protein}g pro · {item.macros.carbs}g carbs · {item.macros.fats}g fat
+                            {item.macros.calories} {t.common.kcal} · {item.macros.protein}g {t.portionSelector.protein} · {item.macros.carbs}g {t.portionSelector.carbs} · {item.macros.fats}g {t.portionSelector.fats}
                           </span>
                         </div>
                         {item.tags.length > 0 && (

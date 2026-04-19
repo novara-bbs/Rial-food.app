@@ -135,6 +135,7 @@ const es = {
     lunch: 'Comida',
     dinner: 'Cena',
     snack: 'Snack',
+    selectorLabel: 'Franja de comida',
   },
   // Real Feel
   realFeel: {
@@ -1298,6 +1299,20 @@ const es = {
     foodCountOne: '{count} alimento',
     highlightedMicros: 'Micronutrientes destacados',
     allergenFilter: 'Excluir alérgenos',
+    allergenLabels: {
+      gluten: 'Gluten',
+      dairy: 'Lácteos',
+      eggs: 'Huevos',
+      nuts: 'Frutos secos',
+      peanuts: 'Cacahuete',
+      soy: 'Soja',
+      fish: 'Pescado',
+      shellfish: 'Marisco',
+      sesame: 'Sésamo',
+      celery: 'Apio',
+      mustard: 'Mostaza',
+      sulfites: 'Sulfitos',
+    },
   },
   // RecipeDetail
   recipeDetail: {

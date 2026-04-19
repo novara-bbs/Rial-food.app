@@ -134,6 +134,7 @@ const en: Translations = {
     lunch: 'Lunch',
     dinner: 'Dinner',
     snack: 'Snack',
+    selectorLabel: 'Meal slot',
   },
   realFeel: {
     title: 'Real Feel',
@@ -1256,6 +1257,20 @@ const en: Translations = {
     foodCountOne: '{count} food',
     highlightedMicros: 'Key micronutrients',
     allergenFilter: 'Exclude allergens',
+    allergenLabels: {
+      gluten: 'Gluten',
+      dairy: 'Dairy',
+      eggs: 'Eggs',
+      nuts: 'Tree nuts',
+      peanuts: 'Peanuts',
+      soy: 'Soy',
+      fish: 'Fish',
+      shellfish: 'Shellfish',
+      sesame: 'Sesame',
+      celery: 'Celery',
+      mustard: 'Mustard',
+      sulfites: 'Sulfites',
+    },
   },
   recipeDetail: {
     yourRecipe: 'Your Recipe',
