@@ -65,6 +65,8 @@ Base token + multiplicative scale. Resolved values preserve Tailwind v4 defaults
 
 Tailwind defaults (`shadow`, `shadow-md`, etc.) remain available but prefer elevation tokens for semantic consistency.
 
+**Elevation en primitives (ADR-010):** `SectionCard` aplica `shadow-elev-1` por default para diferenciar tarjetas del background en modos light. En modos dark el shadow es imperceptible (`rgb(0 0 0 / 0.05)` sobre casi-negro ≈ 0 delta); en modos light aporta depth mínima sin crear skeuomorfismo, complementaria al border `outline-variant/20` y al tint delta `bg ↔ surface-container-low`. Nuevos primitives deben considerar este patrón "belt-and-suspenders" (border + tint + shadow muy sutil) antes de introducir elevación propia.
+
 ### 1.5 Color tokens
 
 All color is theme-aware. The single class `theme-{name}` on `<html>` swaps an entire palette. Never use literal hex in components.
@@ -94,7 +96,7 @@ All color is theme-aware. The single class `theme-{name}` on `<html>` swaps an e
 
 | Palette | Dark class | Light class | Identity |
 |---|---|---|---|
-| `volt` | `.theme-volt-dark` (default `:root`) | `.theme-volt-light` | Zinc 950 / Volt green `#dcfd05` — performance athlete |
+| `volt` | `.theme-volt-dark` (default `:root`) | `.theme-volt-light` | Dark: Zinc 950 / Volt green `#dcfd05`. Light: warm-neutral Stone `#faf9f6` / Lime 600 `#65a30d` (symmetric, black `on-primary`) — performance athlete, electric |
 | `ocean` | `.theme-ocean-dark` | `.theme-ocean-light` | Slate 950 / Sky blue — analytical, disciplined |
 | `ember` | `.theme-ember-dark` | `.theme-ember-light` | Stone 950 / Ember orange — warm creative |
 | `neutral` | `.theme-neutral-dark` | `.theme-neutral-light` | Warm neutrals Bevel-style — adult wellness, emerald accent |
@@ -102,6 +104,8 @@ All color is theme-aware. The single class `theme-{name}` on `<html>` swaps an e
 Plus a separate **mode axis** with 3 values exposed in the UI: `auto` (follows `prefers-color-scheme`), `light` (force day), `dark` (force night). `auto` is the default for new users.
 
 State is persisted under `rial-theme-v2` as `{palette, mode}`. Legacy `rial-theme` values (`dark`, `light`, `blue-dark`, etc.) are migrated once on load. `ThemeContext` subscribes to `matchMedia('(prefers-color-scheme: dark)')` and swaps the class on `<html>` at runtime.
+
+**VOLT LIGHT background (2026-04-19):** `#faf9f6` (warm-neutral Stone). La identidad VOLT viaja por `primary: Lime 600 #65a30d` + `brand-secondary: Lime 500 #84cc16`, no por tint de background. Un intento previo con warm-lime `#fafff0` leía "infantil / campo" y se revirtió — el patrón 2025 en apps premium (Linear, Notion, Bevel, Stripe) es **warm-neutral bg + green accent** porque el contraste warm/cool potencia el verde sin fatigar al ojo en uso prolongado.
 
 **Rule (ADR-005):** never use Tailwind's `dark:` prefix. It only toggles two palettes and breaks the other 6 classes. Theme-specific overrides go in `@layer base .theme-*` in `src/index.css`.
 

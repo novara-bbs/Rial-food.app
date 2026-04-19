@@ -99,3 +99,11 @@ describe('SectionCard drift monitor (ADR-001)', () => {
     expect(BASELINE).toBeGreaterThan(0);
   });
 });
+
+describe('SectionCard primitive shape (ADR-010 — surface elevation)', () => {
+  it('applies shadow-elev-1 in the default class string', () => {
+    const primitivePath = path.resolve(process.cwd(), 'src', 'components', 'SectionCard.tsx');
+    const text = fs.readFileSync(primitivePath, 'utf8');
+    expect(text).toMatch(/bg-surface-container-low[^'"`]*shadow-elev-1/);
+  });
+});

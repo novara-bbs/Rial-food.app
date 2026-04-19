@@ -32,7 +32,7 @@ export default function SettingsAppearance({ userProfile, setUserProfile }: Prop
       label: t.settings.paletteVolt,
       desc: t.settings.paletteVoltDesc,
       dark: { primary: '#dcfd05', bg: '#09090b', surface: '#18181b', text: '#fafafa', textMuted: '#a1a1aa' },
-      light: { primary: '#09090b', bg: '#ffffff', surface: '#f4f4f5', text: '#09090b', textMuted: '#333333' },
+      light: { primary: '#65a30d', bg: '#faf9f6', surface: '#ffffff', text: '#09090b', textMuted: '#4a4945' },
     },
     {
       id: 'ocean',

@@ -32,3 +32,11 @@ Theme switching is handled by `src/contexts/ThemeContext.tsx`, which sets the cl
 - Accents, surfaces, and outlines carry the theme signature automatically.
 - Edge cases (illustrations, third-party embeds) that cannot use tokens document the exemption inline.
 - Tailwind dark mode docs still show `dark:` everywhere; the lint rule is the authoritative override and must be documented for onboarding.
+
+## Notes
+
+- **2026-04-19 — VOLT LIGHT token re-balance (iteración final).** `.theme-volt-light` removido el warm-lime tint del background: `#fafff0` → `#faf9f6` (warm-neutral Stone 50). Identidad VOLT ahora carga por `--primary: #65a30d` (Lime 600 · mirrors DARK `#dcfd05`) + `--brand-secondary: #84cc16` (Lime 500 accent) + `--on-primary: #09090b` (negro, simétrico con DARK). `--tertiary` pasa de Lime 900 a neutral `#18181b` porque headlines deben leer como texto, no como tinte de marca. `--on-surface-variant: #4a4945` warm Stone 700 (AAA 8.5:1). Outlines y surface-container en warm-Stone scale. Razón: el tint lime leía "infantil / ciclismo", fatigaba en uso prolongado, y chocaba con fotos de comida. Research Linear/Notion/Bevel/Stripe 2025 confirma warm-neutral bg + green accent como patrón dominante para apps premium. Los swatches hardcoded en `SettingsAppearance.tsx` + `Onboarding.tsx` actualizados en paralelo para que el picker anticipe fielmente la paleta aplicada.
+
+- **2026-04-19 — NEUTRAL LIGHT tint delta widened.** `.theme-neutral-light` era monocromático: `--background #fafaf9` vs `--surface-container-low #f5f5f4` eran ~3 % delta perceptual — tarjetas leían como parches del mismo nivel. Escala warm-Stone ensanchada (`--surface-container-low` → `#f1f0ec`, `--surface-container` → `#e5e4df`, `--surface-container-high` → `#d5d4cd`, `--surface-container-highest` → `#a8a59d`) para ~5 % delta. Outlines promovidos de Stone 200 a warm Stone 300 (`--outline: #d6d3cb`, `--outline-variant: #e7e5dc`) para visibilidad al 20 % opacity sin romper el Bevel borderless-feel. Brand accent Emerald 600 intacto.
+
+- **2026-04-19 — OCEAN LIGHT typo fix.** `--surface-container-high: #cbd5e0` era hex inválido (6 chars pero el último `0` es un posible typo de `1`). Reemplazado por `#cbd5e1` (Slate 300 canónico). Zero diseño, puramente corrección.

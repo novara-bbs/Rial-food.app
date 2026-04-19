@@ -53,7 +53,7 @@ export default function SectionCard({
   return (
     <section
       className={[
-        'bg-surface-container-low border border-outline-variant/20 rounded-sm',
+        'bg-surface-container-low border border-outline-variant/20 rounded-sm shadow-elev-1',
         PAD[padding],
         SPACE[spacing],
         className,

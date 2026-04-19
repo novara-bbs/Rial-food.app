@@ -184,32 +184,32 @@
     --sidebar-border: var(--outline-variant);
   }
 
-  /* --- VOLT PRO (Light Technical) --- */
+  /* --- VOLT PRO (Light Technical) — warm-neutral Stone + lime-600 accent */
   .theme-volt-light {
-    --background: #ffffff;
+    --background: #faf9f6; /* warm Stone 50 — zero lime tint, identity via accent */
     --on-background: #09090b;
-    --surface: #ffffff;
+    --surface: #ffffff; /* cards lift clean on warm-neutral bg */
     --on-surface: #09090b;
-    --surface-container-low: #f4f4f5; /* Zinc 100 */
-    --surface-container: #e4e4e7; /* Zinc 200 */
-    --surface-container-high: #d4d4d8; /* Zinc 300 */
-    --surface-container-highest: #a1a1aa; /* Zinc 400 */
-    --on-surface-variant: #333333;
-    --primary: #09090b; /* Professional Black */
-    --on-primary: #ffffff;
-    --primary-container: #dcfd05;
-    --on-primary-container: #000000;
-    --brand-secondary: #5c6800; /* Deep Chartreuse — AAA on white */
-    --on-brand-secondary: #ffffff;
-    --tertiary: #18181b;
+    --surface-container-low: #f5f3ee; /* warm Stone 100 — 5% delta vs bg */
+    --surface-container: #ecebe5; /* warm Stone 200 */
+    --surface-container-high: #d9d6cc; /* warm Stone 300 */
+    --surface-container-highest: #a8a59b; /* warm Stone 400 */
+    --on-surface-variant: #4a4945; /* warm Stone 700 · AAA 8.5:1 on bg */
+    --primary: #65a30d; /* Lime 600 · mirrors VOLT DARK lima vivo */
+    --on-primary: #09090b; /* 6.86:1 AA on Lime 600 — symmetric with DARK */
+    --primary-container: #ecfccb; /* Lime 100 pale pill */
+    --on-primary-container: #365314; /* Lime 900 · AAA on Lime 100 */
+    --brand-secondary: #84cc16; /* Lime 500 — vivo accent for badges/data-viz only */
+    --on-brand-secondary: #09090b; /* 7.5:1 AAA */
+    --tertiary: #18181b; /* neutral headline tone — NOT lime (headlines read as text) */
     --on-tertiary: #ffffff;
-    --error: #ef4444;
+    --error: #dc2626; /* Red 600 — strong on warm-neutral */
     --on-error: #ffffff;
-    --outline: #e4e4e7;
-    --outline-variant: #f4f4f5;
+    --outline: #d6d3cb; /* warm Stone 300 hairline */
+    --outline-variant: #e7e5dc; /* warm Stone 200 near-invisible */
 
-    --chart-grid: #e4e4e7;
-    --chart-text: #71717a;
+    --chart-grid: #e7e5dc; /* warm Stone 200 grid */
+    --chart-text: #4a4945; /* warm Stone 700 — readable */
     --chart-recovery: #10b981;
     --chart-strain: #ef4444;
 
@@ -315,7 +315,7 @@
     --on-surface: #0f172a;
     --surface-container-low: #f1f5f9; /* Slate 100 */
     --surface-container: #e2e8f0; /* Slate 200 */
-    --surface-container-high: #cbd5e0; /* Slate 300 */
+    --surface-container-high: #cbd5e1; /* Slate 300 */
     --surface-container-highest: #94a3b8; /* Slate 400 */
     --on-surface-variant: #1e293b;
     --primary: #0284c7; /* Professional Blue */
@@ -558,10 +558,10 @@
     --on-background: #09090b;
     --surface: #ffffff; /* Cards lift above warm background via shadow */
     --on-surface: #09090b;
-    --surface-container-low: #f5f5f4; /* Stone 100 */
-    --surface-container: #e7e5e4; /* Stone 200 */
-    --surface-container-high: #d6d3d1; /* Stone 300 */
-    --surface-container-highest: #a8a29e; /* Stone 400 */
+    --surface-container-low: #f1f0ec; /* warm Stone 100 — ~5% delta vs bg */
+    --surface-container: #e5e4df; /* warm Stone 200 */
+    --surface-container-high: #d5d4cd; /* warm Stone 300 */
+    --surface-container-highest: #a8a59d; /* warm Stone 400 */
     --on-surface-variant: #404040; /* Neutral 700 — 9:1 on #fafaf9 */
     --primary: #09090b; /* Near-black */
     --on-primary: #ffffff;
@@ -573,10 +573,10 @@
     --on-tertiary: #ffffff;
     --error: #dc2626;
     --on-error: #ffffff;
-    --outline: #e5e5e4; /* Stone 200 */
-    --outline-variant: #f1f1f3; /* Near-invisible — borderless Bevel feel */
+    --outline: #d6d3cb; /* warm Stone 300 hairline — readable at 20% opacity */
+    --outline-variant: #e7e5dc; /* warm Stone 200 — visible borderless feel */
 
-    --chart-grid: #e5e5e4;
+    --chart-grid: #e7e5dc;
     --chart-text: #71717a;
     --chart-recovery: #059669;
     --chart-strain: #dc2626;

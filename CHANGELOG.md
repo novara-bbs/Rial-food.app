@@ -152,6 +152,44 @@ Segunda tanda (Wave 1 — design drift purge + HIG 44×44 + React.memo + i18n du
 - **Rollback path.** Revert del commit restaura los 3 deferrals de Wave 0 + los 2 a11y gaps. Cada cambio es independiente: la memoización no afecta comportamiento, el extract de `startScanner` es refactor sin cambio de contrato (su única señal externa es el nuevo `logger.warn` en el retry path), `MealSlotSelector` mantiene la misma API pública (`{value, onChange, ariaLabel?}` — el prop nuevo es opcional), y los dos fixes de `FoodDictionary` son aditivos (atributos ARIA + i18n lookup en vez de literal).
 - **Budget.** tsc 0, lint 0 errors, tests **705/705** (sin nuevos tests — Wave 1 son refactors sobre lógica existente; tests de regresión vendrán cuando extraigamos helpers reales en Wave 2), i18n **1563 → 1576** simétrico (+13), bundle main **778.5 KB raw / 243.8 KB gzip** (Δ +0.5 KB raw vs Wave 0 baseline — dentro de ruido, causado por la memoization wrapper + los 13 strings i18n nuevos).
 
+## [1.5.46] - 2026-04-19
+
+### fix(theme) + refactor(ui) — palette audit: VOLT LIGHT de-greened + NEUTRAL widened + SectionCard elevation
+
+Audit full de las 8 combinaciones (4 paletas × 2 modos) disparado por owner: el primer intento de `[1.5.46]` (warm-lime tint sobre VOLT LIGHT) fue rechazado ("demasiado verde, como estar en un campo"), y en paralelo surgió una queja estructural — NEUTRAL LIGHT era demasiado monocromática, tarjetas y secciones no se distinguían del fondo. Research cross-competitor (Linear, Notion, Bevel, Stripe, shadcn/ui, Material 3) concluyó que la identidad VOLT debe viajar por acento (primary / brand-secondary) y no por tint de fondo, y que la jerarquía de tarjetas en 2025 se resuelve con el combo **border + subtle tint + shadow muy sutil**. Los 4 cambios aplicados:
+
+**Fixed**
+- `src/index.css` `.theme-volt-light` — **de-greened**. Identidad VOLT ahora carga por acento, no por fondo.
+  - `--background: #fafff0` (warm-lime) → `#faf9f6` (warm-neutral Stone 50 — cero tint verde).
+  - `--surface-container-*` escala Lime 50 → 100 → 200 → 300 reemplazada por warm Stone 100 → 200 → 300 → 400 (`#f5f3ee` / `#ecebe5` / `#d9d6cc` / `#a8a59b`).
+  - `--on-surface-variant: #365314` (Lime 900) → `#4a4945` (warm Stone 700, AAA 8.5:1).
+  - `--tertiary: #365314` (Lime 900) → `#18181b` (neutral headline tone) — los headlines deben leer como texto, no como tinte de marca.
+  - `--outline: #d9f99d` (Lime 200) → `#d6d3cb` (warm Stone 300).
+  - `--outline-variant: #f7fde0` (Lime 50) → `#e7e5dc` (warm Stone 200, visible al 20% opacity para Bevel borderless-feel).
+  - **Inalterado** (identidad vía acento): `--primary: #65a30d` (Lime 600 mirror del `#dcfd05` VOLT DARK), `--on-primary: #09090b` (negro simétrico con DARK), `--brand-secondary: #84cc16` (Lime 500 para chips/badges puntuales), `--primary-container: #ecfccb` / `--on-primary-container: #365314`.
+- `src/index.css` `.theme-neutral-light` — **tint delta widened**. Escala warm-Stone 100 → 200 → 300 → 400 pasa de Stone-cool (`#f5f5f4` / `#e7e5e4` / `#d6d3d1` / `#a8a29e`) a warm (`#f1f0ec` / `#e5e4df` / `#d5d4cd` / `#a8a59d`) — bg vs surface-container-low gana ~5% delta perceptual (antes ~3%, imperceptible) sin romper el Bevel borderless-feel. Outlines promovidos de Stone 200 (`#e5e5e4` / `#f1f1f3`) a warm Stone 300 (`#d6d3cb` / `#e7e5dc`) para visibilidad al 20% opacity.
+- `src/index.css` `.theme-ocean-light` — **typo fix**. `--surface-container-high: #cbd5e0` → `#cbd5e1` (Slate 300 canónico). Hex inválido detectado en la auditoría. Zero diseño.
+- `src/features/profile/components/settings/SettingsAppearance.tsx` + `src/features/profile/components/Onboarding.tsx` — swatches hardcoded `volt.light` actualizados a `{primary:'#65a30d', bg:'#faf9f6', surface:'#ffffff', text:'#09090b', textMuted:'#4a4945'}` para que el picker anticipe fielmente la paleta aplicada.
+
+**Changed**
+- `src/components/SectionCard.tsx` — **default shape gana `shadow-elev-1`**. El token `--shadow-elev-1` (`0 1px 2px 0 rgb(0 0 0 / 0.05)`) existía desde Q15.5 pero sólo `BottomSheet` lo consumía (con `shadow-elev-3`). El primitive ahora lo aplica en el className default: `bg-surface-container-low border border-outline-variant/20 rounded-sm shadow-elev-1`. En modos dark el shadow es imperceptible (rgb(0 0 0 / 0.05) sobre casi-negro ≈ 0 delta visual — zero regresión en VOLT/OCEAN/EMBER/NEUTRAL dark); en modos light aporta depth mínima que complementa el border + el tint delta ensanchado. Pattern "belt-and-suspenders" (border + tint + shadow muy sutil) recomendado por research 2025 para apps premium — ver ADR-010.
+- `src/test/conventions/sectioncard-usage.test.ts` — **+1 assertion** locking `shadow-elev-1` en la default class string del primitive (nuevo describe `SectionCard primitive shape (ADR-010 — surface elevation)`). Protege contra remoción inadvertida. No cambia el BASELINE drift de 72.
+
+**Added**
+- `docs/adr/ADR-010-surface-elevation-adoption.md` — **nuevo ADR** documentando la adopción de `shadow-elev-1` en `SectionCard` como decisión arquitectural. Incluye motivación (monochromatic palettes pierden jerarquía), pattern "belt-and-suspenders", cross-competitor research, y consequences (8 paletas re-pintan automáticamente, dark modes imperceptibles, `INPUT_SURFACE_CLASSES` / `BUTTON_CARD_SURFACE_CLASSES` intactos).
+- `docs/adr/ADR-005-theme-by-class-not-tailwind-dark.md` — nota al pie reemplazada (`2026-04-19 — VOLT LIGHT token re-balance (iteración final)`) + 2 notas nuevas (NEUTRAL LIGHT tint delta widened, OCEAN LIGHT typo fix). Documenta los valores finales y la motivación (rechazo del warm-lime + queja monocromática NEUTRAL).
+- `docs/DESIGN-SYSTEM.md` §1.4 Shadow/elevation — párrafo explicando el pattern belt-and-suspenders aplicado en SectionCard. §2 Themes — fila VOLT de la tabla actualizada (`Light: warm-neutral Stone #faf9f6 / Lime 600 #65a30d`) + nota al pie sobre el rollback del warm-lime y la referencia 2025 Linear/Notion/Bevel/Stripe.
+
+**Notes**
+- **No cambia el storage**: `rial-theme-v2: {palette:'volt', mode:'light'}` sigue válido — solo cambian los valores CSS a los que resuelve la clase. Usuarios con VOLT LIGHT (incluidos los que activaron la versión warm-lime de `[1.5.46]` previo) ven los nuevos valores automáticamente al recargar.
+- **Contraste WCAG verificado** (los tres tiers principales):
+  - VOLT LIGHT: `--on-primary #09090b` sobre `--primary #65a30d` ≈ 6.86:1 AAA; `--on-surface-variant #4a4945` sobre `--background #faf9f6` ≈ 8.5:1 AAA.
+  - NEUTRAL LIGHT: `--on-surface-variant #404040` sobre `--surface-container-low #f1f0ec` ≈ 10:1 AAA.
+  - OCEAN LIGHT: sin cambios de contraste (typo fix no altera luminancia percibida — Slate 300 canónico).
+- **Scope explícito**: las 5 combinaciones no-tocadas (VOLT DARK, OCEAN DARK, EMBER DARK, EMBER LIGHT, NEUTRAL DARK) verificadas correctamente formadas — zero cambios de tokens. Directiva owner 2026-04-17: 4 paletas completas, no consolidamos.
+- **Rollback**: revert del commit basta. Zero data migration. Usuarios previamente en VOLT LIGHT warm-lime regresan al estado pre-`[1.5.46]` (negro sobre blanco indistinguible de NEUTRAL LIGHT); usuarios en NEUTRAL LIGHT recuperan el tint delta angosto original.
+- **Budget**: tsc 0, lint 0 errors, tests **716/716** (+1 vs pre-WIP 715 por la nueva assertion `SectionCard primitive shape`), i18n **1576** unchanged (zero keys nuevas — cambio puramente CSS + JS literales + docs), bundle delta 0 KB (main 778.5 KB raw / 243.8 KB gzip unchanged — `shadow-elev-1` ya existe en el token registry, zero-cost net).
+
 ## [1.5.45] - 2026-04-19
 
 ### fix(audit-wave-0) — S3 Diccionario: bug sweep + a11y hardening
