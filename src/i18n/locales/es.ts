@@ -106,6 +106,7 @@ const es = {
     weekLabel: 'sem',
     daysWithData: 'días con datos',
     macroTooltip: 'Los macronutrientes (proteínas, carbohidratos, grasas) son la base de tu energía diaria.',
+    ringAriaLabel: '{remaining} kcal restantes en el día',
     insights: 'Insights',
     shoppingPending: '{count} items pendientes',
     repeatYesterday: 'Repetir ayer',

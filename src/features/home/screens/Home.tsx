@@ -14,6 +14,7 @@ import ProgressPreviewCard from '../components/ProgressPreviewCard';
 import { useI18n } from '../../../i18n';
 import { useAppState } from '../../../contexts/AppStateContext';
 import { getInsights } from '../../wellness/utils/correlations';
+import { featureFlags } from '../../../lib/featureFlags';
 import { calcVitality } from '../utils/homeWidgets';
 import { calcWeekMacros } from '../../wellness/utils/week-stats';
 import { calcStreaks } from '../../wellness/utils/streaks';
@@ -433,13 +434,19 @@ export default function Home({
         )}
       </SectionCard>
 
-      {/* 6b. Progress Preview Card — weight, sparkline, quick-log, deep-link */}
-      <ProgressPreviewCard
-        weightHistory={weightHistory as any[]}
-        unitSystem={userProfile?.unitSystem ?? 'metric'}
-        targetWeight={userProfile?.targetWeight}
-        onNavigateToProgress={onNavigateToProgress}
-      />
+      {/* 6b. Progress Preview Card — weight, sparkline, quick-log, deep-link.
+          Hidden when the Bevel ring-grid hero is enabled (PR 8) — the weight
+          flow stays accessible via the Progress tab, and the new hero keeps
+          the above-the-fold budget focused on nutrition. Flag off restores
+          the card unchanged. See docs/market/home-patterns-benchmark.md §6.1. */}
+      {!featureFlags.homeRingGrid && (
+        <ProgressPreviewCard
+          weightHistory={weightHistory as any[]}
+          unitSystem={userProfile?.unitSystem ?? 'metric'}
+          targetWeight={userProfile?.targetWeight}
+          onNavigateToProgress={onNavigateToProgress}
+        />
+      )}
 
       {/* 6. Real Feel — conditional post-meal */}
       {showRealFeel && onRealFeelLog && (

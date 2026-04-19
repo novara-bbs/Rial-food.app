@@ -105,6 +105,7 @@ const en: Translations = {
     weekLabel: 'wk',
     daysWithData: 'days with data',
     macroTooltip: 'Macronutrients (protein, carbs, fats) are the foundation of your daily energy.',
+    ringAriaLabel: '{remaining} kcal remaining today',
     insights: 'Insights',
     shoppingPending: '{count} items pending',
     repeatYesterday: 'Repeat yesterday',
