@@ -170,3 +170,16 @@ Detalle en [`app-store-rankings.md`](app-store-rankings.md). Top movers:
 - Patrones UX extraídos: [`ux-patterns.md`](ux-patterns.md)
 - Rankings con fuentes: [`app-store-rankings.md`](app-store-rankings.md)
 - Posicionamiento RIAL: [`rial-positioning.md`](rial-positioning.md)
+
+## Design playbooks — accionables por competidor
+
+Complemento a los deep-dives (descriptivos): cada playbook extrae la matriz **Copy / Adapt / Skip** sobre capturas reales en `docs/market/Competitor Images/<competidor>/`, con roadmap de PRs concretos hacia primitives/screens de RIAL.
+
+| Competidor | Playbook | Capturas | Foco |
+|---|---|---|---|
+| **Bevel** | [`bevel-design-playbook.md`](bevel-design-playbook.md) | 64 | Visual system "Apple-designed", bottom-sheet anatomy V1+V2, ConstantTile, onboarding scaffold |
+| **Yazio** | [`yazio-design-playbook.md`](yazio-design-playbook.md) | 11 | Meal-slot FAB inline, recetas por rango calórico, densidad Diario |
+| **Lifesum** | [`lifesum-design-playbook.md`](lifesum-design-playbook.md) | 39 | LifeScoreRing, Diet Plans como lente global, NutritionHero restante-first, HabitTile |
+| **MyFitnessPal** | [`myfitnesspal-design-playbook.md`](myfitnesspal-design-playbook.md) | 14 | Quick-add macros, historial-as-default, ecuación inline Objetivo−Alimentos+Ejercicio |
+| **MyRealFood** | [`myrealfood-design-playbook.md`](myrealfood-design-playbook.md) | 19 | Onboarding supermercados ES, pantry-aware chips, RecipeCard social overlay + verified púrpura |
+| **Kitchen Stories** | [`kitchen-stories-design-playbook.md`](kitchen-stories-design-playbook.md) | 17 | Editorial recipe detail, step-by-step pre-cook, ChipGroup/TimeBadge/DietBadge/RecipeByline primitives |
