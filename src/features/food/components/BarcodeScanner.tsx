@@ -7,29 +7,20 @@ import { useI18n } from '../../../i18n';
 import { logger } from '../../../lib/logger';
 import PortionSelector from './PortionSelector';
 import type { PortionResult } from './PortionSelector';
-import type { Ingredient, ServingSize } from '../../../types';
 import { parseOFFServings } from '../api/open-food-facts';
 import type { UnitSystem } from '../utils/units';
 import { INPUT_SURFACE_CLASSES } from '@/components/ui/surface';
 import SectionCard from '../../../components/SectionCard';
+import {
+  scannedProductToIngredient,
+  type ScannedProduct,
+} from '../utils/pseudo-ingredient';
 
 type ScanState = 'idle' | 'scanning' | 'looking-up' | 'found' | 'not-found' | 'error';
 
-export interface ScannedProduct {
-  name: string;
-  brand: string;
-  calories: number;
-  protein: number;
-  carbs: number;
-  fats: number;
-  fiber?: number;
-  sugar?: number;
-  saturatedFat?: number;
-  barcode: string;
-  image?: string;
-  /** Real serving sizes parsed from Open Food Facts */
-  servingSizes?: ServingSize[];
-}
+// Re-exported here so existing call-sites (AddMeal, RecipeDetail, etc.) keep
+// their imports stable. Canonical shape now lives in `../utils/pseudo-ingredient`.
+export type { ScannedProduct };
 
 interface Props {
   onClose: () => void;
@@ -37,42 +28,6 @@ interface Props {
   onSaveToDictionary?: (product: ScannedProduct) => void;
   onAddToRecipe?: (product: ScannedProduct) => void;
   unitSystem?: UnitSystem;
-}
-
-/** Convert a scanned product to a temporary Ingredient for PortionSelector */
-function productToIngredient(product: ScannedProduct): Ingredient {
-  const servingSizes: ServingSize[] = product.servingSizes && product.servingSizes.length > 0
-    ? product.servingSizes
-    : [
-        { id: '100g', name: '100g', nameEn: '100g', grams: 100, isDefault: true },
-        { id: '50g', name: '50g', nameEn: '50g', grams: 50 },
-        { id: '150g', name: '150g', nameEn: '150g', grams: 150 },
-        { id: '200g', name: '200g', nameEn: '200g', grams: 200 },
-      ];
-
-  return {
-    id: `scanned_${product.barcode}`,
-    name: product.name,
-    nameEn: product.name,
-    description: product.brand || '',
-    descriptionEn: product.brand || '',
-    category: 'prepared',
-    baseAmount: 100,
-    baseUnit: 'g',
-    servingSizes,
-    macros: {
-      calories: product.calories,
-      protein: product.protein,
-      carbs: product.carbs,
-      fats: product.fats,
-      fiber: product.fiber,
-      sugar: product.sugar,
-      saturatedFat: product.saturatedFat,
-    },
-    micros: { vitamins: {}, minerals: {}, others: {} },
-    tags: [],
-    allergens: [],
-  };
 }
 
 export default function BarcodeScanner({ onClose, onProductFound, onSaveToDictionary, onAddToRecipe, unitSystem = 'metric' }: Props) {
@@ -88,7 +43,7 @@ export default function BarcodeScanner({ onClose, onProductFound, onSaveToDictio
   const html5QrRef = useRef<any>(null);
 
   const pseudoIngredient = useMemo(
-    () => product ? productToIngredient(product) : null,
+    () => product ? scannedProductToIngredient(product) : null,
     [product],
   );
 

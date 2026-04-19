@@ -7,6 +7,7 @@ import { logger } from '../../../lib/logger';
 import { useI18n } from '../../../i18n';
 import { getFoodQuality, FOOD_QUALITY_EMOJI } from '../utils/nutrition';
 import { unifiedSearch } from '../utils/unified-search';
+import { offResultToIngredient } from '../utils/pseudo-ingredient';
 import { searchOpenFoodFacts, OFFResult } from '../api/open-food-facts';
 import { analyzePhotoMeal, fileToBase64, DetectedFood } from '../api/photo-recognition';
 import BarcodeScanner from '../components/BarcodeScanner';
@@ -151,33 +152,6 @@ export default function AddMeal({
 
   // ─── Helpers ────────────────────────────────────────────────
 
-  /** Convert an OFF API result to a temporary Ingredient for PortionSheet */
-  function apiResultToIngredient(food: OFFResult): Ingredient {
-    return {
-      id: food.id,
-      name: food.title,
-      nameEn: food.title,
-      description: '',
-      descriptionEn: '',
-      category: 'prepared',
-      baseAmount: 100,
-      baseUnit: 'g',
-      servingSizes: food.servingSizes,
-      macros: {
-        calories: food.cal,
-        protein: food.pro,
-        carbs: food.carbs,
-        fats: food.fats,
-        fiber: food.fiber,
-        sugar: food.sugar,
-        saturatedFat: food.saturatedFat,
-      },
-      micros: { vitamins: {}, minerals: {}, others: {} },
-      tags: [],
-      allergens: [],
-    };
-  }
-
   function logFood(food: any) {
     onLogMeal?.({ ...food, mealSlot, time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) });
   }
@@ -186,7 +160,7 @@ export default function AddMeal({
     // All food items go through PortionSheet — dictionary, API, and scanned
     if (food.isApiResult) {
       // API results: convert to temp Ingredient with real OFF servings
-      setPortionTarget(apiResultToIngredient(food as OFFResult));
+      setPortionTarget(offResultToIngredient(food as OFFResult));
     } else if (food.servingSizes?.length > 0) {
       // Dictionary ingredients with serving sizes
       setPortionTarget(food as Ingredient);
