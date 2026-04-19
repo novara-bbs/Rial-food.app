@@ -1,5 +1,36 @@
 # RIAL App - Changelog
 
+## [1.5.51] - 2026-04-19
+
+### fix(audit-wave-0-1) — S3 Profile cluster: HIG back-button + a11y icon hardening + dead-code i18n fallbacks + silent-catch telemetry
+
+Quinto cluster del S3 audit tranche del plan `revisa-todas-las-capturas-ancient-micali.md` (§S3): **Profile screens** (`Profile.tsx` + `Settings.tsx` + `RialPlus.tsx`). Mismo patrón 4-wave de los clusters anteriores — Wave 0 (bugs + silent-catch) + Wave 1 (a11y + HIG) consolidados dado que ambos scopes son polish.
+
+**Bugs + HIG (Wave 0).**
+
+*`Profile.tsx`*
+- 🐛 **3 dead-code i18n fallbacks.** `t.profile.editProfile || 'Editar perfil'` (línea 77), `t.profile.logout || 'Cerrar sesión'` (línea 199), `t.header?.streakAria ?? t.gamification.streak` (línea 131). Las 3 claves existen en ambos locales (`es.ts` 666-667 + 1214, `en.ts` 646-647 + 1176). Fix: chains eliminadas.
+- a11y + focus-visible. El streak deep-link button ganó ring focus-visible canónico (`ring-primary/60 ring-offset-2`).
+
+*`Settings.tsx`*
+- 🐛 **Silent `catch {}` en `handleLoadPersona`** (línea 74). `toast.error('Error loading persona')` mostraba fallback UI pero sin telemetría. Precedente Diccionario Wave 0 `[1.5.45]` (BarcodeScanner) + SettingsSystem `[1.5.50]`. Fix: `catch (error) { logger.warn('Settings loadDemoPersona failed', { personaId: id, error: error instanceof Error ? error.message : String(error) }); toast.error(...); setLoadingPersona(null); }`. Sentry ahora distingue fallos de lazy-import (`handlers/demo-persona-handlers`) vs. errores del `loadDemoPersona(id)` core. El toast literal queda temporalmente — es dev-only (gated por `isDev`).
+
+*`RialPlus.tsx`*
+- 🐛 **Hero back button sub-HIG.** Línea 125 pre-fix: `className="absolute top-6 left-6 p-2 hover:bg-surface-container-highest rounded-sm transition-colors"` con ícono `<ArrowLeft className="w-5 h-5">` dentro → ~36×36 total, debajo del mínimo HIG 44×44. Fix: `w-11 h-11 flex items-center justify-center` + `aria-label={t.common.back}` (reusa clave existente, cero nuevos keys i18n) + focus-visible ring canónico.
+
+**A11y (Wave 1).**
+
+*`Profile.tsx`* — 6 iconos decorativos marcados `aria-hidden="true"`: `Pencil` (edit-profile header, botón con aria-label), `Star` (level card SectionCard icon prop), `Flame` + `ChevronRight` (streak deep-link button, botón con aria-label), `Trophy` (badges section header), `LogOut` ×2 (trigger + confirm action en el Dialog de logout).
+
+*`Settings.tsx`* — `Loader2` spinner en persona buttons marcado `aria-hidden="true"` (el botón ya contiene el label textual del persona).
+
+*`RialPlus.tsx`* — 9 iconos decorativos marcados `aria-hidden="true"`: `Crown` ×3 (already-pro hero 12×12, new-user hero 8×8, CTA 6×6), `ArrowLeft` (back button, botón con aria-label), `Check` (plan-selected indicator wrapper-div gana `aria-hidden`), `<f.icon>` (feature comparison row icons × 10 features — decorativos junto al label textual de cada feature), `Lock` + `Check` (tabla free/pro status columns — decorativos junto al texto adyacente de la columna), 5-star social-proof row (wrapper-div marcado `aria-hidden` para eliminar la cadena "5 stars graphic" × 5), `Sparkles` + `Crown` (CTA button inline con texto), `RotateCcw` (restore-purchases button con texto).
+
+**Notes**
+- **Cross-cluster deferrals persistidos (no Wave 0+1).** (1) `userProfile?.name || 'User'` fallback EN-only (`Profile.tsx:95`) — parte del sweep cross-cluster ya enumerado en `[1.5.50]` §Notes. (2) `Profile.tsx:183` `userProfile.goal` renderiza el enum value raw (`lose`/`maintain`/`gain`) uppercase — requiere i18n map análogo al de `t.gamification.levels`. (3) `Profile.tsx:187-188` `dietaryPreferences.map((p: string) => <span>{p}</span>)` raw enum render — mismo patrón cross-cluster. (4) `Profile.tsx:214` `localStorage.clear()` en logout wipe onboarding gate `rial_isFirstTime` forzando re-onboarding post-reload; confuso pero no regresión (comportamiento vigente pre-auditoría, decisión de UX separada). (5) `Profile.tsx:46-47` `savedRecipes.filter(r => r.tag === 'MI RECETA' / 'IMPORTADA')` filtros ES-literal que fallan en EN — mismo tag-taxonomy issue cross-cluster deferido desde Q19. (6) `RialPlus.tsx:198-201` labels `'Free'` / `'Pro'` hardcoded — decisión de branding mantener (nombres del producto, no prose); no requiere i18n.
+- **Rollback path.** Revert restaura: 3 dead-code fallbacks + 15 iconos decorativos sin `aria-hidden` + hero back-button sub-HIG (36×36) + silent catch en persona-loader + focus-visible ausente en streak deep-link.
+- **Baselines esperadas.** tsc 0, lint 0 errores (warnings pre-existentes intactos), tests **715/715** sin cambios (polish-only, cero lógica nueva), i18n **1576 symmetric** sin cambios (reusa `t.common.back` existente), bundle main esperado sin delta medible (cambio es pure aria/class/literal cleanup).
+
 ## [1.5.50] - 2026-04-19
 
 ### fix(audit-wave-0-1) — S3 More + Settings partial: dead-code i18n fallbacks + a11y icon hardening + mobile-invisible delete bug

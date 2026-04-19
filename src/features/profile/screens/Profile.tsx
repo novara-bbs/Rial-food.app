@@ -74,8 +74,8 @@ export default function Profile({ userProfile, onBack, realFeelLogs = [], savedR
         label=""
         title={t.profile.title}
         rightAction={
-          <Button variant="ghost" size="icon-sm" onClick={() => navigateTo('settings')} aria-label={t.profile.editProfile || 'Editar perfil'}>
-            <Pencil className="w-4 h-4" />
+          <Button variant="ghost" size="icon-sm" onClick={() => navigateTo('settings')} aria-label={t.profile.editProfile}>
+            <Pencil className="w-4 h-4" aria-hidden="true" />
           </Button>
         }
       />
@@ -104,7 +104,7 @@ export default function Profile({ userProfile, onBack, realFeelLogs = [], savedR
 
       {/* Level progress */}
       <SectionCard
-        icon={<Star className="w-4 h-4 text-primary" />}
+        icon={<Star className="w-4 h-4 text-primary" aria-hidden="true" />}
         title={`${t.gamification.level} ${level.level}`}
         action={
           nextLevel ? (
@@ -128,11 +128,11 @@ export default function Profile({ userProfile, onBack, realFeelLogs = [], savedR
       <button
         type="button"
         onClick={() => navigateTo('progress')}
-        aria-label={t.header?.streakAria ?? t.gamification.streak}
-        className={`${BUTTON_CARD_SURFACE_CLASSES} p-5 flex items-center justify-between w-full text-left hover:border-brand-secondary/40 transition-colors group`}
+        aria-label={t.header.streakAria}
+        className={`${BUTTON_CARD_SURFACE_CLASSES} p-5 flex items-center justify-between w-full text-left hover:border-brand-secondary/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/60 focus-visible:ring-offset-2 focus-visible:ring-offset-background transition-colors group`}
       >
         <div className="flex items-center gap-3">
-          <Flame className="w-6 h-6 text-brand-secondary" />
+          <Flame className="w-6 h-6 text-brand-secondary" aria-hidden="true" />
           <div>
             <span className="font-headline text-sm font-bold uppercase text-tertiary tracking-widest">{t.gamification.streak}</span>
             <p className="text-micro text-on-surface-variant">{t.profile.realFeelMeals}</p>
@@ -140,14 +140,14 @@ export default function Profile({ userProfile, onBack, realFeelLogs = [], savedR
         </div>
         <div className="flex items-center gap-2">
           <span className="font-mono text-3xl font-black text-brand-secondary">{stats.streakDays}</span>
-          <ChevronRight className="w-4 h-4 text-on-surface-variant group-hover:text-brand-secondary transition-colors" />
+          <ChevronRight className="w-4 h-4 text-on-surface-variant group-hover:text-brand-secondary transition-colors" aria-hidden="true" />
         </div>
       </button>
 
       {/* Badges */}
       <div>
         <div className="flex items-center gap-2 mb-4">
-          <Trophy className="w-5 h-5 text-primary" />
+          <Trophy className="w-5 h-5 text-primary" aria-hidden="true" />
           <h3 className="font-headline text-sm font-bold uppercase tracking-widest text-tertiary">{t.gamification.badges}</h3>
           <span className="text-micro text-on-surface-variant font-mono">{earned.length}/{BADGES.length}</span>
         </div>
@@ -195,8 +195,8 @@ export default function Profile({ userProfile, onBack, realFeelLogs = [], savedR
       <Dialog>
         <DialogTrigger asChild>
           <Button variant="outline" className="w-full">
-            <LogOut className="w-4 h-4 mr-2" />
-            {t.profile.logout || 'Cerrar sesión'}
+            <LogOut className="w-4 h-4 mr-2" aria-hidden="true" />
+            {t.profile.logout}
           </Button>
         </DialogTrigger>
         <DialogContent>
@@ -215,7 +215,7 @@ export default function Profile({ userProfile, onBack, realFeelLogs = [], savedR
                 window.location.reload();
               }}
             >
-              <LogOut className="w-4 h-4 mr-2" />
+              <LogOut className="w-4 h-4 mr-2" aria-hidden="true" />
               {t.profile.logoutConfirmAction}
             </Button>
           </DialogFooter>

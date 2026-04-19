@@ -5,6 +5,7 @@ import PageShell from '../../../components/PageShell';
 import SegmentedTabs from '../../../components/SegmentedTabs';
 import { useI18n } from '../../../i18n';
 import { useNavigation } from '../../../contexts/NavigationContext';
+import { logger } from '../../../lib/logger';
 import type { Ingredient } from '../../../types';
 import SettingsProfile from '../components/settings/SettingsProfile';
 import SettingsNutrition from '../components/settings/SettingsNutrition';
@@ -71,7 +72,8 @@ export default function Settings({
       const { loadDemoPersona } = await import('../handlers/demo-persona-handlers');
       toast.success(t.settings.demoLoaded);
       await loadDemoPersona(id);
-    } catch {
+    } catch (error) {
+      logger.warn('Settings loadDemoPersona failed', { personaId: id, error: error instanceof Error ? error.message : String(error) });
       toast.error('Error loading persona');
       setLoadingPersona(null);
     }
@@ -159,7 +161,7 @@ export default function Settings({
                       <span className="font-headline text-xs font-bold uppercase tracking-widest text-tertiary">
                         {t.settings[key]}
                       </span>
-                      {loadingPersona === id && <Loader2 className="w-4 h-4 text-primary animate-spin" />}
+                      {loadingPersona === id && <Loader2 className="w-4 h-4 text-primary animate-spin" aria-hidden="true" />}
                     </button>
                   ))}
                   <button
