@@ -256,25 +256,23 @@ export default function FoodDictionary({ navigateTo }: Props) {
 }
 
 // ── Micro highlights ──────────────────────────
-// NOTE: labels still hardcoded ES (Vit C / Hierro / Folato...). Deferred to
-// a follow-up commit per plan §P2 bonus — requires 11 i18n keys × 2 locales
-// and the canonical key naming still needs owner sign-off.
 function MicroHighlights({ item }: { item: Ingredient }) {
   const { t } = useI18n();
+  const labels = t.foodDictionary.microLabels;
   const highlights: { label: string; value: string }[] = [];
   const { vitamins, minerals } = item.micros;
 
-  if (vitamins.vitaminC && vitamins.vitaminC > 10) highlights.push({ label: 'Vit C', value: `${vitamins.vitaminC}mg` });
-  if (vitamins.vitaminA && vitamins.vitaminA > 100) highlights.push({ label: 'Vit A', value: `${vitamins.vitaminA}mcg` });
-  if (vitamins.vitaminD && vitamins.vitaminD > 2) highlights.push({ label: 'Vit D', value: `${vitamins.vitaminD}mcg` });
-  if (vitamins.vitaminB12 && vitamins.vitaminB12 > 1) highlights.push({ label: 'B12', value: `${vitamins.vitaminB12}mcg` });
-  if (vitamins.folate && vitamins.folate > 30) highlights.push({ label: 'Folato', value: `${vitamins.folate}mcg` });
-  if (minerals.iron && minerals.iron > 1) highlights.push({ label: 'Hierro', value: `${minerals.iron}mg` });
-  if (minerals.calcium && minerals.calcium > 50) highlights.push({ label: 'Calcio', value: `${minerals.calcium}mg` });
-  if (minerals.potassium && minerals.potassium > 200) highlights.push({ label: 'Potasio', value: `${minerals.potassium}mg` });
-  if (minerals.magnesium && minerals.magnesium > 30) highlights.push({ label: 'Magnesio', value: `${minerals.magnesium}mg` });
-  if (minerals.zinc && minerals.zinc > 2) highlights.push({ label: 'Zinc', value: `${minerals.zinc}mg` });
-  if (minerals.selenium && minerals.selenium > 10) highlights.push({ label: 'Selenio', value: `${minerals.selenium}mcg` });
+  if (vitamins.vitaminC && vitamins.vitaminC > 10) highlights.push({ label: labels.vitC, value: `${vitamins.vitaminC}mg` });
+  if (vitamins.vitaminA && vitamins.vitaminA > 100) highlights.push({ label: labels.vitA, value: `${vitamins.vitaminA}mcg` });
+  if (vitamins.vitaminD && vitamins.vitaminD > 2) highlights.push({ label: labels.vitD, value: `${vitamins.vitaminD}mcg` });
+  if (vitamins.vitaminB12 && vitamins.vitaminB12 > 1) highlights.push({ label: labels.vitB12, value: `${vitamins.vitaminB12}mcg` });
+  if (vitamins.folate && vitamins.folate > 30) highlights.push({ label: labels.folate, value: `${vitamins.folate}mcg` });
+  if (minerals.iron && minerals.iron > 1) highlights.push({ label: labels.iron, value: `${minerals.iron}mg` });
+  if (minerals.calcium && minerals.calcium > 50) highlights.push({ label: labels.calcium, value: `${minerals.calcium}mg` });
+  if (minerals.potassium && minerals.potassium > 200) highlights.push({ label: labels.potassium, value: `${minerals.potassium}mg` });
+  if (minerals.magnesium && minerals.magnesium > 30) highlights.push({ label: labels.magnesium, value: `${minerals.magnesium}mg` });
+  if (minerals.zinc && minerals.zinc > 2) highlights.push({ label: labels.zinc, value: `${minerals.zinc}mg` });
+  if (minerals.selenium && minerals.selenium > 10) highlights.push({ label: labels.selenium, value: `${minerals.selenium}mcg` });
 
   if (highlights.length === 0) return null;
 

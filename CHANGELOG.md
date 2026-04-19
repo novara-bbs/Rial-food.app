@@ -1,5 +1,28 @@
 # RIAL App - Changelog
 
+## [1.5.55] - 2026-04-19
+
+### feat(food): MicroHighlights i18n — cierre del deferral P2 bonus
+
+Cierra el único deferral documentado en `[1.5.54]` §F (MicroHighlights labels ES-hardcoded). Los 11 labels de la grid de micronutrientes destacados en la ficha expandida de `FoodDictionary` (`Vit C`, `Vit A`, `Vit D`, `B12`, `Folato`, `Hierro`, `Calcio`, `Potasio`, `Magnesio`, `Zinc`, `Selenio`) pasan de literales JSX al namespace canónico `t.foodDictionary.microLabels.*`. Cierra también el gap documentado en `[1.5.47]` Wave 1 deferral.
+
+**Write set.**
+- `src/features/food/screens/FoodDictionary.tsx` — `MicroHighlights()` ahora resuelve `const labels = t.foodDictionary.microLabels` una sola vez y sustituye los 11 `label: 'Xxx'` por `label: labels.xxx`. Comment "deferred" eliminado.
+- `src/i18n/locales/es.ts` + `en.ts` — nuevo sub-namespace `foodDictionary.microLabels` con 11 claves simétricas:
+  - ES: `vitC:'Vit C'`, `vitA:'Vit A'`, `vitD:'Vit D'`, `vitB12:'B12'`, `folate:'Folato'`, `iron:'Hierro'`, `calcium:'Calcio'`, `potassium:'Potasio'`, `magnesium:'Magnesio'`, `zinc:'Zinc'`, `selenium:'Selenio'`.
+  - EN: `folate:'Folate'`, `iron:'Iron'`, `calcium:'Calcium'`, `potassium:'Potassium'`, `magnesium:'Magnesium'`, `selenium:'Selenium'` (resto son símbolos químicos / abreviaturas internacionales idénticas).
+
+**i18n.** 1589 → **1600** keys simétricas. +11 × 2 locales (22 entries nuevas).
+
+**Tests.** Sin cambios en el lock set — los 773 tests de `[1.5.54]` no tocan estos literales. La convention test `food-family-card.test.ts` valida anatomía de `FamilyCard`, no de `MicroHighlights`.
+
+**Rollback.** Revert restaura los 11 literales ES-hardcoded + el comment "deferred". `microLabels` en locales se puede dejar orphan (tolerated) o revertir por separado.
+
+**Notes.**
+- Decisión nomenclatura: camelCase con prefijo `vit` para vitaminas (`vitC`, `vitA`, `vitD`, `vitB12`). `B12` renderiza como texto plano en UI (es símbolo estándar), pero la key sigue el patrón del resto.
+- `MicroHighlights` continúa siendo local a `FoodDictionary.tsx`. No se extrae a primitive — sigue usando `Ingredient` (legacy) porque el compat re-export mantiene los 138 seed entries con el shape `Ingredient.micros.{vitamins,minerals}`. Una eventual consolidación con `Recipe.nutritionFacts` cerraría la asimetría pero es scope de un sprint mayor (fuera de P0-P6).
+- Este commit NO modifica el flujo P2 original (FamilyCard / VariantRow / MacroDelta / resolver). Es puramente wiring i18n.
+
 ## [1.5.54] - 2026-04-19
 
 ### feat(food): Food Families P0-P2 — primary-view Diccionario con canonical USDA + variantes jerárquicas

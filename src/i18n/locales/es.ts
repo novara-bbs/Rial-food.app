@@ -1328,6 +1328,19 @@ const es = {
       brand: 'Marca',
       user: 'Personalizada',
     },
+    microLabels: {
+      vitC: 'Vit C',
+      vitA: 'Vit A',
+      vitD: 'Vit D',
+      vitB12: 'B12',
+      folate: 'Folato',
+      iron: 'Hierro',
+      calcium: 'Calcio',
+      potassium: 'Potasio',
+      magnesium: 'Magnesio',
+      zinc: 'Zinc',
+      selenium: 'Selenio',
+    },
   },
   // RecipeDetail
   recipeDetail: {
