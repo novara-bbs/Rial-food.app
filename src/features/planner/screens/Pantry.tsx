@@ -9,6 +9,13 @@ import PageHeader from '../../../components/patterns/PageHeader';
 import { useLocalStorageState } from '../../../hooks/useLocalStorageState';
 import { detectCategory, groupShoppingItems } from '../utils/grocery';
 
+/**
+ * Sentinel used when the user adds a pantry item without filling the quantity
+ * field. Persisted in localStorage, so the marker must stay stable across
+ * releases — change at your own risk.
+ */
+const EMPTY_QUANTITY = '—';
+
 interface PantryItem {
   id: number;
   name: string;
@@ -33,7 +40,7 @@ export default function Pantry({ onBack }: { onBack: () => void }) {
     if (!newName.trim()) return;
     const category = detectCategory(newName);
     setPantryItems(prev => [
-      { id: Date.now(), name: newName.trim(), category, quantity: newQuantity.trim() || '—', addedAt: new Date().toISOString() },
+      { id: Date.now(), name: newName.trim(), category, quantity: newQuantity.trim() || EMPTY_QUANTITY, addedAt: new Date().toISOString() },
       ...prev,
     ]);
     toast.success(`${newName} ${t.pantry.addedToPantry}`);
@@ -55,13 +62,18 @@ export default function Pantry({ onBack }: { onBack: () => void }) {
         onBack={onBack}
         title={t.pantry.title}
         rightAction={
-          <button type="button" onClick={() => setIsAdding(true)} className="w-10 h-10 bg-primary text-on-primary rounded-full flex items-center justify-center hover:bg-primary-container transition-colors shadow-lg">
-            <Plus className="w-5 h-5" />
+          <button
+            type="button"
+            onClick={() => setIsAdding(true)}
+            className="w-11 h-11 bg-primary text-on-primary rounded-full flex items-center justify-center hover:bg-primary-container focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/60 focus-visible:ring-offset-2 focus-visible:ring-offset-background transition-colors shadow-lg"
+            aria-label={t.pantry.addToPantry}
+          >
+            <Plus className="w-5 h-5" aria-hidden="true" />
           </button>
         }
       />
 
-      <p className="text-sm text-on-surface-variant font-body leading-relaxed">
+      <p className="text-body-sm text-on-surface-variant font-body leading-relaxed">
         {t.pantry.description}
       </p>
 
@@ -69,12 +81,17 @@ export default function Pantry({ onBack }: { onBack: () => void }) {
       {isAdding && (
         <div className="bg-surface-container-high p-6 rounded-sm border border-primary/30 animate-in fade-in slide-in-from-top-4 duration-300">
           <div className="flex justify-between items-center mb-4">
-            <h3 className="font-headline text-sm font-bold uppercase tracking-widest text-primary">{t.pantry.addToPantry}</h3>
-            <button type="button" onClick={() => setIsAdding(false)} className="text-on-surface-variant hover:text-tertiary">
-              <X className="w-4 h-4" />
+            <h3 className="font-headline text-body-sm font-bold uppercase tracking-widest text-primary">{t.pantry.addToPantry}</h3>
+            <button
+              type="button"
+              onClick={() => setIsAdding(false)}
+              className="w-11 h-11 -mr-2 flex items-center justify-center rounded-full text-on-surface-variant hover:text-tertiary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/60 transition-colors"
+              aria-label={t.common.close}
+            >
+              <X className="w-4 h-4" aria-hidden="true" />
             </button>
           </div>
-          <form onSubmit={addItem} className="space-y-3">
+          <form onSubmit={addItem} className="space-y-3" aria-label={t.pantry.addToPantry}>
             <input
               autoFocus
               type="text"
@@ -95,7 +112,7 @@ export default function Pantry({ onBack }: { onBack: () => void }) {
             <button
               type="submit"
               disabled={!newName.trim()}
-              className="w-full bg-primary text-on-primary py-3 rounded-sm font-headline font-bold text-xs uppercase tracking-widest hover:bg-primary-container transition-colors disabled:opacity-50"
+              className="w-full min-h-11 bg-primary text-on-primary py-3 rounded-sm font-headline font-bold text-label uppercase tracking-widest hover:bg-primary-container focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/60 focus-visible:ring-offset-2 focus-visible:ring-offset-background transition-colors disabled:opacity-50"
             >
               {t.pantry.add}
             </button>
@@ -119,21 +136,22 @@ export default function Pantry({ onBack }: { onBack: () => void }) {
                     key={item.id}
                     padding="none"
                     spacing="none"
-                    className="flex items-center gap-4 p-4 hover:border-primary/30 transition-colors group"
+                    className="flex items-center gap-4 p-4 hover:border-primary/30 transition-colors"
                   >
-                    <Package className="w-5 h-5 text-primary shrink-0" />
+                    <Package className="w-5 h-5 text-primary shrink-0" aria-hidden="true" />
                     <div className="flex-1 min-w-0">
                       <p className="font-headline font-bold text-base uppercase text-tertiary">{item.name}</p>
-                      {pantryItem?.quantity && pantryItem.quantity !== '—' && (
+                      {pantryItem?.quantity && pantryItem.quantity !== EMPTY_QUANTITY && (
                         <p className="font-label text-micro uppercase tracking-widest text-on-surface-variant mt-0.5">{pantryItem.quantity}</p>
                       )}
                     </div>
-                    <button type="button"
+                    <button
+                      type="button"
                       onClick={() => removeItem(item.id)}
-                      className="w-8 h-8 rounded-full bg-surface-container-highest flex items-center justify-center text-on-surface-variant hover:text-error transition-colors opacity-0 group-hover:opacity-100"
+                      className="w-11 h-11 rounded-full bg-surface-container-highest flex items-center justify-center text-on-surface-variant hover:text-error focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/60 transition-colors"
                       aria-label={`${t.pantry.deleteItem} ${item.name}`}
                     >
-                      <Trash2 className="w-4 h-4" />
+                      <Trash2 className="w-4 h-4" aria-hidden="true" />
                     </button>
                   </SectionCard>
                 );

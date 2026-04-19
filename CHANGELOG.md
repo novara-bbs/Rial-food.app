@@ -1,5 +1,31 @@
 # RIAL App - Changelog
 
+## [1.5.49] - 2026-04-19
+
+### fix(audit-wave-0-1) — S3 Despensa: Pantry HIG + a11y + token drift
+
+Primera tanda del segundo cluster del S3 audit tranche del plan `revisa-todas-las-capturas-ancient-micali.md` (§S3 — Despensa cluster; siguiente en orden tras Diccionario). Pantry.tsx es un único screen de ~158 líneas, por lo que Wave 0 (bug sweep) y Wave 1 (drift purge + HIG + a11y + tokens) se consolidan en un solo commit. La extracción factory-handler (Wave 2 de la metodología 4-wave) no aplica: Pantry usa `useLocalStorageState` directamente para `pantryItems` pero la interfaz `(items, setItems)` no es factorable — el estado es 100% local y no hay otra pantalla que lo consuma.
+
+**Bugs reales detectados + corregidos.**
+- 🐛 **Delete button invisible en móvil.** Línea 131–137 (pre-fix): `opacity-0 group-hover:opacity-100` en el botón de eliminar ítem. El patrón hover-to-reveal no se dispara en dispositivos táctiles (no hay cursor hover), dejando a los usuarios móviles sin forma de borrar items de la despensa excepto refrescar/re-añadir. Fix: eliminado `opacity-0 group-hover:opacity-100` + eliminado `group` del SectionCard padre. Botón ahora siempre visible.
+- 🐛 **FAB sub-HIG (40×40).** Línea 58 (pre-fix): `w-10 h-10` (40×40) en el botón "+" del header. Apple HIG + Material Design exigen un área de toque mínima de 44×44. Fix: `w-11 h-11`.
+- 🐛 **Delete button sub-HIG (32×32).** Línea 131 (pre-fix): `w-8 h-8`. Fix: `w-11 h-11`.
+- 🐛 **Close X button sin aria-label ni size.** Línea 73–75 (pre-fix): `<button>` bare sin aria-label (screen readers anunciaban "botón" sin contexto) y sin dimensiones (el área clickable era solo el icono de 16×16, muy sub-HIG). Fix: `w-11 h-11 flex items-center justify-center rounded-full` + `aria-label={t.common.close}` reutilizando la key global existente (sin nuevas i18n keys).
+- 🐛 **Magic string `'—'` para "sin cantidad".** Líneas 36 + 127 (pre-fix) compartían el sentinel em-dash hardcodeado — el valor se persiste en `pantryItems[].quantity` en localStorage, así que cambiarlo implicaría migración. Fix: extraído a constante top-level `const EMPTY_QUANTITY = '—'` con docstring explicando que el valor es persisted-state (no tocar sin bump de `seedVersion`).
+
+**Drift + a11y (Wave 1).**
+- Tokens: 3 literales `text-sm`/`text-xs` reemplazados por tokens semánticos (`text-body-sm` × 2, `text-label` × 1) per ADR-002.
+- `<form onSubmit={addItem}>` sin accessible name. Fix: `aria-label={t.pantry.addToPantry}` (screen readers ahora anuncian la región del form).
+- Focus-visible rings añadidos a los 4 botones interactivos (FAB, close X, submit, delete) con `focus-visible:ring-2 focus-visible:ring-primary/60 focus-visible:ring-offset-2 focus-visible:ring-offset-background` donde aplica.
+- Submit button gana `min-h-11` defensivo (ya era `py-3` pero sin height mínima explícita).
+- `aria-hidden="true"` añadido a los 4 lucide icons decorativos (Plus, X, Package, Trash2) — los botones que los contienen ya tienen aria-label.
+
+**Notes**
+- **Scope discipline.** Los headers de categoría en el grouping (`"Verduras y Vegetales"`, `"Frutas"`, etc.) son ES-only porque vienen de `src/features/planner/utils/grocery.ts::AISLE_CATEGORIES`, que es un mapa de enums hardcoded como strings en español y **además persistido** como `pantryItem.category` en localStorage. La i18n de categorías es el mismo problema que los literales `'Planeado'`/`'Comida'` en `meal-handlers.ts` (deferral §2 de `[1.5.48]`): requiere decidir si se persiste la clave canónica (traducir at-render) o la label traducida (locked at-write). **Defer a sprint orthogonal de i18n data-layer**, no en scope Wave 0/1.
+- **Seed data (lines 22-26)** sigue como 3 items hardcoded en ES (`Quinoa`/`Aceite de Oliva`/`Almendras`) con categorías ES. Se mantiene porque cambiar a empty-state-by-default es un cambio UX (no bug), y porque el `EmptyState` ya existe como fallback cuando el usuario borra todo. Si en un futuro se decide mover este seed a `seed-*.ts` con `seedVersion.ts`, el hook `useLocalStorageState` quedaría en `[]` y el seeding se haría en `AppStateContext` con versión.
+- **Rollback path.** Revert del commit restaura los 3 sub-HIG taps, el magic string `'—'`, los 3 literales de tokens y el delete-invisible-on-mobile. Cero cambios de persistencia (ningún shape de `PantryItem` tocado).
+- **Baselines.** tsc 0, lint 0 errors (573 warnings, todos pre-existentes), tests **715/715** (sin regresión, Wave 0/1 es polish no requiere nuevos tests), i18n **1576 simétrico** (sin cambios — reutiliza `t.common.close` + `t.pantry.addToPantry` existentes), bundle main esperado ≈778.5 KB raw / 243.8 KB gzip (sin cambio funcional).
+
 ## [1.5.48] - 2026-04-19
 
 ### refactor(audit-wave-2) — S3 Diccionario: shared helper extraction (pseudo-ingredient)
