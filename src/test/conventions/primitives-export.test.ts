@@ -21,6 +21,9 @@ import BottomNav from '@/components/BottomNav';
 import PageHeader from '@/components/patterns/PageHeader';
 import Sparkline from '@/components/Sparkline';
 import DayGridCalendar from '@/components/DayGridCalendar';
+import OnboardingScaffold from '@/components/OnboardingScaffold';
+import RadioCardGroup from '@/components/RadioCardGroup';
+import SelectList from '@/components/SelectList';
 
 import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
@@ -63,5 +66,11 @@ describe('Primitives — canonical exports (ADR-001)', () => {
 
   it('exports the Button primitive (shadcn, skinned)', () => {
     expect(Button).toBeTruthy();
+  });
+
+  it('exports the onboarding primitives (PR 9, §4.11)', () => {
+    expect(OnboardingScaffold).toBeTruthy();
+    expect(RadioCardGroup).toBeTruthy();
+    expect(SelectList).toBeTruthy();
   });
 });

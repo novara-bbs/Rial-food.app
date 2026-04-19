@@ -26,6 +26,9 @@ Canonical components. Reach for these **before** writing JSX from scratch.
 | `BottomNav` | `src/components/BottomNav.tsx` | Mobile primary nav | Tablet/desktop (hidden by `md:hidden`) |
 | `Sparkline` | `src/components/Sparkline.tsx` | Inline 7-day trend under a metric | Full-size charts (use recharts directly) |
 | `DayGridCalendar` | `src/components/DayGridCalendar.tsx` | Monthly timeline with day cells | Week views (use `Swimlane`) |
+| `OnboardingScaffold` | `src/components/OnboardingScaffold.tsx` | Per-step wrapper for the 6-step onboarding flow (title + optional subtitle + optional heroSlot + interactive body) | Full-screen modals outside the onboarding context (use `PageShell`) |
+| `RadioCardGroup` | `src/components/RadioCardGroup.tsx` | Exclusive selector rendered as vertical stack of cards with WAI-ARIA radiogroup semantics (2–5 options) | Non-exclusive selection (use checkboxes); side-by-side pills (raw buttons); > 5 options (use `<select>` or `SelectList`) |
+| `SelectList` | `src/components/SelectList.tsx` | Vertical card list where each item is a nav trigger with trailing chevron (no selection state) | Exclusive selection (use `RadioCardGroup`); menus or dropdowns (use `DropdownMenu`) |
 
 ---
 
@@ -243,6 +246,74 @@ Defaults can be overridden via the `copy` prop (`{ noData, noRange, noTrends, st
 | `back-title-action` | Back chevron | `actionSlot` (star, share, etc.) | IMG_1015, 1016, 1019 |
 
 Custom left-header content: pass `leftSlot` (overrides the default from `headerLayout`). Hide the swipe handle for keyboard-first (IMG_1011) or navigation-stack (IMG_1016) sheets: `hideHandle`. For **bottom** anchored sheets use `BottomSheet`; for left/right/top drawers keep the legacy shadcn `Sheet`.
+
+### OnboardingScaffold (PR 9, playbook §4.11)
+```tsx
+// Default variant — hero-less step with subtitle
+<OnboardingScaffold
+  title={t.onboarding.step1.title}
+  subtitle={t.onboarding.step1.subtitle}
+>
+  <RadioCardGroup options={goalOptions} value={data.goal} onChange={setGoal} />
+</OnboardingScaffold>
+
+// Centered variant — ready/celebration steps
+<OnboardingScaffold
+  variant="centered"
+  heroSlot={<PartyPopper className="w-14 h-14 text-primary mx-auto" />}
+  title={t.onboarding.ready.title}
+  subtitle={t.onboarding.ready.subtitle}
+>
+  <SectionCard className="w-full">{/* summary */}</SectionCard>
+</OnboardingScaffold>
+```
+
+Emits `data-variant={variant}` for introspection. Title renders as `<h3>` to preserve the legacy step-title level. No footer slot — each step provides its own inline hints as children (keeps zero-UX-change promise).
+
+### RadioCardGroup (PR 9, playbook §4.11)
+```tsx
+<RadioCardGroup<OnboardingData['activity']>
+  options={[
+    { id: 'sedentary', label: t.onboarding.activity.sedentary },
+    { id: 'light', label: t.onboarding.activity.light },
+    { id: 'moderate', label: t.onboarding.activity.moderate },
+    { id: 'active', label: t.onboarding.activity.active },
+  ]}
+  value={data.activity}
+  onChange={(id) => setData((d) => ({ ...d, activity: id }))}
+  ariaLabel={t.onboarding.activity.aria}
+/>
+
+// With icons + descriptions
+<RadioCardGroup
+  options={[
+    { id: 'muscle', label: 'Ganar músculo', icon: Dumbbell, iconClassName: 'text-blue-400' },
+    { id: 'loss', label: 'Perder grasa', icon: Flame, iconClassName: 'text-orange-400' },
+  ]}
+  value={goal}
+  onChange={setGoal}
+/>
+```
+
+Semantics: outer `<div role="radiogroup">` + each card `<button role="radio" aria-checked>`. Active state uses theme tokens (`border-primary bg-primary/10 ring-1 ring-primary/40`) — no hex, no `dark:`. Trailing `<Check />` on the selected card. Emits `data-selected={selected}` per card. HIG-sized tap area via `p-4`.
+
+### SelectList (PR 9, playbook §4.11)
+```tsx
+<SelectList<'apple-watch' | 'garmin' | 'helio' | 'apple-health' | 'oura' | 'none'>
+  items={[
+    { id: 'apple-watch', label: 'Apple Watch', icon: Watch },
+    { id: 'garmin', label: 'Garmin', icon: Watch },
+    { id: 'helio', label: 'Helio Strap', icon: Activity, desc: 'Recomendada' },
+    { id: 'apple-health', label: 'Salud de Apple', icon: Heart },
+    { id: 'oura', label: 'Oura', icon: Circle },
+    { id: 'none', label: 'No tengo', icon: X },
+  ]}
+  onSelect={(id) => handleDeviceChoice(id)}
+  ariaLabel="Elige tu dispositivo ponible"
+/>
+```
+
+Differs from `RadioCardGroup`: **no selection state** — each card is a one-shot navigation trigger. Trailing `ChevronRight` on every card signals nav. `min-h-14` per item preserves HIG tap area. NOT a radiogroup — do not use when only one item can be "active" at a time.
 
 ---
 

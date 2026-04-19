@@ -6,6 +6,8 @@ import { calculateDailyTargets, type Goal } from '../../food/utils/nutrition';
 import { getBodyWeightUnit, getHeightUnit } from '../../food/utils/units';
 import { INPUT_SURFACE_CLASSES } from '@/components/ui/surface';
 import SectionCard from '../../../components/SectionCard';
+import OnboardingScaffold from '../../../components/OnboardingScaffold';
+import RadioCardGroup, { type RadioCardOption } from '../../../components/RadioCardGroup';
 
 interface OnboardingData {
   goal: string;
@@ -95,15 +97,15 @@ export default function Onboarding({ isOpen, onClose, onComplete }: {
     onClose();
   };
 
-  const goals = [
-    { id: 'muscle', label: t.onboarding.goals.muscle, icon: Dumbbell, color: 'text-blue-400' },
-    { id: 'cut', label: t.onboarding.goals.cut, icon: Flame, color: 'text-orange-400' },
-    { id: 'maintain', label: t.onboarding.goals.maintain, icon: Scale, color: 'text-green-400' },
-    { id: 'health', label: t.onboarding.goals.health, icon: Heart, color: 'text-pink-400' },
-    { id: 'family', label: t.onboarding.goals.family, icon: Users, color: 'text-purple-400' },
+  const goalOptions: RadioCardOption<string>[] = [
+    { id: 'muscle', label: t.onboarding.goals.muscle, icon: Dumbbell, iconClassName: 'text-blue-400' },
+    { id: 'cut', label: t.onboarding.goals.cut, icon: Flame, iconClassName: 'text-orange-400' },
+    { id: 'maintain', label: t.onboarding.goals.maintain, icon: Scale, iconClassName: 'text-green-400' },
+    { id: 'health', label: t.onboarding.goals.health, icon: Heart, iconClassName: 'text-pink-400' },
+    { id: 'family', label: t.onboarding.goals.family, icon: Users, iconClassName: 'text-purple-400' },
   ];
 
-  const activities = [
+  const activityOptions: RadioCardOption<OnboardingData['activity']>[] = [
     { id: 'sedentary', label: t.onboarding.activity.sedentary },
     { id: 'light', label: t.onboarding.activity.light },
     { id: 'active', label: t.onboarding.activity.active },
@@ -152,36 +154,19 @@ export default function Onboarding({ isOpen, onClose, onComplete }: {
         <div className="flex-1 overflow-y-auto p-6 space-y-5">
           {/* STEP 1: Goal */}
           {step === 1 && (
-            <>
-              <h3 className="font-headline text-lg font-bold uppercase text-tertiary tracking-tight">{t.onboarding.step1Title}</h3>
-              <div className="space-y-2">
-                {goals.map(g => {
-                  const Icon = g.icon;
-                  const selected = data.goal === g.id;
-                  return (
-                    <button type="button"
-                      key={g.id}
-                      onClick={() => setData(d => ({ ...d, goal: g.id }))}
-                      className={`w-full flex items-center gap-4 p-4 rounded-sm border transition-all text-left ${
-                        selected
-                          ? 'border-primary bg-primary/10'
-                          : 'border-outline-variant/20 bg-surface-container-low hover:border-primary/50'
-                      }`}
-                    >
-                      <Icon className={`w-6 h-6 ${selected ? 'text-primary' : g.color}`} />
-                      <span className={`font-headline font-bold text-sm uppercase tracking-wider ${selected ? 'text-primary' : 'text-tertiary'}`}>{g.label}</span>
-                      {selected && <Check className="w-5 h-5 text-primary ml-auto" />}
-                    </button>
-                  );
-                })}
-              </div>
-            </>
+            <OnboardingScaffold title={t.onboarding.step1Title}>
+              <RadioCardGroup
+                ariaLabel={t.onboarding.step1Title}
+                options={goalOptions}
+                value={data.goal}
+                onChange={(id) => setData(d => ({ ...d, goal: id }))}
+              />
+            </OnboardingScaffold>
           )}
 
           {/* STEP 2: Body data */}
           {step === 2 && (
-            <>
-              <h3 className="font-headline text-lg font-bold uppercase text-tertiary tracking-tight">{t.onboarding.step2Title}</h3>
+            <OnboardingScaffold title={t.onboarding.step2Title}>
               <div className="space-y-4">
                 <div>
                   <label className="block text-xs font-label uppercase tracking-widest text-on-surface-variant mb-1.5">{t.onboarding.name}</label>
@@ -222,26 +207,23 @@ export default function Onboarding({ isOpen, onClose, onComplete }: {
                 </div>
                 <div>
                   <label className="block text-xs font-label uppercase tracking-widest text-on-surface-variant mb-2">{t.onboarding.activityLevel}</label>
-                  <div className="space-y-2">
-                    {activities.map(a => (
-                      <button type="button" key={a.id} onClick={() => setData(d => ({ ...d, activity: a.id as OnboardingData['activity'] }))}
-                        className={`w-full text-left px-4 py-3 rounded-sm border text-sm transition-all ${
-                          data.activity === a.id ? 'border-primary bg-primary/10 text-primary font-bold' : 'border-outline-variant/20 text-on-surface-variant bg-surface-container-low hover:border-primary/50'
-                        }`}>
-                        {a.label}
-                      </button>
-                    ))}
-                  </div>
+                  <RadioCardGroup
+                    ariaLabel={t.onboarding.activityLevel}
+                    options={activityOptions}
+                    value={data.activity}
+                    onChange={(id) => setData(d => ({ ...d, activity: id }))}
+                  />
                 </div>
               </div>
-            </>
+            </OnboardingScaffold>
           )}
 
           {/* STEP 3: Calculated plan */}
           {step === 3 && (
-            <>
-              <h3 className="font-headline text-lg font-bold uppercase text-tertiary tracking-tight">{t.onboarding.step3Title}</h3>
-              <p className="text-sm text-on-surface-variant">{t.onboarding.basedOnData}</p>
+            <OnboardingScaffold
+              title={t.onboarding.step3Title}
+              subtitle={t.onboarding.basedOnData}
+            >
               <SectionCard padding="lg" spacing="none">
                 <div className="text-center mb-6">
                   <span className="font-mono text-5xl font-black text-primary">{targets.cal}</span>
@@ -276,13 +258,12 @@ export default function Onboarding({ isOpen, onClose, onComplete }: {
                 </div>
               </div>
               <p className="text-xs text-on-surface-variant italic">{t.onboarding.adjustLater}</p>
-            </>
+            </OnboardingScaffold>
           )}
 
           {/* STEP 4: Restrictions */}
           {step === 4 && (
-            <>
-              <h3 className="font-headline text-lg font-bold uppercase text-tertiary tracking-tight">{t.onboarding.step4Title}</h3>
+            <OnboardingScaffold title={t.onboarding.step4Title}>
               <div className="flex flex-wrap gap-2">
                 {restrictions.map(r => {
                   const selected = data.restrictions.includes(r.id);
@@ -301,14 +282,15 @@ export default function Onboarding({ isOpen, onClose, onComplete }: {
                 })}
               </div>
               <p className="text-xs text-on-surface-variant">{t.onboarding.skip}</p>
-            </>
+            </OnboardingScaffold>
           )}
 
           {/* STEP 5: Palette */}
           {step === 5 && (
-            <>
-              <h3 className="font-headline text-lg font-bold uppercase text-tertiary tracking-tight">{t.onboarding.step5PaletteTitle}</h3>
-              <p className="text-xs text-on-surface-variant -mt-2">{t.onboarding.step5PaletteSubtitle}</p>
+            <OnboardingScaffold
+              title={t.onboarding.step5PaletteTitle}
+              subtitle={t.onboarding.step5PaletteSubtitle}
+            >
               <div className="grid grid-cols-2 gap-3" role="radiogroup" aria-label={t.settings.palette}>
                 {palettes.map((p) => {
                   const selected = palette === p.id;
@@ -361,16 +343,18 @@ export default function Onboarding({ isOpen, onClose, onComplete }: {
                 })}
               </div>
               <p className="text-xs text-on-surface-variant text-center">{t.onboarding.step5PaletteHint}</p>
-            </>
+            </OnboardingScaffold>
           )}
 
           {/* STEP 6: Ready */}
           {step === 6 && (
-            <div className="text-center py-6 space-y-6">
-              <PartyPopper className="w-14 h-14 text-primary mx-auto" />
-              <h3 className="font-headline text-2xl font-bold uppercase text-primary tracking-tight">{t.onboarding.step5Title}</h3>
-              <p className="text-on-surface-variant">{t.onboarding.readyMessage}</p>
-              <SectionCard padding="md" spacing="md" className="text-left">
+            <OnboardingScaffold
+              variant="centered"
+              heroSlot={<PartyPopper className="w-14 h-14 text-primary mx-auto" />}
+              title={t.onboarding.step5Title}
+              subtitle={t.onboarding.readyMessage}
+            >
+              <SectionCard padding="md" spacing="md" className="text-left w-full">
                 {data.name && <div className="flex justify-between text-sm"><span className="text-on-surface-variant">{t.onboarding.name}</span><span className="font-bold text-tertiary">{data.name}</span></div>}
                 <div className="flex justify-between text-sm"><span className="text-on-surface-variant">{t.onboarding.dailyCal}</span><span className="font-mono font-bold text-primary">{targets.cal} kcal</span></div>
                 <div className="flex justify-between text-sm"><span className="text-on-surface-variant">{t.home.protein}</span><span className="font-mono font-bold text-tertiary">{targets.pro}g</span></div>
@@ -382,7 +366,7 @@ export default function Onboarding({ isOpen, onClose, onComplete }: {
                   </div>
                 )}
               </SectionCard>
-            </div>
+            </OnboardingScaffold>
           )}
         </div>
 
