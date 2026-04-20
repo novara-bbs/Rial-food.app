@@ -12,6 +12,8 @@
 import { useI18n } from '../../../i18n';
 import type { FoodVariant, MacroDelta as MacroDeltaValue } from '../../../types/food-family';
 import MacroDelta from './MacroDelta';
+import TierBadge from './TierBadge';
+import { deriveTier } from '../utils/trust-tier';
 
 interface Props {
   variant: FoodVariant;
@@ -39,8 +41,11 @@ export default function VariantRow({ variant, delta, selected, onSelect }: Props
     >
       <div className="flex items-start justify-between gap-2">
         <div className="min-w-0 flex-1">
-          <span className="block font-headline font-bold text-body-sm text-on-surface truncate">
-            {locale === 'es' ? variant.name : variant.nameEn}
+          <span className="flex items-center gap-1.5">
+            <TierBadge tier={deriveTier(variant)} />
+            <span className="block font-headline font-bold text-body-sm text-on-surface truncate">
+              {locale === 'es' ? variant.name : variant.nameEn}
+            </span>
           </span>
           <span className="mt-0.5 block text-micro font-label uppercase tracking-widest text-on-surface-variant">
             {typeLabel}

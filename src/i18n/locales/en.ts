@@ -1398,6 +1398,19 @@ const en: Translations = {
       squid: 'Squid',
       egg: 'Egg',
     },
+    // P7 [1.5.63] — trust tier provenance badges on VariantRow.
+    tierLabels: {
+      canonical: 'Official',
+      curated: 'Verified',
+      personal: 'Mine',
+      community: 'Community',
+    },
+    tierTooltips: {
+      canonical: 'USDA lab-verified data',
+      curated: 'RIAL-verified brand',
+      personal: 'Scanned by you',
+      community: 'Crowd-validated',
+    },
   },
   recipeDetail: {
     yourRecipe: 'Your Recipe',

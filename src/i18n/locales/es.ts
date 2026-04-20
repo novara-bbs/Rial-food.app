@@ -1440,6 +1440,19 @@ const es = {
       squid: 'Calamares',
       egg: 'Huevo',
     },
+    // P7 [1.5.63] — trust tier provenance badges on VariantRow.
+    tierLabels: {
+      canonical: 'Oficial',
+      curated: 'Verificado',
+      personal: 'Mío',
+      community: 'Comunidad',
+    },
+    tierTooltips: {
+      canonical: 'Datos USDA de laboratorio',
+      curated: 'Marca verificada por RIAL',
+      personal: 'Escaneado por ti',
+      community: 'Validada por la comunidad',
+    },
   },
   // RecipeDetail
   recipeDetail: {
