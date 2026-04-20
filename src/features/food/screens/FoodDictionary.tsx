@@ -20,7 +20,7 @@ import { useAppState } from '../../../contexts/AppStateContext';
 import EmptyState from '../../../components/EmptyState';
 import {
   groupFamiliesBySubcategory,
-  sortSubcategoriesByPopulation,
+  sortSubcategoriesByOrder,
 } from '../utils/group-by-subcategory';
 
 const ALL_ALLERGENS: Allergen[] = [
@@ -101,8 +101,9 @@ export default function FoodDictionary({ navigateTo }: Props) {
         const families = map.get(cat)!;
         // P2.5: bucket by subcategory → ordered groups; null-bucket (families
         // without subcategory) renders flat under the category header.
-        const subGroups = sortSubcategoriesByPopulation(
+        const subGroups = sortSubcategoriesByOrder(
           groupFamiliesBySubcategory(families),
+          cat,
         );
         return { category: cat, families, subGroups };
       });

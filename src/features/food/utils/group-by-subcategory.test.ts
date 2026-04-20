@@ -9,6 +9,8 @@ import type { FoodFamily } from '../../../types/food-family';
 import {
   groupFamiliesBySubcategory,
   sortSubcategoriesByPopulation,
+  sortSubcategoriesByOrder,
+  SUBCATEGORY_ORDER,
 } from './group-by-subcategory';
 
 // Small helper to avoid stubbing the whole FoodFamily shape when we only
@@ -97,5 +99,111 @@ describe('sortSubcategoriesByPopulation', () => {
     expect(sorted).toHaveLength(1);
     expect(sorted[0].subcategoryKey).toBeNull();
     expect(sorted[0].families.map(f => f.id)).toEqual(['a', 'b', 'c']);
+  });
+});
+
+// --- P7 [1.5.61] ---
+
+describe('SUBCATEGORY_ORDER', () => {
+  it('declares the full 12 IngredientCategory entries', () => {
+    const keys = Object.keys(SUBCATEGORY_ORDER);
+    expect(keys.sort()).toEqual(
+      [
+        'beverages',
+        'dairy',
+        'fruits',
+        'grains',
+        'legumes',
+        'nuts_seeds',
+        'oils',
+        'pantry',
+        'prepared',
+        'proteins',
+        'supplements',
+        'vegetables',
+      ].sort(),
+    );
+  });
+
+  it('declares proteins in macro-cluster order (tierra → mar → otros)', () => {
+    expect(SUBCATEGORY_ORDER.proteins).toEqual([
+      'aves',
+      'vacuno',
+      'cerdo',
+      'caza',
+      'embutidos',
+      'pescado-blanco',
+      'pescado-azul',
+      'marisco',
+      'huevo',
+      'vegetal',
+    ]);
+  });
+
+  it('leaves oils/legumes/supplements empty (flat render)', () => {
+    expect(SUBCATEGORY_ORDER.oils).toEqual([]);
+    expect(SUBCATEGORY_ORDER.legumes).toEqual([]);
+    expect(SUBCATEGORY_ORDER.supplements).toEqual([]);
+  });
+});
+
+describe('sortSubcategoriesByOrder', () => {
+  it('proteins orders tierra before mar before otros', () => {
+    // 1 family each — would be alphabetic under sortSubcategoriesByPopulation
+    // (aves, cerdo, huevo, marisco, pescado-azul, vacuno, vegetal).
+    const map = groupFamiliesBySubcategory([
+      fam('huevo1', 'huevo'),
+      fam('mar1', 'marisco'),
+      fam('pav1', 'pescado-azul'),
+      fam('vac1', 'vacuno'),
+      fam('ave1', 'aves'),
+      fam('ceg1', 'vegetal'),
+      fam('cer1', 'cerdo'),
+    ]);
+    const sorted = sortSubcategoriesByOrder(map, 'proteins');
+    expect(sorted.map(g => g.subcategoryKey)).toEqual([
+      'aves',
+      'vacuno',
+      'cerdo',
+      'pescado-azul',
+      'marisco',
+      'huevo',
+      'vegetal',
+    ]);
+  });
+
+  it('null-bucket always first even when proteins order defined', () => {
+    const map = groupFamiliesBySubcategory([
+      fam('ave1', 'aves'),
+      fam('ung', undefined),
+    ]);
+    const sorted = sortSubcategoriesByOrder(map, 'proteins');
+    expect(sorted[0].subcategoryKey).toBeNull();
+    expect(sorted[1].subcategoryKey).toBe('aves');
+  });
+
+  it('slug not in SUBCATEGORY_ORDER falls to end in alphabetic order', () => {
+    // 'unknown-slug-a' and 'unknown-slug-b' aren't declared in proteins order.
+    const map = groupFamiliesBySubcategory([
+      fam('u1', 'unknown-slug-b'),
+      fam('ave1', 'aves'),
+      fam('u2', 'unknown-slug-a'),
+    ]);
+    const sorted = sortSubcategoriesByOrder(map, 'proteins');
+    expect(sorted.map(g => g.subcategoryKey)).toEqual([
+      'aves',
+      'unknown-slug-a',
+      'unknown-slug-b',
+    ]);
+  });
+
+  it('handles empty SUBCATEGORY_ORDER (oils/legumes/supplements) by falling back to alphabetic', () => {
+    const map = groupFamiliesBySubcategory([
+      fam('a', 'zeta'),
+      fam('b', 'alfa'),
+      fam('c', 'mid'),
+    ]);
+    const sorted = sortSubcategoriesByOrder(map, 'oils');
+    expect(sorted.map(g => g.subcategoryKey)).toEqual(['alfa', 'mid', 'zeta']);
   });
 });
