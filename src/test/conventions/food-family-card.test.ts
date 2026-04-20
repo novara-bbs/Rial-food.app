@@ -136,14 +136,23 @@ describe('VariantRow.tsx', () => {
   });
 });
 
-describe('FoodDictionary.tsx — subcategory grouping (P2.5)', () => {
+describe('FoodDictionary.tsx — subcategory grouping (P2.5 / P7)', () => {
   // The screen delegates bucketing + ordering to the pure helpers in
   // `features/food/utils/group-by-subcategory.ts` (its own unit tests lock the
-  // null-first + population-desc + alphabetic tie-break contract). Here we
-  // only lock that the screen *uses* them and emits the expected markup.
-  it('imports groupFamiliesBySubcategory + sortSubcategoriesByPopulation', () => {
+  // null-first + SUBCATEGORY_ORDER macro-cluster contract). Here we only lock
+  // that the screen *uses* them and emits the expected markup.
+  //
+  // P7 [1.5.61] renamed `sortSubcategoriesByPopulation` → `sortSubcategoriesByOrder`
+  // so the screen passes the active category to the ordering helper. The legacy
+  // helper is kept for back-compat but is no longer used by FoodDictionary.
+  it('imports groupFamiliesBySubcategory + sortSubcategoriesByOrder', () => {
     expect(foodDictionarySrc).toMatch(/groupFamiliesBySubcategory/);
-    expect(foodDictionarySrc).toMatch(/sortSubcategoriesByPopulation/);
+    expect(foodDictionarySrc).toMatch(/sortSubcategoriesByOrder/);
+  });
+
+  it('imports groupFamiliesBySpecies (P7 B) for the species subheader render', () => {
+    expect(foodDictionarySrc).toMatch(/groupFamiliesBySpecies/);
+    expect(foodDictionarySrc).toMatch(/data-species=/);
   });
 
   it('emits a <h4 data-subcategory> sub-header per non-null bucket', () => {

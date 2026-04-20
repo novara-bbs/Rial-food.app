@@ -10,10 +10,40 @@
  * duplicate work across the list.
  */
 import { useI18n } from '../../../i18n';
-import type { FoodVariant, MacroDelta as MacroDeltaValue } from '../../../types/food-family';
+import type { FoodVariant, MacroDelta as MacroDeltaValue, QualityTagSlug } from '../../../types/food-family';
 import MacroDelta from './MacroDelta';
 import TierBadge from './TierBadge';
 import { deriveTier } from '../utils/trust-tier';
+
+/**
+ * P7 D4 — deterministic chip ordering. The visual priority is:
+ *   origin (organic/free-range/grass-fed) → health property (high-protein,
+ *   sugar-free, light) → dietary restriction (gluten-free, lactose-free) →
+ *   processing (no-additives).
+ * Keeps the owner's "organic first" reading convention stable regardless of
+ * the insertion order in the data.
+ */
+const QUALITY_TAG_ORDER: readonly QualityTagSlug[] = [
+  'organic',
+  'free-range',
+  'grass-fed',
+  'high-protein',
+  'sugar-free',
+  'light',
+  'gluten-free',
+  'lactose-free',
+  'no-additives',
+] as const;
+
+function sortQualityTags(tags: QualityTagSlug[]): QualityTagSlug[] {
+  const index = new Map<QualityTagSlug, number>();
+  QUALITY_TAG_ORDER.forEach((slug, i) => index.set(slug, i));
+  return [...tags].sort((a, b) => {
+    const ai = index.get(a) ?? Number.MAX_SAFE_INTEGER;
+    const bi = index.get(b) ?? Number.MAX_SAFE_INTEGER;
+    return ai - bi;
+  });
+}
 
 interface Props {
   variant: FoodVariant;
@@ -26,7 +56,7 @@ export default function VariantRow({ variant, delta, selected, onSelect }: Props
   const { t, locale } = useI18n();
   const typeLabel = t.foodDictionary.variantTypes[variant.variantType];
   const qualityTagLabels = t.foodDictionary.qualityTagLabels as Record<string, string>;
-  const qualityTags = variant.qualityTags ?? [];
+  const qualityTags = sortQualityTags(variant.qualityTags ?? []);
   return (
     <button
       type="button"

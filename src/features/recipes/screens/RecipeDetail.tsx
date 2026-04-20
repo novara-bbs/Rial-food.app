@@ -1,4 +1,4 @@
-import { ArrowLeft, Clock, Flame, Activity, Minus, CheckCircle2, Circle, Plus, MessageSquare, Bookmark, X, Users, ShoppingCart, ChefHat, UtensilsCrossed, Target, Share2, ExternalLink, Pencil, Trash2, GitFork, Crown } from 'lucide-react';
+import { ArrowLeft, Clock, Flame, Activity, Minus, CheckCircle2, Circle, Plus, MessageSquare, Bookmark, X, Users, ShoppingCart, ChefHat, UtensilsCrossed, Target, Share2, ExternalLink, Pencil, Trash2, GitFork, Crown, RefreshCw } from 'lucide-react';
 import SearchInput from '../../../components/patterns/SearchInput';
 import { useState, useMemo, useEffect } from 'react';
 import CookMode from '../components/CookMode';
@@ -22,6 +22,9 @@ import { trackRecipeView } from '../../social/utils/analytics';
 import { CREATORS_MAP } from '../../social/data/seed-creators';
 import { useNavigation } from '../../../contexts/NavigationContext';
 import { useAppState } from '../../../contexts/AppStateContext';
+import VariantPickerSheet from '../../food/components/VariantPickerSheet';
+import { FOOD_FAMILIES } from '../../food/data/food-families';
+import type { FoodFamily, FoodVariant } from '../../../types/food-family';
 import { useLocalStorageState } from '../../../hooks/useLocalStorageState';
 import { useI18n } from '../../../i18n';
 import ConfirmDialog from '../../../components/ConfirmDialog';
@@ -29,7 +32,7 @@ import ConfirmDialog from '../../../components/ConfirmDialog';
 export default function RecipeDetail({ recipe, onBack, onSaveRecipe, isSaved, onAddToPlan, onLogMealNow, onAddToShoppingList, dictionary = [], userProfile }: { recipe: any, onBack: () => void, onSaveRecipe?: (r: any) => void, isSaved?: boolean, onAddToPlan?: (recipe: any, dayIndex: number, slot?: 'breakfast' | 'lunch' | 'dinner' | 'snack') => void, onLogMealNow?: (recipe: any, servings: number) => void, onAddToShoppingList?: (items: any[]) => void, dictionary?: any[], userProfile?: any }) {
   const { t } = useI18n();
   const { navigateTo } = useNavigation();
-  const { setSelectedCreatorId, communityPosts, savedRecipes, savedPosts, navigateToRecipe: navToRecipe, handleDeleteRecipe, handleDuplicateRecipe, setRecipeToEdit, isPro } = useAppState();
+  const { setSelectedCreatorId, communityPosts, savedRecipes, savedPosts, navigateToRecipe: navToRecipe, handleDeleteRecipe, handleDuplicateRecipe, setRecipeToEdit, isPro, mergedVariants, userVariants } = useAppState();
   const [followedCreators, setFollowedCreators] = useLocalStorageState<string[]>('followedCreators', []);
   const [checkedIngredients, setCheckedIngredients] = useState<string[]>([]);
   const [servings, setServings] = useState(1);
@@ -44,6 +47,13 @@ export default function RecipeDetail({ recipe, onBack, onSaveRecipe, isSaved, on
   const [showDuplicateConfirm, setShowDuplicateConfirm] = useState(false);
   const [showUnsaveConfirm, setShowUnsaveConfirm] = useState(false);
   const [lightboxIdx, setLightboxIdx] = useState<number | null>(null);
+  // P7 D1 — transient swap per recipe ingredient row. Override map keyed by
+  // the ingredient row `id`; persists only for this session. Changing the
+  // variant updates the displayed name + brand chip so the owner can preview
+  // "same recipe with a different brand" without mutating savedRecipes. Macro
+  // totals recalculation against swapped variants is deferred (future sprint).
+  const [swapTarget, setSwapTarget] = useState<{ rowId: string; family: FoodFamily } | null>(null);
+  const [variantSwaps, setVariantSwaps] = useState<Record<string, FoodVariant>>({});
 
   // Track recipe view on mount
   useEffect(() => {
@@ -171,20 +181,46 @@ export default function RecipeDetail({ recipe, onBack, onSaveRecipe, isSaved, on
   // `brandName` is populated when a recipe ingredient pins a specific brand variant
   // (new P4 dual-schema shape: `ri.variantId` set → `ri.ingredient.description` = brand name).
   const allIngredientsToDisplay = [
-    ...(data.recipeIngredients ? data.recipeIngredients.map((ri: any) => ({
-      id: ri.id,
-      name: ri.ingredient?.name || 'Unknown',
-      amount: ri.amount,
-      unit: ri.unit,
-      isExtra: false,
-      brandName: ri.variantId && ri.ingredient?.description ? ri.ingredient.description : undefined,
-    })) : (data.ingredients ? data.ingredients.map((ing: string, idx: number) => ({
-      id: `old-${idx}`, name: ing, amount: 0, unit: '', isExtra: false, brandName: undefined,
+    ...(data.recipeIngredients ? data.recipeIngredients.map((ri: any) => {
+      const swap = variantSwaps[ri.id];
+      const displayName = swap?.name ?? ri.ingredient?.name ?? 'Unknown';
+      const displayBrand = swap?.brand?.name
+        ?? (ri.variantId && ri.ingredient?.description ? ri.ingredient.description : undefined);
+      return {
+        id: ri.id,
+        name: displayName,
+        amount: ri.amount,
+        unit: ri.unit,
+        isExtra: false,
+        brandName: displayBrand,
+        familyId: ri.familyId as string | undefined,
+        swapped: Boolean(swap),
+      };
+    }) : (data.ingredients ? data.ingredients.map((ing: string, idx: number) => ({
+      id: `old-${idx}`, name: ing, amount: 0, unit: '', isExtra: false, brandName: undefined, familyId: undefined, swapped: false,
     })) : [])),
     ...extraIngredients.map(ri => ({
-      id: ri.id, name: ri.ingredient?.name || 'Unknown', amount: ri.amount, unit: ri.unit, isExtra: true, brandName: undefined,
+      id: ri.id, name: ri.ingredient?.name || 'Unknown', amount: ri.amount, unit: ri.unit, isExtra: true, brandName: undefined, familyId: undefined, swapped: false,
     })),
   ];
+
+  // P7 D1 — open picker sheet scoped to a family for the given row.
+  const openSwapPicker = (rowId: string, familyId: string) => {
+    const family = FOOD_FAMILIES.find(f => f.id === familyId);
+    if (!family) {
+      toast.error(t.recipeDetail.swapVariant);
+      return;
+    }
+    setSwapTarget({ rowId, family });
+  };
+
+  const applyVariantSwap = (variant: FoodVariant) => {
+    if (!swapTarget) return;
+    setVariantSwaps(prev => ({ ...prev, [swapTarget.rowId]: variant }));
+    setSwapTarget(null);
+    const brandSuffix = variant.brand?.name ? ` · ${variant.brand.name}` : '';
+    toast.success(`${variant.name}${brandSuffix}`);
+  };
 
   const toggleIngredient = (id: string) => {
     setCheckedIngredients(prev =>
@@ -653,6 +689,19 @@ export default function RecipeDetail({ recipe, onBack, onSaveRecipe, isSaved, on
                       <button type="button" onClick={() => removeExtraIngredient(ing.id)} aria-label={t.recipes.removeIngredient} className="min-w-11 min-h-11 flex items-center justify-center text-outline hover:text-error"><X className="w-3.5 h-3.5" aria-hidden="true" /></button>
                     </div>
                   )}
+                  {/* P7 D1 — swap variant (brand) for this recipe ingredient. Only */}
+                  {/* shown when the row has a resolvable family. Transient — does */}
+                  {/* not mutate savedRecipes this sprint. */}
+                  {!ing.isExtra && ing.familyId && (
+                    <button
+                      type="button"
+                      onClick={() => openSwapPicker(ing.id, ing.familyId!)}
+                      aria-label={t.recipeDetail.swapVariant}
+                      className="min-w-11 min-h-11 flex items-center justify-center rounded-sm text-on-surface-variant hover:text-primary hover:bg-primary/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/60 focus-visible:ring-offset-2 focus-visible:ring-offset-background transition-colors"
+                    >
+                      <RefreshCw className="w-3.5 h-3.5" aria-hidden="true" />
+                    </button>
+                  )}
                 </div>
               ))}
             </div>
@@ -893,6 +942,16 @@ export default function RecipeDetail({ recipe, onBack, onSaveRecipe, isSaved, on
       variant="destructive"
       onConfirm={() => onSaveRecipe && onSaveRecipe(getModifiedRecipe())}
     />
+    {swapTarget && (
+      <VariantPickerSheet
+        family={swapTarget.family}
+        allVariants={mergedVariants}
+        userVariants={userVariants}
+        open={Boolean(swapTarget)}
+        onOpenChange={(open) => { if (!open) setSwapTarget(null); }}
+        onSelect={applyVariantSwap}
+      />
+    )}
     </>
   );
 }

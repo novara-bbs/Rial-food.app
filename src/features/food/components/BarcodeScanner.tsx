@@ -366,14 +366,14 @@ export default function BarcodeScanner({
                 const famName = locale === 'es' ? matchResult.family.name : matchResult.family.nameEn;
                 return (
                   <div className="space-y-2">
-                    <div className="flex items-start gap-2 bg-surface-container-low border border-outline-variant/20 rounded-sm p-3">
+                    <SectionCard padding="none" spacing="none" className="flex items-start gap-2 p-3">
                       <Info className="w-4 h-4 text-on-surface-variant shrink-0 mt-0.5" aria-hidden="true" />
                       <p className="text-body-sm text-on-surface-variant">
                         {t.scanner.foundInFamily}
                         {' '}
                         <span className="font-bold text-on-surface">{famName}</span>
                       </p>
-                    </div>
+                    </SectionCard>
                     {addUserVariant && (
                       <Button
                         variant="outline"
