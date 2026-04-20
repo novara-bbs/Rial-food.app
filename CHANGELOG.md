@@ -1,5 +1,44 @@
 # RIAL App - Changelog
 
+## [1.5.67] - 2026-04-21
+
+### feat(food): P10 — Glosario técnico expandible (botón i en subcategorías botánicas)
+
+Owner directive 2026-04-21: *«Mantener la jerga técnica porque el usuario quiere aprender — pero que puedan consultar qué significa»*. En lugar de renombrar subcategorías botánicas/culinarias como `crucíferas`, `solanáceas`, `alliums`, `cucurbitáceas`, `pseudocereales`, etc. a ejemplos-cara (`Col y brócoli`, `Tomate y pimiento`, …), **mantenemos el nombre científico** para preservar el valor educativo del diccionario + añadimos un pequeño botón (i) junto al header que abre un popup con definición corta + ejemplos reconocibles.
+
+**Subcategorías cubiertas (10):**
+- `cruciferas` — Col, Brócoli, Coliflor, Col rizada, Rúcula
+- `solanaceas` — Tomate, Pimiento, Berenjena, Patata
+- `alliums` — Cebolla, Ajo, Puerro, Cebolleta
+- `cucurbitaceas` — Calabaza, Pepino, Melón, Calabacín, Sandía
+- `pseudocereales` — Quinoa, Trigo sarraceno, Amaranto
+- `raices-tuberculos` — Patata, Zanahoria, Remolacha, Boniato
+- `pescado-azul` — Salmón, Atún, Sardina, Caballa
+- `pescado-blanco` — Merluza, Bacalao, Lubina, Dorada
+- `grasas-lacteas` — Mantequilla, Nata, Ghee
+- `mantecas-pastas` — Crema de cacahuete, Tahini, Crema de almendra
+
+Subcategorías auto-explicativas (`yogur`, `leche`, `frutos-secos`, `arroz`, `pan`, …) **no renderizan el botón** (no lo necesitan). Check automático vía `getGlossaryEntry(slug)` retornando `undefined`.
+
+**Nuevos archivos:**
+- `src/features/food/data/glossary.ts` — const `GLOSSARY: Record<string, GlossaryEntry>` con 10 entries estructuradas `{ slug, examples[] }`. Los ejemplos son strings de producto conocidos (`'Brócoli'`, `'Salmón'`) que viven aquí (no i18n) porque son nombres canónicos ya cubiertos por families del diccionario. Helper `getGlossaryEntry(slug)`.
+- `src/features/food/components/GlossaryButton.tsx` — botón pequeño con icon `Info` (lucide). Tap abre shadcn `Dialog` tamaño `max-w-sm` con: título = label de la subcategoría, body = definición i18n de 2-3 líneas, footer = chips de ejemplos. `aria-label` contextual. Solo renderiza si el slug existe en `GLOSSARY`.
+- `src/features/food/data/glossary.test.ts` — 6 asserts: coverage de las 10 subcategorías required, no hay entries muertas (todas matchean slugs usados por FOOD_FAMILIES), min 3 examples por entry, definiciones bilingües existen en ambos locales con longitud suficiente, lookup `getGlossaryEntry` funciona + null para slugs auto-explicativos.
+
+**i18n:**
+- Nuevo sub-namespace `foodDictionary.glossary.definitions.*` con 10 claves bilingües. Tono científico-accesible explicando la familia botánica/culinaria + razón nutricional relevante. Ejemplo `cruciferas`: *«Familia botánica Brassicaceae. Verduras con compuestos sulfurados (glucosinolatos) y rica en vitamina C.»*
+- 2 UI labels: `examplesLabel` («Por ejemplo:»), `infoLabel` («Más información»).
+- Total +12 × 2 locales = +12 simétrico → **1753 → 1765**.
+
+**Integration en `FoodDictionary.tsx`:**
+- En el render de `<h4 data-subcategory={slug}>` (cada subcategory header), se monta `<GlossaryButton slug={sub.subcategoryKey} label={subcategoryLabels[sub.subcategoryKey]} />` inline junto al label. El botón decide internamente si renderizarse (return null si el slug no tiene entry).
+
+**Quality baseline post-P10:**
+- TypeScript: 0 errors
+- Tests: **912 → 918** (+6 nuevos en glossary.test)
+- i18n: 1765 simétrico
+- Build/size:check: pendiente preflight completo
+
 ## [1.5.66] - 2026-04-21
 
 ### feat(food): P9 — Scoring contextual multi-goal (3 lentes perder / mantener / ganar)

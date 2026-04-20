@@ -1492,6 +1492,23 @@ const es = {
       'gluten-free': 'Sin gluten',
       'plant-based': 'Alternativa vegetal',
     },
+    // P10 [1.5.67] — glosario técnico expandible (botón i).
+    glossary: {
+      definitions: {
+        cruciferas: 'Familia botánica Brassicaceae. Verduras con compuestos sulfurados (glucosinolatos) y rica en vitamina C.',
+        solanaceas: 'Familia Solanaceae. Hortalizas que nacen de flores blancas; maduras son seguras y ricas en antioxidantes.',
+        alliums: 'Familia Alliaceae (ajos y cebollas). Ricos en compuestos de azufre con efecto antiinflamatorio.',
+        cucurbitaceas: 'Familia Cucurbitaceae (calabazas y pepinos). Alto contenido en agua, fibra y antioxidantes.',
+        pseudocereales: 'Semillas que se consumen como cereales pero sin gluten. Proteína de alta calidad con aminoácidos esenciales.',
+        'raices-tuberculos': 'Órganos subterráneos de la planta. Fuente principal de carbohidratos complejos y fibra.',
+        'pescado-azul': 'Pescado con ≥5% de grasa. Rico en omega-3 (EPA, DHA) con evidencia cardioprotectora.',
+        'pescado-blanco': 'Pescado con <2% de grasa. Muy magro, alta densidad proteica, baja caloría.',
+        'grasas-lacteas': 'Lácteos con alto contenido graso (>10%). Ricos en vitaminas liposolubles A y D.',
+        'mantecas-pastas': 'Purés de frutos secos con toda la grasa natural. Calóricos pero saciantes y nutricionalmente completos.',
+      },
+      examplesLabel: 'Por ejemplo:',
+      infoLabel: 'Más información',
+    },
   },
   // P9 [1.5.66] — contextual score multi-goal (perder / mantener / ganar).
   contextualScore: {

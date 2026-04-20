@@ -1450,6 +1450,23 @@ const en: Translations = {
       'gluten-free': 'Gluten-free',
       'plant-based': 'Plant-based',
     },
+    // P10 [1.5.67] — expandable technical glossary (info button).
+    glossary: {
+      definitions: {
+        cruciferas: 'Brassicaceae family. Vegetables with sulfur compounds (glucosinolates) and high in vitamin C.',
+        solanaceas: 'Solanaceae family. Vegetables grown from white flowers; ripe they are safe and antioxidant-rich.',
+        alliums: 'Alliaceae family (onions and garlic). Rich in sulfur compounds with anti-inflammatory effect.',
+        cucurbitaceas: 'Cucurbitaceae family (squashes and cucumbers). High water content, fiber and antioxidants.',
+        pseudocereales: 'Seeds eaten like grains but gluten-free. High-quality protein with all essential amino acids.',
+        'raices-tuberculos': 'Underground plant organs. Main source of complex carbohydrates and fiber.',
+        'pescado-azul': 'Fish with ≥5% fat. Rich in omega-3 (EPA, DHA) with cardioprotective evidence.',
+        'pescado-blanco': 'Fish with <2% fat. Very lean, high protein density, low calorie.',
+        'grasas-lacteas': 'High-fat dairy (>10%). Rich in fat-soluble vitamins A and D.',
+        'mantecas-pastas': 'Nut butters with the full natural fat. Calorie-dense but satiating and nutritionally complete.',
+      },
+      examplesLabel: 'For example:',
+      infoLabel: 'More information',
+    },
   },
   // P9 [1.5.66] — contextual score multi-goal (lose / maintain / gain).
   contextualScore: {

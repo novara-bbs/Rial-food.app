@@ -14,6 +14,7 @@ import {
 } from '../utils/food-family-resolver';
 import PortionSelector from '../components/PortionSelector';
 import FamilyCard from '../components/FamilyCard';
+import GlossaryButton from '../components/GlossaryButton';
 import type { IngredientCategory, Allergen, Ingredient } from '../../../types';
 import type { FoodFamily, FoodVariant } from '../../../types/food-family';
 import { useAppState } from '../../../contexts/AppStateContext';
@@ -273,6 +274,10 @@ export default function FoodDictionary({ navigateTo }: Props) {
                         className="text-label font-label uppercase tracking-widest text-on-surface-variant flex items-center gap-2 pt-1"
                       >
                         <span>{subcategoryLabels[sub.subcategoryKey] ?? sub.subcategoryKey}</span>
+                        <GlossaryButton
+                          slug={sub.subcategoryKey}
+                          label={subcategoryLabels[sub.subcategoryKey] ?? sub.subcategoryKey}
+                        />
                         <span className="text-micro font-label text-on-surface-variant/60">{sub.families.length}</span>
                       </h4>
                     )}
