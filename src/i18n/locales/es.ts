@@ -1422,6 +1422,24 @@ const es = {
       aguas: 'Aguas',
       energeticas: 'Energéticas',
     },
+    // P7 [1.5.62] — species subheader inside a multi-species subcategory.
+    // Only rendered when ≥2 families share the species (see FAMILY_SPECIES).
+    speciesLabels: {
+      chicken: 'Pollo',
+      turkey: 'Pavo',
+      beef: 'Ternera',
+      pork: 'Cerdo',
+      lamb: 'Cordero',
+      rabbit: 'Conejo',
+      tuna: 'Atún',
+      salmon: 'Salmón',
+      sardine: 'Sardinas',
+      cod: 'Bacalao',
+      'sea-bass': 'Lubina',
+      shrimp: 'Gambas',
+      squid: 'Calamares',
+      egg: 'Huevo',
+    },
   },
   // RecipeDetail
   recipeDetail: {

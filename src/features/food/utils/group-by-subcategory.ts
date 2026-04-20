@@ -64,6 +64,62 @@ export const SUBCATEGORY_ORDER: Record<IngredientCategory, readonly string[]> = 
   supplements: [], // sin subcategoría — render plano
 };
 
+/**
+ * P7 `[1.5.62]` — bucket families by `species` inside a subcategory.
+ *
+ * Rule: a species-bucket is only created when ≥2 families share the species.
+ * Families whose species is undefined OR whose species has a single family
+ * fall to the `null` bucket (flat render). This keeps the render
+ * self-tuning: add `FAMILY_SPECIES[f]` for a second family and the subheader
+ * appears; remove one and it disappears — no render rule to update.
+ *
+ * Caller passes only the families belonging to ONE subcategory — this helper
+ * does not slice across subcategories.
+ */
+export interface SpeciesGroup {
+  speciesKey: string;
+  families: FoodFamily[];
+}
+
+export interface SpeciesBuckets {
+  /** Families without species (or species used by only this family). Render flat first. */
+  flat: FoodFamily[];
+  /** Multi-family species buckets, in the order first encountered. */
+  groups: SpeciesGroup[];
+}
+
+export function groupFamiliesBySpecies(
+  familiesInSubcategory: readonly FoodFamily[],
+): SpeciesBuckets {
+  // First pass: count species occurrences.
+  const speciesCount = new Map<string, number>();
+  for (const family of familiesInSubcategory) {
+    if (!family.species) continue;
+    speciesCount.set(family.species, (speciesCount.get(family.species) ?? 0) + 1);
+  }
+
+  const flat: FoodFamily[] = [];
+  const groupsMap = new Map<string, FoodFamily[]>();
+
+  for (const family of familiesInSubcategory) {
+    const count = family.species ? speciesCount.get(family.species) ?? 0 : 0;
+    if (family.species && count >= 2) {
+      const list = groupsMap.get(family.species) ?? [];
+      list.push(family);
+      groupsMap.set(family.species, list);
+    } else {
+      flat.push(family);
+    }
+  }
+
+  const groups: SpeciesGroup[] = [];
+  for (const [speciesKey, families] of groupsMap) {
+    groups.push({ speciesKey, families });
+  }
+
+  return { flat, groups };
+}
+
 /** Bucket families by `subcategory`. Preserves input order within each bucket. */
 export function groupFamiliesBySubcategory(
   families: readonly FoodFamily[],

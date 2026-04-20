@@ -1380,6 +1380,24 @@ const en: Translations = {
       aguas: 'Waters',
       energeticas: 'Energy drinks',
     },
+    // P7 [1.5.62] — species subheader inside a multi-species subcategory.
+    // Only rendered when ≥2 families share the species (see FAMILY_SPECIES).
+    speciesLabels: {
+      chicken: 'Chicken',
+      turkey: 'Turkey',
+      beef: 'Beef',
+      pork: 'Pork',
+      lamb: 'Lamb',
+      rabbit: 'Rabbit',
+      tuna: 'Tuna',
+      salmon: 'Salmon',
+      sardine: 'Sardines',
+      cod: 'Cod',
+      'sea-bass': 'Sea bass',
+      shrimp: 'Shrimp',
+      squid: 'Squid',
+      egg: 'Egg',
+    },
   },
   recipeDetail: {
     yourRecipe: 'Your Recipe',

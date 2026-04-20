@@ -450,6 +450,35 @@ const FAMILY_META: Record<string, FamilyMetaOverride> = {
  * homogeneous categories like `oils`, `legumes`, `supplements` where a
  * subcategory level would over-index).
  */
+/**
+ * P7 `[1.5.62]` — species tag within multi-species subcategories.
+ *
+ * Populate ONLY for families that share a species with ≥1 sibling family in
+ * the same subcategory (e.g. `fam_chicken_*` all share `'chicken'` inside
+ * `subcategory: 'aves'`). The Dictionary then renders an `<h5>Pollo</h5>`
+ * subheader above those families (see `groupFamiliesBySpecies` +
+ * `FoodDictionary` render).
+ *
+ * Do NOT populate when the subcategory is already species-level (e.g.
+ * `vacuno` = beef, `cerdo` = pork, `huevo` = egg). An `<h5>Beef</h5>` inside
+ * `<h4>Vacuno</h4>` is tautological and hurts readability.
+ *
+ * Labels resolve via `t.foodDictionary.speciesLabels.{slug}` in ES + EN.
+ * Integrity enforced by `food-families.test.ts`.
+ */
+export const FAMILY_SPECIES: Record<string, string> = {
+  // Aves (poultry) — multi-species subcategory. Chicken has 5 families
+  // (breast / thigh / drumstick / wing / whole) → the owner explicitly asked
+  // for a "Pollo" super-grouper. Turkey has 1 family today so it falls
+  // through to the flat render per the ≥2-family rule.
+  fam_chicken_breast:    'chicken',
+  fam_chicken_thigh:     'chicken',
+  fam_chicken_drumstick: 'chicken',
+  fam_chicken_wing:      'chicken',
+  fam_chicken_whole:     'chicken',
+  fam_turkey_breast:     'turkey',
+};
+
 const FAMILY_SUBCATEGORY: Record<string, string> = {
   // Proteins → aves / vacuno / cerdo / pescado-azul / pescado-blanco / marisco / huevo / vegetal / caza / embutidos
   fam_chicken_breast:    'aves',
@@ -770,6 +799,7 @@ function buildFamilies(): FoodFamily[] {
       throw new Error(`food-families: family ${familyId} has no canonical variant`);
     }
     const subcategory = FAMILY_SUBCATEGORY[familyId];
+    const species = FAMILY_SPECIES[familyId];
     const brandIds = brandIdsByFamily.get(familyId) ?? [];
     families.push({
       id: familyId,
@@ -779,6 +809,7 @@ function buildFamilies(): FoodFamily[] {
       descriptionEn: meta?.descriptionEn ?? canonical.descriptionEn,
       category: g.category,
       ...(subcategory ? { subcategory } : {}),
+      ...(species ? { species } : {}),
       canonicalVariantId: g.canonicalVariantId,
       variantIds: [
         g.canonicalVariantId,

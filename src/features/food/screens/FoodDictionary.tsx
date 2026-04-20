@@ -21,6 +21,7 @@ import EmptyState from '../../../components/EmptyState';
 import {
   groupFamiliesBySubcategory,
   sortSubcategoriesByOrder,
+  groupFamiliesBySpecies,
 } from '../utils/group-by-subcategory';
 
 const ALL_ALLERGENS: Allergen[] = [
@@ -260,20 +261,39 @@ export default function FoodDictionary({ navigateTo }: Props) {
                 <span className="text-micro font-label text-on-surface-variant/60">{group.families.length}</span>
               </h3>
 
-              {group.subGroups.map(sub => (
-                <div key={sub.subcategoryKey ?? '__flat__'} className="space-y-1">
-                  {sub.subcategoryKey !== null && (
-                    <h4
-                      data-subcategory={sub.subcategoryKey}
-                      className="text-label font-label uppercase tracking-widest text-on-surface-variant flex items-center gap-2 pt-1"
-                    >
-                      <span>{subcategoryLabels[sub.subcategoryKey] ?? sub.subcategoryKey}</span>
-                      <span className="text-micro font-label text-on-surface-variant/60">{sub.families.length}</span>
-                    </h4>
-                  )}
-                  {sub.families.map(renderFamily)}
-                </div>
-              ))}
+              {group.subGroups.map(sub => {
+                const speciesLabels = t.foodDictionary.speciesLabels as Record<string, string>;
+                const speciesBuckets = groupFamiliesBySpecies(sub.families);
+                return (
+                  <div key={sub.subcategoryKey ?? '__flat__'} className="space-y-1">
+                    {sub.subcategoryKey !== null && (
+                      <h4
+                        data-subcategory={sub.subcategoryKey}
+                        className="text-label font-label uppercase tracking-widest text-on-surface-variant flex items-center gap-2 pt-1"
+                      >
+                        <span>{subcategoryLabels[sub.subcategoryKey] ?? sub.subcategoryKey}</span>
+                        <span className="text-micro font-label text-on-surface-variant/60">{sub.families.length}</span>
+                      </h4>
+                    )}
+                    {/* Flat families first (no species OR single-family species). */}
+                    {speciesBuckets.flat.map(renderFamily)}
+                    {/* Species subheaders for multi-family species (P7 B). */}
+                    {speciesBuckets.groups.map(g => (
+                      <div key={g.speciesKey} className="space-y-1">
+                        <h5
+                          data-species={g.speciesKey}
+                          className="text-micro font-label uppercase tracking-widest text-on-surface-variant/80 flex items-center gap-2 pt-0.5 pl-1"
+                        >
+                          <span aria-hidden="true" className="inline-block w-1 h-1 rounded-full bg-primary/60" />
+                          <span>{speciesLabels[g.speciesKey] ?? g.speciesKey}</span>
+                          <span className="text-on-surface-variant/60">{g.families.length}</span>
+                        </h5>
+                        {g.families.map(renderFamily)}
+                      </div>
+                    ))}
+                  </div>
+                );
+              })}
             </section>
           );
         })

@@ -11,11 +11,12 @@ import {
   sortSubcategoriesByPopulation,
   sortSubcategoriesByOrder,
   SUBCATEGORY_ORDER,
+  groupFamiliesBySpecies,
 } from './group-by-subcategory';
 
 // Small helper to avoid stubbing the whole FoodFamily shape when we only
 // care about `subcategory` + `id` in ordering tests.
-function fam(id: string, subcategory?: string): FoodFamily {
+function fam(id: string, subcategory?: string, species?: string): FoodFamily {
   return {
     id,
     name: id,
@@ -27,6 +28,7 @@ function fam(id: string, subcategory?: string): FoodFamily {
     variantIds: [`${id}_canonical`],
     tags: [],
     ...(subcategory ? { subcategory } : {}),
+    ...(species ? { species } : {}),
   };
 }
 
@@ -205,5 +207,67 @@ describe('sortSubcategoriesByOrder', () => {
     ]);
     const sorted = sortSubcategoriesByOrder(map, 'oils');
     expect(sorted.map(g => g.subcategoryKey)).toEqual(['alfa', 'mid', 'zeta']);
+  });
+});
+
+describe('groupFamiliesBySpecies', () => {
+  it('flat bucket contains families without species', () => {
+    const buckets = groupFamiliesBySpecies([
+      fam('a', 'aves'),
+      fam('b', 'aves'),
+    ]);
+    expect(buckets.flat.map(f => f.id)).toEqual(['a', 'b']);
+    expect(buckets.groups).toHaveLength(0);
+  });
+
+  it('creates species bucket when ≥2 families share species', () => {
+    const buckets = groupFamiliesBySpecies([
+      fam('breast', 'aves', 'chicken'),
+      fam('thigh', 'aves', 'chicken'),
+      fam('drumstick', 'aves', 'chicken'),
+    ]);
+    expect(buckets.flat).toEqual([]);
+    expect(buckets.groups).toHaveLength(1);
+    expect(buckets.groups[0].speciesKey).toBe('chicken');
+    expect(buckets.groups[0].families.map(f => f.id)).toEqual([
+      'breast', 'thigh', 'drumstick',
+    ]);
+  });
+
+  it('single-family species falls back to flat (avoids orphan subheader)', () => {
+    const buckets = groupFamiliesBySpecies([
+      fam('breast', 'aves', 'chicken'),
+      fam('thigh', 'aves', 'chicken'),
+      fam('turkey_breast', 'aves', 'turkey'), // species with count 1
+    ]);
+    expect(buckets.flat.map(f => f.id)).toEqual(['turkey_breast']);
+    expect(buckets.groups).toHaveLength(1);
+    expect(buckets.groups[0].speciesKey).toBe('chicken');
+    expect(buckets.groups[0].families.map(f => f.id)).toEqual(['breast', 'thigh']);
+  });
+
+  it('preserves input order inside the species bucket', () => {
+    const buckets = groupFamiliesBySpecies([
+      fam('b', 'aves', 'chicken'),
+      fam('a', 'aves', 'chicken'),
+      fam('c', 'aves', 'chicken'),
+    ]);
+    expect(buckets.groups[0].families.map(f => f.id)).toEqual(['b', 'a', 'c']);
+  });
+
+  it('multiple species buckets — first-encounter order', () => {
+    const buckets = groupFamiliesBySpecies([
+      fam('a1', 'marisco', 'squid'),
+      fam('b1', 'marisco', 'shrimp'),
+      fam('a2', 'marisco', 'squid'),
+      fam('b2', 'marisco', 'shrimp'),
+    ]);
+    expect(buckets.groups.map(g => g.speciesKey)).toEqual(['squid', 'shrimp']);
+  });
+
+  it('returns empty buckets for empty input', () => {
+    const buckets = groupFamiliesBySpecies([]);
+    expect(buckets.flat).toEqual([]);
+    expect(buckets.groups).toEqual([]);
   });
 });

@@ -158,6 +158,20 @@ export interface FoodFamily {
   subcategory?: string;
 
   /**
+   * P7 `[1.5.62]` — optional species tag inside a subcategory. Kebab-case slug
+   * (`'chicken'`, `'turkey'`, `'beef'`, `'salmon'`, …). When ≥2 families in the
+   * same subcategory share the same species, the Dictionary renders a species
+   * subheader `<h5>` above those families (USDA 4-tier poultry pattern:
+   * Kind → Class → Style → Type; retail Carrefour Carnicería→Pollo/Pavo). When
+   * only 1 family carries a given species, rendering stays flat.
+   *
+   * Populated via `FAMILY_SPECIES` in `food-families.ts`. Labels resolved via
+   * `t.foodDictionary.speciesLabels[slug]` in ES + EN. Purely a render-time
+   * concern — no persistence / migration impact.
+   */
+  species?: string;
+
+  /**
    * Variant rendered as the family's "primary" face. Typically the USDA /
    * standard-reference entry for the food (e.g. raw cut for meats, natural
    * unsweetened for yoghurts). Must be a member of `variantIds`.
