@@ -11,11 +11,27 @@
  * (exactly one per family, also asserted). Family metadata (display name,
  * aliases, richer description override) lives in `FAMILY_META`; for singleton
  * families the display name + description are reused from the canonical
- * variant so we don't duplicate copy in P1. Multi-variant families get a
- * curated umbrella entry so "Pollo" reads as a concept, not as "Pechuga raw".
+ * variant so we don't duplicate copy.
  *
- * P1 scope: this is data-only. Resolver helpers live in
- * `../utils/food-family-resolver.ts`; the dictionary UI consumes both in P2.
+ * P2.5 scope — taxonomic refinement:
+ * - `variantType: 'cut'` removed. Cuts (pechuga vs muslo, filete vs molida)
+ *   are distinct culinary products, NOT variants of a shared umbrella. They
+ *   now each live as their own family (`fam_chicken_breast` / `fam_beef_ground`
+ *   / `fam_beef_steak` / `fam_egg_whole` / `fam_egg_whites`).
+ * - `fam_rice`, `fam_bread` split into `_white`/`_brown` and `_white`/
+ *   `_wholewheat` respectively (refined vs whole grain — different fiber /
+ *   glycemic index profile, bought in different aisles).
+ * - `fam_almond` / `fam_peanut` keep their id for the whole-nut product; the
+ *   butter variants promote to their own `fam_*_butter` families (distinct
+ *   subcategory `mantecas-pastas`).
+ * - New subcategory level (L2) between `category` (L1) and `family` (L3).
+ *   See `FAMILY_SUBCATEGORY` below.
+ * - New family `fam_yogurt` (canonical = `dai_plain_yogurt`) — closes the
+ *   "natural yogurt" gap so "Griego → Natural → Kéfir" is a real
+ *   intra-subcategory swap path.
+ *
+ * Resolver helpers live in `../utils/food-family-resolver.ts`; the dictionary
+ * UI consumes both.
  */
 import type { FoodFamily, VariantType } from '../../../types/food-family';
 import type { FoodTag, IngredientCategory } from '../../../types/food';
@@ -24,24 +40,35 @@ import { INGREDIENT_DICTIONARY } from './ingredients';
 /**
  * Legacy ingredient id → {familyId, variantType}.
  *
- * Clustering rules applied:
- * - Multi-variant pairs (14): chicken (raw/cooked), beef (ground/steak),
- *   tuna (fresh/canned), yogurt (full-fat/0%), milk (whole/skim), rice
- *   (white/brown), bread (whole/white), coffee (black/milk), wine (red/white),
- *   cola (reg/zero), beer (lager/ipa), peanut (whole/butter), almond
- *   (whole/butter), egg (whole/whites).
- * - Everything else is a singleton family with `variantType: 'canonical'`.
+ * Post-P2.5 multi-variant families (same-product axis):
+ * - `fam_chicken_breast` (raw / cooked — same cut, preparation)
+ * - `fam_tuna` (fresh / canned — same fish, packaging)
+ * - `fam_milk` (whole / skim — same product, fat content)
+ * - `fam_greek_yogurt` (full / 0% — same product, quality)
+ * - `fam_coffee` (black / with milk — same brew, addition)
+ * - `fam_wine` (red / white — same wine family, grape regional)
+ * - `fam_cola` (regular / zero — same drink, quality)
+ * - `fam_beer` (lager / IPA — same beer, regional style)
+ *
+ * Post-P2.5 singletons where the former umbrella was split into distinct
+ * products: `fam_chicken_breast` (was part of `fam_chicken`, renamed),
+ * `fam_beef_ground` + `fam_beef_steak` (split from `fam_beef`), `fam_egg_whole`
+ * + `fam_egg_whites` (split from `fam_egg`), `fam_rice_white` + `fam_rice_brown`
+ * (split from `fam_rice`), `fam_bread_white` + `fam_bread_wholewheat` (split
+ * from `fam_bread`), `fam_almond_butter` + `fam_peanut_butter` (split from
+ * `fam_almond` / `fam_peanut`), `fam_yogurt` (new — closes natural-yogurt gap).
  */
 const VARIANT_MAP: Record<string, { familyId: string; variantType: VariantType }> = {
   // Proteins — multi-variant
-  pro_chicken_breast_raw:    { familyId: 'fam_chicken',        variantType: 'canonical' },
-  pro_chicken_breast_cooked: { familyId: 'fam_chicken',        variantType: 'preparation' },
-  pro_beef_ground_90:        { familyId: 'fam_beef',           variantType: 'canonical' },
-  pro_beef_steak:            { familyId: 'fam_beef',           variantType: 'cut' },
+  pro_chicken_breast_raw:    { familyId: 'fam_chicken_breast', variantType: 'canonical' },
+  pro_chicken_breast_cooked: { familyId: 'fam_chicken_breast', variantType: 'preparation' },
   pro_tuna_fresh:            { familyId: 'fam_tuna',           variantType: 'canonical' },
   pro_tuna_canned:           { familyId: 'fam_tuna',           variantType: 'preparation' },
-  pro_eggs:                  { familyId: 'fam_egg',            variantType: 'canonical' },
-  pro_egg_whites:            { familyId: 'fam_egg',            variantType: 'cut' },
+  // Proteins — split products (P2.5 — formerly `fam_beef` / `fam_egg`)
+  pro_beef_ground_90:        { familyId: 'fam_beef_ground',    variantType: 'canonical' },
+  pro_beef_steak:            { familyId: 'fam_beef_steak',     variantType: 'canonical' },
+  pro_eggs:                  { familyId: 'fam_egg_whole',      variantType: 'canonical' },
+  pro_egg_whites:            { familyId: 'fam_egg_whites',     variantType: 'canonical' },
   // Proteins — singletons
   pro_turkey_breast:         { familyId: 'fam_turkey_breast',  variantType: 'canonical' },
   pro_pork_loin:             { familyId: 'fam_pork_loin',      variantType: 'canonical' },
@@ -104,17 +131,17 @@ const VARIANT_MAP: Record<string, { familyId: string; variantType: VariantType }
   fru_date:       { familyId: 'fam_date',       variantType: 'canonical' },
   fru_lemon:      { familyId: 'fam_lemon',      variantType: 'canonical' },
 
-  // Grains — multi-variant (rice, bread) + singletons
-  gra_white_rice:         { familyId: 'fam_rice',           variantType: 'canonical' },
-  gra_brown_rice:         { familyId: 'fam_rice',           variantType: 'quality' },
-  gra_whole_wheat_bread:  { familyId: 'fam_bread',          variantType: 'canonical' },
-  gra_white_bread:        { familyId: 'fam_bread',          variantType: 'quality' },
-  gra_quinoa:             { familyId: 'fam_quinoa',         variantType: 'canonical' },
-  gra_oats:               { familyId: 'fam_oats',           variantType: 'canonical' },
-  gra_pasta:              { familyId: 'fam_pasta',          variantType: 'canonical' },
-  gra_couscous:           { familyId: 'fam_couscous',       variantType: 'canonical' },
-  gra_buckwheat:          { familyId: 'fam_buckwheat',      variantType: 'canonical' },
-  gra_tortilla_wrap:      { familyId: 'fam_tortilla_wrap',  variantType: 'canonical' },
+  // Grains — split products (P2.5 — formerly `fam_rice` / `fam_bread`) + singletons
+  gra_white_rice:         { familyId: 'fam_rice_white',       variantType: 'canonical' },
+  gra_brown_rice:         { familyId: 'fam_rice_brown',       variantType: 'canonical' },
+  gra_whole_wheat_bread:  { familyId: 'fam_bread_wholewheat', variantType: 'canonical' },
+  gra_white_bread:        { familyId: 'fam_bread_white',      variantType: 'canonical' },
+  gra_quinoa:             { familyId: 'fam_quinoa',           variantType: 'canonical' },
+  gra_oats:               { familyId: 'fam_oats',             variantType: 'canonical' },
+  gra_pasta:              { familyId: 'fam_pasta',            variantType: 'canonical' },
+  gra_couscous:           { familyId: 'fam_couscous',         variantType: 'canonical' },
+  gra_buckwheat:          { familyId: 'fam_buckwheat',        variantType: 'canonical' },
+  gra_tortilla_wrap:      { familyId: 'fam_tortilla_wrap',    variantType: 'canonical' },
 
   // Legumes — all singletons
   leg_lentils:      { familyId: 'fam_lentils',      variantType: 'canonical' },
@@ -124,18 +151,19 @@ const VARIANT_MAP: Record<string, { familyId: string; variantType: VariantType }
   leg_edamame:      { familyId: 'fam_edamame',      variantType: 'canonical' },
   leg_soy_textured: { familyId: 'fam_soy_textured', variantType: 'canonical' },
 
-  // Dairy — multi-variant (milk, greek yogurt) + singletons
-  dai_whole_milk:     { familyId: 'fam_milk',          variantType: 'canonical' },
-  dai_skim_milk:      { familyId: 'fam_milk',          variantType: 'quality' },
-  dai_greek_yogurt:   { familyId: 'fam_greek_yogurt',  variantType: 'canonical' },
-  dai_greek_yogurt_0: { familyId: 'fam_greek_yogurt',  variantType: 'quality' },
+  // Dairy — multi-variant (milk, greek yogurt) + new yogurt family (P2.5) + singletons
+  dai_whole_milk:     { familyId: 'fam_milk',           variantType: 'canonical' },
+  dai_skim_milk:      { familyId: 'fam_milk',           variantType: 'quality' },
+  dai_greek_yogurt:   { familyId: 'fam_greek_yogurt',   variantType: 'canonical' },
+  dai_greek_yogurt_0: { familyId: 'fam_greek_yogurt',   variantType: 'quality' },
+  dai_plain_yogurt:   { familyId: 'fam_yogurt',         variantType: 'canonical' },
   dai_cottage_cheese: { familyId: 'fam_cottage_cheese', variantType: 'canonical' },
-  dai_fresh_cheese:   { familyId: 'fam_fresh_cheese',  variantType: 'canonical' },
-  dai_cured_cheese:   { familyId: 'fam_cured_cheese',  variantType: 'canonical' },
-  dai_mozzarella:     { familyId: 'fam_mozzarella',    variantType: 'canonical' },
-  dai_parmesan:       { familyId: 'fam_parmesan',      variantType: 'canonical' },
-  dai_butter:         { familyId: 'fam_butter',        variantType: 'canonical' },
-  dai_kefir:          { familyId: 'fam_kefir',         variantType: 'canonical' },
+  dai_fresh_cheese:   { familyId: 'fam_fresh_cheese',   variantType: 'canonical' },
+  dai_cured_cheese:   { familyId: 'fam_cured_cheese',   variantType: 'canonical' },
+  dai_mozzarella:     { familyId: 'fam_mozzarella',     variantType: 'canonical' },
+  dai_parmesan:       { familyId: 'fam_parmesan',       variantType: 'canonical' },
+  dai_butter:         { familyId: 'fam_butter',         variantType: 'canonical' },
+  dai_kefir:          { familyId: 'fam_kefir',          variantType: 'canonical' },
 
   // Oils — all singletons
   oil_olive:   { familyId: 'fam_olive_oil',   variantType: 'canonical' },
@@ -144,18 +172,18 @@ const VARIANT_MAP: Record<string, { familyId: string; variantType: VariantType }
   oil_sesame:  { familyId: 'fam_sesame_oil',  variantType: 'canonical' },
   oil_ghee:    { familyId: 'fam_ghee',        variantType: 'canonical' },
 
-  // Nuts & seeds — multi-variant (peanut, almond) + singletons
-  nut_almonds:       { familyId: 'fam_almond',     variantType: 'canonical' },
-  nut_almond_butter: { familyId: 'fam_almond',     variantType: 'preparation' },
-  nut_peanuts:       { familyId: 'fam_peanut',     variantType: 'canonical' },
-  nut_peanut_butter: { familyId: 'fam_peanut',     variantType: 'preparation' },
-  nut_walnuts:       { familyId: 'fam_walnuts',    variantType: 'canonical' },
-  nut_cashews:       { familyId: 'fam_cashews',    variantType: 'canonical' },
-  nut_pistachios:    { familyId: 'fam_pistachios', variantType: 'canonical' },
-  nut_tahini:        { familyId: 'fam_tahini',     variantType: 'canonical' },
-  seed_chia:         { familyId: 'fam_chia',       variantType: 'canonical' },
-  seed_flax:         { familyId: 'fam_flax',       variantType: 'canonical' },
-  seed_pumpkin:      { familyId: 'fam_pumpkin_seed', variantType: 'canonical' },
+  // Nuts & seeds — split products (P2.5 — butter is a distinct product/subcategory)
+  nut_almonds:       { familyId: 'fam_almond',         variantType: 'canonical' },
+  nut_almond_butter: { familyId: 'fam_almond_butter',  variantType: 'canonical' },
+  nut_peanuts:       { familyId: 'fam_peanut',         variantType: 'canonical' },
+  nut_peanut_butter: { familyId: 'fam_peanut_butter',  variantType: 'canonical' },
+  nut_walnuts:       { familyId: 'fam_walnuts',        variantType: 'canonical' },
+  nut_cashews:       { familyId: 'fam_cashews',        variantType: 'canonical' },
+  nut_pistachios:    { familyId: 'fam_pistachios',     variantType: 'canonical' },
+  nut_tahini:        { familyId: 'fam_tahini',         variantType: 'canonical' },
+  seed_chia:         { familyId: 'fam_chia',           variantType: 'canonical' },
+  seed_flax:         { familyId: 'fam_flax',           variantType: 'canonical' },
+  seed_pumpkin:      { familyId: 'fam_pumpkin_seed',   variantType: 'canonical' },
   seed_sunflower:    { familyId: 'fam_sunflower_seed', variantType: 'canonical' },
 
   // Pantry — all singletons
@@ -167,7 +195,7 @@ const VARIANT_MAP: Record<string, { familyId: string; variantType: VariantType }
   pan_apple_cider_vinegar: { familyId: 'fam_apple_cider_vinegar', variantType: 'canonical' },
   pan_mustard:             { familyId: 'fam_mustard',             variantType: 'canonical' },
   pan_mayonnaise:          { familyId: 'fam_mayonnaise',          variantType: 'canonical' },
-  pan_hummus:              { familyId: 'fam_hummus',              variantType: 'canonical' },
+  pan_hummus:              { familyId: 'fam_hummus',               variantType: 'canonical' },
   pan_dark_chocolate:      { familyId: 'fam_dark_chocolate',      variantType: 'canonical' },
 
   // Prepared / plant-based — all singletons
@@ -199,9 +227,10 @@ const VARIANT_MAP: Record<string, { familyId: string; variantType: VariantType }
 
 /**
  * Family display metadata. For multi-variant families we pin a concept-level
- * name + umbrella description (e.g., "Pollo" as an ave de corral, not "Pechuga
- * cruda"). For singletons we omit the entry — the build step below falls back
- * to the canonical variant's name/description so we don't duplicate copy.
+ * name + umbrella description. For singletons we omit the entry — the build
+ * step below falls back to the canonical variant's name/description so we
+ * don't duplicate copy. Aliases still live here for singletons when we want
+ * richer fuzzy matching than the canonical's `name`/`nameEn` alone.
  */
 interface FamilyMetaOverride {
   name?: string;
@@ -212,17 +241,14 @@ interface FamilyMetaOverride {
 }
 
 const FAMILY_META: Record<string, FamilyMetaOverride> = {
-  fam_chicken: {
-    name: 'Pollo', nameEn: 'Chicken',
-    description: 'Ave de corral magra, base proteica versátil. La referencia canónica es la pechuga cruda (USDA).',
-    descriptionEn: 'Lean poultry, a versatile protein staple. Canonical reference is raw breast (USDA).',
-    aliases: ['pollo', 'chicken', 'ave', 'poultry'],
-  },
-  fam_beef: {
-    name: 'Carne de Res', nameEn: 'Beef',
-    description: 'Carne roja rica en hierro y zinc. La referencia canónica es molida 90/10.',
-    descriptionEn: 'Red meat, rich in iron and zinc. Canonical reference is 90/10 ground beef.',
-    aliases: ['carne de res', 'vaca', 'ternera', 'beef'],
+  // P2.5 renamed: formerly `fam_chicken` (umbrella). Only contains breast
+  // variants; id now reflects reality. Future cuts (muslo/ala/entero) will
+  // live as siblings under `subcategory: 'aves'`.
+  fam_chicken_breast: {
+    name: 'Pechuga de Pollo', nameEn: 'Chicken Breast',
+    description: 'Corte magro de ave de corral, base proteica versátil. La referencia canónica es la pechuga cruda (USDA).',
+    descriptionEn: 'Lean poultry cut, a versatile protein staple. Canonical reference is raw breast (USDA).',
+    aliases: ['pechuga', 'pollo', 'chicken', 'chicken breast', 'ave', 'poultry'],
   },
   fam_tuna: {
     name: 'Atún', nameEn: 'Tuna',
@@ -230,23 +256,68 @@ const FAMILY_META: Record<string, FamilyMetaOverride> = {
     descriptionEn: 'Oily fish rich in omega-3. Canonical reference is fresh tuna.',
     aliases: ['atún', 'tuna', 'bonito'],
   },
-  fam_egg: {
-    name: 'Huevo', nameEn: 'Egg',
-    description: 'Proteína completa con todos los aminoácidos esenciales. La referencia canónica es el huevo entero.',
-    descriptionEn: 'Complete protein with all essential amino acids. Canonical reference is whole egg.',
-    aliases: ['huevo', 'egg', 'huevos'],
+  // P2.5 split: was `fam_beef` umbrella. Molida is the "picada para
+  // boloñesa/hamburguesa" product — distinct culinary use from a steak.
+  fam_beef_ground: {
+    name: 'Ternera Molida', nameEn: 'Ground Beef',
+    description: 'Carne picada 90/10. Base versátil para boloñesas, hamburguesas caseras, rellenos.',
+    descriptionEn: 'Ground beef 90/10. Versatile base for bolognese, homemade burgers, fillings.',
+    aliases: ['carne picada', 'carne molida', 'ground beef', 'mince', 'picada'],
   },
-  fam_rice: {
-    name: 'Arroz', nameEn: 'Rice',
-    description: 'Cereal base en cocinas de todo el mundo. La referencia canónica es arroz blanco cocido.',
-    descriptionEn: 'Staple grain in cuisines worldwide. Canonical reference is cooked white rice.',
-    aliases: ['arroz', 'rice'],
+  // P2.5 split: was `fam_beef` umbrella. Filete/solomillo/entrecot — corte
+  // entero para plancha o parrilla. Perfil proteico distinto de molida
+  // (+35% protein, menos grasa).
+  fam_beef_steak: {
+    name: 'Filete de Ternera', nameEn: 'Beef Steak',
+    description: 'Corte magro entero de vacuno, plancha o parrilla. Más proteína que la molida y menos grasa.',
+    descriptionEn: 'Lean whole cut of beef, pan or grill. Higher protein than ground, less fat.',
+    aliases: ['filete', 'solomillo', 'entrecot', 'steak', 'sirloin', 'bistec'],
   },
-  fam_bread: {
-    name: 'Pan', nameEn: 'Bread',
-    description: 'Pan horneado. La referencia canónica es pan integral por su mayor fibra.',
-    descriptionEn: 'Baked bread. Canonical reference is whole wheat bread for higher fiber.',
-    aliases: ['pan', 'bread'],
+  // P2.5 split: was `fam_egg` umbrella. Huevo entero con yema + clara.
+  fam_egg_whole: {
+    name: 'Huevo Entero', nameEn: 'Whole Egg',
+    description: 'Proteína completa con todos los aminoácidos esenciales. Yema rica en colina, vitamina D y B12.',
+    descriptionEn: 'Complete protein with all essential amino acids. Yolk rich in choline, vitamin D and B12.',
+    aliases: ['huevo', 'huevo entero', 'egg', 'whole egg', 'huevos'],
+  },
+  // P2.5 split: was `fam_egg` umbrella. Clara sin yema — se vende en brick
+  // pasteurizada aparte. −64% kcal, −98% grasa vs huevo entero: producto
+  // diferente para objetivos de proteína limpia.
+  fam_egg_whites: {
+    name: 'Clara de Huevo', nameEn: 'Egg White',
+    description: 'Clara pasteurizada sin yema. Proteína casi pura, muy baja en grasa. Ideal en objetivos de definición.',
+    descriptionEn: 'Pasteurized egg white, no yolk. Nearly pure protein, very low fat. Ideal for cutting.',
+    aliases: ['clara', 'claras', 'egg white', 'egg whites', 'albumina', 'clara de huevo'],
+  },
+  // P2.5 split: was `fam_rice` umbrella. Arroz blanco refinado (grano corto
+  // o largo sin salvado). Cocción rápida, IG alto.
+  fam_rice_white: {
+    name: 'Arroz Blanco', nameEn: 'White Rice',
+    description: 'Cereal refinado sin salvado, base en cocinas de todo el mundo. Cocción rápida e IG alto.',
+    descriptionEn: 'Refined grain without bran, staple in cuisines worldwide. Fast cooking, high GI.',
+    aliases: ['arroz', 'arroz blanco', 'white rice', 'long grain', 'redondo'],
+  },
+  // P2.5 split: was `fam_rice` umbrella. Arroz integral con salvado entero.
+  // ~3× fibra que el blanco, IG más bajo, digestión más lenta.
+  fam_rice_brown: {
+    name: 'Arroz Integral', nameEn: 'Brown Rice',
+    description: 'Cereal entero con salvado. Más fibra (~3×) y mejor perfil glucémico que el arroz blanco.',
+    descriptionEn: 'Whole grain with bran. More fiber (~3×) and better glycemic profile than white rice.',
+    aliases: ['integral', 'arroz integral', 'brown rice', 'whole grain rice'],
+  },
+  // P2.5 split: was `fam_bread` umbrella. Pan de harina refinada.
+  fam_bread_white: {
+    name: 'Pan Blanco', nameEn: 'White Bread',
+    description: 'Pan de harina refinada. Miga suave, IG alto, fibra baja.',
+    descriptionEn: 'Bread from refined flour. Soft crumb, high GI, low fiber.',
+    aliases: ['pan blanco', 'pan', 'white bread', 'refinado'],
+  },
+  // P2.5 split: was `fam_bread` umbrella. Pan de harina integral con salvado.
+  fam_bread_wholewheat: {
+    name: 'Pan Integral', nameEn: 'Whole Wheat Bread',
+    description: 'Pan de harina integral con salvado. ~4× fibra que el pan blanco, saciedad superior.',
+    descriptionEn: 'Whole wheat bread with bran. ~4× fiber vs white bread, superior satiety.',
+    aliases: ['pan integral', 'whole wheat bread', 'integral'],
   },
   fam_milk: {
     name: 'Leche', nameEn: 'Milk',
@@ -259,6 +330,14 @@ const FAMILY_META: Record<string, FamilyMetaOverride> = {
     description: 'Yogur colado, rico en proteína. La referencia canónica es griego natural entero.',
     descriptionEn: 'Strained yogurt, high in protein. Canonical reference is full-fat plain Greek.',
     aliases: ['yogur griego', 'greek yogurt', 'yogurt griego'],
+  },
+  // P2.5 new: yogur natural no colado. Cubre el gap de "si un día no tengo
+  // griego" (Natural → Griego es un family-swap, no variant-swap).
+  fam_yogurt: {
+    name: 'Yogur Natural', nameEn: 'Plain Yogurt',
+    description: 'Yogur natural no colado. Base cremosa con menor proteína y más lactosa que el griego.',
+    descriptionEn: 'Unstrained plain yogurt. Creamier base with lower protein and more lactose than Greek.',
+    aliases: ['yogur', 'yogur natural', 'yogurt', 'plain yogurt', 'natural yogurt'],
   },
   fam_coffee: {
     name: 'Café', nameEn: 'Coffee',
@@ -284,18 +363,185 @@ const FAMILY_META: Record<string, FamilyMetaOverride> = {
     descriptionEn: 'Fermented barley drink. Canonical reference is lager.',
     aliases: ['cerveza', 'beer'],
   },
+  // P2.5: keeps id (whole nut). Butter split to `fam_peanut_butter`.
   fam_peanut: {
     name: 'Cacahuete', nameEn: 'Peanut',
-    description: 'Legumbre rica en proteína y grasa monoinsaturada. La referencia canónica es el cacahuete entero.',
-    descriptionEn: 'Legume rich in protein and monounsaturated fat. Canonical reference is whole peanut.',
-    aliases: ['cacahuete', 'maní', 'peanut'],
+    description: 'Legumbre rica en proteína y grasa monoinsaturada. Snack entero o ingrediente crujiente.',
+    descriptionEn: 'Legume rich in protein and monounsaturated fat. Whole snack or crunchy ingredient.',
+    aliases: ['cacahuete', 'maní', 'peanut', 'peanuts'],
   },
+  // P2.5 split: from `fam_peanut`. Crema untable con uso culinario distinto
+  // del cacahuete entero — vive bajo subcategoría `mantecas-pastas`.
+  fam_peanut_butter: {
+    name: 'Crema de Cacahuete', nameEn: 'Peanut Butter',
+    description: 'Crema untable de cacahuete. Uso culinario distinto del fruto entero (snack, untable, salsas).',
+    descriptionEn: 'Peanut butter spread. Different culinary use from whole peanut (snack, spread, sauces).',
+    aliases: ['peanut butter', 'crema de cacahuete', 'mantequilla de cacahuete'],
+  },
+  // P2.5: keeps id (whole nut). Butter split to `fam_almond_butter`.
   fam_almond: {
     name: 'Almendra', nameEn: 'Almond',
-    description: 'Fruto seco rico en vitamina E y grasas saludables. La referencia canónica es la almendra entera.',
-    descriptionEn: 'Tree nut rich in vitamin E and healthy fats. Canonical reference is whole almond.',
-    aliases: ['almendra', 'almond'],
+    description: 'Fruto seco rico en vitamina E y grasas saludables. Snack entero o ingrediente crujiente.',
+    descriptionEn: 'Tree nut rich in vitamin E and healthy fats. Whole snack or crunchy ingredient.',
+    aliases: ['almendra', 'almond', 'almonds'],
   },
+  // P2.5 split: from `fam_almond`. Crema untable bajo subcategoría
+  // `mantecas-pastas`.
+  fam_almond_butter: {
+    name: 'Crema de Almendras', nameEn: 'Almond Butter',
+    description: 'Crema untable de almendras. Uso culinario distinto del fruto entero.',
+    descriptionEn: 'Almond butter spread. Different culinary use from whole nut.',
+    aliases: ['almond butter', 'crema de almendras', 'mantequilla de almendra'],
+  },
+};
+
+/**
+ * Family → subcategory slug (L2 between L1 `category` and L3 `family`).
+ *
+ * Kebab-case slugs. Labels resolve via `t.foodDictionary.subcategoryLabels.{slug}`
+ * in ES + EN — integrity enforced by `food-families.test.ts`.
+ *
+ * Families NOT listed here render flat under their category (used for small /
+ * homogeneous categories like `oils`, `legumes`, `supplements` where a
+ * subcategory level would over-index).
+ */
+const FAMILY_SUBCATEGORY: Record<string, string> = {
+  // Proteins → aves / vacuno / cerdo / pescado-azul / pescado-blanco / marisco / huevo / vegetal / caza / embutidos
+  fam_chicken_breast: 'aves',
+  fam_turkey_breast:  'aves',
+  fam_beef_ground:    'vacuno',
+  fam_beef_steak:     'vacuno',
+  fam_pork_loin:      'cerdo',
+  fam_jamon_serrano:  'embutidos',
+  fam_lamb:           'caza',
+  fam_rabbit:         'caza',
+  fam_tuna:           'pescado-azul',
+  fam_salmon:         'pescado-azul',
+  fam_sardines:       'pescado-azul',
+  fam_cod:            'pescado-blanco',
+  fam_sea_bass:       'pescado-blanco',
+  fam_shrimp:         'marisco',
+  fam_squid:          'marisco',
+  fam_tofu:           'vegetal',
+  fam_tempeh:         'vegetal',
+  fam_seitan:         'vegetal',
+  fam_egg_whole:      'huevo',
+  fam_egg_whites:     'huevo',
+
+  // Vegetables → cruciferas / hojas / raices-tuberculos / solanaceas / alliums / cucurbitaceas / otras
+  fam_broccoli:        'cruciferas',
+  fam_cauliflower:     'cruciferas',
+  fam_kale:            'cruciferas',
+  fam_spinach:         'hojas',
+  fam_lettuce:         'hojas',
+  fam_arugula:         'hojas',
+  fam_chard:           'hojas',
+  fam_carrot:          'raices-tuberculos',
+  fam_potato:          'raices-tuberculos',
+  fam_sweet_potato:    'raices-tuberculos',
+  fam_beetroot:        'raices-tuberculos',
+  fam_tomato:          'solanaceas',
+  fam_eggplant:        'solanaceas',
+  fam_bell_pepper_red: 'solanaceas',
+  fam_onion:           'alliums',
+  fam_garlic:          'alliums',
+  fam_leek:            'alliums',
+  fam_zucchini:        'cucurbitaceas',
+  fam_pumpkin:         'cucurbitaceas',
+  fam_cucumber:        'cucurbitaceas',
+  fam_asparagus:       'otras',
+  fam_mushroom:        'otras',
+  fam_green_beans:     'otras',
+  fam_artichoke:       'otras',
+  fam_celery:          'otras',
+  fam_avocado:         'otras',
+  fam_corn:            'otras',
+  fam_peas:            'otras',
+
+  // Fruits → tropicales / bayas / citricos / pomo / hueso / vid / melon
+  fam_banana:     'tropicales',
+  fam_mango:      'tropicales',
+  fam_pineapple:  'tropicales',
+  fam_kiwi:       'tropicales',
+  fam_strawberry: 'bayas',
+  fam_blueberry:  'bayas',
+  fam_raspberry:  'bayas',
+  fam_orange:     'citricos',
+  fam_lemon:      'citricos',
+  fam_apple:      'pomo',
+  fam_pear:       'pomo',
+  fam_date:       'hueso',
+  fam_grape:      'vid',
+  fam_watermelon: 'melon',
+
+  // Grains → arroz / pan / pseudocereales / pasta-trigo
+  fam_rice_white:        'arroz',
+  fam_rice_brown:        'arroz',
+  fam_bread_white:       'pan',
+  fam_bread_wholewheat:  'pan',
+  fam_quinoa:            'pseudocereales',
+  fam_buckwheat:         'pseudocereales',
+  fam_oats:              'pseudocereales',
+  fam_pasta:             'pasta-trigo',
+  fam_couscous:          'pasta-trigo',
+  fam_tortilla_wrap:     'pasta-trigo',
+
+  // Dairy → leche / yogur / queso-fresco / queso-curado / grasas-lacteas
+  fam_milk:           'leche',
+  fam_kefir:          'yogur',
+  fam_yogurt:         'yogur',
+  fam_greek_yogurt:   'yogur',
+  fam_cottage_cheese: 'queso-fresco',
+  fam_fresh_cheese:   'queso-fresco',
+  fam_mozzarella:     'queso-fresco',
+  fam_cured_cheese:   'queso-curado',
+  fam_parmesan:       'queso-curado',
+  fam_butter:         'grasas-lacteas',
+
+  // Nuts & seeds → frutos-secos / semillas / mantecas-pastas
+  fam_almond:         'frutos-secos',
+  fam_almond_butter:  'mantecas-pastas',
+  fam_peanut:         'frutos-secos',
+  fam_peanut_butter:  'mantecas-pastas',
+  fam_walnuts:        'frutos-secos',
+  fam_cashews:        'frutos-secos',
+  fam_pistachios:     'frutos-secos',
+  fam_chia:           'semillas',
+  fam_flax:           'semillas',
+  fam_pumpkin_seed:   'semillas',
+  fam_sunflower_seed: 'semillas',
+  fam_tahini:         'mantecas-pastas',
+
+  // Pantry → endulzantes / chocolate-cacao / salsas / condimentos
+  fam_honey:               'endulzantes',
+  fam_sugar:               'endulzantes',
+  fam_cocoa_powder:        'chocolate-cacao',
+  fam_dark_chocolate:      'chocolate-cacao',
+  fam_tomato_sauce:        'salsas',
+  fam_soy_sauce:           'salsas',
+  fam_mayonnaise:          'salsas',
+  fam_hummus:              'salsas',
+  fam_mustard:             'condimentos',
+  fam_apple_cider_vinegar: 'condimentos',
+
+  // Prepared → bebidas-vegetales / snacks
+  fam_almond_milk:   'bebidas-vegetales',
+  fam_oat_milk:      'bebidas-vegetales',
+  fam_coconut_water: 'bebidas-vegetales',
+  fam_protein_bar:   'snacks',
+  fam_granola:       'snacks',
+
+  // Beverages → cerveza / vino / refresco / cafe-te / zumos / aguas / energeticas
+  fam_beer:            'cerveza',
+  fam_wine:            'vino',
+  fam_cola:            'refresco',
+  fam_coffee:          'cafe-te',
+  fam_orange_juice:    'zumos',
+  fam_sparkling_water: 'aguas',
+  fam_energy_drink:    'energeticas',
+  fam_sports_drink:    'energeticas',
+
+  // Oils + Legumes + Supplements: NO subcategory — render plano
 };
 
 /**
@@ -342,6 +588,7 @@ function buildFamilies(): FoodFamily[] {
     if (!canonical || !g.canonicalVariantId) {
       throw new Error(`food-families: family ${familyId} has no canonical variant`);
     }
+    const subcategory = FAMILY_SUBCATEGORY[familyId];
     families.push({
       id: familyId,
       name: meta?.name ?? canonical.name,
@@ -349,6 +596,7 @@ function buildFamilies(): FoodFamily[] {
       description: meta?.description ?? canonical.description,
       descriptionEn: meta?.descriptionEn ?? canonical.descriptionEn,
       category: g.category,
+      ...(subcategory ? { subcategory } : {}),
       canonicalVariantId: g.canonicalVariantId,
       variantIds: [g.canonicalVariantId, ...g.variantIds.filter(id => id !== g.canonicalVariantId)],
       aliases: meta?.aliases,

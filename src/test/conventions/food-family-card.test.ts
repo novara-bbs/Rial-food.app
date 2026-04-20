@@ -15,9 +15,11 @@ import { describe, it, expect } from 'vitest';
 
 const FAMILY_CARD = resolve(__dirname, '..', '..', 'features', 'food', 'components', 'FamilyCard.tsx');
 const VARIANT_ROW = resolve(__dirname, '..', '..', 'features', 'food', 'components', 'VariantRow.tsx');
+const FOOD_DICTIONARY = resolve(__dirname, '..', '..', 'features', 'food', 'screens', 'FoodDictionary.tsx');
 
 const familyCardSrc = readFileSync(FAMILY_CARD, 'utf8');
 const variantRowSrc = readFileSync(VARIANT_ROW, 'utf8');
+const foodDictionarySrc = readFileSync(FOOD_DICTIONARY, 'utf8');
 
 describe('FamilyCard.tsx', () => {
   it('has a default export', () => {
@@ -88,5 +90,52 @@ describe('VariantRow.tsx', () => {
     expect(variantRowSrc).not.toMatch(/text-\[\d+px\]/);
     expect(variantRowSrc).not.toMatch(/\bshadow-(sm|md|lg)\b/);
     expect(variantRowSrc).not.toMatch(/\bdark:/);
+  });
+
+  it('renders qualityTag chips via i18n labels (P2.5 multi-axis)', () => {
+    // The chips are rendered only when `variant.qualityTags?.length > 0`
+    // so the conditional guard is part of the lock — without it we'd pint an
+    // empty `<div>` on every row. Labels come from `t.foodDictionary.qualityTagLabels`
+    // so a slug that lands without a matching i18n key renders the raw slug
+    // (acceptable fallback, symmetric with subcategoryLabels).
+    expect(variantRowSrc).toMatch(/qualityTagLabels/);
+    expect(variantRowSrc).toMatch(/qualityTags\.length > 0/);
+    expect(variantRowSrc).toMatch(/data-quality-tags/);
+    expect(variantRowSrc).toMatch(/data-quality-tag=\{slug\}/);
+  });
+});
+
+describe('FoodDictionary.tsx — subcategory grouping (P2.5)', () => {
+  // The screen delegates bucketing + ordering to the pure helpers in
+  // `features/food/utils/group-by-subcategory.ts` (its own unit tests lock the
+  // null-first + population-desc + alphabetic tie-break contract). Here we
+  // only lock that the screen *uses* them and emits the expected markup.
+  it('imports groupFamiliesBySubcategory + sortSubcategoriesByPopulation', () => {
+    expect(foodDictionarySrc).toMatch(/groupFamiliesBySubcategory/);
+    expect(foodDictionarySrc).toMatch(/sortSubcategoriesByPopulation/);
+  });
+
+  it('emits a <h4 data-subcategory> sub-header per non-null bucket', () => {
+    expect(foodDictionarySrc).toMatch(/data-subcategory=\{sub\.subcategoryKey\}/);
+    // null bucket (flat families) must NOT render a wrapper header — the guard
+    // `sub.subcategoryKey !== null` is what keeps oils/legumes/supplements flat.
+    expect(foodDictionarySrc).toMatch(/sub\.subcategoryKey !== null/);
+  });
+
+  it('looks up subcategory labels via i18n with slug fallback', () => {
+    expect(foodDictionarySrc).toMatch(/subcategoryLabels\[sub\.subcategoryKey\]/);
+    // Fallback to the raw slug keeps the screen resilient to mid-flight i18n
+    // additions — a new subcategory slug lands in the UI the moment it appears
+    // in `FAMILY_SUBCATEGORY`, even before the label PR merges.
+    expect(foodDictionarySrc).toMatch(/subcategoryLabels\[sub\.subcategoryKey\] \?\? sub\.subcategoryKey/);
+  });
+
+  it('uses token classes on the sub-header (no text-[Npx], no dark:)', () => {
+    // Scope the token-purity check to the sub-header <h4> block so we don't
+    // trip on unrelated markup elsewhere in the screen.
+    const subHeaderMatch = foodDictionarySrc.match(/<h4[^>]*data-subcategory[\s\S]*?<\/h4>/);
+    expect(subHeaderMatch, 'expected <h4 data-subcategory> block').not.toBeNull();
+    expect(subHeaderMatch![0]).not.toMatch(/text-\[\d+px\]/);
+    expect(subHeaderMatch![0]).not.toMatch(/\bdark:/);
   });
 });

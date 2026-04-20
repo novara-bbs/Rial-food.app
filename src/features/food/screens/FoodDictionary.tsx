@@ -18,6 +18,10 @@ import type { IngredientCategory, Allergen, Ingredient } from '../../../types';
 import type { FoodFamily, FoodVariant } from '../../../types/food-family';
 import { useAppState } from '../../../contexts/AppStateContext';
 import EmptyState from '../../../components/EmptyState';
+import {
+  groupFamiliesBySubcategory,
+  sortSubcategoriesByPopulation,
+} from '../utils/group-by-subcategory';
 
 const ALL_ALLERGENS: Allergen[] = [
   'gluten', 'dairy', 'eggs', 'nuts', 'peanuts',
@@ -93,7 +97,15 @@ export default function FoodDictionary({ navigateTo }: Props) {
     }
     return CATEGORY_ORDER
       .filter(cat => map.has(cat))
-      .map(cat => ({ category: cat, families: map.get(cat)! }));
+      .map(cat => {
+        const families = map.get(cat)!;
+        // P2.5: bucket by subcategory → ordered groups; null-bucket (families
+        // without subcategory) renders flat under the category header.
+        const subGroups = sortSubcategoriesByPopulation(
+          groupFamiliesBySubcategory(families),
+        );
+        return { category: cat, families, subGroups };
+      });
   }, [filteredFamilies]);
 
   const toggleExpand = (id: string) => {
@@ -183,6 +195,62 @@ export default function FoodDictionary({ navigateTo }: Props) {
       ) : (
         grouped.map(group => {
           const meta = INGREDIENT_CATEGORIES[group.category];
+          const subcategoryLabels = t.foodDictionary.subcategoryLabels as Record<string, string>;
+          const renderFamily = (family: FoodFamily) => {
+            const canonical = getCanonicalVariant(family.id);
+            if (!canonical) return null;
+            const variants = getVariantsOfFamily(family.id);
+            const selectedVariantId = selectedByFamily[family.id];
+            const activeVariant = resolveVariant(family.id, selectedVariantId) ?? canonical;
+            const activeIngredient = INGREDIENT_BY_ID[activeVariant.id];
+
+            return (
+              <FamilyCard
+                key={family.id}
+                family={family}
+                canonicalVariant={canonical}
+                variants={variants}
+                expanded={expandedFamilyId === family.id}
+                onToggle={() => toggleExpand(family.id)}
+                selectedVariantId={selectedVariantId}
+                onSelectVariant={v => handleSelectVariant(family.id, v)}
+                portionSlot={
+                  activeIngredient && (
+                    <div className="space-y-2">
+                      <h4 className="text-micro font-label uppercase tracking-widest text-on-surface-variant">
+                        {t.foodDictionary.servings}
+                      </h4>
+                      <PortionSelector ingredient={activeIngredient} unitSystem={unitSystem} />
+                    </div>
+                  )
+                }
+                microSlot={activeIngredient && <MicroHighlights item={activeIngredient} />}
+                ctaSlot={
+                  <div className="flex gap-2">
+                    <Button
+                      variant="brand"
+                      size="sm"
+                      className="flex-1"
+                      onClick={() => navigateTo('add-meal')}
+                    >
+                      <UtensilsCrossed className="w-3.5 h-3.5 mr-1.5" aria-hidden="true" />
+                      {t.portionSelector.addToMeal}
+                    </Button>
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      className="flex-1"
+                      onClick={() => navigateTo('create-recipe')}
+                    >
+                      <ShoppingCart className="w-3.5 h-3.5 mr-1.5" aria-hidden="true" />
+                      {t.portionSelector.addToRecipe}
+                    </Button>
+                  </div>
+                }
+              />
+            );
+          };
+
           return (
             <section key={group.category} className="space-y-2">
               <h3 className="font-headline font-bold text-body-sm uppercase tracking-widest text-on-surface-variant flex items-center gap-2 pt-2">
@@ -191,62 +259,20 @@ export default function FoodDictionary({ navigateTo }: Props) {
                 <span className="text-micro font-label text-on-surface-variant/60">{group.families.length}</span>
               </h3>
 
-              <div className="space-y-1">
-                {group.families.map(family => {
-                  const canonical = getCanonicalVariant(family.id);
-                  if (!canonical) return null;
-                  const variants = getVariantsOfFamily(family.id);
-                  const selectedVariantId = selectedByFamily[family.id];
-                  const activeVariant = resolveVariant(family.id, selectedVariantId) ?? canonical;
-                  const activeIngredient = INGREDIENT_BY_ID[activeVariant.id];
-
-                  return (
-                    <FamilyCard
-                      key={family.id}
-                      family={family}
-                      canonicalVariant={canonical}
-                      variants={variants}
-                      expanded={expandedFamilyId === family.id}
-                      onToggle={() => toggleExpand(family.id)}
-                      selectedVariantId={selectedVariantId}
-                      onSelectVariant={v => handleSelectVariant(family.id, v)}
-                      portionSlot={
-                        activeIngredient && (
-                          <div className="space-y-2">
-                            <h4 className="text-micro font-label uppercase tracking-widest text-on-surface-variant">
-                              {t.foodDictionary.servings}
-                            </h4>
-                            <PortionSelector ingredient={activeIngredient} unitSystem={unitSystem} />
-                          </div>
-                        )
-                      }
-                      microSlot={activeIngredient && <MicroHighlights item={activeIngredient} />}
-                      ctaSlot={
-                        <div className="flex gap-2">
-                          <Button
-                            variant="brand"
-                            size="sm"
-                            className="flex-1"
-                            onClick={() => navigateTo('add-meal')}
-                          >
-                            <UtensilsCrossed className="w-3.5 h-3.5 mr-1.5" aria-hidden="true" />
-                            {t.portionSelector.addToMeal}
-                          </Button>
-                          <Button
-                            variant="outline"
-                            size="sm"
-                            className="flex-1"
-                            onClick={() => navigateTo('create-recipe')}
-                          >
-                            <ShoppingCart className="w-3.5 h-3.5 mr-1.5" aria-hidden="true" />
-                            {t.portionSelector.addToRecipe}
-                          </Button>
-                        </div>
-                      }
-                    />
-                  );
-                })}
-              </div>
+              {group.subGroups.map(sub => (
+                <div key={sub.subcategoryKey ?? '__flat__'} className="space-y-1">
+                  {sub.subcategoryKey !== null && (
+                    <h4
+                      data-subcategory={sub.subcategoryKey}
+                      className="text-label font-label uppercase tracking-widest text-on-surface-variant flex items-center gap-2 pt-1"
+                    >
+                      <span>{subcategoryLabels[sub.subcategoryKey] ?? sub.subcategoryKey}</span>
+                      <span className="text-micro font-label text-on-surface-variant/60">{sub.families.length}</span>
+                    </h4>
+                  )}
+                  {sub.families.map(renderFamily)}
+                </div>
+              ))}
             </section>
           );
         })

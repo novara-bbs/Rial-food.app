@@ -23,6 +23,8 @@ interface Props {
 export default function VariantRow({ variant, delta, selected, onSelect }: Props) {
   const { t, locale } = useI18n();
   const typeLabel = t.foodDictionary.variantTypes[variant.variantType];
+  const qualityTagLabels = t.foodDictionary.qualityTagLabels as Record<string, string>;
+  const qualityTags = variant.qualityTags ?? [];
   return (
     <button
       type="button"
@@ -43,6 +45,22 @@ export default function VariantRow({ variant, delta, selected, onSelect }: Props
           <span className="mt-0.5 block text-micro font-label uppercase tracking-widest text-on-surface-variant">
             {typeLabel}
           </span>
+          {qualityTags.length > 0 && (
+            <div
+              data-quality-tags
+              className="mt-1.5 flex flex-wrap gap-1"
+            >
+              {qualityTags.map(slug => (
+                <span
+                  key={slug}
+                  data-quality-tag={slug}
+                  className="text-caption text-on-surface-variant bg-surface-container-high rounded-full px-2 py-0.5"
+                >
+                  {qualityTagLabels[slug] ?? slug}
+                </span>
+              ))}
+            </div>
+          )}
         </div>
       </div>
       <div className="mt-1.5">

@@ -1,5 +1,79 @@
 # RIAL App - Changelog
 
+## [1.5.56] - 2026-04-20
+
+### refactor(food): Food Families P2.5 — refinamiento taxonómico (3-tier + multi-axis variants)
+
+Refactor del modelo `[1.5.54]` siguiendo el plan `c-mo-funciona-el-diccionario-fluffy-curry.md`. Dos problemas arquitectónicos resueltos: (1) `variantType: 'cut'` conflacionaba productos culinarios distintos como variantes (pechuga vs. muslo, filete vs. molida, clara vs. huevo entero — deltas de ±35-64% en macros); (2) una sola dimensión `category` es demasiado gruesa para escalar al añadir cortes, sub-tipos de queso, o pescados blancos/azules. Solución: **3-tier taxonomy** `category → subcategory → family → variant` donde los productos culinarios son **familias** (no variantes), y **multi-axis variants** — eje primario `variantType` (6 literales, `'cut'` removido) + eje ortogonal opcional `qualityTags?: string[]` (9 slugs: `organic` / `free-range` / `grass-fed` / `light` / `sugar-free` / `lactose-free` / `gluten-free` / `high-protein` / `no-additives`). Doctrina operativa: *si lo puedes comprar aparte en el supermercado, es un producto separado* → familia propia. Precedente USDA FoodData Central (`food_group → food_subgroup`) + Cronometer (carpetas colapsables por subcategoría).
+
+**A) Fase A — Types + convention tests (zero runtime change).**
+
+- `src/types/food-family.ts` — `VariantType` union 7 → 6 literales (drop `'cut'`). `VARIANT_TYPES` readonly array pasa de 7 a 6. `FoodFamily` gana `subcategory?: string` (slug kebab-case ASCII; `undefined` = render plano bajo category — usado por oils/legumes/supplements). `FoodVariant` gana `qualityTags?: string[]` (atributos ortogonales al enum `variantType`; un variant `variantType: 'brand'` puede llevar además `qualityTags: ['free-range', 'organic']`). Nuevo const `QUALITY_TAG_SLUGS` readonly array con los 9 slugs canónicos. JSDoc clarifica la separación de ejes: `variantType` = **eje discriminante en la lista** (qué lo diferencia del canonical), `qualityTags` = **filtros ortogonales** que no cambian la identidad del variant.
+- `src/test/conventions/food-family-types.test.ts` — VARIANT_TYPES length 7 → 6, 6 asserts individuales validando `VariantType` literals (no `'cut'`), nuevo `QUALITY_TAG_SLUGS` lock (9 slugs + length + readonly), type-level asserts `FoodFamily.subcategory?: string` + `FoodVariant.qualityTags?: string[]`.
+
+**B) Fase B — Data migration (6 splits + 1 rename + 1 gap fix).**
+
+- `src/features/food/data/ingredients.ts` — nuevo entry `dai_plain_yogurt` (Yogur Natural, USDA SR Legacy 01116: 61 kcal · 3.5g pro · 4.7g c · 3.3g fat), que cierra gap §B.0: antes del P2.5 no había yogur no-griego en el seed, lo que hacía imposible modelar el escenario del owner "griego → natural → kéfir" (§4.4 del plan). `INGREDIENT_DICTIONARY` pasa de 138 → **139 entries**.
+- `src/features/food/data/food-families.ts` — `VARIANT_MAP` reparentado (13 entries afectadas: 6 splits + 1 rename + 1 add): `fam_chicken` → `fam_chicken_breast` (rename — el id antiguo solo contenía pechuga raw + cooked), `fam_beef` → `fam_beef_ground` + `fam_beef_steak` (split — molida vs filete, Δ +35% protein), `fam_egg` → `fam_egg_whole` + `fam_egg_whites` (split — clara Δ −64% kcal), `fam_rice` → `fam_rice_white` + `fam_rice_brown` (split — integral 3× fibra + IG distinto), `fam_bread` → `fam_bread_white` + `fam_bread_wholewheat` (split — harina refinada vs entera), `fam_almond` conserva id pero pierde butter → nuevo `fam_almond_butter`, idem `fam_peanut` → `fam_peanut_butter`. `dai_plain_yogurt` inaugura `fam_yogurt` como familia nueva bajo `subcategory: 'yogur'`. `FAMILY_META` diff: −5 removidas (`fam_beef` / `fam_egg` / `fam_rice` / `fam_bread` / `fam_chicken`) + 11 nuevas (`fam_chicken_breast` rename + 6 splits × 2 nuevas cada + 1 yogurt). Nuevo const `FAMILY_SUBCATEGORY: Record<string, string>` con 117 familyId → slug mappings cubriendo 9 de 12 IngredientCategories (oils / legumes / supplements intencionalmente SIN subcategoría — render plano, <8 familias + homogeneidad culinaria). `buildFamilies()` lee `FAMILY_SUBCATEGORY[familyId]` y pobla `family.subcategory` (3 líneas nuevas, zero cambio de contrato).
+- `src/features/food/data/food-families.test.ts` — count `FOOD_FAMILIES.length === 132` (post-P2.5 post-splits post-yogurt-add), lock `fam_chicken_breast` con raw+cooked + subcategory `'aves'`, anti-legacy lock (ninguno de `fam_chicken` / `fam_beef` / `fam_egg` / `fam_rice` / `fam_bread` existe), presence lock de los 11 nuevos+renombrados, anti-`'cut'` lock (ningún variant ni VARIANT_MAP entry tiene `variantType: 'cut'`), subcategory integrity (todo slug kebab-case ASCII, aves/vacuno/huevo coverage, yogur cubre natural+griego+kéfir, oils/legumes/supplements sin subcategory). `INGREDIENT_DICTIONARY.length === 139` (compat lock +1).
+
+**C) Fase C — i18n + UI + helpers + tests.**
+
+- `src/i18n/locales/es.ts` + `en.ts` — DROP `foodDictionary.variantTypes.cut` × 2 locales (−2 entries). ADD `foodDictionary.qualityTagLabels.{organic,freeRange,grassFed,light,sugarFree,lactoseFree,glutenFree,highProtein,noAdditives}` × 2 locales (+18 entries; 9 slugs aliased via camelCase keys pero referenciados por slug string en código via `Record<string, string>` lookup). ADD `foodDictionary.subcategoryLabels.{48 slugs}` × 2 locales (+96 entries). Net **+112 entries**. i18n count **1600 → 1657 simétrico**.
+  - Subcategory slugs cubiertos (48): **proteins** (9) `aves / vacuno / cerdo / pescado-azul / pescado-blanco / marisco / huevo / vegetal / caza / embutidos` · **vegetables** (7) `cruciferas / hojas / raices-tuberculos / solanaceas / alliums / cucurbitaceas / otras` · **fruits** (7) `tropicales / bayas / citricos / pomo / hueso / vid / melon` · **grains** (4) `arroz / pan / pseudocereales / pasta-trigo` · **dairy** (5) `leche / yogur / queso-fresco / queso-curado / grasas-lacteas` · **nuts** (3) `frutos-secos / semillas / mantecas-pastas` · **pantry** (4) `endulzantes / chocolate-cacao / salsas / condimentos` · **prepared** (2) `bebidas-vegetales / snacks` · **beverages** (7) `cerveza / vino / refresco / cafe-te / zumos / aguas / energeticas`.
+- `src/features/food/utils/group-by-subcategory.ts` **nuevo** — dos helpers puros: `groupFamiliesBySubcategory(families: FoodFamily[]): Map<string | null, FoodFamily[]>` (bucket por subcategory; `null` para familias sin subcategory = render plano bajo category, preserva orden de entrada dentro de cada bucket); `sortSubcategoriesByPopulation(map): Array<{subcategoryKey, families}>` (ordena null-first → población descendente → alphabetic tie-break ES-friendly). Zero AppState / navigation dependency — funciones puras unit-testables.
+- `src/features/food/utils/group-by-subcategory.test.ts` **nuevo** — 8 asserts lockeando el contrato: bucket correcto + preserva orden de entrada, null-bucket para familias sin subcategory, empty-map para input vacío, null-first + pop-desc + alphabetic tie-break (3 sub-casos), empty-array para map vacío, null-only map handling.
+- `src/features/food/screens/FoodDictionary.tsx` — rewrite del list-render para usar los helpers nuevos. Cada category itera `sortSubcategoriesByPopulation(groupFamiliesBySubcategory(families))`; cuando `sub.subcategoryKey !== null` renderiza `<h4 data-subcategory={slug} className="text-label uppercase tracking-widest text-on-surface-variant">{t.foodDictionary.subcategoryLabels[slug] ?? slug}</h4>` sobre el grupo de FamilyCards; cuando `null`, render flat sin wrapper header. Fallback al slug si la i18n label falta (resilience mid-flight — nuevas subcategorías pueden llegar en `FAMILY_SUBCATEGORY` antes del PR de labels). Tokens existentes, zero CSS nuevo.
+- `src/features/food/components/VariantRow.tsx` — extendido con render condicional de chips `qualityTags` cuando `variant.qualityTags?.length > 0`: `<div data-quality-tags className="mt-1.5 flex flex-wrap gap-1">` + `<span data-quality-tag={slug} className="text-caption text-on-surface-variant bg-surface-container-high rounded-full px-2 py-0.5">{qualityTagLabels[slug] ?? slug}</span>`. Mismo patrón de fallback a slug crudo que subcategoryLabels. Tokens existentes, zero CSS nuevo.
+- `src/test/conventions/food-family-card.test.ts` — +1 assert en `VariantRow` block (`renders qualityTag chips via i18n labels`) + nuevo describe block `FoodDictionary.tsx — subcategory grouping (P2.5)` con 4 asserts (imports helpers, emits `<h4 data-subcategory>`, null-bucket guard `sub.subcategoryKey !== null`, i18n lookup con `?? sub.subcategoryKey` fallback, token-purity del sub-header).
+
+**D) Design doc.**
+
+- `docs/market/food-variants-design.md` — rewrite §2.1 (FoodFamily + FoodVariant updated shape con `subcategory?` + `qualityTags?` + VariantType 6-literal), nuevo §2.2 "Taxonomía 3-tier (P2.5)" con diagrama 4-level + mapping table código↔vocabulario owner + 5 reglas doctrinales de clasificación + tabla completa 48 subcategorías, rewrite §3 (Bootstrap + clasificación) con §3.1 reglas + §3.2 tabla de 7 cambios P2.5 + §3.3 familias multi-variant que sobreviven intactas + §3.4 matriz 3-level de swap + §3.5 bootstrap histórico. Header actualizado con status + última revisión `2026-04-20`.
+
+**E) Forward-compat preserved.**
+
+- **Zero `seedVersion` bump.** `VARIANT_ID_TO_FAMILY` sigue mapeando `pro_beef_steak` y `pro_egg_whites` y los demás variants splitted a un familyId (solo cambió el nombre del familyId destino — los variant ids son estables). Recetas legacy con `ingredientId: 'pro_beef_steak'` resuelven a `fam_beef_steak` con los mismos datos de macros (el variant no se movió). `savedRecipes` en localStorage no requiere migración.
+- **Dual-schema `RecipeIngredient`** (`familyId?` + `variantId?` + legacy `ingredientId?`) de `[1.5.54]` intacto.
+- **Ningún flow de usuario roto** — si un usuario tenía una receta con ingrediente `fam_beef` pineado (imposible hoy porque P4 no está shipped, pero defensivo), el resolver devuelve `undefined` y el consumer cae al legacy path vía `ingredientId`. P4 swap sheet respetará la nueva taxonomía cuando llegue.
+
+**F) Archivos tocados.**
+
+- Modificados: 11 (`src/types/food-family.ts`, `src/features/food/data/ingredients.ts`, `src/features/food/data/food-families.ts`, `src/features/food/data/food-families.test.ts`, `src/features/food/screens/FoodDictionary.tsx`, `src/features/food/components/VariantRow.tsx`, `src/i18n/locales/es.ts` + `en.ts`, `src/test/conventions/food-family-types.test.ts` + `food-family-card.test.ts`, `docs/market/food-variants-design.md`).
+- Nuevos: 2 (`src/features/food/utils/group-by-subcategory.ts` + `.test.ts`).
+- `CHANGELOG.md` + `docs/ai/state.md` — snapshot post-ship.
+
+**G) Preflight — GREEN.**
+
+- tsc: 0 errors
+- lint:code: 0 errors, 573 warnings (pre-existentes `no-explicit-any`, sin cambios)
+- i18n symmetry: **1657 keys** aligned ES ↔ EN (1600 → 1657, net +57: −1 cut + 9 qualityTag + 48 subcategory; el conteo canónico `check:i18n` cuenta keys lógicas únicas post-symmetric).
+- tests: **816/816** passed (773 → 816, **+43 nuevos** repartidos en: food-families.test.ts ampliado con P2.5 taxonomy locks it.each REMOVED_UMBRELLAS ×5 + NEW_FAMILIES ×12 + count lock + 2 no-cut locks + 5 subcategory integrity + 6 resolver helpers + 1 compat = +24; food-family-types.test.ts +6 individual VariantType asserts + QUALITY_TAG_SLUGS lock; food-family-card.test.ts +5 qualityTag chips + FoodDictionary subheader describe block; group-by-subcategory.test.ts nuevo +8).
+- build: main **782.4 KB raw / 245.7 KB gzip** (delta vs `[1.5.54]` baseline 779.4 raw / 244.1 gzip: +3.0 KB raw / +1.6 KB gzip — atribuible a +112 entries i18n físicas + nuevo helper group-by-subcategory + rewrite FoodDictionary list-render + chips qualityTags).
+- size:check: **PASSED** — all budgets within limits.
+
+**H) Rollback.**
+
+- Fase A revert: tipos vuelven a 7 `VariantType` literales + sin `subcategory` + sin `qualityTags`. Zero consumers nuevos. Safe.
+- Fase B revert: `VARIANT_MAP` vuelve a tener `fam_beef` / `fam_egg` / `fam_rice` / `fam_bread` / `fam_chicken` umbrella; `FAMILY_SUBCATEGORY` + `dai_plain_yogurt` desaparecen. Familias 132 → 126. Recetas siguen funcionando (los variantIds son estables). Safe.
+- Fase C revert: UI vuelve al render sin sub-headers. Chips qualityTags dejan de renderizar (`variant.qualityTags` undefined → condicional short-circuit). i18n cleanup inverso. Safe.
+- Dual-schema forward-compat `[1.5.54]` intacto — cada fase reversible independiente.
+
+**I) Scope discipline — explicit deferrals.**
+
+- **P4 swap sheet nivel 2** (family-swap intra-subcategory `Griego → Natural → Kéfir`) — requiere UX redesign del RecipeDetail swap sheet + decisión de disclosure ("Otros productos similares"). Fuera de P2.5. Plan §5 documenta la matriz 3-nivel.
+- **AddMeal grouped por subcategoría** — AddMeal sigue renderizando plano post-P2.5. Requiere decisión separada sobre si la subcategoría aparece en resultados de búsqueda (y cómo). Defer a P3.
+- **BarcodeScanner + qualityTags auto-inferencia** — cuando el user escanea "pollo corral Lidl", el matcher P5 debería heredar `qualityTags: ['free-range']` desde OFF categories. Defer a P5 (OFF integration sprint).
+- **Cortes reales de pollo** (muslo, ala, contramuslo) — el rename `fam_chicken` → `fam_chicken_breast` habilita la creación de `fam_chicken_thigh` / `fam_chicken_wing` bajo `aves` pero la data aún no existe. P8 data-addition sprint (zero refactor, zero riesgo).
+- **Ordering pinned por subcategoría** — hoy el orden es por población descendente + alphabetic tie-break. Posible debate owner post-preview si quiere orden culinario fijo (aves primero, luego vacuno, etc.). Si se requiere, añadir `SUBCATEGORY_ORDER` array explícito en follow-up. No bloquea P2.5.
+- **Promoción `fam_beef_burger` a familia propia** — mientras no haya ≥3 scans distintos de hamburguesa preparada, se parkea bajo `fam_beef_ground` (regla promote-to-family-when-critical-mass, plan §4.2).
+
+**J) Notes.**
+
+- **Nomenclatura preservada.** No renombramos `FoodFamily` → `FoodProduct` ni `subcategory` → `subfamily`. El lexicon del owner (`familia / subfamilia / producto / variante`) vive en los **labels de UI** y **docstrings**; los **identificadores de código** conservan continuidad con `[1.5.54]`. El mapa L1-L4 está documentado en `docs/market/food-variants-design.md` §2.2 para eliminar ambigüedad nominal futura.
+- **Preview smoke manual pendiente owner** — el dev server del worktree está bound al repo principal, no al branch. Las 26 convention tests de scope directo + 42 food-families tests + preflight full suite lockean la anatomía suficientemente para proceder a commit. Smoke manual: abrir Diccionario, verificar sub-headers `Aves` / `Vacuno` / `Huevo` / `Yogur`, expandir "Clara de Huevo" como familia propia, verificar "Yogur Natural" + "Yogur Griego" + "Kéfir" bajo `yogur`.
+- **Q6 Supabase sync sin impacto.** `subcategory` + `qualityTags` son readonly-seed derivados, no persistidos en `user_data`. User variants (`variantType: 'user'`) heredan subcategoría de su familia (no tienen propia).
+
 ## [1.5.55] - 2026-04-19
 
 ### feat(food): MicroHighlights i18n — cierre del deferral P2 bonus

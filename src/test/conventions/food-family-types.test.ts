@@ -9,19 +9,20 @@
 import { describe, it, expect } from 'vitest';
 import {
   FOOD_SOURCES,
+  QUALITY_TAG_SLUGS,
   VARIANT_TYPES,
   type FoodFamily,
   type FoodSource,
   type FoodVariant,
+  type QualityTagSlug,
   type VariantType,
 } from '../../types/food-family';
 import { RecipeSchema } from '../../lib/schemas';
 
 describe('VARIANT_TYPES', () => {
-  it('exposes exactly the 7 canonical variant types', () => {
+  it('exposes exactly the 6 canonical variant types (P2.5 drops "cut")', () => {
     expect(VARIANT_TYPES).toEqual([
       'canonical',
-      'cut',
       'preparation',
       'quality',
       'regional',
@@ -33,14 +34,48 @@ describe('VARIANT_TYPES', () => {
   it('locks each literal as a TypeScript member of VariantType', () => {
     const members: VariantType[] = [
       'canonical',
-      'cut',
       'preparation',
       'quality',
       'regional',
       'brand',
       'user',
     ];
-    expect(members).toHaveLength(7);
+    expect(members).toHaveLength(6);
+  });
+
+  it('no longer includes "cut" — cuts are families, not variants', () => {
+    expect(VARIANT_TYPES).not.toContain('cut' as VariantType);
+  });
+});
+
+describe('QUALITY_TAG_SLUGS', () => {
+  it('exposes exactly the 9 canonical quality tag slugs', () => {
+    expect(QUALITY_TAG_SLUGS).toEqual([
+      'organic',
+      'free-range',
+      'grass-fed',
+      'light',
+      'sugar-free',
+      'lactose-free',
+      'gluten-free',
+      'high-protein',
+      'no-additives',
+    ]);
+  });
+
+  it('locks each literal as a TypeScript member of QualityTagSlug', () => {
+    const members: QualityTagSlug[] = [
+      'organic',
+      'free-range',
+      'grass-fed',
+      'light',
+      'sugar-free',
+      'lactose-free',
+      'gluten-free',
+      'high-protein',
+      'no-additives',
+    ];
+    expect(members).toHaveLength(9);
   });
 });
 
@@ -58,11 +93,11 @@ describe('FOOD_SOURCES', () => {
 describe('FoodFamily shape', () => {
   it('requires id, name, canonicalVariantId and variantIds', () => {
     const fam: FoodFamily = {
-      id: 'fam_chicken',
-      name: 'Pollo',
-      nameEn: 'Chicken',
-      description: 'Ave de corral comúnmente consumida.',
-      descriptionEn: 'Common poultry.',
+      id: 'fam_chicken_breast',
+      name: 'Pechuga de Pollo',
+      nameEn: 'Chicken Breast',
+      description: 'Pechuga de pollo, corte estándar.',
+      descriptionEn: 'Boneless skinless chicken breast.',
       category: 'proteins',
       canonicalVariantId: 'var_chicken_breast_raw',
       variantIds: ['var_chicken_breast_raw'],
@@ -70,6 +105,14 @@ describe('FoodFamily shape', () => {
     };
     expect(fam.canonicalVariantId).toBe('var_chicken_breast_raw');
     expect(fam.variantIds).toContain(fam.canonicalVariantId);
+  });
+
+  it('accepts an optional subcategory slug (P2.5)', () => {
+    const fam: Pick<FoodFamily, 'subcategory'> = { subcategory: 'aves' };
+    expect(fam.subcategory).toBe('aves');
+
+    const noSub: Pick<FoodFamily, 'subcategory'> = {};
+    expect(noSub.subcategory).toBeUndefined();
   });
 });
 
@@ -114,6 +157,33 @@ describe('FoodVariant shape', () => {
     expect(v.brand?.barcode).toBe('8410032002002');
     expect(v.source).toBe('off');
   });
+
+  it('accepts multi-axis qualityTags orthogonal to variantType (P2.5)', () => {
+    const v: FoodVariant = {
+      id: 'var_chicken_breast_lidl',
+      familyId: 'fam_chicken_breast',
+      name: 'Pechuga de pollo (Lidl)',
+      nameEn: 'Chicken breast (Lidl)',
+      variantType: 'brand',
+      brand: { name: 'Lidl', barcode: '8480000123456', scanned: true },
+      qualityTags: ['free-range', 'organic'],
+      baseAmount: 100,
+      baseUnit: 'g',
+      servingSizes: [],
+      macros: { calories: 165, protein: 31, carbs: 0, fats: 3.6 },
+      micros: { vitamins: {}, minerals: {}, others: {} },
+      allergens: [],
+      source: 'off',
+      sourceId: '8480000123456',
+    };
+    expect(v.variantType).toBe('brand');
+    expect(v.qualityTags).toEqual(['free-range', 'organic']);
+  });
+
+  it('treats qualityTags as optional (absent is valid)', () => {
+    const v: Pick<FoodVariant, 'qualityTags'> = {};
+    expect(v.qualityTags).toBeUndefined();
+  });
 });
 
 describe('RecipeSchema — dual-shape RecipeIngredient', () => {
@@ -133,7 +203,7 @@ describe('RecipeSchema — dual-shape RecipeIngredient', () => {
       title: 'Test',
       recipeIngredients: [{
         id: 'i1',
-        familyId: 'fam_chicken',
+        familyId: 'fam_chicken_breast',
         variantId: 'var_chicken_breast_cooked',
         amount: 150,
         unit: 'g',
@@ -147,7 +217,7 @@ describe('RecipeSchema — dual-shape RecipeIngredient', () => {
     const canonicalOnly = {
       id: 'r1',
       title: 'Test',
-      recipeIngredients: [{ id: 'i1', familyId: 'fam_chicken', amount: 150, unit: 'g' }],
+      recipeIngredients: [{ id: 'i1', familyId: 'fam_chicken_breast', amount: 150, unit: 'g' }],
     };
     const parsed = RecipeSchema.safeParse(canonicalOnly);
     expect(parsed.success).toBe(true);
