@@ -168,14 +168,21 @@ export default function RecipeDetail({ recipe, onBack, onSaveRecipe, isSaved, on
   };
 
   // ── Ingredients list ─────────────────────────
+  // `brandName` is populated when a recipe ingredient pins a specific brand variant
+  // (new P4 dual-schema shape: `ri.variantId` set → `ri.ingredient.description` = brand name).
   const allIngredientsToDisplay = [
     ...(data.recipeIngredients ? data.recipeIngredients.map((ri: any) => ({
-      id: ri.id, name: ri.ingredient?.name || 'Unknown', amount: ri.amount, unit: ri.unit, isExtra: false,
+      id: ri.id,
+      name: ri.ingredient?.name || 'Unknown',
+      amount: ri.amount,
+      unit: ri.unit,
+      isExtra: false,
+      brandName: ri.variantId && ri.ingredient?.description ? ri.ingredient.description : undefined,
     })) : (data.ingredients ? data.ingredients.map((ing: string, idx: number) => ({
-      id: `old-${idx}`, name: ing, amount: 0, unit: '', isExtra: false,
+      id: `old-${idx}`, name: ing, amount: 0, unit: '', isExtra: false, brandName: undefined,
     })) : [])),
     ...extraIngredients.map(ri => ({
-      id: ri.id, name: ri.ingredient?.name || 'Unknown', amount: ri.amount, unit: ri.unit, isExtra: true,
+      id: ri.id, name: ri.ingredient?.name || 'Unknown', amount: ri.amount, unit: ri.unit, isExtra: true, brandName: undefined,
     })),
   ];
 
@@ -631,6 +638,11 @@ export default function RecipeDetail({ recipe, onBack, onSaveRecipe, isSaved, on
                     <span className={`text-sm flex-1 ${checkedIngredients.includes(ing.id) ? 'text-on-surface-variant line-through' : 'text-tertiary'}`}>
                       {ing.isExtra && <span className="text-primary font-bold mr-1">[+]</span>}
                       {ing.amount === 0 ? '' : formatAmount(ing.amount)} {ing.unit} {ing.name}
+                      {ing.brandName && (
+                        <span className="ml-1.5 inline-flex items-center text-micro font-label uppercase tracking-widest bg-primary/10 text-primary px-1.5 py-0.5 rounded">
+                          {ing.brandName}
+                        </span>
+                      )}
                     </span>
                   </button>
 

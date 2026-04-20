@@ -1,5 +1,152 @@
 # RIAL App - Changelog
 
+## [1.5.60] - 2026-04-20
+
+### feat(food): P4 — Recipe variant pin + display
+
+Recetas guardan y muestran la variante específica del ingrediente (marca), no solo el genérico USDA. Cierra el gap "recetas salen con alimentos genéricos" (owner verbatim).
+
+**Nuevos archivos:**
+- `src/features/food/utils/variant-to-ingredient.ts` — bridge `FoodVariant → Ingredient` para calculadoras de macros existentes. Mantiene 100% backward-compat con `PortionSelector` + loops de `totals`.
+- `src/features/food/utils/recipe-ingredient-resolver.ts` — `resolveRecipeIngredient(ri, allVariants): FoodVariant | null`. Orden de resolución: `familyId + variantId` → `familyId` (canónico) → `VARIANT_MAP` (seed legacy) → `allVariants.find(v.id === ingredientId)`.
+
+**`CreateRecipe.tsx` (P4.1):**
+- Picker Step 2 muestra resultados de familia (`searchFamilies()`) sobre los resultados planos de diccionario.
+- Nuevo handler `addIngredientFromVariant(family, variant, grams)` — crea `RecipeIngredient` con `familyId + variantId + ingredientId (legacy)`.
+- Totals calculation (`useMemo`) ahora resuelve variantes vía `resolveVariant` + `variantToIngredient` cuando `ri.ingredientId` no está en el diccionario plano.
+- `VariantPickerSheet` montado para la selección de variante desde familia.
+
+**`RecipeDetail.tsx` (P4.3):**
+- `allIngredientsToDisplay` captura `brandName` desde `ri.ingredient?.description` cuando `ri.variantId` está set.
+- Chip de marca renderizado inline en cada fila de ingrediente (badge `bg-primary/10 text-primary`).
+
+**`AppStateContext.tsx` (P4.4):**
+- Migration hook idempotente post-Q19: para `RecipeIngredient` con `ingredientId` sin `familyId`, popula `familyId` en memoria vía `ingredientIdToFamilyVariant()`. Sin reescribir localStorage. Skippea cuando no hay nada que migrar.
+
+**i18n (+6 keys × 2 locales):** `recipeDetail.{variantPinned, swapVariant, genericIngredient}`.
+
+**Smoke test:** CreateRecipe Step 2 → buscar "pechuga" → familia `fam_chicken_breast` aparece primera → tap → `VariantPickerSheet` → elegir BonÀrea → RecipeDetail muestra chip "BonÀrea" + macros 120 kcal/100g (vs 165 canónico).
+
+---
+
+## [1.5.59] - 2026-04-20
+
+### feat(food): P3 — AddMeal family-first search + VariantPickerSheet
+
+Búsqueda en AddMeal ahora es family-aware. En lugar de 5–6 filas planas para "yogur", se muestran 2 familias (`fam_greek_yogurt` + `fam_yogurt`) con sus variantes navegables vía `VariantPickerSheet`.
+
+**Nuevo componente `VariantPickerSheet.tsx` (P3.2):**
+- BottomSheet `size="focus"` + `headerLayout="back-title-action"`.
+- Secciones: (1) canónico con badge "Principal", (2) variantes no-canónicas por `GROUP_ORDER`, (3) "Mis marcas escaneadas" para `userVariants` de la familia.
+- Reutiliza `VariantRow` + `groupVariantsByType` + `computeMacroDelta` (sin duplicar).
+
+**`food-family-resolver.ts` — `searchFamilies()` (P3.1):**
+- Nueva función `searchFamilies(query, allVariants, n): FamilySearchResult[]`.
+- Corpus por familia: tokens de `name + nameEn + aliases + canonical.name + brand variant names` deduplicados.
+- Boost +0.15 cuando la familia tiene userVariants — asegura que marcas escaneadas por el usuario siempre suben al top.
+- Ordenado por score desc, sliceado a n.
+
+**`AddMeal.tsx` (P3.3):**
+- `familyResults` memo: `searchFamilies(query, mergedVariants, 8)` cuando `query.length >= 2`.
+- Sección de familias renderizada sobre los resultados planos — cada fila abre `VariantPickerSheet`.
+- `onSelect` en `VariantPickerSheet` llama `logFood` con `familyId + variantId + title = "FamilyName · BrandName"`.
+- Multi-mode compatible: variantes van a `multiQueue` igual que los demás alimentos.
+
+**i18n (+6 keys × 2 locales):** `addMealScreen.{myScannedBrands, pickerTitle, genericVariant}`.
+
+**Smoke test:** buscar "yogur" en AddMeal → 2 filas de familia → tap `fam_greek_yogurt` → `VariantPickerSheet` → elegir Danone Oikos → log "Yogur Griego · Danone Oikos" 112 kcal.
+
+---
+
+## [1.5.58] - 2026-04-20
+
+### feat(food): P5 — BarcodeScanner → FoodVariant persistido (scan-to-store)
+
+Escanear un producto ya no es efímero. El resultado se puede guardar como `FoodVariant` bajo su familia, visible en AddMeal (sección "Mis marcas") y en las recetas.
+
+**`AppStateContext.tsx` (P5.1):**
+- Nuevo estado `userVariants: FoodVariant[]` + `userVariantBarcodes: Record<string, string>` — persistidos en localStorage `rial_userVariants` + `rial_userVariantBarcodes`.
+- Handlers: `addUserVariant`, `updateUserVariant`, `removeUserVariant`, `addVariantBarcode`.
+- `mergedVariants = useMemo(() => [...baseFoodVariants, ...userVariants])` — pool unificado lazy-cargado (mismo patrón que `mergedDictionary`).
+
+**`src/lib/sync.ts` (P5.1):** `SyncKey` gana `'userVariants' | 'userVariantBarcodes'` para Q6 Supabase sync.
+
+**`food-family-resolver.ts` — `matchFamilyForScan()` (P5.2):**
+- Algoritmo 4 pasos en orden de prioridad: barcode exacto → seed match por brand → fuzzy por título → no-match.
+- 12 nuevos tests (describe blocks separados por tipo de resultado).
+
+**`BarcodeScanner.tsx` (P5.3):**
+- Nuevo helper `createVariantFromScan(product, family)` — id determinista `off_{barcode}`, hereda servingSizes/micros/allergens del canónico, sobreescribe macros/name/brand.
+- 4 ramas de match en el found-state: `known-barcode` (ya guardado) / `seed-match` (banner + botón guardar) / `fuzzy` (confirmación familia) / `ambiguous` (chips de familia) / `no-match` (banner informativo).
+- Props nuevas: `knownVariants`, `addUserVariant`, `addVariantBarcode` — pasadas desde AddMeal.
+
+**i18n (+16 keys × 2 locales):** `scanner.{knownProductFound, foundInFamily, confirmFamily, chooseFamily, unknownProduct, saveAsBrandVariant, saveAsNewFood, savedToBrands}`.
+
+**Smoke test:** escanear `8480000149664` (Hacendado crema cacahuete) → "Encontrado en familia Crema de Cacahuete" → "Guardar en mis marcas" → AddMeal buscar "cacahuete" → `fam_peanut_butter` con sección Hacendado.
+
+---
+
+## [1.5.57] - 2026-04-20
+
+### feat(food): Food Families P2.6 — seed expansion + UX escalable (chicken cuts + brand variants + grouped drill-down)
+
+Cierra tres problemas concretos que emergieron al ver P2.5 (`[1.5.56]`) funcionando en preview + anticipa la escala declarada por el owner (*"100 marcas o supermercados diferentes en varios paises"*). Los tres eran un mismo problema de diseño — *el UI del drill-down asumía ≤5 variants por familia*. P2.6 arregla el UI antes de poblarlo más y entrega seed real como precedente.
+
+**A) Fase A — Seed expansion: cortes de pollo bajo `subcategory: 'aves'`.**
+
+- `src/features/food/data/ingredients.ts` — **+7 entries USDA** cubriendo los cortes que el usuario español encuentra en bandeja separada en Mercadona/Lidl/Carrefour: `pro_chicken_thigh_raw` + `pro_chicken_thigh_cooked` (muslo con hueso/sin piel asado), `pro_chicken_drumstick_raw` + `pro_chicken_drumstick_cooked` (contramuslo / jamoncito), `pro_chicken_wing_raw` + `pro_chicken_wing_cooked` (ala c/piel), `pro_chicken_whole_roasted` (pollo entero asado c/piel — canónico único, sin raw porque el entero casi siempre se consume asado). Macros oficiales USDA FoodData Central (FDC ids 171477/171080/171478/171102/171479/171108/171061). ServingSizes realistas por unidad: muslo 1 ud ≈ 120g raw / 90g cocido; contramuslo 1 ud ≈ 100g / 80g; ala 1 ud ≈ 40g / 30g; pollo entero 1 ración ≈ 150g + 1 pollo ≈ 1000g cocido. `INGREDIENT_DICTIONARY` **139 → 146**.
+- `src/features/food/data/food-families.ts` — `VARIANT_MAP` gana 7 entries nuevas (3 familias con pares raw+cooked `variantType: 'canonical' | 'preparation'` + 1 familia canonical-only). `FAMILY_META` gana 4 familias: `fam_chicken_thigh` (muslo, aliases `muslo/muslo de pollo/thigh`), `fam_chicken_drumstick` (contramuslo, aliases `contramuslo/jamoncito/drumstick`), `fam_chicken_wing` (ala, aliases `ala/alas/alita/wing/wings`), `fam_chicken_whole` (pollo entero asado, aliases `pollo entero/pollo asado/rotisserie chicken`). `FAMILY_SUBCATEGORY` gana 4 entries — todas a `'aves'`. `FOOD_FAMILIES` **132 → 136** (4 nuevos siblings bajo `aves` junto a breast + turkey existentes = 6 familias en la subcategoría).
+
+**B) Fase B — Brand variants seed (demostración end-to-end del patrón `variantType: 'brand'` + `VariantBrand`).**
+
+- `src/features/food/data/food-families.ts` — nueva interfaz exportada `SeedBrandEntry` (forma mínima: `{id, familyId, brand, name/En, description/En, variantType: 'brand', qualityTags?, macros}`). Nuevo const readonly exportado `SEED_BRAND_ENTRIES: readonly SeedBrandEntry[]` con **8 brand variants reales de retail español** distribuidos en 4 familias demostrando el patrón completo: `brand_fam_greek_yogurt_hacendado` (Hacendado 97/3.8/3.8/8), `brand_fam_greek_yogurt_oikos` (Danone Oikos 112/7/4.5/7), `brand_fam_yogurt_hacendado` (Hacendado natural azucarado 80/3.2/12/2.5), `brand_fam_yogurt_sveltesse` (Nestlé Sveltesse 0% 38/4.6/4.5/0.1 + `qualityTags: ['light', 'sugar-free']`), `brand_fam_chicken_breast_bonarea` (BonÀrea de corral 120/23/0/2.5 + `qualityTags: ['free-range']`), `brand_fam_chicken_breast_carrefour_bio` (Carrefour Bio 120/22/0/2.6 + `qualityTags: ['organic', 'free-range']`), `brand_fam_peanut_butter_hacendado` (Hacendado 100% 612/28/16/48 + `qualityTags: ['sugar-free', 'no-additives']`), `brand_fam_peanut_butter_mister_choc` (Lidl Mister Choc 598/22/15/49). Ids deterministas `brand_{familyId}_{slug}` para estabilidad cross-deploy (un usuario que pine `brand_fam_greek_yogurt_hacendado` hoy sigue resolviendo mañana). `buildFamilies()` folds brand ids into `family.variantIds` ordenados después de los variants declarados (canonical + preparation + ... + brand). Nuevo export `getBrandEntry(id)` para consumers P5+.
+- `src/features/food/data/food-variants.ts` — rewrite con nuevo helper privado `brandVariantFrom(canonical, entry): FoodVariant` que **materializa** cada brand variant piggy-backing sobre el canonical de su familia: override macros/name/nameEn/description/brand/qualityTags/variantType/source — inherit servingSizes/micros/allergens/tags/baseAmount/baseUnit (DRY + una nueva serving size en el canonical propaga automáticamente). `buildVariants()` segunda pasada concatena brand variants después de los derivados de `INGREDIENT_DICTIONARY`; throws si el canonical de la familia falta o si el brand id colisiona con un variant existente (invariante de no-duplicación). `FOOD_VARIANTS` **146 → 154** (146 ingredients + 8 brand entries).
+- `src/features/food/data/food-families.test.ts` — **actualiza el invariant histórico** `FOOD_VARIANTS.length === INGREDIENT_DICTIONARY.length` → `FOOD_VARIANTS.length === INGREDIENT_DICTIONARY.length + SEED_BRAND_ENTRIES.length`. El invariant **se rompe intencionalmente** (brand variants no tienen ingrediente canónico propio — heredan del canonical); futuros scanned variants (P5) seguirán el mismo patrón. Nuevo describe block `P2.6 chicken cuts` (4 asserts: 4 familias existen bajo `aves`, thigh tiene variant `preparation`, whole tiene solo canonical). Nuevo describe block `P2.6 brand variants seed` (9 asserts: 8 entries / 4 familias, cada brand materializa, ids deterministas `brand_{family}_{slug}`, NO son canonical de su familia, heredan servingSizes/micros/allergens, macros override, optional qualityTags con slugs válidos, aparecen en `getVariantsOfFamily(familyId)`, `computeMacroDelta` produce delta signed). Family count range permissivo `134 ≤ n ≤ 140`. `INGREDIENT_DICTIONARY.length === 146`. `aves` siblings lock: exact 6 (breast/thigh/drumstick/wing/whole/turkey).
+
+**C) Fase C — Indicador genérico + drill-down agrupado por variantType.**
+
+- `src/features/food/components/FamilyCard.tsx` — **owner directive**: *"con que me ponga que hay variantes a nivel general me vale no me digas cuantas"*. El badge numérico `<Badge>{count} variantes</Badge>` (líneas 82-86 pre-P2.6) se sustituye por indicador genérico: `<span><span aria-hidden bg-primary w-1.5 h-1.5 rounded-full />{t.foodDictionary.variantsIndicatorLabel}</span>` con `aria-label={t.foodDictionary.variantsIndicatorAria}`. Dot 6×6 `bg-primary` + label "VARIANTES"/"VARIANTS" uppercase tracking-widest paridad con el resto de sub-labels del card. `variantCount` sigue calculado pero solo se usa en el branching `> 0` — nunca visible.
+- `FamilyCard.tsx` — drill-down rewrite: pasa de `nonCanonicalVariants.map(v => <VariantRow/>)` plano a **iteración por `GROUP_ORDER` const** (`['preparation','quality','regional','brand','user']` — canonical omitido porque es la primary view). Cada grupo no vacío emite `<div data-variant-group={type}>` con sub-header `<h4>{t.foodDictionary.variantTypes[type]}</h4>` + `.slice(0, INITIAL_LIMIT)` donde `INITIAL_LIMIT = 5`. Si `group.length > 5`: botón "Ver más"/"Show more" con state `expandedGroups: Set<VariantType>` que expande/colapsa localmente. **Escalabilidad**: el 1er render es O(5 × 5 grupos) = 25 filas máx por familia independiente del tamaño total — escanear 50 marcas de yogur no degrada first-paint de otras familias. El usuario opta-in al ruido grupo-a-grupo (el que busca una marca concreta expande BRAND; el que busca preparación no ve marcas).
+- `src/features/food/utils/food-family-resolver.ts` — **+2 helpers puros**: `groupVariantsByType(variants, canonicalId): Map<VariantType, FoodVariant[]>` (buckets por variantType, canonical excluido, orden preservado por input) + `topVariantsByFamily(familyId, n): FoodVariant[]` (deterministic placeholder ordering `brand > quality > regional > preparation > user` + slice `n`; real popularity requires Q6 telemetry). Usados por `FamilyCard` hoy + `AddMeal` result previews P3+ + `RecipeDetail` swap sheet P4 — ambos patterns fundamentalmente iguales, el helper evita reinvención.
+- `src/features/food/utils/food-family-resolver.test.ts` **nuevo** — 9 asserts en 2 describe blocks: `groupVariantsByType` (empty map cuando solo canonical, canonical nunca en buckets, mismo type → mismo bucket, 5 buckets distintos uno por type); `topVariantsByFamily` (canonical excluido, brand-first post-Fase B (`fam_greek_yogurt` → Hacendado + Oikos primero), `n` slice respetado, singleton returns `[]`, GROUP_ORDER sanity check vía `groupVariantsByType`).
+- `src/i18n/locales/es.ts` + `en.ts` — DROP `foodDictionary.variantsCount` + `variantsCountOne` × 2 locales (los literales `'{count} variante' / '{count} variantes'` son conceptualmente reemplazados por el indicador genérico, no se necesitan más). ADD `variantsIndicatorLabel` (ES `"Variantes"` / EN `"Variants"`, uppercase vía CSS), `variantsIndicatorAria` (ES `"Tiene variantes disponibles"` / EN `"Has available variants"`), `showMore` (ES `"Ver más"` / EN `"Show more"`), `showLess` (ES `"Ver menos"` / EN `"Show less"`). Net **−2 + 4 = +2 pairs**; i18n **1657 → 1659 simétrico**.
+- `src/test/conventions/food-family-card.test.ts` — drop stale asserts sobre `variantsCount`/`variantsCountOne` + regression guard `expect(familyCardSrc).not.toMatch(/\bvariantsCountOne\b/)` para que el numeric badge no vuelva. Add: `variantsIndicatorLabel` + `variantsIndicatorAria` presentes cuando `variantCount > 0`; `data-variant-group={type}` emitted + `GROUP_ORDER` const + `groupVariantsByType` usado + `variantTypes[type]` lookup; `INITIAL_LIMIT = 5` + `slice(0, INITIAL_LIMIT)` + `expandedGroups` state + `showMore`/`showLess` i18n + `hasMore` conditional.
+
+**D) Forward-compat preserved.**
+
+- **Zero `seedVersion` bump.** Los 7 `ingredientId` nuevos (chicken cuts) son *additions*, no renames. Recetas legacy intactas. Los 8 brand variant ids son deterministas cross-deploy — un usuario que pine `brand_fam_greek_yogurt_hacendado` hoy sigue resolviendo mañana sin migración.
+- **Dual-schema `RecipeIngredient`** (`familyId?` + `variantId?` + legacy `ingredientId?`) de `[1.5.54]` intacto.
+- **Ningún flow de usuario roto.** `FOOD_VARIANTS.length === INGREDIENT_DICTIONARY.length` invariant roto intencionalmente — un solo assert actualizado con comment inline documentando por qué (brand variants no tienen ingrediente propio; futuros scanned variants P5 seguirán el mismo patrón).
+
+**E) Archivos tocados.**
+
+- Modificados: 8 (`src/features/food/data/ingredients.ts`, `src/features/food/data/food-families.ts`, `src/features/food/data/food-families.test.ts`, `src/features/food/data/food-variants.ts`, `src/features/food/utils/food-family-resolver.ts`, `src/features/food/components/FamilyCard.tsx`, `src/i18n/locales/es.ts` + `en.ts`, `src/test/conventions/food-family-card.test.ts`).
+- Nuevos: 1 (`src/features/food/utils/food-family-resolver.test.ts`).
+- `CHANGELOG.md` + `docs/ai/state.md` — snapshot post-ship.
+
+**F) Rollback.**
+
+- Fase A revert: 7 ingredients + 4 familias desaparecen; `FOOD_FAMILIES` 136 → 132. Recetas legacy sin impacto (ids añadidos no existían antes). Safe.
+- Fase B revert: `SEED_BRAND_ENTRIES` vaciado → `FOOD_VARIANTS` 154 → 146 + `family.variantIds` pierde brand ids. El invariant test vuelve a `=== INGREDIENT_DICTIONARY.length`. Safe.
+- Fase C UI revert: badge numérico y drill-down plano restaurados; 4 i18n keys nuevas borradas + 2 antiguas restauradas. Safe.
+- Fase D revert: 2 helpers y test file nuevos desaparecen; ningún consumer los necesita (FamilyCard era el único). Safe.
+
+**G) Scope discipline — explicit deferrals.**
+
+- **Cortes de otros animales.** Con `aves` demostrado end-to-end, vacuno/cerdo/pescado siguen el patrón en follow-ups (P2.7+). Scope cortado en 1 sprint.
+- **Ordering por popularidad real.** `topVariantsByFamily` usa orden fijo `brand > quality > ...` como placeholder. Con telemetría Q6+ debería ser scan-count desc. Hoy cumple su rol en seed + tests + UI previews.
+- **Grupos colapsados por default.** P2.6 deja grupos expandidos (paridad con comportamiento actual). Si owner post-preview prefiere `brand` empiece colapsado, son 5 líneas de state extra + 1 key i18n (`showBrands` CTA). Scope-out.
+- **Brand macros no verificadas vs OFF oficial.** Los 8 brand seeds son aproximaciones de etiquetas retail españolas públicas (no scraped). Margen ±5% tolerable; tests lockean `brand.name` + `variantType === 'brand'` + ids deterministas, no valores absolutos. Cuando P5 integre OFF, los 8 seeds pueden "ascender" a `source: 'off'` con macros exactas + barcode — ids estables.
+- **BarcodeScanner dedup.** `VariantBrand.barcode?` vacío en seed. Cuando P5 escanee OFF, el matcher debe consultar `SEED_BRAND_ENTRIES` por `brand.name` + `familyId` antes de crear variant nueva (evitar duplicado OFF vs seed). Noted para sprint P5.
+- **Auto-promote marca popular a familia propia.** Lógica P5+ (critical-mass ≥3 scans). No relevante hoy.
+- **AddMeal grouped por subcategoría / preview integration.** AddMeal sigue flat post-P2.6. `topVariantsByFamily` está disponible pero no consumido — P3+ lo integrará cuando diseñemos el picker drill-down.
+
+**H) Notes.**
+
+- **Camera-hot pattern preservation.** `BarcodeScanner` (Despensa P5 pendiente) no tocado; P2.6 es pure data + UI drill-down. Cuando P5 escanee Hacendado/Oikos, debe resolver contra `SEED_BRAND_ENTRIES` por barcode (futuro) o brand name antes de crear variant `source: 'off'` nuevo.
+- **Preview smoke manual pendiente owner.** Scope convention tests (food-family-card.test.ts actualizado) + 9 unit tests nuevos + 64 food-families locks cubren la anatomía. Smoke manual post-push: expandir "Muslo de Pollo" → header pinta dot + "VARIANTES" sin numérico; sección `PREPARACIÓN` con 1 fila (Cocido); delta macros vs canonical correcto. Expandir "Yogur Griego" → secciones `CALIDAD` (0%) + `MARCA` (Hacendado + Oikos). Expandir "Pechuga de Pollo" → `MARCA` BonÀrea + Carrefour Bio con chips `DE CORRAL` / `ECOLÓGICO`.
+- **`FOOD_VARIANTS.length === INGREDIENT_DICTIONARY.length` invariant break.** Es el primer precedente del repo donde un invariant histórico se rompe intencionalmente. El comment inline + el test actualizado con la formula `INGREDIENT_DICTIONARY.length + SEED_BRAND_ENTRIES.length` documentan el nuevo contrato. Futuros scanned variants (P5) heredarán el patrón — el invariant crecerá a `INGREDIENT_DICTIONARY.length + SEED_BRAND_ENTRIES.length + scannedVariants.length` cuando P5 añada persistencia propia.
+
 ## [1.5.56] - 2026-04-20
 
 ### refactor(food): Food Families P2.5 — refinamiento taxonómico (3-tier + multi-axis variants)

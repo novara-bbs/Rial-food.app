@@ -1,4 +1,4 @@
-import { Camera, Plus, Search, Trash2, ArrowUp, ArrowDown, Clock, ChevronRight, Check, Link2, Video, ImagePlus, ThumbsUp, Minus, AlertTriangle, UtensilsCrossed } from 'lucide-react';
+import { Camera, Plus, Search, Trash2, ArrowUp, ArrowDown, Clock, ChevronRight, Check, Link2, Video, ImagePlus, ThumbsUp, Minus, AlertTriangle, UtensilsCrossed, Layers } from 'lucide-react';
 import PageShell from '../../../components/PageShell';
 import { useState, useMemo } from 'react';
 import type { Ingredient, RecipeIngredient, RecipeStep, Micronutrients, FoodTag, MealSlot } from '../../../types';
@@ -8,8 +8,12 @@ import { Badge } from '@/components/ui/badge';
 import PortionSelector, { scaleMacros } from '../../food/components/PortionSelector';
 import MealSlotMultiSelect from '../../food/components/MealSlotMultiSelect';
 import PhotoUploader from '../components/PhotoUploader';
+import VariantPickerSheet from '../../food/components/VariantPickerSheet';
 import { getRecipeSlots } from '../utils/meal-slot';
 import { getFoodQuality } from '../../food/utils/nutrition';
+import { searchFamilies, resolveVariant } from '../../food/utils/food-family-resolver';
+import { variantToIngredient } from '../../food/utils/variant-to-ingredient';
+import type { FoodFamily, FoodVariant } from '../../../types/food-family';
 import { useAppState } from '../../../contexts/AppStateContext';
 import PageHeader from '../../../components/patterns/PageHeader';
 
@@ -71,7 +75,7 @@ export default function CreateRecipe({
   initialRecipe?: any;
 }) {
   const { t, locale } = useI18n();
-  const { userProfile } = useAppState();
+  const { userProfile, mergedVariants, userVariants } = useAppState();
   const unitSystem = userProfile.unitSystem ?? 'metric';
   const [step, setStep] = useState(1);
 
@@ -107,6 +111,9 @@ export default function CreateRecipe({
   const [isSearching, setIsSearching] = useState(false);
   const [expandedIngId, setExpandedIngId] = useState<string | null>(null);
   const [pendingGrams, setPendingGrams] = useState(100);
+  // P4 — variant picker for family-first ingredient selection
+  const [pickerFamily, setPickerFamily] = useState<FoodFamily | null>(null);
+  const [pickerOpen, setPickerOpen] = useState(false);
 
   // ── Step 3: Instructions (with optional per-step photo) ──
   const [steps, setSteps] = useState<RecipeStep[]>(
@@ -121,7 +128,15 @@ export default function CreateRecipe({
     const micros: Micronutrients = { vitamins: {}, minerals: {}, others: {} };
 
     recipeIngredients.forEach(ri => {
-      const ing = dictionary.find(i => i.id === ri.ingredientId);
+      // Try flat dictionary first (legacy + standard ingredients)
+      let ing: Ingredient | undefined = dictionary.find(i => i.id === ri.ingredientId);
+      // Fall back to variant resolution (family variants, user-scanned brands)
+      if (!ing) {
+        const variant = ri.familyId
+          ? resolveVariant(ri.familyId, ri.variantId ?? undefined)
+          : mergedVariants.find(v => v.id === ri.ingredientId);
+        if (variant) ing = variantToIngredient(variant);
+      }
       if (!ing) return;
       const r = ri.amount / ing.baseAmount;
       cal += ing.macros.calories * r;
@@ -149,7 +164,7 @@ export default function CreateRecipe({
       },
       micros,
     };
-  }, [recipeIngredients, dictionary]);
+  }, [recipeIngredients, dictionary, mergedVariants]);
 
   const perServing = useMemo(() => ({
     calories: Math.round(totals.macros.calories / servings),
@@ -183,6 +198,24 @@ export default function CreateRecipe({
     setPendingGrams(100);
   };
 
+  /** P4: add a family variant as a recipe ingredient (new dual-schema shape). */
+  const addIngredientFromVariant = (family: FoodFamily, variant: FoodVariant, grams: number) => {
+    const isCanonical = variant.id === family.canonicalVariantId;
+    setRecipeIngredients(prev => [...prev, {
+      id: Date.now().toString(),
+      familyId: family.id,
+      variantId: isCanonical ? undefined : variant.id,
+      ingredientId: variant.id,  // legacy retained for hydration
+      amount: grams,
+      unit: variant.baseUnit,
+      ingredient: variantToIngredient(variant),
+    }]);
+    setPickerFamily(null);
+    setPickerOpen(false);
+    setSearchQuery('');
+    setPendingGrams(100);
+  };
+
   const removeIngredient = (id: string) => setRecipeIngredients(prev => prev.filter(ri => ri.id !== id));
 
   const addStep = () => setSteps(prev => [...prev, { text: '' }]);
@@ -194,6 +227,14 @@ export default function CreateRecipe({
     const q = searchQuery.toLowerCase();
     return dictionary.filter(i => i.name.toLowerCase().includes(q) || i.nameEn.toLowerCase().includes(q)).slice(0, 20);
   }, [searchQuery, dictionary]);
+
+  /** P4 — family-first results. Shown above flat dictionary rows when searching. */
+  const familyResults = useMemo(
+    () => searchQuery.trim().length >= 2
+      ? searchFamilies(searchQuery, mergedVariants, 6)
+      : [],
+    [searchQuery, mergedVariants],
+  );
 
   /** Detect YouTube video ID for embed */
   const youtubeId = useMemo(() => {
@@ -431,6 +472,28 @@ export default function CreateRecipe({
                   className="text-xs font-label uppercase tracking-widest text-on-surface-variant hover:text-tertiary">{t.common.cancel}</button>
               </div>
               <div className="max-h-72 overflow-y-auto divide-y divide-outline-variant/10">
+                {/* P4 — family rows first */}
+                {familyResults.map(({ family, canonical }) => {
+                  const familyName = locale === 'es' ? family.name : family.nameEn;
+                  return (
+                    <button
+                      key={`fam-${family.id}`}
+                      type="button"
+                      onClick={() => { setPickerFamily(family); setPickerOpen(true); }}
+                      className="w-full text-left px-4 py-3 hover:bg-surface-container transition-colors flex items-center gap-3"
+                    >
+                      <Layers className="w-4 h-4 text-primary shrink-0" aria-hidden="true" />
+                      <div className="flex-1 min-w-0">
+                        <span className="block font-headline font-bold text-sm text-tertiary truncate">{familyName}</span>
+                        <span className="block text-micro font-label uppercase tracking-widest text-on-surface-variant">
+                          {canonical.macros.calories} kcal / 100g · {canonical.macros.protein}g P
+                        </span>
+                      </div>
+                      <ChevronRight className="w-4 h-4 text-primary/60 shrink-0" aria-hidden="true" />
+                    </button>
+                  );
+                })}
+                {/* Flat dictionary rows */}
                 {filteredDictionary.map(ing => (
                   <div key={ing.id}>
                     <button type="button"
@@ -632,10 +695,12 @@ export default function CreateRecipe({
               {recipeIngredients.length} {t.recipes.ingredients}
             </h4>
             {recipeIngredients.map(ri => {
-              const ing = dictionary.find(i => i.id === ri.ingredientId);
+              const ing = ri.ingredient
+                ?? dictionary.find(i => i.id === ri.ingredientId);
+              const name = ing?.name ?? ri.ingredientId ?? '—';
               return (
                 <div key={ri.id} className="flex items-center justify-between py-1.5 border-b border-outline-variant/10 last:border-0">
-                  <span className="font-body text-sm text-tertiary">{ing?.name}</span>
+                  <span className="font-body text-sm text-tertiary">{name}</span>
                   <span className="font-label text-xs text-on-surface-variant">{ri.amount}g</span>
                 </div>
               );
@@ -690,6 +755,23 @@ export default function CreateRecipe({
           </Button>
         )}
       </div>
+
+      {/* P4 — Variant picker sheet for family-first ingredient selection */}
+      {pickerFamily && (
+        <VariantPickerSheet
+          family={pickerFamily}
+          allVariants={mergedVariants}
+          userVariants={userVariants}
+          open={pickerOpen}
+          onOpenChange={(open) => {
+            setPickerOpen(open);
+            if (!open) setPickerFamily(null);
+          }}
+          onSelect={(variant) => {
+            addIngredientFromVariant(pickerFamily, variant, 100);
+          }}
+        />
+      )}
     </PageShell>
   );
 }
