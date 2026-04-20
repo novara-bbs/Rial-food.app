@@ -1,5 +1,49 @@
 # RIAL App - Changelog
 
+## [1.5.66] - 2026-04-21
+
+### feat(food): P9 — Scoring contextual multi-goal (3 lentes perder / mantener / ganar)
+
+Owner directive 2026-04-21: el score de un alimento **no puede ser universal**. El aceite de oliva virgen extra tiene score `A` para quien quiere ganar peso (grasa sana densa, ideal en superávit) y `C` para quien quiere perder (denso calóricamente, vigila la ración). Yuka/Nutri-Score dan el mismo grado a todo el mundo — **diferenciación real de RIAL**.
+
+**Nuevo helper `src/features/food/utils/contextual-score.ts`:**
+- `computeContextualScore(variant, goal): ContextualScore` — devuelve `{ grade: 'A'-'E', rationale: slug, caveats: slug[] }`.
+- Heurística v1 basada en densidad proteica, kcal density, relación proteína:kcal, y detección de ultra-procesados vía `variantType + qualityTags`. Sin campos fiber/sugar/sodium en el seed (pendientes), así que el score queda abierto a refinamiento cuando el seed se amplíe.
+- Normalizador `normalizeGoal(rawGoal)` mapea el string libre de `userProfile.goal` (`'lose'|'cut'|'gain'|'muscle'|'performance'|'maintain'|'health'|'family'`) a los 3 goals canónicos. Null para valores desconocidos (graceful fallback).
+
+**Lógica por goal (resumida):**
+- `lose-weight` — premia alta proteína + baja kcal; penaliza azúcar vacío (cola, zumos) y ultra-procesados densos.
+- `maintain` — premia alimentos completos balanceados; penaliza ultra-procesados y azúcar vacío.
+- `gain-weight` — premia densidad calórica de calidad (oils, nuts, avocado); penaliza muy baja kcal (agua, verduras ligeras) y ultra-procesados.
+
+**Ejemplos shipped (tests):**
+- Aceite oliva VEE (884 kcal, 0 prot, 100 g fat): `A` ganar · `B` mantener · `C` perder
+- Pechuga pollo (165 kcal, 31 prot): `A` perder · `A` mantener · `B` ganar
+- Coca-Cola brand (42 kcal, 0 prot, 10.6 carbs): `E` perder · `D` mantener · `C` ganar
+- Brócoli (34 kcal, 2.8 prot): `B` perder · `C` ganar
+- Agua (0 kcal): `A` perder · `A` mantener · `D` ganar
+
+**Componentes nuevos:**
+- `ContextualScoreChip.tsx` — chip compacto con letter grade + color semántico (`bg-primary` A · `bg-primary/20` B · `bg-surface-container-high` C · `bg-brand-secondary/15` D · `bg-error/10` E). Tap/hover title = `rationale · goal`. Tamaños `sm` (solo letra, 20×20 px) y `md` (letra + label goal).
+- `ContextualScorePanel.tsx` — grid 3 columnas con scores de los 3 goals. Highlight del goal activo del usuario con border-primary + ring + bg. Cada columna muestra: label goal, letter grade bold, rationale corto, caveats (chips secundarios).
+
+**Mount points:**
+- `FoodDetail.tsx` — monta `<ContextualScorePanel activeGoal={normalized userProfile.goal} />` bajo nueva `<SectionCard title="¿Para qué objetivo es mejor?">`. Educa al usuario sobre la doctrina contextual.
+- `FamilyCard.tsx` collapsed header — cuando `userProfile.goal` está definido, añade `<ContextualScoreChip size="sm">` con el score para ese goal. Quick visual signal a la hora de browsear el diccionario.
+
+**i18n:**
+- Nuevo namespace `contextualScore` con: 3 `goalLabels`, 13 `rationales`, 6 `caveats`, 4 UI labels (forGoal, whichGoalIsBetter, tapForDetails, noGoalSet). +27 claves simétricas × 2 locales → **1726 → 1753**.
+
+**Tests:**
+- `contextual-score.test.ts` — 14 asserts: normalizeGoal mapping, olive oil (owner example), chicken breast, cola, broccoli, water, egg, oats, output shape invariants, ultra-processed caveat, gradeColorClass non-empty para cada grade.
+- Tests totales: **898 → 912**.
+
+**Quality baseline post-P9:**
+- TypeScript: 0 errors
+- i18n: 1753 simétrico
+- Tests: 912 passing
+- Build + size:check: pendiente de full preflight tras P10
+
 ## [1.5.65] - 2026-04-21
 
 ### feat(food): P8 — Diccionario enriquecido (imagen + descripción educativa + usos + sustitutos + FoodDetail)

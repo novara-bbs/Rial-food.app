@@ -26,6 +26,9 @@ import { useI18n } from '../../../i18n';
 import type { FoodFamily, FoodVariant, VariantType } from '../../../types/food-family';
 import { computeMacroDelta, groupVariantsByType } from '../utils/food-family-resolver';
 import VariantRow from './VariantRow';
+import ContextualScoreChip from './ContextualScoreChip';
+import { normalizeGoal } from '../utils/contextual-score';
+import { useAppState } from '../../../contexts/AppStateContext';
 
 interface Props {
   family: FoodFamily;
@@ -83,6 +86,12 @@ export default function FamilyCard({
   onLearnMore,
 }: Props) {
   const { t, locale } = useI18n();
+  const { userProfile } = useAppState();
+  const activeGoal = normalizeGoal(
+    typeof (userProfile as { goal?: string })?.goal === 'string'
+      ? (userProfile as { goal?: string }).goal
+      : null,
+  );
   const [expandedGroups, setExpandedGroups] = useState<Set<VariantType>>(() => new Set());
 
   const name = locale === 'es' ? family.name : family.nameEn;
@@ -139,6 +148,11 @@ export default function FamilyCard({
             {macros.calories} {t.common.kcal} · {macros.protein}g {t.portionSelector.protein} · {macros.carbs}g {t.portionSelector.carbs} · {macros.fats}g {t.portionSelector.fats}
           </span>
         </div>
+        {activeGoal && (
+          <span className="mr-2 shrink-0">
+            <ContextualScoreChip variant={canonicalVariant} goal={activeGoal} size="sm" />
+          </span>
+        )}
         {variantCount > 0 && (
           <span
             className="mr-2 inline-flex items-center gap-1 text-micro font-label uppercase tracking-widest text-on-surface-variant shrink-0"

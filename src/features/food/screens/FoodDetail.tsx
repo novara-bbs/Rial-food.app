@@ -37,10 +37,19 @@ import {
 import VariantRow from '../components/VariantRow';
 import TierBadge from '../components/TierBadge';
 import { deriveTier } from '../utils/trust-tier';
+import ContextualScorePanel from '../components/ContextualScorePanel';
+import { normalizeGoal } from '../utils/contextual-score';
+import { useAppState } from '../../../contexts/AppStateContext';
 
 export default function FoodDetail() {
   const { t, locale } = useI18n();
   const { navigateTo, goBack, screenData } = useNavigation();
+  const { userProfile } = useAppState();
+  const activeGoal = normalizeGoal(
+    typeof (userProfile as { goal?: string })?.goal === 'string'
+      ? (userProfile as { goal?: string }).goal
+      : null,
+  );
 
   const familyId = (screenData?.familyId as string | undefined) ?? '';
   const family: FoodFamily | undefined = useMemo(
@@ -117,6 +126,13 @@ export default function FoodDetail() {
           <p className="text-body text-on-surface leading-relaxed whitespace-pre-line">
             {longDescription}
           </p>
+        </SectionCard>
+      )}
+
+      {/* P9 — contextual 3-goal score panel. Requires a canonical variant. */}
+      {canonical && (
+        <SectionCard title={t.contextualScore.whichGoalIsBetter}>
+          <ContextualScorePanel variant={canonical} activeGoal={activeGoal} />
         </SectionCard>
       )}
 

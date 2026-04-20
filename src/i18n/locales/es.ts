@@ -1493,6 +1493,41 @@ const es = {
       'plant-based': 'Alternativa vegetal',
     },
   },
+  // P9 [1.5.66] — contextual score multi-goal (perder / mantener / ganar).
+  contextualScore: {
+    goalLabels: {
+      'lose-weight': 'Perder peso',
+      maintain: 'Mantener',
+      'gain-weight': 'Ganar peso',
+    },
+    rationales: {
+      'high-protein-low-cal': 'Alta proteína, pocas calorías',
+      'protein-base': 'Buena base proteica',
+      'whole-food-balanced': 'Alimento completo equilibrado',
+      'lean-light': 'Ligero y magro',
+      'energy-dense-quality': 'Energía densa de calidad',
+      'energy-dense-good-for-gain': 'Energía densa — ideal para superávit',
+      'dense-calorie-watch-portion': 'Denso calóricamente — mide la ración',
+      'sugar-empty-calories': 'Azúcar sin saciedad',
+      'ultra-processed-caution': 'Ultraprocesado — consumo ocasional',
+      'neutral-use-in-moderation': 'Neutro — con moderación',
+      'mostly-water-low-impact': 'Casi sin calorías',
+      'protein-rich-quality-fat': 'Proteína + grasa de calidad',
+      'carb-rich-sustained': 'Carbohidratos para energía sostenida',
+    },
+    caveats: {
+      'watch-portion': 'Mide la ración',
+      'ultra-processed': 'Ultraprocesado',
+      'add-carbs-or-fat': 'Combina con carbos o grasas',
+      'pair-with-protein': 'Acompaña con proteína',
+      'dense-calorie': 'Denso calóricamente',
+      'check-added-sugar': 'Revisa azúcar añadido',
+    },
+    forGoal: 'Para tu objetivo ({{goal}})',
+    whichGoalIsBetter: '¿Para qué objetivo es mejor?',
+    tapForDetails: 'Toca para detalles',
+    noGoalSet: 'Sin objetivo definido',
+  },
   // RecipeDetail
   recipeDetail: {
     yourRecipe: 'Tu Receta',
