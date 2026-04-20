@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect, useMemo } from 'react';
 import PageShell from '../../../components/PageShell';
-import { Plus, Camera, Barcode, Loader2, BookOpen, Leaf, Globe, Star, Clock, CheckSquare, Square, X, Sparkles, Trash2 } from 'lucide-react';
+import { Plus, Camera, Barcode, Loader2, BookOpen, Leaf, Globe, Star, Clock, CheckSquare, Square, X, Sparkles, Trash2, ChevronRight } from 'lucide-react';
 import SearchInput from '../../../components/patterns/SearchInput';
 import { Ingredient, Recipe } from '../../../types';
 import { logger } from '../../../lib/logger';
@@ -11,7 +11,10 @@ import { offResultToIngredient } from '../utils/pseudo-ingredient';
 import { searchOpenFoodFacts, OFFResult } from '../api/open-food-facts';
 import { analyzePhotoMeal, fileToBase64, DetectedFood } from '../api/photo-recognition';
 import BarcodeScanner from '../components/BarcodeScanner';
+import VariantPickerSheet from '../components/VariantPickerSheet';
 import MealSlotSelector, { MealSlot } from '../components/MealSlotSelector';
+import { searchFamilies } from '../utils/food-family-resolver';
+import type { FoodFamily } from '../../../types/food-family';
 import PortionSheet from '../components/PortionSheet';
 import { PortionResult } from '../components/PortionSelector';
 import EmptyState from '../../../components/EmptyState';
@@ -36,8 +39,12 @@ export default function AddMeal({
   savedRecipes = [],
   dictionary = [],
 }: AddMealProps) {
-  const { t } = useI18n();
-  const { userProfile, foodHistory, favoriteIds, toggleFavorite, openScannerOnAddMeal, setOpenScannerOnAddMeal } = useAppState();
+  const { t, locale } = useI18n();
+  const {
+    userProfile, foodHistory, favoriteIds, toggleFavorite,
+    openScannerOnAddMeal, setOpenScannerOnAddMeal,
+    userVariants, mergedVariants, addUserVariant, addVariantBarcode,
+  } = useAppState();
   const unitSystem = userProfile.unitSystem ?? 'metric';
 
   // ─── Local state ───────────────────────────────────────────
@@ -46,6 +53,9 @@ export default function AddMeal({
   const [mealSlot, setMealSlot] = useState<MealSlot>('lunch');
   const [searchQuery, setSearchQuery] = useState('');
   const [apiResults, setApiResults] = useState<OFFResult[]>([]);
+  // P3 — variant picker sheet
+  const [pickerFamily, setPickerFamily] = useState<FoodFamily | null>(null);
+  const [pickerOpen, setPickerOpen] = useState(false);
   const [isSearchingApi, setIsSearchingApi] = useState(false);
   const [showScanner, setShowScanner] = useState(false);
   const [isAnalyzing, setIsAnalyzing] = useState(false);
@@ -134,6 +144,16 @@ export default function AddMeal({
       ? unifiedSearch(searchQuery, { dictionary, savedRecipes })
       : [],
     [isSearching, searchQuery, dictionary, savedRecipes],
+  );
+
+  // ─── P3 Family-first search results ───────────────────────
+  // Shown above flat search results when query >= 2 chars. Each row opens
+  // VariantPickerSheet so the user picks the specific variant before logging.
+  const familyResults = useMemo(
+    () => searchQuery.length >= 2
+      ? searchFamilies(searchQuery, mergedVariants, 8)
+      : [],
+    [searchQuery, mergedVariants],
   );
 
   // Memoized so rerenders driven by unrelated state (e.g. multi-queue totals,
@@ -308,6 +328,9 @@ export default function AddMeal({
           <BarcodeScanner
             onClose={() => setShowScanner(false)}
             unitSystem={unitSystem}
+            knownVariants={mergedVariants}
+            addUserVariant={addUserVariant}
+            addVariantBarcode={addVariantBarcode}
             onProductFound={(product, portionResult) => {
               setShowScanner(false);
               const m = portionResult?.scaledMacros ?? { calories: product.calories, protein: product.protein, carbs: product.carbs, fats: product.fats };
@@ -426,6 +449,38 @@ export default function AddMeal({
             onChange={(id) => setBrowseMode(id as typeof browseMode)}
             variant="pill"
           />
+        )}
+
+        {/* P3 — Family-first results (shown above flat results when query ≥ 2 chars) */}
+        {isSearching && familyResults.length > 0 && (
+          <section className="space-y-2">
+            <h4 className="text-micro font-label uppercase tracking-widest text-on-surface-variant">
+              {t.addMealScreen.pickerTitle}
+            </h4>
+            <div className="space-y-1.5">
+              {familyResults.map(({ family, canonical }) => {
+                const familyName = locale === 'es' ? family.name : family.nameEn;
+                return (
+                  <button
+                    key={family.id}
+                    type="button"
+                    onClick={() => { setPickerFamily(family); setPickerOpen(true); }}
+                    className="w-full bg-surface-container-low p-3 rounded-sm border border-outline-variant/20 flex items-center justify-between hover:border-primary/30 transition-colors text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/60 focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+                  >
+                    <div className="min-w-0 flex-1 mr-3">
+                      <span className="font-headline font-bold text-sm uppercase text-tertiary block truncate">
+                        {familyName}
+                      </span>
+                      <span className="text-micro font-label tracking-widest uppercase text-on-surface-variant">
+                        {canonical.macros.calories} {t.common.kcal} · {canonical.macros.protein}g P · {canonical.macros.carbs}g C
+                      </span>
+                    </div>
+                    <ChevronRight className="w-4 h-4 text-on-surface-variant shrink-0" aria-hidden="true" />
+                  </button>
+                );
+              })}
+            </div>
+          </section>
         )}
 
         {/* Food list */}
@@ -548,6 +603,44 @@ export default function AddMeal({
           onConfirm={handlePortionConfirm}
           onClose={() => setPortionTarget(null)}
           unitSystem={unitSystem}
+        />
+      )}
+
+      {/* P3 — Variant picker sheet (family-first selection) */}
+      {pickerFamily && (
+        <VariantPickerSheet
+          family={pickerFamily}
+          allVariants={mergedVariants}
+          userVariants={userVariants}
+          open={pickerOpen}
+          onOpenChange={(open) => {
+            setPickerOpen(open);
+            if (!open) setPickerFamily(null);
+          }}
+          onSelect={(variant) => {
+            const familyName = locale === 'es' ? pickerFamily.name : pickerFamily.nameEn;
+            const brandSuffix = variant.brand?.name ? ` · ${variant.brand.name}` : '';
+            const item = {
+              id: variant.id,
+              title: `${familyName}${brandSuffix}`,
+              familyId: variant.familyId,
+              variantId: variant.id,
+              cal: variant.macros.calories,
+              pro: variant.macros.protein,
+              carbs: variant.macros.carbs,
+              fats: variant.macros.fats,
+              macros: variant.macros,
+              grams: 100,
+              portionDescription: '100g',
+              servingUsed: 'base',
+            };
+            if (multiMode) {
+              setMultiQueue(prev => [...prev, item]);
+              toast.success(t.addMealScreen?.addedToQueue || 'Añadido a la cola');
+            } else {
+              logFood(item);
+            }
+          }}
         />
       )}
     </>
