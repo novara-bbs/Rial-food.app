@@ -1241,6 +1241,15 @@ const en: Translations = {
     fats: 'Fats (g)',
     saveAndLog: 'Save & log',
     allFieldsRequired: 'Name and calories are required',
+    // P5 — match-result UI labels
+    knownProductFound: 'Already saved',
+    foundInFamily: 'Found in family',
+    confirmFamily: 'Part of this group?',
+    chooseFamily: 'Which food group?',
+    unknownProduct: 'Product not recognized',
+    saveAsBrandVariant: 'Save to my brands',
+    saveAsNewFood: 'Save as new food',
+    savedToBrands: 'Saved to your dictionary',
   },
   foodDictionary: {
     title: 'Foods',
@@ -1274,8 +1283,10 @@ const en: Translations = {
     },
     primaryLabel: 'Primary',
     variantsSection: 'Variants',
-    variantsCount: '{count} variants',
-    variantsCountOne: '{count} variant',
+    variantsIndicatorLabel: 'Variants',
+    variantsIndicatorAria: 'Has available variants',
+    showMore: 'Show more',
+    showLess: 'Show less',
     vsCanonical: 'vs primary',
     variantTypes: {
       canonical: 'Reference',
@@ -1464,6 +1475,9 @@ const en: Translations = {
     ingredientAdded: '{name} added',
     listBtn: 'List',
     extraBtn: 'Extra',
+    variantPinned: 'Specific variant',
+    swapVariant: 'Change variant',
+    genericIngredient: 'Generic (USDA)',
   },
   shopping: {
     itemName: 'Item name',
@@ -1583,6 +1597,10 @@ const en: Translations = {
     addedToQueue: 'Added to queue',
     logAll: 'Log all ({count})',
     addToMeal: 'Add to meal',
+    // P3 — family-first search
+    myScannedBrands: 'My scanned brands',
+    pickerTitle: 'Choose variant',
+    genericVariant: 'Generic',
   },
   mealToasts: {
     addedToPlan: 'Meal added to planner!',

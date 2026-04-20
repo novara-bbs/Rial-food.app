@@ -1282,6 +1282,15 @@ const es = {
     fats: 'Grasas (g)',
     saveAndLog: 'Guardar y registrar',
     allFieldsRequired: 'Nombre y calorías son obligatorios',
+    // P5 — match-result UI labels
+    knownProductFound: 'Ya lo tenías guardado',
+    foundInFamily: 'Encontrado en familia',
+    confirmFamily: '¿Es de este grupo?',
+    chooseFamily: '¿A qué grupo pertenece?',
+    unknownProduct: 'Producto no reconocido',
+    saveAsBrandVariant: 'Guardar en mis marcas',
+    saveAsNewFood: 'Guardar como alimento nuevo',
+    savedToBrands: 'Guardado en tu diccionario',
   },
   // FoodDictionary
   foodDictionary: {
@@ -1316,8 +1325,10 @@ const es = {
     },
     primaryLabel: 'Principal',
     variantsSection: 'Variantes',
-    variantsCount: '{count} variantes',
-    variantsCountOne: '{count} variante',
+    variantsIndicatorLabel: 'Variantes',
+    variantsIndicatorAria: 'Tiene variantes disponibles',
+    showMore: 'Ver más',
+    showLess: 'Ver menos',
     vsCanonical: 'vs principal',
     variantTypes: {
       canonical: 'Referencia',
@@ -1507,6 +1518,9 @@ const es = {
     ingredientAdded: '{name} añadido',
     listBtn: 'Lista',
     extraBtn: 'Extra',
+    variantPinned: 'Variante específica',
+    swapVariant: 'Cambiar variante',
+    genericIngredient: 'Genérico (USDA)',
   },
   // ShoppingList specific
   shopping: {
@@ -1632,6 +1646,10 @@ const es = {
     addedToQueue: 'Añadido a la cola',
     logAll: 'Registrar ({count})',
     addToMeal: 'Añadir a la comida',
+    // P3 — family-first search
+    myScannedBrands: 'Mis marcas escaneadas',
+    pickerTitle: 'Elige variante',
+    genericVariant: 'Genérico',
   },
   // Meal handler toasts
   mealToasts: {

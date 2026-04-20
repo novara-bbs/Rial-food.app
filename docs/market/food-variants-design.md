@@ -1,10 +1,12 @@
 # Food Variants — Design proposal
 
-> **Status:** P0-P2 + P2.5 shipped · **Owner:** @novara-bbs · **Author:** dev-agent 2026-04-19 PM · **Last revised:** 2026-04-20 (P2.5 taxonomy refinement)
+> **Status:** P0-P2 + P2.5 + P2.6 shipped · **Owner:** @novara-bbs · **Author:** dev-agent 2026-04-19 PM · **Last revised:** 2026-04-20 (P2.6 seed expansion + drill-down UX at scale)
 > **Scope:** FoodDictionary data model + AddMeal picker + RecipeDetail swap + BarcodeScanner integration + CreateRecipe
 > **Relation to roadmap:** sibling of Q19 meal-taxonomy. Not part of S3 audit waves. Needs its own multi-phase sprint.
 
 > **P2.5 refinement (2026-04-20).** Owner feedback reclassified "products are families, variants are attributes": `variantType: 'cut'` dropped (pechuga vs muslo are distinct products bajo una subfamilia `aves`, not variants of the same chicken); multi-axis variants introduced via `qualityTags?` orthogonal to `variantType` singular; new **3-tier taxonomy** `category → subcategory → family → variant` with `FoodFamily.subcategory?: string` (48 slugs); clasificación regla "si lo compras aparte, es un producto separado". See CHANGELOG `[1.5.56]` for write set + §2.2 below for the mapping of owner vocabulary ↔ code identifiers.
+
+> **P2.6 seed + UX escalable (2026-04-20).** Owner directives: *"llena el seed con más productos de la categoria familia, tipos de pollo los que hay en base a partes que se venden en el super"* + *"variantes por ejemplo en lidl u otro super que veas online mete los seed"* + *"con que me ponga que hay variantes a nivel general me vale no me digas cuantas"* + *"razona que todo sea escalable a cuando estemos escaneando datos de 100 marcas o supermercados diferentes"*. Write set: +7 USDA chicken cuts (muslo/contramuslo/ala/pollo entero raw+cooked), +4 families bajo `subcategory: 'aves'`, +8 real retail brand variants (Hacendado/Oikos/Sveltesse/BonÀrea/Carrefour Bio/Lidl Mister Choc) via new top-level `SEED_BRAND_ENTRIES`, 2 resolver helpers (`groupVariantsByType` + `topVariantsByFamily`) + 9 unit tests, generic badge (dot + "VARIANTES" uppercase) replacing numeric count, drill-down grouped por `variantType` con `INITIAL_LIMIT = 5` + "Ver más" toggle per-group. See CHANGELOG `[1.5.57]` + §10 below for the rationale + brand seed table + scale math.
 
 ---
 
@@ -380,7 +382,148 @@ El owner pidió revisar esto "porque vas a ver el food dictionary" (durante S3 W
 
 ---
 
-## 9. Referencias
+## 10. P2.6 addendum — seed expansion + drill-down UX at scale
+
+Post-`[1.5.57]` shipped. Las 3 secciones siguientes documentan los cambios UX + seed introducidos sobre la base P2.5. Se añaden como bloque consolidado en lugar de incrustarse en §2/§4/§5 para no renumerar el resto del documento — la fuente de verdad operativa es el código (`src/features/food/data/food-families.ts::SEED_BRAND_ENTRIES`, `src/features/food/components/FamilyCard.tsx::GROUP_ORDER`, `src/features/food/utils/food-family-resolver.ts::groupVariantsByType`).
+
+### 10.1 Indicador agnóstico de variantes (screenshot-ready)
+
+**Problema detectado post-P2.5.** El header collapsed de `<FamilyCard>` pintaba `<Badge>{count} variantes</Badge>` — con 1 variante el badge ocupa más peso visual del que merece; con 100 brand variants escaneadas de un supermercado grande `"47 variantes"` se convierte en ruido que el usuario no razona. Directiva owner verbatim: *"con que me ponga que hay variantes a nivel general me vale no me digas cuantas"*.
+
+**Nuevo anatomy.** Sustituye el badge numérico por un indicador agnóstico que solo comunica **presencia** del drill-down, no cardinalidad:
+
+```tsx
+{variantCount > 0 && (
+  <span
+    className="mr-2 inline-flex items-center gap-1 text-micro font-label uppercase tracking-widest text-on-surface-variant shrink-0"
+    aria-label={t.foodDictionary.variantsIndicatorAria}
+  >
+    <span className="w-1.5 h-1.5 rounded-full bg-primary" aria-hidden="true" />
+    {t.foodDictionary.variantsIndicatorLabel}
+  </span>
+)}
+```
+
+- **Dot 6×6** `bg-primary` + label **uppercase tracking-widest** — paridad tipográfica con el resto de sub-labels del card (misma jerarquía visual que el row "allergens:" del expanded panel).
+- `variantCount` sigue calculándose (filter non-canonical de `variants`) pero se consume solo como branching `> 0` — **nunca se muestra al usuario**.
+- `aria-label` dedicado ("Tiene variantes disponibles" / "Has available variants") da contexto completo a screen readers sin redundar con el label visible.
+- i18n keys dropped: `variantsCount` + `variantsCountOne` (obsoletas). Added: `variantsIndicatorLabel` + `variantsIndicatorAria` (× 2 locales). Net i18n +4 keys = 1657 → 1659 simétrico.
+
+**Regresión guard.** `src/test/conventions/food-family-card.test.ts` bloquea la reintroducción del count numérico:
+
+```ts
+expect(familyCardSrc).not.toMatch(/\bvariantsCountOne\b/);
+expect(familyCardSrc).not.toMatch(/variantsCount\b(?!One)/);
+```
+
+### 10.2 Drill-down UX at scale (grouped + INITIAL_LIMIT + show-more)
+
+**Problema.** Pre-P2.6 el panel expandido vuelcaba `nonCanonicalVariants.map(v => <VariantRow/>)` plano. Con una familia pobre (1-3 variants) renderizaba bien; con una familia popular post-Q5 telemetry (estimado 50+ brand variants de yogur griego combinando Mercadona + Carrefour + Lidl + Dia + Bonárea + Alcampo) el panel colapsa visualmente — el usuario no sabe qué está mirando, el first paint se alarga, y el scroll se vuelve infinito. El UI del drill-down asumía ≤5 variants por familia.
+
+**Patrón nuevo.** Agrupación por `variantType` + cap por grupo + toggle opt-in:
+
+```ts
+/** Rows shown per group before the "Ver más" toggle kicks in. */
+const INITIAL_LIMIT = 5;
+
+/**
+ * Fixed render order of the variantType groups within the drill-down.
+ * `canonical` is omitted — the canonical is the family's primary view,
+ * painted outside the drill-down.
+ */
+const GROUP_ORDER: readonly VariantType[] = [
+  'preparation',
+  'quality',
+  'regional',
+  'brand',
+  'user',
+] as const;
+```
+
+- `groupVariantsByType(variants, canonicalId): Map<VariantType, FoodVariant[]>` (nuevo helper en `food-family-resolver.ts`) excluye el canonical y preserva el orden de entrada dentro de cada bucket.
+- Iteración fija por `GROUP_ORDER` — salta buckets vacíos (`if (!groupVariants || groupVariants.length === 0) return null`).
+- Cada grupo emite `<div data-variant-group={type}> > <h4>{t.foodDictionary.variantTypes[type]}</h4> > <div>{rows}</div>`, donde `rows` es `groupVariants.slice(0, INITIAL_LIMIT)` por default.
+- `expandedGroups: Set<VariantType>` (React state local al card) controla qué grupos están en "Ver más" mode. Toggle individual por grupo — no un "expand all".
+- Botón "Ver más" / "Ver menos" (`t.foodDictionary.showMore` / `showLess`) renderiza **solo** cuando `groupVariants.length > INITIAL_LIMIT` (flag `hasMore`).
+- HIG-safe: `min-h-11` + focus-visible ring canónico en el toggle button.
+
+**Escalabilidad matemática (la razón operativa del cambio).** First paint per family:
+
+| Escenario | Pre-P2.6 (flat) | Post-P2.6 (grouped + capped) |
+|---|---|---|
+| Familia pobre (1 variant) | 1 row | 1 row (1 sección) |
+| Familia media (10 variants, 2 grupos × 5) | 10 rows | 10 rows (2 secciones, sin toggle) |
+| Familia popular (30 variants, 3 grupos × 10) | 30 rows | **15 rows** (3 secciones × 5) + 3 toggles dormidos |
+| Familia post-escalado 100 marcas (100+ variants mayoría `brand`) | 100+ rows | **≤25 rows** (5 grupos × 5 max) + toggles dormidos |
+
+**Propiedad invariant:** first-paint = O(5 × |GROUP_ORDER|) = **25 rows máximo**, independiente del tamaño total del drill-down. El usuario opta-in al ruido grupo-a-grupo — el que busca preparación no carga las 50 marcas de yogur; el que busca marca expande solo `brand`. Scanear 50 marcas de yogur no degrada el first paint de otras familias.
+
+**Rendering order rationale.** `preparation → quality → regional → brand → user` coincide con el mental model del owner *"primero la variación de preparación (crudo/cocido) que afecta macros culinariamente, luego la calidad (0%/entero) si escoge por nutrición, luego las marcas que encuentro en el supermercado, y al final mis customs"*. `canonical` se omite porque ya está painted arriba como primary-view (Badge "Primary" + description + tags + allergens + portionSlot + microSlot).
+
+**i18n reuse.** Las 5 section headers reutilizan los labels existentes `t.foodDictionary.variantTypes.{preparation,quality,regional,brand,user}` (shipped en P2/P2.5). Cero nuevos keys de i18n para la UI de grouping — el único delta es `showMore`/`showLess` (× 2 locales).
+
+**Helper reutilizable.** `topVariantsByFamily(familyId, n): FoodVariant[]` (mismo módulo) usa el mismo `order` canónico `brand > quality > regional > preparation > user` para habilitar el patrón de **previews** en superficies que no son `<FamilyCard>`:
+- AddMeal result rows (P3+): "3 marcas populares" debajo del row de familia sin expandir el drill-down completo.
+- RecipeDetail swap sheet (P4): "Top 5 alternativas" cuando el swap es intra-family.
+
+Hoy el helper ordena por type-priority fija (placeholder); en Q6+ con telemetría real de `scan-count` descending se promueve a popularity-based sin cambiar la firma de la función.
+
+### 10.3 Seed de brand variants (8 entries, retail español real)
+
+**Problema.** El type `VariantBrand { name, barcode?, scanned? }` existía desde P2 pero **cero variants lo usaban en seed**. Sin brand variants reales en seed, el drill-down section "Marcas" no se veía en uso (excepto para `preparation` raw↔cooked), los i18n labels `t.foodDictionary.variantTypes.brand` quedaban muertos, y cuando aterrice P5 (BarcodeScanner → variant) no habría precedente de cómo se pinta una marca.
+
+**Modelo de datos introducido.** Nuevo top-level const en `src/features/food/data/food-families.ts`:
+
+```ts
+interface SeedBrandEntry {
+  id: string;              // deterministic: `brand_{familyId}_{brand_slug}`
+  familyId: string;        // must resolve via getFamily()
+  name: string;            // nombre comercial ES
+  nameEn: string;          // nombre comercial EN (mayoría idénticos)
+  brand: VariantBrand;     // { name } — barcode llega en P5 via OFF
+  macros: Macros;          // etiqueta retail aproximada (±5%)
+  qualityTags?: string[];  // ejes ortogonales opcionales
+}
+
+const SEED_BRAND_ENTRIES: readonly SeedBrandEntry[] = [ /* 8 entries */ ];
+```
+
+**Helper `brandVariantFrom(canonical, entry)`** (privado al módulo) construye cada `FoodVariant` heredando `servingSizes`/`micros`/`allergens`/`tags`/`baseAmount`/`baseUnit` del canonical de su familia y sobrescribiendo solo `macros`/`name`/`brand`/`qualityTags`. Garantiza que los brand variants no re-declaran los 10+ campos comunes y mantienen consistencia con su familia.
+
+**Integración en `buildVariants()`.** Brand variants se concatenan **después** de los derivados de `INGREDIENT_DICTIONARY`, con `source: 'seed'` + `sourceId: undefined` (el `sourceId` OFF real llega en P5 cuando el matcher reemplace el seed por scan). El invariant `FOOD_VARIANTS.length === INGREDIENT_DICTIONARY.length` **se rompe intencionalmente** post-P2.6 — pasa a `FOOD_VARIANTS.length === INGREDIENT_DICTIONARY.length + SEED_BRAND_ENTRIES.length` (146 + 8 = 154) con comment explicando por qué. El test que lo lockea se actualizó en consecuencia.
+
+**Ids deterministas.** `brand_{familyId}_{brand_slug}` — e.g., `brand_fam_greek_yogurt_hacendado`. Estables entre deploys: si un usuario pinea "Yogur Griego Natural Hacendado" hoy como variante preferida, sigue resolviendo mañana tras re-seed.
+
+**Las 8 entradas (labels retail españoles reales):**
+
+| id | familyId | brand | name (ES) | qualityTags | macros/100g |
+|---|---|---|---|---|---|
+| `brand_fam_greek_yogurt_hacendado` | fam_greek_yogurt | Hacendado | Yogur Griego Natural (Hacendado) | — | 97 kcal · 3.8 pro · 3.8 c · 8 fat |
+| `brand_fam_greek_yogurt_oikos` | fam_greek_yogurt | Danone Oikos | Oikos Natural (Danone) | — | 112 kcal · 7 pro · 4.5 c · 7 fat |
+| `brand_fam_yogurt_hacendado` | fam_yogurt | Hacendado | Yogur Natural Azucarado (Hacendado) | — | 80 kcal · 3.2 pro · 12 c · 2.5 fat |
+| `brand_fam_yogurt_sveltesse` | fam_yogurt | Nestlé Sveltesse | Sveltesse 0% Natural (Nestlé) | `['light','sugar-free']` | 38 kcal · 4.6 pro · 4.5 c · 0.1 fat |
+| `brand_fam_chicken_breast_bonarea` | fam_chicken_breast | BonÀrea | Pechuga de Pollo de Corral (BonÀrea) | `['free-range']` | 120 kcal · 23 pro · 0 c · 2.5 fat |
+| `brand_fam_chicken_breast_carrefour_bio` | fam_chicken_breast | Carrefour Bio | Pechuga de Pollo Eco (Carrefour Bio) | `['organic','free-range']` | 120 kcal · 22 pro · 0 c · 2.6 fat |
+| `brand_fam_peanut_butter_hacendado` | fam_peanut_butter | Hacendado | Crema de Cacahuete 100% (Hacendado) | `['sugar-free','no-additives']` | 612 kcal · 28 pro · 16 c · 48 fat |
+| `brand_fam_peanut_butter_mister_choc` | fam_peanut_butter | Lidl Mister Choc | Crema de Cacahuete (Mister Choc, Lidl) | — | 598 kcal · 22 pro · 15 c · 49 fat |
+
+**Rationale de selección.** Distribución demostrativa, no exhaustiva:
+- **4 familias cubiertas** para exhibir el patrón en 3 subcategorías distintas (`yogur`, `aves`, `mantecas-pastas`) — evita el sesgo de que "brand = solo lácteos".
+- **3 casos sin qualityTags** (Hacendado genéricos + Oikos + Mister Choc) — el grupo `brand` vive solo del `variantType` primario.
+- **4 casos con qualityTags multi-axis** — Sveltesse (light+sugar-free), BonÀrea (free-range), Carrefour Bio (organic+free-range), Hacendado crema (sugar-free+no-additives). Demuestra chips bajo el nombre en `<VariantRow>` con combinaciones distintas.
+- **Delta macros culinariamente significativos** — Sveltesse −54 kcal vs Hacendado yogur natural (eje `light` vs `full`); Oikos +15 kcal / +3.2 g proteína vs Hacendado yogur griego (eje marca premium vs MDD).
+
+**Deferrals explícitos del seed:**
+
+1. **Barcodes no poblados.** `VariantBrand.barcode?` queda `undefined` en los 8 seeds. Cuando P5 integre OFF, el matcher debe consultar `SEED_BRAND_ENTRIES` por `brand.name + familyId` **antes** de crear variant nueva; si encuentra match, actualiza el seed con `barcode + sourceId + source: 'off'` (promoción), no duplica. **TODO en código:** comment en `buildVariants()` marca el hook.
+2. **Macros no verificadas vs OFF oficial.** Aproximaciones de etiquetas retail españolas públicas (±5% tolerance). Tests lockean solo `brand.name` + `variantType === 'brand'` + `familyId` resuelve, no valores absolutos. Q6+ con OFF integrado "asciende" los 8 seeds sin breaking change de id.
+3. **Ordering por popularidad placeholder.** `topVariantsByFamily` usa orden fijo `brand > quality > ...`. En producción con telemetría debería ser `scan-count` desc. Defer a Q6+.
+
+**Matemática de ship.** FOOD_VARIANTS 146 → **154** (+8). INGREDIENT_DICTIONARY unchanged excepto por los 7 USDA chicken cuts añadidos (139 → 146, no relacionados con brand seed). FOOD_FAMILIES 132 → **136** (+4 bajo `aves`: thigh/drumstick/wing/whole). Bundle delta main +3.1 KB raw / +1.7 KB gzip (779.4 → 782.5 KB raw / 244.1 → 245.8 KB gzip) — razonable por 7 ingredientes + 8 brand entries + 2 helpers + drill-down JSX.
+
+---
+
+## 11. Referencias
 
 - Plan activo: `.claude/plans/revisa-todas-las-capturas-ancient-micali.md` (S3 Diccionario cluster)
 - Deep-dive fuente: `docs/market/deep-dives/myfitnesspal.md` (generic + branded pain)

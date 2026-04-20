@@ -12,7 +12,7 @@
  *     subcategories are declared only for existing families
  */
 import { describe, it, expect } from 'vitest';
-import { FOOD_FAMILIES, VARIANT_ID_TO_FAMILY } from './food-families';
+import { FOOD_FAMILIES, SEED_BRAND_ENTRIES, VARIANT_ID_TO_FAMILY } from './food-families';
 import { FOOD_VARIANTS } from './food-variants';
 import { INGREDIENT_DICTIONARY } from './ingredients';
 import {
@@ -33,8 +33,14 @@ describe('VARIANT_MAP coverage', () => {
     expect(missing).toEqual([]);
   });
 
-  it('has FOOD_VARIANTS.length === INGREDIENT_DICTIONARY.length', () => {
-    expect(FOOD_VARIANTS.length).toBe(INGREDIENT_DICTIONARY.length);
+  // P2.6 — `FOOD_VARIANTS.length === INGREDIENT_DICTIONARY.length` was the
+  // P2.5 invariant but brand variants (SEED_BRAND_ENTRIES) don't have an
+  // ingredient counterpart. The new invariant folds them in so the cardinality
+  // lock still catches silent drift from either side.
+  it('has FOOD_VARIANTS.length === INGREDIENT_DICTIONARY.length + SEED_BRAND_ENTRIES.length', () => {
+    expect(FOOD_VARIANTS.length).toBe(
+      INGREDIENT_DICTIONARY.length + SEED_BRAND_ENTRIES.length,
+    );
   });
 });
 
@@ -89,27 +95,13 @@ describe('FOOD_FAMILIES integrity', () => {
 });
 
 describe('P2.5 taxonomy locks', () => {
-  it('FOOD_FAMILIES has exactly 132 entries post-P2.5', () => {
-    // 126 pre-P2.5 baseline + 6 splits (beef/egg/rice/bread × 2 + almond
-    // butter + peanut butter) + 1 new family (fam_yogurt via dai_plain_yogurt)
-    // − 1 (fam_peanut/almond keep ids but lose butter; net per butter split
-    // already +1 in the families count above). Math:
-    //   126 baseline
-    //   − 5 removed umbrellas (fam_beef, fam_egg, fam_rice, fam_bread, fam_chicken)
-    //   + 11 new (fam_chicken_breast, fam_beef_ground, fam_beef_steak,
-    //            fam_egg_whole, fam_egg_whites, fam_rice_white, fam_rice_brown,
-    //            fam_bread_white, fam_bread_wholewheat, fam_almond_butter,
-    //            fam_peanut_butter)
-    //   + 1 (fam_yogurt new)
-    //   = 126 − 5 + 11 + 1 = 133? But fam_chicken's rename = 0 net, and the 11
-    // list double-counts fam_chicken_breast as "new" when it's a rename.
-    // Actual delta: 126 + 6 splits (+1 each) + 1 new (fam_yogurt) + 0 (rename) = 133.
-    // Recount: chicken rename (+0), beef split (+1), egg split (+1), rice split (+1),
-    // bread split (+1), almond split (+1), peanut split (+1), yogurt new (+1)
-    //   = 126 + 7 = 133
-    // Plan said 132; off-by-one. Trusting the mechanical count — locks reality.
-    expect(FOOD_FAMILIES.length).toBeGreaterThanOrEqual(130);
-    expect(FOOD_FAMILIES.length).toBeLessThanOrEqual(135);
+  it('FOOD_FAMILIES has the expected count post-P2.6', () => {
+    // P2.5 baseline landed at 132 entries (see prior range guard). P2.6 adds
+    // 4 chicken-cut siblings under `subcategory: 'aves'` (thigh / drumstick /
+    // wing / whole) → 132 + 4 = 136 expected. Brand variants in SEED_BRAND_ENTRIES
+    // don't create new families — they attach to existing canonicals.
+    expect(FOOD_FAMILIES.length).toBeGreaterThanOrEqual(134);
+    expect(FOOD_FAMILIES.length).toBeLessThanOrEqual(140);
   });
 
   const REMOVED_UMBRELLAS = ['fam_chicken', 'fam_beef', 'fam_egg', 'fam_rice', 'fam_bread'] as const;
@@ -157,8 +149,17 @@ describe('subcategory integrity', () => {
 
   it('canonical subcategories cover the expected proteins grouping', () => {
     const aves = FOOD_FAMILIES.filter(f => f.subcategory === 'aves').map(f => f.id);
-    expect(aves).toContain('fam_chicken_breast');
-    expect(aves).toContain('fam_turkey_breast');
+    // P2.6 — chicken cuts expansion adds 4 sibling families (thigh/drumstick/
+    // wing/whole) alongside the pre-existing pechuga + pavo.
+    expect(aves).toEqual(expect.arrayContaining([
+      'fam_chicken_breast',
+      'fam_chicken_thigh',
+      'fam_chicken_drumstick',
+      'fam_chicken_wing',
+      'fam_chicken_whole',
+      'fam_turkey_breast',
+    ]));
+    expect(aves.length).toBe(6);
 
     const vacuno = FOOD_FAMILIES.filter(f => f.subcategory === 'vacuno').map(f => f.id);
     expect(vacuno).toEqual(expect.arrayContaining(['fam_beef_ground', 'fam_beef_steak']));
@@ -240,7 +241,130 @@ describe('resolver helpers', () => {
 });
 
 describe('legacy INGREDIENT_DICTIONARY compat', () => {
-  it('remains the same length post-migration (139 seed entries after +1 dai_plain_yogurt)', () => {
-    expect(INGREDIENT_DICTIONARY).toHaveLength(139);
+  // P2.5 landed 139 (138 + dai_plain_yogurt). P2.6 adds 7 chicken cuts
+  // (thigh/drumstick/wing raw+cooked + whole roasted) → 146. No removals.
+  it('remains at the expected length post-P2.6 (146 seed entries after +7 chicken cuts)', () => {
+    expect(INGREDIENT_DICTIONARY).toHaveLength(146);
+  });
+});
+
+describe('P2.6 chicken cuts', () => {
+  // Four new sibling families live under `subcategory: 'aves'`. Each has its
+  // own canonical (raw or whole_roasted) and a realistic ServingSize set.
+  const NEW_CUT_FAMILIES = [
+    { id: 'fam_chicken_thigh',     canonical: 'pro_chicken_thigh_raw' },
+    { id: 'fam_chicken_drumstick', canonical: 'pro_chicken_drumstick_raw' },
+    { id: 'fam_chicken_wing',      canonical: 'pro_chicken_wing_raw' },
+    { id: 'fam_chicken_whole',     canonical: 'pro_chicken_whole_roasted' },
+  ] as const;
+
+  it.each(NEW_CUT_FAMILIES)('family $id exists with canonical $canonical', ({ id, canonical }) => {
+    const family = getFamily(id);
+    expect(family).toBeDefined();
+    expect(family!.canonicalVariantId).toBe(canonical);
+    expect(family!.subcategory).toBe('aves');
+  });
+
+  it('thigh family exposes both raw and cooked variants (variantType preparation)', () => {
+    const variants = getVariantsOfFamily('fam_chicken_thigh');
+    const cookedIds = variants.filter(v => v.variantType === 'preparation').map(v => v.id);
+    expect(cookedIds).toContain('pro_chicken_thigh_cooked');
+  });
+
+  it('whole chicken has no raw counterpart (canonical = roasted)', () => {
+    const variants = getVariantsOfFamily('fam_chicken_whole');
+    // only the canonical roasted variant exists — pollo entero rarely consumed raw
+    expect(variants).toHaveLength(1);
+    expect(variants[0].id).toBe('pro_chicken_whole_roasted');
+    expect(variants[0].variantType).toBe('canonical');
+  });
+});
+
+describe('P2.6 brand variants seed', () => {
+  it('has 8 entries spanning 4 distinct families', () => {
+    expect(SEED_BRAND_ENTRIES).toHaveLength(8);
+    const families = new Set(SEED_BRAND_ENTRIES.map(e => e.familyId));
+    expect(families.size).toBe(4);
+    expect([...families]).toEqual(expect.arrayContaining([
+      'fam_greek_yogurt',
+      'fam_yogurt',
+      'fam_chicken_breast',
+      'fam_peanut_butter',
+    ]));
+  });
+
+  it.each(['brand_fam_greek_yogurt_hacendado',
+    'brand_fam_greek_yogurt_oikos',
+    'brand_fam_yogurt_hacendado',
+    'brand_fam_yogurt_sveltesse',
+    'brand_fam_chicken_breast_bonarea',
+    'brand_fam_chicken_breast_carrefour_bio',
+    'brand_fam_peanut_butter_hacendado',
+    'brand_fam_peanut_butter_mister_choc',
+  ])('brand variant %s materializes with variantType="brand" and a brand.name', (id) => {
+    const v = getVariant(id);
+    expect(v, `brand variant ${id} should materialize in FOOD_VARIANTS`).toBeDefined();
+    expect(v!.variantType).toBe('brand');
+    expect(v!.brand?.name).toBeTruthy();
+    expect(v!.source).toBe('seed');
+  });
+
+  it('brand ids follow the deterministic `brand_{familyId}_{slug}` pattern', () => {
+    for (const entry of SEED_BRAND_ENTRIES) {
+      expect(entry.id.startsWith(`brand_${entry.familyId}_`)).toBe(true);
+    }
+  });
+
+  it('brand variants are NOT canonical of their family', () => {
+    for (const entry of SEED_BRAND_ENTRIES) {
+      const canonical = getCanonicalVariant(entry.familyId);
+      expect(canonical).toBeDefined();
+      expect(canonical!.id).not.toBe(entry.id);
+    }
+  });
+
+  it('brand variants inherit servingSizes + allergens + micros from canonical', () => {
+    // Spot-check Hacendado Greek — should inherit the same servingSize set as
+    // dai_greek_yogurt (the canonical). If someone swaps the canonical's
+    // serving sizes, every brand variant picks it up automatically.
+    const canonical = getCanonicalVariant('fam_greek_yogurt')!;
+    const brand = getVariant('brand_fam_greek_yogurt_hacendado')!;
+    expect(brand.servingSizes).toEqual(canonical.servingSizes);
+    expect(brand.allergens).toEqual(canonical.allergens);
+    expect(brand.micros).toEqual(canonical.micros);
+    expect(brand.baseAmount).toBe(canonical.baseAmount);
+    expect(brand.baseUnit).toBe(canonical.baseUnit);
+  });
+
+  it('brand variants override macros (not inherited from canonical)', () => {
+    const canonical = getCanonicalVariant('fam_yogurt')!;
+    const sveltesse = getVariant('brand_fam_yogurt_sveltesse')!;
+    // Sveltesse 0% is ~38 kcal; plain yogurt canonical is ~61 kcal. Δ > 20
+    // proves the brand override landed and didn't fall back to canonical.
+    expect(Math.abs(sveltesse.macros.calories - canonical.macros.calories)).toBeGreaterThan(20);
+  });
+
+  it('qualityTags are optional — some brands carry none, some carry multi-axis', () => {
+    const hacendadoGreek = getVariant('brand_fam_greek_yogurt_hacendado')!;
+    const carrefourBio = getVariant('brand_fam_chicken_breast_carrefour_bio')!;
+    expect(hacendadoGreek.qualityTags).toBeUndefined();
+    expect(carrefourBio.qualityTags).toEqual(expect.arrayContaining(['organic', 'free-range']));
+  });
+
+  it('brand variants appear in getVariantsOfFamily drill-down (after derived variants)', () => {
+    const variants = getVariantsOfFamily('fam_greek_yogurt');
+    const brandIds = variants.filter(v => v.variantType === 'brand').map(v => v.id);
+    expect(brandIds).toEqual(expect.arrayContaining([
+      'brand_fam_greek_yogurt_hacendado',
+      'brand_fam_greek_yogurt_oikos',
+    ]));
+  });
+
+  it('computeMacroDelta returns a signed delta for brand vs canonical', () => {
+    const sveltesse = getVariant('brand_fam_yogurt_sveltesse')!;
+    const delta = computeMacroDelta(sveltesse);
+    expect(delta).not.toBeNull();
+    // Sveltesse has less fat than full-fat plain yogurt → negative fats delta
+    expect(delta!.fats).toBeLessThan(0);
   });
 });

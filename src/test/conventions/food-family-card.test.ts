@@ -48,15 +48,46 @@ describe('FamilyCard.tsx', () => {
     expect(familyCardSrc).toMatch(/t\.foodDictionary\.primaryLabel/);
   });
 
-  it('shows a variants counter badge only when non-canonical variants exist', () => {
+  it('shows the generic "Variantes" indicator (dot + label, no numeric count) only when non-canonical variants exist', () => {
+    // P2.6 owner directive: "con que me ponga que hay variantes a nivel
+    // general me vale". The numeric count was intentionally dropped — at
+    // 100+ retail brand variants per family the counter becomes noise.
     expect(familyCardSrc).toMatch(/variantCount > 0/);
-    expect(familyCardSrc).toMatch(/variantsCountOne/);
-    expect(familyCardSrc).toMatch(/variantsCount/);
+    expect(familyCardSrc).toMatch(/variantsIndicatorLabel/);
+    expect(familyCardSrc).toMatch(/variantsIndicatorAria/);
+    // Regression guard: the numeric patterns must not come back.
+    expect(familyCardSrc).not.toMatch(/\bvariantsCountOne\b/);
+    expect(familyCardSrc).not.toMatch(/variantsCount\b(?!One)/);
   });
 
   it('renders non-canonical variants via <VariantRow>', () => {
     expect(familyCardSrc).toMatch(/import VariantRow/);
     expect(familyCardSrc).toMatch(/<VariantRow/);
+  });
+
+  it('groups the drill-down by variantType with data-variant-group markers (P2.6)', () => {
+    // Each variantType group emits a wrapper with a data-variant-group
+    // attribute so the bucketing is visible in the DOM and testable by
+    // both convention locks + future preview smoke tests.
+    expect(familyCardSrc).toMatch(/data-variant-group=\{type\}/);
+    // The render order lives in a top-level GROUP_ORDER constant — the
+    // canonical is NOT in the list (primary view above) and the 5 buckets
+    // (preparation/quality/regional/brand/user) are.
+    expect(familyCardSrc).toMatch(/GROUP_ORDER/);
+    expect(familyCardSrc).toMatch(/groupVariantsByType/);
+    // Section headers are resolved via i18n variantTypes map, not hardcoded.
+    expect(familyCardSrc).toMatch(/t\.foodDictionary\.variantTypes\[type\]/);
+  });
+
+  it('caps each group at INITIAL_LIMIT rows and exposes a show-more toggle (P2.6)', () => {
+    expect(familyCardSrc).toMatch(/INITIAL_LIMIT\s*=\s*5/);
+    expect(familyCardSrc).toMatch(/slice\(0,\s*INITIAL_LIMIT\)/);
+    expect(familyCardSrc).toMatch(/expandedGroups/);
+    // Toggle labels resolve via i18n showMore/showLess keys.
+    expect(familyCardSrc).toMatch(/t\.foodDictionary\.showMore/);
+    expect(familyCardSrc).toMatch(/t\.foodDictionary\.showLess/);
+    // The toggle is conditional on the group exceeding INITIAL_LIMIT.
+    expect(familyCardSrc).toMatch(/hasMore/);
   });
 
   it('uses token classes (no text-[Npx], no shadow-{sm,md,lg}, no dark:)', () => {

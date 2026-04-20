@@ -33,8 +33,13 @@
  * Resolver helpers live in `../utils/food-family-resolver.ts`; the dictionary
  * UI consumes both.
  */
-import type { FoodFamily, VariantType } from '../../../types/food-family';
-import type { FoodTag, IngredientCategory } from '../../../types/food';
+import type {
+  FoodFamily,
+  QualityTagSlug,
+  VariantBrand,
+  VariantType,
+} from '../../../types/food-family';
+import type { FoodTag, IngredientCategory, Macros } from '../../../types/food';
 import { INGREDIENT_DICTIONARY } from './ingredients';
 
 /**
@@ -62,6 +67,18 @@ const VARIANT_MAP: Record<string, { familyId: string; variantType: VariantType }
   // Proteins — multi-variant
   pro_chicken_breast_raw:    { familyId: 'fam_chicken_breast', variantType: 'canonical' },
   pro_chicken_breast_cooked: { familyId: 'fam_chicken_breast', variantType: 'preparation' },
+  // P2.6 chicken cuts — sibling families bajo `subcategory: 'aves'`. Cortes
+  // distintos que el usuario español busca por separado en la bandeja del
+  // super (Mercadona/Lidl/Carrefour), con macros propios:
+  // muslo +40% grasa vs pechuga, ala +30% grasa vs muslo, pollo entero asado
+  // el único producto habitualmente consumido ya cocinado (no raw canonical).
+  pro_chicken_thigh_raw:        { familyId: 'fam_chicken_thigh',     variantType: 'canonical' },
+  pro_chicken_thigh_cooked:     { familyId: 'fam_chicken_thigh',     variantType: 'preparation' },
+  pro_chicken_drumstick_raw:    { familyId: 'fam_chicken_drumstick', variantType: 'canonical' },
+  pro_chicken_drumstick_cooked: { familyId: 'fam_chicken_drumstick', variantType: 'preparation' },
+  pro_chicken_wing_raw:         { familyId: 'fam_chicken_wing',      variantType: 'canonical' },
+  pro_chicken_wing_cooked:      { familyId: 'fam_chicken_wing',      variantType: 'preparation' },
+  pro_chicken_whole_roasted:    { familyId: 'fam_chicken_whole',     variantType: 'canonical' },
   pro_tuna_fresh:            { familyId: 'fam_tuna',           variantType: 'canonical' },
   pro_tuna_canned:           { familyId: 'fam_tuna',           variantType: 'preparation' },
   // Proteins — split products (P2.5 — formerly `fam_beef` / `fam_egg`)
@@ -250,6 +267,34 @@ const FAMILY_META: Record<string, FamilyMetaOverride> = {
     descriptionEn: 'Lean poultry cut, a versatile protein staple. Canonical reference is raw breast (USDA).',
     aliases: ['pechuga', 'pollo', 'chicken', 'chicken breast', 'ave', 'poultry'],
   },
+  // P2.6 — cortes reales del pollo vendidos por separado en el super. Cada uno
+  // familia propia (no variante) porque se compran en bandeja distinta con
+  // macros propios: muslo más grasa y sabor, ala mini-porción finger-food,
+  // pollo entero asado el producto rotisserie de supermercado / domingo.
+  fam_chicken_thigh: {
+    name: 'Muslo de Pollo', nameEn: 'Chicken Thigh',
+    description: 'Corte jugoso del cuarto trasero del pollo, con hueso y piel. Más sabor y grasa que la pechuga; tolera bien cocciones largas.',
+    descriptionEn: 'Juicy cut from the chicken hind quarter, with bone and skin. More flavor and fat than breast; tolerates long cooking.',
+    aliases: ['muslo', 'muslo de pollo', 'thigh', 'chicken thigh'],
+  },
+  fam_chicken_drumstick: {
+    name: 'Contramuslo de Pollo', nameEn: 'Chicken Drumstick',
+    description: 'Jamoncito de pollo, parte inferior del cuarto trasero. Formato práctico de 1 unidad; carne oscura sabrosa.',
+    descriptionEn: 'Chicken leg, lower half of the hind quarter. Practical single-unit format; flavorful dark meat.',
+    aliases: ['contramuslo', 'jamoncito', 'drumstick'],
+  },
+  fam_chicken_wing: {
+    name: 'Ala de Pollo', nameEn: 'Chicken Wing',
+    description: 'Alita con piel — snack clásico a la plancha, frito o al horno. Porción pequeña (~40 g cruda).',
+    descriptionEn: 'Chicken wing with skin — classic pan, fried or baked snack. Small portion (~40 g raw).',
+    aliases: ['ala', 'alas', 'alita', 'alitas', 'wing', 'wings'],
+  },
+  fam_chicken_whole: {
+    name: 'Pollo Entero', nameEn: 'Whole Chicken',
+    description: 'Pollo entero asado con piel. Producto rotisserie del super o asado casero; la referencia canónica asume ya cocinado.',
+    descriptionEn: 'Whole roasted chicken with skin. Supermarket rotisserie or home-roasted; canonical reference assumes already cooked.',
+    aliases: ['pollo entero', 'pollo asado', 'whole chicken', 'rotisserie chicken', 'roasted chicken'],
+  },
   fam_tuna: {
     name: 'Atún', nameEn: 'Tuna',
     description: 'Pescado azul rico en omega-3. La referencia canónica es fresco.',
@@ -407,8 +452,12 @@ const FAMILY_META: Record<string, FamilyMetaOverride> = {
  */
 const FAMILY_SUBCATEGORY: Record<string, string> = {
   // Proteins → aves / vacuno / cerdo / pescado-azul / pescado-blanco / marisco / huevo / vegetal / caza / embutidos
-  fam_chicken_breast: 'aves',
-  fam_turkey_breast:  'aves',
+  fam_chicken_breast:    'aves',
+  fam_chicken_thigh:     'aves',
+  fam_chicken_drumstick: 'aves',
+  fam_chicken_wing:      'aves',
+  fam_chicken_whole:     'aves',
+  fam_turkey_breast:     'aves',
   fam_beef_ground:    'vacuno',
   fam_beef_steak:     'vacuno',
   fam_pork_loin:      'cerdo',
@@ -545,6 +594,125 @@ const FAMILY_SUBCATEGORY: Record<string, string> = {
 };
 
 /**
+ * P2.6 — Brand variants seed.
+ *
+ * Retail brand products seeded directly as `variantType: 'brand'`. They do NOT
+ * have a counterpart in `INGREDIENT_DICTIONARY` (no USDA canonical of their
+ * own — they piggy-back on the family's canonical servingSizes / micros /
+ * allergens via `brandVariantFrom` in `food-variants.ts`). Ids follow the
+ * deterministic pattern `brand_{familyId}_{slug}` so user pins stay stable
+ * across deploys and future OFF barcodes can escalate the same id to
+ * `source: 'off'` without breaking references.
+ *
+ * Macros are approximations of public retail labels (Mercadona / Lidl /
+ * Carrefour / BonÀrea). Tolerance ±5% — tests lock `brand.name` +
+ * `variantType === 'brand'`, not absolute values. When P5 integrates Open
+ * Food Facts, each seed can be upgraded to `source: 'off'` with exact macros
+ * + `brand.barcode` — the id stays put.
+ *
+ * TODO — P5 barcode dedup. BarcodeScanner must match scanned OFF products
+ * against SEED_BRAND_ENTRIES by `{brand.name + familyId}` before creating a
+ * new variant, to avoid duplicating e.g. "Hacendado Greek Yogurt" once per
+ * scan. See `docs/market/food-variants-design.md` §5.1.
+ */
+export interface SeedBrandEntry {
+  id: string;
+  familyId: string;
+  brand: VariantBrand;
+  name: string;
+  nameEn: string;
+  description?: string;
+  descriptionEn?: string;
+  macros: Macros;
+  qualityTags?: QualityTagSlug[];
+}
+
+export const SEED_BRAND_ENTRIES: readonly SeedBrandEntry[] = [
+  // Yogur griego — referencia canónica `dai_greek_yogurt` (97 kcal full-fat
+  // natural; Oikos es la alternativa más rica en proteína del retail español).
+  {
+    id: 'brand_fam_greek_yogurt_hacendado',
+    familyId: 'fam_greek_yogurt',
+    brand: { name: 'Hacendado' },
+    name: 'Yogur Griego Natural (Hacendado)',
+    nameEn: 'Greek Yogurt, Plain (Hacendado)',
+    macros: { calories: 97, protein: 3.8, carbs: 3.8, fats: 8, saturatedFat: 5.5 },
+  },
+  {
+    id: 'brand_fam_greek_yogurt_oikos',
+    familyId: 'fam_greek_yogurt',
+    brand: { name: 'Danone Oikos' },
+    name: 'Oikos Natural (Danone)',
+    nameEn: 'Oikos Plain (Danone)',
+    macros: { calories: 112, protein: 7, carbs: 4.5, fats: 7, saturatedFat: 4.7 },
+  },
+  // Yogur natural — referencia `dai_plain_yogurt` (nuevo P2.5).
+  // Sveltesse 0% es el arquetipo "light" + "sin azúcar" del retail.
+  {
+    id: 'brand_fam_yogurt_hacendado',
+    familyId: 'fam_yogurt',
+    brand: { name: 'Hacendado' },
+    name: 'Yogur Natural Azucarado (Hacendado)',
+    nameEn: 'Plain Sweetened Yogurt (Hacendado)',
+    macros: { calories: 80, protein: 3.2, carbs: 12, fats: 2.5, saturatedFat: 1.6, sugar: 11 },
+  },
+  {
+    id: 'brand_fam_yogurt_sveltesse',
+    familyId: 'fam_yogurt',
+    brand: { name: 'Nestlé Sveltesse' },
+    name: 'Sveltesse 0% Natural (Nestlé)',
+    nameEn: 'Sveltesse 0% Plain (Nestlé)',
+    macros: { calories: 38, protein: 4.6, carbs: 4.5, fats: 0.1, saturatedFat: 0.1 },
+    qualityTags: ['light', 'sugar-free'],
+  },
+  // Pechuga de pollo — BonÀrea (pollo de corral catalán) + Carrefour Bio
+  // (ecológico + corral). Demuestran qualityTags multi-axis sobre el mismo
+  // producto.
+  {
+    id: 'brand_fam_chicken_breast_bonarea',
+    familyId: 'fam_chicken_breast',
+    brand: { name: 'BonÀrea' },
+    name: 'Pechuga de Pollo de Corral (BonÀrea)',
+    nameEn: 'Free-Range Chicken Breast (BonÀrea)',
+    macros: { calories: 120, protein: 23, carbs: 0, fats: 2.5, saturatedFat: 0.7 },
+    qualityTags: ['free-range'],
+  },
+  {
+    id: 'brand_fam_chicken_breast_carrefour_bio',
+    familyId: 'fam_chicken_breast',
+    brand: { name: 'Carrefour Bio' },
+    name: 'Pechuga de Pollo Eco (Carrefour Bio)',
+    nameEn: 'Organic Chicken Breast (Carrefour Bio)',
+    macros: { calories: 120, protein: 22, carbs: 0, fats: 2.6, saturatedFat: 0.7 },
+    qualityTags: ['organic', 'free-range'],
+  },
+  // Crema de cacahuete — Hacendado 100% (sin azúcar ni aditivos) vs Lidl
+  // Mister Choc (versión standard con azúcar y aceite añadido).
+  {
+    id: 'brand_fam_peanut_butter_hacendado',
+    familyId: 'fam_peanut_butter',
+    brand: { name: 'Hacendado' },
+    name: 'Crema de Cacahuete 100% (Hacendado)',
+    nameEn: '100% Peanut Butter (Hacendado)',
+    macros: { calories: 612, protein: 28, carbs: 16, fats: 48, saturatedFat: 8, sugar: 5 },
+    qualityTags: ['sugar-free', 'no-additives'],
+  },
+  {
+    id: 'brand_fam_peanut_butter_mister_choc',
+    familyId: 'fam_peanut_butter',
+    brand: { name: 'Lidl Mister Choc' },
+    name: 'Crema de Cacahuete (Mister Choc, Lidl)',
+    nameEn: 'Peanut Butter (Mister Choc, Lidl)',
+    macros: { calories: 598, protein: 22, carbs: 15, fats: 49, saturatedFat: 9, sugar: 8 },
+  },
+];
+
+/** brand-id → SeedBrandEntry lookup, used by the variants builder. */
+const BRAND_ENTRY_BY_ID = new Map<string, SeedBrandEntry>(
+  SEED_BRAND_ENTRIES.map(e => [e.id, e]),
+);
+
+/**
  * Build `FOOD_FAMILIES` by grouping `INGREDIENT_DICTIONARY` via `VARIANT_MAP`.
  * The builder runs at module-load (pure, deterministic). Result is cached as
  * a readonly const array.
@@ -581,6 +749,19 @@ function buildFamilies(): FoodFamily[] {
     }
   }
 
+  // P2.6 — brand variants declared in `SEED_BRAND_ENTRIES` don't have an
+  // ingredient counterpart, so they never flow through the loop above. Fold
+  // their ids into the matching family's `variantIds` so the resolver's
+  // `getVariantsOfFamily` surfaces them in the drill-down. The brand ids land
+  // AFTER the derived variants (canonical first, then preparation/quality,
+  // then brand), which matches the section order `FamilyCard` will render.
+  const brandIdsByFamily = new Map<string, string[]>();
+  for (const entry of SEED_BRAND_ENTRIES) {
+    const bucket = brandIdsByFamily.get(entry.familyId) ?? [];
+    bucket.push(entry.id);
+    brandIdsByFamily.set(entry.familyId, bucket);
+  }
+
   const families: FoodFamily[] = [];
   for (const [familyId, g] of groups) {
     const meta = FAMILY_META[familyId];
@@ -589,6 +770,7 @@ function buildFamilies(): FoodFamily[] {
       throw new Error(`food-families: family ${familyId} has no canonical variant`);
     }
     const subcategory = FAMILY_SUBCATEGORY[familyId];
+    const brandIds = brandIdsByFamily.get(familyId) ?? [];
     families.push({
       id: familyId,
       name: meta?.name ?? canonical.name,
@@ -598,12 +780,26 @@ function buildFamilies(): FoodFamily[] {
       category: g.category,
       ...(subcategory ? { subcategory } : {}),
       canonicalVariantId: g.canonicalVariantId,
-      variantIds: [g.canonicalVariantId, ...g.variantIds.filter(id => id !== g.canonicalVariantId)],
+      variantIds: [
+        g.canonicalVariantId,
+        ...g.variantIds.filter(id => id !== g.canonicalVariantId),
+        ...brandIds,
+      ],
       aliases: meta?.aliases,
       tags: Array.from(g.tags),
     });
   }
   return families;
+}
+
+/**
+ * Brand-variant lookup for the food-variants builder. Exposed (not inlined in
+ * `buildFamilies`) because materializing a `FoodVariant` requires access to
+ * the canonical variant's full shape — which lives in `food-variants.ts` to
+ * avoid a circular dep.
+ */
+export function getBrandEntry(id: string): SeedBrandEntry | undefined {
+  return BRAND_ENTRY_BY_ID.get(id);
 }
 
 export const FOOD_FAMILIES: readonly FoodFamily[] = Object.freeze(buildFamilies());
