@@ -40,6 +40,13 @@ interface Props {
   portionSlot?: React.ReactNode;
   microSlot?: React.ReactNode;
   ctaSlot?: React.ReactNode;
+  /**
+   * P8 `[1.5.65]` — when provided, renders a "Saber más" CTA inside the
+   * expanded panel that navigates to the full FoodDetail screen. Keeps the
+   * in-place expand for quick peek while opening a path to the educational
+   * deep-dive (long description, culinary uses, substitutes).
+   */
+  onLearnMore?: () => void;
 }
 
 /** Rows shown per group before the "Ver más" toggle kicks in. */
@@ -73,6 +80,7 @@ export default function FamilyCard({
   portionSlot,
   microSlot,
   ctaSlot,
+  onLearnMore,
 }: Props) {
   const { t, locale } = useI18n();
   const [expandedGroups, setExpandedGroups] = useState<Set<VariantType>>(() => new Set());
@@ -113,8 +121,16 @@ export default function FamilyCard({
         aria-expanded={expanded}
         aria-controls={panelId}
         onClick={onToggle}
-        className="w-full min-h-11 flex items-center p-3 text-left hover:bg-surface-container-highest/50 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/60 focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+        className="w-full min-h-11 flex items-center gap-3 p-3 text-left hover:bg-surface-container-highest/50 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/60 focus-visible:ring-offset-2 focus-visible:ring-offset-background"
       >
+        {family.image && (
+          <span
+            aria-hidden="true"
+            className="text-3xl leading-none shrink-0 select-none"
+          >
+            {family.image}
+          </span>
+        )}
         <div className="flex-1 min-w-0">
           <span className="font-headline font-bold text-body-sm text-on-surface block truncate">
             {name}
@@ -159,6 +175,17 @@ export default function FamilyCard({
             </div>
             <p className="text-body-sm text-on-surface-variant">{description}</p>
           </div>
+
+          {onLearnMore && (
+            <button
+              type="button"
+              onClick={onLearnMore}
+              className="inline-flex items-center gap-1 text-body-sm font-medium text-primary hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/60 focus-visible:ring-offset-2 focus-visible:ring-offset-background rounded-sm"
+            >
+              {t.foodDictionary.learnMore}
+              <span aria-hidden="true">→</span>
+            </button>
+          )}
 
           {canonicalVariant.tags && canonicalVariant.tags.length > 0 && (
             <div className="flex flex-wrap gap-1">

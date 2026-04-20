@@ -31,7 +31,7 @@ const ALL_ALLERGENS: Allergen[] = [
 ];
 
 interface Props {
-  navigateTo: (screen: string) => void;
+  navigateTo: (screen: string, data?: Record<string, unknown>) => void;
 }
 
 const CATEGORY_ORDER = Object.entries(INGREDIENT_CATEGORIES)
@@ -216,6 +216,7 @@ export default function FoodDictionary({ navigateTo }: Props) {
                 onToggle={() => toggleExpand(family.id)}
                 selectedVariantId={selectedVariantId}
                 onSelectVariant={v => handleSelectVariant(family.id, v)}
+                onLearnMore={() => navigateTo('food-detail', { familyId: family.id })}
                 portionSlot={
                   activeIngredient && (
                     <div className="space-y-2">

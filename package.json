@@ -15,6 +15,7 @@
     "check": "tsc --noEmit && vitest run",
     "check:i18n": "node scripts/check-i18n-symmetry.mjs",
     "generate-icons": "node scripts/generate-icons.mjs",
+    "generate:family-content": "node scripts/generate-family-content.mjs",
     "native-assets": "npx @capacitor/assets generate --android --ios",
     "cap:sync": "npm run build && npx cap sync",
     "cap:ios": "npm run cap:sync && npx cap open ios",

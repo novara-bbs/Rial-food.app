@@ -41,6 +41,8 @@ import type {
 } from '../../../types/food-family';
 import type { FoodTag, IngredientCategory, Macros } from '../../../types/food';
 import { INGREDIENT_DICTIONARY } from './ingredients';
+import { getFamilyImage } from './family-images';
+import { FAMILY_CONTENT } from './family-content.generated';
 
 /**
  * Legacy ingredient id → {familyId, variantType}.
@@ -801,6 +803,12 @@ function buildFamilies(): FoodFamily[] {
     const subcategory = FAMILY_SUBCATEGORY[familyId];
     const species = FAMILY_SPECIES[familyId];
     const brandIds = brandIdsByFamily.get(familyId) ?? [];
+    // P8 — enriched content (optional, progressive): image is always populated
+    // via `getFamilyImage` (falls back to a generic plate); long-description /
+    // culinary-uses / substitutes come from `FAMILY_CONTENT` and are only set
+    // when the family has curated content.
+    const image = getFamilyImage(familyId);
+    const content = FAMILY_CONTENT[familyId];
     families.push({
       id: familyId,
       name: meta?.name ?? canonical.name,
@@ -818,6 +826,12 @@ function buildFamilies(): FoodFamily[] {
       ],
       aliases: meta?.aliases,
       tags: Array.from(g.tags),
+      image,
+      ...(content ? {
+        longDescription: content.longDescription,
+        culinaryUses: content.culinaryUses,
+        substitutes: content.substitutes,
+      } : {}),
     });
   }
   return families;

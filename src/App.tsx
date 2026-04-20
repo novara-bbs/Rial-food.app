@@ -30,6 +30,7 @@ const {
   Notifications: NotificationsScreen, ChallengeDetail, Progress,
   Login, Signup, ForgotPassword,
   PrivacyPolicy, TermsOfService,
+  FoodDetail,
 } = screens;
 
 function LoadingSkeleton() {
@@ -165,6 +166,7 @@ export default function App() {
       case 'challenge-detail': return <ChallengeDetail onBack={() => navigateTo(previousScreen)} challengeId={selectedChallengeId || 'green-7'} />;
       case 'progress': return <Progress onBack={() => navigateTo(previousScreen)} />;
       case 'food-dictionary': return <FoodDictionary navigateTo={navigateTo} />;
+      case 'food-detail': return <FoodDetail />;
       case 'privacy-policy': return <PrivacyPolicy onBack={() => navigateTo(previousScreen)} />;
       case 'terms-of-service': return <TermsOfService onBack={() => navigateTo(previousScreen)} />;
       default: return null;

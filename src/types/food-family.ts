@@ -107,6 +107,87 @@ export const QUALITY_TAG_SLUGS: readonly QualityTagSlug[] = [
 ] as const;
 
 /**
+ * P8 `[1.5.65]` — culinary use slugs for the enriched FoodDetail view.
+ *
+ * Each FoodFamily can declare 5-8 culinary contexts where it fits ("En ensaladas",
+ * "A la plancha", "Post-entreno", …). Renders as filter-friendly chips on the
+ * FoodDetail screen and feeds the (future) recipe recommender.
+ *
+ * Labels resolved via `t.foodDictionary.culinaryUseLabels.{slug}` in ES + EN.
+ */
+export type CulinaryUseSlug =
+  | 'raw-salads'
+  | 'grilling'
+  | 'baking'
+  | 'roasting'
+  | 'stir-fry'
+  | 'stews-soups'
+  | 'smoothies'
+  | 'breakfast'
+  | 'snack'
+  | 'dessert'
+  | 'spread'
+  | 'dressing'
+  | 'batch-cooking'
+  | 'meal-prep'
+  | 'post-workout'
+  | 'pre-workout';
+
+export const CULINARY_USE_SLUGS: readonly CulinaryUseSlug[] = [
+  'raw-salads',
+  'grilling',
+  'baking',
+  'roasting',
+  'stir-fry',
+  'stews-soups',
+  'smoothies',
+  'breakfast',
+  'snack',
+  'dessert',
+  'spread',
+  'dressing',
+  'batch-cooking',
+  'meal-prep',
+  'post-workout',
+  'pre-workout',
+] as const;
+
+/**
+ * P8 `[1.5.65]` — rationale slug explaining why a sustitute is suggested.
+ * Rendered inline ("Macros parecidos", "Más barato", …). Cerrar el set
+ * evita string drift en el contenido generado por LLM.
+ *
+ * Labels resolved via `t.foodDictionary.substituteReasons.{slug}`.
+ */
+export type SubstituteReason =
+  | 'similar-macros'
+  | 'similar-flavor'
+  | 'cheaper'
+  | 'higher-protein'
+  | 'lower-cal'
+  | 'lactose-free'
+  | 'gluten-free'
+  | 'plant-based';
+
+export const SUBSTITUTE_REASONS: readonly SubstituteReason[] = [
+  'similar-macros',
+  'similar-flavor',
+  'cheaper',
+  'higher-protein',
+  'lower-cal',
+  'lactose-free',
+  'gluten-free',
+  'plant-based',
+] as const;
+
+/** P8 — single substitute reference on a FoodFamily. */
+export interface SubstituteRef {
+  /** Target FoodFamily id. Must exist in FOOD_FAMILIES (guarded by test). */
+  familyId: string;
+  reason: SubstituteReason;
+}
+
+/**
  * Where a variant's data came from. Drives provenance badges and deduplication
  * decisions (e.g. `off` variants are candidates for promotion to `seed` once
  * enough users scan the same barcode; that is a Q6 backend concern).
@@ -186,6 +267,40 @@ export interface FoodFamily {
 
   /** Tags inherited by variants unless a variant overrides them. */
   tags: FoodTag[];
+
+  /**
+   * P8 `[1.5.65]` — visual identity of the family. Emoji recommended (widest
+   * Unicode coverage + zero bundle cost); string id reserved for custom SVG
+   * when emoji doesn't fit (e.g. `'svg:tempeh'` → loads from assets at render
+   * time). Populated via `FAMILY_IMAGES` map in `family-images.ts`; falls back
+   * to the generic plate emoji when missing.
+   */
+  image?: string;
+
+  /**
+   * P8 `[1.5.65]` — educational description (120-180 words) covering origin,
+   * nutritional profile, production method and a curious fact. Bilingual:
+   * `es` mandatory when present, `en` mandatory when present. Bootstrapped via
+   * `scripts/generate-family-content.mjs` (Gemini) and committed for admin
+   * review in `family-content.generated.ts`. Rendered in `FoodDetail` but
+   * optional everywhere — families without a long description fall back to
+   * the short `description`.
+   */
+  longDescription?: { es: string; en: string };
+
+  /**
+   * P8 `[1.5.65]` — 5-8 culinary contexts where this food fits well.
+   * Chosen from {@link CULINARY_USE_SLUGS}. Rendered as chips on FoodDetail.
+   * Feeds the (future) recipe recommender.
+   */
+  culinaryUses?: CulinaryUseSlug[];
+
+  /**
+   * P8 `[1.5.65]` — 3-5 curated substitutes for this family. Rendered as
+   * "¿Sin yogur griego? Prueba…" on FoodDetail, each row tap-able to open the
+   * target family's detail. `familyId` must exist in FOOD_FAMILIES.
+   */
+  substitutes?: SubstituteRef[];
 }
 
 /**

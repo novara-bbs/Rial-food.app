@@ -1,9 +1,22 @@
 import React, { createContext, useContext, useState } from 'react';
 
+/**
+ * Opaque data payload attached to a navigation. Kept loose — each screen
+ * defines the shape it expects and reads the fields it needs from
+ * `screenData`. Introduced in P8 `[1.5.65]` so FoodDetail can receive
+ * `{ familyId }` without a separate AppStateContext field.
+ *
+ * Rule: payloads are ephemeral. They are cleared on every navigation that
+ * doesn't pass new data, so a screen can't rely on "sticky" data across
+ * unrelated transitions.
+ */
+export type NavigationData = Record<string, unknown> | undefined;
+
 interface NavigationContextType {
   currentScreen: string;
   previousScreen: string;
-  navigateTo: (screen: string) => void;
+  screenData: NavigationData;
+  navigateTo: (screen: string, data?: NavigationData) => void;
   goBack: () => void;
 }
 
@@ -12,16 +25,18 @@ const NavigationContext = createContext<NavigationContextType | undefined>(undef
 export function NavigationProvider({ children }: { children: React.ReactNode }) {
   const [currentScreen, setCurrentScreen] = useState('home');
   const [previousScreen, setPreviousScreen] = useState('home');
+  const [screenData, setScreenData] = useState<NavigationData>(undefined);
 
-  const navigateTo = (screen: string) => {
+  const navigateTo = (screen: string, data?: NavigationData) => {
     setPreviousScreen(currentScreen);
     setCurrentScreen(screen);
+    setScreenData(data);
   };
 
   const goBack = () => navigateTo(previousScreen);
 
   return (
-    <NavigationContext.Provider value={{ currentScreen, previousScreen, navigateTo, goBack }}>
+    <NavigationContext.Provider value={{ currentScreen, previousScreen, screenData, navigateTo, goBack }}>
       {children}
     </NavigationContext.Provider>
   );

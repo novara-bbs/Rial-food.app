@@ -1,5 +1,58 @@
 # RIAL App - Changelog
 
+## [1.5.65] - 2026-04-21
+
+### feat(food): P8 — Diccionario enriquecido (imagen + descripción educativa + usos + sustitutos + FoodDetail)
+
+El Diccionario de Alimentos deja de ser una lista seca de macros y se convierte en herramienta educativa. Cada familia tiene ahora: emoji identitario, descripción científica-pero-accesible (120-180 palabras), usos culinarios, y sustitutos curados. Nueva pantalla dedicada `FoodDetail` accesible vía CTA «Saber más» dentro del FamilyCard expandido (preserva el quick-peek inline y abre camino al deep-dive educativo).
+
+**Owner directive (2026-04-21)**: el Diccionario NO se colapsa — es una diferenciación real vs MFP/Yuka/Cronometer (ninguno lo tiene así). Se enriquece para que usuarios de cualquier edad encuentren valor real al entrar.
+
+**Nuevos tipos (`src/types/food-family.ts`):**
+- `CulinaryUseSlug` × 16 (raw-salads, grilling, baking, roasting, stir-fry, stews-soups, smoothies, breakfast, snack, dessert, spread, dressing, batch-cooking, meal-prep, post-workout, pre-workout)
+- `SubstituteReason` × 8 (similar-macros, similar-flavor, cheaper, higher-protein, lower-cal, lactose-free, gluten-free, plant-based)
+- `SubstituteRef` interface `{ familyId, reason }`
+- `FoodFamily` extendido con 4 campos opcionales: `image?`, `longDescription?: {es,en}`, `culinaryUses?`, `substitutes?`
+
+**Nuevos archivos:**
+- `src/features/food/data/family-images.ts` — mapa 100% coverage ~130 familias → emoji Unicode. `getFamilyImage(id)` con fallback al plato genérico 🍽️.
+- `src/features/food/data/family-content.generated.ts` — contenido educativo bilingüe. Ships con **8 familias hand-crafted** como seed de referencia (pollo, salmón, yogur griego, aguacate, brócoli, quinoa, avena, huevo) + infraestructura para merge progresivo vía script LLM. Familias sin contenido renderizan con fallback al `description` corto.
+- `src/features/food/screens/FoodDetail.tsx` — pantalla educativa dedicada. Hero con emoji XL + macros canonical + TierBadge. Secciones: «¿Qué es?» (longDescription), «¿Para qué se usa?» (culinaryUses chips), «¿Sin esto? Prueba…» (substitutes rows tappables recursivos), «Variantes» (reuso VariantRow), CTAs «Añadir al diario» + «Usar en receta». Degradación 100% graceful: cualquier campo ausente no rompe el render.
+- `scripts/generate-family-content.mjs` — bootstrap LLM (Gemini 2.0 Flash). Lee FOOD_FAMILIES + FAMILY_CONTENT existente, genera entries faltantes con prompt estructurado (responseMimeType JSON), rate limit 1/s, merge en el .generated.ts. Flags `--dry-run` + `--family=X` + `--force`. Requiere `VITE_GEMINI_API_KEY`.
+- Tests: `family-images.test.ts` (6 asserts: coverage 100%, non-empty strings, fallback, lookup), `family-content.test.ts` (9 asserts: shape invariants, bilingual, slug validity, substitute familyId exists, hydration).
+
+**Cambios en schema (backward-compat 100%):**
+- `FoodFamily` gana 4 campos todos opcionales. Recetas legacy + scanned variants + seed families pre-P8 siguen funcionando sin mutación.
+- `buildFamilies()` en `food-families.ts` ahora llama `getFamilyImage(id)` + merge con `FAMILY_CONTENT[id]` cuando existe.
+
+**Navigation:**
+- `NavigationContext` extendido con `screenData?: Record<string, unknown>` — payload opcional para transiciones entre pantallas. `navigateTo('food-detail', { familyId })` pasa el id a FoodDetail.
+- Nuevo lazy-loaded screen `FoodDetail` en `src/config/routes.ts` + mount en `App.tsx`.
+- `FamilyCard` gana prop `onLearnMore?: () => void`; cuando presente renderiza CTA «Saber más →» en el expanded panel. Primary path vs collapse-in-place (quick peek preservado).
+- FamilyCard collapsed header ahora muestra el emoji a la izquierda (`gap-3 + shrink-0`), dándole identidad visual a cada entrada del diccionario.
+
+**i18n:**
+- +31 claves simétricas bajo `foodDictionary.{foodDetail.*,culinaryUseLabels.*,substituteReasons.*}` + `foodDictionary.learnMore` → **1695 → 1726**.
+
+**Contenido inicial (hand-crafted, 8 familias):**
+- Cada entry tiene longDescription bilingüe (120-180 palabras) con estructura: origen/historia · macros clave · método de producción/cultivo · dato curioso. Tono verificado científico pero accesible.
+- Ejemplo pechuga de pollo incluye: dominio cultural anglosajón/mediterráneo, industrialización avícola años 50, razón de su tono pálido (mioglobina). Ejemplo aguacate: origen Mesoamérica 5000 años, huella hídrica, monocultivo Michoacán.
+- Sustitutos curados a mano priorizando disponibilidad retail española. Pechuga pollo → pavo (similar-macros), atún (higher-protein), tofu (plant-based), bacalao (lower-cal).
+
+**Quality baseline post-P8:**
+- TypeScript: 0 errors
+- Tests: **884 → 898** (+14 nuevos en family-images + family-content)
+- i18n: 1695 → **1726** simétrico
+- tsc, check:i18n, vitest: PASS
+
+**Seguimiento inmediato (P9, P10):**
+- P9 `[1.5.66]` — Scoring contextual multi-goal (3 lentes perder/mantener/ganar)
+- P10 `[1.5.67]` — Glosario técnico con botón (i) en subcategorías botánicas (crucíferas, solanáceas, alliums, etc.)
+
+**Pendiente para admin (no bloqueante):**
+- Ejecutar `npm run generate:family-content` con `VITE_GEMINI_API_KEY` para generar las ~120 entries restantes. Cada ejecución es idempotente (sólo toca familias sin contenido). Se puede trocear por familia con `--family=fam_X`.
+- Review manual de las descripciones generadas antes de commit.
+
 ## [1.5.60] - 2026-04-20
 
 ### feat(food): P4 — Recipe variant pin + display

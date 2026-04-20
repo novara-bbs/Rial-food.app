@@ -23,6 +23,7 @@ export const screens = {
   CreatorVerification: React.lazy(() => import('../features/social/screens/CreatorVerification')),
   CreatorDashboard: React.lazy(() => import('../features/social/screens/CreatorDashboard')),
   FoodDictionary: React.lazy(() => import('../features/food/screens/FoodDictionary')),
+  FoodDetail: React.lazy(() => import('../features/food/screens/FoodDetail')),
   Challenges: React.lazy(() => import('../features/social/screens/Challenges')),
   CreatorProfile: React.lazy(() => import('../features/social/screens/CreatorProfile')),
   PostDetail: React.lazy(() => import('../features/social/screens/PostDetail')),
