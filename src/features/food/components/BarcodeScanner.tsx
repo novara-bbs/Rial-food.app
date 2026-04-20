@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef, useMemo } from 'react';
-import { X, Loader2, AlertTriangle, CheckCircle2, UtensilsCrossed, BookOpen, Save, RotateCcw, Plus } from 'lucide-react';
+import { X, Loader2, AlertTriangle, CheckCircle2, UtensilsCrossed, BookOpen, Save, RotateCcw, Plus, Info } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import BottomSheet from '@/components/ui/bottom-sheet';
@@ -15,6 +15,12 @@ import {
   scannedProductToIngredient,
   type ScannedProduct,
 } from '../utils/pseudo-ingredient';
+import type { FoodVariant, FoodFamily } from '../../../types/food-family';
+import {
+  matchFamilyForScan,
+  getCanonicalVariant,
+  type FamilyMatchResult,
+} from '../utils/food-family-resolver';
 
 type ScanState = 'idle' | 'scanning' | 'looking-up' | 'found' | 'not-found' | 'error';
 
@@ -22,18 +28,66 @@ type ScanState = 'idle' | 'scanning' | 'looking-up' | 'found' | 'not-found' | 'e
 // their imports stable. Canonical shape now lives in `../utils/pseudo-ingredient`.
 export type { ScannedProduct };
 
+/** Build a brand FoodVariant from a scanned product + a family match. */
+function createVariantFromScan(
+  product: ScannedProduct,
+  family: FoodFamily,
+): FoodVariant {
+  const canonical = getCanonicalVariant(family.id);
+  const barcode = product.barcode && !product.barcode.startsWith('custom_')
+    ? product.barcode
+    : undefined;
+  const id = barcode ? `off_${barcode}` : `user_${Date.now()}`;
+  return {
+    id,
+    familyId: family.id,
+    name: product.name,
+    nameEn: product.name,
+    variantType: 'brand',
+    brand: { name: product.brand || 'Marca desconocida', barcode, scanned: true },
+    baseAmount: canonical?.baseAmount ?? 100,
+    baseUnit: canonical?.baseUnit ?? 'g',
+    servingSizes: product.servingSizes?.length ? product.servingSizes : (canonical?.servingSizes ?? []),
+    macros: {
+      calories: product.calories,
+      protein: product.protein,
+      carbs: product.carbs,
+      fats: product.fats,
+      saturatedFat: product.saturatedFat,
+      sugar: product.sugar,
+    },
+    micros: canonical?.micros ?? { vitamins: {}, minerals: {}, others: {} },
+    allergens: canonical?.allergens ?? [],
+    tags: canonical?.tags ?? [],
+    source: 'off',
+  };
+}
+
 interface Props {
   onClose: () => void;
   onProductFound: (product: ScannedProduct, portionResult?: PortionResult) => void;
   onSaveToDictionary?: (product: ScannedProduct) => void;
   onAddToRecipe?: (product: ScannedProduct) => void;
   unitSystem?: UnitSystem;
+  /** Merged variant pool from AppStateContext (FOOD_VARIANTS + userVariants). Used for match-result UI. */
+  knownVariants?: FoodVariant[];
+  /** Called when the user saves a scanned product to their brand library. */
+  addUserVariant?: (variant: FoodVariant) => void;
+  /** Called to index the barcode → variantId so re-scans are instant. */
+  addVariantBarcode?: (barcode: string, variantId: string) => void;
 }
 
-export default function BarcodeScanner({ onClose, onProductFound, onSaveToDictionary, onAddToRecipe, unitSystem = 'metric' }: Props) {
-  const { t } = useI18n();
+export default function BarcodeScanner({
+  onClose, onProductFound, onSaveToDictionary, onAddToRecipe,
+  unitSystem = 'metric',
+  knownVariants = [],
+  addUserVariant,
+  addVariantBarcode,
+}: Props) {
+  const { t, locale } = useI18n();
   const [state, setState] = useState<ScanState>('idle');
   const [product, setProduct] = useState<ScannedProduct | null>(null);
+  const [matchResult, setMatchResult] = useState<FamilyMatchResult | null>(null);
   const [errorMsg, setErrorMsg] = useState('');
   const [manualCode, setManualCode] = useState('');
   const [portionResult, setPortionResult] = useState<PortionResult | null>(null);
@@ -81,6 +135,17 @@ export default function BarcodeScanner({ onClose, onProductFound, onSaveToDictio
 
         setProduct(result);
         setState('found');
+
+        // P5 — compute the family match asynchronously so UI is non-blocking
+        if (knownVariants.length > 0) {
+          const mr = matchFamilyForScan(
+            barcode,
+            p.brands || '',
+            result.name,
+            knownVariants,
+          );
+          setMatchResult(mr);
+        }
       } else {
         setState('not-found');
       }
@@ -149,6 +214,7 @@ export default function BarcodeScanner({ onClose, onProductFound, onSaveToDictio
   const handleScanAnother = () => {
     setState('idle');
     setProduct(null);
+    setMatchResult(null);
     setPortionResult(null);
     setManualCode('');
     setShowCustomForm(false);
@@ -249,7 +315,7 @@ export default function BarcodeScanner({ onClose, onProductFound, onSaveToDictio
         headerLayout="back-title-action"
         onBack={handleSheetBack}
       >
-        {/* FOUND — Product detail + portion selector + CTAs */}
+        {/* FOUND — Product detail + match banner + portion selector + CTAs */}
         {!showCustomForm && state === 'found' && product && pseudoIngredient && (
           <div className="space-y-4">
             <div className="bg-surface-container-low border border-green-500/30 rounded-sm p-4">
@@ -259,7 +325,7 @@ export default function BarcodeScanner({ onClose, onProductFound, onSaveToDictio
                 )}
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center gap-2 mb-1">
-                    <CheckCircle2 className="w-3.5 h-3.5 text-primary shrink-0" />
+                    <CheckCircle2 className="w-3.5 h-3.5 text-primary shrink-0" aria-hidden="true" />
                     <Badge variant="outline" className="text-primary border-primary/30">
                       {t.scanner.scanned}
                     </Badge>
@@ -271,6 +337,109 @@ export default function BarcodeScanner({ onClose, onProductFound, onSaveToDictio
                 </div>
               </div>
             </div>
+
+            {/* P5 — family match banner */}
+            {matchResult && matchResult.type !== 'no-match' && (() => {
+              const handleSaveBrand = (family: FoodFamily) => {
+                if (!addUserVariant) return;
+                const v = createVariantFromScan(product, family);
+                addUserVariant(v);
+                if (addVariantBarcode && product.barcode && !product.barcode.startsWith('custom_')) {
+                  addVariantBarcode(product.barcode, v.id);
+                }
+              };
+
+              if (matchResult.type === 'known-barcode') {
+                const famName = locale === 'es' ? matchResult.family.name : matchResult.family.nameEn;
+                return (
+                  <div className="flex items-start gap-2 bg-primary/10 border border-primary/20 rounded-sm p-3">
+                    <CheckCircle2 className="w-4 h-4 text-primary shrink-0 mt-0.5" aria-hidden="true" />
+                    <p className="text-body-sm text-on-surface">
+                      <span className="font-bold">{t.scanner.knownProductFound}</span>
+                      {' · '}{famName}
+                    </p>
+                  </div>
+                );
+              }
+
+              if (matchResult.type === 'seed-match') {
+                const famName = locale === 'es' ? matchResult.family.name : matchResult.family.nameEn;
+                return (
+                  <div className="space-y-2">
+                    <div className="flex items-start gap-2 bg-surface-container-low border border-outline-variant/20 rounded-sm p-3">
+                      <Info className="w-4 h-4 text-on-surface-variant shrink-0 mt-0.5" aria-hidden="true" />
+                      <p className="text-body-sm text-on-surface-variant">
+                        {t.scanner.foundInFamily}
+                        {' '}
+                        <span className="font-bold text-on-surface">{famName}</span>
+                      </p>
+                    </div>
+                    {addUserVariant && (
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        className="w-full"
+                        onClick={() => handleSaveBrand(matchResult.family)}
+                      >
+                        <Save className="w-3.5 h-3.5 mr-1.5" aria-hidden="true" />
+                        {t.scanner.saveAsBrandVariant}
+                      </Button>
+                    )}
+                  </div>
+                );
+              }
+
+              if (matchResult.type === 'fuzzy') {
+                const famName = locale === 'es' ? matchResult.family.name : matchResult.family.nameEn;
+                return (
+                  <div className="space-y-2">
+                    <p className="text-body-sm text-on-surface-variant text-center">
+                      {t.scanner.confirmFamily}
+                      {' '}
+                      <span className="font-bold text-on-surface">{famName}</span>?
+                    </p>
+                    {addUserVariant && (
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        className="w-full"
+                        onClick={() => handleSaveBrand(matchResult.family)}
+                      >
+                        <Save className="w-3.5 h-3.5 mr-1.5" aria-hidden="true" />
+                        {t.scanner.saveAsBrandVariant}
+                      </Button>
+                    )}
+                  </div>
+                );
+              }
+
+              if (matchResult.type === 'ambiguous') {
+                return (
+                  <div className="space-y-2">
+                    <p className="text-micro font-label uppercase tracking-widest text-on-surface-variant text-center">
+                      {t.scanner.chooseFamily}
+                    </p>
+                    <div className="flex flex-wrap gap-2 justify-center">
+                      {matchResult.candidates.map(({ family }) => {
+                        const famName = locale === 'es' ? family.name : family.nameEn;
+                        return (
+                          <button
+                            key={family.id}
+                            type="button"
+                            onClick={() => addUserVariant && handleSaveBrand(family)}
+                            className="px-3 py-1.5 rounded-sm bg-surface-container-highest text-body-sm text-on-surface border border-outline-variant/20 min-h-11 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/60 focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+                          >
+                            {famName}
+                          </button>
+                        );
+                      })}
+                    </div>
+                  </div>
+                );
+              }
+
+              return null;
+            })()}
 
             <SectionCard padding="none" spacing="none" className="p-4 space-y-2">
               <h4 className="text-micro font-label uppercase tracking-widest text-on-surface-variant">
@@ -289,7 +458,7 @@ export default function BarcodeScanner({ onClose, onProductFound, onSaveToDictio
                 className="w-full"
                 onClick={() => onProductFound(product, portionResult ?? undefined)}
               >
-                <UtensilsCrossed className="w-4 h-4 mr-2" />
+                <UtensilsCrossed className="w-4 h-4 mr-2" aria-hidden="true" />
                 {t.portionSelector.addToMeal}
               </Button>
 
@@ -297,13 +466,13 @@ export default function BarcodeScanner({ onClose, onProductFound, onSaveToDictio
                 <div className="grid grid-cols-2 gap-2">
                   {onAddToRecipe && (
                     <Button variant="outline" size="sm" onClick={() => onAddToRecipe(product)}>
-                      <BookOpen className="w-3.5 h-3.5 mr-1.5" />
+                      <BookOpen className="w-3.5 h-3.5 mr-1.5" aria-hidden="true" />
                       {t.portionSelector.addToRecipe}
                     </Button>
                   )}
                   {onSaveToDictionary && (
                     <Button variant="outline" size="sm" onClick={() => onSaveToDictionary(product)}>
-                      <Save className="w-3.5 h-3.5 mr-1.5" />
+                      <Save className="w-3.5 h-3.5 mr-1.5" aria-hidden="true" />
                       {t.scanner.save}
                     </Button>
                   )}
@@ -312,7 +481,7 @@ export default function BarcodeScanner({ onClose, onProductFound, onSaveToDictio
             </div>
 
             <Button variant="ghost" className="w-full" onClick={handleScanAnother}>
-              <RotateCcw className="w-3.5 h-3.5 mr-2" />
+              <RotateCcw className="w-3.5 h-3.5 mr-2" aria-hidden="true" />
               {t.scanner.scanAnother}
             </Button>
           </div>

@@ -1,6 +1,7 @@
 import React, { createContext, useContext, useState, useMemo, useCallback, useEffect, useRef } from 'react';
 import { toast } from 'sonner';
 import { Recipe, DailyCheckIn as DailyCheckInType, Ingredient } from '../types';
+import type { FoodVariant } from '../types/food-family';
 import { useLocalStorageState } from '../hooks/useLocalStorageState';
 import { useDailyReset, DailyArchive } from '../hooks/useDailyReset';
 import { useNavigation } from './NavigationContext';
@@ -25,6 +26,7 @@ import { createHandleShareProgress } from '../features/wellness/handlers/progres
 import { createHandleLoadDemoSeed, createHandleClearDemoSeed } from '../features/dev/handlers/demo-seed-handlers';
 import { shouldReseed, setStoredSeedVersion } from '../lib/seedVersion';
 import { getRecipeSlots } from '../features/recipes/utils/meal-slot';
+import { ingredientIdToFamilyVariant } from '../features/food/utils/food-family-resolver';
 import { logger } from '../lib/logger';
 import type { BodySnapshot } from '../types/wellness';
 import type { CommunityPost } from '../types/social';
@@ -70,9 +72,21 @@ interface AppStateContextType {
   checkInStatus: DailyCheckInType | null;
   setCheckInStatus: (v: any) => void;
 
-  // User foods (scanned / custom)
+  // User foods (scanned / custom) — legacy flat list kept for backward-compat
   userFoods: Ingredient[];
   addUserFood: (food: Ingredient) => void;
+
+  // User variants — scanned brand/product variants stored under a FoodFamily.
+  // Separate from legacy `userFoods` so flat-ingredient consumers are untouched.
+  userVariants: FoodVariant[];
+  addUserVariant: (variant: FoodVariant) => void;
+  updateUserVariant: (id: string, updates: Partial<Pick<FoodVariant, 'brand' | 'macros'>>) => void;
+  removeUserVariant: (id: string) => void;
+  /** barcode → variantId index (seed-matched + user-saved). Enables instant re-recognition. */
+  userVariantBarcodes: Record<string, string>;
+  addVariantBarcode: (barcode: string, variantId: string) => void;
+  /** Unified variant pool: FOOD_VARIANTS (seed) + userVariants. Pass to matchFamilyForScan / searchFamilies. */
+  mergedVariants: FoodVariant[];
 
   // Daily food diary log
   dailyLog: DailyLogEntry[];
@@ -290,6 +304,40 @@ export function AppStateProvider({ children }: { children: React.ReactNode }) {
     toast.success(t.mealToasts.foodSaved);
   }, [setUserFoods, t]);
 
+  // User variants: brand/product FoodVariants stored under a FoodFamily.
+  // New localStorage key — no seedVersion bump (user-only data, no seed to merge).
+  const [userVariants, setUserVariants] = useLocalStorageState<FoodVariant[]>('userVariants', []);
+  const [userVariantBarcodes, setUserVariantBarcodes] = useLocalStorageState<Record<string, string>>('userVariantBarcodes', {});
+
+  const addUserVariant = useCallback((variant: FoodVariant) => {
+    setUserVariants((prev: FoodVariant[]) => {
+      if (prev.some(v => v.id === variant.id)) return prev;
+      return [variant, ...prev];
+    });
+    toast.success(t.mealToasts.foodSaved);
+  }, [setUserVariants, t]);
+
+  const updateUserVariant = useCallback((id: string, updates: Partial<Pick<FoodVariant, 'brand' | 'macros'>>) => {
+    setUserVariants((prev: FoodVariant[]) =>
+      prev.map(v => v.id === id ? { ...v, ...updates } : v),
+    );
+  }, [setUserVariants]);
+
+  const removeUserVariant = useCallback((id: string) => {
+    setUserVariants((prev: FoodVariant[]) => prev.filter(v => v.id !== id));
+    setUserVariantBarcodes((prev: Record<string, string>) => {
+      const next = { ...prev };
+      Object.keys(next).forEach(barcode => {
+        if (next[barcode] === id) delete next[barcode];
+      });
+      return next;
+    });
+  }, [setUserVariants, setUserVariantBarcodes]);
+
+  const addVariantBarcode = useCallback((barcode: string, variantId: string) => {
+    setUserVariantBarcodes((prev: Record<string, string>) => ({ ...prev, [barcode]: variantId }));
+  }, [setUserVariantBarcodes]);
+
   // Ingredient dictionary (lazy-loaded to keep ~90KB out of the initial bundle)
   const [baseDictionary, setBaseDictionary] = useState<Ingredient[]>([]);
   useEffect(() => {
@@ -303,6 +351,23 @@ export function AppStateProvider({ children }: { children: React.ReactNode }) {
   const mergedDictionary = useMemo(
     () => [...baseDictionary, ...userFoods],
     [baseDictionary, userFoods],
+  );
+
+  // Seed FoodVariants — lazy-loaded from food-variants.ts to keep them out of
+  // the initial bundle (same pattern as baseDictionary above).
+  const [baseFoodVariants, setBaseFoodVariants] = useState<FoodVariant[]>([]);
+  useEffect(() => {
+    let cancelled = false;
+    import('../features/food/data/food-variants').then((m) => {
+      if (!cancelled) setBaseFoodVariants(m.FOOD_VARIANTS as FoodVariant[]);
+    }).catch((err) => logger.warn('food-variants lazy load failed', { err }));
+    return () => { cancelled = true; };
+  }, []);
+
+  /** Unified variant pool used by matchFamilyForScan + searchFamilies (P5/P3). */
+  const mergedVariants = useMemo<FoodVariant[]>(
+    () => [...baseFoodVariants, ...userVariants],
+    [baseFoodVariants, userVariants],
   );
 
   // Seeded content — all lazy-loaded on first mount via `shouldReseed()`.
@@ -363,6 +428,32 @@ export function AppStateProvider({ children }: { children: React.ReactNode }) {
         if (!slots) return r;
         const { mealType: _legacy, ...rest } = r;
         return { ...rest, suitableFor: slots };
+      });
+    });
+  }, []);
+
+  // P4.4 — RecipeIngredient hydration: for legacy `ingredientId`-only entries
+  // that lack `familyId`, populate `familyId` (and `variantId`) in memory so
+  // `resolveRecipeIngredient()` can resolve them via the new dual-schema path.
+  // This does NOT rewrite localStorage — it is an in-memory projection only.
+  // A future seedVersion bump + eager migration will persist the change.
+  // Idempotent: skips recipes where every ingredient already has `familyId`.
+  useEffect(() => {
+    setSavedRecipes((prev: any[]) => {
+      if (!prev.length) return prev;
+      const needsMigration = prev.some((r: any) =>
+        r?.recipeIngredients?.some((ri: any) => !ri.familyId && ri.ingredientId),
+      );
+      if (!needsMigration) return prev;
+      return prev.map((r: any) => {
+        if (!r?.recipeIngredients) return r;
+        const migratedRIs = r.recipeIngredients.map((ri: any) => {
+          if (ri.familyId || !ri.ingredientId) return ri;
+          const mapped = ingredientIdToFamilyVariant(ri.ingredientId);
+          if (!mapped) return ri;
+          return { ...ri, familyId: mapped.familyId, variantId: mapped.variantId };
+        });
+        return { ...r, recipeIngredients: migratedRIs };
       });
     });
   }, []);
@@ -790,6 +881,9 @@ export function AppStateProvider({ children }: { children: React.ReactNode }) {
     realFeelLogs, setRealFeelLogs,
     checkInStatus, setCheckInStatus,
     userFoods, addUserFood,
+    userVariants, addUserVariant, updateUserVariant, removeUserVariant,
+    userVariantBarcodes, addVariantBarcode,
+    mergedVariants,
     dailyLog, setDailyLog,
     foodHistory, setFoodHistory, favoriteIds, toggleFavorite,
     weightHistory, setWeightHistory,
@@ -840,6 +934,8 @@ export function AppStateProvider({ children }: { children: React.ReactNode }) {
     shoppingList, setShoppingList, communityPosts, setCommunityPosts,
     toleranceLogs, setToleranceLogs, realFeelLogs, setRealFeelLogs,
     checkInStatus, setCheckInStatus, userFoods, addUserFood,
+    userVariants, addUserVariant, updateUserVariant, removeUserVariant,
+    userVariantBarcodes, addVariantBarcode, mergedVariants,
     dailyLog, setDailyLog, foodHistory, setFoodHistory, favoriteIds, toggleFavorite,
     weightHistory, setWeightHistory, nutritionHistory, setNutritionHistory,
     selectedRecipe, targetPlanDay, openScannerOnAddMeal, selectedStoryAuthorId, selectedCreatorId, selectedPostId,

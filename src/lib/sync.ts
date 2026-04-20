@@ -54,6 +54,9 @@ type SyncKey =
   | 'userFoods'
   | 'foodHistory'
   | 'favoriteIds'
+  // P5 — user variant library (scanned brand products stored under FoodFamily)
+  | 'userVariants'
+  | 'userVariantBarcodes'
   // Wave 1 tab audit — social graph
   | 'likedPosts'
   | 'savedPosts'
