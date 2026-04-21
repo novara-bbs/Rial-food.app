@@ -1,5 +1,71 @@
 # RIAL App - Changelog
 
+## [1.5.74] - 2026-04-21
+
+### feat(food): P16 — Seed-variant inline log shortcut (macros curadas RIAL > OFF cuando user confirma)
+
+**Razonamiento profundo pre-sprint** identificó que P15 dejó shipped una **incoherencia lógica**: el `ContextualScoreChip` usaba las macros del seed variant (curadas) cuando había `seed-match`, pero el `PortionSelector` y el log final seguían usando los macros de OFF. El usuario veía *«Grade A para tu goal»* basado en Activia 4.2g proteína (seed) pero al loggear se guardaban las 3.8g proteína (OFF, outdated). Discrepancia invisible pero real.
+
+**Problema técnico del scan retail estándar:**
+- OFF tiene macros outdated (fabricantes cambian formulación, OFF tarda meses en actualizarse)
+- OFF tiene parsing errors (`product.fats` puede llegar `undefined`)
+- OFF tiene servingSizes pobres (solo «100g»)
+- OFF no tiene `qualityTags` (no distingue light/high-protein/sugar-free)
+
+**Nuestros 52 seed brands P14** tienen macros curados a mano + servingSizes canonical heredados + qualityTags asignadas + descriptions ES/EN. Son estructuralmente **mejores** que OFF para los productos que cubren.
+
+**Design elegido (Opción B de 5 consideradas):** CTA explícita en el banner seed-match que permite al usuario confirmar *«Sí, es este mi producto»* → swap de la fuente de datos. NO auto-default (podría asumir incorrectamente Activia Sabor Fresa = Activia Natural). NO toggle permanente (overkill cognitivo).
+
+**Write set:**
+- `src/features/food/components/BarcodeScanner.tsx`:
+  - Nuevo state `useSeedMacros: boolean`. Auto-`true` cuando `matchResult.type === 'known-barcode'` (el usuario ya curó esa entrada antes). Manual toggle cuando `seed-match`. Reset en `handleScanAnother`.
+  - `pseudoIngredient` derivado condicionalmente: cuando `useSeedMacros && match has variant` → `variantToIngredient(seed)` (P4 existing util), overriding solo el `name` para mantener al usuario orientado a *su* scan. Sin toggle → `scannedProductToIngredient(product)` (OFF payload). El PortionSelector + `onProductFound` callback consumen este ingredient → swap automático en toda la cadena de log.
+  - **Badge visual de fuente** en el product card: `✨ Datos RIAL` (primary verde) / `Datos fabricante` (gris). El usuario siempre ve qué fuente está activa.
+  - **Toggle button** en el banner seed-match: `variant="brand"` activo cuando `useSeedMacros=true`, `variant="outline"` inactivo. `aria-pressed` correcto. Copy contextual: *«Usar datos verificados de Activia Natural»* → *«Usando datos verificados RIAL»*.
+  - **Hide duplicate save**: cuando `useSeedMacros && matchResult.variant.source === 'seed'`, el botón «Guardar en mis marcas» se esconde (sería duplicar un entry curado como userVariant). Solo aparece cuando `useSeedMacros=false` o cuando el match es user variant (no seed).
+  - Banner seed-match añade `font-bold` al nombre del seed para destacar («Tenemos una similar: **Activia Natural (Danone)**»).
+
+**i18n (+6 keys simétricas ES/EN):**
+- `scanner.useVerifiedData` — *«Usar datos verificados de {{name}}»* / *«Use verified data from {{name}}»*
+- `scanner.usingVerifiedData` — *«Usando datos verificados RIAL»* / *«Using RIAL verified data»*
+- `scanner.sourceVerified` — badge label *«Datos RIAL»* / *«RIAL data»*
+- `scanner.sourceVerifiedAria` — aria label
+- `scanner.sourceManufacturer` — *«Datos fabricante»* / *«Label data»*
+- `scanner.sourceManufacturerAria` — aria label
+
+Total i18n: 1776 → **1782** simétrico.
+
+**Edge cases manejados:**
+1. **ServingSize lost al swap**: la derivación del pseudoIngredient se re-ejecuta con useMemo; el PortionSelector re-renders. `variantToIngredient` devuelve los servingSizes heredados del canonical (ej. yogur griego gana `[tarrina 125g, vasito 115g, 100g]` cuando swap). Si el user ya había seleccionado «100g» y el nuevo set también tiene «100g», Preserva. Si no, PortionSelector cae al default (`isDefault: true`).
+2. **Seed variant sin servingSizes propios**: `variantToIngredient` devuelve `variant.servingSizes ?? []`. Vacío → PortionSelector muestra solo input gramos directo. Graceful.
+3. **Toggle rapid on/off**: cada toggle dispara re-memo pero no perdemos el portionResult hasta el próximo cambio del user.
+4. **Usuario cambia de opinión post-toggle**: toggle reversible, badges actualizan, macros swap. Sin penalización.
+5. **Known-barcode path**: también preferirá seed macros (auto-true). Consistente con la semántica «ya lo guardé antes, usa eso».
+
+**Bug P15 lateral cerrado:** ahora chip contextual + PortionSelector + log usan la MISMA fuente de datos. Si el user ve `A` y loguea, lo que se guarda produce `A`. Si ve `B` y no toggleó seed, logs con OFF macros que produjeron `B`. Consistencia visual ↔ datos guardados.
+
+**Quality baseline post-P16:**
+- TypeScript: 0 errors
+- Tests: 958/958 passing (zero regressions — el swap es un useMemo puro)
+- i18n: 1776 → **1782** simétrico (+6 keys)
+- Build main: 862.0 → **862.6 KB raw** / 271.2 → **271.4 KB gzip** (+0.6 KB raw / +0.2 KB gzip — el toggle + badges + condicionales)
+
+**Flujo nuevo en Mercadona (Clara, goal=perder peso):**
+1. Escanea **Yopro Proteína Natural** de Vitalínea (está en SEED_BRAND_ENTRIES P14 como seed)
+2. Ve banner: «Encontrado en familia Yogur griego · Tenemos una similar: **Yopro Proteína Natural (Vitalínea)**»
+3. Ve chip: «Para tu objetivo (Perder peso): **A** · alta proteína, pocas calorías»
+4. Tap **«Usar datos verificados de Yopro Proteína Natural»**
+5. Badge cambia a **✨ Datos RIAL**
+6. PortionSelector swap — ahora ofrece servingSizes de yogur griego canonical («1 tarrina 125g», «vasito 115g», «100g»)
+7. Botón «Guardar en mis marcas» se esconde (ya está en seed, no hay que duplicar)
+8. Tap «Añadir a comida» → log con macros + qualityTags del seed + serving realista
+
+**Follow-ups re-razonados post-P16:**
+1. **P17 Barcode population en SEED_BRAND_ENTRIES** — añadir `brand.barcode` a los 52 entries vía OFF EAN lookup → Step 1 `known-barcode` path trigger auto → auto-use seed macros sin toggle explícito. Este sprint era ~2h scraping. Ahora con P16 shipped el ROI sube porque el mecanismo ya está montado.
+2. **P18 AI Coach free-tier exposure** — sigue pending decisión producto.
+3. **P15-original LLM content gen** — 170 familias longDescription, requiere `VITE_GEMINI_API_KEY` owner.
+4. **P19 Diff visible OFF vs RIAL** — cuando seed y OFF macros difieren >20 %, un chip sutil «Label dice 66 kcal / RIAL verificó 73 kcal» para transparencia total. Defer hasta tener métricas de adoption del toggle P16.
+
 ## [1.5.73] - 2026-04-21
 
 ### fix(food): P15 — BarcodeScanner polish post-P14 (feedback + score chip + seed-match copy)

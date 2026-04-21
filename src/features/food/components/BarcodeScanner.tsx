@@ -24,6 +24,7 @@ import {
 } from '../utils/food-family-resolver';
 import ContextualScoreChip from './ContextualScoreChip';
 import { normalizeGoal } from '../utils/contextual-score';
+import { variantToIngredient } from '../utils/variant-to-ingredient';
 
 type ScanState = 'idle' | 'scanning' | 'looking-up' | 'found' | 'not-found' | 'error';
 
@@ -108,6 +109,12 @@ export default function BarcodeScanner({
   // the «Guardar en mis marcas» button shows «Guardado ✓» + disables itself,
   // preventing silent double-taps that would duplicate userVariants.
   const [savedBrandFamilyIds, setSavedBrandFamilyIds] = useState<Set<string>>(() => new Set());
+  // P16 [1.5.74] — when true, the PortionSelector + log uses the macros of the
+  // matched seed/saved variant instead of the OFF payload. Auto-true for
+  // `known-barcode` (user already chose to save that variant before); opt-in
+  // for `seed-match` (user confirms «yes this is Activia Natural»).
+  // Resets on every new lookup.
+  const [useSeedMacros, setUseSeedMacros] = useState(false);
   const scannerRef = useRef<HTMLDivElement>(null);
   const html5QrRef = useRef<any>(null);
 
@@ -145,10 +152,30 @@ export default function BarcodeScanner({
     };
   }, [activeGoal, product, matchResult]);
 
-  const pseudoIngredient = useMemo(
-    () => product ? scannedProductToIngredient(product) : null,
-    [product],
-  );
+  // P16 [1.5.74] — effective ingredient source.
+  // When `useSeedMacros` is on AND we have a seed/known variant match, the
+  // PortionSelector + onProductFound payload use the curated seed macros +
+  // servingSizes. Otherwise fall back to the scanned OFF product. This is the
+  // key fix closing the P15 lateral bug (chip used seed but log used OFF).
+  const pseudoIngredient = useMemo(() => {
+    if (!product) return null;
+    const canUseSeed =
+      useSeedMacros
+      && (matchResult?.type === 'known-barcode' || matchResult?.type === 'seed-match')
+      && matchResult.variant;
+    if (canUseSeed) {
+      // Override the display name to keep the user oriented to *their* scan,
+      // but use the curated macros + servingSizes from the seed variant.
+      const seedIngredient = variantToIngredient(matchResult.variant);
+      return {
+        ...seedIngredient,
+        id: `scan_${product.barcode ?? Date.now()}`,
+        name: product.name,
+        nameEn: product.name,
+      };
+    }
+    return scannedProductToIngredient(product);
+  }, [product, useSeedMacros, matchResult]);
 
   const lookupBarcode = async (barcode: string) => {
     setState('looking-up');
@@ -194,6 +221,13 @@ export default function BarcodeScanner({
             knownVariants,
           );
           setMatchResult(mr);
+          // P16 [1.5.74] — auto-prefer saved macros on known-barcode (the user
+          // already curated this entry). Seed-match stays opt-in because we
+          // can't be sure the specific product is identical without a barcode
+          // confirmation (that's P17).
+          setUseSeedMacros(mr.type === 'known-barcode');
+        } else {
+          setUseSeedMacros(false);
         }
       } else {
         setState('not-found');
@@ -267,6 +301,8 @@ export default function BarcodeScanner({
     setPortionResult(null);
     setManualCode('');
     setShowCustomForm(false);
+    // P16 [1.5.74] — reset the seed-macros toggle; each scan starts fresh.
+    setUseSeedMacros(false);
     // Brief delay lets the prior scanner teardown settle before we boot a new
     // instance on the same `#barcode-reader` DOM node.
     setTimeout(() => { startScanner(); }, 100);
@@ -373,11 +409,23 @@ export default function BarcodeScanner({
                   <img src={product.image} alt="" className="w-16 h-16 rounded-sm object-cover shrink-0" referrerPolicy="no-referrer" />
                 )}
                 <div className="flex-1 min-w-0">
-                  <div className="flex items-center gap-2 mb-1">
+                  <div className="flex items-center gap-2 mb-1 flex-wrap">
                     <CheckCircle2 className="w-3.5 h-3.5 text-primary shrink-0" aria-hidden="true" />
                     <Badge variant="outline" className="text-primary border-primary/30">
                       {t.scanner.scanned}
                     </Badge>
+                    {/* P16 [1.5.74] — data source badge: RIAL curated vs OFF manufacturer. */}
+                    {useSeedMacros
+                      ? (
+                        <Badge variant="outline" className="text-primary border-primary/30" aria-label={t.scanner.sourceVerifiedAria}>
+                          ✨ {t.scanner.sourceVerified}
+                        </Badge>
+                      )
+                      : (
+                        <Badge variant="outline" className="text-on-surface-variant border-outline-variant/40" aria-label={t.scanner.sourceManufacturerAria}>
+                          {t.scanner.sourceManufacturer}
+                        </Badge>
+                      )}
                   </div>
                   {product.brand && <p className="text-micro text-on-surface-variant mt-0.5">{product.brand}</p>}
                   <p className="text-micro text-on-surface-variant/60 mt-1">
@@ -451,6 +499,12 @@ export default function BarcodeScanner({
                   ? matchResult.variant.name
                   : matchResult.variant.nameEn;
                 const saved = savedBrandFamilyIds.has(matchResult.family.id);
+                // P16 [1.5.74] — when the user has opted into seed macros, the
+                // seed variant IS the source of truth for this scan. The
+                // «Guardar en mis marcas» button becomes redundant (it would
+                // duplicate a curated entry as a userVariant), so we hide it.
+                const seedIsCurated = matchResult.variant.source === 'seed';
+                const hideSaveButton = useSeedMacros && seedIsCurated;
                 return (
                   <div className="space-y-2">
                     <SectionCard padding="none" spacing="none" className="flex items-start gap-2 p-3">
@@ -462,11 +516,31 @@ export default function BarcodeScanner({
                           <span className="font-bold text-on-surface">{famName}</span>
                         </p>
                         <p className="text-micro text-on-surface-variant/80 mt-0.5">
-                          {t.scanner.similarBrand}: {seedName}
+                          {t.scanner.similarBrand}: <span className="font-bold text-on-surface">{seedName}</span>
                         </p>
                       </div>
                     </SectionCard>
-                    {addUserVariant && (
+                    {/* P16 [1.5.74] — let user swap macros source to the curated seed. */}
+                    <Button
+                      variant={useSeedMacros ? 'brand' : 'outline'}
+                      size="sm"
+                      className="w-full"
+                      onClick={() => setUseSeedMacros(prev => !prev)}
+                      aria-pressed={useSeedMacros}
+                    >
+                      {useSeedMacros ? (
+                        <>
+                          <CheckCircle2 className="w-3.5 h-3.5 mr-1.5" aria-hidden="true" />
+                          {t.scanner.usingVerifiedData}
+                        </>
+                      ) : (
+                        <>
+                          <Info className="w-3.5 h-3.5 mr-1.5" aria-hidden="true" />
+                          {t.scanner.useVerifiedData.replace('{{name}}', seedName)}
+                        </>
+                      )}
+                    </Button>
+                    {addUserVariant && !hideSaveButton && (
                       <Button
                         variant="outline"
                         size="sm"
