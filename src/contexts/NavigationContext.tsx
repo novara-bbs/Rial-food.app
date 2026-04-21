@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState } from 'react';
+import React, { createContext, useCallback, useContext, useMemo, useState } from 'react';
 
 /**
  * Opaque data payload attached to a navigation. Kept loose — each screen
@@ -12,6 +12,11 @@ import React, { createContext, useContext, useState } from 'react';
  */
 export type NavigationData = Record<string, unknown> | undefined;
 
+interface NavItem {
+  screen: string;
+  data?: NavigationData;
+}
+
 interface NavigationContextType {
   currentScreen: string;
   previousScreen: string;
@@ -22,24 +27,59 @@ interface NavigationContextType {
 
 const NavigationContext = createContext<NavigationContextType | undefined>(undefined);
 
+/**
+ * Internal cap on the navigation history. 32 entries comfortably covers
+ * every real-world flow (the Diccionario substitute drill-down maxes at ~5,
+ * the deepest existing flow is Onboarding at ~8). The cap prevents runaway
+ * memory if a screen were to push in a loop.
+ */
+const HISTORY_CAP = 32;
+
+/**
+ * P8 `[1.5.65]` + P10-post fix: full history stack replaces the single
+ * `previousScreen` snapshot. Each entry preserves `{screen, data}` so that
+ * `goBack()` restores BOTH the screen id AND the `screenData` payload —
+ * fixes the chained-substitute drill-down bug where tapping through multiple
+ * FoodDetail pages (A → B → C) and then pressing Back would lose the
+ * previous family id and render the empty-state fallback.
+ *
+ * Public API preserved verbatim (`currentScreen`, `previousScreen`,
+ * `navigateTo`, `goBack`) so the 20+ call sites across App.tsx +
+ * AppStateContext + meal-handlers continue to work unchanged.
+ * `previousScreen` is now a derived getter from history[length-2].
+ */
 export function NavigationProvider({ children }: { children: React.ReactNode }) {
-  const [currentScreen, setCurrentScreen] = useState('home');
-  const [previousScreen, setPreviousScreen] = useState('home');
-  const [screenData, setScreenData] = useState<NavigationData>(undefined);
+  const [history, setHistory] = useState<NavItem[]>([{ screen: 'home' }]);
 
-  const navigateTo = (screen: string, data?: NavigationData) => {
-    setPreviousScreen(currentScreen);
-    setCurrentScreen(screen);
-    setScreenData(data);
-  };
+  const currentScreen = history[history.length - 1]?.screen ?? 'home';
+  const screenData = history[history.length - 1]?.data;
+  const previousScreen =
+    history.length >= 2 ? history[history.length - 2].screen : currentScreen;
 
-  const goBack = () => navigateTo(previousScreen);
+  const navigateTo = useCallback((screen: string, data?: NavigationData) => {
+    setHistory(prev => {
+      const top = prev[prev.length - 1];
+      // Collapse immediate self-navigations without data — prevents runaway
+      // history growth when a consumer calls navigateTo('home') already on home.
+      // Substitute drill-down (same screen, different data) is preserved
+      // because we still push when `data` differs.
+      if (top && top.screen === screen && !data && !top.data) return prev;
+      const next = [...prev, { screen, data }];
+      // Cap the history to keep memory bounded; drop oldest entries first.
+      return next.length > HISTORY_CAP ? next.slice(next.length - HISTORY_CAP) : next;
+    });
+  }, []);
 
-  return (
-    <NavigationContext.Provider value={{ currentScreen, previousScreen, screenData, navigateTo, goBack }}>
-      {children}
-    </NavigationContext.Provider>
+  const goBack = useCallback(() => {
+    setHistory(prev => (prev.length > 1 ? prev.slice(0, -1) : prev));
+  }, []);
+
+  const value = useMemo<NavigationContextType>(
+    () => ({ currentScreen, previousScreen, screenData, navigateTo, goBack }),
+    [currentScreen, previousScreen, screenData, navigateTo, goBack],
   );
+
+  return <NavigationContext.Provider value={value}>{children}</NavigationContext.Provider>;
 }
 
 export function useNavigation() {

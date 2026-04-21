@@ -32,7 +32,7 @@ export default function ContextualScorePanel({ variant, activeGoal }: Props) {
       data-contextual-score-panel
       role="group"
       aria-label={t.contextualScore.whichGoalIsBetter}
-      className="grid grid-cols-3 gap-2"
+      className="grid grid-cols-1 sm:grid-cols-3 gap-2"
     >
       {GOALS.map((goal: Goal) => {
         const score = computeContextualScore(variant, goal);

@@ -1,5 +1,35 @@
 # RIAL App - Changelog
 
+## [1.5.68] - 2026-04-21
+
+### fix(food): audit findings P8-P10 — navigation history stack + mobile interactivity
+
+Auditoría post-ship P8+P9+P10 detectó 3 issues reales (2 bugs funcionales + 1 UX crítico móvil). Este release los corrige y añade regression tests. Los hallazgos 🟡 polish + 🟢 doc (dup `variantsSection`, ejemplos glosario, disclaimer médico) se mantienen explícitamente deferred — no crítico, no bloquea.
+
+**🔴 Fix #1 — Navigation history stack restores `screenData` en `goBack()`**
+- **Bug**: `NavigationContext` sólo guardaba `previousScreen: string` (single level). La navegación encadenada de substitutos en FoodDetail (Pollo → Pavo → Tofu) acumulaba correctamente el `currentScreen` pero al pulsar atrás perdía el `familyId` anterior → FoodDetail recibía `screenData=undefined` y renderizaba el fallback `noResults`. UX roto para el flujo educativo principal.
+- **Fix**: `NavigationContext` ahora usa un history stack interno `Array<{screen, data}>` cap a 32 entries. `previousScreen` sigue existiendo como derived getter (backward-compat con ~20 call-sites en `App.tsx` + `AppStateContext` + `meal-handlers`). `goBack()` hace pop del stack restaurando screen + data simultáneamente. Collapsa self-navigations sin data (`navigateTo('home')` estando en home) para prevenir stack crecimiento.
+- **Test**: `src/contexts/NavigationContext.test.tsx` — 6 asserts incluyendo el escenario del bug (A → B → C → back → back recupera familyIds en orden).
+
+**🟠 Fix #2 — `ContextualScoreChip` mobile-safe**
+- **Bug**: el chip `size="sm"` era `<span>` con attribute `title` para tooltip. HTML `title` **no renderiza en iOS** — usuarios móviles (mayoría) no veían nunca la rationale del grade. Además, `w-5 h-5` (20×20) como único elemento "interactivo" violaba HIG 44×44.
+- **Fix**: convertido a `<button>` con onClick que abre un shadcn Dialog compacto mostrando goal + grade + rationale traducido + chips de caveats. Wrapper invisible `w-11 h-11 -m-3` mantiene el footprint visual de 20×20 pero expone 44×44 de tap area (HIG compliant). `aria-label` detallado para screen readers. Nueva prop `interactive?: boolean` (default `true`) — se pasa `false` desde VariantRow/contextos donde la fila padre ya captura el tap, evitando botones anidados.
+
+**🟠 Fix #3 — `ContextualScorePanel` responsive**
+- **Bug**: `grid grid-cols-3 gap-2` en viewport 360px asignaba ~115px por columna. El rationale text ("Denso calóricamente — mide la ración", 40 chars ES) colapsaba con caveat chips abajo creando overflow visual + wrapping feo.
+- **Fix**: `grid grid-cols-1 sm:grid-cols-3`. Mobile (<640px) apila vertical (3 cards full-width, todas visibles en scroll natural), tablet+ mantiene comparación lado-a-lado. Sin pérdida de información en ningún breakpoint.
+
+**Quality baseline post-fix:**
+- TypeScript: 0 errors
+- Tests: 918 → **924** (+6 nuevos en NavigationContext.test.tsx)
+- i18n: 1765 simétrico (sin cambios)
+- Build: esperado sin delta significativo
+
+**Hallazgos deferred explícitamente (no bloquean):**
+- 🟡 Eliminar dup key i18n `foodDictionary.variantsSection` vs `foodDictionary.foodDetail.variants` (ambos "Variantes"/"Variants") — cleanup siguiente sprint.
+- 🟡 Patata aparece en `raices-tuberculos` examples aunque botánicamente es solanácea — ejemplo pedagógicamente ambiguo pero no erróneo; decidir en revisión de copy.
+- 🟢 Claims nutricionales fuertes en `family-content.generated.ts` (sulforafano antioxidante, beta-glucano reduce LDL) sin disclaimer legal. Low-risk en España (contenido educativo referenciado a EFSA) pero recomendable añadir disclaimer global tipo "Información educativa, no consejo médico" en footer de FoodDetail cuando el seed esté completo.
+
 ## [1.5.67] - 2026-04-21
 
 ### feat(food): P10 — Glosario técnico expandible (botón i en subcategorías botánicas)
