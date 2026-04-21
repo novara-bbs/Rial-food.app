@@ -1261,6 +1261,7 @@ const en: Translations = {
     // P5 — match-result UI labels
     knownProductFound: 'Already saved',
     foundInFamily: 'Found in family',
+    similarBrand: 'We have a similar one',
     confirmFamily: 'Part of this group?',
     chooseFamily: 'Which food group?',
     unknownProduct: 'Product not recognized',

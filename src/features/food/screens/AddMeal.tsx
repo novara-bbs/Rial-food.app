@@ -339,6 +339,7 @@ export default function AddMeal({
             knownVariants={mergedVariants}
             addUserVariant={addUserVariant}
             addVariantBarcode={addVariantBarcode}
+            userGoal={(userProfile as { goal?: string } | null)?.goal ?? null}
             onProductFound={(product, portionResult) => {
               setShowScanner(false);
               const m = portionResult?.scaledMacros ?? { calories: product.calories, protein: product.protein, carbs: product.carbs, fats: product.fats };

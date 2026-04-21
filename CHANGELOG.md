@@ -1,5 +1,59 @@
 # RIAL App - Changelog
 
+## [1.5.73] - 2026-04-21
+
+### fix(food): P15 — BarcodeScanner polish post-P14 (feedback + score chip + seed-match copy)
+
+Tras P14 (SEED_BRAND_ENTRIES 8→52), la rama `seed-match` del BarcodeScanner se disparó 5-10× más frecuente — pasó de ser edge-case a **path principal del flujo retail España**. Auditoría post-P14 detectó 3 issues UX en esta rama que se hicieron visibles recién al escalar el seed.
+
+**🔴 Fix #1 — Feedback ausente tras «Guardar en mis marcas»**
+- **Bug**: tap del botón llamaba `addUserVariant()` sin señalización visual. Usuario no veía confirmación → doble-tap frecuente → **duplicados en userVariants**.
+- **Fix**: nuevo state `savedBrandFamilyIds: Set<string>` por sesión de scan. Al guardar:
+  - `toast.success(t.scanner.savedToBrands)` visible
+  - botón pasa a estado disabled con copy `✓ Guardado`
+  - icono cambia de `Save` a `CheckCircle2`
+  - segundos taps → no-op (guard explícito en handler)
+  - Se aplica a las 3 ramas con botón de guardar: `seed-match`, `fuzzy`, `ambiguous`.
+
+**🟠 Fix #2 — ContextualScoreChip en el result panel**
+- **Gap**: usuario escanea un producto, ve macros, pero **NO ve si es bueno/malo para su goal** hasta que lo logea. El diferenciador P9+P13 estaba ausente en el flujo scan→decide.
+- **Fix**: `<ContextualScoreChip size="md">` renderizado entre el header del producto y el match banner. Copy: *«Para tu objetivo (Perder peso): B · grasa saludable, 1-2 cdas»*. Nuevo prop opcional `userGoal` cableado desde `AddMeal` vía `userProfile.goal`.
+- **Fuente del chip**:
+  - Si match produjo `known-barcode` o `seed-match` → usa el variant curado (macros limpias, qualityTags conocidas)
+  - En otro caso → construye pseudo-variant desde OFF macros (`variantType: 'brand'`, `source: 'off'`)
+
+**🟠 Fix #3 — Seed-match banner muestra el variant del seed, no solo la familia**
+- **Gap**: cuando el seed-match latcha (ej. scaneas Activia, seed tiene `brand_fam_yogurt_hacendado`), el banner solo decía «Encontrado en familia Yogur natural». El usuario **no sabía que teníamos una marca parecida** en nuestra base.
+- **Fix**: el banner ahora muestra 2 líneas:
+  - Línea 1: «Encontrado en familia **Yogur natural**» (comportamiento previo)
+  - Línea 2: «Tenemos una similar: **Yogur Natural Azucarado (Hacendado)**» — el seed variant con el que matcheó
+- **`known-barcode` rama**: también ahora muestra `variant.name` en vez de solo `family.name` → el usuario reconoce su entrada previa exacta («Yogur Griego Hacendado · Yogur Griego» en lugar del ambiguo «Ya lo tenías guardado · Yogur Griego»).
+
+**i18n (+1 par simétrico):**
+- Nueva clave `scanner.similarBrand` en ES/EN (*«Tenemos una similar» / «We have a similar one»*). Total: 1775 → **1776**.
+
+**Write set:**
+- `src/features/food/components/BarcodeScanner.tsx` — 4 cambios: nuevo state `savedBrandFamilyIds`, nuevo `activeGoal` + `scoreVariant` useMemos, mount de `ContextualScoreChip` en el result panel, rewrite de `handleSaveBrand` con guard + toast + setState, rewrite de los 3 banners de match con disabled + copy polish.
+- `src/features/food/screens/AddMeal.tsx` — passa `userGoal={userProfile.goal}` al BarcodeScanner.
+- `src/i18n/locales/es.ts` + `en.ts` — +1 clave simétrica.
+
+**Quality baseline post-P15:**
+- TypeScript: 0 errors
+- Tests: 958/958 passing (zero regressions, feature-only polish sin arquitectura nueva)
+- i18n: 1775 → **1776** simétrico
+- Build main: 861.9 → **862.0 KB raw** / 271.1 → **271.2 KB gzip** (+0.1 KB gzip — reuse total)
+
+**Impacto UX (flujo real Mercadona):**
+- Usuario escanea Hacendado Natural: ve chip `B perder peso` → decide rápido.
+- Tap «Guardar en mis marcas»: toast instant + botón `✓ Guardado` — no doble-tap.
+- Banner indica claramente qué variant curada RIAL tiene en base + abre puerta a P16 «¿Es este tu producto?» (usar macros del seed en vez de OFF para precisión).
+
+**Follow-ups re-razonados:**
+1. **P16 Seed-variant inline log shortcut** — si `seed-match` retorna variant con macros conocidas + user confirma «Sí, es este», usar `matchResult.variant.macros` en vez de `product.macros` (OFF puede estar desactualizado o tener ruido). Add inline «Sí, añadir esta» CTA junto al banner.
+2. **P17 Barcode population en SEED_BRAND_ENTRIES** — añadir `brand.barcode` a los 52 seed brand entries vía OFF EAN lookup. Permite Step 1 (known-barcode path) para scans retail comunes → recognition instant + macros definitivas de nuestra curation, no OFF. Trabajo de data (~2h scraping OFF).
+3. **P18 AI Coach free-tier exposure** (diferido desde P14 follow-up) — sigue pending decisión producto.
+4. **P15 original «LLM content generation»** — 170 familias sin longDescription, requiere `VITE_GEMINI_API_KEY` del owner.
+
 ## [1.5.72] - 2026-04-21
 
 ### feat(food): P14 — Brand variants retail España expansion (+40 entries, 8→52)

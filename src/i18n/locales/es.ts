@@ -1302,6 +1302,7 @@ const es = {
     // P5 — match-result UI labels
     knownProductFound: 'Ya lo tenías guardado',
     foundInFamily: 'Encontrado en familia',
+    similarBrand: 'Tenemos una similar',
     confirmFamily: '¿Es de este grupo?',
     chooseFamily: '¿A qué grupo pertenece?',
     unknownProduct: 'Producto no reconocido',

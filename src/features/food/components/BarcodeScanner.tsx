@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef, useMemo } from 'react';
 import { X, Loader2, AlertTriangle, CheckCircle2, UtensilsCrossed, BookOpen, Save, RotateCcw, Plus, Info } from 'lucide-react';
+import { toast } from 'sonner';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import BottomSheet from '@/components/ui/bottom-sheet';
@@ -21,6 +22,8 @@ import {
   getCanonicalVariant,
   type FamilyMatchResult,
 } from '../utils/food-family-resolver';
+import ContextualScoreChip from './ContextualScoreChip';
+import { normalizeGoal } from '../utils/contextual-score';
 
 type ScanState = 'idle' | 'scanning' | 'looking-up' | 'found' | 'not-found' | 'error';
 
@@ -75,6 +78,13 @@ interface Props {
   addUserVariant?: (variant: FoodVariant) => void;
   /** Called to index the barcode → variantId so re-scans are instant. */
   addVariantBarcode?: (barcode: string, variantId: string) => void;
+  /**
+   * P15 `[1.5.73]` — raw user goal (from `userProfile.goal`). When present,
+   * a `ContextualScoreChip` renders next to the scanned product so the user
+   * sees immediately whether this product aligns with their goal, before
+   * deciding to log it. Normalised internally via `normalizeGoal`.
+   */
+  userGoal?: string | null;
 }
 
 export default function BarcodeScanner({
@@ -83,6 +93,7 @@ export default function BarcodeScanner({
   knownVariants = [],
   addUserVariant,
   addVariantBarcode,
+  userGoal,
 }: Props) {
   const { t, locale } = useI18n();
   const [state, setState] = useState<ScanState>('idle');
@@ -93,8 +104,46 @@ export default function BarcodeScanner({
   const [portionResult, setPortionResult] = useState<PortionResult | null>(null);
   const [showCustomForm, setShowCustomForm] = useState(false);
   const [customFood, setCustomFood] = useState({ name: '', brand: '', serving: '100', cal: '', pro: '', carbs: '', fats: '' });
+  // P15 [1.5.73] — tracks brand saves made during the current scan session so
+  // the «Guardar en mis marcas» button shows «Guardado ✓» + disables itself,
+  // preventing silent double-taps that would duplicate userVariants.
+  const [savedBrandFamilyIds, setSavedBrandFamilyIds] = useState<Set<string>>(() => new Set());
   const scannerRef = useRef<HTMLDivElement>(null);
   const html5QrRef = useRef<any>(null);
+
+  // P15 [1.5.73] — normalise the user's goal once for the contextual chip.
+  const activeGoal = useMemo(() => normalizeGoal(userGoal), [userGoal]);
+
+  // P15 [1.5.73] — build a score-ready FoodVariant from the scanned product's
+  // macros. Used for the ContextualScoreChip, not persisted. When match produced
+  // a seed/user variant, prefer that (cleaner macros, known qualityTags).
+  const scoreVariant = useMemo<FoodVariant | null>(() => {
+    if (!activeGoal || !product) return null;
+    if (matchResult?.type === 'known-barcode' || matchResult?.type === 'seed-match') {
+      return matchResult.variant;
+    }
+    return {
+      id: `scan_${product.barcode ?? Date.now()}`,
+      familyId: 'fam_scan_result',
+      name: product.name,
+      nameEn: product.name,
+      variantType: 'brand',
+      baseAmount: 100,
+      baseUnit: 'g',
+      servingSizes: [],
+      macros: {
+        calories: product.calories,
+        protein: product.protein,
+        carbs: product.carbs,
+        fats: product.fats,
+        saturatedFat: product.saturatedFat,
+        sugar: product.sugar,
+      },
+      micros: { vitamins: {}, minerals: {}, others: {} },
+      allergens: [],
+      source: 'off',
+    };
+  }, [activeGoal, product, matchResult]);
 
   const pseudoIngredient = useMemo(
     () => product ? scannedProductToIngredient(product) : null,
@@ -338,41 +387,84 @@ export default function BarcodeScanner({
               </div>
             </div>
 
-            {/* P5 — family match banner */}
+            {/* P15 [1.5.73] — contextual score chip: the user sees immediately
+                if this product aligns with their goal, before deciding to log. */}
+            {scoreVariant && activeGoal && (
+              <div className="flex items-center justify-center gap-2">
+                <span className="text-micro font-label uppercase tracking-widest text-on-surface-variant">
+                  {t.contextualScore.forGoal.replace('{{goal}}', t.contextualScore.goalLabels[activeGoal])}
+                </span>
+                <ContextualScoreChip variant={scoreVariant} goal={activeGoal} size="md" />
+              </div>
+            )}
+
+            {/* P5 — family match banner (P15 polished: save-feedback + variant-name). */}
             {matchResult && matchResult.type !== 'no-match' && (() => {
               const handleSaveBrand = (family: FoodFamily) => {
                 if (!addUserVariant) return;
+                // P15 [1.5.73] — guard double-tap: if already saved under this family
+                // in the current session, no-op. Prevents duplicate userVariants.
+                if (savedBrandFamilyIds.has(family.id)) return;
                 const v = createVariantFromScan(product, family);
                 addUserVariant(v);
                 if (addVariantBarcode && product.barcode && !product.barcode.startsWith('custom_')) {
                   addVariantBarcode(product.barcode, v.id);
                 }
+                setSavedBrandFamilyIds(prev => {
+                  const next = new Set(prev);
+                  next.add(family.id);
+                  return next;
+                });
+                toast.success(t.scanner.savedToBrands);
               };
 
               if (matchResult.type === 'known-barcode') {
                 const famName = locale === 'es' ? matchResult.family.name : matchResult.family.nameEn;
+                // P15 — show the saved variant name (not just family) so the user
+                // recognises the exact previously-scanned entry.
+                const variantName = locale === 'es'
+                  ? matchResult.variant.name
+                  : matchResult.variant.nameEn;
                 return (
                   <div className="flex items-start gap-2 bg-primary/10 border border-primary/20 rounded-sm p-3">
                     <CheckCircle2 className="w-4 h-4 text-primary shrink-0 mt-0.5" aria-hidden="true" />
-                    <p className="text-body-sm text-on-surface">
-                      <span className="font-bold">{t.scanner.knownProductFound}</span>
-                      {' · '}{famName}
-                    </p>
+                    <div className="flex-1 min-w-0">
+                      <p className="text-body-sm text-on-surface">
+                        <span className="font-bold">{t.scanner.knownProductFound}</span>
+                      </p>
+                      <p className="text-micro text-on-surface-variant mt-0.5">
+                        {variantName}
+                        {' · '}
+                        {famName}
+                      </p>
+                    </div>
                   </div>
                 );
               }
 
               if (matchResult.type === 'seed-match') {
                 const famName = locale === 'es' ? matchResult.family.name : matchResult.family.nameEn;
+                // P15 — highlight the seed variant the scanner matched to (e.g.
+                // "Activia Natural"), not just the family, so the user can tell
+                // whether our curated brand entry IS their product.
+                const seedName = locale === 'es'
+                  ? matchResult.variant.name
+                  : matchResult.variant.nameEn;
+                const saved = savedBrandFamilyIds.has(matchResult.family.id);
                 return (
                   <div className="space-y-2">
                     <SectionCard padding="none" spacing="none" className="flex items-start gap-2 p-3">
                       <Info className="w-4 h-4 text-on-surface-variant shrink-0 mt-0.5" aria-hidden="true" />
-                      <p className="text-body-sm text-on-surface-variant">
-                        {t.scanner.foundInFamily}
-                        {' '}
-                        <span className="font-bold text-on-surface">{famName}</span>
-                      </p>
+                      <div className="flex-1 min-w-0">
+                        <p className="text-body-sm text-on-surface-variant">
+                          {t.scanner.foundInFamily}
+                          {' '}
+                          <span className="font-bold text-on-surface">{famName}</span>
+                        </p>
+                        <p className="text-micro text-on-surface-variant/80 mt-0.5">
+                          {t.scanner.similarBrand}: {seedName}
+                        </p>
+                      </div>
                     </SectionCard>
                     {addUserVariant && (
                       <Button
@@ -380,9 +472,20 @@ export default function BarcodeScanner({
                         size="sm"
                         className="w-full"
                         onClick={() => handleSaveBrand(matchResult.family)}
+                        disabled={saved}
+                        aria-label={saved ? t.scanner.savedToBrands : t.scanner.saveAsBrandVariant}
                       >
-                        <Save className="w-3.5 h-3.5 mr-1.5" aria-hidden="true" />
-                        {t.scanner.saveAsBrandVariant}
+                        {saved ? (
+                          <>
+                            <CheckCircle2 className="w-3.5 h-3.5 mr-1.5" aria-hidden="true" />
+                            {t.scanner.savedToBrands}
+                          </>
+                        ) : (
+                          <>
+                            <Save className="w-3.5 h-3.5 mr-1.5" aria-hidden="true" />
+                            {t.scanner.saveAsBrandVariant}
+                          </>
+                        )}
                       </Button>
                     )}
                   </div>
@@ -391,6 +494,7 @@ export default function BarcodeScanner({
 
               if (matchResult.type === 'fuzzy') {
                 const famName = locale === 'es' ? matchResult.family.name : matchResult.family.nameEn;
+                const saved = savedBrandFamilyIds.has(matchResult.family.id);
                 return (
                   <div className="space-y-2">
                     <p className="text-body-sm text-on-surface-variant text-center">
@@ -404,9 +508,20 @@ export default function BarcodeScanner({
                         size="sm"
                         className="w-full"
                         onClick={() => handleSaveBrand(matchResult.family)}
+                        disabled={saved}
+                        aria-label={saved ? t.scanner.savedToBrands : t.scanner.saveAsBrandVariant}
                       >
-                        <Save className="w-3.5 h-3.5 mr-1.5" aria-hidden="true" />
-                        {t.scanner.saveAsBrandVariant}
+                        {saved ? (
+                          <>
+                            <CheckCircle2 className="w-3.5 h-3.5 mr-1.5" aria-hidden="true" />
+                            {t.scanner.savedToBrands}
+                          </>
+                        ) : (
+                          <>
+                            <Save className="w-3.5 h-3.5 mr-1.5" aria-hidden="true" />
+                            {t.scanner.saveAsBrandVariant}
+                          </>
+                        )}
                       </Button>
                     )}
                   </div>
@@ -422,14 +537,20 @@ export default function BarcodeScanner({
                     <div className="flex flex-wrap gap-2 justify-center">
                       {matchResult.candidates.map(({ family }) => {
                         const famName = locale === 'es' ? family.name : family.nameEn;
+                        const saved = savedBrandFamilyIds.has(family.id);
                         return (
                           <button
                             key={family.id}
                             type="button"
                             onClick={() => addUserVariant && handleSaveBrand(family)}
-                            className="px-3 py-1.5 rounded-sm bg-surface-container-highest text-body-sm text-on-surface border border-outline-variant/20 min-h-11 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/60 focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+                            disabled={saved}
+                            className={`px-3 py-1.5 rounded-sm text-body-sm border min-h-11 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/60 focus-visible:ring-offset-2 focus-visible:ring-offset-background ${
+                              saved
+                                ? 'bg-primary/10 border-primary/30 text-primary'
+                                : 'bg-surface-container-highest border-outline-variant/20 text-on-surface'
+                            }`}
                           >
-                            {famName}
+                            {saved ? `✓ ${famName}` : famName}
                           </button>
                         );
                       })}
