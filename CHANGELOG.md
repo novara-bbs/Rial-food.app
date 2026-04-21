@@ -1,5 +1,43 @@
 # RIAL App - Changelog
 
+## [1.5.69] - 2026-04-21
+
+### feat(home): P11 — «Qué me falta hoy» (recomendación personalizada Home)
+
+Primera pieza visible de la capa de personalización que convive con el Diccionario educativo (P7-P10). Card dinámico en Home que analiza la diferencia entre macros consumidas hoy vs objetivo del perfil y sugiere 1-3 alimentos específicos para cerrar el mayor déficit — con boost por historial personal del usuario, filtro por objetivo (sin recomendar grade-E para perder peso), filtro por intolerancias, y 1-tap-log integrado.
+
+**Directiva de producto 2026-04-21:** el diferenciador real de RIAL **no es solo el Diccionario** — es que CADA vez que el usuario abre la app, el Home le hable personalmente. MFP muestra "Recent" (plano). Yazio "Frequent" (plano). RIAL muestra *«te faltan 45g de proteína; basado en lo que sueles comer, prueba yogur griego Oikos (18g · 112 kcal)»* — accionable + contextual + 1-tap.
+
+**Nuevos archivos:**
+- `src/features/home/utils/meal-gaps.ts` — funciones puras `computeMealGaps(consumed, target)` + `biggestDeficit(gaps)` + `guessMealSlotForTime(now)`. Heurística de priorización del déficit: protein (≥10 % target) > cal (≥15 %) > carbs (≥20 %) > fats (≥20 %). Umbrales lax para calorías a propósito — evitar ruido cuando al usuario le queda media jornada por loggear. Zero-target guardrail (no crash pre-onboarding).
+- `src/features/home/utils/meal-gaps.test.ts` — 15 asserts: MACRO_KEYS orden, deficit clamping, zero-target NaN-free, priorización protein > cal > carbs > fats, null cuando todo OK, null cuando zero target, null cuando surplus, fall-through cuando protein fine, `guessMealSlotForTime` ventanas.
+- `src/features/home/utils/suggest-foods.ts` — ranker `rankFoodsForGap(macroKey, pool, options)` con 5 señales combinadas: (1) macro density match, (2) historical affinity 1.5× boost, (3) contextual score multiplier (A=1.3, B=1.1, C=0.7, D=0.3, E=disqualified), (4) trust tier +0.05 por tier (canonical > curated > community > personal), (5) balance multiplier para déficit de calorías (mono-macro foods penalized 0.2×, dual-macro 0.5×, balanced whole foods 1.0×) — así un usuario bajo en calorías NO recibe "toma 100g de aceite", recibe "toma avena" o "toma almendras".
+- `src/features/home/utils/suggest-foods.test.ts` — 9 asserts: protein deficit → chicken/tuna top, zero-protein exclusion (olive oil nunca sale para protein gap), calorie deficit → whole foods (no oil), history boost mejora posición, allergen hard filter (nuts excluido), goal disqualification (cola grade-E no aparece para lose-weight), limit respect, empty pool → [].
+- `src/features/home/components/MealGapSuggestion.tsx` — card UI con Sparkles icon + copy contextual dinámico + 2-3 tap rows con emoji de la familia + nombre + macros + reason chip + «Registrar» CTA. Graceful-degrade: si no hay deficit o no hay variants aptos, no renderiza nada.
+
+**i18n (+10 simétricas, 1765 → 1775):**
+- Nuevo sub-namespace `home.mealGap.{title, deficitCopy, deficit.{cal,pro,carbs,fats}, reason.{history, macro-density, whole-food}, logCta}` × 2 locales. `deficitCopy` con interpolación `{{amount}}g de {{macro}}`.
+
+**Integration Home.tsx:**
+- Montado tras `TodaysMeals` y `NextMealSuggestion`. Solo renderiza si `onLogMealNow` está wired.
+- Consume `mergedVariants` + `foodHistory` del `useAppState()`. Pasa `userProfile.goal` al ranker y `userProfile.intolerances ?? allergens ?? []` como filtro.
+- Handler 1-tap construye un meal shape a partir de FoodVariant (100 g standard serving) y llama al canonical `onLogMealNow`. Toast + home refresh vía el handler factory existente — zero código de logging duplicado.
+
+**Ejemplos vivos:**
+- Usuario con target 150g proteína / 2000 cal, consumido 50g proteína / 1000 cal, goal = lose → card «Qué te falta hoy: Te faltan 100g de proteína» con top 3 = pechuga pollo (31g, A) / atún canónico (28g, A) / yogur griego Oikos (10g, B o history-boosted si ya lo ha loggeado).
+- Usuario con target pero todo en target al final del día → card no renderiza (no spam).
+- Usuario con intolerance a frutos secos → almendras excluidos del ranking aunque sean high-protein.
+- Usuario pre-onboarding con target=0 → card no renderiza (safe).
+
+**Quality baseline post-P11:**
+- TypeScript: 0 errors
+- Tests: 924 → **948** (+24: 15 meal-gaps + 9 suggest-foods)
+- i18n: 1765 → **1775** simétrico
+- Build main: 835.8 → **836.7 KB raw** / 264.0 → **264.4 KB gzip** (+0.9 KB raw, +0.4 KB gzip — dentro de budget)
+- size:check: PASS
+
+**Follow-up natural (P12):** detección automática de comidas típicas del usuario (desayuno habitual, snack de las 17h) desde foodHistory 30d → grid 1-tap-log en Home paralelo al MealGapSuggestion. Mismo patrón técnico, distinto signal.
+
 ## [1.5.68] - 2026-04-21
 
 ### fix(food): audit findings P8-P10 — navigation history stack + mobile interactivity

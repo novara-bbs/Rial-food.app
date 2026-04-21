@@ -33,6 +33,23 @@ const es = {
   },
   // Home screen
   home: {
+    // P11 [1.5.69] — «Qué me falta hoy» dynamic suggestion card.
+    mealGap: {
+      title: 'Qué te falta hoy',
+      deficitCopy: 'Te faltan {{amount}}g de {{macro}} para tu objetivo',
+      deficit: {
+        cal: 'calorías',
+        pro: 'proteína',
+        carbs: 'carbohidratos',
+        fats: 'grasas',
+      },
+      reason: {
+        history: 'Ya lo sueles comer',
+        'macro-density': 'Alto en la macro que te falta',
+        'whole-food': 'Alimento completo equilibrado',
+      },
+      logCta: 'Registrar',
+    },
     goodMorning: 'Buenos Días',
     goodAfternoon: 'Buenas Tardes',
     goodEvening: 'Buenas Noches',

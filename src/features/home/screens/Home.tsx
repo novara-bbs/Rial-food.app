@@ -9,6 +9,7 @@ import ActivityRow from '../components/ActivityRow';
 import RealScoreBadge from '../components/RealScoreBadge';
 import WeeklyMiniDash from '../components/WeeklyMiniDash';
 import NextMealSuggestion from '../components/NextMealSuggestion';
+import MealGapSuggestion from '../components/MealGapSuggestion';
 import QuickActions from '../components/QuickActions';
 import ProgressPreviewCard from '../components/ProgressPreviewCard';
 import { useI18n } from '../../../i18n';
@@ -95,7 +96,7 @@ export default function Home({
   );
 
   // Weekly progress metrics — canonical calcWeekMacros (Q13)
-  const { weightHistory, shoppingList, savedRecipes } = useAppState();
+  const { weightHistory, shoppingList, savedRecipes, mergedVariants, foodHistory } = useAppState();
   const weekMacros = useMemo(
     () => calcWeekMacros(
       (nutritionHistory ?? []) as DailyArchive[],
@@ -479,6 +480,33 @@ export default function Home({
           }
         }}
       />
+
+      {/* P11 [1.5.69] — Qué me falta hoy: personalized macro-gap suggestions. */}
+      {onLogMealNow && (
+        <MealGapSuggestion
+          dailyMacros={dailyMacros}
+          mergedVariants={mergedVariants}
+          foodHistory={foodHistory}
+          userGoal={userProfile?.goal}
+          excludeAllergens={userProfile?.intolerances ?? userProfile?.allergens ?? []}
+          onLogFood={(variant) => {
+            // Build a meal-shape from the variant for 100 g (1 standard portion).
+            const meal = {
+              id: variant.id,
+              title: variant.name,
+              portionDescription: '100g',
+              macros: {
+                calories: variant.macros.calories,
+                protein: variant.macros.protein,
+                carbs: variant.macros.carbs,
+                fats: variant.macros.fats,
+              },
+              mealSlot: 'snack',
+            };
+            onLogMealNow(meal, 1);
+          }}
+        />
+      )}
 
       {/* 7c. Shopping Reminder — conditional */}
       {shoppingPendingCount > 0 && (

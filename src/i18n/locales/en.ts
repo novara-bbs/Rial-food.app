@@ -32,6 +32,23 @@ const en: Translations = {
     dayAbbr: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
   },
   home: {
+    // P11 [1.5.69] — «What you're missing today» dynamic suggestion card.
+    mealGap: {
+      title: 'What you need today',
+      deficitCopy: "You're {{amount}}g short on {{macro}} for your goal",
+      deficit: {
+        cal: 'calories',
+        pro: 'protein',
+        carbs: 'carbs',
+        fats: 'fat',
+      },
+      reason: {
+        history: 'You already eat this',
+        'macro-density': 'High in the macro you need',
+        'whole-food': 'Balanced whole food',
+      },
+      logCta: 'Log it',
+    },
     goodMorning: 'Good Morning',
     goodAfternoon: 'Good Afternoon',
     goodEvening: 'Good Evening',
