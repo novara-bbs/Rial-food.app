@@ -1,5 +1,85 @@
 # RIAL App - Changelog
 
+## [1.5.72] - 2026-04-21
+
+### feat(food): P14 — Brand variants retail España expansion (+40 entries, 8→52)
+
+Owner directive reprioritizada: el gap práctico de mayor impacto post-P13 (ContextualScore visible) es que **SEED_BRAND_ENTRIES solo cubría 8 productos** (P2.6 piloto: Hacendado/Oikos/Sveltesse/BonÀrea/CarrefourBio/MisterChoc). Cada usuario español escaneando Mercadona/Carrefour/Lidl recreaba variants personales de productos MUY comunes — Danone Activia, Campofrío, Luengo, Carbonell, Bimbo, Bezoya, Mahou, etc. Duplicación masiva entre users + flujo BarcodeScanner siempre caía en rama «guardar como nuevo» en vez de «ya lo conocemos».
+
+**Escala: 8 → 52 entries (+40, 550 % growth en cobertura retail).** Pattern dual: marca líder nacional + private label (Hacendado cuando aplicable).
+
+**+40 brand variants por categoría:**
+
+**Lácteos (+10)** — el 50 % de la cesta diaria española:
+- `fam_yogurt`: Danone Activia (#1 ventas España) · Danone Danacol (funcional colesterol)
+- `fam_greek_yogurt`: Fage Total 0% (premium high-protein) · Vitalínea Yopro (high-protein mass market)
+- `fam_milk`: Central Lechera Asturiana Entera · Pascual Desnatada · Puleva Omega-3 Semi
+- `fam_kefir`: Kaiku (marca dominante kéfir España)
+- `fam_skyr`: Hacendado (único retail Mercadona)
+- `fam_fresh_cheese`: Burgo de Arias · Philadelphia
+
+**Proteínas procesadas (+6):**
+- `fam_ham_cooked`: Campofrío Extra · ElPozo Selección · Hacendado Extra
+- `fam_jamon_serrano`: Campofrío Reserva
+- `fam_tuna`: Calvo Aceite Oliva · Ortiz Bonito del Norte
+- `fam_sardines`: Calvo Aceite Oliva
+- `fam_salmon`: Hacendado Ahumado
+
+**Legumbres cocidas (+3)** — pattern único retail España (usuarios casi nunca cocinan desde seco):
+- `fam_lentils`: Luengo Pardinas Cocidas (bote)
+- `fam_chickpeas`: Luengo Pedrosillanos Cocidos (bote)
+- `fam_kidney_beans`: Luengo Cocidas (bote)
+
+**Aceites (+3):**
+- `fam_olive_oil`: Carbonell VEE · La Española VEE
+- `fam_sunflower_oil`: Koipesol
+
+**Pan y cereales (+4):**
+- `fam_bread_white`: Bimbo Silueta
+- `fam_bread_wholewheat`: Bimbo Integral 100%
+- `fam_pasta`: Gallo Macarrones · Barilla Spaghetti
+- `fam_rice_white`: SOS Bomba (paella)
+- `fam_oats`: Quaker Copos
+
+**Bebidas (+8):**
+- `fam_beer`: Mahou Clásica · Estrella Galicia Especial · Mahou Sin 0,0
+- `fam_water`: Bezoya · Solán de Cabras
+- `fam_coffee`: Nescafé Clásico
+
+**Condimentos y dulces (+6):**
+- `fam_dark_chocolate`: Valor 70% · Lindt Excellence 85%
+- `fam_ketchup`: Heinz Original
+- `fam_mayonnaise`: Hellmann's Original · Musa Light
+- `fam_jam`: Hero Fresa
+- `fam_tomato_sauce`: Solís Tomate Frito
+
+**QualityTags aplicadas donde corresponde:** `['high-protein']` para Yopro/Fage/Skyr/Quaker/Bimbo Integral, `['light']` para Pascual Desnatada/Musa Light, `['sugar-free']` para Lindt 85%. Demuestran el multi-axis (tag ortogonal a variantType).
+
+**Impacto medible:**
+- **BarcodeScanner recognition rate** — el scan de una bandeja «Jamón Cocido Campofrío Extra» ahora match a `brand_fam_ham_cooked_campofrio` (rama `known-barcode` o `seed-match`), no a «no-match → crear userVariant personal».
+- **AddMeal search** — búsqueda «activia» en Mercadona → hit directo `brand_fam_yogurt_activia` sin necesidad de OFF API fallback.
+- **VariantPickerSheet** en Diccionario → familias con brand variants muestran sección «brand» con 3-5 opciones retail reconocibles.
+- **ContextualScore** (P9+P13) se aplica a cada brand: Activia → `A` perder / `A` mantener (alimento balanceado, bajo en sat fat); Heinz Ketchup → `E` perder (22.8 g azúcar/100 g); Carbonell VEE → `A` ganar / `C` perder (dense cal good/bad según goal).
+
+**Tests updated (backward-compat):**
+- `food-families.test.ts::P2.6 brand variants seed` — renamed P14, range-based (≥40 ≤80) para permitir crecimiento futuro sin test churn. Core assertion: las 4 familias originales preservan coverage.
+- `food-family-resolver.test.ts::matchFamilyForScan no-match` — reemplazado el caso «El Pozo + Lomo Embuchado» (ahora seed-matches porque ElPozo está en el seed jamón cocido) por un caso definitivamente-novel (`MarcaInventadaXYZ + Producto Desconocido`).
+
+**Quality baseline post-P14:**
+- TypeScript: 0 errors
+- Tests: 958/958 passing (2 actualizados, 0 regressions)
+- i18n: 1775 simétrico (zero keys nuevas — brand variants no requieren i18n, los macros son data)
+- Build main: 851.4 → **861.9 KB raw** / 268.7 → **271.1 KB gzip** (+10.5 KB raw / +2.4 KB gzip por 40 brand entries con macros completos — dentro de budget 900/280)
+- size:check: PASS
+
+**FOOD_VARIANTS total post-P14:** 189 canonical (INGREDIENT_DICTIONARY) + 52 brand = **241 variants** accesibles en el Diccionario y BarcodeScanner.
+
+**Follow-ups re-razonados post-P14:**
+1. **LLM content gen (P15 programado)** — sigue pendiente. 170 familias sin `longDescription` educativa. `npm run generate:family-content` requiere `VITE_GEMINI_API_KEY` del owner.
+2. **AI Coach free-tier exposure** — feature más gated, 95 % free users nunca lo prueban. Hook conversion crítico.
+3. **Processing tier NOVA MyRealFood-style** — re-evaluar tras campo. Posible complementario a ContextualScore si usuarios piden grade absoluto adicional.
+4. **Barcode → seed-match UI polish** — BarcodeScanner rama `seed-match` ahora aparece mucho más frecuente post-P14. Verificar que el copy «Encontrado en familia X · Guardar en mis marcas» aparece bien para productos retail top.
+
 ## [1.5.71] - 2026-04-21
 
 ### feat(food): P13 — ContextualScore visible en el flujo diario (TodaysMeals + AddMeal search)

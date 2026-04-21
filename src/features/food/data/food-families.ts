@@ -1084,6 +1084,435 @@ export const SEED_BRAND_ENTRIES: readonly SeedBrandEntry[] = [
     nameEn: 'Peanut Butter (Mister Choc, Lidl)',
     macros: { calories: 598, protein: 22, carbs: 15, fats: 49, saturatedFat: 9, sugar: 8 },
   },
+
+  // ═══════════════════════════════════════════════════════════════
+  // P14 [1.5.72] — Retail España expansion (+40 brand variants)
+  // Cubren los productos con mayor frecuencia de scan en Mercadona /
+  // Carrefour / Lidl. Patrón dual: marca nacional dominante + Hacendado
+  // private label (mejor precio España).
+  // ═══════════════════════════════════════════════════════════════
+
+  // --- Yogur natural (Activia = #1 ventas España; Danacol = funcional colesterol) ---
+  {
+    id: 'brand_fam_yogurt_activia',
+    familyId: 'fam_yogurt',
+    brand: { name: 'Danone Activia' },
+    name: 'Activia Natural (Danone)',
+    nameEn: 'Activia Plain (Danone)',
+    macros: { calories: 66, protein: 4.2, carbs: 6.5, fats: 2.8, saturatedFat: 1.8, sugar: 6.3 },
+  },
+  {
+    id: 'brand_fam_yogurt_danacol',
+    familyId: 'fam_yogurt',
+    brand: { name: 'Danone Danacol' },
+    name: 'Danacol Natural (Danone)',
+    nameEn: 'Danacol Plain (Danone)',
+    description: 'Con esteroles vegetales para reducir colesterol.',
+    descriptionEn: 'With plant sterols to reduce cholesterol.',
+    macros: { calories: 51, protein: 3, carbs: 4.9, fats: 2, saturatedFat: 1.3, sugar: 4.5 },
+  },
+
+  // --- Yogur griego ampliado (Fage = proteína premium; Yopro = alto proteína) ---
+  {
+    id: 'brand_fam_greek_yogurt_fage',
+    familyId: 'fam_greek_yogurt',
+    brand: { name: 'Fage Total 0%' },
+    name: 'Fage Total 0% (Fage)',
+    nameEn: 'Fage Total 0% (Fage)',
+    macros: { calories: 57, protein: 10.3, carbs: 4, fats: 0.2, saturatedFat: 0.1, sugar: 4 },
+    qualityTags: ['high-protein', 'light'],
+  },
+  {
+    id: 'brand_fam_greek_yogurt_yopro',
+    familyId: 'fam_greek_yogurt',
+    brand: { name: 'Vitalínea Yopro' },
+    name: 'Yopro Proteína Natural (Vitalínea)',
+    nameEn: 'Yopro Protein Plain (Vitalínea)',
+    macros: { calories: 63, protein: 10, carbs: 4, fats: 0.8, saturatedFat: 0.5, sugar: 4 },
+    qualityTags: ['high-protein'],
+  },
+
+  // --- Leche (Central Lechera Asturiana + Pascual + Puleva + Hacendado) ---
+  {
+    id: 'brand_fam_milk_central_lechera',
+    familyId: 'fam_milk',
+    brand: { name: 'Central Lechera Asturiana' },
+    name: 'Leche Entera (Central Lechera Asturiana)',
+    nameEn: 'Whole Milk (Central Lechera Asturiana)',
+    macros: { calories: 64, protein: 3.1, carbs: 4.8, fats: 3.6, saturatedFat: 2.3, sugar: 4.8 },
+  },
+  {
+    id: 'brand_fam_milk_pascual_desnatada',
+    familyId: 'fam_milk',
+    brand: { name: 'Pascual' },
+    name: 'Leche Desnatada (Pascual)',
+    nameEn: 'Skim Milk (Pascual)',
+    macros: { calories: 34, protein: 3.3, carbs: 4.8, fats: 0.3, saturatedFat: 0.2, sugar: 4.8 },
+    qualityTags: ['light'],
+  },
+  {
+    id: 'brand_fam_milk_puleva_omega3',
+    familyId: 'fam_milk',
+    brand: { name: 'Puleva' },
+    name: 'Puleva Omega-3 Semidesnatada',
+    nameEn: 'Puleva Omega-3 Semi-Skim',
+    macros: { calories: 52, protein: 3.4, carbs: 4.9, fats: 1.9, saturatedFat: 1.1, sugar: 4.8 },
+  },
+
+  // --- Kéfir (Kaiku dominante) ---
+  {
+    id: 'brand_fam_kefir_kaiku',
+    familyId: 'fam_kefir',
+    brand: { name: 'Kaiku' },
+    name: 'Kéfir Natural (Kaiku)',
+    nameEn: 'Plain Kefir (Kaiku)',
+    macros: { calories: 65, protein: 3.5, carbs: 4.5, fats: 3.5, saturatedFat: 2.2, sugar: 4.5 },
+  },
+
+  // --- Skyr (brand España) ---
+  {
+    id: 'brand_fam_skyr_hacendado',
+    familyId: 'fam_skyr',
+    brand: { name: 'Hacendado' },
+    name: 'Skyr Natural (Hacendado)',
+    nameEn: 'Skyr Plain (Hacendado)',
+    macros: { calories: 62, protein: 11, carbs: 4, fats: 0.2, saturatedFat: 0.1, sugar: 4 },
+    qualityTags: ['high-protein', 'light'],
+  },
+
+  // --- Queso fresco (Burgo de Arias + Philadelphia + Hacendado 0%) ---
+  {
+    id: 'brand_fam_fresh_cheese_burgo_arias',
+    familyId: 'fam_fresh_cheese',
+    brand: { name: 'Burgo de Arias' },
+    name: 'Queso Fresco Natural (Burgo de Arias)',
+    nameEn: 'Fresh Cheese Plain (Burgo de Arias)',
+    macros: { calories: 226, protein: 11, carbs: 2.5, fats: 19, saturatedFat: 13, sugar: 2.5 },
+  },
+  {
+    id: 'brand_fam_fresh_cheese_philadelphia',
+    familyId: 'fam_fresh_cheese',
+    brand: { name: 'Philadelphia' },
+    name: 'Queso Untable Natural (Philadelphia)',
+    nameEn: 'Spreadable Cheese Plain (Philadelphia)',
+    macros: { calories: 245, protein: 6.5, carbs: 3.5, fats: 23, saturatedFat: 15, sugar: 3.5 },
+  },
+
+  // --- Jamón cocido (Campofrío + ElPozo + Hacendado Extra) ---
+  {
+    id: 'brand_fam_ham_cooked_campofrio',
+    familyId: 'fam_ham_cooked',
+    brand: { name: 'Campofrío' },
+    name: 'Jamón Cocido Extra (Campofrío)',
+    nameEn: 'Extra Cooked Ham (Campofrío)',
+    macros: { calories: 115, protein: 17, carbs: 1, fats: 4.5, saturatedFat: 1.6, sugar: 1 },
+  },
+  {
+    id: 'brand_fam_ham_cooked_elpozo',
+    familyId: 'fam_ham_cooked',
+    brand: { name: 'ElPozo' },
+    name: 'Jamón Cocido Selección (ElPozo)',
+    nameEn: 'Cooked Ham Selection (ElPozo)',
+    macros: { calories: 130, protein: 18, carbs: 0.8, fats: 6, saturatedFat: 2.1, sugar: 0.8 },
+  },
+  {
+    id: 'brand_fam_ham_cooked_hacendado_extra',
+    familyId: 'fam_ham_cooked',
+    brand: { name: 'Hacendado' },
+    name: 'Jamón Cocido Extra (Hacendado)',
+    nameEn: 'Extra Cooked Ham (Hacendado)',
+    macros: { calories: 110, protein: 17.5, carbs: 1, fats: 4.2, saturatedFat: 1.5, sugar: 1 },
+  },
+
+  // --- Jamón serrano (Campofrío + Hacendado Bodega) ---
+  {
+    id: 'brand_fam_jamon_serrano_campofrio',
+    familyId: 'fam_jamon_serrano',
+    brand: { name: 'Campofrío' },
+    name: 'Jamón Serrano Reserva (Campofrío)',
+    nameEn: 'Serrano Ham Reserva (Campofrío)',
+    macros: { calories: 250, protein: 30, carbs: 0, fats: 14, saturatedFat: 5 },
+  },
+
+  // --- Conservas pescado (Calvo + Ortiz + Hacendado) ---
+  {
+    id: 'brand_fam_tuna_calvo',
+    familyId: 'fam_tuna',
+    brand: { name: 'Calvo' },
+    name: 'Atún Claro en Aceite de Oliva (Calvo)',
+    nameEn: 'Light Tuna in Olive Oil (Calvo)',
+    macros: { calories: 189, protein: 26, carbs: 0, fats: 9, saturatedFat: 1.3 },
+  },
+  {
+    id: 'brand_fam_tuna_ortiz',
+    familyId: 'fam_tuna',
+    brand: { name: 'Ortiz' },
+    name: 'Bonito del Norte en Aceite de Oliva (Ortiz)',
+    nameEn: 'White Tuna in Olive Oil (Ortiz)',
+    macros: { calories: 195, protein: 27, carbs: 0, fats: 9.5, saturatedFat: 1.4 },
+  },
+  {
+    id: 'brand_fam_sardines_calvo',
+    familyId: 'fam_sardines',
+    brand: { name: 'Calvo' },
+    name: 'Sardinas en Aceite de Oliva (Calvo)',
+    nameEn: 'Sardines in Olive Oil (Calvo)',
+    macros: { calories: 208, protein: 24, carbs: 0, fats: 12, saturatedFat: 1.8 },
+  },
+
+  // --- Salmón ahumado ---
+  {
+    id: 'brand_fam_salmon_hacendado_smoked',
+    familyId: 'fam_salmon',
+    brand: { name: 'Hacendado' },
+    name: 'Salmón Ahumado (Hacendado)',
+    nameEn: 'Smoked Salmon (Hacendado)',
+    macros: { calories: 185, protein: 22, carbs: 0, fats: 11, saturatedFat: 2.2 },
+  },
+
+  // --- Legumbres cocidas (formato bote, pattern retail España) ---
+  {
+    id: 'brand_fam_lentils_luengo',
+    familyId: 'fam_lentils',
+    brand: { name: 'Luengo' },
+    name: 'Lentejas Pardinas Cocidas (Luengo)',
+    nameEn: 'Cooked Pardina Lentils (Luengo)',
+    description: 'Cocidas en bote, listas para usar.',
+    descriptionEn: 'Pre-cooked in jar, ready to use.',
+    macros: { calories: 116, protein: 9, carbs: 20, fats: 0.4, saturatedFat: 0.1 },
+  },
+  {
+    id: 'brand_fam_chickpeas_luengo',
+    familyId: 'fam_chickpeas',
+    brand: { name: 'Luengo' },
+    name: 'Garbanzos Pedrosillanos Cocidos (Luengo)',
+    nameEn: 'Cooked Pedrosillano Chickpeas (Luengo)',
+    description: 'Cocidos en bote, listos para usar.',
+    descriptionEn: 'Pre-cooked in jar, ready to use.',
+    macros: { calories: 139, protein: 8, carbs: 22, fats: 2.5, saturatedFat: 0.3 },
+  },
+  {
+    id: 'brand_fam_kidney_beans_luengo',
+    familyId: 'fam_kidney_beans',
+    brand: { name: 'Luengo' },
+    name: 'Alubias Rojas Cocidas (Luengo)',
+    nameEn: 'Cooked Red Kidney Beans (Luengo)',
+    description: 'Cocidas en bote.',
+    descriptionEn: 'Pre-cooked in jar.',
+    macros: { calories: 123, protein: 8, carbs: 20, fats: 0.5, saturatedFat: 0.1 },
+  },
+
+  // --- Aceite de oliva (Carbonell + La Española + Hacendado) ---
+  {
+    id: 'brand_fam_olive_oil_carbonell',
+    familyId: 'fam_olive_oil',
+    brand: { name: 'Carbonell' },
+    name: 'Aceite Oliva Virgen Extra (Carbonell)',
+    nameEn: 'Extra Virgin Olive Oil (Carbonell)',
+    macros: { calories: 884, protein: 0, carbs: 0, fats: 100, saturatedFat: 14 },
+  },
+  {
+    id: 'brand_fam_olive_oil_la_espanola',
+    familyId: 'fam_olive_oil',
+    brand: { name: 'La Española' },
+    name: 'Aceite Oliva Virgen Extra (La Española)',
+    nameEn: 'Extra Virgin Olive Oil (La Española)',
+    macros: { calories: 884, protein: 0, carbs: 0, fats: 100, saturatedFat: 14 },
+  },
+
+  // --- Aceite girasol ---
+  {
+    id: 'brand_fam_sunflower_oil_koipesol',
+    familyId: 'fam_sunflower_oil',
+    brand: { name: 'Koipesol' },
+    name: 'Aceite Girasol (Koipesol)',
+    nameEn: 'Sunflower Oil (Koipesol)',
+    macros: { calories: 884, protein: 0, carbs: 0, fats: 100, saturatedFat: 10.3 },
+  },
+
+  // --- Pan (Bimbo Silueta + Integral) ---
+  {
+    id: 'brand_fam_bread_white_bimbo',
+    familyId: 'fam_bread_white',
+    brand: { name: 'Bimbo' },
+    name: 'Pan de Molde Silueta (Bimbo)',
+    nameEn: 'Sliced Bread Silueta (Bimbo)',
+    macros: { calories: 234, protein: 9, carbs: 44, fats: 2, saturatedFat: 0.5, sugar: 5 },
+  },
+  {
+    id: 'brand_fam_bread_wholewheat_bimbo',
+    familyId: 'fam_bread_wholewheat',
+    brand: { name: 'Bimbo' },
+    name: 'Pan Integral 100% (Bimbo)',
+    nameEn: 'Whole Wheat Bread 100% (Bimbo)',
+    macros: { calories: 231, protein: 11, carbs: 36, fats: 3.5, saturatedFat: 0.6, sugar: 3.5 },
+    qualityTags: ['high-protein'],
+  },
+
+  // --- Pasta (Gallo + Barilla) ---
+  {
+    id: 'brand_fam_pasta_gallo',
+    familyId: 'fam_pasta',
+    brand: { name: 'Gallo' },
+    name: 'Macarrones (Gallo)',
+    nameEn: 'Macaroni (Gallo)',
+    macros: { calories: 353, protein: 12, carbs: 72, fats: 1.5, saturatedFat: 0.5 },
+  },
+  {
+    id: 'brand_fam_pasta_barilla',
+    familyId: 'fam_pasta',
+    brand: { name: 'Barilla' },
+    name: 'Spaghetti (Barilla)',
+    nameEn: 'Spaghetti (Barilla)',
+    macros: { calories: 353, protein: 12.5, carbs: 72, fats: 1.5, saturatedFat: 0.5 },
+  },
+
+  // --- Arroz (SOS Bomba = arroz premium paella) ---
+  {
+    id: 'brand_fam_rice_white_sos_bomba',
+    familyId: 'fam_rice_white',
+    brand: { name: 'SOS' },
+    name: 'Arroz Bomba (SOS)',
+    nameEn: 'Bomba Rice (SOS)',
+    description: 'Arroz premium para paella.',
+    descriptionEn: 'Premium rice for paella.',
+    macros: { calories: 354, protein: 7, carbs: 79, fats: 0.8, saturatedFat: 0.2 },
+  },
+
+  // --- Avena (Quaker = marca dominante) ---
+  {
+    id: 'brand_fam_oats_quaker',
+    familyId: 'fam_oats',
+    brand: { name: 'Quaker' },
+    name: 'Copos de Avena (Quaker)',
+    nameEn: 'Rolled Oats (Quaker)',
+    macros: { calories: 375, protein: 13, carbs: 66, fats: 7, fiber: 10, saturatedFat: 1.3 },
+    qualityTags: ['high-protein'],
+  },
+
+  // --- Cerveza (Mahou + Estrella Galicia + sin alcohol) ---
+  {
+    id: 'brand_fam_beer_mahou',
+    familyId: 'fam_beer',
+    brand: { name: 'Mahou' },
+    name: 'Cerveza Clásica (Mahou)',
+    nameEn: 'Classic Beer (Mahou)',
+    macros: { calories: 41, protein: 0.4, carbs: 3.1, fats: 0, saturatedFat: 0 },
+  },
+  {
+    id: 'brand_fam_beer_estrella_galicia',
+    familyId: 'fam_beer',
+    brand: { name: 'Estrella Galicia' },
+    name: 'Especial (Estrella Galicia)',
+    nameEn: 'Special (Estrella Galicia)',
+    macros: { calories: 48, protein: 0.5, carbs: 3.9, fats: 0, saturatedFat: 0 },
+  },
+  {
+    id: 'brand_fam_beer_mahou_sin',
+    familyId: 'fam_beer',
+    brand: { name: 'Mahou Sin' },
+    name: 'Mahou Sin Alcohol 0,0',
+    nameEn: 'Mahou Alcohol-Free 0.0',
+    macros: { calories: 23, protein: 0.4, carbs: 5, fats: 0, saturatedFat: 0 },
+  },
+
+  // --- Agua (mineral España: Bezoya + Lanjarón + Solán de Cabras) ---
+  {
+    id: 'brand_fam_water_bezoya',
+    familyId: 'fam_water',
+    brand: { name: 'Bezoya' },
+    name: 'Agua Mineral (Bezoya)',
+    nameEn: 'Mineral Water (Bezoya)',
+    description: 'Mineralización muy débil.',
+    descriptionEn: 'Very low mineralization.',
+    macros: { calories: 0, protein: 0, carbs: 0, fats: 0, saturatedFat: 0 },
+  },
+  {
+    id: 'brand_fam_water_solan_cabras',
+    familyId: 'fam_water',
+    brand: { name: 'Solán de Cabras' },
+    name: 'Agua Mineral (Solán de Cabras)',
+    nameEn: 'Mineral Water (Solán de Cabras)',
+    macros: { calories: 0, protein: 0, carbs: 0, fats: 0, saturatedFat: 0 },
+  },
+
+  // --- Chocolate (Valor + Lindt + Hacendado premium) ---
+  {
+    id: 'brand_fam_dark_chocolate_valor_70',
+    familyId: 'fam_dark_chocolate',
+    brand: { name: 'Valor' },
+    name: 'Chocolate Negro 70% (Valor)',
+    nameEn: 'Dark Chocolate 70% (Valor)',
+    macros: { calories: 559, protein: 8, carbs: 34, fats: 43, saturatedFat: 26, sugar: 28 },
+  },
+  {
+    id: 'brand_fam_dark_chocolate_lindt_85',
+    familyId: 'fam_dark_chocolate',
+    brand: { name: 'Lindt' },
+    name: 'Excellence 85% Cacao (Lindt)',
+    nameEn: 'Excellence 85% Cocoa (Lindt)',
+    macros: { calories: 592, protein: 11, carbs: 17, fats: 51, saturatedFat: 30, sugar: 12 },
+    qualityTags: ['sugar-free'],
+  },
+
+  // --- Ketchup (Heinz + Hacendado) ---
+  {
+    id: 'brand_fam_ketchup_heinz',
+    familyId: 'fam_ketchup',
+    brand: { name: 'Heinz' },
+    name: 'Ketchup Original (Heinz)',
+    nameEn: 'Original Ketchup (Heinz)',
+    macros: { calories: 103, protein: 1.3, carbs: 24, fats: 0.1, saturatedFat: 0, sugar: 22.8 },
+  },
+
+  // --- Mayonesa (Hellmann's + Musa) ---
+  {
+    id: 'brand_fam_mayonnaise_hellmanns',
+    familyId: 'fam_mayonnaise',
+    brand: { name: "Hellmann's" },
+    name: 'Mayonesa Original (Hellmann\'s)',
+    nameEn: 'Original Mayonnaise (Hellmann\'s)',
+    macros: { calories: 710, protein: 1, carbs: 1.5, fats: 78, saturatedFat: 6 },
+  },
+  {
+    id: 'brand_fam_mayonnaise_musa_light',
+    familyId: 'fam_mayonnaise',
+    brand: { name: 'Musa' },
+    name: 'Mayonesa Light (Musa)',
+    nameEn: 'Light Mayonnaise (Musa)',
+    macros: { calories: 355, protein: 1, carbs: 10, fats: 35, saturatedFat: 3 },
+    qualityTags: ['light'],
+  },
+
+  // --- Mermelada (Hero Fresa) ---
+  {
+    id: 'brand_fam_jam_hero_fresa',
+    familyId: 'fam_jam',
+    brand: { name: 'Hero' },
+    name: 'Mermelada Fresa (Hero)',
+    nameEn: 'Strawberry Jam (Hero)',
+    macros: { calories: 243, protein: 0.5, carbs: 60, fats: 0, saturatedFat: 0, sugar: 50 },
+  },
+
+  // --- Tomate frito (Solís + Hida, staple España) ---
+  {
+    id: 'brand_fam_tomato_sauce_solis',
+    familyId: 'fam_tomato_sauce',
+    brand: { name: 'Solís' },
+    name: 'Tomate Frito (Solís)',
+    nameEn: 'Fried Tomato Sauce (Solís)',
+    macros: { calories: 75, protein: 1.5, carbs: 10, fats: 3.2, saturatedFat: 0.4, sugar: 6 },
+  },
+
+  // --- Café (Marcilla + Nescafé) ---
+  {
+    id: 'brand_fam_coffee_nescafe',
+    familyId: 'fam_coffee',
+    brand: { name: 'Nescafé' },
+    name: 'Clásico Soluble (Nescafé)',
+    nameEn: 'Classic Instant (Nescafé)',
+    macros: { calories: 2, protein: 0.3, carbs: 0, fats: 0, saturatedFat: 0 },
+  },
 ];
 
 /** brand-id → SeedBrandEntry lookup, used by the variants builder. */

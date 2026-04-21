@@ -279,11 +279,17 @@ describe('P2.6 chicken cuts', () => {
   });
 });
 
-describe('P2.6 brand variants seed', () => {
-  it('has 8 entries spanning 4 distinct families', () => {
-    expect(SEED_BRAND_ENTRIES).toHaveLength(8);
+describe('P2.6 + P14 brand variants seed', () => {
+  it('has the expected count post-P14 (original 8 + retail España +40-50)', () => {
+    // P2.6 shipped 8 entries (greek_yogurt ×2, yogurt ×2, chicken_breast ×2,
+    // peanut_butter ×2). P14 [1.5.72] added ~40 more covering dairy, embutidos,
+    // conservas, legumbres cocidas, aceite, pan, pasta, cerveza, agua, chocolate,
+    // condimentos. Range checked instead of exact number to allow progressive growth.
+    expect(SEED_BRAND_ENTRIES.length).toBeGreaterThanOrEqual(40);
+    expect(SEED_BRAND_ENTRIES.length).toBeLessThanOrEqual(80);
     const families = new Set(SEED_BRAND_ENTRIES.map(e => e.familyId));
-    expect(families.size).toBe(4);
+    // Original 4 families preserved + expansion covers 20+ families.
+    expect(families.size).toBeGreaterThanOrEqual(4);
     expect([...families]).toEqual(expect.arrayContaining([
       'fam_greek_yogurt',
       'fam_yogurt',

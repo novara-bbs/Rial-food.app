@@ -223,15 +223,20 @@ describe('matchFamilyForScan — fuzzy', () => {
 });
 
 describe('matchFamilyForScan — no-match', () => {
-  it('returns no-match for a product with no seed family (embutidos not in seed)', () => {
+  it('returns no-match for a brand+product combination absent from any seed', () => {
+    // Use an invented brand + product title so neither the seed-match (step 2)
+    // nor the fuzzy-family-name (step 3) can latch onto anything meaningful.
+    // Post-P14 [1.5.72] the seed covers 20+ Spanish brands so the prior
+    // «El Pozo + Lomo Embuchado» example no longer reliably misses — swap for
+    // guaranteed-novel input.
     const result = matchFamilyForScan(
-      'BARCODE_EMBUTIDO',
-      'El Pozo',
-      'Lomo Embuchado Premium',
+      'BARCODE_NOMATCH',
+      'MarcaInventadaXYZ',
+      'Producto Desconocido 123',
       FOOD_VARIANTS as FoodVariant[],
     );
-    // El Pozo + lomo embuchado should not match any current dairy/protein family
-    // (no embutidos family exists). Accept no-match or very-low-confidence fuzzy.
+    // Accept no-match or very-low-confidence fuzzy (some token may still land
+    // on a family name, but confidence must stay well below action threshold).
     if (result.type === 'fuzzy') {
       expect(result.confidence).toBeLessThan(0.4);
     } else {
