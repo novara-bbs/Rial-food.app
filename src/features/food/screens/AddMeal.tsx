@@ -15,6 +15,9 @@ import VariantPickerSheet from '../components/VariantPickerSheet';
 import MealSlotSelector, { MealSlot } from '../components/MealSlotSelector';
 import { searchFamilies } from '../utils/food-family-resolver';
 import type { FoodFamily } from '../../../types/food-family';
+import ContextualScoreChip from '../components/ContextualScoreChip';
+import { normalizeGoal } from '../utils/contextual-score';
+import { variantFromIngredientLike } from '../utils/variant-from-log';
 import PortionSheet from '../components/PortionSheet';
 import { PortionResult } from '../components/PortionSelector';
 import EmptyState from '../../../components/EmptyState';
@@ -46,6 +49,11 @@ export default function AddMeal({
     userVariants, mergedVariants, addUserVariant, addVariantBarcode,
   } = useAppState();
   const unitSystem = userProfile.unitSystem ?? 'metric';
+  // P13 [1.5.71] — normalise the user's goal once for contextual chips across search rows.
+  const addMealActiveGoal = useMemo(
+    () => normalizeGoal((userProfile as { goal?: string } | null)?.goal ?? null),
+    [userProfile],
+  );
 
   // ─── Local state ───────────────────────────────────────────
   const [activeTab, setActiveTab] = useState<'recipes' | 'ingredients'>('recipes');
@@ -511,6 +519,27 @@ export default function AddMeal({
             // an OFF API product that happen to collide on the numeric id
             // don't swap DOM nodes when the search set changes.
             const keyPrefix = food.isApiResult ? 'off' : 'loc';
+            // P13 [1.5.71] — contextual score chip for the user's active goal.
+            // Use variantFromIngredientLike so OFF results get scored even
+            // before they're saved as userVariants. Suppressed pre-onboarding
+            // (goal null) so we don't render a misleading grade.
+            const scoreVariant =
+              addMealActiveGoal && (food.cal || food.macros?.calories)
+                ? variantFromIngredientLike(
+                    {
+                      id: foodId,
+                      name: food.title ?? food.name,
+                      nameEn: food.nameEn,
+                      macros: {
+                        calories: food.cal ?? food.macros?.calories ?? 0,
+                        protein: food.pro ?? food.macros?.protein ?? 0,
+                        carbs: food.carbs ?? food.macros?.carbs ?? 0,
+                        fats: food.fats ?? food.macros?.fats ?? 0,
+                      },
+                    },
+                    mergedVariants,
+                  )
+                : null;
             return (
               <div
                 key={`${keyPrefix}-${foodId}`}
@@ -518,6 +547,9 @@ export default function AddMeal({
               >
                 <div className="min-w-0 flex-1 mr-3">
                   <div className="flex items-center gap-2 mb-1 flex-wrap">
+                    {scoreVariant && addMealActiveGoal && (
+                      <ContextualScoreChip variant={scoreVariant} goal={addMealActiveGoal} size="sm" />
+                    )}
                     <h4 className="font-headline font-bold text-sm uppercase text-tertiary truncate">{food.title ?? food.name}</h4>
                     {food.isApiResult && (
                       <span className="text-micro font-bold uppercase tracking-wider bg-surface-container-highest text-on-surface-variant px-1.5 py-0.5 rounded flex items-center gap-0.5 shrink-0">

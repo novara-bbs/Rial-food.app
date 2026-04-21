@@ -469,6 +469,8 @@ export default function Home({
         setDailyLog={setDailyLog}
         setDailyMacros={setDailyMacros}
         onNavigateToRecipe={onNavigateToRecipe}
+        mergedVariants={mergedVariants}
+        userGoal={userProfile?.goal}
       />
 
       {/* 7b. Next Meal Suggestion — after logging at least 1 meal */}

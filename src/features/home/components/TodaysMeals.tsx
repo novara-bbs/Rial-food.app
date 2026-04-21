@@ -1,8 +1,12 @@
 import { Calendar, UtensilsCrossed, Trash2, Pencil, Check, X, Minus, Plus } from 'lucide-react';
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import SectionCard from '../../../components/SectionCard';
 import { useI18n } from '../../../i18n';
 import type { DailyLogEntry } from '../../food/handlers/meal-handlers';
+import type { FoodVariant } from '../../../types/food-family';
+import ContextualScoreChip from '../../food/components/ContextualScoreChip';
+import { normalizeGoal } from '../../food/utils/contextual-score';
+import { variantFromLogEntry } from '../../food/utils/variant-from-log';
 
 interface TodaysMealsProps {
   dailyLog: DailyLogEntry[];
@@ -13,15 +17,25 @@ interface TodaysMealsProps {
   setDailyLog?: (fn: any) => void;
   setDailyMacros?: (fn: any) => void;
   onNavigateToRecipe?: (recipe: any) => void;
+  /** P13 [1.5.71] — pool of known variants for contextual score resolution. */
+  mergedVariants?: readonly FoodVariant[];
+  /** P13 [1.5.71] — raw user goal string; normalised for grade selection. */
+  userGoal?: string | null;
 }
 
 export default function TodaysMeals({
   dailyLog, todaysMeals, onLogMealNow, onNavigateToPlan, onAddMeal,
   setDailyLog, setDailyMacros,
+  mergedVariants,
+  userGoal,
 }: TodaysMealsProps) {
   const { t } = useI18n();
   const [editingEntry, setEditingEntry] = useState<DailyLogEntry | null>(null);
   const [editGrams, setEditGrams] = useState(0);
+
+  // P13 [1.5.71] — resolve the goal once; null when unknown/pre-onboarding,
+  // which suppresses the chip per-entry gracefully.
+  const activeGoal = useMemo(() => normalizeGoal(userGoal), [userGoal]);
 
   const startEdit = (entry: DailyLogEntry) => {
     setEditingEntry(entry);
@@ -107,6 +121,14 @@ export default function TodaysMeals({
                 fats: +(entry.macros.fats * previewFactor).toFixed(1),
               } : entry.macros;
 
+              // P13 [1.5.71] — compute contextual score per entry under the user's active goal.
+              // Resolver returns null when we can't produce a meaningful grade
+              // (no id match + no grams), which suppresses the chip gracefully.
+              const scoreVariant =
+                activeGoal && mergedVariants
+                  ? variantFromLogEntry(entry, mergedVariants)
+                  : null;
+
               return (
                 <div key={entry.id}>
                   <div className="flex items-center gap-3 px-4 py-3 group">
@@ -122,6 +144,17 @@ export default function TodaysMeals({
                       </div>
                     </div>
                     <div className="flex items-center gap-1 shrink-0">
+                      {/* P13 [1.5.71] — contextual grade for the user's active goal.
+                          Suppressed when goal unknown or variant can't be resolved. */}
+                      {scoreVariant && activeGoal && !isEditing && (
+                        <span className="mr-1">
+                          <ContextualScoreChip
+                            variant={scoreVariant}
+                            goal={activeGoal}
+                            size="sm"
+                          />
+                        </span>
+                      )}
                       {/* HIG 44×44 tap targets, always visible (opacity-0+group-hover
                           was invisible on touch devices where there's no hover). */}
                       {entry.grams && (

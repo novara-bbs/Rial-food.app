@@ -1,5 +1,43 @@
 # RIAL App - Changelog
 
+## [1.5.71] - 2026-04-21
+
+### feat(food): P13 — ContextualScore visible en el flujo diario (TodaysMeals + AddMeal search)
+
+Auditoría estratégica pre-sprint identificó el gap real: **P9 ContextualScore está shipped pero oculto** — solo se ve al entrar a FoodDetail (2-3 taps) o navegar el Diccionario. En el flujo diario real de un usuario RIAL (80 % del tiempo = Home + Log + AddMeal), el diferenciador principal vs MFP/Yuka/Cronometer **NO aparece**. Usuario logea sin feedback sobre alineación con su goal.
+
+**Directiva razonada:** antes de avanzar con los follow-ups programados P13/P14/P15 (Processing tier NOVA + segunda ola de alimentos + LLM content gen), activar el diferenciador ya-shipped en los 2 puntos de mayor visibilidad. Reuse cero-arquitectura, 0 data-work, máximo ROI visible.
+
+**Write set:**
+- `src/features/food/utils/variant-from-log.ts` — nuevo helper `variantFromLogEntry(entry, mergedVariants)` + `variantFromIngredientLike(ing, mergedVariants)`. Resuelve una entrada del diario (DailyLogEntry) o un resultado de búsqueda (Ingredient-like) al FoodVariant correspondiente para poder scorearlo. Dos paths: (1) lookup por id en el pool, (2) pseudo-variant construido desde macros normalizadas a 100 g. Retorna null cuando no hay info suficiente para grade significativo (graceful suppress del chip).
+- `src/features/food/utils/variant-from-log.test.ts` — 10 asserts: identity lookup, multi-id fallback, grams normalisation, null cuando grams missing/0, clamp macros negativos, OFF ids → brand variant source off, custom ids → user variant source seed.
+- `src/features/home/components/TodaysMeals.tsx` — chip montado en cada entry del diario del día. Suprimido cuando: goal del user no definido, variant no resoluble, entry en modo edit. 2 nuevos props `mergedVariants` + `userGoal` cableados desde Home.tsx.
+- `src/features/food/screens/AddMeal.tsx` — chip montado en cada row del list unificado (diccionario local + recetas guardadas + resultados OFF API). Apareces junto al título antes de los badges OFF/DB. Useful especialmente en resultados OFF: un usuario buscando «bollería» ya ve «E» rojo antes de loggear.
+
+**Impacto usuario (razonamiento por ICP):**
+- **Clara (perder peso)** — logea Bollycao, ve chip «E» inmediato; al buscar alternativas ve yogur griego «A», manzana «A». Accountability real-time sin entrar al Diccionario.
+- **Marcos (ganar músculo)** — busca snack post-entreno, ve «A» en plátano + yogur griego, «B» en skyr. Chip confirma que hace bien sin tener que comparar mentalmente.
+- **Ana (salud familia)** — busca «comida para niños», ve «B» en muchas cosas y «D» en precocinados. Aprende por osmosis sin sentirse juzgada (chip es gris para C, no agresivo).
+- **Pre-onboarding (goal null)** — chip no aparece. No renderiza ruido cuando no hay contexto.
+
+**Graceful degradation completa:**
+- Sin goal → 0 chips renderizados (la funcionalidad no molesta)
+- Entry sin grams ni ingredientId match → pseudo-variant null → no chip
+- OFF search results con macros → chip aparece (scoreado por pseudo-variant)
+- Entry en modo edit → chip suprimido para no competir visualmente con preview macros
+
+**Quality baseline post-P13:**
+- TypeScript: 0 errors
+- Tests: 948 → **958** (+10 nuevos en variant-from-log.test)
+- i18n: 1775 simétrico (zero cambios — reusa contextualScore namespace shipped en P9)
+- Build main: 851.3 → **851.4 KB raw** / 268.6 → **268.7 KB gzip** (+0.1 KB — solo 2 imports más; helper comparte espacio con contextual-score ya compilado)
+
+**Follow-ups re-razonados post-P13:**
+1. **Brand variants España expansion** (ex-P14 reorientado) — el gap práctico real: cada scan en Mercadona = crear variant personal porque SEED_BRAND_ENTRIES solo cubre 8 productos. Expandir a 30-50 (Danone, Activia, Hacendado retail top, Danacol, Sveltesse, Central Lechera Asturiana, Gallo/Luengo legumbres cocidas). Reuse pattern P2.6. Mayor ROI práctico que processing tier NOVA.
+2. **LLM content gen** (P15 programado) — correr `npm run generate:family-content` con `VITE_GEMINI_API_KEY` del owner. 170 familias sin longDescription educativa. Trabajo 0-código.
+3. **Processing tier NOVA MyRealFood-style** (ex-P13 programado, diferido) — redundante parcial con ContextualScore contextual (que ya penaliza ultra-procesados). Re-evaluar después de feedback en campo sobre si usuarios piden grade "absoluto" o el contextual basta.
+4. **AI Coach free-tier exposure** — el producto más gated. Sin exposure free, 95 % de usuarios nunca lo prueban. Investigar dejar 1 pregunta/día gratis como hook conversion → Pro.
+
 ## [1.5.70] - 2026-04-21
 
 ### feat(food): P12 — Expansion del seed a básicos de España (+43 familias)
