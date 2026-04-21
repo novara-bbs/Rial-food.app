@@ -95,13 +95,13 @@ describe('FOOD_FAMILIES integrity', () => {
 });
 
 describe('P2.5 taxonomy locks', () => {
-  it('FOOD_FAMILIES has the expected count post-P2.6', () => {
-    // P2.5 baseline landed at 132 entries (see prior range guard). P2.6 adds
-    // 4 chicken-cut siblings under `subcategory: 'aves'` (thigh / drumstick /
-    // wing / whole) → 132 + 4 = 136 expected. Brand variants in SEED_BRAND_ENTRIES
-    // don't create new families — they attach to existing canonicals.
-    expect(FOOD_FAMILIES.length).toBeGreaterThanOrEqual(134);
-    expect(FOOD_FAMILIES.length).toBeLessThanOrEqual(140);
+  it('FOOD_FAMILIES has the expected count post-P12', () => {
+    // P2.5 baseline: 132. P2.6 +4 chicken cuts = 136. P12 [1.5.70] adds 43
+    // Spain-basics (pescados, mariscos, verduras color, frutas, cereales,
+    // legumbres, lácteos, frutos secos, condimentos, bebidas) = 179.
+    // Brand variants in SEED_BRAND_ENTRIES don't create new families.
+    expect(FOOD_FAMILIES.length).toBeGreaterThanOrEqual(170);
+    expect(FOOD_FAMILIES.length).toBeLessThanOrEqual(200);
   });
 
   const REMOVED_UMBRELLAS = ['fam_chicken', 'fam_beef', 'fam_egg', 'fam_rice', 'fam_bread'] as const;
@@ -241,10 +241,9 @@ describe('resolver helpers', () => {
 });
 
 describe('legacy INGREDIENT_DICTIONARY compat', () => {
-  // P2.5 landed 139 (138 + dai_plain_yogurt). P2.6 adds 7 chicken cuts
-  // (thigh/drumstick/wing raw+cooked + whole roasted) → 146. No removals.
-  it('remains at the expected length post-P2.6 (146 seed entries after +7 chicken cuts)', () => {
-    expect(INGREDIENT_DICTIONARY).toHaveLength(146);
+  // P2.5: 139. P2.6 +7 chicken cuts = 146. P12 [1.5.70] +43 Spain-basics = 189.
+  it('has the expected length post-P12 (189 seed entries after +43 Spain-basics)', () => {
+    expect(INGREDIENT_DICTIONARY).toHaveLength(189);
   });
 });
 

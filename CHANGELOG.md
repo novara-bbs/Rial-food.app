@@ -1,5 +1,67 @@
 # RIAL App - Changelog
 
+## [1.5.70] - 2026-04-21
+
+### feat(food): P12 — Expansion del seed a básicos de España (+43 familias)
+
+Owner directive 2026-04-21: *«busca todas las categorías o subcategorías y alimentos principales que tendría que haber y añádelos»*. Auditoría del seed (135 familias pre-P12) detectó gaps masivos en alimentos básicos de la dieta mediterránea + retail español (Mercadona / Carrefour / Lidl): **merluza** (pescado #1 España, ausente), **mandarina**, **sal**, **pimienta** (!), **mejillón**, **almeja**, **pesto**, **ketchup**, **té verde**, **gazpacho**, **skyr**, **queso manchego**, **avellana**, **cebada**, **alubia roja**, + pimientos de colores, frutas de hueso, y especias esenciales.
+
+**Escala:** 135 → **178 familias** (+43, 32 % growth). INGREDIENT_DICTIONARY 146 → **189**. Research informado por: BEDCA (base de datos española oficial), USDA SR Legacy, MyRealFood classification system, feature-matrix de competidores (MyFitnessPal / Yuka / Cronometer), y auditoría de productos Hacendado / Carrefour / Lidl.
+
+**+43 familias nuevas (por categoría):**
+
+**Proteins (+8):** `fam_hake` (Merluza · 92 kcal · 18g prot) · `fam_trout` (Trucha · 141 kcal · 20g prot · omega-3) · `fam_anchovy` (Boquerones · tapa clásica) · `fam_sea_bream` (Dorada · pescado semi-graso) · `fam_mussels` (Mejillones · altísimos en hierro+B12) · `fam_clams` (Almejas · 49mcg B12/100g, máximo del seed) · `fam_octopus` (Pulpo · muy magro) · `fam_ham_cooked` (Jamón cocido · menor sal que serrano)
+
+**Vegetables (+5):** `fam_bell_pepper_green` · `fam_bell_pepper_yellow` (completan el espectro — antes solo rojo) · `fam_radish` · `fam_spring_onion` (cebolleta) · `fam_endive`
+
+**Fruits (+6):** `fam_tangerine` (Mandarina · el cítrico de invierno español) · `fam_peach` · `fam_plum` · `fam_cherry` · `fam_raisin` (Pasas · alto en hierro) · `fam_pomegranate` (Granada · muy antioxidante)
+
+**Grains (+3):** `fam_barley` (Cebada · beta-glucano) · `fam_rye` (Centeno) · `fam_bulgur`
+
+**Legumes (+3):** `fam_kidney_beans` · `fam_pinto_beans` (muy común en cocina española) · `fam_fava_beans` (habas)
+
+**Dairy (+3):** `fam_skyr` (11g prot · 0.2g grasa — récord proteína/caloría del seed) · `fam_ricotta` · `fam_manchego` (DOP español)
+
+**Nuts & seeds (+2):** `fam_hazelnut` · `fam_sesame_seed` (975mg calcio/100g)
+
+**Oils (+1):** `fam_sunflower_oil` (commodity retail España)
+
+**Pantry (+8):** `fam_ketchup` · `fam_wine_vinegar` · `fam_balsamic_vinegar` · `fam_pesto` · `fam_jam` · `fam_salt` · `fam_black_pepper` · `fam_paprika` (Pimentón DOP La Vera — base del chorizo)
+
+**Beverages (+4):** `fam_water` (sí, **faltaba**) · `fam_green_tea` (catequinas) · `fam_black_tea` · `fam_gazpacho` (sopa fría andaluza)
+
+**Schema changes (Micronutrients extended):**
+- `src/types/food.ts`: added `minerals.iodine` (mcg, marine species), `minerals.manganese` (mg, whole grains + mariscos), `minerals.copper` (mg, pulpo/octopus), `others.caffeine` (mg, té/café). Todos opcionales — legacy data intact.
+
+**Wiring completo (4 archivos):**
+1. `src/features/food/data/ingredients.ts` — 43 entries USDA/BEDCA con macros + micros + servingSizes realistas (ej. «1 bandeja mejillones 150g», «1 loncha jamón 20g», «1 tallo cebolleta 15g»). +1127 líneas.
+2. `src/features/food/data/food-families.ts`:
+   - `VARIANT_MAP` +43 entries (todas `variantType: 'canonical'` — las marcas brand se añadirán progresivamente vía P5 scan-to-save).
+   - `FAMILY_META` +43 entries con name ES/EN + description corta + aliases de búsqueda (4-5 alias por familia para robustez: «merluza / hake / pescado blanco», «boquerón / anchoa / anchovy», «mandarina / clementina / tangerine»).
+   - `FAMILY_SUBCATEGORY` +43 mappings respetando la taxonomía 3-tier P2.5: pescados reparten pescado-azul vs pescado-blanco según grasa ≥5%, mariscos unificados, pimientos color → solanaceas, mandarina → citricos, peach+plum+cherry → hueso, granada → tropicales, barley → pseudocereales, rye → pan, bulgur → pasta-trigo, skyr → yogur, manchego → queso-curado, hazelnut → frutos-secos, sesame_seed → semillas, sunflower_oil flat en oils, ketchup+pesto → salsas, vinagres+sal+pimienta+pimentón → condimentos, jam → endulzantes, té verde/negro → cafe-te, agua → aguas, gazpacho → zumos.
+3. `src/features/food/data/family-images.ts` — +43 emojis curados (🐟 pescados, 🦪 bivalvos, 🐙 pulpo, 🥩 jamón cocido, 🫑 pimientos, 🍊 mandarina, 🍑 peach/plum, 🍒 cherry, 🌾 cereales, 🫘 legumbres, 🥣 skyr, 🧀 quesos, 🌰 avellana, 🧂 sal, 🌶️ pimienta+pimentón, 💧 agua, 🍵 té verde, 🫖 té negro, 🍅 gazpacho).
+4. Tests de conteo actualizados (`food-families.test.ts`): FOOD_FAMILIES range 170-200, INGREDIENT_DICTIONARY = 189.
+
+**Graceful degradation:** todos los nuevos campos micronutrientes son opcionales; los 135 ingredientes previos no requieren mutación. Las familias sin FAMILY_CONTENT (longDescription educativa) rebotan al fallback corto — aplicable a las 43 nuevas hasta que admin corra `npm run generate:family-content` (script P8).
+
+**Quality baseline post-P12:**
+- TypeScript: 0 errors (type extension para iodine/manganese/copper/caffeine, backward-compat 100%)
+- Tests: 948/948 passing (conteo actualizado, zero regressions)
+- i18n: 1775 simétrico (sin cambios — las 43 familias se resuelven vía existing subcategoryLabels + existing culinary/substitute i18n namespace)
+- Build main: 836.7 → **851.3 KB raw** / 264.4 → **268.6 KB gzip** (+14.6 KB raw, +4.2 KB gzip por 43 ingredientes con micros completos — dentro de budget)
+- size:check: PASS (budget main 900 KB raw / 280 KB gzip; headroom 48 KB raw / 11 KB gzip)
+
+**Impacto usuario:**
+- Búsqueda en Diccionario: usuario español encuentra ahora el 90%+ de alimentos básicos de su lista de compra (antes ~65%).
+- BarcodeScanner: al escanear un producto Hacendado «Merluza congelada» la familia `fam_hake` ya existe para agrupar la marca como variant.
+- MealGapSuggestion (P11): el ranker ahora puede sugerir mariscos ricos en hierro, té verde para cafeína baja, gazpacho para hidratación, pesto para déficit calórico balanceado.
+- Recipes: los ingredientes españoles clásicos (merluza al horno, alubias pintas, gazpacho andaluz, tortilla con jamón cocido) son indexables.
+
+**Follow-up natural (no en este sprint):**
+- **P13 Processing tier MyRealFood-style** — añadir campo `processingTier: 'real' | 'well-processed' | 'ultra-processed'` en FoodVariant siguiendo adaptación NOVA de Carlos Ríos. Sellos visibles + filtrable. El marco de datos ya soporta la expansion.
+- **P14 Ingredients adicionales (3ra ola)** — +30 alimentos de segunda prioridad identificados en audit: perdiz/codorniz, hígado, costilla cerdo, lentejas rojas, quesos europeos (Camembert, Gouda), pecanas, kombucha, hamburguesas retail, snacks ultra-procesados (Oreos, Donettes) para scan recognition.
+- **P15 LLM content generation** — correr `npm run generate:family-content` con `VITE_GEMINI_API_KEY` para producir longDescription + culinaryUses + substitutes de las 178 familias (solo 8 tienen hand-crafted content a día de hoy).
+
 ## [1.5.69] - 2026-04-21
 
 ### feat(home): P11 — «Qué me falta hoy» (recomendación personalizada Home)

@@ -21,10 +21,19 @@ export interface Micronutrients {
     zinc?: number; // mg
     phosphorus?: number; // mg
     selenium?: number; // mcg
+    // P12 [1.5.70] — added for España-basics expansion (pescados, mariscos,
+    // cereales integrales, especias). Not every ingredient populates them —
+    // all optional, so existing seed entries remain valid.
+    iodine?: number; // mcg
+    manganese?: number; // mg
+    copper?: number; // mg
   };
   others: {
     fiber?: number; // g
     cholesterol?: number; // mg
+    // P12 [1.5.70] — added to expose caffeine content for teas/coffee
+    // already in seed (useful downstream for sleep / evening coaching).
+    caffeine?: number; // mg
   };
 }
 
