@@ -1,5 +1,8 @@
 import React, { useState, useMemo } from 'react';
-import { Plus, Link, ShoppingCart, Sparkles, Sunrise, Sun, Moon, Cookie, Zap } from 'lucide-react';
+import { Plus, Link, ShoppingCart, Sparkles, Sunrise, Sun, Moon, Cookie, Zap, ArrowUpDown } from 'lucide-react';
+import CollectionsCarousel from '../components/CollectionsCarousel';
+import { COLLECTIONS } from '../data/collections';
+import { useLocalStorageState } from '../../../hooks/useLocalStorageState';
 import SearchInput from '../../../components/patterns/SearchInput';
 import { useI18n } from '../../../i18n';
 import { useAppState } from '../../../contexts/AppStateContext';
@@ -37,6 +40,9 @@ export default function Cocina({ onAddMeal, onCreateRecipe, onNavigateToRecipe, 
   const [searchQuery, setSearchQuery] = useState('');
   const [activeCollection, setActiveCollection] = useState('all');
   const [activeMealType, setActiveMealType] = useState<string>('all');
+  const [sortMode, setSortMode] = useLocalStorageState<'recommended' | 'recent' | 'quick' | 'highProtein' | 'mostCooked'>(
+    'cocinaSort', 'recommended',
+  );
 
   const parseMin = (v: any) => typeof v === 'number' ? v : parseInt(String(v)) || 0;
 
@@ -90,7 +96,7 @@ export default function Cocina({ onAddMeal, onCreateRecipe, onNavigateToRecipe, 
     { id: 'cooked', label: (t.recipes as any).filterCooked ?? 'Ya cocinadas', count: scoredRecipes.filter(r => r.cookedAt?.length > 0).length },
   ];
 
-  // Combined filters: slot (primary) + collection (secondary) + search.
+  // Combined filters: slot (primary) + collection (secondary) + search + sort.
   const filteredRecipes = useMemo(() => {
     let list = scoredRecipes;
     if (activeMealType !== 'all') {
@@ -106,8 +112,21 @@ export default function Cocina({ onAddMeal, onCreateRecipe, onNavigateToRecipe, 
     if (activeCollection === 'high-protein') list = list.filter(r => r.pro >= 30);
     if (activeCollection === 'verified') list = list.filter(r => r.verified != null);
     if (activeCollection === 'cooked') list = list.filter(r => r.cookedAt?.length > 0);
-    return list;
-  }, [scoredRecipes, activeMealType, searchQuery, activeCollection]);
+    // R3 collection predicates (for CollectionsCarousel-driven filters)
+    // Falls through for ids not handled above (vegan / lowCarb / batch / highProtein)
+    const registryCol = COLLECTIONS.find(c => c.id === activeCollection);
+    if (registryCol && !['all', 'mine', 'imported'].includes(activeCollection)) {
+      list = list.filter(registryCol.predicate);
+    }
+    // Sort
+    const sorted = [...list];
+    if (sortMode === 'recommended') sorted.sort((a, b) => (b.matchScore ?? 0) - (a.matchScore ?? 0));
+    else if (sortMode === 'recent') sorted.sort((a, b) => (b.savedAt ?? '').localeCompare(a.savedAt ?? ''));
+    else if (sortMode === 'quick') sorted.sort((a, b) => (a.totalTime || 999) - (b.totalTime || 999));
+    else if (sortMode === 'highProtein') sorted.sort((a, b) => (b.pro ?? 0) - (a.pro ?? 0));
+    else if (sortMode === 'mostCooked') sorted.sort((a, b) => (b.cookedAt?.length ?? 0) - (a.cookedAt?.length ?? 0));
+    return sorted;
+  }, [scoredRecipes, activeMealType, searchQuery, activeCollection, sortMode]);
 
   const handleDeleteRecipe = (e: React.MouseEvent, id: number | string) => {
     e.stopPropagation();
@@ -186,29 +205,70 @@ export default function Cocina({ onAddMeal, onCreateRecipe, onNavigateToRecipe, 
 
             <FilterRow options={mealCategories} active={activeMealType} onChange={setActiveMealType} variant="icon" className="-mx-6 px-6" />
 
+            {/* Collections discovery carousel — only visible with no active filter or search */}
+            {activeCollection === 'all' && !searchQuery.trim() && (
+              <CollectionsCarousel
+                recipes={scoredRecipes}
+                activeCollection={activeCollection}
+                onSelect={setActiveCollection}
+                className="mt-1"
+              />
+            )}
+
             <FilterRow options={collections} active={activeCollection} onChange={setActiveCollection} variant="pill" className="-mx-6 px-6" />
 
-            {/* Recipe count */}
-            {!isPro && (
-              <div className="text-xs text-on-surface-variant font-label uppercase tracking-widest">
-                {t.recipes.recipeCount.replace('{count}', String(savedRecipes.length))}
+            {/* Sort row + recipe count */}
+            <div className="flex items-center justify-between">
+              {!isPro && (
+                <div className="text-xs text-on-surface-variant font-label uppercase tracking-widest">
+                  {t.recipes.recipeCount.replace('{count}', String(savedRecipes.length))}
+                </div>
+              )}
+              <div className={`flex items-center gap-1.5 ml-auto ${isPro ? '' : ''}`}>
+                <ArrowUpDown className="w-3.5 h-3.5 text-on-surface-variant" aria-hidden="true" />
+                <select
+                  value={sortMode}
+                  onChange={(e) => setSortMode(e.target.value as typeof sortMode)}
+                  className="text-xs font-label uppercase tracking-widest bg-transparent text-on-surface-variant border-0 outline-none cursor-pointer hover:text-tertiary transition-colors"
+                  aria-label={(t.recipes as any).sortRecommended ?? 'Ordenar'}
+                >
+                  <option value="recommended">{(t.recipes as any).sortRecommended ?? 'Recomendadas'}</option>
+                  <option value="recent">{(t.recipes as any).sortRecent ?? 'Recientes'}</option>
+                  <option value="quick">{(t.recipes as any).sortQuick ?? 'Rápidas'}</option>
+                  <option value="highProtein">{(t.recipes as any).sortHighProtein ?? 'Alta proteína'}</option>
+                  <option value="mostCooked">{(t.recipes as any).sortMostCooked ?? 'Más cocinadas'}</option>
+                </select>
               </div>
-            )}
+            </div>
 
             {/* Recipe grid — portrait cards */}
             {filteredRecipes.length === 0 ? (
-              <EmptyState icon="📖" description={t.empty.recipesEmpty}>
-                <div className="flex gap-3">
-                  <button type="button" onClick={onCreateRecipe} className="px-6 py-3 bg-primary text-on-primary rounded-sm font-headline text-xs font-bold uppercase tracking-widest">
-                    {t.recipes.create}
+              searchQuery.trim() ? (
+                <EmptyState icon="🔍" description={(t.recipes as any).emptySearchHint?.replace('{query}', searchQuery) ?? `No hay coincidencias para "${searchQuery}"`}>
+                  <button type="button" onClick={() => setSearchQuery('')} className="px-6 py-3 bg-surface-container-highest border border-outline-variant/20 text-primary rounded-sm font-headline text-xs font-bold uppercase tracking-widest">
+                    {(t.common as any).clear ?? 'Limpiar búsqueda'}
                   </button>
-                  {onImportUrl && (
-                    <button type="button" onClick={onImportUrl} className="px-6 py-3 bg-surface-container-highest border border-outline-variant/20 text-primary rounded-sm font-headline text-xs font-bold uppercase tracking-widest">
-                      {t.recipes.import}
+                </EmptyState>
+              ) : activeCollection !== 'all' ? (
+                <EmptyState icon="📂" description={(t.recipes as any).emptyFilterHint ?? 'Prueba otro filtro o busca por nombre'}>
+                  <button type="button" onClick={() => setActiveCollection('all')} className="px-6 py-3 bg-surface-container-highest border border-outline-variant/20 text-primary rounded-sm font-headline text-xs font-bold uppercase tracking-widest">
+                    {t.recipes.all}
+                  </button>
+                </EmptyState>
+              ) : (
+                <EmptyState icon="📖" description={t.empty.recipesEmpty}>
+                  <div className="flex gap-3">
+                    <button type="button" onClick={onCreateRecipe} className="px-6 py-3 bg-primary text-on-primary rounded-sm font-headline text-xs font-bold uppercase tracking-widest">
+                      {t.recipes.create}
                     </button>
-                  )}
-                </div>
-              </EmptyState>
+                    {onImportUrl && (
+                      <button type="button" onClick={onImportUrl} className="px-6 py-3 bg-surface-container-highest border border-outline-variant/20 text-primary rounded-sm font-headline text-xs font-bold uppercase tracking-widest">
+                        {t.recipes.import}
+                      </button>
+                    )}
+                  </div>
+                </EmptyState>
+              )
             ) : (
               <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3">
                 {filteredRecipes.map((recipe: any) => (

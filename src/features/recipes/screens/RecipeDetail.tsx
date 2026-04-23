@@ -32,6 +32,7 @@ import type { FoodFamily, FoodVariant } from '../../../types/food-family';
 import { useLocalStorageState } from '../../../hooks/useLocalStorageState';
 import { useI18n } from '../../../i18n';
 import ConfirmDialog from '../../../components/ConfirmDialog';
+import RelatedRecipesCarousel from '../components/RelatedRecipesCarousel';
 
 export default function RecipeDetail({ recipe, onBack, onSaveRecipe, isSaved, onAddToPlan, onLogMealNow, onAddToShoppingList, dictionary = [], userProfile }: { recipe: any, onBack: () => void, onSaveRecipe?: (r: any) => void, isSaved?: boolean, onAddToPlan?: (recipe: any, dayIndex: number, slot?: 'breakfast' | 'lunch' | 'dinner' | 'snack') => void, onLogMealNow?: (recipe: any, servings: number) => void, onAddToShoppingList?: (items: any[]) => void, dictionary?: any[], userProfile?: any }) {
   const { t } = useI18n();
@@ -966,6 +967,14 @@ export default function RecipeDetail({ recipe, onBack, onSaveRecipe, isSaved, on
             </div>
           );
         })()}
+
+        {/* ══ Related recipes carousel — R3 ══ */}
+        <RelatedRecipesCarousel
+          currentRecipe={data}
+          allRecipes={savedRecipes}
+          onNavigate={(r) => navToRecipe(r)}
+          className="-mx-6"
+        />
       </div>
     </div>
     {showPublishSheet && (

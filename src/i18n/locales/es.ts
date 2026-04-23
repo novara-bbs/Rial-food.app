@@ -310,6 +310,26 @@ const es = {
     savedOn: 'Guardada el {date}',
     filterVerified: 'Verificadas',
     filterCooked: 'Ya cocinadas',
+    relatedRecipes: 'También te puede gustar',
+    sortRecommended: 'Recomendadas',
+    sortRecent: 'Recientes',
+    sortQuick: 'Rápidas',
+    sortHighProtein: 'Alta proteína',
+    sortMostCooked: 'Más cocinadas',
+    emptyFilterTitle: 'Sin resultados',
+    emptyFilterHint: 'Prueba otro filtro o busca por nombre',
+    emptySearchHint: 'No hay coincidencias para "{query}"',
+  },
+  // Collections (R3)
+  collections: {
+    verified: 'Verificadas',
+    quick: 'Rápidas',
+    highProtein: 'Alta proteína',
+    vegan: 'Veganas',
+    lowCarb: 'Low-Carb',
+    batch: 'Batch cooking',
+    cooked: 'Ya cocinadas',
+    recipes: 'recetas',
   },
   // Import URL
   importUrl: {
