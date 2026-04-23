@@ -5,27 +5,26 @@
 > prunes this file back down. Everything below should answer: *what's the release line,
 > what's the quality baseline, what's the next move, what's broken?*
 
-Last updated: **2026-04-23** — R3 + R8.2 + R8.4 shipped (`761bc83` → `rial-food/main`).
+Last updated: **2026-04-24** — R8.1+R8.3 shipped (`d702ad2`, pending push).
 
 ## Release snapshot
-- **Branch**: `main`, in sync with `rial-food/main` through `761bc83`.
-- **Last shipped**: `[1.5.76]` — R3 Cocina collections carousel + RelatedRecipesCarousel
-  + sort dropdown + contextual empty states. R8.2 paywall "Te sale a N€/mes". R8.4
-  personal notes textarea (SettingsProfile). i18n +17 keys R3 + 4 keys R8.2+R8.4.
+- **Branch**: `main`, ahead of `rial-food/main` by 1 commit (`d702ad2`).
+- **Last shipped**: `[1.5.77]` — R8.1 KcalBreakdownCard + onboarding kcal breakdown.
+  R8.3 trinario foodPreferences (migration + SettingsNutrition UI + all profileSlice
+  consumers). Convention test 13 assertions. i18n +11 keys × 2.
 - **Active plan**: `.claude/plans/revisa-todas-las-capturas-ancient-micali.md` (v2 re-sync).
-  R1 ✓, R2 ✓, R3 ✓, R8.2 ✓, R8.4 ✓. **R4 + R6 CERRADO**.
-  Next: **R8.1** (onboarding kcal breakdown) + **R8.3** (trinario food preferences).
-  Then R5 (CookMode deeper) → R7 (CreateRecipe authoring).
+  R1 ✓, R2 ✓, R3 ✓, R8 ✓ (all 4 sub-tasks). **R4 + R6 CERRADO**.
+  Next: **R5** (CookMode deeper + mise-en-place + voice) → R7 (CreateRecipe paste-bulk).
 - **Release target**: `rial-food/main` (`novara-bbs/Rial-food.app`). Origin `rial-food`.
 - **Vercel project**: `rial.app.v1.5` (id `prj_t11VHYQjptazjUx7Y2hWLz0IDAjg`).
 - **Governance**: work directly on `main`. "continua" = push approval post green preflight.
 
-## Quality baseline (post-R3 + R8.2 + R8.4, 2026-04-23)
+## Quality baseline (post-R8.1+R8.3, 2026-04-24)
 - TypeScript: **0 errors** (`npx tsc --noEmit`)
-- Tests: **982/982** passing (61 files)
-- i18n symmetry: **1813** keys aligned ES ↔ EN
-- Design-system lint: 0 errors (621 warnings pre-existing type-debt + 5-file shadcn allowlist)
-- Build main: **864.4 KB raw / 272.0 KB gzip** · `size:check` PASS
+- Tests: **995/995** passing (62 files)
+- i18n symmetry: **1824** keys aligned ES ↔ EN
+- Design-system lint: 0 errors (warnings pre-existing, unchanged)
+- Build main: **868.9 KB raw / 273.5 KB gzip** · `size:check` PASS
 - Drift: `text-[Npx]` = **0**, SectionCard shape = **0**, INPUT_SURFACE_CLASSES 4 consumers,
   BUTTON_CARD_SURFACE_CLASSES 5 consumers.
 
@@ -68,13 +67,10 @@ Execute Q6 ONLY when ALL hold:
 - E2E green on last 3 commits to main
 
 ## Next sprint candidates (ordered, only pending)
-- ~~**R2**~~ ✓ — shipped `8f4e22c`.
-- ~~**R3**~~ ✓ — shipped `761bc83`.
-- ~~**R8.2 + R8.4**~~ ✓ — shipped `09f4326`.
-- **R8.1 + R8.3** — INDYA: onboarding kcal breakdown (KcalBreakdownCard) + trinario
-  food preferences (accordion by family + foodPreferences migration). ~1.5d.
-- **R5** — CookMode deeper + mise-en-place + voice read-aloud. ~3d.
-- **R7** — CreateRecipe paste-bulk + drag-drop + verified-creator path. ~2d.
+- ~~**R2**~~ ✓ `8f4e22c` · ~~**R3**~~ ✓ `761bc83` · ~~**R8**~~ ✓ `09f4326` / `d702ad2`
+- **R5** — CookMode deeper: per-step ingredient checkoff + step-photo inline + mise-en-place
+  pre-cook screen + voice read-aloud. ~3d.
+- **R7** — CreateRecipe paste-bulk + drag-drop reorder + verified-creator path. ~2d.
 - **Q6** — Supabase integration (gated by feature-freeze gate above).
 - **Q15** — ICP-adaptive Progress widgets + `calculateStreak` sweep.
 - **Q17** — CSP header + contrast + responsive audit.
@@ -82,7 +78,7 @@ Execute Q6 ONLY when ALL hold:
 **Shipped sprints** (full detail in CHANGELOG.md): Q1-Q14, Q15.5 (design-system),
 Q16-B1, Q16-B2, Tab audit 2026-04-18, S3 tranche, Bevel PR 1-9, Q19 meal-taxonomy,
 Fase 1+2 multi-media recipes, Food Families P0-P16, R1 docs, R2 recipes editorial,
-**R3 Cocina collections**, **R8.2+R8.4 INDYA quick-wins**.
+**R3 Cocina collections**, **R8 INDYA adoption** (all 4: R8.1+R8.2+R8.3+R8.4).
 
 ## Repository compliance
 - `LICENSE`: Proprietary © 2026 RIAL FOOD WORLD S.L. Contact legal@rialfoodworld.com.

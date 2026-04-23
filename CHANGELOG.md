@@ -1,5 +1,35 @@
 # RIAL App - Changelog
 
+## [1.5.77] - 2026-04-24
+
+### feat(profile): R8.1+R8.3 INDYA kcal breakdown + trinario food preferences
+
+**R8.1 — Onboarding kcal breakdown (`KcalBreakdownCard` new primitive):**
+`calculateDailyTargetsWithBreakdown()` in `nutrition.ts` now exposes the full
+TDEE decomposition: `basal + activity + exercise + objective = total`. `KcalBreakdownCard`
+renders as a `<SectionCard padding="md">` with 4 labeled rows (sign-aware coloring) +
+divider + bold total + optional tooltip ("¿Cómo se calcula?"). Mounted in Onboarding step 3
+below the existing macro hero number — user sees the transparent breakdown before
+confirming goals. Reusable for SettingsNutrition. Pattern: INDYA IMG_1215.
+i18n: `kcalBreakdown` section +8 keys × 2 (basal, activity, exercise, objective, total,
+tooltip, range, title).
+
+**R8.3 — Trinario food preferences (INDYA IMG_1220):**
+`foodPreferences: Record<string, 'like'|'dislike'>` replaces binary `foodDislikes: string[]`.
+Eager migration in AppStateContext converts existing `foodDislikes[]` → `foodPreferences[id]='dislike'`
+(idempotent; runs once). All profileSlice consumers (Discovery, Cocina, RecipeDetail, App AI
+context) derive `foodDislikes: string[]` from `foodPreferences` — zero changes to matchScore,
+goalOptimizer, substitutions. `SettingsNutrition` trinario UI: search box → dropdown with
+Heart / Ban per result; saved preferences list shows active Heart/Ban + X neutral button.
+`schemas.ts` validates new field. Convention test `food-preferences-trinary.test.ts`: 13
+assertions covering migration idempotency + toggle semantics + schema validation.
+i18n: `settings.prefLike / prefDislike / foodPrefSearch` +3 keys × 2.
+
+**Quality baseline:** tsc 0 · lint warnings unchanged · **995/995 tests** (62 files) ·
+i18n **1824 keys** symmetric · build **868.9 KB raw / 273.5 KB gzip** · size:check PASS.
+
+---
+
 ## [1.5.76] - 2026-04-23
 
 ### feat(recipes): R3 — Cocina collections carousel + RelatedRecipesCarousel + sort + empty states
