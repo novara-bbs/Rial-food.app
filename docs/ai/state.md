@@ -5,25 +5,25 @@
 > prunes this file back down. Everything below should answer: *what's the release line,
 > what's the quality baseline, what's the next move, what's broken?*
 
-Last updated: **2026-04-23** — R2.1 data-model foundation shipped (`9e540b6` → `rial-food/main`).
+Last updated: **2026-04-23** — R2 complete (`8f4e22c` → `rial-food/main`).
 
 ## Release snapshot
-- **Branch**: `main`, in sync with `rial-food/main` through `9e540b6`.
-- **Last shipped**: `[1.5.75]` R2.1 — verified tier (`Recipe.verified`) + `cookedAt[]` +
-  8 hero seeds marked + featureFlag + convention test (11 asserts). Zero UI, zero flag-on.
-- **Last code sprint (user-visible)**: Food Families P16 `[1.5.74]` (seed-variant inline log).
+- **Branch**: `main`, in sync with `rial-food/main` through `8f4e22c`.
+- **Last shipped**: `[1.5.75]` R2 full — verified tier data model + 3 primitives
+  (TimeTileComposite, AuthorAttributionCard, StickyCookCTA) + Mark as Cooked universal
+  + Cocina chips "Verificadas"/"Ya cocinadas" + Fraunces CDN + i18n +10 keys × 2.
+  Flag `verifiedRecipePolish` defaults `false`; data/handlers ship live to all users.
 - **Active plan**: `.claude/plans/revisa-todas-las-capturas-ancient-micali.md` (v2 re-sync).
-  R1 ✓, R2.1 ✓. **R4 + R6 CERRADO**. Next: **R2.2–R2.6** (user-visible editorial polish,
-  3 new primitives + RecipeDetail branches + Cocina chips + Fraunces + i18n +12 keys).
-  Then R3 / R8 (parallelizable) → R5 → R7.
+  R1 ✓, R2 ✓. **R4 + R6 CERRADO**. Next: **R3** (Cocina collections + RelatedRecipes +
+  sort) + **R8** INDYA (parallelizable). Then R5 → R7.
 - **Release target**: `rial-food/main` (`novara-bbs/Rial-food.app`). Origin `rial-food`.
 - **Vercel project**: `rial.app.v1.5` (id `prj_t11VHYQjptazjUx7Y2hWLz0IDAjg`).
 - **Governance**: work directly on `main`. "continua" = push approval post green preflight.
 
 ## Quality baseline (post-R2.1, 2026-04-23)
 - TypeScript: **0 errors** (`npx tsc --noEmit`)
-- Tests: **969/969** passing (60 files) — +120 vs P16 baseline
-- i18n symmetry: **1782** keys aligned ES ↔ EN
+- Tests: **970/970** passing (60 files)
+- i18n symmetry: **1792** keys aligned ES ↔ EN
 - Design-system lint: 0 errors (warnings pre-existing, unchanged)
 - Build main: **862.6 KB raw / 271.4 KB gzip** · `size:check` PASS
 - Drift: `text-[Npx]` = **0**, SectionCard shape = **0**
@@ -71,9 +71,7 @@ Execute Q6 ONLY when ALL hold:
 - E2E green on last 3 commits to main
 
 ## Next sprint candidates (ordered, only pending)
-- **R2.2–R2.6** — 3 primitives (TimeTileComposite, AuthorAttributionCard, StickyCookCTA)
-  + RecipeDetail editorial branches (flag-on) + Cocina chips "Verificadas"/"Ya cocinadas"
-  + Fraunces serif load + i18n +12 keys + convention tests. ~2.5d.
+- ~~**R2**~~ ✓ — shipped `8f4e22c`.
 - **R3** — Cocina collections first-class + RelatedRecipesCarousel + sort dropdown.
   Builds on R2 `cookedAt` + "Ya cocinadas" chip. ~2-3d.
 - **R8** — INDYA adoption: onboarding kcal breakdown + paywall "Te sale a N€/mes" +
@@ -85,9 +83,8 @@ Execute Q6 ONLY when ALL hold:
 - **Q17** — CSP header + contrast + responsive audit.
 
 **Shipped sprints** (full detail in CHANGELOG.md): Q1-Q14, Q15.5 (design-system),
-Q16-B1 (text-[Npx] 249→0), Q16-B2 (SectionCard drift 72→0), Tab audit 2026-04-18,
-S3 tranche, Bevel PR 1-9, Q19 meal-taxonomy, Fase 1+2 multi-media recipes,
-Food Families P0-P16, R1 docs, **R2.1 data-model**.
+Q16-B1, Q16-B2, Tab audit 2026-04-18, S3 tranche, Bevel PR 1-9, Q19 meal-taxonomy,
+Fase 1+2 multi-media recipes, Food Families P0-P16, R1 docs, **R2 recipes editorial**.
 
 ## Repository compliance
 - `LICENSE`: Proprietary © 2026 RIAL FOOD WORLD S.L. Contact legal@rialfoodworld.com.

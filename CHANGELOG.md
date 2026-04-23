@@ -2,6 +2,43 @@
 
 ## [1.5.75] - 2026-04-23
 
+### feat(recipes): R2.2–R2.5 — Editorial polish, Mark as Cooked universal, Cocina chips, Fraunces CDN
+
+**3 new recipe primitives:**
+- `TimeTileComposite` — 3 SVG arc-ring tiles (Prep/Cook/Rest). Proportional fill from
+  parsed time strings ("10M" → 10 min, "1H30M" → 90 min). Rest tile hidden when 0 min.
+- `AuthorAttributionCard` — 4 variants: `card` (SectionCard + avatar + role badge),
+  `inline` (byline text), `savedDate` ("Guardada el {date}"), `creator` (@handle + badge).
+- `StickyCookCTA` — fixed pill button (bottom-right, safe-area-inset, shadow-elev-2),
+  IntersectionObserver hides when quick-actions row enters viewport.
+
+**Mark as Cooked — universal (NYT Cooking pattern):**
+- `createHandleMarkAsCooked` handler appends ISO timestamp to `recipe.cookedAt[]`.
+  Auto-saves recipe if not in vault first (progressive engagement).
+  Toast shows "Cocinada N veces" with count.
+- Wired in AppStateContext, consumed in RecipeDetail via `useAppState()`.
+- Button renders below Log/Plan row for every recipe. Badge "Cocinada N veces" when > 0.
+
+**RecipeDetail editorial branch (`featureFlags.verifiedRecipePolish`, default false):**
+- Hero height: verified → 65vh max 520px, classic → unchanged h-56/h-72.
+- Title: ADR-011 `font-headline` kept, `style={fontFamily: var(--font-serif)}` override
+  for verified (Fraunces). `textTransform: none` removes uppercase on serif titles.
+- `TimeTileComposite` replaces inline clock row below hero when verified.
+- `AuthorAttributionCard variant="card"/"creator"` mounts below TimeTileComposite.
+- `StickyCookCTA` mounts on verified recipes, hidden when quickActionsRef visible.
+
+**Cocina chips (R2.4):** "Verificadas" + "Ya cocinadas" added to collections array +
+filteredRecipes useMemo. Zero UI change when chips have 0 count (users start fresh).
+
+**Fraunces CDN (R2.5):** Google Fonts `@import` (variable axes opsz 9..144, wgt
+300..900). `--font-serif` token in Tailwind CSS v4 `@theme`. Zero bundle impact (CDN).
+
+**i18n:** +10 keys × 2 locales. 1782 → **1792** keys aligned.
+**Quality baseline post-R2.2–R2.5:**
+- TypeScript: 0 errors · lint: 0 errors · tests: **970/970** · i18n: **1792** · size: **271 KB gzip** PASS
+
+---
+
 ### feat(recipes): R2.1 — Verified tier + cookedAt[] data-model foundation (R2 plan v2)
 
 Zero-UI, zero-risk data layer that unlocks the full R2 editorial sprint. Pre-existing
