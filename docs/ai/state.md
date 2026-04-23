@@ -5,10 +5,10 @@
 > prunes this file back down. Everything below should answer: *what's the release line,
 > what's the quality baseline, what's the next move, what's broken?*
 
-Last updated: **2026-04-24** — R5 + onboarding quick-wins merged (`a158f54` pending push).
+Last updated: **2026-04-24** — R5 + onboarding quick-wins merged, pushed (`c3b4ceb`).
 
 ## Release snapshot
-- **Branch**: `main`, ahead of `rial-food/main` by merge commit.
+- **Branch**: `main`, in sync with `rial-food/main` through `c3b4ceb`.
 - **Last shipped**: `[1.5.78]` — R5 CookMode deeper (`IngredientCheckoff`, `MiseEnPlaceScreen`,
   step-photo → MediaLightbox, voice read-aloud) + onboarding quick-wins (destrabar step 1,
   hero icons, subtitles, Skip funcional, pre-select goal=maintain). Combined.
