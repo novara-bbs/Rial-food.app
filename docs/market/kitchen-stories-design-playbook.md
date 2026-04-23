@@ -344,3 +344,88 @@ Baselines a preservar post-PRs:
 - **Chef byline para seed recipes** requiere decidir copy ES — "Equipo RIAL", "RIAL Cocina", "Comunidad RIAL". Dejar al diseño de copy del owner.
 - **Step ingredients en seed data** (PR 2) requiere backfill manual de 46 recetas × ~3–4 steps cada una = ~150 strings nuevas en `seed-recipes.ts`. Esfuerzo alto — considerar marcar `RecipeStep.ingredients` como opcional y fallback a la lista global si empty.
 - **Translation toggle de comments** (IMG_1153 "Show original language: German") intencionalmente skipped — requiere Edge function Gemini + detección de idioma + latency UX. Defer a Q20+ con post-lanzamiento i18n.
+
+---
+
+## 9. RIAL verified-recipe applicability (R1.1 re-audit, 2026-04-19 PM)
+
+> Owner directive 2026-04-19: re-auditar las 17 capturas IMG_1141–1159 con foco específico en aplicar el paso-a-paso editorial de Kitchen Stories **solo** al layer de recetas verificadas de RIAL (oficiales del equipo + creadores verificados), no al conjunto completo.
+
+### 9.1 Principio general: "tiered treatment"
+
+Kitchen Stories es **content-first** — cada receta es un artículo con byline, foto pro, chef attribution, social proof. RIAL no puede escalar ese tratamiento a **todas** las recetas (seed 46 + user-imported URL + user-created + futuras UGC) porque no hay equipo de producción editorial. La única vía sostenible es **tiered**: un subset pequeño recibe el tratamiento editorial completo, el resto mantiene el layout standard existente. Coincide con el patrón de marketplaces/plataformas maduras (Airbnb "Guest Favorite", Spotify "Editorial Playlist", Netflix "Netflix Original").
+
+**Data-model mínimo** (R2.1 del plan): `Recipe.verified?: 'rial' | 'creator' | null`. Empty/null = user-saved estándar; `'rial'` = receta oficial del equipo/partners; `'creator'` = creador verificado (flag futura `userProfile.isVerifiedCreator` gate-ea quién puede setearla). Feature-flag: `featureFlags.verifiedRecipePolish` default `false` durante rollout controlado.
+
+### 9.2 Tabla Copy / Adapt / Skip — re-clasificada por tier
+
+Cada patrón documentado en §2 se re-etiqueta con su tier de aplicación. Objetivo: saber qué patrones son "verified-only" (coste editorial alto) vs "universales" (coste marginal cero, aplicables a toda receta).
+
+| Patrón Kitchen Stories | §2 original | **Tier RIAL (R1.1)** | Razón |
+|---|---|---|---|
+| Foto hero a sangre (bleed, sin card) | Copy | **Verified-only** | Requiere foto pro / creator-curated. User-saved + importadas heredan fotos de calidad irregular; bleed amplifica la mediocridad. |
+| Tipografía serif en título | Adapt | **Verified-only** | El posicionamiento "artículo" solo es creíble con curation + foto pro. Serif sobre user-saved grita "fake premium". |
+| Sticky "Cocinar" CTA pill bottom | Copy | **Universal** | UX pura, 0 coste editorial. Cualquier receta con >1 step se beneficia. |
+| Tres time-tiles con arc (Prep/Cook/Rest) | Adapt | **Universal** | Primitive reusable `<TimeTileComposite>`. Seed tiene `prepTime`/`cookTime`. User-saved con tiempos 0 renderizan "empty-tile" (patrón `ConstantTile`). |
+| Chef attribution card | Adapt | **Verified-only** | Cargo ("RIAL Verified" / "Creator @nombre") solo con actor verificado. User-saved muestra solo fecha de guardado (default). |
+| Step banner peach + step ingredients + foto full-width | Copy | **Verified-only** (foto) + **Universal** (banner + ingredients) | Foto/step requiere curation. Banner + ingredients son markup reusable. Sin `step.photoUrl` fallback omite foto; sin `step.ingredientIds` fallback omite sub-lista. |
+| Per-step ingredients (step.ingredientIds) | — (nuevo R5) | **Universal** (con fallback) | Si existe → render sub-lista; si no → fallback al overlay global. |
+| Ingredient check-off CookMode | — (nuevo R5) | **Universal** | Cliente-side, 0 coste. |
+| Mise-en-place pre-cook screen | — (nuevo R5) | **Universal** (opt-in) | `settings.miseEnPlacePreCook` default `true`. |
+| Rating stars + "Too few ratings" | Copy | **Verified-only** (V1) | Sin UGC ratings, placeholder queda permanente. Verified puede heredar ratings seed curados. Defer Q20+. |
+| Comments carousel thumb stack + `+N` | Adapt | **Verified-only** (V1) | Requiere UGC masivo. Defer. |
+| Banner Plus beige top-home dismissible | Adapt | **Universal** (home-level) | Independiente del tier. |
+| TimeBadge top-left + DietBadge top-right | Copy | **Universal** | Deriva de `recipe.tags[]` + tiempos. 0 coste. |
+| Author pill bajo título card | Adapt | **Universal** (con fallback) | "Equipo RIAL" / "Creator @nombre" / "Tu receta" / "Importado de {domain}" cubre 4 orígenes. |
+| Meta-tag "Today's Recipe" 11px naranja | Copy | **Verified-only** | Solo como "Receta verificada RIAL" sobre verified card. |
+| Collection grid 2-col + tabs split | Adapt | **Universal** | Pattern reusable en R3 (`verificadas`, `rapidas`, etc.). |
+| Empty "For You" mascot ilustrado | Copy | **Universal** | Pattern general. |
+| ChipGroup multi-select cuisine | Copy | **Universal** | Primitive reusable. |
+
+**Resumen tier-split**:
+- **Universal** (aplica a toda receta, sin gate): 10 patrones — sticky CTA, time-tiles, step banners + ingredients, check-off, mise-en-place, TimeBadge, DietBadge, author pill, collection grid, empty states, ChipGroup, Plus banner.
+- **Verified-only** (aplica solo cuando `recipe.verified !== null`): 7 patrones — hero bleed, serif title, chef attribution card, per-step photos, rating stars placeholder, comments carousel, meta-tag "Receta verificada".
+
+### 9.3 Mapping al sprint map R2-R7
+
+| Sprint | Patrón | Tier | Archivo RIAL afectado |
+|---|---|---|---|
+| **R2** | Sticky "Cocinar" CTA | Universal | `RecipeDetail.tsx` (no flag-gated) |
+| **R2** | Time-tile composite (Prep/Cook/Rest arc) | Universal | `TimeTileComposite.tsx` new + RecipeDetail mount |
+| **R2** | Author/chef attribution card | Verified-only | `AuthorAttributionCard.tsx` new + RecipeDetail branching on `recipe.verified` |
+| **R2** | Hero bleed variant | Verified-only | `HeroGallery.tsx` extend + RecipeDetail branching |
+| **R2** | Serif title variant | Verified-only | `index.css` `--font-serif` token + RecipeDetail className conditional |
+| **R2** | Meta-tag "Receta verificada" pill | Verified-only | `RecipeCard.tsx` + RecipeDetail header variant |
+| **R2** | Cocina Verified filter chip + editorial treatment | Verified-only | `Cocina.tsx` chip + RecipeCard variant switch |
+| **R3** | Collection grid 2-col + carrusel horizontal | Universal | `Cocina.tsx` + `collections.ts` new |
+| **R3** | Empty states contextuales | Universal | `Cocina.tsx` |
+| **R5** | Step banner peach "Step N/Total" | Universal | `CookMode.tsx` |
+| **R5** | Per-step ingredients sub-list | Universal (con fallback) | `CookMode.tsx` + `recipe.steps[i].ingredientIds?` type |
+| **R5** | Ingredient check-off strike-through | Universal | `CookMode.tsx` transient state |
+| **R5** | Mise-en-place pre-cook | Universal (opt-in) | `MiseEnPlaceScreen.tsx` new + routing |
+
+### 9.4 Patrones NO aplicables a RIAL (re-firmado 2026-04-19)
+
+Confirma §4.12 + añade:
+- **Ratings UGC**: IMG_1146/1152 aspiracionales hasta Q20+. Placeholder "Too few ratings" permanente = fake-empty-state. Esperar.
+- **Comments carousel visual IMG_1154**: requiere UGC volumen + fotos reales. Defer.
+- **Editorial heavy producción**: skip. Verified recipes se marcan entre las 46 seed existentes (8-10 heroes por calidad de foto). No producir nuevas.
+- **Dual-accent verde/naranja**: skip. RIAL 4 paletas.
+
+### 9.5 Riesgo "dos RIAL distintos en el mismo screen"
+
+Mostrar verified-recipe con hero bleed + serif + chef card y scrollear a user-saved sin ningún tratamiento puede percibirse como "app rota". **Mitigación**:
+
+1. **Layout-parity en Cocina grid**: verified se marcan con pill "Verificada" top-left + badge `<CheckCircle2>` en author pill, pero **el layout de la card permanece idéntico**. La diferencia editorial se revela solo al abrir RecipeDetail.
+2. **Serif gate**: `--font-serif` con `font-display: swap` — si falla o es user-saved, fallback a Inter. Zero breakage.
+3. **Chef card additive**: user-saved renderiza `AuthorAttributionCard variant="savedDate"` (avatar RIAL + "Guardado el 12 Abr 2026"); verified renderiza `variant="rialTeam"` o `variant="creator"`. Mismo componente, 3 variantes, mismo footprint (~64px). Sin "hueco" perceptible entre tiers.
+
+Este apartado es regla de review: cualquier patrón verified-only que rompa layout-parity con user-saved es motivo de rechazo en PR R2.
+
+### 9.6 Gate check R1 → R2
+
+- [ ] Owner firma la clasificación tier-split de §9.2.
+- [ ] Owner valida la lista de 8-10 heroes RIAL seed a marcar `verified: 'rial'` en R2.1.
+- [ ] Owner revisa mitigation plan §9.5 layout-parity.
+
+Post-gate → R2 procede con write-set del `recipe-playbook.md` §6 (R1.4).

@@ -183,3 +183,7 @@ Complemento a los deep-dives (descriptivos): cada playbook extrae la matriz **Co
 | **MyFitnessPal** | [`myfitnesspal-design-playbook.md`](myfitnesspal-design-playbook.md) | 14 | Quick-add macros, historial-as-default, ecuación inline Objetivo−Alimentos+Ejercicio |
 | **MyRealFood** | [`myrealfood-design-playbook.md`](myrealfood-design-playbook.md) | 19 | Onboarding supermercados ES, pantry-aware chips, RecipeCard social overlay + verified púrpura |
 | **Kitchen Stories** | [`kitchen-stories-design-playbook.md`](kitchen-stories-design-playbook.md) | 17 | Editorial recipe detail, step-by-step pre-cook, ChipGroup/TimeBadge/DietBadge/RecipeByline primitives |
+| **NYT Cooking** | [`nyt-cooking-design-playbook.md`](nyt-cooking-design-playbook.md) | 16 | Editorial newspaper tone, author-hyperlink byline, Recipe Box folders, Mark as Cooked pattern |
+| **INDYA** | [`indya-design-playbook.md`](indya-design-playbook.md) | 33 | Coach-led nutrition ES, onboarding kcal-breakdown transparente, paywall humano-céntrico, trinario food preferences |
+
+**Síntesis cross-competitor**: [`recipe-playbook.md`](recipe-playbook.md) — benchmark cruzado de 5 recipe-adjacent playbooks (KS + NYT + Paprika + MRF + INDYA) con matriz Copy/Adapt/Skip agregada, recomendación Option A tiered editorial, y write set feeding R2–R8.
