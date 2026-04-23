@@ -1,13 +1,17 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
-import { X, ChevronLeft, ChevronRight, UtensilsCrossed, Clock } from 'lucide-react';
+import { X, ChevronLeft, ChevronRight, UtensilsCrossed, Clock, Volume2, VolumeX } from 'lucide-react';
 import { useI18n } from '../../../i18n';
 import { Z_TW } from '../../../lib/z-index';
 import CookTimer from './CookTimer';
+import IngredientCheckoff, { type CheckoffIngredient } from './IngredientCheckoff';
+import MediaLightbox from './MediaLightbox';
+import featureFlags from '../../../lib/featureFlags';
 
 interface NormalizedStep {
   text: string;
   photoUrl?: string;
   detectedMinutes?: number;
+  ingredientIds?: string[];
 }
 
 const TIME_REGEX = /(\d+(?:\.\d+)?)\s*(minutos?|minutes?|mins?|segundos?|seconds?|secs?|horas?|hours?|hrs?)/gi;
@@ -29,26 +33,37 @@ export default function CookMode({
   ingredients = [],
   onClose,
 }: {
-  steps: string[] | { text: string; photoUrl?: string; timerMinutes?: number }[];
+  steps: string[] | { text: string; photoUrl?: string; timerMinutes?: number; ingredientIds?: string[] }[];
   title: string;
-  ingredients?: { name: string; amount: number; unit: string }[];
+  ingredients?: CheckoffIngredient[];
   onClose: () => void;
 }) {
-  const { t } = useI18n();
+  const { t, locale } = useI18n();
   const [current, setCurrent] = useState(0);
   const [showIngredients, setShowIngredients] = useState(false);
   const [activeTimers, setActiveTimers] = useState<Record<number, boolean>>({});
+  const [lightboxOpen, setLightboxOpen] = useState(false);
+  const [isSpeaking, setIsSpeaking] = useState(false);
   const touchStartX = useRef<number>(0);
   const closeButtonRef = useRef<HTMLButtonElement | null>(null);
+
+  const voiceSupported = featureFlags.cookModeVoiceReadAloud && typeof window !== 'undefined' && 'speechSynthesis' in window;
 
   const normalized: NormalizedStep[] = steps.map(s =>
     typeof s === 'string'
       ? { text: s, detectedMinutes: detectTimerMinutes(s) }
-      : { text: s.text, photoUrl: s.photoUrl, detectedMinutes: s.timerMinutes ?? detectTimerMinutes(s.text) },
+      : { text: s.text, photoUrl: s.photoUrl, detectedMinutes: s.timerMinutes ?? detectTimerMinutes(s.text), ingredientIds: s.ingredientIds },
   );
 
   const step = normalized[current];
   const total = normalized.length;
+
+  // Per-step ingredients: look up by id from the full ingredients list
+  const stepIngredients: CheckoffIngredient[] = step.ingredientIds?.length
+    ? step.ingredientIds
+        .map(id => ingredients.find(ing => ing.id === id))
+        .filter((ing): ing is CheckoffIngredient => ing !== undefined)
+    : [];
 
   // WakeLock — keep screen on while cooking. Re-acquire on visibilitychange
   // because browsers silently release the lock when the tab goes background.
@@ -79,6 +94,25 @@ export default function CookMode({
     };
   }, []);
 
+  // Cancel speech when step changes. We intentionally only re-run on `current`
+  // to avoid cancelling speech mid-step on unrelated re-renders.
+  const currentRef = useRef(current);
+  useEffect(() => {
+    if (currentRef.current !== current) {
+      currentRef.current = current;
+      if (voiceSupported) {
+        window.speechSynthesis.cancel();
+        setIsSpeaking(false);
+      }
+    }
+  });
+
+  useEffect(() => {
+    return () => {
+      if (voiceSupported) window.speechSynthesis.cancel();
+    };
+  }, [voiceSupported]);
+
   // Autofocus the close button on mount so users can exit with Tab+Enter
   // immediately, and so screen readers announce "exit cook mode".
   useEffect(() => {
@@ -98,6 +132,21 @@ export default function CookMode({
     window.addEventListener('keydown', onKey);
     return () => window.removeEventListener('keydown', onKey);
   }, [onClose, goNext, goPrev]);
+
+  const handleVoiceToggle = () => {
+    if (!voiceSupported) return;
+    if (isSpeaking) {
+      window.speechSynthesis.cancel();
+      setIsSpeaking(false);
+      return;
+    }
+    const utter = new SpeechSynthesisUtterance(step.text);
+    utter.lang = locale === 'es' ? 'es-ES' : 'en-US';
+    utter.onend = () => setIsSpeaking(false);
+    utter.onerror = () => setIsSpeaking(false);
+    window.speechSynthesis.speak(utter);
+    setIsSpeaking(true);
+  };
 
   // Empty-steps guard — avoid crashing on step.text when steps came empty.
   if (total === 0) {
@@ -130,7 +179,10 @@ export default function CookMode({
     if (Math.abs(dx) > 50) { if (dx > 0) { goNext(); } else { goPrev(); } }
   };
 
+  const voiceTt = t.cookMode;
+
   return (
+    <>
     <div
       className={`fixed inset-0 ${Z_TW.FULLSCREEN} bg-neutral-950 flex flex-col text-on-overlay select-none`}
       onTouchStart={handleTouchStart}
@@ -147,6 +199,24 @@ export default function CookMode({
           </p>
         </div>
         <div className="flex items-center gap-2">
+          {/* Voice read-aloud button */}
+          {voiceSupported && (
+            <button type="button"
+              onClick={handleVoiceToggle}
+              className={`p-2 rounded-full transition-colors ${
+                isSpeaking
+                  ? 'bg-primary/30 text-primary hover:bg-primary/40'
+                  : 'bg-on-overlay/10 hover:bg-on-overlay/20'
+              }`}
+              aria-label={isSpeaking ? voiceTt.stopReading : voiceTt.readAloud}
+            >
+              {isSpeaking
+                ? <VolumeX className="w-4 h-4 text-primary" />
+                : <Volume2 className="w-4 h-4" />}
+            </button>
+          )}
+
+          {/* Global ingredients overlay button */}
           {ingredients.length > 0 && (
             <button type="button"
               onClick={() => setShowIngredients(s => !s)}
@@ -186,11 +256,33 @@ export default function CookMode({
           <span className="font-headline font-bold text-primary text-lg">{current + 1}</span>
         </div>
 
+        {/* Step photo — R5.2: clickable thumbnail → MediaLightbox */}
         {step.photoUrl && (
-          <img src={step.photoUrl} alt={`Step ${current + 1}`} className="w-full max-w-sm rounded-sm object-cover max-h-48" />
+          <button
+            type="button"
+            onClick={() => setLightboxOpen(true)}
+            className="w-full max-w-sm rounded-sm overflow-hidden focus-visible:ring-2 focus-visible:ring-primary/50"
+            aria-label={voiceTt.viewStepPhoto}
+          >
+            <img
+              src={step.photoUrl}
+              alt={`Step ${current + 1}`}
+              className="w-full object-cover max-h-48"
+            />
+          </button>
         )}
 
         <p className="text-xl md:text-2xl font-body leading-relaxed text-on-overlay max-w-lg">{step.text}</p>
+
+        {/* R5.1: Per-step ingredient sub-list */}
+        {stepIngredients.length > 0 && (
+          <div className="w-full max-w-sm bg-on-overlay/5 border border-overlay-border rounded-sm px-4 py-3">
+            <p className="text-xs font-label uppercase tracking-widest text-on-overlay/40 mb-2">
+              {voiceTt.ingredientsForStep}
+            </p>
+            <IngredientCheckoff ingredients={stepIngredients} compact />
+          </div>
+        )}
 
         {step.detectedMinutes && (
           <div className="flex flex-col items-center gap-3">
@@ -248,26 +340,31 @@ export default function CookMode({
         )}
       </div>
 
-      {/* Ingredients overlay */}
+      {/* Ingredients overlay — global fallback when no per-step ids */}
       {showIngredients && (
         <div
           className="absolute inset-0 bg-neutral-950/95 z-10 flex flex-col pt-16 px-6 pb-8"
           onClick={() => setShowIngredients(false)}
         >
           <h3 className="font-headline font-bold text-lg uppercase text-on-overlay mb-4">{t.recipeDetail.viewIngredients}</h3>
-          <div className="space-y-2 overflow-y-auto flex-1">
-            {ingredients.map((ing, i) => (
-              <div key={i} className="flex justify-between py-2 border-b border-overlay-border text-sm">
-                <span className="text-on-overlay">{ing.name}</span>
-                {ing.amount > 0 && (
-                  <span className="text-on-overlay/50 font-mono">{ing.amount}{ing.unit ? ` ${ing.unit}` : ''}</span>
-                )}
-              </div>
-            ))}
+          <div className="flex-1 overflow-y-auto">
+            <IngredientCheckoff ingredients={ingredients} />
           </div>
           <p className="text-on-overlay/50 text-xs mt-4 text-center">{t.recipeDetail.tapToClose}</p>
         </div>
       )}
     </div>
+
+    {/* Step photo lightbox — R5.2 */}
+    {step.photoUrl && (
+      <MediaLightbox
+        photos={[step.photoUrl]}
+        startIndex={0}
+        open={lightboxOpen}
+        onOpenChange={setLightboxOpen}
+        alt={`${title} — paso ${current + 1}`}
+      />
+    )}
+    </>
   );
 }

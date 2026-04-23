@@ -1730,6 +1730,23 @@ const es = {
     listCleared: 'Lista de compras vaciada',
     copiedToClipboard: 'Lista copiada al portapapeles',
   },
+  // CookMode R5 — voice read-aloud + per-step ingredient sub-list
+  cookMode: {
+    readAloud: 'Leer en voz alta',
+    stopReading: 'Detener lectura',
+    ingredientsForStep: 'Ingredientes para este paso',
+    viewStepPhoto: 'Ver foto del paso',
+    voiceUnavailable: 'Lectura en voz alta no disponible',
+  },
+  // MiseEnPlace R5 — pre-cook screen
+  miseEnPlace: {
+    title: 'Prepara los ingredientes',
+    description: 'Ten todo listo antes de empezar. Marca cada ingrediente a medida que lo prepares.',
+    noIngredients: 'Sin ingredientes específicos',
+    startCooking: 'Empezar a cocinar',
+    startWithoutPrep: 'Empezar sin preparar ahora',
+    dontShowAgain: 'No mostrar esto más',
+  },
   // Pantry
   pantry: {
     title: 'Mi Despensa',

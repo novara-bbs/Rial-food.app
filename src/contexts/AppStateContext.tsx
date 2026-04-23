@@ -41,6 +41,9 @@ interface AppStateContextType {
   setShowAIBot: (v: boolean) => void;
   isFirstTime: boolean;
   setIsFirstTime: (v: boolean) => void;
+  /** R5: whether to show the mise-en-place pre-cook screen. Default true. */
+  miseEnPlaceEnabled: boolean;
+  setMiseEnPlaceEnabled: (v: boolean) => void;
   userProfile: UserProfile;
   setUserProfile: (v: UserProfile) => void;
 
@@ -270,6 +273,8 @@ export function AppStateProvider({ children }: { children: React.ReactNode }) {
   const [isPro, setIsPro] = useLocalStorageState<boolean>('isPro', false);
   const [showAIBot, setShowAIBot] = useLocalStorageState<boolean>('showAIBot', true);
   const [isFirstTime, setIsFirstTime] = useLocalStorageState<boolean>('isFirstTime', true);
+  // R5: pre-cook mise-en-place screen. Default true — user can opt-out per session.
+  const [miseEnPlaceEnabled, setMiseEnPlaceEnabled] = useLocalStorageState<boolean>('miseEnPlacePreCook', true);
   const [checkInStatus, setCheckInStatus] = useLocalStorageState<DailyCheckInType | null>('checkInStatus', null);
 
   const [userProfile, setUserProfile] = useLocalStorageState<UserProfile>('userProfile', {
@@ -896,6 +901,7 @@ export function AppStateProvider({ children }: { children: React.ReactNode }) {
     isPro, setIsPro,
     showAIBot, setShowAIBot,
     isFirstTime, setIsFirstTime,
+    miseEnPlaceEnabled, setMiseEnPlaceEnabled,
     userProfile, setUserProfile,
     dailyMacros, setDailyMacros,
     hydration, setHydration,
@@ -957,6 +963,7 @@ export function AppStateProvider({ children }: { children: React.ReactNode }) {
     recipeToEdit, setRecipeToEdit,
   }), [
     isPro, setIsPro, showAIBot, setShowAIBot, isFirstTime, setIsFirstTime,
+    miseEnPlaceEnabled, setMiseEnPlaceEnabled,
     userProfile, setUserProfile, dailyMacros, setDailyMacros,
     hydration, setHydration, movement, setMovement, dailyGoal, setDailyGoal,
     savedRecipes, setSavedRecipes, mealPlan, setMealPlan,

@@ -6,6 +6,7 @@ import StickyCookCTA from '../components/StickyCookCTA';
 import SearchInput from '../../../components/patterns/SearchInput';
 import { useState, useMemo, useEffect, useRef } from 'react';
 import CookMode from '../components/CookMode';
+import MiseEnPlaceScreen from '../components/MiseEnPlaceScreen';
 import HeroGallery from '../components/HeroGallery';
 import MediaLightbox from '../components/MediaLightbox';
 import VideoSection from '../components/VideoSection';
@@ -37,7 +38,7 @@ import RelatedRecipesCarousel from '../components/RelatedRecipesCarousel';
 export default function RecipeDetail({ recipe, onBack, onSaveRecipe, isSaved, onAddToPlan, onLogMealNow, onAddToShoppingList, dictionary = [], userProfile }: { recipe: any, onBack: () => void, onSaveRecipe?: (r: any) => void, isSaved?: boolean, onAddToPlan?: (recipe: any, dayIndex: number, slot?: 'breakfast' | 'lunch' | 'dinner' | 'snack') => void, onLogMealNow?: (recipe: any, servings: number) => void, onAddToShoppingList?: (items: any[]) => void, dictionary?: any[], userProfile?: any }) {
   const { t } = useI18n();
   const { navigateTo } = useNavigation();
-  const { setSelectedCreatorId, communityPosts, savedRecipes, savedPosts, navigateToRecipe: navToRecipe, handleDeleteRecipe, handleDuplicateRecipe, handleMarkAsCooked, setRecipeToEdit, isPro, mergedVariants, userVariants } = useAppState();
+  const { setSelectedCreatorId, communityPosts, savedRecipes, savedPosts, navigateToRecipe: navToRecipe, handleDeleteRecipe, handleDuplicateRecipe, handleMarkAsCooked, setRecipeToEdit, isPro, mergedVariants, userVariants, miseEnPlaceEnabled, setMiseEnPlaceEnabled } = useAppState();
   // Ref for StickyCookCTA — points at the quick-actions row so the sticky
   // button hides when those buttons enter the viewport.
   const quickActionsRef = useRef<HTMLDivElement>(null);
@@ -45,6 +46,7 @@ export default function RecipeDetail({ recipe, onBack, onSaveRecipe, isSaved, on
   const [checkedIngredients, setCheckedIngredients] = useState<string[]>([]);
   const [servings, setServings] = useState(1);
   const [cookModeActive, setCookModeActive] = useState(false);
+  const [miseEnPlaceActive, setMiseEnPlaceActive] = useState(false);
   const [selectedFamily, setSelectedFamily] = useState<string[]>([]);
   const [showDaySelector, setShowDaySelector] = useState(false);
   const [extraIngredients, setExtraIngredients] = useState<any[]>([]);
@@ -291,8 +293,17 @@ export default function RecipeDetail({ recipe, onBack, onSaveRecipe, isSaved, on
 
   const s = servings * scaleFactor; // scale multiplier
 
-  const cookIngredients = allIngredientsToDisplay.map(i => ({ name: i.name, amount: Number(i.amount), unit: i.unit }));
+  const cookIngredients = allIngredientsToDisplay.map(i => ({ id: String(i.id), name: i.name, amount: Number(i.amount), unit: i.unit }));
   const cookSteps = data.steps?.length ? data.steps : instructions;
+
+  /** R5.3: Route through MiseEnPlaceScreen if setting enabled, else go straight to CookMode. */
+  const openCookMode = () => {
+    if (miseEnPlaceEnabled && cookIngredients.length > 0) {
+      setMiseEnPlaceActive(true);
+    } else {
+      setCookModeActive(true);
+    }
+  };
   const hasCreator = !!(data.publishedBy && data.publishedBy !== 'self' && CREATORS_MAP[data.publishedBy]);
   const hasAttribution = hasCreator || data.publishedBy === 'self' || !!data.forkedFrom;
 
@@ -309,6 +320,15 @@ export default function RecipeDetail({ recipe, onBack, onSaveRecipe, isSaved, on
 
   return (
     <>
+    {miseEnPlaceActive && (
+      <MiseEnPlaceScreen
+        recipeTitle={data.title}
+        ingredients={cookIngredients}
+        onStart={() => { setMiseEnPlaceActive(false); setCookModeActive(true); }}
+        onClose={() => setMiseEnPlaceActive(false)}
+        onDisable={() => setMiseEnPlaceEnabled(false)}
+      />
+    )}
     {cookModeActive && (
       <CookMode
         steps={cookSteps}
@@ -321,7 +341,7 @@ export default function RecipeDetail({ recipe, onBack, onSaveRecipe, isSaved, on
     {isVerified && (
       <StickyCookCTA
         label={(t.recipes as any).cookNow ?? 'Cocinar ahora'}
-        onClick={() => setCookModeActive(true)}
+        onClick={openCookMode}
         targetRef={quickActionsRef}
       />
     )}
@@ -786,7 +806,7 @@ export default function RecipeDetail({ recipe, onBack, onSaveRecipe, isSaved, on
               <span className="font-label text-micro uppercase tracking-widest text-on-surface-variant">
                 {cookSteps.length} {t.recipeDetail.stepsCount}
               </span>
-              <Button variant="brand" size="sm" onClick={() => setCookModeActive(true)}>
+              <Button variant="brand" size="sm" onClick={openCookMode}>
                 <ChefHat className="w-3.5 h-3.5 mr-1.5" /> {t.recipeDetail.cookMode}
               </Button>
             </div>

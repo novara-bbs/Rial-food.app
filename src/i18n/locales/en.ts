@@ -1686,6 +1686,23 @@ const en: Translations = {
     listCleared: 'Shopping list cleared',
     copiedToClipboard: 'List copied to clipboard',
   },
+  // CookMode R5 — voice read-aloud + per-step ingredient sub-list
+  cookMode: {
+    readAloud: 'Read aloud',
+    stopReading: 'Stop reading',
+    ingredientsForStep: 'Ingredients for this step',
+    viewStepPhoto: 'View step photo',
+    voiceUnavailable: 'Read aloud not available',
+  },
+  // MiseEnPlace R5 — pre-cook screen
+  miseEnPlace: {
+    title: 'Prepare your ingredients',
+    description: 'Have everything ready before you start. Check each ingredient as you prepare it.',
+    noIngredients: 'No specific ingredients',
+    startCooking: 'Start cooking',
+    startWithoutPrep: 'Start without prepping now',
+    dontShowAgain: 'Don\'t show this again',
+  },
   pantry: {
     title: 'My Pantry',
     description: 'Track what you have at home. RIAL will mark these ingredients as available when generating your shopping list.',

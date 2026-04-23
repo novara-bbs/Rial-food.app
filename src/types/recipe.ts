@@ -12,6 +12,12 @@ export interface RecipeStep {
   text: string;
   photoUrl?: string;
   timerMinutes?: number;
+  /**
+   * R5: IDs referencing dictionary `Ingredient.id` values that are relevant
+   * for this specific step. When present, CookMode renders a per-step
+   * ingredient sub-list with check-off instead of the global overlay.
+   */
+  ingredientIds?: string[];
 }
 
 export type VideoPlatform = 'youtube' | 'tiktok' | 'instagram' | 'vimeo' | 'other';

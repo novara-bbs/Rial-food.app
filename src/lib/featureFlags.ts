@@ -49,11 +49,22 @@ export interface FeatureFlags {
    * chips work even before the consumer branches land).
    */
   verifiedRecipePolish: boolean;
+  /**
+   * R5 — Voice read-aloud step text in CookMode. When `true` and the browser
+   * supports `speechSynthesis`, a Volume2 button appears in the CookMode header.
+   * Tap reads the current step text aloud; tap again cancels. Default `true`
+   * (opt-out via `VITE_FEATURE_COOK_MODE_VOICE=0`). The flag check is combined
+   * with a runtime `'speechSynthesis' in window` guard so it degrades silently
+   * on platforms that lack the API.
+   */
+  cookModeVoiceReadAloud: boolean;
 }
 
 export const featureFlags: FeatureFlags = Object.freeze({
   homeRingGrid: readEnvFlag('VITE_FEATURE_HOME_RING_GRID'),
   verifiedRecipePolish: readEnvFlag('VITE_FEATURE_VERIFIED_RECIPE_POLISH'),
+  // Default true — opt-out via VITE_FEATURE_COOK_MODE_VOICE=0
+  cookModeVoiceReadAloud: !readEnvFlag('VITE_FEATURE_COOK_MODE_VOICE_OFF'),
 });
 
 export default featureFlags;
