@@ -5,26 +5,26 @@
 > prunes this file back down. Everything below should answer: *what's the release line,
 > what's the quality baseline, what's the next move, what's broken?*
 
-Last updated: **2026-04-24** — R8.1+R8.3 shipped (`d702ad2` → `rial-food/main`).
+Last updated: **2026-04-24** — R5 shipped (`1436c97` → `rial-food/main`).
 
 ## Release snapshot
-- **Branch**: `main`, in sync with `rial-food/main` through `fd7f79c`.
-- **Last shipped**: `[1.5.77]` — R8.1 KcalBreakdownCard + onboarding kcal breakdown.
-  R8.3 trinario foodPreferences (migration + SettingsNutrition UI + all profileSlice
-  consumers). Convention test 13 assertions. i18n +11 keys × 2.
+- **Branch**: `main`, in sync with `rial-food/main` through `1436c97`.
+- **Last shipped**: `[1.5.78]` — R5 CookMode deeper: `IngredientCheckoff` (per-step
+  sub-list), `MiseEnPlaceScreen` (pre-cook prep screen), step-photo → MediaLightbox,
+  voice read-aloud (`speechSynthesis`). Convention test 29 assertions. i18n +11 keys × 2.
 - **Active plan**: `.claude/plans/revisa-todas-las-capturas-ancient-micali.md` (v2 re-sync).
-  R1 ✓, R2 ✓, R3 ✓, R8 ✓ (all 4 sub-tasks). **R4 + R6 CERRADO**.
-  Next: **R5** (CookMode deeper + mise-en-place + voice) → R7 (CreateRecipe paste-bulk).
+  R1 ✓, R2 ✓, R3 ✓, R5 ✓, R8 ✓. **R4 + R6 CERRADO**.
+  Next: **R7** (CreateRecipe paste-bulk + drag-drop + verified-creator).
 - **Release target**: `rial-food/main` (`novara-bbs/Rial-food.app`). Origin `rial-food`.
 - **Vercel project**: `rial.app.v1.5` (id `prj_t11VHYQjptazjUx7Y2hWLz0IDAjg`).
 - **Governance**: work directly on `main`. "continua" = push approval post green preflight.
 
-## Quality baseline (post-R8.1+R8.3, 2026-04-24)
+## Quality baseline (post-R5, 2026-04-24)
 - TypeScript: **0 errors** (`npx tsc --noEmit`)
-- Tests: **995/995** passing (62 files)
-- i18n symmetry: **1824** keys aligned ES ↔ EN
+- Tests: **1024/1024** passing (63 files)
+- i18n symmetry: **1835** keys aligned ES ↔ EN
 - Design-system lint: 0 errors (warnings pre-existing, unchanged)
-- Build main: **868.9 KB raw / 273.5 KB gzip** · `size:check` PASS
+- Build main: **870.0 KB raw / 273.9 KB gzip** · `size:check` PASS
 - Drift: `text-[Npx]` = **0**, SectionCard shape = **0**, INPUT_SURFACE_CLASSES 4 consumers,
   BUTTON_CARD_SURFACE_CLASSES 5 consumers.
 
@@ -67,10 +67,10 @@ Execute Q6 ONLY when ALL hold:
 - E2E green on last 3 commits to main
 
 ## Next sprint candidates (ordered, only pending)
-- ~~**R2**~~ ✓ `8f4e22c` · ~~**R3**~~ ✓ `761bc83` · ~~**R8**~~ ✓ `09f4326` / `d702ad2`
-- **R5** — CookMode deeper: per-step ingredient checkoff + step-photo inline + mise-en-place
-  pre-cook screen + voice read-aloud. ~3d.
+- ~~**R2**~~ ✓ `8f4e22c` · ~~**R3**~~ ✓ `761bc83` · ~~**R5**~~ ✓ `1436c97` · ~~**R8**~~ ✓
 - **R7** — CreateRecipe paste-bulk + drag-drop reorder + verified-creator path. ~2d.
+  Files: `ingredient-parser.ts` (new), `CreateRecipe.tsx`, `types/profile.ts` (`isVerifiedCreator`),
+  `package.json` (+`@dnd-kit/core`+`@dnd-kit/sortable`), `ingredient-parser.test.ts` (new).
 - **Q6** — Supabase integration (gated by feature-freeze gate above).
 - **Q15** — ICP-adaptive Progress widgets + `calculateStreak` sweep.
 - **Q17** — CSP header + contrast + responsive audit.
@@ -78,7 +78,7 @@ Execute Q6 ONLY when ALL hold:
 **Shipped sprints** (full detail in CHANGELOG.md): Q1-Q14, Q15.5 (design-system),
 Q16-B1, Q16-B2, Tab audit 2026-04-18, S3 tranche, Bevel PR 1-9, Q19 meal-taxonomy,
 Fase 1+2 multi-media recipes, Food Families P0-P16, R1 docs, R2 recipes editorial,
-**R3 Cocina collections**, **R8 INDYA adoption** (all 4: R8.1+R8.2+R8.3+R8.4).
+**R3 Cocina collections**, **R5 CookMode deeper**, **R8 INDYA adoption** (all 4).
 
 ## Repository compliance
 - `LICENSE`: Proprietary © 2026 RIAL FOOD WORLD S.L. Contact legal@rialfoodworld.com.

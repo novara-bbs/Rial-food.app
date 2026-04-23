@@ -1,5 +1,52 @@
 # RIAL App - Changelog
 
+## [1.5.78] - 2026-04-24
+
+### feat(recipes): R5 — CookMode deeper: MiseEnPlaceScreen + IngredientCheckoff + voice
+
+**R5.1 — Per-step ingredient sub-list (`IngredientCheckoff` new component):**
+`RecipeStep.ingredientIds?: string[]` — when a step has ingredient ids, `CookMode`
+renders a compact sub-card with `IngredientCheckoff` (tap-toggle strikethrough + opacity,
+transient session state). Falls back to the global overlay when ids are absent.
+`IngredientCheckoff` is reusable across `MiseEnPlaceScreen` (full list) and CookMode
+per-step view.
+
+**R5.2 — Step-photo thumbnail → MediaLightbox:** CookMode photos changed from static
+`<img>` to a `<button>` that opens the existing `MediaLightbox` full-screen viewer.
+Tap-to-zoom with keyboard/swipe navigation. Pattern: KS IMG_1148/1150.
+
+**R5.3 — MiseEnPlaceScreen (`MiseEnPlaceScreen` new component):** Pre-cook screen that
+intercepts "Cocinar" and shows the full ingredient list with check-off. Three CTAs:
+"Empezar a cocinar" (enabled when all checked, or at partial check), "Empezar sin
+preparar ahora" (skip), "No mostrar esto más" (sets `miseEnPlaceEnabled=false` in
+`localStorage` permanently). `AppStateContext` exposes `miseEnPlaceEnabled: boolean`
+(key `miseEnPlacePreCook`, default `true`). `RecipeDetail.openCookMode()` routes through
+MiseEnPlaceScreen when enabled + has ingredients; goes straight to CookMode otherwise.
+Replaces both CookMode-launch call sites (`StickyCookCTA` + steps "Cocinar" button).
+Pattern: KS mise-en-place.
+
+**R5.4 — Voice read-aloud step text:** `featureFlags.cookModeVoiceReadAloud` default
+`true` (opt-out via `VITE_FEATURE_COOK_MODE_VOICE_OFF=1`). `Volume2/VolumeX` button
+in CookMode header, rendered only when `'speechSynthesis' in window`. Tap → speaks
+`step.text` with `SpeechSynthesisUtterance` in `es-ES` or `en-US` per locale. Tap
+again → `cancel()`. Auto-cancels on step advance (via `currentRef` pattern — avoids
+the disabled `react-hooks/exhaustive-deps` rule). Cleans up on unmount. Pattern: KS
+wellness mode.
+
+**Convention test:** 29 assertions — component exports (×3), `RecipeStep.ingredientIds`
+type (×2), `featureFlags.cookModeVoiceReadAloud` (×2), `cookMode` i18n section 5 keys ×
+2 locales (×20), `miseEnPlace` i18n section 6 keys × 2 locales (×12 via forEach in
+combined groups).
+
+**i18n +11 keys × 2:** `cookMode` section (5: readAloud / stopReading /
+ingredientsForStep / viewStepPhoto / voiceUnavailable) + `miseEnPlace` section (6:
+title / description / noIngredients / startCooking / startWithoutPrep / dontShowAgain).
+
+**Quality baseline:** tsc 0 · lint 0 errors · **1024/1024 tests** (63 files) ·
+**1835 keys** symmetric ES ↔ EN · build **870.0 KB raw / 273.9 KB gzip** · PASS.
+
+---
+
 ## [1.5.77] - 2026-04-24
 
 ### feat(profile): R8.1+R8.3 INDYA kcal breakdown + trinario food preferences
