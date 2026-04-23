@@ -218,6 +218,8 @@ interface UserProfile {
   mode?: 'simple' | 'advanced';
   /** Avatar URL */
   avatar?: string;
+  /** Free-form private notes (allergies, supplements, medication). Max 500 chars. R8.4. */
+  personalNotes?: string;
 }
 
 interface DailyMacros {

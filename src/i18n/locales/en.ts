@@ -633,6 +633,7 @@ const en: Translations = {
     processing: 'Processing...',
     startRialPlus: 'Start RIAL+',
     cancelAnytime: 'Cancel anytime · No commitments · Secure data',
+    monthlyEquiv: 'Works out to {n}€/month',
     welcomePro: 'Welcome to RIAL+! Enjoy all features.',
     purchaseUnavailable: 'Product unavailable. Please try again later.',
     purchaseFailed: 'Purchase failed. Please try again.',
@@ -810,6 +811,10 @@ const en: Translations = {
     intoleranceFish: 'Fish',
     intoleranceShellfish: 'Shellfish',
     intoleranceSoy: 'Soy',
+    // Personal notes (R8.4)
+    personalNotesTitle: 'Your notes (optional)',
+    personalNotesPlaceholder: 'Specific allergies, supplements, medication or other details relevant to your plan',
+    personalNotesDisclaimer: 'These notes are private and are not shared with external services',
     // Social links
     socialLinksTitle: 'Social Links',
     instagramUsername: 'Instagram username',

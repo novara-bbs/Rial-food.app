@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { User, Users, Target, Sparkles, Plus, Trash2, Crown, Camera, Globe } from 'lucide-react';
+import { User, Users, Target, Sparkles, Plus, Trash2, Crown, Camera, Globe, FileText } from 'lucide-react';
 import { Switch } from '@/components/ui/switch';
 import { useI18n } from '../../../../i18n';
 import { useAppState } from '../../../../contexts/AppStateContext';
@@ -362,6 +362,29 @@ export default function SettingsProfile({ userProfile, setUserProfile, setDailyM
               className={`${INPUT_SURFACE_CLASSES} w-full px-3 py-2 text-sm text-on-surface outline-none focus:border-primary`} />
           </div>
         ))}
+      </SectionCard>
+
+      {/* Personal Notes — R8.4 INDYA pattern */}
+      <SectionCard
+        icon={<FileText className="w-4 h-4 text-primary" aria-hidden="true" />}
+        title={(t.settings as any).personalNotesTitle ?? 'Tus notas (opcional)'}
+      >
+        <textarea
+          value={userProfile?.personalNotes ?? ''}
+          onChange={(e) => updateBiometric('personalNotes', e.target.value.slice(0, 500))}
+          placeholder={(t.settings as any).personalNotesPlaceholder ?? 'Alergias específicas, suplementos, medicación u otros detalles relevantes para tu plan'}
+          rows={4}
+          maxLength={500}
+          className={`${INPUT_SURFACE_CLASSES} w-full px-3 py-2 text-sm text-on-surface outline-none focus:border-primary resize-none`}
+        />
+        <div className="flex items-start gap-2 mt-2">
+          <p className="flex-1 font-label text-micro text-on-surface-variant">
+            {(t.settings as any).personalNotesDisclaimer ?? 'Estas notas son privadas y no se comparten con servicios externos'}
+          </p>
+          <span className="font-label text-micro text-on-surface-variant shrink-0">
+            {(userProfile?.personalNotes ?? '').length}/500
+          </span>
+        </div>
       </SectionCard>
     </>
   );

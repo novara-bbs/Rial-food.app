@@ -9,8 +9,15 @@ import PageHeader from '../../../components/patterns/PageHeader';
 import { getOfferings, purchasePackage, restorePurchases, type OfferingInfo } from '../../../lib/purchases';
 import { isNative } from '../../../lib/platform';
 
+/** Parse numeric value from price strings like "39,99€" / "39,99 €" / "39.99€". */
+function parseEurPrice(str: string): number {
+  const cleaned = str.replace(/[€$\s]/g, '').replace(',', '.');
+  const val = parseFloat(cleaned);
+  return isNaN(val) ? 0 : val;
+}
+
 export default function RialPlus({ onBack }: { onBack: () => void }) {
-  const { t } = useI18n();
+  const { t, locale } = useI18n();
   const f = t.rialPlus.screen;
   const p = t.rialPlus.plans;
 
@@ -51,6 +58,12 @@ export default function RialPlus({ onBack }: { onBack: () => void }) {
     }
     return plan === 'monthly' ? p.monthlyPrice : p.yearlyPrice;
   };
+
+  // Monthly-equivalent for yearly plan (INDYA R8.2 pattern)
+  const yearlyPriceNum = parseEurPrice(getPrice('yearly'));
+  const monthlyEquivStr = yearlyPriceNum > 0
+    ? (yearlyPriceNum / 12).toFixed(2).replace('.', locale === 'es' ? ',' : '.')
+    : null;
 
   const handleUpgrade = async () => {
     setIsUpgrading(true);
@@ -162,6 +175,13 @@ export default function RialPlus({ onBack }: { onBack: () => void }) {
               <p className="font-headline font-bold text-sm uppercase text-tertiary">{plan.label}</p>
               <p className="font-headline font-black text-2xl text-primary mt-1">{plan.price}</p>
               <p className="font-label text-micro uppercase tracking-widest text-on-surface-variant">{plan.period}</p>
+              {plan.id === 'yearly' && monthlyEquivStr && (
+                <p className="font-label text-micro text-on-surface-variant mt-0.5">
+                  {(t.rialPlus as any).monthlyEquiv
+                    ? (t.rialPlus as any).monthlyEquiv.replace('{n}', monthlyEquivStr)
+                    : locale === 'es' ? `Te sale a ${monthlyEquivStr}€/mes` : `Works out to ${monthlyEquivStr}€/month`}
+                </p>
+              )}
               {selectedPlan === plan.id && (
                 <div className="absolute top-3 right-3 w-5 h-5 bg-primary rounded-full flex items-center justify-center" aria-hidden="true">
                   <Check className="w-3 h-3 text-on-primary" />

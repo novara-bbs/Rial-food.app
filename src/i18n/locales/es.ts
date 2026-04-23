@@ -652,6 +652,7 @@ const es = {
     processing: 'Procesando...',
     startRialPlus: 'Empezar RIAL+',
     cancelAnytime: 'Cancela cuando quieras · Sin compromisos · Datos seguros',
+    monthlyEquiv: 'Te sale a {n}€/mes',
     welcomePro: '¡Bienvenido a RIAL+! Disfruta de todas las funciones.',
     purchaseUnavailable: 'Producto no disponible. Inténtalo más tarde.',
     purchaseFailed: 'Compra fallida. Inténtalo de nuevo.',
@@ -831,6 +832,10 @@ const es = {
     intoleranceFish: 'Pescado',
     intoleranceShellfish: 'Marisco',
     intoleranceSoy: 'Soja',
+    // Personal notes (R8.4)
+    personalNotesTitle: 'Tus notas (opcional)',
+    personalNotesPlaceholder: 'Alergias específicas, suplementos, medicación u otros detalles relevantes para tu plan',
+    personalNotesDisclaimer: 'Estas notas son privadas y no se comparten con servicios externos',
     // Social links
     socialLinksTitle: 'Redes Sociales',
     instagramUsername: 'Usuario de Instagram',
