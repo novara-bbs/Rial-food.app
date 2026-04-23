@@ -29,7 +29,8 @@ export const SEED_VERSIONS = {
   // v2 → 46 recipes (sprint-q18 seed data overhaul, 2026-04-16).
   // v3 → meal-taxonomy migration: `mealType` → `suitableFor[]` (Q19).
   // v4 → Fase 1 multi-media: `photos[]` + `videoUrl` on demo recipes (2026-04-17).
-  savedRecipes: 4,
+  // v5 → verified tier + cookedAt[] (R2 plan v2, 2026-04-23). Strategy `preserve-user`.
+  savedRecipes: 5,
   mealPlan: 1,
   shoppingList: 1,
   // v1 → 3 posts. v2 → 6 posts with progress types (sprint-q18).

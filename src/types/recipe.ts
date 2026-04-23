@@ -73,4 +73,23 @@ export interface Recipe {
    * of pre-Q19 user data; migrated on read via `getRecipeSlots()`.
    */
   mealType?: string;
+  /**
+   * Editorial tier marker (R2 plan v2). When set, the recipe gets the
+   * verified-treatment branch in `RecipeDetail` (hero bleed, serif title,
+   * sticky CTA) behind the `featureFlags.verifiedRecipePolish` gate.
+   *
+   * - `'rial'`  → curated by the RIAL nutrition team (default for seed heroes).
+   * - `'creator'` → published by a user with `isVerifiedCreator: true` flag
+   *                 (R7 sprint wires that surface; gate stays `false` until
+   *                 R2.3 ships the consumer).
+   * - `null` / `undefined` → user-saved or generic recipe (default tier).
+   */
+  verified?: 'rial' | 'creator' | null;
+  /**
+   * ISO timestamps of each time the user marked this recipe as cooked
+   * (NYT Cooking pattern — R2 plan v2). Always append, never mutate.
+   * Used by Cocina filter "Ya cocinadas" and by the badge "Cocinada N veces".
+   * Undefined/empty means never cooked.
+   */
+  cookedAt?: string[];
 }

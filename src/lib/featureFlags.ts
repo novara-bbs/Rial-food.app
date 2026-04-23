@@ -36,10 +36,24 @@ export interface FeatureFlags {
    * via the Progress tab). When `false`, Home renders exactly as before.
    */
   homeRingGrid: boolean;
+  /**
+   * R2 plan v2 — verified recipes editorial polish. When `true`, recipes
+   * with `verified: 'rial' | 'creator'` render the editorial branch in
+   * `RecipeDetail` (hero bleed, Fraunces serif title, `AuthorAttributionCard`,
+   * `TimeTileComposite` arcs, `StickyCookCTA`). When `false`, every recipe
+   * renders with the classic layout regardless of its `verified` field.
+   *
+   * Escape hatch: `VITE_FEATURE_VERIFIED_RECIPE_POLISH=1` in `.env.local`.
+   * The `Recipe.cookedAt[]` + "Mark as Cooked" badge ship universally —
+   * they do NOT depend on this flag (data is always collected so R3 filter
+   * chips work even before the consumer branches land).
+   */
+  verifiedRecipePolish: boolean;
 }
 
 export const featureFlags: FeatureFlags = Object.freeze({
   homeRingGrid: readEnvFlag('VITE_FEATURE_HOME_RING_GRID'),
+  verifiedRecipePolish: readEnvFlag('VITE_FEATURE_VERIFIED_RECIPE_POLISH'),
 });
 
 export default featureFlags;
