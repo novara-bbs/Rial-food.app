@@ -21,6 +21,12 @@
 - Use `docs/ai/handoffs.md` for partial task transfer, not as a permanent design document.
 - Avoid duplicating large sections across `AGENTS.md`, `CLAUDE.md`, `GEMINI.md`, and IDE rules.
 
+## Exploration rules (token discipline)
+- **Grep/Glob before Read.** For any exploration task (find a symbol, locate a pattern, count occurrences, check for drift), use `Grep` or `Glob` first. Only use `Read` when you already know the file path AND the line range you need.
+- **Never read files > 500 lines whole** unless you're rewriting them end-to-end. Use `Read` with `offset` + `limit`, or `Grep` with `-C` for context windows.
+- **Prefer a single agent call over a chain of Reads** when the task spans 3+ files — spawn an `Explore` or `explore-rial` subagent with a focused prompt and ask for a short report.
+- **Do not re-read files loaded by the SessionStart import chain** (`AGENTS.md`, `docs/ai/project.md`, `docs/ai/workflow.md`, `docs/ai/state.md`, `docs/ai/reference.md`). They're already in context.
+
 ## Verification rules
 - During iteration, use `npx tsc --noEmit` as the cheapest guard.
 - Before handing off substantial changes, prefer:
@@ -48,7 +54,7 @@
 - One agent should own the final integration and verification pass.
 - Durable shared decisions go to `docs/ai/state.md` or `CHANGELOG.md`.
 - Temporary task transfer goes to `docs/ai/handoffs.md`.
-- Use `docs/ai/skills.md` to map capabilities between tools instead of rewriting instructions per IDE.
+- Use `docs/ai/reference.md` to map capabilities between tools instead of rewriting instructions per IDE.
 
 ## Scope and safety
 - Keep release work on the root repo unless the user explicitly switches to another worktree.

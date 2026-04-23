@@ -1,7 +1,7 @@
 # Using Claude Code Skills Efficiently with RIAL
 
 This file is the Claude-specific companion to the shared multi-agent docs in `AGENTS.md` and `docs/ai/`.
-Use `docs/ai/skills.md` for the cross-tool view; use this file for Claude-oriented workflows and shortcuts.
+Use `docs/ai/reference.md` §1 for the cross-tool view; use this file for Claude-oriented workflows and shortcuts.
 
 ## Available Skills (invoke with /)
 

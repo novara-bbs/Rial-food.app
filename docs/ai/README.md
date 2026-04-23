@@ -14,20 +14,15 @@ It is intentionally separate from product prompts or runtime AI logic.
 2. `docs/ai/project.md`
 3. `docs/ai/workflow.md`
 4. `docs/ai/state.md`
-5. Read the task-specific file that matters next:
-   - `skills.md`
-   - `handoffs.md`
-   - `boundaries.md`
-   - `compatibility.md`
+5. `docs/ai/reference.md` (skills + tool compatibility + dev-AI vs product-AI boundary)
+6. `docs/ai/handoffs.md` — only when picking up a partial task
 
 ## File guide
 - `project.md`: stable system map and deployment context
-- `workflow.md`: how we work, verify, document, and coordinate
-- `state.md`: current snapshot of the release line and active risks
-- `skills.md`: repo skills and cross-tool equivalents
-- `handoffs.md`: compact handoff format for partial memory between agents
-- `boundaries.md`: development AI versus product AI separation
-- `compatibility.md`: adapter strategy by tool or IDE
+- `workflow.md`: how we work, verify, document, and coordinate (+ exploration rules for token discipline)
+- `state.md`: current snapshot of the release line and active risks — keep ≤ 150 lines
+- `reference.md`: skills, tool adapters, dev-AI vs product-AI boundary (stable)
+- `handoffs.md`: compact handoff format for partial memory between agents (transactional)
 
 ## Maintenance rules
 - Put durable repo knowledge here, not in private local memory.

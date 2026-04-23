@@ -76,10 +76,8 @@ Product AI flows must stay isolated behind app prompts, runtime safeguards, cost
 - `docs/ai/project.md`: stable project map, architecture, commands, deployment context
 - `docs/ai/workflow.md`: collaboration style, validation, documentation rules, task routing
 - `docs/ai/state.md`: current release line, recent changes, active risks, next updates
-- `docs/ai/skills.md`: local skills and cross-tool equivalents
-- `docs/ai/handoffs.md`: partial-memory handoff template and log
-- `docs/ai/boundaries.md`: hard boundary between dev AI and product AI
-- `docs/ai/compatibility.md`: how this repo maps to Claude, Gemini, Cursor, Windsurf, Codex, and local models
+- `docs/ai/reference.md`: skills, tool adapters (Claude/Gemini/Cursor/Windsurf/Codex/local), dev-AI vs product-AI boundary
+- `docs/ai/handoffs.md`: partial-memory handoff template and log (transactional — not auto-loaded)
 
 ## Tool-specific notes
 - Claude Code reads `CLAUDE.md`, so `CLAUDE.md` imports this file and the shared docs.

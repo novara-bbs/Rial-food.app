@@ -19,7 +19,7 @@ Then load the deeper file that matches the task:
 - Architecture or system mapping -> `docs/ai/project.md`
 - Workflow or release process -> `docs/ai/workflow.md`
 - Multi-agent coordination -> `docs/ai/handoffs.md`
-- AI scope questions -> `docs/ai/boundaries.md`
+- Skills, tool adapters, AI scope questions -> `docs/ai/reference.md`
 
 ## Step 2: Check project health
 

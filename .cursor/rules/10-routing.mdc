@@ -6,4 +6,4 @@ description: Use this rule when deciding how to split RIAL work across explore, 
 - Split work in parallel only when file ownership is clearly separated.
 - Durable decisions belong in `docs/ai/state.md` or `CHANGELOG.md`.
 - Task transfer belongs in `docs/ai/handoffs.md`.
-- Use `docs/ai/skills.md` to map capabilities across tools before inventing tool-specific process.
+- Use `docs/ai/reference.md` §1 to map capabilities across tools before inventing tool-specific process.

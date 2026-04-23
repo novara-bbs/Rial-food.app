@@ -69,10 +69,8 @@ docs/
 | `docs/ai/project.md` | Stable project architecture and deployment map |
 | `docs/ai/workflow.md` | Collaboration, verification, and documentation workflow |
 | `docs/ai/state.md` | Current release snapshot and active risks |
-| `docs/ai/skills.md` | Repo skills and cross-tool capability mapping |
+| `docs/ai/reference.md` | Skills, tool compatibility, dev-AI vs product-AI boundary (consolidated) |
 | `docs/ai/handoffs.md` | Partial-memory handoff template and task log |
-| `docs/ai/boundaries.md` | Separation between development AI and product AI |
-| `docs/ai/compatibility.md` | Tool compatibility for Codex, Claude, Gemini, Cursor, Windsurf, and local models |
 | `docs/ARCHITECTURE.md` | System architecture reference |
 | `docs/CONTRIBUTING.md` | Development workflow and contribution checklist |
 | `docs/RULES.md` | Business rules and product logic |
