@@ -1,5 +1,42 @@
 # RIAL App - Changelog
 
+## [1.5.75] - 2026-04-23
+
+### feat(recipes): R2.1 — Verified tier + cookedAt[] data-model foundation (R2 plan v2)
+
+Zero-UI, zero-risk data layer that unlocks the full R2 editorial sprint. Pre-existing
+seed entries get the `verified: 'rial'` marker pushed via seedVersion v4→v5
+(`preserve-user` strategy — user-owned recipes untouched).
+
+**New fields on `Recipe`:**
+- `verified?: 'rial' | 'creator' | null` — editorial tier marker. `'rial'` = RIAL nutrition
+  team curated. `'creator'` = user with `isVerifiedCreator: true` (R7 wires the UI).
+  `null` / `undefined` = user-saved or generic (default, unchanged behaviour).
+- `cookedAt?: string[]` — append-only array of ISO timestamps, each = one "Mark as Cooked"
+  tap (NYT Cooking pattern). Used by R2.3 badge + R2.4 / R3 filter chips.
+
+**8 seed heroes marked `verified: 'rial'`** (balanced meal-slot coverage):
+Bol de Salmón Vibrante (#1, L/D) · Bol de Pollo y Quinoa (#2, L/D) · Bol de Avena
+Energético (#3, B) · Curry Suave de Lentejas (#4, L/D) · Tortitas de Avena y Plátano (#5, B)
+· Wrap de Pavo y Aguacate (#6, L/D) · Batido de Proteína y Banana (#7, B) · Chili con
+Carne Fit (#8, L/D). B = breakfast, L/D = lunch+dinner.
+
+**Feature flag:** `featureFlags.verifiedRecipePolish` (default `false`,
+`VITE_FEATURE_VERIFIED_RECIPE_POLISH`). Data always collected; editorial UI branches
+off this gate from R2.3 onwards. `cookedAt` persistence is NOT gated.
+
+**Convention test:** `src/test/conventions/recipe-verified.test.ts` — 11 asserts locking
+type shape, hero count, chef-only invariant, multi-slot coverage, flag posture,
+seedVersion floor (≥ 5).
+
+**Quality baseline post-R2.1:**
+- TypeScript: 0 errors
+- Tests: 849 → **969/969** passing (60/60 files) · +11 new in `recipe-verified.test.ts`
+- i18n: 1782 keys aligned (no change — i18n in R2.6)
+- Build main: 862.6 KB raw / 271.4 KB gzip (unchanged — data-model only, no UI)
+
+---
+
 ## [1.5.74] - 2026-04-21
 
 ### feat(food): P16 — Seed-variant inline log shortcut (macros curadas RIAL > OFF cuando user confirma)
