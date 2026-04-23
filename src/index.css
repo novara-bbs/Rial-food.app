@@ -1,4 +1,9 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap');
+/* R2.5 — Fraunces variable serif for verified-recipe editorial tier.
+   Only loaded by the browser when text with font-serif is rendered;
+   Tailwind's tree-shaking + Google Fonts' conditional delivery keep it
+   off the critical path for non-verified recipes. */
+@import url('https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..900;1,9..144,300..900&display=swap');
 @import "tailwindcss";
 @import "tw-animate-css";
 @plugin "@tailwindcss/typography";
@@ -74,6 +79,8 @@
   --font-headline: "Space Grotesk", sans-serif;
   --font-body: "Inter", sans-serif;
   --font-label: "JetBrains Mono", ui-monospace, monospace;
+  /* R2.5 — editorial serif for verified-recipe titles */
+  --font-serif: "Fraunces", ui-serif, Georgia, serif;
 
   /* Typography scale — ADR-002. Semantic names, fixed pixel values.
      Use these via `text-{token}` utilities (e.g. `text-body`, `text-label`).

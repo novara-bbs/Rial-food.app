@@ -85,6 +85,9 @@ export default function Cocina({ onAddMeal, onCreateRecipe, onNavigateToRecipe, 
     { id: 'imported', label: t.recipes.imported, count: scoredRecipes.filter(r => r.tag === 'IMPORTADA').length },
     { id: 'quick', label: t.discovery.catQuick, count: quickCount, icon: Zap },
     { id: 'high-protein', label: t.recipes.highProtein, count: scoredRecipes.filter(r => r.pro >= 30).length },
+    // R2.4 — verified tier + cookedAt filters
+    { id: 'verified', label: (t.recipes as any).filterVerified ?? 'Verificadas', count: scoredRecipes.filter(r => r.verified != null).length },
+    { id: 'cooked', label: (t.recipes as any).filterCooked ?? 'Ya cocinadas', count: scoredRecipes.filter(r => r.cookedAt?.length > 0).length },
   ];
 
   // Combined filters: slot (primary) + collection (secondary) + search.
@@ -101,6 +104,8 @@ export default function Cocina({ onAddMeal, onCreateRecipe, onNavigateToRecipe, 
     if (activeCollection === 'imported') list = list.filter(r => r.tag === 'IMPORTADA');
     if (activeCollection === 'quick') list = list.filter(r => r.totalTime > 0 && r.totalTime <= 20);
     if (activeCollection === 'high-protein') list = list.filter(r => r.pro >= 30);
+    if (activeCollection === 'verified') list = list.filter(r => r.verified != null);
+    if (activeCollection === 'cooked') list = list.filter(r => r.cookedAt?.length > 0);
     return list;
   }, [scoredRecipes, activeMealType, searchQuery, activeCollection]);
 

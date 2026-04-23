@@ -27,6 +27,9 @@ import SelectList from '@/components/SelectList';
 import FamilyCard from '@/features/food/components/FamilyCard';
 import VariantRow from '@/features/food/components/VariantRow';
 import MacroDelta from '@/features/food/components/MacroDelta';
+import TimeTileComposite from '@/features/recipes/components/TimeTileComposite';
+import AuthorAttributionCard from '@/features/recipes/components/AuthorAttributionCard';
+import StickyCookCTA from '@/features/recipes/components/StickyCookCTA';
 
 import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
@@ -81,5 +84,11 @@ describe('Primitives — canonical exports (ADR-001)', () => {
     expect(FamilyCard).toBeTruthy();
     expect(VariantRow).toBeTruthy();
     expect(MacroDelta).toBeTruthy();
+  });
+
+  it('exports the recipe editorial primitives (R2.2)', () => {
+    expect(TimeTileComposite).toBeTruthy();
+    expect(AuthorAttributionCard).toBeTruthy();
+    expect(StickyCookCTA).toBeTruthy();
   });
 });

@@ -1,6 +1,10 @@
 import { ArrowLeft, Clock, Flame, Activity, Minus, CheckCircle2, Circle, Plus, MessageSquare, Bookmark, X, Users, ShoppingCart, ChefHat, UtensilsCrossed, Target, Share2, ExternalLink, Pencil, Trash2, GitFork, Crown, RefreshCw } from 'lucide-react';
+import featureFlags from '../../../lib/featureFlags';
+import TimeTileComposite from '../components/TimeTileComposite';
+import AuthorAttributionCard from '../components/AuthorAttributionCard';
+import StickyCookCTA from '../components/StickyCookCTA';
 import SearchInput from '../../../components/patterns/SearchInput';
-import { useState, useMemo, useEffect } from 'react';
+import { useState, useMemo, useEffect, useRef } from 'react';
 import CookMode from '../components/CookMode';
 import HeroGallery from '../components/HeroGallery';
 import MediaLightbox from '../components/MediaLightbox';
@@ -32,7 +36,10 @@ import ConfirmDialog from '../../../components/ConfirmDialog';
 export default function RecipeDetail({ recipe, onBack, onSaveRecipe, isSaved, onAddToPlan, onLogMealNow, onAddToShoppingList, dictionary = [], userProfile }: { recipe: any, onBack: () => void, onSaveRecipe?: (r: any) => void, isSaved?: boolean, onAddToPlan?: (recipe: any, dayIndex: number, slot?: 'breakfast' | 'lunch' | 'dinner' | 'snack') => void, onLogMealNow?: (recipe: any, servings: number) => void, onAddToShoppingList?: (items: any[]) => void, dictionary?: any[], userProfile?: any }) {
   const { t } = useI18n();
   const { navigateTo } = useNavigation();
-  const { setSelectedCreatorId, communityPosts, savedRecipes, savedPosts, navigateToRecipe: navToRecipe, handleDeleteRecipe, handleDuplicateRecipe, setRecipeToEdit, isPro, mergedVariants, userVariants } = useAppState();
+  const { setSelectedCreatorId, communityPosts, savedRecipes, savedPosts, navigateToRecipe: navToRecipe, handleDeleteRecipe, handleDuplicateRecipe, handleMarkAsCooked, setRecipeToEdit, isPro, mergedVariants, userVariants } = useAppState();
+  // Ref for StickyCookCTA — points at the quick-actions row so the sticky
+  // button hides when those buttons enter the viewport.
+  const quickActionsRef = useRef<HTMLDivElement>(null);
   const [followedCreators, setFollowedCreators] = useLocalStorageState<string[]>('followedCreators', []);
   const [checkedIngredients, setCheckedIngredients] = useState<string[]>([]);
   const [servings, setServings] = useState(1);
@@ -289,6 +296,12 @@ export default function RecipeDetail({ recipe, onBack, onSaveRecipe, isSaved, on
     ? data.photos
     : [data.img || data.image].filter(Boolean);
 
+  // R2.3 — editorial tier flags.
+  // `isVerified` gates the visual polish branch (hero bleed, serif, primitives).
+  // `cookedCount` drives the universal badge — not flag-gated.
+  const isVerified = data.verified != null && featureFlags.verifiedRecipePolish;
+  const cookedCount: number = data.cookedAt?.length ?? 0;
+
   return (
     <>
     {cookModeActive && (
@@ -299,16 +312,25 @@ export default function RecipeDetail({ recipe, onBack, onSaveRecipe, isSaved, on
         onClose={() => setCookModeActive(false)}
       />
     )}
+    {/* StickyCookCTA — only on verified recipes (flag-gated), hides when quick-actions visible */}
+    {isVerified && (
+      <StickyCookCTA
+        label={(t.recipes as any).cookNow ?? 'Cocinar ahora'}
+        onClick={() => setCookModeActive(true)}
+        targetRef={quickActionsRef}
+      />
+    )}
     <div>
       {/* ══ Hero Image / Gallery ══ */}
-      <div className="relative h-56 md:h-72 w-full overflow-hidden">
+      {/* verified: taller bleed hero (65 vh) — classic: compact card (h-56/h-72) */}
+      <div className={`relative w-full overflow-hidden ${isVerified ? 'h-[65vh] max-h-[520px]' : 'h-56 md:h-72'}`}>
         <HeroGallery
           photos={galleryPhotos}
           alt={data.title}
           onTap={galleryPhotos.length > 0 ? (idx) => setLightboxIdx(idx) : undefined}
           className="absolute inset-0"
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-background via-background/30 to-transparent pointer-events-none" />
+        <div className="absolute inset-0 bg-gradient-to-t from-background via-background/40 to-transparent pointer-events-none" />
 
         <button type="button" onClick={onBack} aria-label={t.common.back} className="absolute top-4 left-4 w-10 h-10 bg-surface/80 backdrop-blur-md rounded-full flex items-center justify-center text-tertiary hover:bg-primary hover:text-on-primary transition-colors z-10">
           <ArrowLeft className="w-5 h-5" />
@@ -338,14 +360,41 @@ export default function RecipeDetail({ recipe, onBack, onSaveRecipe, isSaved, on
 
         <div className="absolute bottom-4 left-6 right-6">
           <Badge className="mb-2">{data.tag}</Badge>
-          <h2 className="font-headline text-2xl md:text-3xl font-bold tracking-tighter uppercase text-tertiary leading-tight">{data.title}</h2>
-          <div className="flex items-center gap-3 mt-1.5 text-on-surface-variant text-xs font-label uppercase tracking-widest">
-            <span className="flex items-center gap-1"><Clock className="w-3.5 h-3.5" /> {data.prepTime} + {data.cookTime}</span>
-            <span>•</span>
-            <span>{data.difficulty}</span>
-          </div>
+          {/* verified: Fraunces serif title via inline style override (ADR-011 font-headline preserved) */}
+          <h2
+            className="font-headline text-2xl md:text-3xl font-bold tracking-tighter leading-tight text-tertiary uppercase"
+            style={isVerified ? { fontFamily: 'var(--font-serif)', textTransform: 'none' } : undefined}
+          >
+            {data.title}
+          </h2>
+          {/* Classic time row — hidden for verified (replaced by TimeTileComposite below) */}
+          {!isVerified && (
+            <div className="flex items-center gap-3 mt-1.5 text-on-surface-variant text-xs font-label uppercase tracking-widest">
+              <span className="flex items-center gap-1"><Clock className="w-3.5 h-3.5" /> {data.prepTime} + {data.cookTime}</span>
+              <span>•</span>
+              <span>{data.difficulty}</span>
+            </div>
+          )}
         </div>
       </div>
+
+      {/* ══ Verified editorial additions (flag-gated) ══ */}
+      {isVerified && (
+        <>
+          {/* Time breakdown tiles (replaces the inline clock row) */}
+          <div className="px-6 pt-4 max-w-4xl mx-auto">
+            <TimeTileComposite prepTime={data.prepTime} cookTime={data.cookTime} />
+          </div>
+          {/* AuthorAttributionCard — RIAL Verified or Creator */}
+          <div className="px-6 mt-3 max-w-4xl mx-auto">
+            <AuthorAttributionCard
+              variant={data.verified === 'creator' ? 'creator' : 'card'}
+              name={data.publishedByName ?? (t.recipes as any).verifiedRial}
+              role={(t.recipes as any).verifiedRial ?? 'Equipo RIAL'}
+            />
+          </div>
+        </>
+      )}
 
       {/* ══ Creator attribution ══ */}
       {data.publishedBy && data.publishedBy !== 'self' && (() => {
@@ -545,7 +594,7 @@ export default function RecipeDetail({ recipe, onBack, onSaveRecipe, isSaved, on
             />
 
             {/* Quick actions — primary */}
-            <div className="flex flex-col sm:flex-row gap-3">
+            <div ref={quickActionsRef} className="flex flex-col sm:flex-row gap-3">
               <Button variant="brand" className="flex-1" onClick={() => onLogMealNow && onLogMealNow(getModifiedRecipe(), servings)}>
                 <UtensilsCrossed className="w-4 h-4 mr-2" /> {t.recipeDetail.logMeal}
               </Button>
@@ -553,6 +602,25 @@ export default function RecipeDetail({ recipe, onBack, onSaveRecipe, isSaved, on
                 {t.recipeDetail.addToPlan}
               </Button>
             </div>
+
+            {/* Mark as Cooked — universal, NYT Cooking pattern (R2.3) */}
+            <button
+              type="button"
+              onClick={() => handleMarkAsCooked(getModifiedRecipe())}
+              className="w-full flex items-center justify-between min-h-11 px-4 py-3 bg-surface-container-low rounded-sm border border-outline-variant/20 hover:border-primary/30 transition-colors group"
+            >
+              <div className="flex items-center gap-3">
+                <ChefHat className="w-4 h-4 text-on-surface-variant group-hover:text-primary transition-colors" />
+                <span className="font-headline font-bold text-xs text-tertiary uppercase tracking-widest">
+                  {(t.recipes as any).markAsCooked ?? 'Marcar como cocinada'}
+                </span>
+              </div>
+              {cookedCount > 0 && (
+                <span className="font-label text-micro uppercase tracking-widest text-primary">
+                  {((t.recipes as any).cookedNTimes ?? 'Cocinada {n} veces').replace('{n}', String(cookedCount))}
+                </span>
+              )}
+            </button>
 
             {/* Versionar — secondary action, Pro-only */}
             {data.publishedBy !== 'self' && (

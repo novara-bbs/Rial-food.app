@@ -293,6 +293,17 @@ const en: Translations = {
       private: 'Private (only you)',
       public: 'Public (community can see)',
     },
+    // R2.2–R2.6 — verified tier + Mark as Cooked
+    verifiedRial: 'RIAL Verified',
+    verifiedCreator: 'Verified Creator',
+    restTime: 'Rest',
+    cookNow: 'Cook now',
+    markAsCooked: 'Mark as cooked',
+    unmarkCooked: 'Unmark',
+    cookedNTimes: 'Cooked {n} times',
+    savedOn: 'Saved on {date}',
+    filterVerified: 'Verified',
+    filterCooked: 'Cooked',
   },
   importUrl: {
     title: 'Import recipe',

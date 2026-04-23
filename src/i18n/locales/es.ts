@@ -299,6 +299,17 @@ const es = {
       private: 'Privada (solo tú)',
       public: 'Pública (comunidad puede ver)',
     },
+    // R2.2–R2.6 — verified tier + Mark as Cooked
+    verifiedRial: 'Verificada RIAL',
+    verifiedCreator: 'Creador verificado',
+    restTime: 'Reposo',
+    cookNow: 'Cocinar ahora',
+    markAsCooked: 'Marcar como cocinada',
+    unmarkCooked: 'Desmarcar',
+    cookedNTimes: 'Cocinada {n} veces',
+    savedOn: 'Guardada el {date}',
+    filterVerified: 'Verificadas',
+    filterCooked: 'Ya cocinadas',
   },
   // Import URL
   importUrl: {

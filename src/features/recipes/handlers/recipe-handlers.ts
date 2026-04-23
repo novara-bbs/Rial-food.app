@@ -195,3 +195,39 @@ export function createHandleImportRecipe(deps: Pick<RecipeHandlerDeps, 'setSaved
     deps.navigateTo('cocina');
   };
 }
+
+/**
+ * Mark a recipe as cooked — R2 plan v2 (NYT Cooking pattern).
+ *
+ * Appends the current ISO timestamp to `recipe.cookedAt[]`. Always appends,
+ * never deduplicates — the intent is to log each distinct cook session.
+ * If the recipe isn't in `savedRecipes` (e.g. the user is browsing a seed
+ * recipe without having saved it yet), it is first saved, then marked.
+ * This mirrors the NYT Cooking "saving implies interest" progressive-engagement
+ * heuristic: cooking something is a stronger signal than just saving it.
+ */
+export function createHandleMarkAsCooked(deps: Pick<RecipeHandlerDeps, 'setSavedRecipes' | 't'>) {
+  return (recipe: any) => {
+    const ts = new Date().toISOString();
+    deps.setSavedRecipes((prev: any[]) => {
+      const idx = prev.findIndex((r: any) => r.id === recipe.id);
+      if (idx === -1) {
+        // Recipe not yet saved — save it first, then mark as cooked.
+        const saved = { ...recipe, tag: recipe.tag ?? 'GUARDADO', cookedAt: [ts] };
+        toast.success(deps.t?.toast?.recipeSavedAndCooked || '¡Receta guardada y marcada como cocinada!');
+        return [...prev, saved];
+      }
+      const updated = [...prev];
+      updated[idx] = {
+        ...updated[idx],
+        cookedAt: [...(updated[idx].cookedAt ?? []), ts],
+      };
+      const count = updated[idx].cookedAt.length;
+      const msg = deps.t?.toast?.recipeCooked
+        ? deps.t.toast.recipeCooked.replace('{n}', String(count))
+        : `¡Cocinada ${count} ${count === 1 ? 'vez' : 'veces'}!`;
+      toast.success(msg);
+      return updated;
+    });
+  };
+}

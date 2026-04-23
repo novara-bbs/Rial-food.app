@@ -8,7 +8,7 @@ import { useNavigation } from './NavigationContext';
 import { Allergen } from '../types';
 import { createHandleLogMeal, createHandleLogMealNow, DailyLogEntry, FoodHistoryEntry } from '../features/food/handlers/meal-handlers';
 import { useI18n } from '../i18n';
-import { createHandleSaveRecipe, createHandleAddToPlan, createHandleCreateRecipeSubmit, createHandleImportRecipe, createHandleDeleteRecipe, createHandleDuplicateRecipe } from '../features/recipes/handlers/recipe-handlers';
+import { createHandleSaveRecipe, createHandleAddToPlan, createHandleCreateRecipeSubmit, createHandleImportRecipe, createHandleDeleteRecipe, createHandleDuplicateRecipe, createHandleMarkAsCooked } from '../features/recipes/handlers/recipe-handlers';
 import { createHandleCreatePost, createHandleAddComment } from '../features/social/handlers/social-handlers';
 import { createHandlePublishStory, createHandleMarkStoryViewed } from '../features/social/handlers/story-handlers';
 import { createHandleFollowCreator } from '../features/social/handlers/creator-handlers';
@@ -164,6 +164,7 @@ interface AppStateContextType {
   handleCompleteCheckIn: (data: any) => void;
   handleDeleteRecipe: (recipeId: any) => void;
   handleDuplicateRecipe: (recipe: any) => void;
+  handleMarkAsCooked: (recipe: any) => void;
   handleLogWeight: (args: LogWeightArgs) => { replaced: boolean };
   handleUpdateSnapshot: (args: { date: string; photoUrl?: string; measurements?: import('../types/wellness').BodyMeasurements }) => void;
   handleDeleteSnapshot: (date: string) => void;
@@ -703,6 +704,10 @@ export function AppStateProvider({ children }: { children: React.ReactNode }) {
     () => createHandleDeleteRecipe({ setSavedRecipes, navigateTo, t }),
     [setSavedRecipes, navigateTo, t],
   );
+  const handleMarkAsCooked = useMemo(
+    () => createHandleMarkAsCooked({ setSavedRecipes, t }),
+    [setSavedRecipes, t],
+  );
   const handleDuplicateRecipe = useMemo(
     () => createHandleDuplicateRecipe({ setSavedRecipes, navigateTo, t }),
     [setSavedRecipes, navigateTo, t],
@@ -918,6 +923,7 @@ export function AppStateProvider({ children }: { children: React.ReactNode }) {
     handleCompleteCheckIn,
     handleDeleteRecipe,
     handleDuplicateRecipe,
+    handleMarkAsCooked,
     handleLogWeight,
     handleUpdateSnapshot,
     handleDeleteSnapshot,
@@ -950,7 +956,7 @@ export function AppStateProvider({ children }: { children: React.ReactNode }) {
     handleCreatePost, handleAddComment, handleAddToleranceLog,
     handleCreateRecipeSubmit, handleRealFeelLog, handleImportRecipe,
     handleAddToPlan, handleCheckIn, handleCompleteCheckIn,
-    handleDeleteRecipe, handleDuplicateRecipe, handleLogWeight, handleUpdateSnapshot, handleDeleteSnapshot,
+    handleDeleteRecipe, handleDuplicateRecipe, handleMarkAsCooked, handleLogWeight, handleUpdateSnapshot, handleDeleteSnapshot,
     handleShareProgress, handleLoadDemoSeed, handleClearDemoSeed, navigateToRecipe,
     recipeToEdit,
   ]);
