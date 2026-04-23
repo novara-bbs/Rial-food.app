@@ -5,24 +5,24 @@
 > prunes this file back down. Everything below should answer: *what's the release line,
 > what's the quality baseline, what's the next move, what's broken?*
 
-Last updated: **2026-04-24** — R5 shipped (`1436c97` → `rial-food/main`).
+Last updated: **2026-04-24** — R5 + onboarding quick-wins merged (`a158f54` pending push).
 
 ## Release snapshot
-- **Branch**: `main`, in sync with `rial-food/main` through `1436c97`.
-- **Last shipped**: `[1.5.78]` — R5 CookMode deeper: `IngredientCheckoff` (per-step
-  sub-list), `MiseEnPlaceScreen` (pre-cook prep screen), step-photo → MediaLightbox,
-  voice read-aloud (`speechSynthesis`). Convention test 29 assertions. i18n +11 keys × 2.
+- **Branch**: `main`, ahead of `rial-food/main` by merge commit.
+- **Last shipped**: `[1.5.78]` — R5 CookMode deeper (`IngredientCheckoff`, `MiseEnPlaceScreen`,
+  step-photo → MediaLightbox, voice read-aloud) + onboarding quick-wins (destrabar step 1,
+  hero icons, subtitles, Skip funcional, pre-select goal=maintain). Combined.
 - **Active plan**: `.claude/plans/revisa-todas-las-capturas-ancient-micali.md` (v2 re-sync).
-  R1 ✓, R2 ✓, R3 ✓, R5 ✓, R8 ✓. **R4 + R6 CERRADO**.
+  R1 ✓, R2 ✓, R3 ✓, R5 ✓, R8 ✓. Onboarding quick-wins ✓. **R4 + R6 CERRADO**.
   Next: **R7** (CreateRecipe paste-bulk + drag-drop + verified-creator).
 - **Release target**: `rial-food/main` (`novara-bbs/Rial-food.app`). Origin `rial-food`.
 - **Vercel project**: `rial.app.v1.5` (id `prj_t11VHYQjptazjUx7Y2hWLz0IDAjg`).
 - **Governance**: work directly on `main`. "continua" = push approval post green preflight.
 
-## Quality baseline (post-R5, 2026-04-24)
+## Quality baseline (post-R5 + onboarding quick-wins, 2026-04-24)
 - TypeScript: **0 errors** (`npx tsc --noEmit`)
 - Tests: **1024/1024** passing (63 files)
-- i18n symmetry: **1835** keys aligned ES ↔ EN
+- i18n symmetry: **1835** keys aligned ES ↔ EN (R5 +11, onboarding +5 already included)
 - Design-system lint: 0 errors (warnings pre-existing, unchanged)
 - Build main: **870.0 KB raw / 273.9 KB gzip** · `size:check` PASS
 - Drift: `text-[Npx]` = **0**, SectionCard shape = **0**, INPUT_SURFACE_CLASSES 4 consumers,

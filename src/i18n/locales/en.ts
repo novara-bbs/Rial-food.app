@@ -522,6 +522,7 @@ const en: Translations = {
     welcome: 'Welcome to RIAL',
     subtitle: 'Real nutrition. Real recipes. Real community.',
     step1Title: 'What is your goal?',
+    step1Subtitle: 'We\'ll tailor your plan to this',
     goals: {
       muscle: 'Build muscle / bulk',
       cut: 'Lose fat / cut',
@@ -530,6 +531,7 @@ const en: Translations = {
       family: 'Plan for my family',
     },
     step2Title: 'About you',
+    step2Subtitle: 'We need these for your TDEE and macros',
     name: 'Name',
     weight: 'Current weight (kg)',
     height: 'Height (cm)',
@@ -552,6 +554,7 @@ const en: Translations = {
     noTraining: 'No',
     adjustLater: 'You can adjust everything later.',
     step4Title: 'Dietary restrictions',
+    step4Subtitle: 'Optional — you can change this later',
     restrictions: {
       vegetarian: 'Vegetarian',
       vegan: 'Vegan',
@@ -570,7 +573,9 @@ const en: Translations = {
     start: 'Get started',
     next: 'Next',
     back: 'Back',
-    skip: 'Skip',
+    skip: 'Skip for now',
+    selectHint: 'Tap an option to continue',
+    stepCounter: 'Step {current} of {total}',
   },
   gamification: {
     streak: 'Streak',

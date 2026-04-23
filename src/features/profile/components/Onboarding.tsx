@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { ArrowLeft, Dumbbell, Flame, Scale, Heart, Users, ChevronRight, Check, PartyPopper } from 'lucide-react';
+import { ArrowLeft, Dumbbell, Flame, Scale, Heart, Users, ChevronRight, Check, PartyPopper, Target, Salad, Palette } from 'lucide-react';
 import { useI18n } from '../../../i18n';
 import { useTheme, type Palette as PaletteId } from '../../../contexts/ThemeContext';
 import { calculateDailyTargets, calculateDailyTargetsWithBreakdown, type Goal } from '../../food/utils/nutrition';
@@ -23,7 +23,7 @@ interface OnboardingData {
 }
 
 const DEFAULT_DATA: OnboardingData = {
-  goal: '', name: '', weight: 70, height: 170, age: 30, sex: 'male',
+  goal: 'maintain', name: '', weight: 70, height: 170, age: 30, sex: 'male',
   activity: 'active', trains: false, restrictions: [],
 };
 
@@ -137,12 +137,13 @@ export default function Onboarding({ isOpen, onClose, onComplete }: {
         <div className="p-5 border-b border-outline-variant/10 shrink-0">
           <div className="flex items-center justify-between mb-3">
             {step > 1 ? (
-              <button type="button" onClick={() => setStep(s => s - 1)} className="p-1 text-on-surface-variant hover:text-primary transition-colors">
+              <button type="button" onClick={() => setStep(s => s - 1)} className="flex items-center gap-1 p-1 -ml-1 text-on-surface-variant hover:text-primary transition-colors">
                 <ArrowLeft className="w-5 h-5" />
+                <span className="text-xs font-label uppercase tracking-widest hidden sm:inline">{t.onboarding.back}</span>
               </button>
             ) : <div className="w-5" />}
             <h2 className="font-headline text-xl font-bold uppercase text-primary tracking-tight">RIAL</h2>
-            <span className="font-mono text-xs text-on-surface-variant">{step}/6</span>
+            <span className="font-mono text-xs text-on-surface-variant tracking-wider">{t.onboarding.stepCounter.replace('{current}', String(step)).replace('{total}', '6')}</span>
           </div>
           {/* Progress bar */}
           <div className="flex gap-1.5">
@@ -156,7 +157,11 @@ export default function Onboarding({ isOpen, onClose, onComplete }: {
         <div className="flex-1 overflow-y-auto p-6 space-y-5">
           {/* STEP 1: Goal */}
           {step === 1 && (
-            <OnboardingScaffold title={t.onboarding.step1Title}>
+            <OnboardingScaffold
+              title={t.onboarding.step1Title}
+              subtitle={t.onboarding.step1Subtitle}
+              heroSlot={<Target className="w-12 h-12 text-primary" aria-hidden="true" />}
+            >
               <RadioCardGroup
                 ariaLabel={t.onboarding.step1Title}
                 options={goalOptions}
@@ -168,7 +173,7 @@ export default function Onboarding({ isOpen, onClose, onComplete }: {
 
           {/* STEP 2: Body data */}
           {step === 2 && (
-            <OnboardingScaffold title={t.onboarding.step2Title}>
+            <OnboardingScaffold title={t.onboarding.step2Title} subtitle={t.onboarding.step2Subtitle}>
               <div className="space-y-4">
                 <div>
                   <label className="block text-xs font-label uppercase tracking-widest text-on-surface-variant mb-1.5">{t.onboarding.name}</label>
@@ -269,7 +274,11 @@ export default function Onboarding({ isOpen, onClose, onComplete }: {
 
           {/* STEP 4: Restrictions */}
           {step === 4 && (
-            <OnboardingScaffold title={t.onboarding.step4Title}>
+            <OnboardingScaffold
+              title={t.onboarding.step4Title}
+              subtitle={t.onboarding.step4Subtitle}
+              heroSlot={<Salad className="w-12 h-12 text-primary" aria-hidden="true" />}
+            >
               <div className="flex flex-wrap gap-2">
                 {restrictions.map(r => {
                   const selected = data.restrictions.includes(r.id);
@@ -287,7 +296,13 @@ export default function Onboarding({ isOpen, onClose, onComplete }: {
                   );
                 })}
               </div>
-              <p className="text-xs text-on-surface-variant">{t.onboarding.skip}</p>
+              <button
+                type="button"
+                onClick={() => setStep(s => s + 1)}
+                className="self-start text-xs font-label uppercase tracking-widest text-on-surface-variant hover:text-primary underline underline-offset-4 transition-colors"
+              >
+                {t.onboarding.skip}
+              </button>
             </OnboardingScaffold>
           )}
 
@@ -296,6 +311,7 @@ export default function Onboarding({ isOpen, onClose, onComplete }: {
             <OnboardingScaffold
               title={t.onboarding.step5PaletteTitle}
               subtitle={t.onboarding.step5PaletteSubtitle}
+              heroSlot={<Palette className="w-12 h-12 text-primary" aria-hidden="true" />}
             >
               <div className="grid grid-cols-2 gap-3" role="radiogroup" aria-label={t.settings.palette}>
                 {palettes.map((p) => {
@@ -388,19 +404,24 @@ export default function Onboarding({ isOpen, onClose, onComplete }: {
         </div>
 
         {/* Footer */}
-        <div className="p-5 border-t border-outline-variant/10 shrink-0">
+        <div className="p-5 border-t border-outline-variant/10 shrink-0 space-y-2">
           {step < 6 ? (
-            <button type="button"
-              onClick={() => setStep(s => s + 1)}
-              disabled={!canNext()}
-              className="w-full py-4 bg-primary text-on-primary rounded-sm font-headline text-sm font-bold uppercase tracking-widest hover:opacity-90 transition-all disabled:opacity-40 flex items-center justify-center gap-2"
-            >
-              {t.onboarding.next} <ChevronRight className="w-4 h-4" />
-            </button>
+            <>
+              <button type="button"
+                onClick={() => setStep(s => s + 1)}
+                disabled={!canNext()}
+                className="w-full py-4 bg-primary text-on-primary rounded-sm font-headline text-sm font-bold uppercase tracking-widest hover:opacity-90 transition-opacity duration-200 disabled:opacity-40 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+              >
+                {t.onboarding.next} <ChevronRight className="w-4 h-4" />
+              </button>
+              {!canNext() && (
+                <p className="text-xs text-on-surface-variant text-center">{t.onboarding.selectHint}</p>
+              )}
+            </>
           ) : (
             <button type="button"
               onClick={handleFinish}
-              className="w-full py-4 bg-primary text-on-primary rounded-sm font-headline text-sm font-bold uppercase tracking-widest hover:opacity-90 transition-all"
+              className="w-full py-4 bg-primary text-on-primary rounded-sm font-headline text-sm font-bold uppercase tracking-widest hover:opacity-90 transition-opacity duration-200"
             >
               {t.onboarding.start}
             </button>

@@ -22,28 +22,28 @@ preparar ahora" (skip), "No mostrar esto más" (sets `miseEnPlaceEnabled=false` 
 `localStorage` permanently). `AppStateContext` exposes `miseEnPlaceEnabled: boolean`
 (key `miseEnPlacePreCook`, default `true`). `RecipeDetail.openCookMode()` routes through
 MiseEnPlaceScreen when enabled + has ingredients; goes straight to CookMode otherwise.
-Replaces both CookMode-launch call sites (`StickyCookCTA` + steps "Cocinar" button).
 Pattern: KS mise-en-place.
 
 **R5.4 — Voice read-aloud step text:** `featureFlags.cookModeVoiceReadAloud` default
 `true` (opt-out via `VITE_FEATURE_COOK_MODE_VOICE_OFF=1`). `Volume2/VolumeX` button
 in CookMode header, rendered only when `'speechSynthesis' in window`. Tap → speaks
-`step.text` with `SpeechSynthesisUtterance` in `es-ES` or `en-US` per locale. Tap
-again → `cancel()`. Auto-cancels on step advance (via `currentRef` pattern — avoids
-the disabled `react-hooks/exhaustive-deps` rule). Cleans up on unmount. Pattern: KS
-wellness mode.
+`step.text` with `SpeechSynthesisUtterance` in `es-ES` or `en-US` per locale.
+Auto-cancels on step advance. Pattern: KS wellness mode.
 
-**Convention test:** 29 assertions — component exports (×3), `RecipeStep.ingredientIds`
-type (×2), `featureFlags.cookModeVoiceReadAloud` (×2), `cookMode` i18n section 5 keys ×
-2 locales (×20), `miseEnPlace` i18n section 6 keys × 2 locales (×12 via forEach in
-combined groups).
+**Convention test:** 29 assertions — exports, RecipeStep type, featureFlag, cookMode
+i18n (5 keys × 2 locales), miseEnPlace i18n (6 keys × 2 locales).
+**i18n +11 keys × 2:** `cookMode` + `miseEnPlace` sections. Total: 1835 keys.
 
-**i18n +11 keys × 2:** `cookMode` section (5: readAloud / stopReading /
-ingredientsForStep / viewStepPhoto / voiceUnavailable) + `miseEnPlace` section (6:
-title / description / noIngredients / startCooking / startWithoutPrep / dontShowAgain).
+### fix(onboarding): destrabar step 1 + pulido visual quick-wins
 
-**Quality baseline:** tsc 0 · lint 0 errors · **1024/1024 tests** (63 files) ·
-**1835 keys** symmetric ES ↔ EN · build **870.0 KB raw / 273.9 KB gzip** · PASS.
+**Root cause** "la primera pestaña no va": `DEFAULT_DATA.goal = ''` dejaba el CTA
+"SIGUIENTE" disabled sin affordance. Fix: pre-seleccionar `goal: 'maintain'`. Añadido
+microcopy `selectHint` condicional + transición opacity en enable.
+
+**Pulido visual** (Yazio / Bevel / Lifesum patterns): hero icons en steps 1/4/5, subtítulos
+en 1/2/4, Back con label en ≥sm, stepper semántico "Paso N de 6", Skip como botón funcional
+en step 4. **i18n +5 keys × 2:** `step1Subtitle`, `step2Subtitle`, `step4Subtitle`,
+`selectHint`, `stepCounter`.
 
 ---
 
