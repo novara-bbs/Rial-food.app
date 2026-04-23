@@ -537,6 +537,7 @@ const es = {
     welcome: 'Bienvenido a RIAL',
     subtitle: 'Nutrición real. Recetas reales. Comunidad real.',
     step1Title: '¿Cuál es tu objetivo?',
+    step1Subtitle: 'Personalizaremos tu plan según esto',
     goals: {
       muscle: 'Ganar músculo / volumen',
       cut: 'Perder grasa / definición',
@@ -545,6 +546,7 @@ const es = {
       family: 'Planificar para mi familia',
     },
     step2Title: 'Sobre ti',
+    step2Subtitle: 'Necesitamos estos datos para tu TDEE y macros',
     name: 'Nombre',
     weight: 'Peso actual (kg)',
     height: 'Altura (cm)',
@@ -567,6 +569,7 @@ const es = {
     noTraining: 'No',
     adjustLater: 'Puedes ajustar todo después.',
     step4Title: 'Restricciones alimentarias',
+    step4Subtitle: 'Opcional — puedes cambiarlo luego',
     restrictions: {
       vegetarian: 'Vegetariano',
       vegan: 'Vegano',
@@ -585,7 +588,9 @@ const es = {
     start: 'Empezar',
     next: 'Siguiente',
     back: 'Atrás',
-    skip: 'Saltar',
+    skip: 'Saltar por ahora',
+    selectHint: 'Toca una opción para continuar',
+    stepCounter: 'Paso {current} de {total}',
   },
   // Gamification
   gamification: {

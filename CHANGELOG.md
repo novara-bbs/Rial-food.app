@@ -1,5 +1,53 @@
 # RIAL App - Changelog
 
+## [1.5.78] - 2026-04-24
+
+### fix(onboarding): destrabar step 1 + pulido visual quick-wins
+
+**Root cause del reporte "la primera pestaña no va":** no era bug técnico —
+`DEFAULT_DATA.goal = ''` dejaba el CTA "SIGUIENTE" en `disabled` desde el arranque
+sin feedback ni microcopy que explicara qué hacer. Fricción severa reportada por
+usuario.
+
+**Fixes aplicados a [Onboarding.tsx](src/features/profile/components/Onboarding.tsx):**
+
+- **Pre-seleccionar `goal: 'maintain'`** en `DEFAULT_DATA` — el CTA entra activo;
+  usuario puede cambiar o avanzar. `maintain` es el objetivo menos dañino si se deja
+  accidentalmente (a diferencia de `cut`/`muscle` que implican déficit/superávit).
+- **Microcopy `selectHint`** renderizada bajo el CTA solo cuando `canNext()` es false
+  (step 2 con datos inválidos) — "Toca una opción para continuar" / "Tap an option to
+  continue".
+- **Transición suave** del CTA (`transition-opacity duration-200`) al pasar de
+  disabled → enabled.
+
+**Pulido visual estilo competidores** (Yazio / Bevel / Lifesum, ver
+`docs/market/ux-patterns.md` §1):
+
+- **Hero icons** en steps 1/4/5 vía `OnboardingScaffold.heroSlot` (antes solo step 6):
+  `Target` (goal) / `Salad` (restrictions) / `Palette` (theme).
+- **Subtítulos** en steps 1/2/4 (antes solo 3 y 5) vía `OnboardingScaffold.subtitle`.
+- **Back con label** "Atrás" / "Back" visible en ≥sm breakpoint junto al `ArrowLeft`.
+- **Stepper semántico** "Paso N de 6" / "Step N of 6" en lugar del "1/6" críptico
+  (patrón Yazio/Lifesum).
+- **Skip como botón funcional** en step 4 — antes era solo un hint textual
+  ignorable; ahora es un `<button>` underline que avanza al step 5.
+
+**i18n +5 keys × 2** (symmetric ES ↔ EN): `onboarding.step1Subtitle`,
+`step2Subtitle`, `step4Subtitle`, `selectHint`, `stepCounter` (con interpolación
+`{current}/{total}`). `skip` reutilizado con copy actualizado "Saltar por ahora" /
+"Skip for now".
+
+**Scope excluido:** step 3 (KcalBreakdownCard) ya shippeado en [1.5.77] R8.1 —
+intacto en este commit. `isFirstTime` en SyncKey sin cambios. No refactor de
+sex/train/restrictions ni test de interacción del flow (gaps separados).
+
+**Verificación:** TS 0 errors · i18n symmetric · onboarding tests 25/25 ·
+lint 0 errors (warnings pre-existentes). Flow completo validado en dev server —
+6 steps, back/skip/finish, `isFirstTime → false` post-finish, `weightHistory`
+seeded.
+
+---
+
 ## [1.5.77] - 2026-04-24
 
 ### feat(profile): R8.1+R8.3 INDYA kcal breakdown + trinario food preferences
