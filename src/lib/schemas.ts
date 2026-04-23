@@ -29,7 +29,8 @@ export const UserProfileSchema = z.object({
   trains: z.boolean().optional(),
   dietaryPreferences: z.array(z.string()).default([]),
   unitSystem: z.enum(['metric', 'imperial']).default('metric'),
-  foodDislikes: z.array(z.string()).default([]),
+  foodDislikes: z.array(z.string()).default([]),  // @deprecated — kept for migration read
+  foodPreferences: z.record(z.string(), z.enum(['like', 'dislike'])).optional(),
   intolerances: z.array(z.string()).default([]),
   bio: z.string().optional(),
   socialLinks: z.record(z.string(), z.string()).optional(),

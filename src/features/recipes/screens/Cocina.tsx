@@ -47,9 +47,12 @@ export default function Cocina({ onAddMeal, onCreateRecipe, onNavigateToRecipe, 
   const parseMin = (v: any) => typeof v === 'number' ? v : parseInt(String(v)) || 0;
 
   // Profile slice for match scoring
+  // Derive foodDislikes from foodPreferences (R8.3 migration)
   const profileSlice = useMemo(() => ({
     goal: userProfile.goal,
-    foodDislikes: userProfile.foodDislikes,
+    foodDislikes: Object.entries(userProfile.foodPreferences ?? {})
+      .filter(([, v]) => v === 'dislike')
+      .map(([id]) => id),
     intolerances: userProfile.intolerances,
     dailyTarget: { cal: dailyMacros.target.cal, pro: dailyMacros.target.pro },
   }), [userProfile, dailyMacros.target]);

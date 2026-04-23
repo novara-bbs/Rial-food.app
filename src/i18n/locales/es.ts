@@ -709,6 +709,17 @@ const es = {
       yearlySavings: 'Ahorra 44%',
     },
   },
+  // Kcal breakdown (R8.1) — reused in Onboarding step 3 + SettingsNutrition
+  kcalBreakdown: {
+    title: '¿Cómo se calcula tu objetivo?',
+    basal: 'Metabolismo basal',
+    activity: 'Actividad diaria',
+    exercise: 'Entrenamientos',
+    objective: 'Objetivo nutricional',
+    total: 'Total diario',
+    tooltipAriaLabel: '¿Cómo se calcula?',
+    tooltipText: 'Tu objetivo calórico = metabolismo basal + gasto por actividad + entrenamientos + ajuste según objetivo. Calculado con la fórmula Mifflin-St Jeor.',
+  },
   // Profile
   profile: {
     title: 'Perfil',
@@ -845,6 +856,9 @@ const es = {
     foodPreferences: 'Preferencias Alimentarias',
     foodDislikes: 'No me gusta',
     foodDislikesPlaceholder: 'Buscar alimento...',
+    foodPrefSearch: 'Buscar alimento',
+    prefLike: 'Me gusta',
+    prefDislike: 'No me gusta',
     intolerances: 'Intolerancias',
     intoleranceDairy: 'Lácteos',
     intoleranceEggs: 'Huevos',

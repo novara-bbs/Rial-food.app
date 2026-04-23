@@ -2,7 +2,8 @@ import { useState } from 'react';
 import { ArrowLeft, Dumbbell, Flame, Scale, Heart, Users, ChevronRight, Check, PartyPopper } from 'lucide-react';
 import { useI18n } from '../../../i18n';
 import { useTheme, type Palette as PaletteId } from '../../../contexts/ThemeContext';
-import { calculateDailyTargets, type Goal } from '../../food/utils/nutrition';
+import { calculateDailyTargets, calculateDailyTargetsWithBreakdown, type Goal } from '../../food/utils/nutrition';
+import KcalBreakdownCard from './KcalBreakdownCard';
 import { getBodyWeightUnit, getHeightUnit } from '../../food/utils/units';
 import { INPUT_SURFACE_CLASSES } from '@/components/ui/surface';
 import SectionCard from '../../../components/SectionCard';
@@ -76,6 +77,7 @@ export default function Onboarding({ isOpen, onClose, onComplete }: {
   if (!isOpen) return null;
 
   const targets = calculateDailyTargets(data.weight, data.height, data.age, data.sex, data.activity, (data.goal || 'maintain') as Goal);
+  const breakdown = calculateDailyTargetsWithBreakdown(data.weight, data.height, data.age, data.sex, data.activity, (data.goal || 'maintain') as Goal, data.trains);
 
   const handleFinish = () => {
     onComplete?.({
@@ -218,12 +220,13 @@ export default function Onboarding({ isOpen, onClose, onComplete }: {
             </OnboardingScaffold>
           )}
 
-          {/* STEP 3: Calculated plan */}
+          {/* STEP 3: Calculated plan — INDYA kcal-breakdown pattern (R8.1) */}
           {step === 3 && (
             <OnboardingScaffold
               title={t.onboarding.step3Title}
               subtitle={t.onboarding.basedOnData}
             >
+              {/* Macro summary hero — keeps the familiar big-number UX */}
               <SectionCard padding="lg" spacing="none">
                 <div className="text-center mb-6">
                   <span className="font-mono text-5xl font-black text-primary">{targets.cal}</span>
@@ -244,6 +247,9 @@ export default function Onboarding({ isOpen, onClose, onComplete }: {
                   </div>
                 </div>
               </SectionCard>
+
+              {/* Transparent kcal breakdown — INDYA pedagogy */}
+              <KcalBreakdownCard breakdown={breakdown} showTooltip />
               <div>
                 <p className="text-sm text-on-surface-variant mb-3">{t.onboarding.doYouTrain}</p>
                 <div className="flex gap-3">

@@ -1,5 +1,5 @@
 import { useState, useMemo } from 'react';
-import { Target, Leaf, ShieldAlert, Search, X, Droplets, Footprints } from 'lucide-react';
+import { Target, Leaf, ShieldAlert, Search, X, Droplets, Footprints, Heart, Ban } from 'lucide-react';
 import { useI18n } from '../../../../i18n';
 import type { Ingredient, Allergen } from '../../../../types';
 import { INPUT_SURFACE_CLASSES } from '@/components/ui/surface';
@@ -20,13 +20,16 @@ export default function SettingsNutrition({ dailyMacros, setDailyMacros, userPro
   const { t } = useI18n();
   const [dislikeSearch, setDislikeSearch] = useState('');
 
-  const dislikeResults = useMemo(() => {
+  // R8.3: foodPreferences replaces foodDislikes as source of truth
+  const foodPreferences: Record<string, 'like' | 'dislike'> = userProfile?.foodPreferences ?? {};
+
+  const prefSearchResults = useMemo(() => {
     if (!dislikeSearch || dislikeSearch.length < 2) return [];
     const q = dislikeSearch.toLowerCase();
     return dictionary
-      .filter((d) => (d.name.toLowerCase().includes(q) || d.nameEn.toLowerCase().includes(q)) && !(userProfile?.foodDislikes || []).includes(d.id))
+      .filter((d) => (d.name.toLowerCase().includes(q) || d.nameEn.toLowerCase().includes(q)) && !foodPreferences[d.id])
       .slice(0, 6);
-  }, [dislikeSearch, dictionary, userProfile?.foodDislikes]);
+  }, [dislikeSearch, dictionary, foodPreferences]);
 
   const toggleDietaryPreference = (pref: string) => {
     if (!setUserProfile) return;
@@ -37,13 +40,18 @@ export default function SettingsNutrition({ dailyMacros, setDailyMacros, userPro
     });
   };
 
-  const addDislike = (id: string) => {
-    setUserProfile((prev: any) => ({ ...prev, foodDislikes: [...(prev.foodDislikes || []), id] }));
+  /** Set or toggle a food preference. Passing `null` removes the entry (neutral). */
+  const setFoodPref = (id: string, pref: 'like' | 'dislike' | null) => {
+    setUserProfile((prev: any) => {
+      const current: Record<string, 'like' | 'dislike'> = { ...(prev.foodPreferences ?? {}) };
+      if (pref === null || current[id] === pref) {
+        delete current[id]; // toggle off → neutral
+      } else {
+        current[id] = pref;
+      }
+      return { ...prev, foodPreferences: current };
+    });
     setDislikeSearch('');
-  };
-
-  const removeDislike = (id: string) => {
-    setUserProfile((prev: any) => ({ ...prev, foodDislikes: (prev.foodDislikes || []).filter((d: string) => d !== id) }));
   };
 
   const toggleIntolerance = (allergen: Allergen) => {
@@ -133,9 +141,11 @@ export default function SettingsNutrition({ dailyMacros, setDailyMacros, userPro
           <h3 className="font-headline text-xl font-bold text-tertiary uppercase">{t.settings.foodPreferences}</h3>
         </div>
 
-        {/* Dislikes */}
+        {/* Trinario food preferences — R8.3 INDYA pattern */}
         <div className="mb-6">
-          <label className="block font-label text-micro tracking-widest uppercase text-on-surface-variant mb-2">{t.settings.foodDislikes}</label>
+          <label className="block font-label text-micro tracking-widest uppercase text-on-surface-variant mb-2">
+            {t.settings.foodPrefSearch}
+          </label>
           <div className="relative">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-on-surface-variant pointer-events-none" aria-hidden="true" />
             <input type="text" value={dislikeSearch}
@@ -143,26 +153,65 @@ export default function SettingsNutrition({ dailyMacros, setDailyMacros, userPro
               placeholder={t.settings.foodDislikesPlaceholder}
               className={`${INPUT_SURFACE_CLASSES} w-full py-2 pl-9 pr-3 text-tertiary text-sm focus:outline-none focus:border-primary`} />
           </div>
-          {dislikeResults.length > 0 && (
-            <div className="mt-1 bg-surface-container-highest border border-outline-variant/20 rounded-sm max-h-40 overflow-y-auto">
-              {dislikeResults.map((d) => (
-                <button type="button" key={d.id} onClick={() => addDislike(d.id)} className="w-full text-left px-3 py-2 text-sm text-tertiary hover:bg-primary/10 transition-colors">
-                  {d.name}
-                </button>
+          {prefSearchResults.length > 0 && (
+            <div className="mt-1 bg-surface-container-highest border border-outline-variant/10 rounded-sm max-h-40 overflow-y-auto">
+              {prefSearchResults.map((d) => (
+                <div key={d.id} className="flex items-center justify-between px-3 py-2 hover:bg-primary/5 transition-colors">
+                  <span className="text-sm text-tertiary flex-1">{d.name}</span>
+                  <div className="flex gap-2">
+                    <button type="button"
+                      onClick={() => setFoodPref(d.id, 'like')}
+                      aria-label={t.settings.prefLike}
+                      className="w-8 h-8 rounded-full flex items-center justify-center bg-primary/10 hover:bg-primary/20 text-primary transition-colors">
+                      <Heart className="w-3.5 h-3.5" aria-hidden="true" />
+                    </button>
+                    <button type="button"
+                      onClick={() => setFoodPref(d.id, 'dislike')}
+                      aria-label={t.settings.prefDislike}
+                      className="w-8 h-8 rounded-full flex items-center justify-center bg-error/10 hover:bg-error/20 text-error transition-colors">
+                      <Ban className="w-3.5 h-3.5" aria-hidden="true" />
+                    </button>
+                  </div>
+                </div>
               ))}
             </div>
           )}
-          <div className="flex flex-wrap gap-2 mt-3">
-            {(userProfile?.foodDislikes || []).map((id: string) => {
-              const ing = dictionary.find((d) => d.id === id);
-              return (
-                <span key={id} className="inline-flex items-center gap-1 bg-error/10 text-error px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider">
-                  {ing?.name || id}
-                  <button type="button" onClick={() => removeDislike(id)} aria-label={t.settings.removeItem} className="hover:bg-error/20 rounded-full p-0.5"><X className="w-3 h-3" aria-hidden="true" /></button>
-                </span>
-              );
-            })}
-          </div>
+          {/* Saved preferences list */}
+          {Object.entries(foodPreferences).length > 0 && (
+            <div className="mt-3 space-y-1">
+              {Object.entries(foodPreferences).map(([id, pref]) => {
+                const ing = dictionary.find((d) => d.id === id);
+                const isLike = pref === 'like';
+                return (
+                  <div key={id} className="flex items-center justify-between py-2 border-b border-outline-variant/10 last:border-0">
+                    <span className="text-sm text-on-surface flex-1">{ing?.name || id}</span>
+                    <div className="flex items-center gap-2">
+                      <button type="button"
+                        onClick={() => setFoodPref(id, 'like')}
+                        aria-label={t.settings.prefLike}
+                        aria-pressed={isLike}
+                        className={`w-7 h-7 rounded-full flex items-center justify-center transition-colors ${isLike ? 'bg-primary text-on-primary' : 'text-on-surface-variant/40 hover:text-primary'}`}>
+                        <Heart className="w-3 h-3" aria-hidden="true" />
+                      </button>
+                      <button type="button"
+                        onClick={() => setFoodPref(id, 'dislike')}
+                        aria-label={t.settings.prefDislike}
+                        aria-pressed={!isLike}
+                        className={`w-7 h-7 rounded-full flex items-center justify-center transition-colors ${!isLike ? 'bg-error text-white' : 'text-on-surface-variant/40 hover:text-error'}`}>
+                        <Ban className="w-3 h-3" aria-hidden="true" />
+                      </button>
+                      <button type="button"
+                        onClick={() => setFoodPref(id, null)}
+                        aria-label={t.settings.removeItem}
+                        className="w-7 h-7 rounded-full flex items-center justify-center text-on-surface-variant/30 hover:text-on-surface-variant transition-colors">
+                        <X className="w-3 h-3" aria-hidden="true" />
+                      </button>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          )}
         </div>
 
         {/* Intolerances */}

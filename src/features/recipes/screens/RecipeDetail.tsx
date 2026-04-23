@@ -162,9 +162,13 @@ export default function RecipeDetail({ recipe, onBack, onSaveRecipe, isSaved, on
   }, [data.recipeIngredients, userProfile, dictionary]);
 
   const matchScore = useMemo(() => {
+    // R8.3: derive foodDislikes from foodPreferences
+    const foodDislikes = Object.entries(userProfile?.foodPreferences ?? {})
+      .filter(([, v]) => v === 'dislike')
+      .map(([id]) => id);
     return calculateMatchScore(data, {
       goal: userProfile?.goal,
-      foodDislikes: userProfile?.foodDislikes,
+      foodDislikes,
       intolerances: userProfile?.intolerances,
       dailyTarget: userProfile?.dailyTarget,
     }, dictionary);
@@ -591,7 +595,7 @@ export default function RecipeDetail({ recipe, onBack, onSaveRecipe, isSaved, on
             <RecipeSubstitutionPicker
               swapSuggestions={swapSuggestions}
               onApplySwap={applySwap}
-              hasPreferences={!!(userProfile?.foodDislikes?.length || userProfile?.intolerances?.length)}
+              hasPreferences={!!(Object.keys(userProfile?.foodPreferences ?? {}).length || userProfile?.intolerances?.length)}
             />
 
             {/* Quick actions — primary */}

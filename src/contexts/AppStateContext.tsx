@@ -202,7 +202,15 @@ interface UserProfile {
   dietaryPreferences: string[];
   /** 'metric' (g/ml) or 'imperial' (oz/fl oz). Default: metric */
   unitSystem?: 'metric' | 'imperial';
-  /** Ingredient IDs the user dislikes */
+  /**
+   * Trinario food preferences — R8.3.
+   * Record<ingredientId, 'like' | 'dislike' | null>
+   * null = neutral (removed from map in practice).
+   * Replaces `foodDislikes` as the source of truth; `foodDislikes` is kept
+   * as a derived getter in profileSlices for backward-compat with utils.
+   */
+  foodPreferences?: Record<string, 'like' | 'dislike'>;
+  /** @deprecated Use foodPreferences. Kept for migration compatibility. */
   foodDislikes?: string[];
   /** Declared food intolerances/allergies */
   intolerances?: Allergen[];
@@ -275,6 +283,19 @@ export function AppStateProvider({ children }: { children: React.ReactNode }) {
     trains: false,
     dietaryPreferences: [],
   });
+
+  // R8.3 — migrate foodDislikes[] → foodPreferences Record (eager, idempotent).
+  useEffect(() => {
+    setUserProfile((prev: any) => {
+      if (!prev?.foodDislikes?.length) return prev;
+      if (prev.foodPreferences) return prev; // already migrated
+      const foodPreferences: Record<string, 'like' | 'dislike'> = {};
+      (prev.foodDislikes as string[]).forEach((id: string) => {
+        foodPreferences[id] = 'dislike';
+      });
+      return { ...prev, foodPreferences };
+    });
+  }, []);
 
   // Fresh-install starts at zero — the hardcoded 840 cal / 45 g pro default used
   // to show as if the user had already eaten before ever logging anything.

@@ -113,7 +113,10 @@ export default function App() {
       dailyMacros, checkInStatus, toleranceLogs, savedRecipes,
       userGoal: userProfile.goal,
       intolerances: userProfile.intolerances || [],
-      foodDislikes: (userProfile.foodDislikes || []).map((id: string) => dictionary.find(d => d.id === id)?.name || id),
+      // R8.3: derive dislike ids from foodPreferences, then resolve names
+      foodDislikes: Object.entries(userProfile.foodPreferences ?? {})
+        .filter(([, v]) => v === 'dislike')
+        .map(([id]) => dictionary.find((d: any) => d.id === id)?.name || id),
       recentFoodInsights: getFoodInsights(realFeelLogs, dictionary).slice(0, 5).map(i => ({ name: i.ingredientName, tone: i.tone, avgLevel: i.avgLevel })),
       weeklyNutritionAvg,
       weightTrend,

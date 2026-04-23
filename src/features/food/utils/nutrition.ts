@@ -76,6 +76,63 @@ export function calculateDailyTargets(
 }
 
 /**
+ * Extended breakdown exposing each component of the TDEE calculation.
+ * Used by KcalBreakdownCard (R8.1, INDYA onboarding pattern):
+ *   basal + actividad + entrenamientos + objetivo = total
+ *
+ * `trains` is accepted for future use — currently no training-volume
+ * parameterization, so `exercise` = 0 (honest, avoids phantom estimates).
+ */
+export interface DailyTargetsBreakdown {
+  /** Basal Metabolic Rate — Mifflin-St Jeor (kcal) */
+  basal: number;
+  /** Activity multiplier contribution = TDEE − BMR (kcal) */
+  activity: number;
+  /** Training sessions contribution (currently always 0) */
+  exercise: number;
+  /** Goal adjustment (positive = surplus, negative = deficit, kcal) */
+  objective: number;
+  /** Final kcal target = basal + activity + exercise + objective */
+  total: number;
+  pro: number;
+  carbs: number;
+  fats: number;
+}
+
+export function calculateDailyTargetsWithBreakdown(
+  weight: number,
+  height: number,
+  age: number,
+  sex: Sex,
+  activity: ActivityLevel,
+  goal: Goal,
+  _trains?: boolean,
+): DailyTargetsBreakdown {
+  const bmr = calculateBMR(weight, height, age, sex);
+  const tdee = calculateTDEE(bmr, activity);
+  const basal = Math.round(bmr);
+  const activityContrib = tdee - basal;
+  const exercise = 0; // training-volume not yet parameterized
+  const objective = GOAL_ADJUSTMENTS[goal];
+  const total = Math.round(tdee + objective);
+
+  // Same macro split as calculateDailyTargets
+  let proteinPerKg: number;
+  let fatPercent: number;
+  switch (goal) {
+    case 'muscle': proteinPerKg = 2.0; fatPercent = 0.25; break;
+    case 'cut':    proteinPerKg = 2.2; fatPercent = 0.25; break;
+    default:       proteinPerKg = 1.6; fatPercent = 0.30; break;
+  }
+  const pro = Math.round(weight * proteinPerKg);
+  const fats = Math.round((total * fatPercent) / 9);
+  const carbsCal = total - (pro * 4) - (fats * 9);
+  const carbs = Math.round(Math.max(carbsCal, 0) / 4);
+
+  return { basal, activity: activityContrib, exercise, objective, total, pro, carbs, fats };
+}
+
+/**
  * Food quality rating based on nutritional density
  * Returns: 'good' (😊) | 'neutral' (😐) | 'poor' (😕)
  */

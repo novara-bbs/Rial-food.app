@@ -40,10 +40,12 @@ export default function Discovery({ onNavigateToRecipe, savedRecipes = [], onSav
     { id: 'snack', label: t.discovery.catSnack, icon: Cookie },
   ];
 
-  // Profile slice for match scoring
+  // Profile slice for match scoring — R8.3: derive foodDislikes from foodPreferences
   const profileSlice = useMemo(() => ({
     goal: userProfile.goal,
-    foodDislikes: userProfile.foodDislikes,
+    foodDislikes: Object.entries(userProfile.foodPreferences ?? {})
+      .filter(([, v]) => v === 'dislike')
+      .map(([id]) => id),
     intolerances: userProfile.intolerances,
     dailyTarget: { cal: dailyMacros.target.cal, pro: dailyMacros.target.pro },
   }), [userProfile, dailyMacros.target]);

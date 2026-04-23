@@ -690,6 +690,17 @@ const en: Translations = {
       yearlySavings: 'Save 44%',
     },
   },
+  // Kcal breakdown (R8.1)
+  kcalBreakdown: {
+    title: 'How is your target calculated?',
+    basal: 'Basal metabolism',
+    activity: 'Daily activity',
+    exercise: 'Training sessions',
+    objective: 'Nutrition objective',
+    total: 'Daily total',
+    tooltipAriaLabel: 'How is it calculated?',
+    tooltipText: 'Your calorie target = basal metabolism + activity expenditure + training + goal adjustment. Calculated using the Mifflin-St Jeor formula.',
+  },
   profile: {
     title: 'Profile',
     editProfile: 'Edit profile',
@@ -824,6 +835,9 @@ const en: Translations = {
     foodPreferences: 'Food Preferences',
     foodDislikes: 'Dislikes',
     foodDislikesPlaceholder: 'Search food...',
+    foodPrefSearch: 'Search food',
+    prefLike: 'I like this',
+    prefDislike: 'I dislike this',
     intolerances: 'Intolerances',
     intoleranceDairy: 'Dairy',
     intoleranceEggs: 'Eggs',
