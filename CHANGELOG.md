@@ -1,5 +1,47 @@
 # RIAL App - Changelog
 
+## [1.5.76] - 2026-04-23
+
+### feat(recipes): R3 — Cocina collections carousel + RelatedRecipesCarousel + sort + empty states
+
+**Collections registry (`src/features/recipes/data/collections.ts`):** 7 entries with
+pure predicates — verified / quick / highProtein / vegan / lowCarb / batch / cooked.
+`getCollection(id)` resolver. Convention test `cocina-collections.test.ts` locks shape
++ predicate semantics (10 + 6 assertions).
+
+**CollectionsCarousel (new component):** horizontal scroll row shown above the grid when
+`activeCollection === 'all'` and no search query. Each card: icon + label + live count.
+Active card gets `heroColor` fill, inactive gets surface-container-low bordered card.
+Tap toggles collection (re-tap 'all' to reset). Pattern: NYT Cooking + KS discovery.
+
+**RelatedRecipesCarousel (new component):** mounted in RecipeDetail footer after
+"More from this creator". Scores all savedRecipes: +3 verified-tier alignment, +2 per
+overlapping tag/slot (max 3), +1 calorie proximity ±20%. Limit 5 cards, horizontal scroll.
+`onNavigate` uses `navToRecipe` for in-place recipe switching.
+
+**Sort dropdown (R3.4):** `cocinaSort` localStorage-persisted `<select>` above grid —
+Recommended (matchScore) / Recent (savedAt) / Quick (totalTime) / High Protein / Most
+Cooked. Renders with `ArrowUpDown` icon, native select for minimal bundle impact.
+
+**Contextual empty states (R3.3):** search no-match shows query + clear button; filter
+no-match shows hint + "Ver todas"; no recipes at all shows create/import CTAs.
+
+**i18n +17 keys × 2:** `recipes.sort*` (5) + `recipes.empty*` (3) + new `collections`
+section (8: labels + "recipes" count suffix). 1813 keys total.
+
+### feat(profile): R8.2+R8.4 INDYA quick-wins
+
+**R8.2 — RialPlus paywall "Te sale a N€/mes":** `parseEurPrice()` extracts numeric
+from RC priceString or i18n static fallback; divides yearly by 12; renders below yearly
+plan period label. i18n: `rialPlus.monthlyEquiv` × 2.
+
+**R8.4 — SettingsProfile personal notes:** `UserProfile.personalNotes?: string` (max
+500 chars) + SectionCard "Tus notas (opcional)" with `<textarea>`, character counter,
+and privacy disclaimer. i18n: `settings.personalNotes{Title,Placeholder,Disclaimer}`
+× 2.
+
+---
+
 ## [1.5.75] - 2026-04-23
 
 ### feat(recipes): R2.2–R2.5 — Editorial polish, Mark as Cooked universal, Cocina chips, Fraunces CDN

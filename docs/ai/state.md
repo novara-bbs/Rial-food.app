@@ -5,30 +5,27 @@
 > prunes this file back down. Everything below should answer: *what's the release line,
 > what's the quality baseline, what's the next move, what's broken?*
 
-Last updated: **2026-04-23** — R2 complete (`8f4e22c` → `rial-food/main`).
+Last updated: **2026-04-23** — R3 + R8.2 + R8.4 shipped (`761bc83` → `rial-food/main`).
 
 ## Release snapshot
-- **Branch**: `main`, in sync with `rial-food/main` through `8f4e22c`.
-- **Last shipped**: `[1.5.75]` R2 full — verified tier data model + 3 primitives
-  (TimeTileComposite, AuthorAttributionCard, StickyCookCTA) + Mark as Cooked universal
-  + Cocina chips "Verificadas"/"Ya cocinadas" + Fraunces CDN + i18n +10 keys × 2.
-  Flag `verifiedRecipePolish` defaults `false`; data/handlers ship live to all users.
+- **Branch**: `main`, in sync with `rial-food/main` through `761bc83`.
+- **Last shipped**: `[1.5.76]` — R3 Cocina collections carousel + RelatedRecipesCarousel
+  + sort dropdown + contextual empty states. R8.2 paywall "Te sale a N€/mes". R8.4
+  personal notes textarea (SettingsProfile). i18n +17 keys R3 + 4 keys R8.2+R8.4.
 - **Active plan**: `.claude/plans/revisa-todas-las-capturas-ancient-micali.md` (v2 re-sync).
-  R1 ✓, R2 ✓. **R4 + R6 CERRADO**. Next: **R3** (Cocina collections + RelatedRecipes +
-  sort) + **R8** INDYA (parallelizable). Then R5 → R7.
+  R1 ✓, R2 ✓, R3 ✓, R8.2 ✓, R8.4 ✓. **R4 + R6 CERRADO**.
+  Next: **R8.1** (onboarding kcal breakdown) + **R8.3** (trinario food preferences).
+  Then R5 (CookMode deeper) → R7 (CreateRecipe authoring).
 - **Release target**: `rial-food/main` (`novara-bbs/Rial-food.app`). Origin `rial-food`.
 - **Vercel project**: `rial.app.v1.5` (id `prj_t11VHYQjptazjUx7Y2hWLz0IDAjg`).
 - **Governance**: work directly on `main`. "continua" = push approval post green preflight.
 
-## Quality baseline (post-R2.1, 2026-04-23)
+## Quality baseline (post-R3 + R8.2 + R8.4, 2026-04-23)
 - TypeScript: **0 errors** (`npx tsc --noEmit`)
-- Tests: **970/970** passing (60 files)
-- i18n symmetry: **1792** keys aligned ES ↔ EN
-- Design-system lint: 0 errors (warnings pre-existing, unchanged)
-- Build main: **862.6 KB raw / 271.4 KB gzip** · `size:check` PASS
-- Drift: `text-[Npx]` = **0**, SectionCard shape = **0**
-- Design-system lint: 0 errors (573 warnings pre-existing type-debt + 5-file shadcn allowlist)
-- Build main: ~779 KB raw / ~244 KB gzip · `size:check` PASS
+- Tests: **982/982** passing (61 files)
+- i18n symmetry: **1813** keys aligned ES ↔ EN
+- Design-system lint: 0 errors (621 warnings pre-existing type-debt + 5-file shadcn allowlist)
+- Build main: **864.4 KB raw / 272.0 KB gzip** · `size:check` PASS
 - Drift: `text-[Npx]` = **0**, SectionCard shape = **0**, INPUT_SURFACE_CLASSES 4 consumers,
   BUTTON_CARD_SURFACE_CLASSES 5 consumers.
 
@@ -72,10 +69,10 @@ Execute Q6 ONLY when ALL hold:
 
 ## Next sprint candidates (ordered, only pending)
 - ~~**R2**~~ ✓ — shipped `8f4e22c`.
-- **R3** — Cocina collections first-class + RelatedRecipesCarousel + sort dropdown.
-  Builds on R2 `cookedAt` + "Ya cocinadas" chip. ~2-3d.
-- **R8** — INDYA adoption: onboarding kcal breakdown + paywall "Te sale a N€/mes" +
-  trinario likes/dislikes + personal notes textarea. Parallelizable with R3. ~2-3d.
+- ~~**R3**~~ ✓ — shipped `761bc83`.
+- ~~**R8.2 + R8.4**~~ ✓ — shipped `09f4326`.
+- **R8.1 + R8.3** — INDYA: onboarding kcal breakdown (KcalBreakdownCard) + trinario
+  food preferences (accordion by family + foodPreferences migration). ~1.5d.
 - **R5** — CookMode deeper + mise-en-place + voice read-aloud. ~3d.
 - **R7** — CreateRecipe paste-bulk + drag-drop + verified-creator path. ~2d.
 - **Q6** — Supabase integration (gated by feature-freeze gate above).
@@ -84,7 +81,8 @@ Execute Q6 ONLY when ALL hold:
 
 **Shipped sprints** (full detail in CHANGELOG.md): Q1-Q14, Q15.5 (design-system),
 Q16-B1, Q16-B2, Tab audit 2026-04-18, S3 tranche, Bevel PR 1-9, Q19 meal-taxonomy,
-Fase 1+2 multi-media recipes, Food Families P0-P16, R1 docs, **R2 recipes editorial**.
+Fase 1+2 multi-media recipes, Food Families P0-P16, R1 docs, R2 recipes editorial,
+**R3 Cocina collections**, **R8.2+R8.4 INDYA quick-wins**.
 
 ## Repository compliance
 - `LICENSE`: Proprietary © 2026 RIAL FOOD WORLD S.L. Contact legal@rialfoodworld.com.
