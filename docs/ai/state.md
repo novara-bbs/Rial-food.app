@@ -5,10 +5,10 @@
 > prunes this file back down. Everything below should answer: *what's the release line,
 > what's the quality baseline, what's the next move, what's broken?*
 
-Last updated: **2026-04-24** — R8.1+R8.3 shipped (`d702ad2`, pending push).
+Last updated: **2026-04-24** — R8.1+R8.3 shipped (`d702ad2` → `rial-food/main`).
 
 ## Release snapshot
-- **Branch**: `main`, ahead of `rial-food/main` by 1 commit (`d702ad2`).
+- **Branch**: `main`, in sync with `rial-food/main` through `fd7f79c`.
 - **Last shipped**: `[1.5.77]` — R8.1 KcalBreakdownCard + onboarding kcal breakdown.
   R8.3 trinario foodPreferences (migration + SettingsNutrition UI + all profileSlice
   consumers). Convention test 13 assertions. i18n +11 keys × 2.
