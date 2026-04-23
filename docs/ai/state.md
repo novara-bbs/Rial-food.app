@@ -5,26 +5,30 @@
 > prunes this file back down. Everything below should answer: *what's the release line,
 > what's the quality baseline, what's the next move, what's broken?*
 
-Last updated: **2026-04-24** — R8.1+R8.3 shipped (`d702ad2` → `rial-food/main`).
+Last updated: **2026-04-24** — `[1.5.78]` onboarding quick-wins shipped (`faeda2a` → `rial-food/main`).
 
 ## Release snapshot
-- **Branch**: `main`, in sync with `rial-food/main` through `fd7f79c`.
-- **Last shipped**: `[1.5.77]` — R8.1 KcalBreakdownCard + onboarding kcal breakdown.
-  R8.3 trinario foodPreferences (migration + SettingsNutrition UI + all profileSlice
-  consumers). Convention test 13 assertions. i18n +11 keys × 2.
-- **Active plan**: `.claude/plans/revisa-todas-las-capturas-ancient-micali.md` (v2 re-sync).
+- **Branch**: `main`, in sync with `rial-food/main` through `faeda2a`.
+- **Last shipped**: `[1.5.78]` — **fix(onboarding)**: destrabar step 1 + pulido visual
+  quick-wins. Pre-select `goal: 'maintain'` (resuelve reporte "primera pestaña no va" —
+  era CTA disabled sin affordance). Hero icons Target/Salad/Palette en steps 1/4/5,
+  subtítulos 1/2/4, Back con label, stepper semántico "Paso N de 6", Skip funcional
+  en step 4. Microcopy `selectHint` condicional + transición opacity. i18n +5 keys × 2.
+  Step 3 (KcalBreakdownCard de R8.1) intacto.
+- **Active plan**: `.claude/plans/revisa-el-onboarding-de-zippy-hedgehog.md`.
+  Onboarding quick-wins cerrado. Plan previo `revisa-todas-las-capturas-ancient-micali.md`:
   R1 ✓, R2 ✓, R3 ✓, R8 ✓ (all 4 sub-tasks). **R4 + R6 CERRADO**.
   Next: **R5** (CookMode deeper + mise-en-place + voice) → R7 (CreateRecipe paste-bulk).
 - **Release target**: `rial-food/main` (`novara-bbs/Rial-food.app`). Origin `rial-food`.
 - **Vercel project**: `rial.app.v1.5` (id `prj_t11VHYQjptazjUx7Y2hWLz0IDAjg`).
 - **Governance**: work directly on `main`. "continua" = push approval post green preflight.
 
-## Quality baseline (post-R8.1+R8.3, 2026-04-24)
+## Quality baseline (post-1.5.78, 2026-04-24)
 - TypeScript: **0 errors** (`npx tsc --noEmit`)
-- Tests: **995/995** passing (62 files)
-- i18n symmetry: **1824** keys aligned ES ↔ EN
+- Tests: **995/995** passing (62 files) — onboarding primitives 25/25 stable
+- i18n symmetry: **1829** keys aligned ES ↔ EN (+5 onboarding: step1/2/4Subtitle, selectHint, stepCounter)
 - Design-system lint: 0 errors (warnings pre-existing, unchanged)
-- Build main: **868.9 KB raw / 273.5 KB gzip** · `size:check` PASS
+- Build main: **870.3 KB raw / 273.8 KB gzip** · `size:check` PASS
 - Drift: `text-[Npx]` = **0**, SectionCard shape = **0**, INPUT_SURFACE_CLASSES 4 consumers,
   BUTTON_CARD_SURFACE_CLASSES 5 consumers.
 
