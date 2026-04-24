@@ -8,7 +8,7 @@
 Last updated: **2026-04-24** — Q17 shipped (`[1.5.81]`).
 
 ## Release snapshot
-- **Branch**: `main`, in sync with `rial-food/main` through `179d0ec`.
+- **Branch**: `main`, in sync with `rial-food/main` through `70ce481`.
 - **Last shipped**: `[1.5.81]` — Q17 CSP header + contrast audit (3 WCAG fixes in Signup,
   ConstantTile, AddMeal). Q15 + Q17 both ✓.
 - **Active plan**: `.claude/plans/revisa-todas-las-capturas-ancient-micali.md` (v2 re-sync).
