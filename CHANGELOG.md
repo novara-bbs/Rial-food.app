@@ -1,5 +1,42 @@
 # RIAL App - Changelog
 
+## [1.5.80] - 2026-04-24
+
+### feat(q15): ICP-adaptive NutritionHero goal-status chip + best-streak badge + calcStreaks sweep
+
+**Goal-status chip in NutritionHeroRing (Q15):**
+`NutritionHeroRing` and `NutritionHero` now accept a `goal?: string` prop threaded from
+`Home.tsx → NutritionHero → NutritionHeroRing`. When the ring variant is active
+(`featureFlags.homeRingGrid`), a contextual chip appears below the 3-col macros SectionCard
+that adapts its message to the user's ICP goal:
+- **`cut`** + remaining ≥ 0 → `"Déficit N kcal · en camino"` (primary/green, positive)
+- **`cut`** + remaining < 0 → `"N kcal de exceso"` (error/red, negative)
+- **`muscle`** + remaining > 0 → `"N kcal más para tu superávit"` (error/amber, actionable)
+- **`muscle`** + remaining ≤ 0 → `"Superávit logrado"` (primary/green, positive)
+- **`maintain`** + remaining ≥ 0 → `"Equilibrado · N kcal libres"` (primary/green, positive)
+- **`maintain`** + remaining < 0 → `"N kcal de exceso"` (error/red, negative)
+No chip renders when `goal` is not set (undefined/null). `aria-live="polite"` for a11y.
+
+**Best-streak badge in Home.tsx header (Q15):**
+`calcStreaks()` now exposes both `mealLog.current` and `mealLog.best`. When
+`bestStreakDays > streakDays` (user broke their record but has a higher personal best),
+the streak button shows `"Racha: N días · Mejor: M"` as a motivational reminder.
+When on their current best (most common state), no extra text is shown.
+
+**calcStreaks sweep — deprecated `calculateStreak` removed from tests:**
+`gamification.test.ts` — `calculateStreak` describe block (8 tests) replaced with two
+`calcStreaks` describe blocks (11 tests) covering `mealLog.current` + `mealLog.best`,
+including gap tolerance, deduplication, and best-across-history. `calculateStreak` itself
+remains in `gamification.ts` with `@deprecated` tag — removal deferred to Q6 cleanup.
+
+**i18n:** +6 keys × 2 locales (`home.goalCutOnTrack`, `home.goalOver`, `home.goalMuscleNeed`,
+`home.goalMuscleDone`, `home.goalMaintainBalance`, `home.bestStreak`). Total: 1856 keys.
+
+**Verification:** tsc 0 errors · 1046/1046 tests · i18n 1856 symmetric · size:check PASS ·
+build 872.6 KB raw / 274.7 KB gzip (±0.4 KB).
+
+---
+
 ## [1.5.79] - 2026-04-24
 
 ### feat(r7): CreateRecipe step photos (16:9 crop) + paste-bulk ingredients + verified-creator

@@ -111,13 +111,14 @@ export default function Home({
   );
 
   // Streaks — canonical calcStreaks (Q13). Meal-log streak is the one surfaced in the UI.
-  const streakDays = useMemo(() => {
+  // Q15: also expose bestStreakDays to show personal record in the badge.
+  const { streakDays, bestStreakDays } = useMemo(() => {
     const streaks = calcStreaks({
       history: (nutritionHistory ?? []) as DailyArchive[],
       realFeelLogs: (realFeelLogs ?? []) as Array<{ date?: string }>,
       todayHasMeals: dailyLog.length > 0,
     });
-    return streaks.mealLog.current;
+    return { streakDays: streaks.mealLog.current, bestStreakDays: streaks.mealLog.best };
   }, [nutritionHistory, realFeelLogs, dailyLog.length]);
 
   // Shopping pending count
@@ -270,7 +271,12 @@ export default function Home({
             className="flex items-center gap-1.5 bg-brand-secondary/10 text-brand-secondary min-h-11 px-4 rounded-full border border-brand-secondary/20 shadow-elev-1 hover:bg-brand-secondary/15 hover:border-brand-secondary/40 transition-colors"
           >
             <Flame className="w-4 h-4" aria-hidden="true" />
-            <span className="font-bold text-micro uppercase tracking-widest">{t.home.streak}: {streakDays} {t.home.days}</span>
+            <span className="font-bold text-micro uppercase tracking-widest">
+              {t.home.streak}: {streakDays} {t.home.days}
+              {bestStreakDays > streakDays && bestStreakDays > 0 && (
+                <span className="opacity-60 ml-1">· {t.home.bestStreak.replace('{n}', String(bestStreakDays))}</span>
+              )}
+            </span>
           </button>
         </div>
       </section>
@@ -337,8 +343,8 @@ export default function Home({
         </button>
       )}
 
-      {/* 3. Nutrition Hero — above the fold */}
-      <NutritionHero dailyMacros={dailyMacros} mode={isSimpleMode ? 'simple' : 'detailed'} exerciseCalories={exerciseCalories} />
+      {/* 3. Nutrition Hero — above the fold (Q15: goal prop for ICP-adaptive status chip) */}
+      <NutritionHero dailyMacros={dailyMacros} mode={isSimpleMode ? 'simple' : 'detailed'} exerciseCalories={exerciseCalories} goal={userProfile?.goal} />
 
       {/* 4. Weekly Mini Dashboard — advanced mode only */}
       {!isSimpleMode && (

@@ -127,6 +127,13 @@ const en: Translations = {
     shoppingPending: '{count} items pending',
     repeatYesterday: 'Repeat yesterday',
     yesterdayMeals: '{kcal} kcal · {count} meals',
+    // Q15 — goal-status chip + best-streak badge
+    goalCutOnTrack: 'Deficit {n} kcal · on track',
+    goalOver: '{n} kcal over budget',
+    goalMuscleNeed: '{n} kcal more for your surplus',
+    goalMuscleDone: 'Surplus achieved',
+    goalMaintainBalance: 'Balanced · {n} kcal free',
+    bestStreak: 'Best: {n}',
     nextUp: 'Next up',
     suggestedForYou: 'Suggested for you',
     fillsRemaining: 'Fills your remaining macros',

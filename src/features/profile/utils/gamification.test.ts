@@ -1,6 +1,5 @@
 import { describe, it, expect } from 'vitest';
 import {
-  calculateStreak,
   calculatePoints,
   getUserLevel,
   getEarnedBadges,
@@ -9,12 +8,16 @@ import {
   STREAK_MILESTONES,
   type UserStats,
 } from './gamification';
+import { calcStreaks } from '../../wellness/utils/streaks';
+import type { DailyArchive } from '../../../hooks/useDailyReset';
 
-// Helper: date string N days ago from "today" mock
+// Helper: build a minimal DailyArchive stub N days before `refNow`.
 const DAY_MS = 86_400_000;
 
-function daysAgo(n: number): string {
-  return new Date(Date.now() - n * DAY_MS).toISOString();
+function archiveDaysAgo(n: number, refNow: Date): DailyArchive {
+  const d = new Date(refNow.getTime() - n * DAY_MS);
+  const date = d.toISOString().slice(0, 10);
+  return { date, mealCount: 1 } as DailyArchive;
 }
 
 const baseStats: UserStats = {
@@ -33,45 +36,82 @@ const baseStats: UserStats = {
   streakDays: 0,
 };
 
-// ─── calculateStreak ──────────────────────────────────────────────────────────
+// ─── calcStreaks (canonical Q13 — replaces deprecated calculateStreak) ────────
 
-describe('calculateStreak', () => {
-  it('returns 0 for empty array', () => {
-    expect(calculateStreak([])).toBe(0);
+describe('calcStreaks – mealLog.current', () => {
+  const now = new Date('2026-04-24T12:00:00Z');
+
+  it('returns 0 for empty history', () => {
+    const result = calcStreaks({ history: [], realFeelLogs: [], now });
+    expect(result.mealLog.current).toBe(0);
   });
 
-  it('returns 1 when only today is logged', () => {
-    expect(calculateStreak([daysAgo(0)])).toBe(1);
+  it('returns 1 when only today has meals (via todayHasMeals flag)', () => {
+    const result = calcStreaks({ history: [], realFeelLogs: [], todayHasMeals: true, now });
+    expect(result.mealLog.current).toBe(1);
   });
 
-  it('returns 1 when only yesterday is logged', () => {
-    expect(calculateStreak([daysAgo(1)])).toBe(1);
+  it('returns 1 when only yesterday has meals in archive', () => {
+    const history = [archiveDaysAgo(1, now)];
+    const result = calcStreaks({ history, realFeelLogs: [], now });
+    expect(result.mealLog.current).toBe(1);
   });
 
   it('returns 0 when last log was 2+ days ago', () => {
-    expect(calculateStreak([daysAgo(2)])).toBe(0);
+    const history = [archiveDaysAgo(2, now)];
+    const result = calcStreaks({ history, realFeelLogs: [], now });
+    expect(result.mealLog.current).toBe(0);
   });
 
   it('returns consecutive streak including today', () => {
-    const dates = [daysAgo(0), daysAgo(1), daysAgo(2)];
-    expect(calculateStreak(dates)).toBe(3);
+    const history = [archiveDaysAgo(1, now), archiveDaysAgo(2, now)];
+    const result = calcStreaks({ history, realFeelLogs: [], todayHasMeals: true, now });
+    expect(result.mealLog.current).toBe(3);
   });
 
-  it('returns consecutive streak including yesterday', () => {
-    const dates = [daysAgo(1), daysAgo(2), daysAgo(3)];
-    expect(calculateStreak(dates)).toBe(3);
+  it('returns consecutive streak when all in archive (today not logged)', () => {
+    const history = [archiveDaysAgo(1, now), archiveDaysAgo(2, now), archiveDaysAgo(3, now)];
+    const result = calcStreaks({ history, realFeelLogs: [], now });
+    expect(result.mealLog.current).toBe(3);
   });
 
-  it('stops counting at gap (>2 days)', () => {
-    // today, yesterday, but then a 3-day gap
-    const dates = [daysAgo(0), daysAgo(1), daysAgo(5), daysAgo(6)];
-    expect(calculateStreak(dates)).toBe(2);
+  it('stops counting at gap', () => {
+    const history = [archiveDaysAgo(1, now), archiveDaysAgo(5, now), archiveDaysAgo(6, now)];
+    const result = calcStreaks({ history, realFeelLogs: [], todayHasMeals: true, now });
+    expect(result.mealLog.current).toBe(2);
   });
 
-  it('deduplicates same-day entries', () => {
-    // 3 entries for today, 1 for yesterday → streak = 2
-    const dates = [daysAgo(0), daysAgo(0), daysAgo(0), daysAgo(1)];
-    expect(calculateStreak(dates)).toBe(2);
+  it('deduplicates same-day entries (mealCount > 0 check)', () => {
+    // Two archive entries for the same day — should still count as 1 day.
+    const sameDay = archiveDaysAgo(1, now);
+    const history = [sameDay, { ...sameDay }, archiveDaysAgo(2, now)];
+    const result = calcStreaks({ history, realFeelLogs: [], todayHasMeals: true, now });
+    expect(result.mealLog.current).toBe(3);
+  });
+});
+
+describe('calcStreaks – mealLog.best', () => {
+  const now = new Date('2026-04-24T12:00:00Z');
+
+  it('returns 0 best for empty history', () => {
+    expect(calcStreaks({ history: [], realFeelLogs: [], now }).mealLog.best).toBe(0);
+  });
+
+  it('best equals current when always consecutive', () => {
+    const history = [archiveDaysAgo(1, now), archiveDaysAgo(2, now), archiveDaysAgo(3, now)];
+    const result = calcStreaks({ history, realFeelLogs: [], now });
+    expect(result.mealLog.best).toBe(3);
+  });
+
+  it('best is preserved across a gap', () => {
+    // 3-day run long ago, 1-day current streak
+    const history = [
+      archiveDaysAgo(1, now),
+      archiveDaysAgo(10, now), archiveDaysAgo(11, now), archiveDaysAgo(12, now),
+    ];
+    const result = calcStreaks({ history, realFeelLogs: [], now });
+    expect(result.mealLog.best).toBe(3);
+    expect(result.mealLog.current).toBe(1);
   });
 });
 

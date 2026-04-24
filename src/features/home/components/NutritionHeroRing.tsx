@@ -35,6 +35,8 @@ interface Props {
   dailyMacros: Macros;
   mode?: 'simple' | 'detailed';
   exerciseCalories?: number;
+  /** User goal: 'cut' | 'muscle' | 'maintain' (or any string from profile). */
+  goal?: string;
 }
 
 /**
@@ -79,7 +81,7 @@ export function describeSemiRingTrack(cx: number, cy: number, r: number): string
   return `M ${startX.toFixed(3)} ${startY.toFixed(3)} A ${r} ${r} 0 1 1 ${endX.toFixed(3)} ${endY.toFixed(3)}`;
 }
 
-export default function NutritionHeroRing({ dailyMacros, exerciseCalories = 0 }: Props) {
+export default function NutritionHeroRing({ dailyMacros, exerciseCalories = 0, goal }: Props) {
   const { t } = useI18n();
 
   const remaining = dailyMacros.target.cal - dailyMacros.consumed.cal + exerciseCalories;
@@ -123,6 +125,28 @@ export default function NutritionHeroRing({ dailyMacros, exerciseCalories = 0 }:
   ];
 
   const ringAria = t.home.ringAriaLabel.replace('{remaining}', String(remaining));
+
+  /** Resolve the ICP-adaptive goal-status chip (Q15). */
+  const goalStatus: { text: string; isPositive: boolean } | null = (() => {
+    if (!goal) return null;
+    const abs = Math.abs(remaining);
+    if (goal === 'cut') {
+      if (remaining >= 0)
+        return { text: t.home.goalCutOnTrack.replace('{n}', String(remaining)), isPositive: true };
+      return { text: t.home.goalOver.replace('{n}', String(abs)), isPositive: false };
+    }
+    if (goal === 'muscle') {
+      if (remaining > 0)
+        return { text: t.home.goalMuscleNeed.replace('{n}', String(remaining)), isPositive: false };
+      return { text: t.home.goalMuscleDone, isPositive: true };
+    }
+    if (goal === 'maintain') {
+      if (remaining >= 0)
+        return { text: t.home.goalMaintainBalance.replace('{n}', String(remaining)), isPositive: true };
+      return { text: t.home.goalOver.replace('{n}', String(abs)), isPositive: false };
+    }
+    return null;
+  })();
 
   return (
     <section className="space-y-4" data-testid="nutrition-hero-ring">
@@ -222,6 +246,21 @@ export default function NutritionHeroRing({ dailyMacros, exerciseCalories = 0 }:
           );
         })}
       </SectionCard>
+
+      {/* ICP-adaptive goal-status chip (Q15) — only shown when user has a goal set. */}
+      {goalStatus && (
+        <div
+          className={`flex items-center justify-center gap-2 px-3 py-2 rounded-sm font-label text-micro font-bold uppercase tracking-widest transition-colors ${
+            goalStatus.isPositive
+              ? 'bg-primary/10 text-primary'
+              : 'bg-error/10 text-error'
+          }`}
+          data-testid="goal-status-chip"
+          aria-live="polite"
+        >
+          {goalStatus.text}
+        </div>
+      )}
     </section>
   );
 }

@@ -9,7 +9,7 @@ interface Macros {
   target: { cal: number; pro: number; carbs: number; fats: number };
 }
 
-export default function NutritionHero({ dailyMacros, mode = 'detailed', exerciseCalories = 0 }: { dailyMacros: Macros; mode?: 'simple' | 'detailed'; exerciseCalories?: number }) {
+export default function NutritionHero({ dailyMacros, mode = 'detailed', exerciseCalories = 0, goal }: { dailyMacros: Macros; mode?: 'simple' | 'detailed'; exerciseCalories?: number; goal?: string }) {
   const { t } = useI18n();
 
   // PR 8 — Bevel Home ring-grid. When the feature flag is on, render the
@@ -20,7 +20,7 @@ export default function NutritionHero({ dailyMacros, mode = 'detailed', exercise
   // must run before this early-return to respect rules-of-hooks.
   if (featureFlags.homeRingGrid) {
     return (
-      <NutritionHeroRing dailyMacros={dailyMacros} mode={mode} exerciseCalories={exerciseCalories} />
+      <NutritionHeroRing dailyMacros={dailyMacros} mode={mode} exerciseCalories={exerciseCalories} goal={goal} />
     );
   }
 

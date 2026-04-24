@@ -5,25 +5,25 @@
 > prunes this file back down. Everything below should answer: *what's the release line,
 > what's the quality baseline, what's the next move, what's broken?*
 
-Last updated: **2026-04-24** — R7 merged, pushed (`706b0be`).
+Last updated: **2026-04-24** — Q15 shipped (`[1.5.80]`).
 
 ## Release snapshot
-- **Branch**: `main`, in sync with `rial-food/main` through `c3b4ceb`.
-- **Last shipped**: `[1.5.79]` — R7 CreateRecipe authoring: step photos (16:9 crop), paste-bulk
-  ingredient parser, verified-creator checkbox. All R1–R8 complete (R4+R6 closed by absorption).
+- **Branch**: `main`, pending push to `rial-food/main` (continua gate).
+- **Last shipped**: `[1.5.80]` — Q15 ICP-adaptive NutritionHero goal-status chip + best-streak
+  badge + calcStreaks sweep (3 new tests, `calculateStreak` removed from test suite).
 - **Active plan**: `.claude/plans/revisa-todas-las-capturas-ancient-micali.md` (v2 re-sync).
-  R1 ✓, R2 ✓, R3 ✓, R5 ✓, R7 ✓, R8 ✓. **R4 + R6 CERRADO**. **ALL R-sprints DONE**.
-  Next: **Q6** (Supabase integration, gated by feature-freeze gate).
+  R1–R8 ✓ · **ALL R-sprints DONE**. Q15 ✓.
+  Next: **Q17** (CSP header + contrast audit) or **Q6** (Supabase — gated, see below).
 - **Release target**: `rial-food/main` (`novara-bbs/Rial-food.app`). Origin `rial-food`.
 - **Vercel project**: `rial.app.v1.5` (id `prj_t11VHYQjptazjUx7Y2hWLz0IDAjg`).
 - **Governance**: work directly on `main`. "continua" = push approval post green preflight.
 
-## Quality baseline (post-R7, 2026-04-24)
+## Quality baseline (post-Q15, 2026-04-24)
 - TypeScript: **0 errors** (`npx tsc --noEmit`)
-- Tests: **1043/1043** passing (64 files) — +19 from `ingredient-parser.test.ts`
-- i18n symmetry: **1850** keys aligned ES ↔ EN (R7 +10: createRecipe×9 + common.add)
-- Design-system lint: 0 errors (warnings pre-existing, unchanged)
-- Build main: **872.2 KB raw / 274.5 KB gzip** · `size:check` PASS
+- Tests: **1046/1046** passing (64 files) — +3 from `calcStreaks` describe blocks
+- i18n symmetry: **1856** keys aligned ES ↔ EN (Q15 +6: home.goal* × 5 + home.bestStreak)
+- Design-system lint: 0 errors (631 warnings pre-existing, unchanged)
+- Build main: **872.6 KB raw / 274.7 KB gzip** · `size:check` PASS
 - Drift: `text-[Npx]` = **0**, SectionCard shape = **0**, INPUT_SURFACE_CLASSES 4 consumers,
   BUTTON_CARD_SURFACE_CLASSES 5 consumers.
 
@@ -66,17 +66,16 @@ Execute Q6 ONLY when ALL hold:
 - E2E green on last 3 commits to main
 
 ## Next sprint candidates (ordered, only pending)
-- ~~**R2**~~ ✓ · ~~**R3**~~ ✓ · ~~**R5**~~ ✓ · ~~**R7**~~ ✓ `706b0be` · ~~**R8**~~ ✓
-- **Q6** — Supabase integration (gated by feature-freeze gate above).
-- **Q15** — ICP-adaptive Progress widgets + `calculateStreak` sweep.
-- **Q17** — CSP header + contrast + responsive audit.
-- **Q15** — ICP-adaptive Progress widgets + `calculateStreak` sweep.
-- **Q17** — CSP header + contrast + responsive audit.
+- ~~**R2**~~ ✓ · ~~**R3**~~ ✓ · ~~**R5**~~ ✓ · ~~**R7**~~ ✓ · ~~**R8**~~ ✓ · ~~**Q15**~~ ✓
+- **Q6** — Supabase integration (gated — see feature-freeze gate; earliest after Q17 ships with 0 model changes).
+- **Q17** — CSP header + contrast + responsive audit (next, no model changes, unblocks Q6 gate).
+- `calculateStreak` function in `gamification.ts` still has `@deprecated` tag — remove in Q6 cleanup.
 
 **Shipped sprints** (full detail in CHANGELOG.md): Q1-Q14, Q15.5 (design-system),
 Q16-B1, Q16-B2, Tab audit 2026-04-18, S3 tranche, Bevel PR 1-9, Q19 meal-taxonomy,
 Fase 1+2 multi-media recipes, Food Families P0-P16, R1 docs, R2 recipes editorial,
-**R3 Cocina collections**, **R5 CookMode deeper**, **R8 INDYA adoption**, **R7 CreateRecipe authoring**.
+**R3 Cocina collections**, **R5 CookMode deeper**, **R8 INDYA adoption**, **R7 CreateRecipe authoring**,
+**Q15 ICP-adaptive NutritionHero + calcStreaks sweep**.
 
 ## Repository compliance
 - `LICENSE`: Proprietary © 2026 RIAL FOOD WORLD S.L. Contact legal@rialfoodworld.com.

@@ -128,6 +128,13 @@ const es = {
     shoppingPending: '{count} items pendientes',
     repeatYesterday: 'Repetir ayer',
     yesterdayMeals: '{kcal} kcal · {count} comidas',
+    // Q15 — goal-status chip + best-streak badge
+    goalCutOnTrack: 'Déficit {n} kcal · en camino',
+    goalOver: '{n} kcal de exceso',
+    goalMuscleNeed: '{n} kcal más para tu superávit',
+    goalMuscleDone: 'Superávit logrado',
+    goalMaintainBalance: 'Equilibrado · {n} kcal libres',
+    bestStreak: 'Mejor: {n}',
     nextUp: 'Siguiente',
     suggestedForYou: 'Sugerido para ti',
     fillsRemaining: 'Llena tus macros restantes',
