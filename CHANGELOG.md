@@ -1,5 +1,38 @@
 # RIAL App - Changelog
 
+## [1.5.79] - 2026-04-24
+
+### feat(r7): CreateRecipe step photos (16:9 crop) + paste-bulk ingredients + verified-creator
+
+**Step photos with 16:9 crop (new):**
+`cropTo16x9()` canvas utility centre-crops any image to 16:9, output JPEG 85% / max 1280px.
+The existing placeholder `ImagePlus` button is now functional — triggers a hidden
+`<input type="file">`, crops on selection, and previews the result in an `aspect-video`
+container above the step textarea with an `X` remove button.  Step 4 review shows all
+step photos as inline 16:9 thumbnails. CookMode already handles `step.photoUrl` via
+MediaLightbox (R5.2). The crop is stored client-side as a JPEG data URL in `RecipeStep.photoUrl`.
+
+**R7.1 — Paste-bulk ingredient input:**
+`ingredient-parser.ts` (new utility) — `parseBulkIngredients(text)` / `parseIngredientLine(line)` /
+`toApproxGrams(qty, unit, default)`. Handles: `200g pasta`, `2 huevos`, `100ml leche`,
+`1 taza harina`, `1/2 cebolla` (fraction no unit), `1/2 taza avena` (fraction+unit), bare text
+(low-confidence). Step 2 shows a clipboard button that opens a `BottomSheet size="focus"
+headerLayout="cancel-action"` with a textarea. Live preview renders each parsed line with:
+`✓ matched` (green, will be added), `⚠ no dict match` (amber, skipped), `✕ low-conf` (red,
+skipped). Confirm appends all matched lines as `RecipeIngredient[]`.
+
+**R7.3 — Verified-creator publish path:**
+`UserProfile.isVerifiedCreator?: boolean` added to `AppStateContext` interface.
+When `isVerifiedCreator === true`, Step 4 shows a "Publicar como receta verificada" checkbox
+with `BadgeCheck` icon. When checked, `handleSave()` writes `recipe.verified = 'creator'`
+— consumed by `RecipeDetail` editorial branch (R2) for verified treatment.
+
+**i18n:** +9 `createRecipe` keys + `common.add` = **+10 keys × 2 locales** → **1850 aligned ES ↔ EN**.
+**Tests:** 1043/1043 passing (64 files) — +19 from `ingredient-parser.test.ts`.
+**Bundle:** 872.2 KB raw / 274.5 KB gzip — `size:check` PASS.
+
+---
+
 ## [1.5.78] - 2026-04-24
 
 ### feat(recipes): R5 — CookMode deeper: MiseEnPlaceScreen + IngredientCheckoff + voice
