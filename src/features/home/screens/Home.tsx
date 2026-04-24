@@ -1,4 +1,4 @@
-import { Flame, Plus, CheckCircle2, Droplets, Sparkles, Sun, Moon, ShoppingCart, ChevronRight, BarChart3 } from 'lucide-react';
+import { Plus, CheckCircle2, Droplets, Sparkles, ShoppingCart, ChevronRight, BarChart3 } from 'lucide-react';
 import PageShell from '../../../components/PageShell';
 import SectionCard from '../../../components/SectionCard';
 import { Heading } from '@/components/ui/Typography';
@@ -7,7 +7,8 @@ import RealFeelInline from '../../wellness/components/RealFeelInline';
 import NutritionHero from '../components/NutritionHero';
 import TodaysMeals from '../components/TodaysMeals';
 import ActivityRow from '../components/ActivityRow';
-import RealScoreBadge from '../components/RealScoreBadge';
+import HomeHeader from '../components/HomeHeader';
+import HomeQuickStats from '../components/HomeQuickStats';
 import WeeklyMiniDash from '../components/WeeklyMiniDash';
 import NextMealSuggestion from '../components/NextMealSuggestion';
 import MealGapSuggestion from '../components/MealGapSuggestion';
@@ -18,6 +19,7 @@ import { useAppState } from '../../../contexts/AppStateContext';
 import { getInsights } from '../../wellness/utils/correlations';
 import { featureFlags } from '../../../lib/featureFlags';
 import { calcVitality } from '../utils/homeWidgets';
+import { computeDayStatus } from '../utils/dayStatus';
 import { calcWeekMacros } from '../../wellness/utils/week-stats';
 import { calcStreaks } from '../../wellness/utils/streaks';
 import { calcWeightTrend } from '../../wellness/utils/weight-trend';
@@ -28,10 +30,8 @@ import type { BodySnapshot } from '../../../types/wellness';
 import InsightRow from '../components/InsightRow';
 
 export default function Home({
-  onCheckIn,
   onAddMeal,
   onNavigateToPlan,
-  checkInStatus,
   dailyMacros,
   userProfile,
   mealPlan,
@@ -49,11 +49,9 @@ export default function Home({
   nutritionHistory = [],
   onNavigateToProgress,
 }: {
-  onCheckIn: () => void,
   onAddMeal: () => void,
   onNavigateToPlan: () => void,
   onNavigateToProgress?: () => void,
-  checkInStatus: any,
   dailyMacros: any,
   setDailyMacros?: (fn: any) => void,
   userProfile: any,
@@ -71,8 +69,6 @@ export default function Home({
   nutritionHistory?: any[],
 }) {
   const { t } = useI18n();
-  const [greeting, setGreeting] = useState(t.home.goodMorning);
-  const [timeIcon, setTimeIcon] = useState(<Sun className="w-6 h-6 text-amber-400" />);
   const [isEditingHydration, setIsEditingHydration] = useState(false);
   const [showRealFeel, setShowRealFeel] = useState(false);
   const [isTrainingDay, setIsTrainingDay] = useState(false);
@@ -231,19 +227,6 @@ export default function Home({
     lastCalRef.current = dailyMacros.consumed.cal;
   }, [dailyMacros.consumed.cal]);
 
-  useEffect(() => {
-    const hour = new Date().getHours();
-    if (hour >= 12 && hour < 17) {
-      setGreeting(t.home.goodAfternoon);
-      setTimeIcon(<Sun className="w-6 h-6 text-amber-500" />);
-    } else if (hour >= 17) {
-      setGreeting(t.home.goodEvening);
-      setTimeIcon(<Moon className="w-6 h-6 text-indigo-400" />);
-    } else {
-      setGreeting(t.home.goodMorning);
-    }
-  }, [t]);
-
   // Today's planned meals
   const today = new Date().getDay();
   const adjustedDayIndex = today === 0 ? 6 : today - 1;
@@ -253,38 +236,56 @@ export default function Home({
     setHydration((prev: any) => ({ ...prev, consumed: Math.min(prev.consumed + 1, prev.target + 5) }));
   };
 
+  // Phase 1 — quick-stats chip-row navigation. Resolves each chip target to
+  // an existing Home action/route, reusing callbacks already wired from
+  // upstream. `hydration` and `insights` focus in-page surfaces (the
+  // Hydration SectionCard and Smart Insights block); `progress` + `activity`
+  // delegate to their tab routes. No new bottom sheets (§Phase 1 conservative).
+  const handleQuickStatNav = useCallback(
+    (target: 'hydration' | 'progress' | 'activity' | 'insights') => {
+      if (target === 'progress' || target === 'activity') {
+        onNavigateToProgress?.();
+        return;
+      }
+      if (target === 'hydration') {
+        setIsEditingHydration(true);
+        if (typeof document !== 'undefined') {
+          document.querySelector('[data-testid="home-hydration-card"]')?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+        return;
+      }
+      if (target === 'insights' && typeof document !== 'undefined') {
+        document.querySelector('[data-testid="home-insights-section"]')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    },
+    [onNavigateToProgress],
+  );
+
+  const weightDeltaForChip = useMemo(() => {
+    if (weightTrend.weekDelta == null) return undefined;
+    return {
+      value: weightTrend.weekDelta,
+      unit: (userProfile?.unitSystem === 'imperial' ? 'lb' : 'kg') as 'kg' | 'lb',
+      since: 'week' as const,
+    };
+  }, [weightTrend.weekDelta, userProfile?.unitSystem]);
+
   return (
     <PageShell maxWidth="wide" spacing="lg">
-      {/* 1. Header — greeting + streak (flex-wrap for 320px viewport) */}
-      <section className="pt-6 flex flex-wrap items-center justify-between gap-2">
-        <div className="flex items-center gap-3 min-w-0 flex-1">
-          <span className="shrink-0">{timeIcon}</span>
-          <h1 className="font-headline text-2xl sm:text-3xl font-black text-tertiary uppercase tracking-tight leading-none truncate">
-            {greeting}, {userProfile.name?.split(' ')[0] || t.home.friend}
-          </h1>
-        </div>
-        <div className="flex items-center gap-2 shrink-0">
-          {!isSimpleMode && <RealScoreBadge avgVitality={avgVitality} trend={vitalityTrend} onTap={() => onNavigateToProgress?.()} />}
-          <button
-            type="button"
-            onClick={() => onNavigateToProgress?.()}
-            aria-label={t.header?.streakAria ?? `${t.home.streak}: ${streakDays} ${t.home.days}`}
-            className="flex items-center gap-1.5 bg-brand-secondary/10 text-brand-secondary min-h-11 px-4 rounded-full border border-brand-secondary/20 shadow-elev-1 hover:bg-brand-secondary/15 hover:border-brand-secondary/40 transition-colors"
-          >
-            <Flame className="w-4 h-4" aria-hidden="true" />
-            <span className="font-bold text-micro uppercase tracking-widest">
-              {t.home.streak}: {streakDays} {t.home.days}
-              {bestStreakDays > streakDays && bestStreakDays > 0 && (
-                <span className="opacity-60 ml-1">· {t.home.bestStreak.replace('{n}', String(bestStreakDays))}</span>
-              )}
-            </span>
-          </button>
-        </div>
-      </section>
+      {/* 1. Header — fecha + pacing chip + vitality & streak row (Bevel-style) */}
+      <HomeHeader
+        avgVitality={avgVitality}
+        vitalityTrend={vitalityTrend}
+        isSimpleMode={isSimpleMode}
+        streakDays={streakDays}
+        bestStreakDays={bestStreakDays}
+        dayStatus={computeDayStatus(dailyMacros.consumed.cal, dailyMacros.target.cal)}
+        onNavigateToProgress={onNavigateToProgress}
+      />
 
-      {/* 2. Guided Setup — first 7 days */}
+      {/* 2. Guided Setup — first 7 days (p-4 to match other tinted-primary cards) */}
       {!guidedDismissed && (
-        <section className="bg-surface-container-low border border-primary/30 p-5 rounded-sm space-y-3 animate-in fade-in slide-in-from-top-3">
+        <section className="bg-surface-container-low border border-primary/20 p-4 rounded-sm space-y-3 animate-in fade-in slide-in-from-top-3">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
               <Sparkles className="w-4 h-4 text-primary" />
@@ -326,65 +327,44 @@ export default function Home({
         </section>
       )}
 
-      {/* 2b. Progress card — always visible when history exists */}
-      {onNavigateToProgress && nutritionHistory.length > 0 && (
-        <button
-          type="button"
-          onClick={onNavigateToProgress}
-          className="w-full bg-primary/5 border border-primary/20 p-4 rounded-sm flex items-center gap-4 hover:bg-primary/10 transition-colors text-left min-h-11"
-        >
-          <div className="w-10 h-10 bg-primary/10 rounded-full flex items-center justify-center shrink-0">
-            <BarChart3 className="w-5 h-5 text-primary" />
-          </div>
-          <div className="flex-1 min-w-0">
-            <p className="font-headline text-xs font-bold uppercase tracking-widest text-tertiary">{t.progress.title}</p>
-            <p className="text-caption text-on-surface-variant mt-0.5 leading-relaxed">{t.progress.desc}</p>
-          </div>
-          <ChevronRight className="w-4 h-4 text-primary shrink-0" />
-        </button>
-      )}
-
       {/* 3. Nutrition Hero — above the fold (Q15: goal prop for ICP-adaptive status chip) */}
-      <NutritionHero dailyMacros={dailyMacros} mode={isSimpleMode ? 'simple' : 'detailed'} exerciseCalories={exerciseCalories} goal={userProfile?.goal} />
+      <NutritionHero dailyMacros={dailyMacros} mode={isSimpleMode ? 'simple' : 'advanced'} exerciseCalories={exerciseCalories} goal={userProfile?.goal} />
 
-      {/* 4. Weekly Mini Dashboard — advanced mode only */}
-      {!isSimpleMode && (
-        <WeeklyMiniDash
-          calAvg={weekMacros.avg.cal}
-          proteinHitDays={weekMacros.hitDays.pro}
-          totalDays={weekMacros.daysLogged}
-          weekDelta={weightTrend.weekDelta}
-          onNavigateToProgress={() => onNavigateToProgress?.()}
-        />
-      )}
+      {/* 4. HomeQuickStats — chip-row (advanced only; simple returns null) */}
+      <HomeQuickStats
+        mode={isSimpleMode ? 'simple' : 'advanced'}
+        hydration={hydration}
+        weightDelta={weightDeltaForChip}
+        activityToday={{ minutes: movement.activeMinutes || 0, isTrainingDay }}
+        insightCount={insights.length}
+        onNavigate={handleQuickStatNav}
+      />
 
-      {/* 5. Primary Actions — Log Meal + Check-in */}
-      <div className="grid grid-cols-2 gap-4">
-        <button
-          type="button"
-          onClick={onAddMeal}
-          className="bg-primary text-on-primary p-5 rounded-sm flex flex-col items-center justify-center gap-3 hover:bg-primary/90 transition-all shadow-elev-3 shadow-primary/10 group"
-        >
-          <Plus className="w-6 h-6 group-hover:scale-110 transition-transform" />
-          <span className="font-headline font-bold text-xs uppercase tracking-widest">{t.fab.logMeal}</span>
-        </button>
-        <button
-          type="button"
-          onClick={onCheckIn}
-          className={`p-5 rounded-sm flex flex-col items-center justify-center gap-3 transition-all group border ${
-            checkInStatus
-              ? 'bg-primary/10 border-primary text-primary'
-              : 'bg-surface-container-low border-outline-variant/20 hover:border-primary text-tertiary'
-          }`}
-        >
-          <CheckCircle2 className={`w-6 h-6 text-primary group-hover:scale-110 transition-transform`} />
-          <span className="font-headline font-bold text-xs uppercase tracking-widest">
-            {checkInStatus ? t.home.registered : t.home.checkIn}
-          </span>
-        </button>
-      </div>
+      {/* 5. Today's Meals — primary action surface (moved up from pos 7) */}
+      <TodaysMeals
+        dailyLog={dailyLog}
+        todaysMeals={todaysMeals}
+        onLogMealNow={onLogMealNow}
+        onNavigateToPlan={onNavigateToPlan}
+        onAddMeal={onAddMeal}
+        setDailyLog={setDailyLog}
+        setDailyMacros={setDailyMacros}
+        onNavigateToRecipe={onNavigateToRecipe}
+        mergedVariants={mergedVariants}
+        userGoal={userProfile?.goal}
+      />
 
-      {/* 5b. Quick Actions — repeat yesterday (only when no meals logged today) */}
+      {/* 6. Primary Action — single Log Meal button (Check-in collapsed into FAB). */}
+      <button
+        type="button"
+        onClick={onAddMeal}
+        className="w-full bg-primary text-on-primary p-4 rounded-sm flex items-center justify-center gap-3 hover:bg-primary/90 transition-all shadow-elev-3 shadow-primary/10 group min-h-11"
+      >
+        <Plus className="w-5 h-5 group-hover:scale-110 transition-transform" />
+        <span className="font-headline font-bold text-xs uppercase tracking-widest">{t.fab.logMeal}</span>
+      </button>
+
+      {/* 6b. Quick Actions — repeat yesterday (only when no meals logged today) */}
       {dailyLog.length === 0 && yesterdayData && (
         <QuickActions
           yesterdayKcal={yesterdayData.kcal}
@@ -393,9 +373,12 @@ export default function Home({
         />
       )}
 
-      {/* 6. Hydration — compact row */}
+      {/* 7. Hydration — compact row (ad-hoc divider replaced with nested SectionCard padding) */}
       <SectionCard padding="md" spacing="md">
-        <div className="flex items-center justify-between">
+        <div
+          className="flex items-center justify-between"
+          data-testid="home-hydration-card"
+        >
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 bg-brand-secondary/10 rounded-full flex items-center justify-center shrink-0">
               <Droplets className="w-5 h-5 text-brand-secondary" />
@@ -424,7 +407,7 @@ export default function Home({
           </div>
         </div>
         {isEditingHydration && (
-          <div className="pt-3 border-t border-outline-variant/10 animate-in fade-in slide-in-from-top-2">
+          <div className="pt-3 border-t border-outline-variant/20 animate-in fade-in slide-in-from-top-2">
             <div className="flex items-center justify-between mb-2">
               <span className="font-label text-micro uppercase tracking-widest text-on-surface-variant">{t.home.dailyTarget} ({t.home.cups})</span>
               <span className="font-headline font-bold text-sm text-brand-secondary">{hydration.target}</span>
@@ -442,45 +425,7 @@ export default function Home({
         )}
       </SectionCard>
 
-      {/* 6b. Progress Preview Card — weight, sparkline, quick-log, deep-link.
-          Hidden when the Bevel ring-grid hero is enabled (PR 8) — the weight
-          flow stays accessible via the Progress tab, and the new hero keeps
-          the above-the-fold budget focused on nutrition. Flag off restores
-          the card unchanged. See docs/market/home-patterns-benchmark.md §6.1. */}
-      {!featureFlags.homeRingGrid && (
-        <ProgressPreviewCard
-          weightHistory={weightHistory as any[]}
-          unitSystem={userProfile?.unitSystem ?? 'metric'}
-          targetWeight={userProfile?.targetWeight}
-          onNavigateToProgress={onNavigateToProgress}
-        />
-      )}
-
-      {/* 6. Real Feel — conditional post-meal */}
-      {showRealFeel && onRealFeelLog && (
-        <section>
-          <RealFeelInline
-            onSubmit={(entry) => { onRealFeelLog(entry); setShowRealFeel(false); }}
-            onDismiss={() => setShowRealFeel(false)}
-          />
-        </section>
-      )}
-
-      {/* 7. Today's Meals — merged planned + diary */}
-      <TodaysMeals
-        dailyLog={dailyLog}
-        todaysMeals={todaysMeals}
-        onLogMealNow={onLogMealNow}
-        onNavigateToPlan={onNavigateToPlan}
-        onAddMeal={onAddMeal}
-        setDailyLog={setDailyLog}
-        setDailyMacros={setDailyMacros}
-        onNavigateToRecipe={onNavigateToRecipe}
-        mergedVariants={mergedVariants}
-        userGoal={userProfile?.goal}
-      />
-
-      {/* 7b. Next Meal Suggestion — after logging at least 1 meal */}
+      {/* 8. Next Meal Suggestion — after logging at least 1 meal */}
       <NextMealSuggestion
         suggestion={nextMealSuggestion}
         onTap={() => {
@@ -490,7 +435,7 @@ export default function Home({
         }}
       />
 
-      {/* P11 [1.5.69] — Qué me falta hoy: personalized macro-gap suggestions. */}
+      {/* 9. P11 [1.5.69] — Qué me falta hoy: personalized macro-gap suggestions. */}
       {onLogMealNow && (
         <MealGapSuggestion
           dailyMacros={dailyMacros}
@@ -499,7 +444,6 @@ export default function Home({
           userGoal={userProfile?.goal}
           excludeAllergens={userProfile?.intolerances ?? userProfile?.allergens ?? []}
           onLogFood={(variant) => {
-            // Build a meal-shape from the variant for 100 g (1 standard portion).
             const meal = {
               id: variant.id,
               title: variant.name,
@@ -517,12 +461,12 @@ export default function Home({
         />
       )}
 
-      {/* 7c. Shopping Reminder — conditional */}
+      {/* 10. Shopping Reminder — conditional (p-4 homologado con otras tinted cards) */}
       {shoppingPendingCount > 0 && (
         <button
           type="button"
           onClick={onNavigateToPlan}
-          className="bg-surface-container border border-outline-variant/30 p-3 rounded-sm flex items-center gap-3 w-full min-h-11 hover:border-primary/30 hover:bg-surface-container-high transition-colors"
+          className="bg-surface-container border border-outline-variant/30 p-4 rounded-sm flex items-center gap-3 w-full min-h-11 hover:border-primary/30 hover:bg-surface-container-high transition-colors"
         >
           <ShoppingCart className="w-4 h-4 text-primary" />
           <span className="text-label font-bold uppercase tracking-widest text-tertiary flex-1 text-left">
@@ -532,7 +476,48 @@ export default function Home({
         </button>
       )}
 
-      {/* 8. Activity — compact card */}
+      {/* ─── advanced-only section below ─────────────────────────────────── */}
+
+      {/* 11. Weekly Mini Dashboard — advanced mode only */}
+      {!isSimpleMode && (
+        <WeeklyMiniDash
+          calAvg={weekMacros.avg.cal}
+          proteinHitDays={weekMacros.hitDays.pro}
+          totalDays={weekMacros.daysLogged}
+          weekDelta={weightTrend.weekDelta}
+          onNavigateToProgress={() => onNavigateToProgress?.()}
+        />
+      )}
+
+      {/* 12. Progress Preview Card — advanced only (hidden when homeRingGrid flag on). */}
+      {!isSimpleMode && !featureFlags.homeRingGrid && (
+        <ProgressPreviewCard
+          weightHistory={weightHistory as any[]}
+          unitSystem={userProfile?.unitSystem ?? 'metric'}
+          targetWeight={userProfile?.targetWeight}
+          onNavigateToProgress={onNavigateToProgress}
+        />
+      )}
+
+      {/* 13. Progress deep-link banner — advanced only, visible when history exists */}
+      {!isSimpleMode && onNavigateToProgress && nutritionHistory.length > 0 && (
+        <button
+          type="button"
+          onClick={onNavigateToProgress}
+          className="w-full bg-primary/5 border border-primary/20 p-4 rounded-sm flex items-center gap-4 hover:bg-primary/10 transition-colors text-left min-h-11"
+        >
+          <div className="w-10 h-10 bg-primary/10 rounded-full flex items-center justify-center shrink-0">
+            <BarChart3 className="w-5 h-5 text-primary" />
+          </div>
+          <div className="flex-1 min-w-0">
+            <p className="font-headline text-xs font-bold uppercase tracking-widest text-tertiary">{t.progress.title}</p>
+            <p className="text-caption text-on-surface-variant mt-0.5 leading-relaxed">{t.progress.desc}</p>
+          </div>
+          <ChevronRight className="w-4 h-4 text-primary shrink-0" />
+        </button>
+      )}
+
+      {/* 14. Activity — advanced only */}
       {!isSimpleMode && (
         <ActivityRow
           movement={movement}
@@ -542,10 +527,20 @@ export default function Home({
         />
       )}
 
-      {/* 9. Smart Insights — conditional (memoized) */}
-      {insights.length > 0 && (
-        <section className="space-y-3">
-          <Heading level="h2" variant="overline" className="flex items-center gap-2 px-1">
+      {/* 15. Real Feel — conditional post-meal, advanced only */}
+      {!isSimpleMode && showRealFeel && onRealFeelLog && (
+        <section>
+          <RealFeelInline
+            onSubmit={(entry) => { onRealFeelLog(entry); setShowRealFeel(false); }}
+            onDismiss={() => setShowRealFeel(false)}
+          />
+        </section>
+      )}
+
+      {/* 16. Smart Insights — advanced only */}
+      {!isSimpleMode && insights.length > 0 && (
+        <section className="space-y-3" data-testid="home-insights-section">
+          <Heading level="h2" variant="overline" className="flex items-center gap-2">
             <Sparkles className="w-4 h-4 text-primary" /> {t.home.insights}
           </Heading>
           {insights.slice(0, 3).map((ins) => (

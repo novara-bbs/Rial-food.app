@@ -1,5 +1,61 @@
 # RIAL App - Changelog
 
+## [1.5.84] - 2026-04-24
+
+### feat(home): Phase 1 rework — chip-row + reorder + simple/advanced density
+
+Integral Home rework addressing section ordering, spacing/padding drift, and
+simple/advanced density differentiation. Follow-up to Q15 Phase 0 (header +
+mode-adaptive hero). See `docs/market/home-patterns-benchmark.md` §4.4 + §6 for
+the Lifesum/MFP/Yazio precedent informing the new ordering.
+
+**Section reorder (both modes):**
+`HomeHeader → GuidedSetup → NutritionHero → HomeQuickStats (NEW) → TodaysMeals
+→ PrimaryAction → Hydration → NextMealSuggestion → MealGap → ShoppingReminder`.
+`TodaysMeals` moves from pos 7 to pos 5 (pegged to hero). `ProgressPreviewCard`
++ Progress deep-link banner + WeeklyMiniDash + ActivityRow + RealFeel + Smart
+Insights all gated `!isSimpleMode`.
+
+**New: HomeQuickStats chip-row** (`src/features/home/components/HomeQuickStats.tsx`)
+— horizontal-scroll row of tinted chips (hydration, weight delta, activity,
+insights). Conservative density pass — no new bottom sheets, each chip navigates
+to an existing surface or focuses the in-page card. Returns `null` in simple mode
+(lonely-chip guard). 3-4 chips in advanced based on data availability.
+
+**Primary Action collapsed:** 2-col `Log Meal + Check-in` grid → single centered
+`Log Meal` button (Check-in redundant with FAB create sheet). `onCheckIn` +
+`checkInStatus` props removed from `Home.tsx`; `App.tsx` no longer threads
+`handleCheckIn` to Home (DailyCheckIn screen still handles check-in directly).
+
+**Header polish:** `showBest` badge now gated by `!isSimpleMode` so simple shows
+current streak only.
+
+**Spacing/padding unification:** `px-1` stripped from `NutritionHero` +
+`NutritionHeroRing` H2 wrappers (PageShell already applies px-6). Guided Setup
+border/padding normalized `p-5 → p-4` + `border-primary/30 → /20` to match other
+tinted-primary cards. Hydration ad-hoc divider `border-outline-variant/10 →
+/20` for token parity. Shopping reminder `p-3 → p-4` homologado.
+
+**i18n:** +6 keys × 2 locales (`home.quickHydration`, `home.quickWeight`,
+`home.quickActivity`, `home.quickInsights`, `home.quickRest`,
+`home.quickTraining`).
+
+**Convention tests:** new `home-quick-stats.test.ts` — 15 assertions locking
+chip-row shape (simple-null guard, PageShell gutter clear, HIG touch-target,
+no detailed drift, i18n keys symmetric across locales).
+
+**Compatibility note:** Rebased onto `[1.5.83]` (ADR-012 typography primitives).
+Home.tsx Smart Insights section now uses `<Heading level="h2" variant="overline">`
+primitive from ADR-012 instead of raw `<h2>` — no behavioral change, just
+respecting the design-system sealing that shipped between Phase 0 and Phase 1.
+
+**Verification:** tsc 0 errors · 1144/1144 tests (68 files, +31 vs `[1.5.83]`) ·
+i18n 1871 symmetric · lint:code 0 errors · size:check PASS (877.5 KB raw / 275.7 KB gzip) ·
+preview: simple hides chipRow+miniDash+activity+insights+bestBadge+RealScore;
+advanced surfaces 3-chip row + miniDash/activity/insights/RealScore.
+
+---
+
 ## [1.5.83] - 2026-04-24
 
 ### feat(design-system): ADR-012 — `<Heading>` + `<Text>` typography primitives (closes call-site layer)

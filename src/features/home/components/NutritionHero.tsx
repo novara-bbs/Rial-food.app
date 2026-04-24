@@ -9,7 +9,7 @@ interface Macros {
   target: { cal: number; pro: number; carbs: number; fats: number };
 }
 
-export default function NutritionHero({ dailyMacros, mode = 'detailed', exerciseCalories = 0, goal }: { dailyMacros: Macros; mode?: 'simple' | 'detailed'; exerciseCalories?: number; goal?: string }) {
+export default function NutritionHero({ dailyMacros, mode = 'advanced', exerciseCalories = 0, goal }: { dailyMacros: Macros; mode?: 'simple' | 'advanced'; exerciseCalories?: number; goal?: string }) {
   const { t } = useI18n();
 
   // PR 8 — Bevel Home ring-grid. When the feature flag is on, render the
@@ -42,7 +42,7 @@ export default function NutritionHero({ dailyMacros, mode = 'detailed', exercise
 
   return (
     <section className="space-y-4">
-      <div className="flex items-center justify-between px-1">
+      <div className="flex items-center justify-between">
         <h2 className="font-headline text-xl font-bold tracking-tight uppercase text-tertiary flex items-center gap-2">
           <Zap className="w-5 h-5 text-primary" /> {t.home.weekSummary}
           <span title={t.home.macroTooltip}>
@@ -52,16 +52,17 @@ export default function NutritionHero({ dailyMacros, mode = 'detailed', exercise
       </div>
 
       {/*
-        Calorie equation hero — RESTANTE as primary number, math as caption.
-        Replaces the former 4-column flex layout that clipped "RESTANTE" on ≤375 px widths.
+        Calorie hero — mode-adaptive (simple vs advanced).
+        Simple: large Remaining number + visible daily-goal caption.
+        Advanced: 3-col Consumido | Restante | Objetivo + running-sum caption below.
       */}
       <SectionCard padding="md" spacing="sm">
-        <div className="flex items-end justify-between gap-4">
-          <div className="min-w-0">
-            <div className="font-label text-micro uppercase tracking-wider font-bold text-on-surface-variant">
+        {mode === 'simple' ? (
+          <div className="flex flex-col items-center text-center gap-2">
+            <span className="font-label text-micro uppercase tracking-widest font-bold text-on-surface-variant">
               {t.home.remaining}
-            </div>
-            <div className="flex items-baseline gap-1.5 mt-1">
+            </span>
+            <div className="flex items-baseline gap-1.5">
               <span className="font-headline font-bold text-display text-primary tabular-nums leading-none">
                 {remaining}
               </span>
@@ -69,22 +70,65 @@ export default function NutritionHero({ dailyMacros, mode = 'detailed', exercise
                 {t.home.kcal}
               </span>
             </div>
+            <span
+              className="font-label text-body-sm text-on-surface-variant"
+              data-testid="hero-daily-goal-caption"
+            >
+              {t.home.dayGoal.replace('{n}', String(dailyMacros.target.cal))}
+            </span>
           </div>
-          <dl className="shrink-0 text-right font-label text-micro uppercase tracking-wider space-y-1">
-            <div className="flex items-baseline justify-end gap-1.5">
-              <dt className="text-on-surface-variant font-bold">{t.home.target}</dt>
-              <dd className="tabular-nums font-bold text-on-surface">{dailyMacros.target.cal}</dd>
+        ) : (
+          <div className="space-y-3">
+            <div className="grid grid-cols-3 gap-3 text-center" data-testid="hero-kcal-3col">
+              <div className="flex flex-col items-center gap-1">
+                <span className="font-label text-micro font-bold uppercase tracking-widest text-on-surface-variant">
+                  {t.home.consumed}
+                </span>
+                <span className="font-headline font-bold text-title-lg text-on-surface tabular-nums leading-none">
+                  {dailyMacros.consumed.cal}
+                </span>
+                <span className="font-label text-micro font-bold uppercase tracking-wider text-on-surface-variant">
+                  {t.home.kcal}
+                </span>
+              </div>
+              <div className="flex flex-col items-center gap-1">
+                <span className="font-label text-micro font-bold uppercase tracking-widest text-on-surface-variant">
+                  {t.home.remaining}
+                </span>
+                <span className="font-headline font-bold text-title-lg text-primary tabular-nums leading-none">
+                  {remaining}
+                </span>
+                <span className="font-label text-micro font-bold uppercase tracking-wider text-on-surface-variant">
+                  {t.home.kcal}
+                </span>
+              </div>
+              <div className="flex flex-col items-center gap-1">
+                <span className="font-label text-micro font-bold uppercase tracking-widest text-on-surface-variant">
+                  {t.home.target}
+                </span>
+                <span className="font-headline font-bold text-title-lg text-on-surface tabular-nums leading-none">
+                  {dailyMacros.target.cal}
+                </span>
+                <span className="font-label text-micro font-bold uppercase tracking-wider text-on-surface-variant">
+                  {t.home.kcal}
+                </span>
+              </div>
             </div>
-            <div className="flex items-baseline justify-end gap-1.5">
-              <dt className="text-on-surface-variant font-bold">− {t.home.food}</dt>
-              <dd className="tabular-nums font-bold text-on-surface">{dailyMacros.consumed.cal}</dd>
-            </div>
-            <div className="flex items-baseline justify-end gap-1.5">
-              <dt className="text-on-surface-variant font-bold">+ {t.home.exercise}</dt>
-              <dd className="tabular-nums font-bold text-brand-secondary">{exerciseCalories}</dd>
-            </div>
-          </dl>
-        </div>
+            <dl
+              className="flex items-center justify-center gap-4 flex-wrap font-label text-micro uppercase tracking-wider"
+              data-testid="hero-running-sum"
+            >
+              <div className="flex items-baseline gap-1.5">
+                <dt className="text-on-surface-variant font-bold">− {t.home.food}</dt>
+                <dd className="tabular-nums font-bold text-on-surface">{dailyMacros.consumed.cal}</dd>
+              </div>
+              <div className="flex items-baseline gap-1.5">
+                <dt className="text-on-surface-variant font-bold">+ {t.home.exercise}</dt>
+                <dd className="tabular-nums font-bold text-brand-secondary">{exerciseCalories}</dd>
+              </div>
+            </dl>
+          </div>
+        )}
       </SectionCard>
 
       {/* Macro progress */}

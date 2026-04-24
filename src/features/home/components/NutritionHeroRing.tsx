@@ -17,9 +17,10 @@
  *   - Same props interface as `NutritionHero` so the caller (`Home.tsx`)
  *     does not need to branch. The flag decision is made inside
  *     `NutritionHero.tsx` which routes to this component when on.
- *   - `mode` prop kept for API parity with the legacy hero, but ignored —
- *     the flag-on shape is a single unified layout (`simple` vs `detailed`
- *     distinction becomes moot once the ring carries the scalar).
+ *   - `mode` prop drives a layered adaptation: `simple` surfaces only
+ *     `Restante` + a visible daily-goal caption, hiding the MFP running-sum;
+ *     `advanced` surfaces a 3-col `Consumido | Restante | Objetivo` block
+ *     over the ring and the food/exercise running-sum below.
  *   - Colors use theme tokens only (see ADR-003 + DESIGN-SYSTEM.md).
  */
 import { Zap, HelpCircle } from 'lucide-react';
@@ -33,7 +34,7 @@ interface Macros {
 
 interface Props {
   dailyMacros: Macros;
-  mode?: 'simple' | 'detailed';
+  mode?: 'simple' | 'advanced';
   exerciseCalories?: number;
   /** User goal: 'cut' | 'muscle' | 'maintain' (or any string from profile). */
   goal?: string;
@@ -81,7 +82,7 @@ export function describeSemiRingTrack(cx: number, cy: number, r: number): string
   return `M ${startX.toFixed(3)} ${startY.toFixed(3)} A ${r} ${r} 0 1 1 ${endX.toFixed(3)} ${endY.toFixed(3)}`;
 }
 
-export default function NutritionHeroRing({ dailyMacros, exerciseCalories = 0, goal }: Props) {
+export default function NutritionHeroRing({ dailyMacros, mode = 'advanced', exerciseCalories = 0, goal }: Props) {
   const { t } = useI18n();
 
   const remaining = dailyMacros.target.cal - dailyMacros.consumed.cal + exerciseCalories;
@@ -150,7 +151,7 @@ export default function NutritionHeroRing({ dailyMacros, exerciseCalories = 0, g
 
   return (
     <section className="space-y-4" data-testid="nutrition-hero-ring">
-      <div className="flex items-center justify-between px-1">
+      <div className="flex items-center justify-between">
         <h2 className="font-headline text-xl font-bold tracking-tight uppercase text-tertiary flex items-center gap-2">
           <Zap className="w-5 h-5 text-primary" /> {t.home.weekSummary}
           <span title={t.home.macroTooltip}>
@@ -201,21 +202,34 @@ export default function NutritionHeroRing({ dailyMacros, exerciseCalories = 0, g
             </div>
           </div>
 
-          {/* Running-sum caption — "Objetivo − Alimentos + Ejercicio" (MFP pattern §3.4). */}
-          <dl className="flex items-center justify-center gap-4 flex-wrap font-label text-micro uppercase tracking-wider pt-2">
-            <div className="flex items-baseline gap-1.5">
-              <dt className="text-on-surface-variant font-bold">{t.home.target}</dt>
-              <dd className="tabular-nums font-bold text-on-surface">{dailyMacros.target.cal}</dd>
-            </div>
-            <div className="flex items-baseline gap-1.5">
-              <dt className="text-on-surface-variant font-bold">− {t.home.food}</dt>
-              <dd className="tabular-nums font-bold text-on-surface">{dailyMacros.consumed.cal}</dd>
-            </div>
-            <div className="flex items-baseline gap-1.5">
-              <dt className="text-on-surface-variant font-bold">+ {t.home.exercise}</dt>
-              <dd className="tabular-nums font-bold text-brand-secondary">{exerciseCalories}</dd>
-            </div>
-          </dl>
+          {mode === 'simple' ? (
+            /* Simple mode — daily-goal caption surfaces the target without clutter. */
+            <p
+              className="font-label text-body-sm text-on-surface-variant pt-2 text-center"
+              data-testid="hero-ring-daily-goal-caption"
+            >
+              {t.home.dayGoal.replace('{n}', String(dailyMacros.target.cal))}
+            </p>
+          ) : (
+            /* Advanced — running-sum "Objetivo − Alimentos + Ejercicio" (MFP pattern §3.4). */
+            <dl
+              className="flex items-center justify-center gap-4 flex-wrap font-label text-micro uppercase tracking-wider pt-2"
+              data-testid="hero-ring-running-sum"
+            >
+              <div className="flex items-baseline gap-1.5">
+                <dt className="text-on-surface-variant font-bold">{t.home.target}</dt>
+                <dd className="tabular-nums font-bold text-on-surface">{dailyMacros.target.cal}</dd>
+              </div>
+              <div className="flex items-baseline gap-1.5">
+                <dt className="text-on-surface-variant font-bold">− {t.home.food}</dt>
+                <dd className="tabular-nums font-bold text-on-surface">{dailyMacros.consumed.cal}</dd>
+              </div>
+              <div className="flex items-baseline gap-1.5">
+                <dt className="text-on-surface-variant font-bold">+ {t.home.exercise}</dt>
+                <dd className="tabular-nums font-bold text-brand-secondary">{exerciseCalories}</dd>
+              </div>
+            </dl>
+          )}
         </div>
       </SectionCard>
 

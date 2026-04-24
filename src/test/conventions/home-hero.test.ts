@@ -205,6 +205,39 @@ describe('NutritionHeroRing — Option A shape anatomy', () => {
   });
 });
 
+describe('NutritionHero(Ring) — mode-adaptive hero (simple vs advanced)', () => {
+  it('legacy hero renders a simple-mode daily-goal caption branch', () => {
+    // Simple mode surfaces the target with `t.home.dayGoal` + body-sm caption.
+    expect(HERO_LEGACY_SRC).toContain("mode === 'simple'");
+    expect(HERO_LEGACY_SRC).toContain('t.home.dayGoal.replace');
+    expect(HERO_LEGACY_SRC).toContain('data-testid="hero-daily-goal-caption"');
+  });
+
+  it('legacy hero renders an advanced-mode 3-col equal-weight block', () => {
+    expect(HERO_LEGACY_SRC).toContain('data-testid="hero-kcal-3col"');
+    expect(HERO_LEGACY_SRC).toContain('{t.home.consumed}');
+    expect(HERO_LEGACY_SRC).toContain('{t.home.remaining}');
+    expect(HERO_LEGACY_SRC).toContain('{t.home.target}');
+    // Running-sum preserved in advanced branch (MFP pattern §3.4).
+    expect(HERO_LEGACY_SRC).toContain('data-testid="hero-running-sum"');
+  });
+
+  it('ring hero branches its caption by mode (simple dayGoal vs advanced running-sum)', () => {
+    expect(HERO_RING_SRC).toContain("mode === 'simple'");
+    expect(HERO_RING_SRC).toContain('data-testid="hero-ring-daily-goal-caption"');
+    expect(HERO_RING_SRC).toContain('data-testid="hero-ring-running-sum"');
+    expect(HERO_RING_SRC).toContain('t.home.dayGoal.replace');
+  });
+
+  it('mode prop uses canonical `simple | advanced` (no `detailed` drift)', () => {
+    expect(HERO_LEGACY_SRC).toMatch(/mode\??:\s*'simple'\s*\|\s*'advanced'/);
+    expect(HERO_RING_SRC).toMatch(/mode\??:\s*'simple'\s*\|\s*'advanced'/);
+    // The deprecated `'detailed'` literal must not appear in either file.
+    expect(HERO_LEGACY_SRC).not.toContain("'detailed'");
+    expect(HERO_RING_SRC).not.toContain("'detailed'");
+  });
+});
+
 describe('Home.tsx — flag-gated ProgressPreviewCard', () => {
   it('imports featureFlags module', () => {
     expect(HOME_SRC).toContain("from '../../../lib/featureFlags'");
