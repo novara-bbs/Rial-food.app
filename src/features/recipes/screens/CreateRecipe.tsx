@@ -1,7 +1,10 @@
-import { Camera, Plus, Search, Trash2, ArrowUp, ArrowDown, Clock, ChevronRight, Check, Link2, Video, ImagePlus, ThumbsUp, Minus, AlertTriangle, UtensilsCrossed, Layers } from 'lucide-react';
+import { Camera, Plus, Search, Trash2, ArrowUp, ArrowDown, Clock, ChevronRight, Check, Link2, Video, ImagePlus, ThumbsUp, Minus, AlertTriangle, UtensilsCrossed, Layers, X, ClipboardList, CheckCircle2, AlertCircle, BadgeCheck } from 'lucide-react';
 import PageShell from '../../../components/PageShell';
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useRef } from 'react';
 import type { Ingredient, RecipeIngredient, RecipeStep, Micronutrients, FoodTag, MealSlot } from '../../../types';
+import BottomSheet from '../../../components/ui/bottom-sheet';
+import { parseBulkIngredients, toApproxGrams } from '../utils/ingredient-parser';
+import type { ParsedIngredient } from '../utils/ingredient-parser';
 import { useI18n } from '../../../i18n';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -38,6 +41,56 @@ function swapped<T>(arr: T[], idx: number, dir: -1 | 1): T[] {
   const next = [...arr];
   [next[idx], next[tgt]] = [next[tgt], next[idx]];
   return next;
+}
+
+/**
+ * Centre-crop an image file to a 16:9 aspect ratio and return a JPEG data URL.
+ * Output width is capped at 1280px to keep the data URL small.
+ */
+function cropTo16x9(file: File): Promise<string> {
+  return new Promise((resolve, reject) => {
+    const img = new Image();
+    const objectUrl = URL.createObjectURL(file);
+    img.onload = () => {
+      const TARGET_RATIO = 16 / 9;
+      const srcW = img.naturalWidth;
+      const srcH = img.naturalHeight;
+      const srcRatio = srcW / srcH;
+
+      let sx = 0, sy = 0, sw = srcW, sh = srcH;
+      if (srcRatio > TARGET_RATIO) {
+        // Wider than 16:9 — crop left/right
+        sw = Math.round(srcH * TARGET_RATIO);
+        sx = Math.round((srcW - sw) / 2);
+      } else if (srcRatio < TARGET_RATIO) {
+        // Narrower / portrait — crop top/bottom
+        sh = Math.round(srcW / TARGET_RATIO);
+        sy = Math.round((srcH - sh) / 2);
+      }
+
+      const MAX_W = 1280;
+      const outW = Math.min(sw, MAX_W);
+      const outH = Math.round(outW / TARGET_RATIO);
+
+      const canvas = document.createElement('canvas');
+      canvas.width = outW;
+      canvas.height = outH;
+      const ctx = canvas.getContext('2d');
+      if (!ctx) {
+        URL.revokeObjectURL(objectUrl);
+        reject(new Error('no 2d context'));
+        return;
+      }
+      ctx.drawImage(img, sx, sy, sw, sh, 0, 0, outW, outH);
+      URL.revokeObjectURL(objectUrl);
+      resolve(canvas.toDataURL('image/jpeg', 0.85));
+    };
+    img.onerror = () => {
+      URL.revokeObjectURL(objectUrl);
+      reject(new Error('image load failed'));
+    };
+    img.src = objectUrl;
+  });
 }
 
 /** Auto-suggest FoodTags from per-serving macros + ingredient properties */
@@ -121,6 +174,18 @@ export default function CreateRecipe({
     initialRecipe?.instructions?.length ? initialRecipe.instructions.map((text: string) => ({ text })) :
     [{ text: '' }]
   );
+
+  // ── Step photo upload ──
+  const stepPhotoInputRef = useRef<HTMLInputElement>(null);
+  const pendingStepPhotoIdx = useRef(-1);
+
+  // ── Paste-bulk sheet ──
+  const [pasteSheetOpen, setPasteSheetOpen] = useState(false);
+  const [pasteText, setPasteText] = useState('');
+  const [parsedLines, setParsedLines] = useState<ParsedIngredient[]>([]);
+
+  // ── Verified-creator publish flag (Step 4) ──
+  const [publishAsVerified, setPublishAsVerified] = useState(false);
 
   // ── Computed totals ──
   const totals = useMemo(() => {
@@ -220,7 +285,65 @@ export default function CreateRecipe({
 
   const addStep = () => setSteps(prev => [...prev, { text: '' }]);
   const updateStepText = (idx: number, val: string) => setSteps(prev => prev.map((s, i) => i === idx ? { ...s, text: val } : s));
+  const updateStepPhoto = (idx: number, photoUrl: string | null) =>
+    setSteps(prev => prev.map((s, i) => i === idx ? { ...s, photoUrl: photoUrl ?? undefined } : s));
   const removeStep = (idx: number) => setSteps(prev => prev.filter((_, i) => i !== idx));
+
+  /** Trigger the hidden file input for a specific step index. */
+  const handleStepPhotoClick = (idx: number) => {
+    pendingStepPhotoIdx.current = idx;
+    stepPhotoInputRef.current?.click();
+  };
+
+  /** On file selected: crop to 16:9, store as data URL in the step. */
+  const handleStepPhotoChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file || pendingStepPhotoIdx.current < 0) return;
+    try {
+      const url = await cropTo16x9(file);
+      updateStepPhoto(pendingStepPhotoIdx.current, url);
+    } catch {
+      // silent — photo just won't be added
+    } finally {
+      // Reset so the same file can be selected again later
+      if (stepPhotoInputRef.current) stepPhotoInputRef.current.value = '';
+      pendingStepPhotoIdx.current = -1;
+    }
+  };
+
+  /** Parse the paste textarea and update parsedLines preview. */
+  const handlePastePreview = (text: string) => {
+    setPasteText(text);
+    setParsedLines(parseBulkIngredients(text));
+  };
+
+  /** Confirm paste-bulk: match high-confidence lines against dictionary and add. */
+  const handlePasteConfirm = () => {
+    const toAdd: RecipeIngredient[] = [];
+    for (const item of parsedLines) {
+      if (item.confidence < 0.6 || !item.name) continue;
+      const nameLower = item.name.toLowerCase();
+      const ing = dictionary.find(
+        d =>
+          d.name.toLowerCase().includes(nameLower) ||
+          d.nameEn?.toLowerCase().includes(nameLower),
+      );
+      if (!ing) continue;
+      const defaultGrams = ing.servingSizes.find(s => s.isDefault)?.grams ?? 100;
+      const grams = toApproxGrams(item.quantity, item.unit, defaultGrams);
+      toAdd.push({
+        id: `paste-${Date.now()}-${Math.random().toString(36).slice(2, 7)}`,
+        ingredientId: ing.id,
+        amount: Math.max(1, grams),
+        unit: ing.baseUnit,
+        ingredient: ing,
+      });
+    }
+    if (toAdd.length > 0) setRecipeIngredients(prev => [...prev, ...toAdd]);
+    setPasteSheetOpen(false);
+    setPasteText('');
+    setParsedLines([]);
+  };
 
   const filteredDictionary = useMemo(() => {
     if (!searchQuery.trim()) return dictionary.slice(0, 30);
@@ -259,6 +382,7 @@ export default function CreateRecipe({
     const cleanSteps = steps.filter(s => s.text.trim());
     onCreateRecipe({
       ...(initialRecipe?.id ? { id: initialRecipe.id, tag: initialRecipe.tag, publishedBy: initialRecipe.publishedBy } : {}),
+      ...(publishAsVerified ? { verified: 'creator' } : {}),
       title: title.trim(),
       description,
       prepTime: `${prepTime || 15} min`,
@@ -527,10 +651,19 @@ export default function CreateRecipe({
               </div>
             </div>
           ) : (
-            <button type="button" onClick={() => setIsSearching(true)}
-              className="w-full border-2 border-dashed border-outline-variant/30 p-4 rounded-sm flex items-center justify-center gap-2 text-on-surface-variant hover:text-primary hover:border-primary/50 transition-colors font-label text-xs font-bold tracking-widest uppercase">
-              <Plus className="w-4 h-4" /> {t.createRecipe.addIngredient}
-            </button>
+            <div className="flex gap-2">
+              <button type="button" onClick={() => setIsSearching(true)}
+                className="flex-1 border-2 border-dashed border-outline-variant/30 p-4 rounded-sm flex items-center justify-center gap-2 text-on-surface-variant hover:text-primary hover:border-primary/50 transition-colors font-label text-xs font-bold tracking-widest uppercase">
+                <Plus className="w-4 h-4" /> {t.createRecipe.addIngredient}
+              </button>
+              <button type="button" onClick={() => setPasteSheetOpen(true)}
+                className="border-2 border-dashed border-outline-variant/30 px-4 py-4 rounded-sm flex items-center justify-center gap-1.5 text-on-surface-variant hover:text-primary hover:border-primary/50 transition-colors font-label text-xs font-bold tracking-widest uppercase shrink-0"
+                aria-label={t.createRecipe.pasteListTitle}
+              >
+                <ClipboardList className="w-4 h-4" />
+                <span className="hidden sm:inline">{t.createRecipe.pasteList}</span>
+              </button>
+            </div>
           )}
         </div>
       )}
@@ -550,6 +683,24 @@ export default function CreateRecipe({
                   {idx + 1}
                 </div>
                 <div className="flex-1 space-y-2">
+                  {/* Step photo preview — 16:9 crop stored on upload */}
+                  {s.photoUrl ? (
+                    <div className="relative w-full aspect-video rounded-sm overflow-hidden bg-surface-container-highest">
+                      <img
+                        src={s.photoUrl}
+                        alt={`Paso ${idx + 1}`}
+                        className="w-full h-full object-cover"
+                      />
+                      <button
+                        type="button"
+                        onClick={() => updateStepPhoto(idx, null)}
+                        className="absolute top-2 right-2 p-1 bg-neutral-900/70 hover:bg-neutral-900/90 text-white rounded-full transition-colors"
+                        aria-label={t.createRecipe.removeStepPhoto}
+                      >
+                        <X className="w-3.5 h-3.5" />
+                      </button>
+                    </div>
+                  ) : null}
                   <textarea
                     value={s.text}
                     onChange={e => updateStepText(idx, e.target.value)}
@@ -562,10 +713,12 @@ export default function CreateRecipe({
                         <Clock className="w-2.5 h-2.5" /> {m} min
                       </Badge>
                     ))}
-                    {/* Per-step photo placeholder */}
+                    {/* Per-step photo upload */}
                     <button
                       type="button"
+                      onClick={() => handleStepPhotoClick(idx)}
                       className="inline-flex items-center gap-1 text-micro font-label uppercase tracking-widest text-on-surface-variant/60 hover:text-primary border border-dashed border-outline-variant/20 hover:border-primary/30 rounded-sm px-2 py-1 transition-colors"
+                      aria-label={t.createRecipe.addStepPhoto}
                     >
                       <ImagePlus className="w-3 h-3" />
                       {t.createRecipe.photo}
@@ -719,6 +872,11 @@ export default function CreateRecipe({
                   <div key={idx} className="flex gap-2 items-start">
                     <span className="w-5 h-5 rounded-full bg-primary/10 text-primary text-micro font-bold flex items-center justify-center shrink-0 mt-0.5">{idx + 1}</span>
                     <div className="flex-1 min-w-0">
+                      {s.photoUrl && (
+                        <div className="w-full aspect-video rounded-sm overflow-hidden mb-1.5 bg-surface-container-highest">
+                          <img src={s.photoUrl} alt={`Paso ${idx + 1}`} className="w-full h-full object-cover" />
+                        </div>
+                      )}
                       <p className="text-sm text-on-surface-variant line-clamp-2">{s.text}</p>
                       {timers.length > 0 && (
                         <div className="flex gap-1 mt-1">
@@ -734,6 +892,30 @@ export default function CreateRecipe({
                 );
               })}
             </div>
+          )}
+
+          {/* Verified-creator publish checkbox — visible only when profile flag is set */}
+          {userProfile.isVerifiedCreator && (
+            <label className="flex items-start gap-3 bg-surface-container-low p-4 rounded-sm border border-primary/20 cursor-pointer select-none">
+              <div className="mt-0.5 shrink-0">
+                <input
+                  type="checkbox"
+                  checked={publishAsVerified}
+                  onChange={e => setPublishAsVerified(e.target.checked)}
+                  className="sr-only"
+                />
+                <div className={`w-5 h-5 rounded border-2 flex items-center justify-center transition-colors ${publishAsVerified ? 'bg-primary border-primary' : 'border-outline-variant bg-transparent'}`}>
+                  {publishAsVerified && <Check className="w-3 h-3 text-on-primary" />}
+                </div>
+              </div>
+              <div className="flex-1 min-w-0">
+                <span className="flex items-center gap-1.5 font-headline font-bold text-sm text-tertiary">
+                  <BadgeCheck className="w-4 h-4 text-primary" />
+                  {t.createRecipe.publishAsVerified}
+                </span>
+                <p className="text-xs text-on-surface-variant mt-0.5">{t.createRecipe.verifiedCreatorHint}</p>
+              </div>
+            </label>
           )}
         </div>
       )}
@@ -772,6 +954,105 @@ export default function CreateRecipe({
           }}
         />
       )}
+
+      {/* Hidden file input for step photo upload */}
+      <input
+        ref={stepPhotoInputRef}
+        type="file"
+        accept="image/*"
+        className="sr-only"
+        aria-hidden="true"
+        tabIndex={-1}
+        onChange={handleStepPhotoChange}
+      />
+
+      {/* Paste-bulk ingredient sheet — R7.1 */}
+      <BottomSheet
+        open={pasteSheetOpen}
+        onOpenChange={(open) => {
+          setPasteSheetOpen(open);
+          if (!open) { setPasteText(''); setParsedLines([]); }
+        }}
+        title={t.createRecipe.pasteListTitle}
+        headerLayout="cancel-action"
+        size="focus"
+        actionSlot={
+          parsedLines.filter(l => l.confidence >= 0.6).length > 0 ? (
+            <button
+              type="button"
+              onClick={handlePasteConfirm}
+              className="font-headline font-bold text-sm text-primary uppercase tracking-widest"
+            >
+              {t.common.add}
+            </button>
+          ) : null
+        }
+      >
+        <div className="px-4 pt-2 pb-4 space-y-4">
+          <textarea
+            autoFocus
+            value={pasteText}
+            onChange={e => handlePastePreview(e.target.value)}
+            placeholder={t.createRecipe.pasteListPlaceholder}
+            rows={5}
+            className="w-full bg-surface-container-low border border-outline-variant/30 p-3 font-body text-sm text-tertiary rounded-sm focus:outline-none focus:border-primary transition-colors placeholder:text-outline-variant resize-none"
+          />
+
+          {parsedLines.length > 0 && (
+            <div className="space-y-2">
+              <p className="font-label text-micro font-bold tracking-widest uppercase text-on-surface-variant">
+                {t.createRecipe.parsedNLines.replace('{n}', String(parsedLines.length))}
+              </p>
+              {parsedLines.map((item, i) => {
+                const high = item.confidence >= 0.6;
+                const matched = high && !!item.name && dictionary.some(
+                  d =>
+                    d.name.toLowerCase().includes(item.name!.toLowerCase()) ||
+                    d.nameEn?.toLowerCase().includes(item.name!.toLowerCase()),
+                );
+                return (
+                  <div
+                    key={i}
+                    className={`flex items-start gap-2.5 p-3 rounded-sm border text-sm ${
+                      matched
+                        ? 'bg-primary/5 border-primary/20'
+                        : high
+                        ? 'bg-surface-container-highest border-outline-variant/20'
+                        : 'bg-error/5 border-error/20'
+                    }`}
+                  >
+                    {matched ? (
+                      <CheckCircle2 className="w-4 h-4 text-primary shrink-0 mt-0.5" />
+                    ) : high ? (
+                      <AlertCircle className="w-4 h-4 text-brand-secondary shrink-0 mt-0.5" />
+                    ) : (
+                      <AlertCircle className="w-4 h-4 text-error/60 shrink-0 mt-0.5" />
+                    )}
+                    <div className="flex-1 min-w-0">
+                      <span className="font-body text-tertiary truncate block">{item.raw}</span>
+                      {!matched && high && (
+                        <span className="text-micro font-label uppercase tracking-widest text-on-surface-variant">
+                          {t.createRecipe.lowConfidence}
+                        </span>
+                      )}
+                      {!high && (
+                        <span className="text-micro font-label uppercase tracking-widest text-error/60">
+                          {t.createRecipe.lowConfidence}
+                        </span>
+                      )}
+                    </div>
+                    {item.quantity && (
+                      <span className="font-label text-micro uppercase tracking-widest text-on-surface-variant shrink-0">
+                        {item.quantity}{item.unit ?? ''}
+                      </span>
+                    )}
+                  </div>
+                );
+              })}
+            </div>
+          )}
+        </div>
+      </BottomSheet>
     </PageShell>
   );
 }

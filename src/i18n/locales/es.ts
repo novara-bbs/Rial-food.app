@@ -971,6 +971,7 @@ const es = {
     optional: 'Opcional',
     register: 'Registrar',
     close: 'Cerrar',
+    add: 'Añadir',
   },
   // DailyCheckIn / Tolerance
   checkIn: {
@@ -1168,6 +1169,15 @@ const es = {
       steps: 'Pasos',
       review: 'Revisar',
     },
+    addStepPhoto: 'Añadir foto al paso',
+    removeStepPhoto: 'Eliminar foto del paso',
+    pasteList: 'Pegar lista',
+    pasteListTitle: 'Pegar lista de ingredientes',
+    pasteListPlaceholder: 'Ej.: 200g pasta\n2 huevos\n100ml leche',
+    parsedNLines: '{n} líneas detectadas',
+    lowConfidence: 'Revisión manual',
+    publishAsVerified: 'Publicar como receta verificada',
+    verifiedCreatorHint: 'Aparecerá con el badge de creador verificado',
   },
   // CreatePost
   createPost: {

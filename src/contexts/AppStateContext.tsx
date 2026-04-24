@@ -231,6 +231,8 @@ interface UserProfile {
   avatar?: string;
   /** Free-form private notes (allergies, supplements, medication). Max 500 chars. R8.4. */
   personalNotes?: string;
+  /** Creator verification flag — set by admin. Enables "Publish as verified recipe" checkbox in CreateRecipe. R7.3. */
+  isVerifiedCreator?: boolean;
 }
 
 interface DailyMacros {

@@ -949,6 +949,7 @@ const en: Translations = {
     optional: 'Optional',
     register: 'Register',
     close: 'Close',
+    add: 'Add',
   },
   checkIn: {
     title: 'Daily Check-in',
@@ -1139,6 +1140,15 @@ const en: Translations = {
       steps: 'Steps',
       review: 'Review',
     },
+    addStepPhoto: 'Add photo to step',
+    removeStepPhoto: 'Remove step photo',
+    pasteList: 'Paste list',
+    pasteListTitle: 'Paste ingredient list',
+    pasteListPlaceholder: 'E.g.: 200g pasta\n2 eggs\n100ml milk',
+    parsedNLines: '{n} lines detected',
+    lowConfidence: 'Manual review',
+    publishAsVerified: 'Publish as verified recipe',
+    verifiedCreatorHint: 'Will appear with your verified creator badge',
   },
   createPost: {
     title: 'New Post',
