@@ -54,41 +54,6 @@ export const LEVELS = [
 
 export const STREAK_MILESTONES = [3, 7, 14, 30, 60, 90, 180, 365];
 
-/**
- * @deprecated Q13 — use `calcStreaks()` from `features/wellness/utils/streaks.ts`
- * which returns both `mealLog` and `realFeel` streaks with a consistent
- * definition. This helper treats any list of log dates as a single streak
- * and is kept only for back-compat inside Profile; scheduled for removal
- * in Q14 once Profile migrates to the canonical streaks util.
- */
-export function calculateStreak(mealLogDates: string[]): number {
-  if (!mealLogDates.length) return 0;
-
-  const uniqueDays = [...new Set(mealLogDates.map(d => new Date(d).toDateString()))].sort((a, b) => new Date(b).getTime() - new Date(a).getTime());
-
-  const today = new Date().toDateString();
-  const yesterday = new Date(Date.now() - 86400000).toDateString();
-
-  // Must have logged today or yesterday to maintain streak
-  if (uniqueDays[0] !== today && uniqueDays[0] !== yesterday) return 0;
-
-  let streak = 1;
-  for (let i = 0; i < uniqueDays.length - 1; i++) {
-    const curr = new Date(uniqueDays[i]).getTime();
-    const prev = new Date(uniqueDays[i + 1]).getTime();
-    const diffDays = Math.round((curr - prev) / 86400000);
-    if (diffDays === 1) {
-      streak++;
-    } else if (diffDays === 2) {
-      // 1 grace day per month (simplified: allow 1 gap)
-      streak++;
-    } else {
-      break;
-    }
-  }
-  return streak;
-}
-
 export function calculatePoints(stats: UserStats): number {
   return (
     stats.mealsLogged * 2 +
