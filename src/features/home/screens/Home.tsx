@@ -1,6 +1,7 @@
 import { Flame, Plus, CheckCircle2, Droplets, Sparkles, Sun, Moon, ShoppingCart, ChevronRight, BarChart3 } from 'lucide-react';
 import PageShell from '../../../components/PageShell';
 import SectionCard from '../../../components/SectionCard';
+import { Heading } from '@/components/ui/Typography';
 import { useState, useEffect, useRef, useMemo, useCallback } from 'react';
 import RealFeelInline from '../../wellness/components/RealFeelInline';
 import NutritionHero from '../components/NutritionHero';
@@ -544,9 +545,9 @@ export default function Home({
       {/* 9. Smart Insights — conditional (memoized) */}
       {insights.length > 0 && (
         <section className="space-y-3">
-          <h2 className="font-headline text-sm font-bold tracking-widest uppercase text-tertiary flex items-center gap-2 px-1">
+          <Heading level="h2" variant="overline" className="flex items-center gap-2 px-1">
             <Sparkles className="w-4 h-4 text-primary" /> {t.home.insights}
-          </h2>
+          </Heading>
           {insights.slice(0, 3).map((ins) => (
             <InsightRow key={ins.id} insight={ins} />
           ))}

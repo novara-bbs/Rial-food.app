@@ -21,6 +21,8 @@ Mandatory before opening a PR that adds or substantially restructures a screen.
 - [ ] Every action → `<Button>`. Raw `<button className="...">` is only allowed for card-shaped clickables (and must include `focus-visible:ring-*` manually)
 - [ ] Empty states → `<EmptyState>` with an icon, description, and CTA
 - [ ] Destructive confirmations → `<ConfirmDialog variant="destructive">`. Never `confirm()`
+- [ ] Every `<h1..h4>` → `<Heading level="hN" variant="default|editorial|overline">` (ADR-012). **No ad-hoc `font-headline text-2xl font-bold uppercase tracking-tighter text-tertiary` strings.** Raw `<hN>` only if the file is on `typographyMigrationAllowlist` in `eslint.config.mjs` and the bespoke voice is intentional (auth greeting, brand mark).
+- [ ] Token-sized body / labels inside tiles or cards → `<Text variant="body|body-sm|caption|label|micro" as="...">` (ADR-012). Paragraphs flowing across a column can still use raw `<p className="text-body">` — the primitive earns its keep where the `{variant, as, className}` trio is easier to audit than three Tailwind utilities.
 
 ## 3. Tokens, not arbitrary values (ADR-002, ADR-007)
 

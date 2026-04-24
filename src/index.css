@@ -1,5 +1,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap');
-/* R2.5 — Fraunces variable serif for verified-recipe editorial tier.
+/* Fraunces variable serif — shared editorial face. Used by:
+   - R2.5 verified-recipe editorial tier (via raw `font-serif` utility)
+   - ADR-012 <Heading variant="editorial"> primitive (via HEADING_STYLES map)
    Only loaded by the browser when text with font-serif is rendered;
    Tailwind's tree-shaking + Google Fonts' conditional delivery keep it
    off the critical path for non-verified recipes. */
@@ -79,7 +81,8 @@
   --font-headline: "Space Grotesk", sans-serif;
   --font-body: "Inter", sans-serif;
   --font-label: "JetBrains Mono", ui-monospace, monospace;
-  /* R2.5 — editorial serif for verified-recipe titles */
+  /* Shared editorial serif. Consumed by raw `font-serif` utility (R2.5
+     verified-recipe titles) AND by <Heading variant="editorial"> (ADR-012). */
   --font-serif: "Fraunces", ui-serif, Georgia, serif;
 
   /* Typography scale — ADR-002. Semantic names, fixed pixel values.

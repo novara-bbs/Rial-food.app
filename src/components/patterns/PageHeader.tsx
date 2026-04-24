@@ -1,5 +1,7 @@
 import { ArrowLeft } from 'lucide-react';
 
+import { Heading } from '@/components/ui/Typography';
+
 export default function PageHeader({ onBack, label = 'RIAL', title, rightAction }: {
   onBack: () => void;
   label?: string;
@@ -14,7 +16,7 @@ export default function PageHeader({ onBack, label = 'RIAL', title, rightAction 
         </button>
         <div>
           {label && <span className="font-label text-xs tracking-[0.2em] text-primary uppercase block">{label}</span>}
-          <h2 className="font-headline text-2xl font-bold tracking-tighter uppercase text-tertiary">{title}</h2>
+          <Heading level="h2">{title}</Heading>
         </div>
       </div>
       {rightAction}

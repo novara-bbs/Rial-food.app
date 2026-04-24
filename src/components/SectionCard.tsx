@@ -7,6 +7,8 @@
  */
 import type { ReactNode } from 'react';
 
+import { Heading } from '@/components/ui/Typography';
+
 interface SectionCardProps {
   /** Primary headline (defaults to `font-headline bold uppercase tracking-widest`). */
   title?: ReactNode;
@@ -65,10 +67,10 @@ export default function SectionCard({
         <div className="flex items-start justify-between gap-2">
           <div className="flex flex-col gap-1 min-w-0">
             {title != null && (
-              <h2 className="font-headline font-bold text-sm uppercase tracking-widest text-tertiary flex items-center gap-2">
+              <Heading level="h3" variant="overline" className="flex items-center gap-2">
                 {icon}
                 {title}
-              </h2>
+              </Heading>
             )}
             {caption}
           </div>

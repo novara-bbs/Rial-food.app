@@ -17,8 +17,9 @@ All tokens are declared in `src/index.css` under `@theme` and resolved by Tailwi
 | `font-headline` | Space Grotesk 400/500/600/700 | Screen titles, hero metrics, uppercase caps |
 | `font-body` | Inter 400/500/600/700 | Primary reading, form fields, menu items |
 | `font-label` | JetBrains Mono 400/500/600/700 | Numeric readouts, micro-labels, uppercase caps |
+| `font-serif` | Fraunces variable (opsz 9..144, italic axis, wght 300..900) | Editorial heroes, verified-recipe detail, long-form moments — opt-in via `<Heading variant="editorial">` or raw `font-serif` utility (R2.5 verified-recipe titles) |
 
-Loaded via Google Fonts in `src/index.css:1`. If you use `text-xs` inside a `<span className="font-label">` it renders JetBrains Mono — that is intentional.
+Loaded via Google Fonts in `src/index.css:1`. If you use `text-xs` inside a `<span className="font-label">` it renders JetBrains Mono — that is intentional. `font-serif` (Fraunces) is loaded but **not** applied by default — reach for it through `<Heading variant="editorial">` (ADR-012 primitive) or the raw `font-serif` Tailwind utility for verified-recipe titles (R2.5). One token, two consumers.
 
 **Regla semántica (ADR-011, 2026-04-19).** Todo `className` que combine `text-{xl,2xl,3xl,4xl}` + `font-bold` **debe** incluir `font-headline` en el mismo string — sin él, el texto cae en Inter bold por default y los titulares pierden la firma visual de Space Grotesk. Para titulares canónicos de pantalla prefiere `text-headline` (32 px) o `text-display` (40 px) sobre los tamaños Tailwind directos. Excepciones: `font-mono` (JetBrains Mono numérico) es válido en hero tiles de métricas. La regla se aplica via ESLint `no-restricted-syntax` + convention test `src/test/conventions/typography-semantic.test.ts` (BASELINE = 0 post-`[1.5.53]`).
 
@@ -175,6 +176,52 @@ State is persisted under `rial-theme-v2` as `{palette, mode}`. Legacy `rial-them
 
 ---
 
+## 3b. Typography primitives — single source of truth (ADR-012)
+
+RIAL works **CMS-style** for headings and body text: one file controls the look of every
+H1..H4 and every token-sized text block. You don't edit call-sites to change brand
+typography — you edit the primitive and the change propagates everywhere.
+
+### The primitives
+
+| Primitive | File | What it does |
+|---|---|---|
+| `Heading` | `src/components/ui/Typography.tsx` | Renders `<h1..h4>` with three variants: `default` (Space Grotesk caps, canonical RIAL voice), `editorial` (Fraunces serif, opt-in hero), `overline` (small-caps sub-header regardless of level). |
+| `Text` | `src/components/ui/Typography.tsx` | Renders token-sized paragraph/inline text — `variant` selects `body-lg / body / body-sm / caption / label / micro`, `as` picks the tag (`p`, `span`, `div`, etc.). |
+
+### Change the whole brand voice in 1 edit
+
+To switch H2 from uppercase Space Grotesk to mixed-case Fraunces across the entire app:
+
+1. Open `src/components/ui/Typography.tsx`.
+2. Find `HEADING_STYLES.h2.default`.
+3. Swap the class string. Save.
+4. Every screen that uses `<Heading level="h2">` repaints with the new voice.
+
+To change the editorial hero face from Fraunces to e.g. Playfair:
+
+1. Open `src/index.css`.
+2. Update `@import url(...)` to load Playfair instead of Fraunces.
+3. Update `--font-serif` under `@theme` to `"Playfair Display", serif`.
+4. Every `<Heading variant="editorial">` and every raw `font-serif` utility (R2.5 verified-recipe titles) repaints together.
+
+### Rule
+
+- New screens must use `<Heading>` and `<Text>` instead of ad-hoc `className` strings
+  that combine `font-*` + `text-*` + `font-bold` + `uppercase` + `tracking-*`.
+- Raw `<h1..h4>` with hand-rolled Tailwind typography is allowed **only** when the
+  variant truly doesn't fit (bespoke hero, auth greeting) and the file is on the
+  `typographyMigrationAllowlist` in `eslint.config.mjs`. The allowlist shrinks every
+  sprint — don't grow it.
+
+This is enforced by:
+- ESLint `no-restricted-syntax` targeting JSXOpeningElement nodes for `h1..h4` with
+  ad-hoc typography strings outside the allowlist.
+- `src/test/conventions/typography-primitives.test.tsx` locking the canonical class
+  strings for each `{level, variant}` cell.
+
+---
+
 ## 4. How to extend
 
 ### Adding a new token
@@ -222,6 +269,7 @@ Smoke visual: open `src/App.tsx` in dev, cycle through the 8 theme classes (4 pa
 - ADR-007: Radius multiplicative scale
 - ADR-008: Pricing model — free-generous core + single premium tier
 - ADR-009: Bottom-sheet anatomy
+- ADR-012: Typography & layout primitives (`<Heading>`, `<Text>`)
 - `docs/DESIGN-AUDIT-2026-04-16.md` — origin audit that produced these rules
 - `docs/market/bevel-design-playbook.md` — Bevel competitor analysis + copy/adapt/skip matrix (source of §7)
 

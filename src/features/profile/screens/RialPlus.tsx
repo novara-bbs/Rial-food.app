@@ -1,6 +1,7 @@
 import { ArrowLeft, Check, Crown, Sparkles, Brain, ShoppingCart, Lock, Star, BarChart3, Download, Microscope, Archive, ClipboardList, Globe, Timer, Target, RotateCcw, type LucideIcon } from 'lucide-react';
 import PageShell from '../../../components/PageShell';
 import SectionCard from '../../../components/SectionCard';
+import { Heading } from '@/components/ui/Typography';
 import { useState, useEffect } from 'react';
 import { toast } from 'sonner';
 import { useAppState } from '../../../contexts/AppStateContext';
@@ -193,7 +194,7 @@ export default function RialPlus({ onBack }: { onBack: () => void }) {
 
         {/* Feature comparison */}
         <div>
-          <h3 className="font-headline text-sm font-bold uppercase tracking-widest text-tertiary mb-4">{t.rialPlus.whatsIncluded}</h3>
+          <Heading level="h3" variant="overline" className="mb-4">{t.rialPlus.whatsIncluded}</Heading>
           <div className="space-y-2">
             {FEATURES.map((f, i) => (
               <div key={i} className="flex items-center gap-3 py-3 border-b border-outline-variant/10 last:border-0">

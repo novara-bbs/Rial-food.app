@@ -1,6 +1,7 @@
 import { LogOut, ChevronRight, Flame, Trophy, Star, Pencil } from 'lucide-react';
 import PageShell from '../../../components/PageShell';
 import SectionCard from '../../../components/SectionCard';
+import { Heading } from '@/components/ui/Typography';
 import { BUTTON_CARD_SURFACE_CLASSES } from '../../../components/ui/surface';
 import { useI18n } from '../../../i18n';
 import { BADGES, LEVELS, calculatePoints, getUserLevel, getEarnedBadges, type UserStats } from '../utils/gamification';
@@ -148,7 +149,7 @@ export default function Profile({ userProfile, onBack, realFeelLogs = [], savedR
       <div>
         <div className="flex items-center gap-2 mb-4">
           <Trophy className="w-5 h-5 text-primary" aria-hidden="true" />
-          <h3 className="font-headline text-sm font-bold uppercase tracking-widest text-tertiary">{t.gamification.badges}</h3>
+          <Heading level="h3" variant="overline">{t.gamification.badges}</Heading>
           <span className="text-micro text-on-surface-variant font-mono">{earned.length}/{BADGES.length}</span>
         </div>
         <div className="grid grid-cols-4 sm:grid-cols-7 gap-3">

@@ -1,4 +1,6 @@
 import React from 'react';
+
+import { Heading } from '@/components/ui/Typography';
 import { cn } from '../../lib/utils';
 
 interface SwimlaneProps {
@@ -13,9 +15,7 @@ export default function Swimlane({ title, children, className }: SwimlaneProps) 
 
   return (
     <section className={cn('mb-8', className)}>
-      <h3 className="font-headline text-lg font-bold tracking-tight uppercase text-tertiary mb-3 px-6">
-        {title}
-      </h3>
+      <Heading level="h3" className="mb-3 px-6">{title}</Heading>
       <div className="flex gap-3 overflow-x-auto hide-scrollbar px-6 pb-3">
         {children}
       </div>

@@ -1,5 +1,80 @@
 # RIAL App - Changelog
 
+## [1.5.83] - 2026-04-24
+
+### feat(design-system): ADR-012 — `<Heading>` + `<Text>` typography primitives (closes call-site layer)
+
+"CMS-style" design-system sealing — sibling to R2.5's Fraunces introduction.
+R2.5 (`[1.5.75]`) loaded the Fraunces variable face and wired `--font-serif` at
+the token layer. ADR-012 (`[1.5.83]`) closes the **call-site layer** — the ~160
+`<h1..h4>` inline re-derivations that previously forced a 30-file refactor
+for any typographic change. Combined, changing how an H1/H2/H3 looks across
+RIAL, or swapping the editorial face, is now a **1-line edit** in either
+`src/index.css` (token) or `src/components/ui/Typography.tsx` (primitive).
+
+**New primitives** (`src/components/ui/Typography.tsx`):
+- `<Heading level="h1|h2|h3|h4" variant="default|editorial|overline">` — canonical
+  brand headline (`default`, Space Grotesk caps) / serif hero (`editorial`,
+  consumes the shared `--font-serif` / `font-serif` token already wired by
+  R2.5) / small-caps sub-header (`overline`). `level` drives the HTML tag
+  (a11y); `variant` swaps the look. All 4 overline variants unified to the
+  RIAL canonical pattern (`font-headline text-body font-bold uppercase
+  tracking-widest text-tertiary`).
+- `<Text variant="body-lg|body|body-sm|caption|label|micro" as?>` — semantic
+  body text primitive. Defaults to `<p>`; `as` prop supports
+  span/div/small/figcaption.
+- Emits `data-heading-level`, `data-heading-variant`, `data-text-variant`
+  attributes for DevTools inspection + convention tests.
+
+**One token, two consumers:** the Fraunces face is exposed as a single
+`--font-serif` token. R2.5 verified-recipe titles consume it via raw
+`font-serif` utility; ADR-012 `<Heading variant="editorial">` consumes it via
+`HEADING_STYLES[*].editorial`. Swapping faces only edits `--font-serif`.
+
+**ESLint rules** (ADR-012 guardrails, Fase B):
+- `preferHeadingPrimitive` — bans raw `<h1..h4>` in features/patterns (error
+  outside allowlist).
+- `preferSemanticTextToken` — bans `text-{xs..4xl}` + `font-{medium|semibold|
+  bold|black}` combos (error outside allowlist). Literal + TemplateElement
+  variants.
+- Migration allowlist: pre-existing files (warn while migration runs); auth
+  + onboarding + shadcn primitives + editorial chrome (RecipeCard/Sidebar
+  brand mark) are documented permanent exceptions.
+
+**Convention tests** (+ 67 asserts):
+- `typography-primitives.test.tsx` — 4 levels × 3 variants matrix, className
+  merging, `as` prop, `--font-serif` token + Fraunces @import in CSS.
+- `pageshell.test.ts` — every screen under `src/features/*/screens/`
+  imports `<PageShell>` or is in an 8-file documented exception list.
+
+**Fase C hot-spots migration:**
+- Patterns: `PageHeader` (h2 default), `SectionCard` (h2→h3 overline, a11y
+  improvement — SectionCard titles are sub-sections of the page heading),
+  `Swimlane` (h3 default). PageHeader + Swimlane now drift-free (removed
+  from allowlist).
+- Screens: `Home.tsx` (h2 overline), `Profile.tsx` (h3 overline),
+  `RialPlus.tsx` (h3 overline), `RealFeelDiary.tsx` (5 × h2 overline).
+
+**shadcn `card.tsx` deprecated for feature code.** JSDoc `@deprecated` header
+added; file retained for shadcn `dialog`/`sheet` internals. Use `SectionCard`.
+
+**New docs:**
+- `docs/adr/ADR-012-typography-and-layout-primitives.md` — full decision record.
+- `docs/DESIGN-SYSTEM.md` §3b "Typography primitives — single source of
+  truth" — the 1-edit CMS-style workflow.
+- `docs/NEW-SCREEN-CHECKLIST.md` §2 — mandate for `<Heading>` / `<Text>` on
+  new screens.
+- `docs/PRIMITIVES.md` — Heading + Text rows added to the canonical table.
+
+**Out of scope** (deferred to follow-up sprints):
+- Auth + onboarding centered composition (permanent ADR-012 exception).
+- RecipeCard editorial hero + carousel/grid variants (bespoke responsive
+  `text-xl md:text-3xl` + `font-black`; documented allowlist entry).
+- Settings / CreateRecipe / Cocina / social / wellness component label+badge
+  drift (`<p>` + `text-xs|sm font-bold`; warn-only, future sprint).
+
+---
+
 ## [1.5.82] - 2026-04-24
 
 ### feat(q6): Supabase offline-first sync wiring — pull-on-sign-in + push-on-change

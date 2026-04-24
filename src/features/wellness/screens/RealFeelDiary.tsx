@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import PageShell from '../../../components/PageShell';
 import SectionCard from '../../../components/SectionCard';
+import { Heading } from '@/components/ui/Typography';
 import { TrendingUp, TrendingDown, Minus, Zap, Leaf, Brain, UtensilsCrossed, Trash2 } from 'lucide-react';
 import ConfirmDialog from '../../../components/ConfirmDialog';
 import EmptyState from '../../../components/EmptyState';
@@ -158,7 +159,7 @@ export default function RealFeelDiary({ realFeelLogs = [], onBack }: { realFeelL
       {/* Daily Realities */}
       {dailyRealities.length > 0 && (
         <div>
-          <h2 className="font-headline text-sm font-bold uppercase tracking-widest text-tertiary mb-3">{t.realFeel.dailyRealities}</h2>
+          <Heading level="h2" variant="overline" className="mb-3">{t.realFeel.dailyRealities}</Heading>
           <div className="grid grid-cols-2 gap-3">
             {dailyRealities.map((r, i) => (
               <div key={i} className={`p-4 rounded-sm border ${r.tone === 'positive' ? 'bg-primary/5 border-primary/20' : 'bg-error/5 border-error/20'}`}>
@@ -174,7 +175,7 @@ export default function RealFeelDiary({ realFeelLogs = [], onBack }: { realFeelL
       {/* Food ↔ Feeling Insights */}
       {foodInsights.length > 0 && (
         <div>
-          <h2 className="font-headline text-sm font-bold uppercase tracking-widest text-tertiary mb-3">{t.realFeel.foodInsights}</h2>
+          <Heading level="h2" variant="overline" className="mb-3">{t.realFeel.foodInsights}</Heading>
           <div className="space-y-2">
             {foodInsights.map((fi) => (
               <div key={fi.ingredientId} className={`p-4 rounded-sm border flex items-center gap-3 ${
@@ -202,7 +203,7 @@ export default function RealFeelDiary({ realFeelLogs = [], onBack }: { realFeelL
       {/* Weekly Patterns */}
       {weeklyPatterns && (weeklyPatterns.energy || weeklyPatterns.digestion) && (
         <div>
-          <h2 className="font-headline text-sm font-bold uppercase tracking-widest text-tertiary mb-3">{t.realFeel.weeklyPatterns}</h2>
+          <Heading level="h2" variant="overline" className="mb-3">{t.realFeel.weeklyPatterns}</Heading>
           <div className="flex gap-3">
             {weeklyPatterns.energy && (
               <SectionCard padding="none" spacing="none" className="flex-1 p-3 flex items-center gap-2">
@@ -228,7 +229,7 @@ export default function RealFeelDiary({ realFeelLogs = [], onBack }: { realFeelL
 
       {/* Correlations */}
       <div>
-        <h2 className="font-headline text-sm font-bold uppercase tracking-widest text-tertiary mb-4">{t.realFeel.correlations}</h2>
+        <Heading level="h2" variant="overline" className="mb-4">{t.realFeel.correlations}</Heading>
         {needsMoreData ? (
           <SectionCard padding="none" spacing="none" className="p-8 text-center">
             <div className="text-3xl mb-3">🔍</div>
@@ -263,7 +264,7 @@ export default function RealFeelDiary({ realFeelLogs = [], onBack }: { realFeelL
 
       {/* Timeline */}
       <div>
-        <h2 className="font-headline text-sm font-bold uppercase tracking-widest text-tertiary mb-4">{t.realFeel.timeline}</h2>
+        <Heading level="h2" variant="overline" className="mb-4">{t.realFeel.timeline}</Heading>
         <div className="space-y-2">
           {realFeelLogs.slice(0, 20).map((log: any, i: number) => (
             <SectionCard key={log.id || i} padding="none" spacing="none" className="flex items-start gap-4 p-3">

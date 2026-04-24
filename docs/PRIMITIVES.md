@@ -10,6 +10,8 @@ Canonical components. Reach for these **before** writing JSX from scratch.
 
 | Primitive | File | When to use | When NOT |
 |---|---|---|---|
+| `Heading` | `src/components/ui/Typography.tsx` | **Every** `<h1..h4>` in features/patterns — `level` = HTML tag, `variant` = `default` / `editorial` (serif hero) / `overline` (small-caps sub-header) | Auth/onboarding centered hero; editorial card chrome with bespoke responsive size (documented allowlist) |
+| `Text` | `src/components/ui/Typography.tsx` | Token-sized paragraph or inline text — `variant` = `body-lg`/`body`/`body-sm`/`caption`/`label`/`micro`; `as` prop for span/div/small | Labels inside interactive tiles where the tile primitive owns typography |
 | `PageShell` | `src/components/PageShell.tsx` | Outermost wrapper of every screen | Embedded list items; modal bodies |
 | `PageHeader` | `src/components/patterns/PageHeader.tsx` | Screen title + back button + right action slot | Top-level nav (use `GlobalHeader`) |
 | `SectionCard` | `src/components/SectionCard.tsx` | Any grouping with a title/icon/action | Interactive tiles (use `StatTile`); full-screen overlays |

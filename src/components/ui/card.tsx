@@ -1,3 +1,13 @@
+/**
+ * @deprecated Do not use for RIAL screens. Use `SectionCard` from
+ * `@/components/SectionCard` instead — it enforces the canonical RIAL
+ * shape (`bg-surface-container-low border-outline-variant/20 rounded-sm
+ * shadow-elev-1`). This file is retained only so shadcn dialog/sheet
+ * variants can keep consuming the base shell internally. New call-sites
+ * outside `src/components/ui/` that import from this module are blocked
+ * by ESLint (see `eslint.config.mjs` → `noShadcnCardOutsideUi`).
+ * @see docs/adr/ADR-012-typography-and-layout-primitives.md
+ */
 import * as React from "react"
 
 import { cn } from "@/lib/utils"
