@@ -8,7 +8,7 @@
 Last updated: **2026-04-24** — Q15 shipped (`[1.5.80]`).
 
 ## Release snapshot
-- **Branch**: `main`, pending push to `rial-food/main` (continua gate).
+- **Branch**: `main`, in sync with `rial-food/main` through `179d0ec`.
 - **Last shipped**: `[1.5.80]` — Q15 ICP-adaptive NutritionHero goal-status chip + best-streak
   badge + calcStreaks sweep (3 new tests, `calculateStreak` removed from test suite).
 - **Active plan**: `.claude/plans/revisa-todas-las-capturas-ancient-micali.md` (v2 re-sync).
