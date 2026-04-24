@@ -83,7 +83,8 @@ const noTailwindShadowTpl = {
 /**
  * Require `font-headline` whenever `text-{xl|2xl|3xl|4xl}` is paired with
  * `font-bold` (ADR-011 § 2026-04-19 typography semantic rule). Prevents
- * headlines from falling back to Inter when Space Grotesk is intended.
+ * headlines from falling back to Inter when Bricolage Grotesque is intended
+ * (`--font-headline` token, [1.5.84]; previously Space Grotesk).
  *
  * Matches: literal contains both text-Xl + font-bold AND does NOT contain
  * font-headline. (Positive lookaheads for text-* and font-bold, negative

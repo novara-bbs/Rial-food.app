@@ -5,34 +5,45 @@
 > prunes this file back down. Everything below should answer: *what's the release line,
 > what's the quality baseline, what's the next move, what's broken?*
 
-Last updated: **2026-04-24** — Phase 1 Home rework shipped (`[1.5.84]`) on top of ADR-012 (`[1.5.83]`), Q6 sync (`[1.5.82]`), Q17 (`[1.5.81]`).
+Last updated: **2026-04-24** — `[1.5.85]` brand font system normalization:
+`--font-headline` Space Grotesk → **Bricolage Grotesque** (Google Fonts variable)
++ new `--font-mono` alias so `font-mono` utility binds to JetBrains Mono instead
+of OS system mono. On top of Phase 1 Home rework (`[1.5.84]`), ADR-012 primitives
+(`[1.5.83]`), Q6 sync (`[1.5.82]`), and Q17 (`[1.5.81]`).
 
 ## Release snapshot
-- **Branch**: `main`, local work ahead of `rial-food/main` (`afb92da`) pending push.
-- **Last shipped**: `[1.5.84]` Phase 1 Home rework — HomeQuickStats chip-row (advanced
-  only), section reorder (TodaysMeals → pos 5), simple/advanced gating (hides
-  Progress/ActivityRow/MiniDash/RealFeel/Smart Insights/bestStreak in simple), Primary
-  Action compacted to single Log Meal button, spacing unification, 15 convention
-  assertions locking HomeQuickStats shape. Rebased onto ADR-012 → Smart Insights
-  section uses `<Heading level="h2" variant="overline">` primitive.
-- **Previous**: `[1.5.83]` ADR-012 `<Heading>` + `<Text>` typography primitives.
-  `[1.5.82]` Q6 Supabase offline-first sync wiring. `[1.5.81]` Q17 CSP header + contrast.
-  Q15 ✓, Q17 ✓, Q6 ✓, R1–R8 ✓, **Phase 1 Home** ✓.
-- **Active plan**: Phase 1 Home closed. Next: Fase C allowlist shrink (ADR-012
-  migration tranches) + **owner actions** to unlock Supabase in production.
+- **Branch**: `main`, awaiting push to `rial-food/main` (local ahead 1 vs `5bbb748`).
+- **Last shipped**: `[1.5.85]` brand font normalization. 4-font system = Bricolage
+  Grotesque (headline) + Inter (body) + Fraunces (editorial) + JetBrains Mono
+  (data). Token-only edit — 0 call-site files touched. Pairing reference: Food52
+  / Substack creator / Bon Appétit. Fixed hidden hardcode: `font-mono` utility
+  used in ~30 files (FastingTimer, Profile, Onboarding, KPIs…) was falling
+  through to OS mono; now aliased to JetBrains Mono via new token.
+- **Previous**: `[1.5.84]` Phase 1 Home rework — HomeQuickStats chip-row,
+  TodaysMeals → pos 5, simple/advanced gating, Primary Action compaction, spacing
+  unification. `[1.5.83]` ADR-012 `<Heading>` + `<Text>` primitives closing the
+  call-site layer. `[1.5.82]` Q6 Supabase offline-first sync wiring. `[1.5.81]`
+  Q17 CSP header + contrast audit. Q15 ✓, Q17 ✓, Q6 ✓, R1–R8 ✓, ADR-012 ✓,
+  Phase 1 Home ✓.
+- **Active plan**: Design-system sealed, fonts normalized. Next: **global filter
+  normalization audit** (all pills/chips/tabs/search surfaces across Cocina,
+  Discover, Profile, MyRecipes, Wellness — duplicated patterns, inconsistent
+  widths, ugly). Then Fase C allowlist shrink + owner actions to unlock Supabase
+  in production (see risks).
 - **Release target**: `rial-food/main` (`novara-bbs/Rial-food.app`). Origin `rial-food`.
 - **Vercel project**: `rial.app.v1.5` (id `prj_t11VHYQjptazjUx7Y2hWLz0IDAjg`).
 - **Governance**: work directly on `main`. "continua" = push approval post green preflight.
 
-## Quality baseline (post-[1.5.84], 2026-04-24)
+## Quality baseline (post-[1.5.85], 2026-04-24)
 - TypeScript: **0 errors** (`npx tsc --noEmit`)
-- Tests: **1144/1144** passing (68 files) — +31 vs `[1.5.83]` (HomeQuickStats 15 asserts +
-  mode-adaptive NutritionHero extensions + DayStatus helpers)
-- i18n symmetry: **1871** keys aligned ES ↔ EN (+6 Phase 1: quickHydration, quickWeight,
-  quickActivity, quickInsights, quickRest, quickTraining)
-- Design-system lint: **0 errors**, 1149 warnings (typographyMigrationAllowlist)
-- Build main: **877.5 KB raw / 275.7 KB gzip** · `size:check` PASS
-- Security headers: HSTS + X-Frame + nosniff + Permissions-Policy + Referrer-Policy + **CSP** ✓
+- Tests: **1144/1144** passing (68 files) — unchanged vs `[1.5.84]` Phase 1 Home
+  (font swap is token-only; typography-semantic message cosmetic update)
+- i18n symmetry: **1871** keys aligned ES ↔ EN (unchanged vs `[1.5.84]`)
+- Design-system lint: **0 errors**, ~1149 warnings (typographyMigrationAllowlist hits;
+  shrinks with each Fase C tranche)
+- Build main: **877.1 KB raw / 275.5 KB gzip** · `size:check` PASS (JS bundle delta
+  = 0; Google Fonts request net ≈ +10 KB over wire)
+- Security headers: HSTS + X-Frame-Options + nosniff + Permissions-Policy + Referrer-Policy + **CSP** ✓
 - Drift: `text-[Npx]` = **0**, SectionCard shape = **0**, ad-hoc `<hN>` typography
   outside allowlist = **0** (ADR-012 guardrail)
 
@@ -83,7 +94,8 @@ Fase 1+2 multi-media recipes, Food Families P0-P16, R1 docs, R2 recipes editoria
 **Q15 ICP-adaptive NutritionHero + calcStreaks sweep**, **Q17 CSP header + contrast audit**,
 **Q6 Supabase offline-first sync wiring** (pull-on-sign-in + push-on-change + Mi Cuenta),
 **ADR-012 typography primitives (`<Heading>`, `<Text>`) closing call-site layer**,
-**Phase 1 Home rework (chip-row + reorder + simple/advanced density)**.
+**Phase 1 Home rework (chip-row + reorder + simple/advanced density)**,
+**[1.5.85] brand font normalization** (Bricolage Grotesque headline + `--font-mono` alias → JetBrains Mono; CMS-style proof).
 
 ## Repository compliance
 - `LICENSE`: Proprietary © 2026 RIAL FOOD WORLD S.L. Contact legal@rialfoodworld.com.

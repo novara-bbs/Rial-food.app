@@ -1,10 +1,19 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap');
-/* Fraunces variable serif — shared editorial face. Used by:
-   - R2.5 verified-recipe editorial tier (via raw `font-serif` utility)
-   - ADR-012 <Heading variant="editorial"> primitive (via HEADING_STYLES map)
-   Only loaded by the browser when text with font-serif is rendered;
-   Tailwind's tree-shaking + Google Fonts' conditional delivery keep it
-   off the critical path for non-verified recipes. */
+/* RIAL font system ([1.5.84] normalization).
+   4 tokens, 4 families, 100 % Google Fonts (no self-host, CSP-clean):
+   - --font-headline → Bricolage Grotesque (variable, opsz 12..96, wght 200..800)
+     Warm modernist grotesque with editorial personality. Replaces Space Grotesk
+     (over-saturated in dev-tool / v0-template branding). Target ICP = premium-
+     nutrition female 25–45; reference pairing seen in Food52, Substack creator
+     pages, Bon Appétit web.
+   - --font-body → Inter (standard sans body, excellent multilingual ES/EN).
+   - --font-serif → Fraunces (variable, opsz 9..144) for editorial hero moments
+     (R2.5 verified-recipe titles + ADR-012 <Heading variant="editorial">).
+   - --font-label / --font-mono → JetBrains Mono (numeric readouts, caps labels).
+     Both utilities map to the same family so `font-mono` call-sites bind to the
+     brand mono instead of the OS-default stack.
+   Only Fraunces's large-opsz variants are fetched when a screen renders serif
+   text; Bricolage is critical-path because Heading/default is everywhere. */
+@import url('https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,200..800&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..900;1,9..144,300..900&display=swap');
 @import "tailwindcss";
 @import "tw-animate-css";
@@ -78,9 +87,18 @@
   --radius-xl: calc(var(--radius) * 3);      /* 12px */
   --radius-2xl: calc(var(--radius) * 4);     /* 16px */
 
-  --font-headline: "Space Grotesk", sans-serif;
+  /* Brand headline — Bricolage Grotesque variable ([1.5.84]).
+     Cap-friendly at tracking-tight/tighter, humanist warmth at display sizes.
+     Google Fonts `opsz 12..96, wght 200..800`. */
+  --font-headline: "Bricolage Grotesque", system-ui, sans-serif;
   --font-body: "Inter", sans-serif;
+  /* Brand mono — JetBrains Mono. Two aliases so both `font-label` (semantic
+     RIAL token) and `font-mono` (generic Tailwind utility inherited by ~30
+     call-sites: FastingTimer, Onboarding, Profile stats, CookTimer, KPI tiles…)
+     render the same family. Fixes the pre-[1.5.84] drift where `font-mono`
+     fell through to ui-monospace (SF Mono / Menlo / Cascadia per OS). */
   --font-label: "JetBrains Mono", ui-monospace, monospace;
+  --font-mono: "JetBrains Mono", ui-monospace, monospace;
   /* Shared editorial serif. Consumed by raw `font-serif` utility (R2.5
      verified-recipe titles) AND by <Heading variant="editorial"> (ADR-012). */
   --font-serif: "Fraunces", ui-serif, Georgia, serif;

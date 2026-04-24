@@ -2,8 +2,9 @@
  * Typography semantic rule — ADR-011 (NEUTRAL brand default + design system polish).
  *
  * Every `text-{xl,2xl,3xl,4xl}` paired with `font-bold` must also include
- * `font-headline` so Space Grotesk renders. Without it, the class falls back
- * to Inter bold — which produces visually indistinct headlines across screens.
+ * `font-headline` so Bricolage Grotesque renders ([1.5.84] brand font). Without
+ * it, the class falls back to Inter bold — which produces visually indistinct
+ * headlines across screens.
  *
  * `font-mono` is an accepted alternative (JetBrains Mono by design) for
  * numeric/monospace hero tiles — skipped.
@@ -69,7 +70,7 @@ describe('Typography semantic rule (ADR-011 § 1.1)', () => {
       // eslint-disable-next-line no-console -- surfaced to CI logs
       console.error(
         `\nTypography regression: ${violations.length} headline(s) missing font-headline:\n  - ${violations.join('\n  - ')}\n` +
-          'Add `font-headline` so Space Grotesk renders. For canonical headlines prefer `text-headline` or `text-display`. See docs/DESIGN-SYSTEM.md § 1.1.',
+          'Add `font-headline` so Bricolage Grotesque renders. For canonical headlines prefer `text-headline` or `text-display`. See docs/DESIGN-SYSTEM.md § 1.1.',
       );
     }
     expect(violations).toEqual([]);

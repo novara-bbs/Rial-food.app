@@ -14,12 +14,14 @@ All tokens are declared in `src/index.css` under `@theme` and resolved by Tailwi
 
 | Token | Value | Purpose |
 |---|---|---|
-| `font-headline` | Space Grotesk 400/500/600/700 | Screen titles, hero metrics, uppercase caps |
+| `font-headline` | Bricolage Grotesque variable (opsz 12..96, wght 200..800) | Screen titles, hero metrics, uppercase caps |
 | `font-body` | Inter 400/500/600/700 | Primary reading, form fields, menu items |
-| `font-label` | JetBrains Mono 400/500/600/700 | Numeric readouts, micro-labels, uppercase caps |
+| `font-label` / `font-mono` | JetBrains Mono 400/500/600/700 | Numeric readouts, micro-labels, uppercase caps. Both utilities alias to the same family — see § "Why two mono tokens" below. |
 | `font-serif` | Fraunces variable (opsz 9..144, italic axis, wght 300..900) | Editorial heroes, verified-recipe detail, long-form moments — opt-in via `<Heading variant="editorial">` or raw `font-serif` utility (R2.5 verified-recipe titles) |
 
-Loaded via Google Fonts in `src/index.css:1`. If you use `text-xs` inside a `<span className="font-label">` it renders JetBrains Mono — that is intentional. `font-serif` (Fraunces) is loaded but **not** applied by default — reach for it through `<Heading variant="editorial">` (ADR-012 primitive) or the raw `font-serif` Tailwind utility for verified-recipe titles (R2.5). One token, two consumers.
+All four families are loaded via Google Fonts in `src/index.css:1–2`. No self-host, no preload — the critical-path hit is ~160 KB across Bricolage + Inter + JetBrains Mono, conditional fetch for Fraunces only when a `font-serif` class actually renders (editorial recipe hero). If you use `text-xs` inside a `<span className="font-label">` it renders JetBrains Mono — that is intentional. `font-serif` (Fraunces) is loaded but **not** applied by default — reach for it through `<Heading variant="editorial">` (ADR-012 primitive) or the raw `font-serif` Tailwind utility for verified-recipe titles (R2.5). One token, two consumers.
+
+**Why two mono tokens?** Pre-`[1.5.84]` the repo declared only `--font-label`, so the semantic utility `font-label` rendered JetBrains Mono correctly — but the ~30 call-sites using the generic Tailwind `font-mono` utility (FastingTimer hero, Profile stats, Onboarding targets, CookTimer, KPI tiles, Discover/Community chips, etc.) fell through to the platform default mono (SF Mono on Mac, Consolas on Windows, Cascadia on newer Windows, Menlo on older iOS). `[1.5.84]` declares `--font-mono` as a sibling token pointing at the same JetBrains Mono stack, so both utilities bind to the brand mono. `font-label` remains the semantic-preferred utility (conveys intent: "this is a data label"); `font-mono` is accepted for existing call-sites and for monospace-alignment cases (OTP inputs, cook-timer countdowns).
 
 **Regla semántica (ADR-011, 2026-04-19).** Todo `className` que combine `text-{xl,2xl,3xl,4xl}` + `font-bold` **debe** incluir `font-headline` en el mismo string — sin él, el texto cae en Inter bold por default y los titulares pierden la firma visual de Space Grotesk. Para titulares canónicos de pantalla prefiere `text-headline` (32 px) o `text-display` (40 px) sobre los tamaños Tailwind directos. Excepciones: `font-mono` (JetBrains Mono numérico) es válido en hero tiles de métricas. La regla se aplica via ESLint `no-restricted-syntax` + convention test `src/test/conventions/typography-semantic.test.ts` (BASELINE = 0 post-`[1.5.53]`).
 
@@ -186,12 +188,12 @@ typography — you edit the primitive and the change propagates everywhere.
 
 | Primitive | File | What it does |
 |---|---|---|
-| `Heading` | `src/components/ui/Typography.tsx` | Renders `<h1..h4>` with three variants: `default` (Space Grotesk caps, canonical RIAL voice), `editorial` (Fraunces serif, opt-in hero), `overline` (small-caps sub-header regardless of level). |
+| `Heading` | `src/components/ui/Typography.tsx` | Renders `<h1..h4>` with three variants: `default` (Bricolage Grotesque caps, canonical RIAL voice), `editorial` (Fraunces serif, opt-in hero), `overline` (small-caps sub-header regardless of level). |
 | `Text` | `src/components/ui/Typography.tsx` | Renders token-sized paragraph/inline text — `variant` selects `body-lg / body / body-sm / caption / label / micro`, `as` picks the tag (`p`, `span`, `div`, etc.). |
 
 ### Change the whole brand voice in 1 edit
 
-To switch H2 from uppercase Space Grotesk to mixed-case Fraunces across the entire app:
+To switch H2 from uppercase Bricolage Grotesque to mixed-case Fraunces across the entire app:
 
 1. Open `src/components/ui/Typography.tsx`.
 2. Find `HEADING_STYLES.h2.default`.

@@ -1,5 +1,91 @@
 # RIAL App - Changelog
 
+## [1.5.85] - 2026-04-24
+
+### feat(design-system): brand font system normalization — Bricolage Grotesque + `--font-mono` alias fix
+
+Two changes wrapped in one token-layer edit. Neither touches a call-site,
+both propagate through `<Heading>` + ~30 allowlist files + every data readout
+via the ADR-012 "CMS-style" contract.
+
+**1. `--font-headline`: Space Grotesk → Bricolage Grotesque (variable).**
+
+Space Grotesk was RIAL's headline face since v1, but by 2024–2026 it had become
+the default display font for Vercel, Linear, Retool, shadcn docs, and the bulk
+of v0/Cursor/Bolt/Lovable "vibe-coded" templates. The crypto/dev-tool association
+clashed with RIAL's premium-nutrition voice and with the editorial Fraunces
+axis opened by R2.5 (`[1.5.75]`). Target ICP is premium-nutrition women 25–45
+interested in recipe discovery, creator content, and community — closer to the
+Food52 / Substack creator / Bon Appétit web editorial register than to SaaS
+dev-tool branding.
+
+**Bricolage Grotesque** (variable, `opsz 12..96, wght 200..800`, Google Fonts /
+Mathieu Triay, OFL) is a warm modernist grotesque with editorial personality.
+Cap-friendly at `tracking-tight`/`tighter` where the RIAL `Heading` primitive
+lives. Not saturated in the v0 template ecosystem. Single-family variable
+means 1 request covers every weight/opsz we need.
+
+**2. `--font-mono` alias (hidden-hardcode fix).**
+
+Pre-`[1.5.85]` only `--font-label` was declared. That meant the semantic
+utility `font-label` rendered JetBrains Mono correctly, but ~30 call-sites
+using the generic Tailwind `font-mono` utility — FastingTimer hero countdown,
+Profile streak tile, Onboarding macro targets, KcalBreakdownCard, CookTimer,
+KPI readouts, Discover/Community header chips, OTP input, ImportRecipeURL
+macros, etc. — fell through to the platform default mono (SF Mono on macOS,
+Consolas on Windows, Cascadia on newer Windows, Menlo on older iOS). Numeric
+readouts drifted visually across OS. `[1.5.85]` declares `--font-mono` as a
+sibling token pointing at the same JetBrains Mono stack so both utilities
+bind to the brand mono. No call-site migration needed; the token layer does
+the work.
+
+**How.**
+- `src/index.css` line 1 — new consolidated `@import` URL adds
+  `Bricolage+Grotesque:opsz,wght@12..96,200..800` and drops Space Grotesk.
+  Inter + JetBrains Mono stay on the same import. Fraunces import unchanged.
+- `src/index.css` `@theme` block — `--font-headline: "Bricolage Grotesque", system-ui, sans-serif`
+  and new `--font-mono: "JetBrains Mono", ui-monospace, monospace` sibling token.
+- No custom-hosted font file ships in the repo; everything comes from the
+  single Google Fonts CDN request.
+
+**Surface updated (cosmetic only, no logic change).**
+- `eslint.config.mjs` `noHeadlineWithoutFont` rule doc: headline font name updated.
+- `src/test/conventions/typography-semantic.test.ts` header + error message: same.
+- `docs/DESIGN-SYSTEM.md` § 1.1 Fonts table + Heading primitive description +
+  CMS-style example + new § "Why two mono tokens".
+
+**Not touched.**
+- `src/components/ui/Typography.tsx` — still emits `font-headline` / `font-serif`;
+  tokens change underneath.
+- `typographyMigrationAllowlist` (~30 files) — consume `font-headline` already.
+- All `font-mono` call-sites — inherit JetBrains Mono automatically via the alias.
+- Inter, Fraunces — intact.
+- CSP — no change. All fonts come from `fonts.googleapis.com` / `fonts.gstatic.com`,
+  already in the policy since Q17.
+
+**Bundle impact.**
+- JS bundle delta: 0.
+- Font network cost (first paint, gzip, measured via Google Fonts response):
+  ~+40 KB (Bricolage variable subset) − ~30 KB (Space Grotesk 4 weights removed)
+  ≈ +10 KB net. Within budget.
+
+**Verification.**
+- `npm run release:preflight` — tsc + lint + lint:code + check:i18n + test +
+  build + size:check all green.
+- Smoke visual: Home, Profile, Recipe Detail, Cocina, CreateRecipe, Wellness,
+  FastingTimer, Onboarding, CookMode. All `<Heading>` switch to Bricolage on
+  reload; numeric readouts (FastingTimer, macro targets, KPIs) switch from
+  system-mono to JetBrains Mono.
+- DevTools CMS-invariant test: `document.documentElement.style.setProperty(
+  '--font-headline', 'Courier New, monospace')` → every headline becomes mono
+  instantly. Reverts on reload. Confirms the token-layer contract end-to-end.
+
+**Rollback.** Revert `src/index.css` `@theme` `--font-headline` back to
+`"Space Grotesk", sans-serif`; remove the `--font-mono` declaration. No other
+file needs touching. That is the ADR-012 guarantee.
+
+---
+
 ## [1.5.84] - 2026-04-24
 
 ### feat(home): Phase 1 rework — chip-row + reorder + simple/advanced density
