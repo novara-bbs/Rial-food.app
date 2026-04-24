@@ -23,7 +23,7 @@ import { PortionResult } from '../components/PortionSelector';
 import EmptyState from '../../../components/EmptyState';
 import TabNav from '../../../components/patterns/TabNav';
 import PageHeader from '../../../components/patterns/PageHeader';
-import FilterRow from '../../../components/patterns/FilterRow';
+import ChipRow from '../../../components/patterns/ChipRow';
 import { useAppState } from '../../../contexts/AppStateContext';
 import { toast } from 'sonner';
 
@@ -448,15 +448,17 @@ export default function AddMeal({
         />
 
         {!isSearching && (
-          <FilterRow
+          <ChipRow
+            mode="single"
+            variant="pill"
             options={[
               { id: 'recents', label: t.addMealScreen.recents, icon: Clock },
               { id: 'favorites', label: t.addMealScreen.favorites, icon: Star },
               { id: 'all', label: t.addMealScreen.allFoods },
             ]}
             active={browseMode}
-            onChange={(id) => setBrowseMode(id as typeof browseMode)}
-            variant="pill"
+            onChange={(id) => setBrowseMode((id ?? 'all') as typeof browseMode)}
+            ariaLabel={t.addMealScreen.allFoods}
           />
         )}
 

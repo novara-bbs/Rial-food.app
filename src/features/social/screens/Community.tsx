@@ -6,7 +6,7 @@ import { useI18n } from '../../../i18n';
 import { useNavigation } from '../../../contexts/NavigationContext';
 import { useAppState } from '../../../contexts/AppStateContext';
 import EmptyState from '../../../components/EmptyState';
-import FilterRow from '../../../components/patterns/FilterRow';
+import TabNav from '../../../components/patterns/TabNav';
 import PostCard from '../components/PostCard';
 import StoryRingsRow from '../components/StoryRingsRow';
 import { rankFeed, getFollowingFeed, getTrendingFeed } from '../utils/feed-algorithm';
@@ -114,16 +114,17 @@ export default function Community({ communityPosts = [], onAddComment }: { commu
         <StoryRingsRow />
       </section>
 
-      {/* Feed Mode Chips */}
-      <FilterRow
-        options={[
+      {/* Feed source tabs — FOR YOU / FOLLOWING / TRENDING are distinct
+          feed axes (navigation), not facets. ADR-013: navigation → TabNav. */}
+      <TabNav
+        tabs={[
           { id: 'forYou', label: feed.forYou || 'Para Ti' },
           { id: 'following', label: feed.following || 'Siguiendo' },
           { id: 'trending', label: feed.trending || 'Trending' },
         ]}
         active={feedMode}
         onChange={(id) => setFeedMode(id as FeedMode)}
-        variant="pill"
+        className="-mx-4 mb-2"
       />
 
       {/* Posts feed */}

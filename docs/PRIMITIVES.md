@@ -31,6 +31,11 @@ Canonical components. Reach for these **before** writing JSX from scratch.
 | `OnboardingScaffold` | `src/components/OnboardingScaffold.tsx` | Per-step wrapper for the 6-step onboarding flow (title + optional subtitle + optional heroSlot + interactive body) | Full-screen modals outside the onboarding context (use `PageShell`) |
 | `RadioCardGroup` | `src/components/RadioCardGroup.tsx` | Exclusive selector rendered as vertical stack of cards with WAI-ARIA radiogroup semantics (2–5 options) | Non-exclusive selection (use checkboxes); side-by-side pills (raw buttons); > 5 options (use `<select>` or `SelectList`) |
 | `SelectList` | `src/components/SelectList.tsx` | Vertical card list where each item is a nav trigger with trailing chevron (no selection state) | Exclusive selection (use `RadioCardGroup`); menus or dropdowns (use `DropdownMenu`) |
+| `TabNav` | `src/components/patterns/TabNav.tsx` | Source / type / view navigation — 1-of-N **required**, underline indicator, `role="tablist"` | Optional filtering (use `ChipRow single`); compact card-scoped toggles (use `SegmentedTabs`) |
+| `ChipRow` | `src/components/patterns/ChipRow.tsx` | Faceted filtering — `mode="single"` (0-or-1 optional) / `mode="multi"` (0-to-N). Variants `pill` / `icon` / `emoji`; tone `default` / `danger` (excluded-state) | Source navigation (use `TabNav`); sort (use `SortControl`); curated editorial collections (use `CollectionsCarousel`) |
+| `FilterRow` | `src/components/patterns/FilterRow.tsx` | **Deprecated shim** → delegates to `ChipRow`. Kept so existing imports don't break | New code — import `ChipRow` directly |
+| `SearchInput` | `src/components/patterns/SearchInput.tsx` | Free-text filter at the top of a list | Facet filtering (use `ChipRow`); sort (use `SortControl`) |
+| `SortControl` | `src/components/patterns/SortControl.tsx` | Ordering — reorder without reducing. Native `<select>` under brand chrome, height ≡ `SearchInput` so both align in one flex row | Reducing set (use `ChipRow`); one-shot actions (use `Button` + menu) |
 
 ---
 
@@ -316,6 +321,93 @@ Semantics: outer `<div role="radiogroup">` + each card `<button role="radio" ari
 ```
 
 Differs from `RadioCardGroup`: **no selection state** — each card is a one-shot navigation trigger. Trailing `ChevronRight` on every card signals nav. `min-h-14` per item preserves HIG tap area. NOT a radiogroup — do not use when only one item can be "active" at a time.
+
+### Filter primitives (ADR-013)
+
+"One axis = one primitive." Pick the primitive from the axis the user is choosing on:
+
+| Axis | Primitive | Notes |
+|---|---|---|
+| Source / type / view (1-of-N required) | `TabNav` | Underline, `role="tablist"`, navigation feel |
+| Single facet (1-of-N optional) | `ChipRow mode="single"` | Chips toggle off to `null` |
+| Multiple facets (0-to-N) | `ChipRow mode="multi"` | `active: string[]`, no null |
+| Compact 1-of-N inside a card/dialog | `SegmentedTabs` | Pill container, ≤5 options |
+| Ordering (reorder, not reduce) | `SortControl` | Native `<select>` + brand chrome |
+| Free-text search | `SearchInput` | Always the top row |
+| Curated editorial collections with count | `CollectionsCarousel` | Rail — not a filter |
+
+```tsx
+// TabNav — source nav (forYou / following / trending)
+<TabNav
+  tabs={[
+    { id: 'forYou',    label: t.community.forYou,    icon: Sparkles },
+    { id: 'following', label: t.community.following, icon: Users },
+    { id: 'trending',  label: t.community.trending,  icon: TrendingUp },
+  ]}
+  active={mode}
+  onChange={(id) => setMode(id as typeof mode)}
+  ariaLabel={t.community.sourceAria}
+/>
+
+// ChipRow single — optional facet (all/mine/imported/cooked)
+<ChipRow
+  mode="single"
+  variant="pill"
+  options={sourceChips}
+  active={activeSource}
+  onChange={(id) => setActiveSource(id ?? 'all')}
+  ariaLabel={t.cocina.sourceAria}
+/>
+
+// ChipRow icon — meal-type selector (tiles with vertical icon + label)
+<ChipRow
+  mode="single"
+  variant="icon"
+  options={mealCategories}
+  active={activeMeal}
+  onChange={setActiveMeal}
+  ariaLabel={t.cocina.mealAria}
+/>
+
+// ChipRow emoji — taxonomy picker (food categories)
+<ChipRow
+  mode="single"
+  variant="emoji"
+  options={categoryOptions}
+  active={activeCategory}
+  onChange={setActiveCategory}
+  ariaLabel={t.foodDictionary.categoryAria}
+/>
+
+// ChipRow multi tone="danger" — excluded-state (allergens)
+<ChipRow
+  mode="multi"
+  variant="pill"
+  tone="danger"
+  options={allergenOptions}
+  active={Array.from(excluded)}
+  onChange={(next) => setExcluded(new Set(next))}
+  ariaLabel={t.foodDictionary.allergenAria}
+/>
+
+// SortControl — ordering, same height as SearchInput
+<SortControl
+  options={[
+    { id: 'recent',     label: t.cocina.sort.recent },
+    { id: 'az',         label: t.cocina.sort.az },
+    { id: 'time-short', label: t.cocina.sort.timeShort },
+  ]}
+  active={sortMode}
+  onChange={setSortMode}
+  ariaLabel={t.cocina.sortAria}
+/>
+```
+
+**Invariants (CI-enforced, see `src/test/conventions/filter-system.test.ts`):**
+
+- **No inline chip reimplementation.** A `<button>` in `src/features/**` that carries the full triad `shrink-0` + `rounded-*` + `uppercase` + `tracking-widest` + `font-(headline|label)` must come through `ChipRow` / `SegmentedTabs` / `TabNav`.
+- **No branded inline `<select>`.** A native `<select>` in `src/features/**/screens/*` with `font-(headline|label)` must route through `SortControl`.
+- **Dedup invariant.** No dimension appears on two primitives at once. If it's in the R3 `COLLECTIONS` registry (surfaced via `CollectionsCarousel`), it does **not** also appear in `ChipRow`.
 
 ---
 

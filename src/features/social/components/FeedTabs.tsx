@@ -7,6 +7,12 @@ interface FeedTabsProps {
   trendingContent: React.ReactNode;
 }
 
+/**
+ * @deprecated Use the canonical `TabNav` primitive from
+ * `components/patterns/TabNav` with controlled state (ADR-013). This
+ * hardcodes 3 specific feeds and has no callers after `[1.5.86]`; kept only
+ * as a reference until the next cleanup sprint.
+ */
 export default function FeedTabs({ forYouContent, followingContent, trendingContent }: FeedTabsProps) {
   const { t } = useI18n();
   const feed = t.feed;

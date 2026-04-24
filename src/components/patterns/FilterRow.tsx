@@ -1,5 +1,12 @@
 import React from 'react';
-import { cn } from '../../lib/utils';
+import ChipRow, { type ChipOption } from './ChipRow';
+
+/**
+ * @deprecated Use `ChipRow` directly (ADR-013). This file is a backward-compat
+ * shim so we can migrate call-sites incrementally without a 7-file rename PR.
+ * No new code should import `FilterRow`; the shim will be removed in a later
+ * sprint once every call-site is migrated.
+ */
 
 export interface FilterOption {
   id: string;
@@ -17,11 +24,7 @@ export interface FilterRowProps {
   className?: string;
 }
 
-/**
- * Horizontal scrollable filter row. Two variants:
- * - "icon": vertical icon + label buttons (meal-type selectors)
- * - "pill": rounded-full chips with optional count (collection filters)
- */
+/** @deprecated Use `ChipRow` instead. */
 export default function FilterRow({
   options,
   active,
@@ -29,59 +32,24 @@ export default function FilterRow({
   variant = 'pill',
   className,
 }: FilterRowProps) {
-  if (variant === 'icon') {
-    return (
-      <div className={cn('flex gap-3 overflow-x-auto hide-scrollbar', className)}>
-        {options.map(opt => {
-          const Icon = opt.icon;
-          const isActive = active === opt.id;
-          return (
-            <button
-              type="button"
-              key={opt.id}
-              onClick={() => onChange(opt.id)}
-              className={cn(
-                'flex flex-col items-center gap-1.5 px-3 py-2 rounded-sm shrink-0 transition-colors',
-                isActive
-                  ? 'bg-primary text-on-primary'
-                  : 'bg-surface-container-high text-on-surface-variant border border-outline-variant/20 hover:bg-surface-container-highest',
-              )}
-            >
-              {Icon && <Icon className="w-5 h-5" />}
-              <span className="text-micro font-black tracking-widest uppercase">{opt.label}</span>
-            </button>
-          );
-        })}
-      </div>
-    );
-  }
-
-  // variant === 'pill'
+  // Legacy FilterRow always called onChange(id) on click — never with null —
+  // so `all` source chips expected `setActiveCollection('all')` etc. to
+  // toggle off. ChipRow's single-mode emits `null` when the active chip is
+  // clicked again; we coalesce to empty string for compat.
+  const chipOptions: ChipOption[] = options.map(o => ({
+    id: o.id,
+    label: o.label,
+    icon: o.icon,
+    count: o.count,
+  }));
   return (
-    <div className={cn('flex gap-2 overflow-x-auto hide-scrollbar', className)}>
-      {options.map(opt => {
-        const Icon = opt.icon;
-        const isActive = active === opt.id;
-        return (
-          <button
-            type="button"
-            key={opt.id}
-            onClick={() => onChange(opt.id)}
-            className={cn(
-              'shrink-0 px-4 py-2 rounded-full text-xs font-bold uppercase tracking-wider transition-all',
-              isActive
-                ? 'bg-primary text-on-primary'
-                : 'bg-surface-container-low border border-outline-variant/20 text-on-surface-variant hover:border-primary/50',
-            )}
-          >
-            <span className="flex items-center gap-1.5">
-              {Icon && <Icon className="w-3 h-3" />}
-              {opt.label}
-              {opt.count !== undefined && ` (${opt.count})`}
-            </span>
-          </button>
-        );
-      })}
-    </div>
+    <ChipRow
+      mode="single"
+      variant={variant}
+      options={chipOptions}
+      active={active}
+      onChange={(next) => onChange((next ?? active) as string)}
+      className={className}
+    />
   );
 }

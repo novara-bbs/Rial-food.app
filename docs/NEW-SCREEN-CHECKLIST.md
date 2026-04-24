@@ -80,6 +80,23 @@ Si es `<BottomSheet>`, aplicar también:
 
 **Referencia completa**: `docs/market/bevel-design-playbook.md` §4.4.b (matriz de surfaces existentes) + §4.4.c (framework detallado). ADR-009 V3 para la versión resumida que aplica el reviewer.
 
+## 6d. Filter surfaces — one axis = one primitive (ADR-013)
+
+Si la pantalla expone cualquier superficie de filtrado / ordering / navegación por sets, **decide la tipología por eje antes de escribir JSX**. Un eje = un primitive.
+
+- [ ] **Source / type / view** (1-of-N *obligatorio*; navegar entre sets de contenido) → `<TabNav>` (underline, `role="tablist"`)
+- [ ] **Faceta opcional** (1-of-N que puede estar deseleccionado; reduce el set) → `<ChipRow mode="single">`
+- [ ] **Facetas múltiples** (0-a-N; reducen el set) → `<ChipRow mode="multi">`. Si la semántica es "excluir" (alérgenos, tags bloqueados), añadir `tone="danger"`
+- [ ] **1-of-N compacto dentro de card o dialog** → `<SegmentedTabs>`
+- [ ] **Ordering** (reordenar sin reducir) → `<SortControl>`. **Prohibido** `<select>` nativo con `font-headline` / `font-label` en `features/**/screens` — el convention test falla
+- [ ] **Búsqueda libre** → `<SearchInput>`
+- [ ] **Colecciones editoriales curadas con count** → `<CollectionsCarousel>`. Rail editorial, no una fila de chips
+- [ ] **Dedup**: ninguna dimensión aparece en dos primitives a la vez. Si `verified`/`quick`/`highProtein` están en el R3 `COLLECTIONS` registry (via `CollectionsCarousel`), **no** se duplican en `ChipRow`
+- [ ] **No chip inline**: un `<button>` con `shrink-0` + `rounded-*` + `uppercase` + `tracking-widest` + `font-(headline|label)` dentro de `src/features/**` debe ir por `ChipRow` / `SegmentedTabs` / `TabNav`. El convention test `filter-system.test.ts` lo detecta
+- [ ] **`FilterRow` está deprecated** (shim que delega a `ChipRow`). Los imports nuevos usan `ChipRow` directamente
+
+**Referencia completa**: ADR-013 (`docs/adr/ADR-013-filter-system.md`) + `docs/PRIMITIVES.md` § Filter primitives.
+
 ## 7. Theme parity
 
 - [ ] Smoke-test in the 6 themes: `theme-volt-dark` (default), `theme-light`, `theme-blue-dark`, `theme-blue-light`, `theme-orange-dark`, `theme-orange-light`

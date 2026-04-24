@@ -224,6 +224,75 @@ This is enforced by:
 
 ---
 
+## 3c. Filter composition — one axis, one primitive (ADR-013)
+
+The filter layer has six primitives. Pick by the **axis the user is choosing on**, not by visual similarity:
+
+```
+                       What is the user choosing?
+                                  │
+        ┌─────────────────────────┼─────────────────────────┐
+        │                         │                         │
+    Navigation                 Reduction                 Ordering
+  (between sets)            (within a set)           (same set, reordered)
+        │                         │                         │
+   ┌────┴────┐              ┌─────┼─────┐                   │
+   │         │              │     │     │                   │
+  1-of-N   Card-          1-of-N  0..N Free-text            │
+  required scoped        optional      search               │
+   │         │              │     │     │                   │
+ TabNav  Segmented-      ChipRow  ChipRow  SearchInput  SortControl
+          Tabs           single   multi
+                         (variant:pill/icon/emoji)
+                         (tone:default/danger)
+```
+
+Plus one rail for editorial curation: **`CollectionsCarousel`** — curated taxonomies (R3 registry: `verified / quick / highProtein / vegan / lowCarb / batch`) with counts. Not a filter primitive; lives above the chip-row and hides once the user commits to one.
+
+**Dedup invariant**: a dimension (e.g. `quick`) lives in *exactly one* primitive. If it's a curated collection in `CollectionsCarousel`, it is **not** also a chip in `ChipRow`. Two different surfaces with the same handler is the single most common bug this layer produces (Cocina `[1.5.86]` root cause).
+
+**Enforced by**:
+- `src/test/conventions/filter-system.test.ts` — invariant A (no inline chip reimplementation in `features/**`) + invariant B (no branded native `<select>` in `features/**/screens/*`).
+- `src/test/conventions/primitives-export.test.ts` — locks `ChipRow`, `SortControl`, `TabNav`, `SearchInput`, `FilterRow` (shim) exports.
+
+**Anti-pattern — do NOT do this**:
+
+```tsx
+// ✗ FilterRow pill as tabs → primitive misuse (no role=tablist, no underline)
+<FilterRow variant="pill" chips={[{id:'forYou'},{id:'following'},{id:'trending'}]} />
+
+// ✗ Same dimension on carousel AND chip-row → duplicate axis, diverging state
+<CollectionsCarousel collections={[{id:'quick'}, …]} />
+<ChipRow options={[{id:'quick'}, …]} />
+
+// ✗ Inline <select> with brand font → bypasses SortControl
+<select className="font-label uppercase tracking-widest …">…</select>
+
+// ✗ Inline chip with canonical chip styles → bypasses ChipRow
+<button className="shrink-0 rounded-full px-4 py-2 font-headline uppercase tracking-widest …">
+```
+
+**Canonical — do this**:
+
+```tsx
+// Source navigation
+<TabNav tabs={[…]} active={mode} onChange={setMode} />
+
+// Optional facet
+<ChipRow mode="single" variant="pill" options={…} active={active} onChange={setActive} />
+
+// Multi-select with "excluded" semantics
+<ChipRow mode="multi" variant="pill" tone="danger" options={allergens}
+  active={Array.from(excluded)} onChange={(ids) => setExcluded(new Set(ids))} />
+
+// Ordering
+<SortControl options={…} active={sortMode} onChange={setSortMode} />
+```
+
+`FilterRow` is a `@deprecated` shim that delegates to `ChipRow`. New code imports `ChipRow` directly.
+
+---
+
 ## 4. How to extend
 
 ### Adding a new token
@@ -272,6 +341,7 @@ Smoke visual: open `src/App.tsx` in dev, cycle through the 8 theme classes (4 pa
 - ADR-008: Pricing model — free-generous core + single premium tier
 - ADR-009: Bottom-sheet anatomy
 - ADR-012: Typography & layout primitives (`<Heading>`, `<Text>`)
+- ADR-013: Filter system primitives (`ChipRow`, `SortControl`)
 - `docs/DESIGN-AUDIT-2026-04-16.md` — origin audit that produced these rules
 - `docs/market/bevel-design-playbook.md` — Bevel competitor analysis + copy/adapt/skip matrix (source of §7)
 

@@ -6,7 +6,7 @@ import { toast } from 'sonner';
 import { useI18n } from '../../../i18n';
 import EmptyState from '../../../components/EmptyState';
 import ConfirmDialog from '../../../components/ConfirmDialog';
-import FilterRow from '../../../components/patterns/FilterRow';
+import ChipRow from '../../../components/patterns/ChipRow';
 import { useLocalStorageState } from '../../../hooks/useLocalStorageState';
 import { aggregateShoppingItems, groupShoppingItems, formatShoppingListForShare, detectCategory, AISLE_CATEGORIES, markPantryItems, PantryItem } from '../utils/grocery';
 
@@ -164,11 +164,13 @@ export default function ShoppingList({ onBack, shoppingList = [], setShoppingLis
               onChange={(e) => setNewItemName(e.target.value)}
               className="w-full bg-surface-container-low border border-outline-variant/30 p-3 rounded-sm text-tertiary placeholder:text-outline focus:outline-none focus:border-primary transition-colors"
             />
-            <FilterRow
+            <ChipRow
+              mode="single"
+              variant="pill"
               options={CATEGORY_DISPLAY.map(cat => ({ id: cat, label: cat }))}
               active={newItemCategory}
-              onChange={(id) => setNewItemCategory(id)}
-              variant="pill"
+              onChange={(id) => setNewItemCategory(id ?? AISLE_CATEGORIES.other)}
+              ariaLabel={t.shoppingList.addItem}
             />
             <button type="submit" disabled={!newItemName.trim()} className="w-full bg-primary text-on-primary py-3 rounded-sm font-headline font-bold text-xs uppercase tracking-widest hover:bg-primary-container transition-colors disabled:opacity-50">
               {t.shopping.add}

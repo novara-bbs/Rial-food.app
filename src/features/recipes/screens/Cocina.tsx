@@ -1,5 +1,5 @@
 import React, { useState, useMemo } from 'react';
-import { Plus, Link, ShoppingCart, Sparkles, Sunrise, Sun, Moon, Cookie, Zap, ArrowUpDown } from 'lucide-react';
+import { Plus, Link, ShoppingCart, Sparkles, Sunrise, Sun, Moon, Cookie } from 'lucide-react';
 import CollectionsCarousel from '../components/CollectionsCarousel';
 import { COLLECTIONS } from '../data/collections';
 import { useLocalStorageState } from '../../../hooks/useLocalStorageState';
@@ -12,7 +12,8 @@ import type { MealSlot } from '../../../types';
 import EmptyState from '../../../components/EmptyState';
 import PageShell from '../../../components/PageShell';
 import RecipeCard from '../../../components/patterns/RecipeCard';
-import FilterRow from '../../../components/patterns/FilterRow';
+import ChipRow from '../../../components/patterns/ChipRow';
+import SortControl from '../../../components/patterns/SortControl';
 import TabNav from '../../../components/patterns/TabNav';
 import { aggregateShoppingItems, detectCategory, AISLE_CATEGORIES } from '../../planner/utils/grocery';
 import Planner from '../../planner/screens/Planner';
@@ -86,16 +87,14 @@ export default function Cocina({ onAddMeal, onCreateRecipe, onNavigateToRecipe, 
     { id: 'snack', label: t.discovery.catSnack, icon: Cookie },
   ];
 
-  const quickCount = scoredRecipes.filter(r => r.totalTime > 0 && r.totalTime <= 20).length;
-
-  const collections = [
+  // Source chip-row — one axis: "where does this recipe come from?" (all /
+  // mine / imported / cooked). Facet axes (quick / highProtein / verified /
+  // vegan…) live in CollectionsCarousel as curated tiles with count — kept
+  // out of the chip-row to avoid the duplicate-axis anti-pattern (ADR-013).
+  const sourceChips = [
     { id: 'all', label: t.recipes.all, count: scoredRecipes.length },
     { id: 'mine', label: t.recipes.myRecipes, count: scoredRecipes.filter(r => r.publishedBy === 'self' && r.tag !== 'IMPORTADA').length },
     { id: 'imported', label: t.recipes.imported, count: scoredRecipes.filter(r => r.tag === 'IMPORTADA').length },
-    { id: 'quick', label: t.discovery.catQuick, count: quickCount, icon: Zap },
-    { id: 'high-protein', label: t.recipes.highProtein, count: scoredRecipes.filter(r => r.pro >= 30).length },
-    // R2.4 — verified tier + cookedAt filters
-    { id: 'verified', label: (t.recipes as any).filterVerified ?? 'Verificadas', count: scoredRecipes.filter(r => r.verified != null).length },
     { id: 'cooked', label: (t.recipes as any).filterCooked ?? 'Ya cocinadas', count: scoredRecipes.filter(r => r.cookedAt?.length > 0).length },
   ];
 
@@ -109,17 +108,16 @@ export default function Cocina({ onAddMeal, onCreateRecipe, onNavigateToRecipe, 
       const q = searchQuery.toLowerCase();
       list = list.filter(r => r.title?.toLowerCase().includes(q) || r.tag?.toLowerCase().includes(q) || r.description?.toLowerCase().includes(q));
     }
+    // Source predicates (chip-row axis)
     if (activeCollection === 'mine') list = list.filter(r => r.publishedBy === 'self' && r.tag !== 'IMPORTADA');
-    if (activeCollection === 'imported') list = list.filter(r => r.tag === 'IMPORTADA');
-    if (activeCollection === 'quick') list = list.filter(r => r.totalTime > 0 && r.totalTime <= 20);
-    if (activeCollection === 'high-protein') list = list.filter(r => r.pro >= 30);
-    if (activeCollection === 'verified') list = list.filter(r => r.verified != null);
-    if (activeCollection === 'cooked') list = list.filter(r => r.cookedAt?.length > 0);
-    // R3 collection predicates (for CollectionsCarousel-driven filters)
-    // Falls through for ids not handled above (vegan / lowCarb / batch / highProtein)
-    const registryCol = COLLECTIONS.find(c => c.id === activeCollection);
-    if (registryCol && !['all', 'mine', 'imported'].includes(activeCollection)) {
-      list = list.filter(registryCol.predicate);
+    else if (activeCollection === 'imported') list = list.filter(r => r.tag === 'IMPORTADA');
+    else if (activeCollection === 'cooked') list = list.filter(r => r.cookedAt?.length > 0);
+    else if (activeCollection !== 'all') {
+      // Curated collection predicates (carousel axis) — verified, quick,
+      // highProtein, vegan, lowCarb, batch, …. ADR-013 dedup: these live
+      // only in COLLECTIONS, not in sourceChips.
+      const registryCol = COLLECTIONS.find(c => c.id === activeCollection);
+      if (registryCol) list = list.filter(registryCol.predicate);
     }
     // Sort
     const sorted = [...list];
@@ -189,12 +187,27 @@ export default function Cocina({ onAddMeal, onCreateRecipe, onNavigateToRecipe, 
         {activeTab === 'recipes' && (
           <PageShell maxWidth="wide" spacing="sm">
             {/* Search + actions */}
-            <div className="flex gap-3">
+            {/* Search + sort + create/import actions. Search grows, sort is
+                fixed-width, actions on the right. One flex row = one mental
+                unit: "what am I looking at and how is it ordered". */}
+            <div className="flex gap-2 items-stretch">
               <SearchInput
                 value={searchQuery}
                 onChange={setSearchQuery}
                 placeholder={t.recipes.search}
                 className="flex-1"
+              />
+              <SortControl
+                options={[
+                  { id: 'recommended', label: (t.recipes as any).sortRecommended ?? 'Recomendadas' },
+                  { id: 'recent', label: (t.recipes as any).sortRecent ?? 'Recientes' },
+                  { id: 'quick', label: (t.recipes as any).sortQuick ?? 'Rápidas' },
+                  { id: 'highProtein', label: (t.recipes as any).sortHighProtein ?? 'Alta proteína' },
+                  { id: 'mostCooked', label: (t.recipes as any).sortMostCooked ?? 'Más cocinadas' },
+                ]}
+                active={sortMode}
+                onChange={(id) => setSortMode(id as typeof sortMode)}
+                ariaLabel={(t.recipes as any).sortRecommended ?? 'Ordenar'}
               />
               <button type="button" onClick={onCreateRecipe} className="p-3 bg-primary text-on-primary rounded-sm hover:opacity-90 transition-opacity" title={t.recipes.create}>
                 <Plus className="w-5 h-5" />
@@ -206,9 +219,22 @@ export default function Cocina({ onAddMeal, onCreateRecipe, onNavigateToRecipe, 
               )}
             </div>
 
-            <FilterRow options={mealCategories} active={activeMealType} onChange={setActiveMealType} variant="icon" className="-mx-6 px-6" />
+            {/* Meal-type slot — icon ChipRow, single-select */}
+            <ChipRow
+              mode="single"
+              variant="icon"
+              options={mealCategories}
+              active={activeMealType}
+              onChange={(id) => setActiveMealType(id ?? 'all')}
+              ariaLabel={t.discovery.catAll}
+              className="-mx-6 px-6"
+            />
 
-            {/* Collections discovery carousel — only visible with no active filter or search */}
+            {/* Curated collections rail (R3) — editorial tiles with counts.
+                Only surfaced in the idle state; picking a tile collapses the
+                rail and filters via activeCollection. Facet axes (verified /
+                quick / high-protein / vegan / lowCarb / batch) live ONLY here
+                — not in the source chip-row below (ADR-013 dedup rule). */}
             {activeCollection === 'all' && !searchQuery.trim() && (
               <CollectionsCarousel
                 recipes={scoredRecipes}
@@ -218,31 +244,23 @@ export default function Cocina({ onAddMeal, onCreateRecipe, onNavigateToRecipe, 
               />
             )}
 
-            <FilterRow options={collections} active={activeCollection} onChange={setActiveCollection} variant="pill" className="-mx-6 px-6" />
+            {/* Source chip-row — single-select across "where from?" axis. */}
+            <ChipRow
+              mode="single"
+              variant="pill"
+              options={sourceChips}
+              active={activeCollection}
+              onChange={(id) => setActiveCollection(id ?? 'all')}
+              ariaLabel={t.recipes.all}
+              className="-mx-6 px-6"
+            />
 
-            {/* Sort row + recipe count */}
-            <div className="flex items-center justify-between">
-              {!isPro && (
-                <div className="text-xs text-on-surface-variant font-label uppercase tracking-widest">
-                  {t.recipes.recipeCount.replace('{count}', String(savedRecipes.length))}
-                </div>
-              )}
-              <div className={`flex items-center gap-1.5 ml-auto ${isPro ? '' : ''}`}>
-                <ArrowUpDown className="w-3.5 h-3.5 text-on-surface-variant" aria-hidden="true" />
-                <select
-                  value={sortMode}
-                  onChange={(e) => setSortMode(e.target.value as typeof sortMode)}
-                  className="text-xs font-label uppercase tracking-widest bg-transparent text-on-surface-variant border-0 outline-none cursor-pointer hover:text-tertiary transition-colors"
-                  aria-label={(t.recipes as any).sortRecommended ?? 'Ordenar'}
-                >
-                  <option value="recommended">{(t.recipes as any).sortRecommended ?? 'Recomendadas'}</option>
-                  <option value="recent">{(t.recipes as any).sortRecent ?? 'Recientes'}</option>
-                  <option value="quick">{(t.recipes as any).sortQuick ?? 'Rápidas'}</option>
-                  <option value="highProtein">{(t.recipes as any).sortHighProtein ?? 'Alta proteína'}</option>
-                  <option value="mostCooked">{(t.recipes as any).sortMostCooked ?? 'Más cocinadas'}</option>
-                </select>
+            {/* Recipe count label (if not Pro) */}
+            {!isPro && (
+              <div className="text-xs text-on-surface-variant font-label uppercase tracking-widest">
+                {t.recipes.recipeCount.replace('{count}', String(savedRecipes.length))}
               </div>
-            </div>
+            )}
 
             {/* Recipe grid — portrait cards */}
             {filteredRecipes.length === 0 ? (

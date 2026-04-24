@@ -1,5 +1,138 @@
 # RIAL App - Changelog
 
+## [1.5.86] - 2026-04-25
+
+### feat(ds): filter system normalization — ChipRow + SortControl + Cocina dedup + ADR-013
+
+An audit of every filter/facet/tab/search surface (triggered by 2 screenshots
+from MyRecipes + Discover) exposed four structural problems that made filtering
+feel *"lioso y feo"*:
+
+1. **Duplicate axes across primitives.** `Cocina.tsx` rendered the same
+   dimension (`verified` / `quick` / `highProtein`) twice — once as
+   `CollectionsCarousel` tiles with counts, and again as `FilterRow pill` chips.
+   State diverged (tile click hit the R3 registry predicate; pill click hit an
+   ad-hoc `if` branch) and nobody knew which surface was "real".
+2. **Primitive misuse.** `Community.tsx` used `FilterRow variant="pill"` to
+   render FOR YOU / FOLLOWING / TRENDING — which is *source navigation*, not a
+   facet. No underline indicator, no `role="tablist"`, pills looked visually
+   identical to facet chips elsewhere.
+3. **Inline reimplementation.** `FoodDictionary.tsx` hand-rolled two chip groups
+   (category selector + allergen multi-select) with utility classes 95%
+   identical to `FilterRow pill` — no primitive, silent drift, invisible to
+   future refactors.
+4. **Inline sort.** `Cocina.tsx` embedded a native `<select>` + `<ArrowUpDown>`
+   icon in the same flex row as the search input, styled one-off. Every other
+   screen that gained a sort affordance risked diverging.
+
+Root cause: `FilterRow` was the only primitive in this layer, it was
+single-select only, and it didn't distinguish between *source / type / view*
+axes (where "Tabs" is the right mental model) and *faceted filtering* (where
+chips are). Three other sublayers grew to fill the gaps.
+
+**Decision (ADR-013 "one axis = one primitive").** Six primitives cover the
+whole layer, one per axis:
+
+| Axis | Primitive |
+|---|---|
+| Source / type / view (1-of-N required) | `TabNav` |
+| Single facet (1-of-N optional) | `ChipRow mode="single"` |
+| Multiple facets (0-to-N) | `ChipRow mode="multi"` |
+| Compact 1-of-N inside a card/dialog | `SegmentedTabs` |
+| Ordering | `SortControl` |
+| Free-text search | `SearchInput` |
+| Editorial collections with count | `CollectionsCarousel` (rail) |
+
+Plus a **dedup invariant**: no dimension appears on two primitives at once.
+
+**What shipped.**
+
+**New primitives (2)** in `src/components/patterns/`:
+
+- **`ChipRow`** — replaces `FilterRow`. Discriminated-union props:
+  - `mode`: `single` (0-or-1 optional; `active: string | null`) or `multi`
+    (0-to-N; `active: string[]`).
+  - `variant`: `pill` (rounded capsule), `icon` (icon-on-top tile for
+    meal-type selectors), `emoji` (chip with emoji prefix — food categories).
+  - `tone`: `default` (brand-primary active) or `danger` (error-tinted active
+    with leading `×` for "excluded" semantics — allergens).
+  - Emits `data-chip-row` + `data-variant` + `data-mode` + `data-tone` for
+    test discovery. Uses `role="radiogroup"` when single, `role="group"` when
+    multi.
+
+- **`SortControl`** — canonical ordering. Native `<select>` wrapped under
+  brand chrome: `ArrowUpDown` icon + current option label + `ChevronDown`.
+  Same height as `SearchInput` so both align in one flex row. Invisible
+  overlay `<select>` handles keyboard + a11y without custom JS.
+
+**Shim**:
+
+- **`FilterRow`** — converted into a `@deprecated` re-export wrapper that
+  delegates to `ChipRow`. Preserves the 6 existing import sites; no mass
+  rename required.
+
+**Call-site migrations (6 files)**:
+
+| File | Before | After |
+|---|---|---|
+| `features/recipes/screens/Cocina.tsx` | `FilterRow pill` (7 items, 3 duplicated w/ carousel) + inline `<select>` + `<ArrowUpDown>` | `ChipRow pill` (4 source chips: all/mine/imported/cooked) + `SortControl` — dedup removes `verified`/`quick`/`highProtein` from the chip-row; they live only in `CollectionsCarousel` via the R3 registry |
+| `features/social/screens/Community.tsx` | `FilterRow pill` (forYou/following/trending) | `TabNav` (underline, `role="tablist"`) |
+| `features/food/screens/FoodDictionary.tsx` | 2 inline chip blocks (categories + allergens) | `ChipRow emoji` (categories, single) + `ChipRow multi tone="danger"` (allergens, X prefix on selected) |
+| `features/home/screens/Discovery.tsx` | `FilterRow icon` | `ChipRow icon` |
+| `features/food/screens/AddMeal.tsx` | `FilterRow pill` | `ChipRow pill` |
+| `features/planner/screens/ShoppingList.tsx` | `FilterRow pill` | `ChipRow pill` |
+
+**Deprecated**:
+
+- `features/social/components/FeedTabs.tsx` — hardcoded-3-tabs feed component,
+  unused since Community migrated to `TabNav`. `@deprecated` JSDoc added; file
+  kept until the next cleanup sprint.
+
+**Enforcement (2 convention tests)**:
+
+- `src/test/conventions/filter-system.test.ts` — **Invariant A**: a `<button>`
+  in `src/features/**` carrying `shrink-0 + rounded-* + uppercase +
+  tracking-widest + font-(headline|label)` must route through `ChipRow` /
+  `SegmentedTabs` / `TabNav`. **Invariant B**: a native `<select>` in
+  `src/features/**/screens/*` with `font-(headline|label)` must route through
+  `SortControl`. Allowlist carries documented exceptions (currently 1: AddMeal
+  "Multi" mode toggle — standalone binary toggle, not a chip).
+
+- `src/test/conventions/primitives-export.test.ts` — extended to lock
+  `ChipRow`, `SortControl`, `TabNav`, `SearchInput`, `FilterRow` (shim) exports.
+
+**Docs**:
+
+- New: `docs/adr/ADR-013-filter-system.md` — context, decision, axis→primitive
+  table, do/don't, consequences, migration record.
+- `docs/PRIMITIVES.md` — 6 new table rows + Filter primitives section with
+  minimal examples for all 5 ChipRow cells and SortControl.
+- `docs/NEW-SCREEN-CHECKLIST.md` — new §6d "Filter surfaces — one axis = one
+  primitive" with 8 checkpoints.
+- `docs/DESIGN-SYSTEM.md` — new §3c with ASCII decision tree, dedup invariant,
+  anti-pattern catalog.
+- `docs/ai/state.md` — bumped to `[1.5.86]`, quality baseline +2 tests, filter
+  layer added to active conventions reference.
+
+**Consequences.**
+
+- One mental model per axis. A screen author answers "is this choice source,
+  facet, sort or search?" and the primitive is determined.
+- CMS-style contract extends to the filter layer: a visual update to chip
+  styling is a single-file edit in `ChipRow.tsx`.
+- Multi-select is first-class — no more hand-rolled `Set<T>` + button patterns.
+- Cocina goes from 6 stacked surfaces to 4 clear ones; the 3 duplicated
+  dimensions collapse into the carousel alone.
+- Convention tests catch regressions without reviewer memory.
+
+**Delta.** 2 new primitives, 1 shim conversion, 6 call-site migrations, 1
+`@deprecated` mark, 2 convention tests, 1 ADR, 4 doc updates. Bundle delta
+≤ +1 KB gzip (new primitives offset by thinner call-sites). 0 TS errors,
+1147/1147 tests passing (+3 vs `[1.5.85]`: 2 filter-system invariants + 1
+filter-primitives export cell).
+
+---
+
 ## [1.5.85] - 2026-04-24
 
 ### feat(design-system): brand font system normalization — Bricolage Grotesque + `--font-mono` alias fix

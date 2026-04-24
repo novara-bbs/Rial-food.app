@@ -1,8 +1,9 @@
 import { useState, useMemo } from 'react';
 import PageShell from '../../../components/PageShell';
-import { UtensilsCrossed, ShoppingCart, X } from 'lucide-react';
+import { UtensilsCrossed, ShoppingCart } from 'lucide-react';
 import SearchInput from '../../../components/patterns/SearchInput';
 import PageHeader from '../../../components/patterns/PageHeader';
+import ChipRow from '../../../components/patterns/ChipRow';
 import { Button } from '@/components/ui/button';
 import { useI18n } from '../../../i18n';
 import { INGREDIENT_DICTIONARY, INGREDIENT_CATEGORIES } from '../data/ingredients';
@@ -54,14 +55,6 @@ export default function FoodDictionary({ navigateTo }: Props) {
   const [expandedFamilyId, setExpandedFamilyId] = useState<string | null>(null);
   const [excludedAllergens, setExcludedAllergens] = useState<Set<Allergen>>(new Set());
   const [selectedByFamily, setSelectedByFamily] = useState<Record<string, string>>({});
-
-  const toggleAllergen = (a: Allergen) => {
-    setExcludedAllergens(prev => {
-      const next = new Set(prev);
-      if (next.has(a)) next.delete(a); else next.add(a);
-      return next;
-    });
-  };
 
   const filteredFamilies = useMemo(() => {
     const q = query.toLowerCase().trim();
@@ -130,63 +123,43 @@ export default function FoodDictionary({ navigateTo }: Props) {
         onClear={() => setQuery('')}
       />
 
-      <div className="flex gap-2 overflow-x-auto pb-1 -mx-4 px-4 scrollbar-none">
-        <button
-          type="button"
-          onClick={() => setActiveCategory(null)}
-          className={`shrink-0 px-3 py-1.5 rounded-sm text-label font-headline font-bold uppercase tracking-widest transition-colors ${
-            activeCategory === null
-              ? 'bg-primary text-on-primary'
-              : 'bg-surface-container-highest text-on-surface-variant hover:bg-surface-container-high'
-          }`}
-        >
-          {t.foodDictionary.allCategories}
-        </button>
-        {CATEGORY_ORDER.map(cat => {
-          const meta = INGREDIENT_CATEGORIES[cat];
-          return (
-            <button
-              type="button"
-              key={cat}
-              onClick={() => setActiveCategory(activeCategory === cat ? null : cat)}
-              className={`shrink-0 px-3 py-1.5 rounded-sm text-label font-headline font-bold uppercase tracking-widest transition-colors ${
-                activeCategory === cat
-                  ? 'bg-primary text-on-primary'
-                  : 'bg-surface-container-highest text-on-surface-variant hover:bg-surface-container-high'
-              }`}
-            >
-              {meta.icon} {locale === 'es' ? meta.name : meta.nameEn}
-            </button>
-          );
-        })}
-      </div>
+      <ChipRow
+        mode="single"
+        variant="emoji"
+        ariaLabel={t.foodDictionary.allCategories}
+        options={[
+          { id: '__all__', label: t.foodDictionary.allCategories },
+          ...CATEGORY_ORDER.map(cat => {
+            const meta = INGREDIENT_CATEGORIES[cat];
+            return {
+              id: cat,
+              label: locale === 'es' ? meta.name : meta.nameEn,
+              emoji: meta.icon,
+            };
+          }),
+        ]}
+        active={activeCategory ?? '__all__'}
+        onChange={(id) => setActiveCategory(id && id !== '__all__' ? (id as IngredientCategory) : null)}
+        className="-mx-4 px-4"
+      />
 
       <div className="space-y-1.5">
         <span id="allergen-filter-label" className="text-micro font-label uppercase tracking-widest text-on-surface-variant">
           {t.foodDictionary.allergenFilter}
         </span>
-        <div role="group" aria-labelledby="allergen-filter-label" className="flex gap-1.5 flex-wrap">
-          {ALL_ALLERGENS.map(a => {
-            const active = excludedAllergens.has(a);
-            const label = t.foodDictionary.allergenLabels[a];
-            return (
-              <button
-                type="button"
-                key={a}
-                aria-pressed={active}
-                onClick={() => toggleAllergen(a)}
-                className={`inline-flex items-center gap-1 px-2 py-1 rounded-sm text-micro font-headline font-bold uppercase tracking-widest transition-colors ${
-                  active
-                    ? 'bg-error/15 text-error border border-error/30'
-                    : 'bg-surface-container-highest text-on-surface-variant border border-transparent hover:bg-surface-container-high'
-                }`}
-              >
-                {active && <X className="w-3 h-3" aria-hidden="true" />}
-                {label}
-              </button>
-            );
-          })}
-        </div>
+        <ChipRow
+          mode="multi"
+          variant="pill"
+          tone="danger"
+          ariaLabel={t.foodDictionary.allergenFilter}
+          options={ALL_ALLERGENS.map(a => ({
+            id: a,
+            label: t.foodDictionary.allergenLabels[a],
+          }))}
+          active={Array.from(excludedAllergens)}
+          onChange={(next) => setExcludedAllergens(new Set(next as Allergen[]))}
+          className="flex-wrap"
+        />
       </div>
 
       <p className="text-label text-on-surface-variant font-label tracking-widest uppercase">

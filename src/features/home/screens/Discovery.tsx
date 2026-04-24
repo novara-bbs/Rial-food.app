@@ -7,7 +7,7 @@ import EmptyState from '../../../components/EmptyState';
 import PageShell from '../../../components/PageShell';
 import RecipeCard from '../../../components/patterns/RecipeCard';
 import Swimlane from '../../../components/patterns/Swimlane';
-import FilterRow from '../../../components/patterns/FilterRow';
+import ChipRow from '../../../components/patterns/ChipRow';
 import { useAppState } from '../../../contexts/AppStateContext';
 import { calculateMatchScore } from '../../recipes/utils/matchScore';
 import { recipeFitsSlot } from '../../recipes/utils/meal-slot';
@@ -186,7 +186,14 @@ export default function Discovery({ onNavigateToRecipe, savedRecipes = [], onSav
 
       {/* 2. Category icon row */}
       <section className="px-6 pb-4">
-        <FilterRow options={categories} active={activeCategory} onChange={setActiveCategory} variant="icon" />
+        <ChipRow
+          mode="single"
+          variant="icon"
+          options={categories}
+          active={activeCategory}
+          onChange={(id) => setActiveCategory(id ?? 'all')}
+          ariaLabel={t.discovery.title}
+        />
       </section>
 
       {/* 3. Hero compacto — best match */}
