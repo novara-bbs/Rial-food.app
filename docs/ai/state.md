@@ -47,9 +47,7 @@ Last updated: **2026-04-24** — Q17 shipped (`[1.5.81]`).
   but intentionally deferred until features stable. Apply via `supabase db push` or SQL
   Editor when Q6 unlocks.
 - **`useSupabasePersistence` flag not wired** — intentionally deferred, same Q6 trigger.
-- **CSP header pending (Q17)** — `vercel.json` has HSTS + X-Frame + nosniff + Permissions-
-  Policy + Referrer-Policy. CSP deferred until third-party origins audited (Supabase,
-  Sentry, Google GenAI, RevenueCat, recharts).
+- ~~**CSP header**~~ ✓ — shipped Q17 `[1.5.81]`. All 6 security headers now active in `vercel.json`.
 - **Tag taxonomy regression** — `Recipe.tag: string` ad-hoc ES-literal (`'MI RECETA'`,
   `'VEGANO'`) fails in EN filters. `Discovery.tsx:126` filters `r.tag === 'VEGANO'` while
   `CreateRecipe` writes `tags[].includes('vegan')`. Requires `origin?: 'user'|'imported'|
@@ -67,16 +65,16 @@ Execute Q6 ONLY when ALL hold:
 - E2E green on last 3 commits to main
 
 ## Next sprint candidates (ordered, only pending)
-- ~~**R2**~~ ✓ · ~~**R3**~~ ✓ · ~~**R5**~~ ✓ · ~~**R7**~~ ✓ · ~~**R8**~~ ✓ · ~~**Q15**~~ ✓
-- **Q6** — Supabase integration (gated — see feature-freeze gate; earliest after Q17 ships with 0 model changes).
-- **Q17** — CSP header + contrast + responsive audit (next, no model changes, unblocks Q6 gate).
+- ~~**R2**~~ ✓ · ~~**R3**~~ ✓ · ~~**R5**~~ ✓ · ~~**R7**~~ ✓ · ~~**R8**~~ ✓ · ~~**Q15**~~ ✓ · ~~**Q17**~~ ✓
+- **Q6** — Supabase integration. Gate re-evaluate: Q17 shipped with 0 model changes → data model
+  now stable for 1 sprint. Re-check all 6 gate criteria before starting Q6.
 - `calculateStreak` function in `gamification.ts` still has `@deprecated` tag — remove in Q6 cleanup.
 
 **Shipped sprints** (full detail in CHANGELOG.md): Q1-Q14, Q15.5 (design-system),
 Q16-B1, Q16-B2, Tab audit 2026-04-18, S3 tranche, Bevel PR 1-9, Q19 meal-taxonomy,
 Fase 1+2 multi-media recipes, Food Families P0-P16, R1 docs, R2 recipes editorial,
 **R3 Cocina collections**, **R5 CookMode deeper**, **R8 INDYA adoption**, **R7 CreateRecipe authoring**,
-**Q15 ICP-adaptive NutritionHero + calcStreaks sweep**.
+**Q15 ICP-adaptive NutritionHero + calcStreaks sweep**, **Q17 CSP header + contrast audit**.
 
 ## Repository compliance
 - `LICENSE`: Proprietary © 2026 RIAL FOOD WORLD S.L. Contact legal@rialfoodworld.com.
@@ -103,4 +101,4 @@ Fase 1+2 multi-media recipes, Food Families P0-P16, R1 docs, R2 recipes editoria
 **Not** for:
 - Per-sprint narrative (goes to CHANGELOG)
 - Per-file writeups (goes to CHANGELOG)
-- Commit-by-commit history (gi
+- Commit-by-commit history (git log handles that)
