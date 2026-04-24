@@ -112,7 +112,7 @@ export default function ConstantTile({
           <span className="font-headline font-bold text-body-sm text-on-surface-variant">
             {resolvedCopy.noData}
           </span>
-          <span className="text-micro uppercase tracking-widest text-on-surface-variant/70">
+          <span className="text-micro uppercase tracking-widest text-on-surface-variant">
             {sub}
           </span>
         </div>

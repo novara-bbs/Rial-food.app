@@ -569,10 +569,10 @@ export default function AddMeal({
                     <span>{food.carbs ?? food.macros?.carbs ?? 0}g C</span>
                     {food.macros && <span className="ml-1">{FOOD_QUALITY_EMOJI[getFoodQuality(food.macros, food.micros?.others?.fiber)]}</span>}
                     {food.servingSizes?.length > 0 && (
-                      <span className="text-on-surface-variant/50 italic normal-case text-micro">{t.addMealScreen.adjustablePortion}</span>
+                      <span className="text-on-surface-variant/70 italic normal-case text-micro">{t.addMealScreen.adjustablePortion}</span>
                     )}
                     {historyEntry && (
-                      <span className="text-on-surface-variant/50 italic normal-case text-micro">
+                      <span className="text-on-surface-variant/70 italic normal-case text-micro">
                         {t.addMealScreen.timesLogged.replace('{count}', String(historyEntry.useCount))}
                       </span>
                     )}

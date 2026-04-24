@@ -1,5 +1,40 @@
 # RIAL App - Changelog
 
+## [1.5.81] - 2026-04-24
+
+### feat(q17): Content-Security-Policy header + contrast audit fixes
+
+**Content-Security-Policy (primary Q17 deliverable):**
+`vercel.json` — CSP header added after full third-party origin audit. Directives:
+- `script-src 'self'` — Vite bundles everything; confirmed no inline scripts in dist/index.html
+- `style-src 'self' 'unsafe-inline'` — React inline `style={}` props + Tailwind CSS variables
+- `connect-src 'self' https://*.supabase.co https://world.openfoodfacts.org https://generativelanguage.googleapis.com https://*.ingest.sentry.io https://api.revenuecat.com`
+- `img-src 'self' data: blob: https://images.unsplash.com https://images.openfoodfacts.org https://world.openfoodfacts.org`
+- `font-src 'self'` — all fonts are local (Fraunces R2.5, Inter bundled)
+- `worker-src 'self' blob:` — Workbox PWA service worker
+- `object-src 'none'` · `base-uri 'self'` · `form-action 'self'`
+No WebSocket origins (Supabase Realtime not in use). No Google Fonts CDN (local fonts only).
+RevenueCat is a Capacitor native plugin; web fallback uses `api.revenuecat.com`.
+
+**Contrast audit — 3 fixes (WCAG AA):**
+- `Signup.tsx` — legal note text: `text-on-surface-variant/50 text-micro` → `text-on-surface-variant`
+  (10px legal text at 50% opacity failed WCAG AA; content is informational, not decorative)
+- `ConstantTile.tsx` — no-data subtitle: `text-on-surface-variant/70 text-micro` → `text-on-surface-variant`
+  (10px at 70% opacity is borderline; full opacity token is the safe choice)
+- `AddMeal.tsx` — serving/logged hints: `text-on-surface-variant/50 italic text-micro` → `/70`
+  (italic + 10px + 50% is triple contrast penalty; /70 keeps the visual hierarchy without failing)
+
+**Responsive audit findings (documented, no code change needed):**
+- `PostCard.tsx` `grid-cols-5` + `RecipeNutritionBar.tsx` `grid-cols-4`: acceptable on 375px —
+  short numeric content, no wrapping issues observed.
+- `MediaLightbox.tsx` `100vw`: intentional fullscreen lightbox behavior.
+- No horizontal overflow regressions found in static analysis.
+
+**Verification:** tsc 0 errors · 1046/1046 tests (no delta) · i18n 1856 (unchanged) ·
+size:check PASS (no bundle change — vercel.json not bundled).
+
+---
+
 ## [1.5.80] - 2026-04-24
 
 ### feat(q15): ICP-adaptive NutritionHero goal-status chip + best-streak badge + calcStreaks sweep

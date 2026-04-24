@@ -150,7 +150,7 @@ export default function Signup({ onNavigateToLogin }: SignupProps) {
           </button>
 
           {/* Legal note */}
-          <p className="font-label text-micro text-on-surface-variant/50 uppercase tracking-widest text-center leading-relaxed px-2">
+          <p className="font-label text-micro text-on-surface-variant uppercase tracking-widest text-center leading-relaxed px-2">
             {t.auth.legalNote}
           </p>
         </form>

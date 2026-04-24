@@ -5,25 +5,26 @@
 > prunes this file back down. Everything below should answer: *what's the release line,
 > what's the quality baseline, what's the next move, what's broken?*
 
-Last updated: **2026-04-24** — Q15 shipped (`[1.5.80]`).
+Last updated: **2026-04-24** — Q17 shipped (`[1.5.81]`).
 
 ## Release snapshot
 - **Branch**: `main`, in sync with `rial-food/main` through `179d0ec`.
-- **Last shipped**: `[1.5.80]` — Q15 ICP-adaptive NutritionHero goal-status chip + best-streak
-  badge + calcStreaks sweep (3 new tests, `calculateStreak` removed from test suite).
+- **Last shipped**: `[1.5.81]` — Q17 CSP header + contrast audit (3 WCAG fixes in Signup,
+  ConstantTile, AddMeal). Q15 + Q17 both ✓.
 - **Active plan**: `.claude/plans/revisa-todas-las-capturas-ancient-micali.md` (v2 re-sync).
-  R1–R8 ✓ · **ALL R-sprints DONE**. Q15 ✓.
-  Next: **Q17** (CSP header + contrast audit) or **Q6** (Supabase — gated, see below).
+  R1–R8 ✓ · **ALL R-sprints DONE**. Q15 ✓. Q17 ✓.
+  Next: **Q6** (Supabase integration — gate criteria re-evaluate, see below).
 - **Release target**: `rial-food/main` (`novara-bbs/Rial-food.app`). Origin `rial-food`.
 - **Vercel project**: `rial.app.v1.5` (id `prj_t11VHYQjptazjUx7Y2hWLz0IDAjg`).
 - **Governance**: work directly on `main`. "continua" = push approval post green preflight.
 
-## Quality baseline (post-Q15, 2026-04-24)
+## Quality baseline (post-Q17, 2026-04-24)
 - TypeScript: **0 errors** (`npx tsc --noEmit`)
-- Tests: **1046/1046** passing (64 files) — +3 from `calcStreaks` describe blocks
-- i18n symmetry: **1856** keys aligned ES ↔ EN (Q15 +6: home.goal* × 5 + home.bestStreak)
+- Tests: **1046/1046** passing (64 files)
+- i18n symmetry: **1856** keys aligned ES ↔ EN
 - Design-system lint: 0 errors (631 warnings pre-existing, unchanged)
 - Build main: **872.6 KB raw / 274.7 KB gzip** · `size:check` PASS
+- Security headers: HSTS + X-Frame-Options + nosniff + Permissions-Policy + Referrer-Policy + **CSP** ✓
 - Drift: `text-[Npx]` = **0**, SectionCard shape = **0**, INPUT_SURFACE_CLASSES 4 consumers,
   BUTTON_CARD_SURFACE_CLASSES 5 consumers.
 
@@ -102,4 +103,4 @@ Fase 1+2 multi-media recipes, Food Families P0-P16, R1 docs, R2 recipes editoria
 **Not** for:
 - Per-sprint narrative (goes to CHANGELOG)
 - Per-file writeups (goes to CHANGELOG)
-- Commit-by-commit history (git log handles that)
+- Commit-by-commit history (gi
