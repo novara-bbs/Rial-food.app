@@ -1,5 +1,53 @@
 # RIAL App - Changelog
 
+## [1.5.82] - 2026-04-24
+
+### feat(q6): Supabase offline-first sync wiring — pull-on-sign-in + push-on-change
+
+**Architecture:** The sync infrastructure was already complete (`src/lib/sync.ts`,
+`src/contexts/AuthContext.tsx`, `supabase/migrations/001_initial_schema.sql`). This sprint
+wires the missing connection between `AppStateContext` and the sync layer.
+
+**`src/contexts/AppStateContext.tsx`:**
+- Imports `useAuth` from `AuthContext` + `syncOnSignIn`, `pushToCloud` from `src/lib/sync`
+- `const { status: authStatus } = useAuth()` — safe because `AppStateProvider` lives inside
+  `AuthProvider` in `main.tsx`
+- **Pull on sign-in**: `syncOnSignIn()` fires when `authStatus` transitions to `'authed'`
+  (edge-triggered, not level). Remote values are applied via `applyRemoteData` callback that
+  merges into all 13 core local state setters (`userProfile`, `dailyMacros`, `savedRecipes`,
+  `mealPlan`, `shoppingList`, `realFeelLogs`, `toleranceLogs`, `weightHistory`,
+  `nutritionHistory`, `isPro`, `dailyLog`, `foodHistory`, `favoriteIds`).
+- **Push on change**: 13 individual `useEffect` hooks push each key to Supabase on every
+  value change. `pushToCloud` returns immediately when Supabase is unconfigured or user not
+  signed in — zero overhead in offline/guest mode.
+- **Data-URL guard**: `savedRecipes` push is skipped when any recipe has a data-URL photo
+  (base64 `r.photos` or `r.steps[*].photoUrl` starting with `data:`), preventing the ~1 MB
+  Supabase row-size limit from being hit.
+
+**`src/features/profile/screens/Settings.tsx` — Mi Cuenta section (Q6):**
+- New `onNavigateToLogin?: () => void` prop passed from `App.tsx`
+- Uses `useAuth()` for `{ status: authStatus, user, isSupabaseEnabled, signOut }`
+- System tab now shows a "Mi Cuenta" / "My Account" `SectionCard` when `isSupabaseEnabled`:
+  - `'loading'` → spinner
+  - `'authed'` → email + "datos sincronizados con la nube" + sign-out button
+  - `'guest'` → "sin cuenta · solo local" + optional sign-in button (if prop provided)
+
+**`src/App.tsx`:** passes `onNavigateToLogin={() => setAuthScreen('login')}` to Settings.
+
+**i18n:** +6 keys × 2 locales (ES/EN) in `settings` section:
+`accountSection`, `accountConnected`, `accountGuest`, `accountSignIn`, `accountSignOut`,
+`accountSyncStatus`.
+
+**Owner actions still required (cannot do programmatically):**
+1. Apply `supabase/migrations/001_initial_schema.sql` to production DB via
+   `supabase db push` or Supabase SQL Editor (creates `profiles` + `user_data` tables + RLS).
+2. Add `VITE_SUPABASE_URL` and `VITE_SUPABASE_ANON_KEY` to Vercel project environment vars
+   (Settings → Environment Variables). Without these, `isSupabaseEnabled = false` and all
+   sync is a no-op — app continues working offline-first.
+
+**Verification:** tsc 0 errors · 1046/1046 tests (no delta) · i18n 1862 (+6) ·
+size:check PASS (875.9 KB raw / 275.3 KB gzip, +3 KB from sync wiring).
+
 ## [1.5.81] - 2026-04-24
 
 ### feat(q17): Content-Security-Policy header + contrast audit fixes

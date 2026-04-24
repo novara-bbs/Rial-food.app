@@ -938,6 +938,13 @@ const es = {
     deleteAccountSuccess: 'Cuenta eliminada correctamente',
     deleteAccountError: 'Error al eliminar la cuenta. Inténtalo de nuevo.',
     notSignedIn: 'No has iniciado sesión',
+    // Q6 — Mi cuenta (Supabase)
+    accountSection: 'Mi Cuenta',
+    accountConnected: 'Conectado como',
+    accountGuest: 'Sin cuenta · solo almacenamiento local',
+    accountSignIn: 'Iniciar sesión',
+    accountSignOut: 'Cerrar sesión',
+    accountSyncStatus: 'Datos sincronizados con la nube',
     // Q14 — developer panel
     developer: 'Desarrollador',
     loadDemoPersona: 'Cargar persona demo',

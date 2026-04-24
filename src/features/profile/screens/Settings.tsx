@@ -1,10 +1,11 @@
 import { useState } from 'react';
-import { Users, Loader2, Trash2 } from 'lucide-react';
+import { Users, Loader2, Trash2, UserCircle, LogIn, LogOut } from 'lucide-react';
 import { toast } from 'sonner';
 import PageShell from '../../../components/PageShell';
 import SegmentedTabs from '../../../components/SegmentedTabs';
 import { useI18n } from '../../../i18n';
 import { useNavigation } from '../../../contexts/NavigationContext';
+import { useAuth } from '../../../contexts/AuthContext';
 import { logger } from '../../../lib/logger';
 import type { Ingredient } from '../../../types';
 import SettingsProfile from '../components/settings/SettingsProfile';
@@ -36,6 +37,7 @@ export default function Settings({
   setHydration,
   movement,
   setMovement,
+  onNavigateToLogin,
 }: {
   dailyMacros?: any;
   setDailyMacros?: any;
@@ -50,9 +52,12 @@ export default function Settings({
   setHydration?: (fn: any) => void;
   movement?: { steps: number; target: number; activeMinutes: number; activeTarget: number };
   setMovement?: (fn: any) => void;
+  /** Q6: callback to open the login overlay from App.tsx */
+  onNavigateToLogin?: () => void;
 }) {
   const { t } = useI18n();
   const { navigateTo } = useNavigation();
+  const { status: authStatus, user, isSupabaseEnabled, signOut } = useAuth();
   const [loadingPersona, setLoadingPersona] = useState<string | null>(null);
   const [activeTab, setActiveTab] = useState<SettingsTab>('profile');
 
@@ -134,6 +139,55 @@ export default function Settings({
 
         {activeTab === 'system' && (
           <>
+            {/* Q6 — Mi cuenta (only shown when Supabase is configured) */}
+            {isSupabaseEnabled && (
+              <SectionCard
+                icon={<UserCircle className="w-4 h-4 text-primary" aria-hidden="true" />}
+                title={t.settings.accountSection}
+              >
+                {authStatus === 'loading' && (
+                  <div className="flex items-center gap-2 text-on-surface-variant">
+                    <Loader2 className="w-4 h-4 animate-spin" aria-hidden="true" />
+                    <span className="font-label text-micro uppercase tracking-widest">{t.common.loading}</span>
+                  </div>
+                )}
+                {authStatus === 'authed' && user && (
+                  <div className="flex flex-col gap-3">
+                    <p className="font-body text-sm text-on-surface-variant">
+                      {t.settings.accountConnected}
+                      <span className="text-on-surface ml-1 font-medium">{user.email}</span>
+                    </p>
+                    <p className="font-label text-micro uppercase tracking-widest text-primary/70">
+                      {t.settings.accountSyncStatus}
+                    </p>
+                    <button
+                      type="button"
+                      onClick={() => signOut().catch(err => logger.warn('signOut failed', { err: String(err) }))}
+                      className="flex items-center gap-2 font-label text-micro uppercase tracking-widest text-error hover:text-error/80 transition-colors w-fit"
+                    >
+                      <LogOut className="w-3.5 h-3.5" aria-hidden="true" />
+                      {t.settings.accountSignOut}
+                    </button>
+                  </div>
+                )}
+                {authStatus === 'guest' && (
+                  <div className="flex flex-col gap-3">
+                    <p className="font-body text-sm text-on-surface-variant">{t.settings.accountGuest}</p>
+                    {onNavigateToLogin && (
+                      <button
+                        type="button"
+                        onClick={onNavigateToLogin}
+                        className="flex items-center gap-2 font-label text-micro uppercase tracking-widest text-primary hover:text-primary/80 transition-colors w-fit"
+                      >
+                        <LogIn className="w-3.5 h-3.5" aria-hidden="true" />
+                        {t.settings.accountSignIn}
+                      </button>
+                    )}
+                  </div>
+                )}
+              </SectionCard>
+            )}
+
             <SettingsSystem
               showAIBot={!!showAIBot}
               setShowAIBot={setShowAIBot}

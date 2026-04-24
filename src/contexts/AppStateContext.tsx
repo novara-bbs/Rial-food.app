@@ -30,6 +30,8 @@ import { ingredientIdToFamilyVariant } from '../features/food/utils/food-family-
 import { logger } from '../lib/logger';
 import type { BodySnapshot } from '../types/wellness';
 import type { CommunityPost } from '../types/social';
+import { useAuth } from './AuthContext';
+import { syncOnSignIn, pushToCloud } from '../lib/sync';
 
 // ─── Types ───────────────────────────────────────────────────────────────────
 
@@ -699,6 +701,70 @@ export function AppStateProvider({ children }: { children: React.ReactNode }) {
 
   // Reset daily counters when calendar date changes (midnight rollover)
   useDailyReset({ setDailyLog, setDailyMacros, setHydration, setMovement });
+
+  // ─── Q6: Supabase sync wiring ────────────────────────────────────────────────
+  // AppStateProvider lives inside AuthProvider (main.tsx), so useAuth() is safe here.
+  const { status: authStatus } = useAuth();
+  const prevAuthStatusRef = useRef<string>('loading');
+
+  // On sign-in: pull remote data and merge into local state (last-write-wins per key).
+  // Values arrive from Supabase JSONB — we trust the schema matches what we stored.
+  const applyRemoteData = useCallback((remote: Partial<Record<string, unknown>>) => {
+    /* eslint-disable @typescript-eslint/no-explicit-any */
+    if (remote.userProfile) setUserProfile(remote.userProfile as UserProfile);
+    if (remote.dailyMacros) setDailyMacros(remote.dailyMacros as DailyMacros);
+    if (remote.savedRecipes) setSavedRecipes(remote.savedRecipes as any[]);
+    if (remote.mealPlan) setMealPlan(remote.mealPlan as Record<number, any[]>);
+    if (remote.shoppingList) setShoppingList(remote.shoppingList as ShoppingItem[]);
+    if (remote.realFeelLogs) setRealFeelLogs(remote.realFeelLogs as any[]);
+    if (remote.toleranceLogs) setToleranceLogs(remote.toleranceLogs as any[]);
+    if (remote.weightHistory) setWeightHistory(remote.weightHistory as BodySnapshot[]);
+    if (remote.nutritionHistory) setNutritionHistory(remote.nutritionHistory as DailyArchive[]);
+    if (typeof remote.isPro === 'boolean') setIsPro(remote.isPro);
+    if (remote.dailyLog) setDailyLog(remote.dailyLog as DailyLogEntry[]);
+    if (remote.foodHistory) setFoodHistory(remote.foodHistory as FoodHistoryEntry[]);
+    if (remote.favoriteIds) setFavoriteIds(remote.favoriteIds as string[]);
+    /* eslint-enable @typescript-eslint/no-explicit-any */
+  }, [
+    setUserProfile, setDailyMacros, setSavedRecipes, setMealPlan,
+    setShoppingList, setRealFeelLogs, setToleranceLogs, setWeightHistory,
+    setNutritionHistory, setIsPro, setDailyLog, setFoodHistory, setFavoriteIds,
+  ]);
+
+  useEffect(() => {
+    if (authStatus !== 'authed' || prevAuthStatusRef.current === 'authed') {
+      prevAuthStatusRef.current = authStatus;
+      return;
+    }
+    prevAuthStatusRef.current = 'authed';
+    syncOnSignIn()
+      .then(applyRemoteData)
+      .catch(err => logger.warn('syncOnSignIn failed', { err: String(err) }));
+  }, [authStatus, applyRemoteData]);
+
+  // Push on change — no-op when Supabase is unconfigured or user not signed in.
+  // savedRecipes: skip when any recipe has a data-URL photo (Supabase row-size guard ~1 MB).
+  useEffect(() => {
+    const hasDataUrl = savedRecipes.some(
+      (r: any) =>
+        r?.photos?.some((p: string) => p?.startsWith('data:')) ||
+        r?.steps?.some((s: any) => s?.photoUrl?.startsWith('data:')),
+    );
+    if (!hasDataUrl) pushToCloud('savedRecipes', savedRecipes);
+  }, [savedRecipes]);
+  useEffect(() => { pushToCloud('userProfile', userProfile); }, [userProfile]);
+  useEffect(() => { pushToCloud('dailyMacros', dailyMacros); }, [dailyMacros]);
+  useEffect(() => { pushToCloud('mealPlan', mealPlan); }, [mealPlan]);
+  useEffect(() => { pushToCloud('shoppingList', shoppingList); }, [shoppingList]);
+  useEffect(() => { pushToCloud('realFeelLogs', realFeelLogs); }, [realFeelLogs]);
+  useEffect(() => { pushToCloud('toleranceLogs', toleranceLogs); }, [toleranceLogs]);
+  useEffect(() => { pushToCloud('weightHistory', weightHistory); }, [weightHistory]);
+  useEffect(() => { pushToCloud('nutritionHistory', nutritionHistory); }, [nutritionHistory]);
+  useEffect(() => { pushToCloud('isPro', isPro); }, [isPro]);
+  useEffect(() => { pushToCloud('dailyLog', dailyLog); }, [dailyLog]);
+  useEffect(() => { pushToCloud('foodHistory', foodHistory); }, [foodHistory]);
+  useEffect(() => { pushToCloud('favoriteIds', favoriteIds); }, [favoriteIds]);
+  // ──────────────────────────────────────────────────────────────────────────────
 
   // ─── Handlers (delegated to feature modules, memoized to prevent re-renders) ──
 

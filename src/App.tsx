@@ -150,7 +150,7 @@ export default function App() {
       case 'daily-check-in': return <DailyCheckIn initialStatus={checkInStatus?.status || null} onBack={() => navigateTo(previousScreen)} onComplete={handleCompleteCheckIn} />;
       case 'ai-coach': return <AICoach onBack={() => navigateTo(previousScreen)} isPro={isPro} memoryContext={aiCoachMemory} />;
       case 'profile': return <Profile userProfile={userProfile} onBack={() => navigateTo(previousScreen)} realFeelLogs={realFeelLogs} savedRecipes={savedRecipes} communityPosts={communityPosts} nutritionHistory={nutritionHistory} dailyLogHasEntries={dailyLog.length > 0} />;
-      case 'settings': return <Settings dailyMacros={dailyMacros} setDailyMacros={setDailyMacros} isPro={isProState} setIsPro={setIsPro} showAIBot={showAIBotState} setShowAIBot={setShowAIBot} userProfile={userProfile} setUserProfile={setUserProfile} dictionary={dictionary} hydration={hydration} setHydration={setHydration} movement={movement} setMovement={setMovement} />;
+      case 'settings': return <Settings dailyMacros={dailyMacros} setDailyMacros={setDailyMacros} isPro={isProState} setIsPro={setIsPro} showAIBot={showAIBotState} setShowAIBot={setShowAIBot} userProfile={userProfile} setUserProfile={setUserProfile} dictionary={dictionary} hydration={hydration} setHydration={setHydration} movement={movement} setMovement={setMovement} onNavigateToLogin={() => setAuthScreen('login')} />;
       case 'real-feel-diary': return <RealFeelDiary realFeelLogs={realFeelLogs} onBack={() => navigateTo('more')} />;
       case 'fasting-timer': return <FastingTimer onBack={() => navigateTo('more')} />;
       case 'pantry': return <Pantry onBack={() => navigateTo('more')} />;

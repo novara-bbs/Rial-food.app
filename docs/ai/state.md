@@ -5,25 +5,24 @@
 > prunes this file back down. Everything below should answer: *what's the release line,
 > what's the quality baseline, what's the next move, what's broken?*
 
-Last updated: **2026-04-24** — Q17 shipped (`[1.5.81]`).
+Last updated: **2026-04-24** — Q6 shipped (`[1.5.82]`).
 
 ## Release snapshot
-- **Branch**: `main`, in sync with `rial-food/main` through `70ce481`.
-- **Last shipped**: `[1.5.81]` — Q17 CSP header + contrast audit (3 WCAG fixes in Signup,
-  ConstantTile, AddMeal). Q15 + Q17 both ✓.
+- **Branch**: `main`, in sync with `rial-food/main` through `70ce481` (push pending).
+- **Last shipped**: `[1.5.82]` — Q6 Supabase offline-first sync wiring (pull-on-sign-in +
+  push-on-change + Mi Cuenta Settings section). All R-sprints ✓. Q15 ✓. Q17 ✓. Q6 ✓.
 - **Active plan**: `.claude/plans/revisa-todas-las-capturas-ancient-micali.md` (v2 re-sync).
-  R1–R8 ✓ · **ALL R-sprints DONE**. Q15 ✓. Q17 ✓.
-  Next: **Q6** (Supabase integration — gate criteria re-evaluate, see below).
+  All sprints DONE. Next: **owner actions** (apply DB migration + Vercel env vars — see risks).
 - **Release target**: `rial-food/main` (`novara-bbs/Rial-food.app`). Origin `rial-food`.
 - **Vercel project**: `rial.app.v1.5` (id `prj_t11VHYQjptazjUx7Y2hWLz0IDAjg`).
 - **Governance**: work directly on `main`. "continua" = push approval post green preflight.
 
-## Quality baseline (post-Q17, 2026-04-24)
+## Quality baseline (post-Q6, 2026-04-24)
 - TypeScript: **0 errors** (`npx tsc --noEmit`)
 - Tests: **1046/1046** passing (64 files)
-- i18n symmetry: **1856** keys aligned ES ↔ EN
+- i18n symmetry: **1862** keys aligned ES ↔ EN (+6 Q6 account keys)
 - Design-system lint: 0 errors (631 warnings pre-existing, unchanged)
-- Build main: **872.6 KB raw / 274.7 KB gzip** · `size:check` PASS
+- Build main: **875.9 KB raw / 275.3 KB gzip** · `size:check` PASS
 - Security headers: HSTS + X-Frame-Options + nosniff + Permissions-Policy + Referrer-Policy + **CSP** ✓
 - Drift: `text-[Npx]` = **0**, SectionCard shape = **0**, INPUT_SURFACE_CLASSES 4 consumers,
   BUTTON_CARD_SURFACE_CLASSES 5 consumers.
@@ -34,26 +33,24 @@ Last updated: **2026-04-24** — Q17 shipped (`[1.5.81]`).
 - `vercel.json` does NOT inject Gemini secrets.
 
 ## Active risks
+- **⚠️ Owner action required — Supabase DB migration not applied** — `supabase/migrations/
+  001_initial_schema.sql` creates `profiles` + `user_data` + RLS. Apply via
+  `supabase db push` or Supabase SQL Editor. Without this, sync push silently no-ops.
+- **⚠️ Owner action required — Vercel env vars missing** — `VITE_SUPABASE_URL` and
+  `VITE_SUPABASE_ANON_KEY` not set in Vercel project. Without these, `isSupabaseEnabled =
+  false` and the Mi Cuenta section is hidden. App still works offline-first.
 - **Data URL payload in `savedRecipes`** — Fase 2 multi-media stores photos as base64 data
   URLs. ~1.2 MB per recipe with 6 photos exceeds Supabase `user_data` row-limit (~1 MB).
-  Mitigation: IDB local persistence, sync push excludes `savedRecipes` when any photo is
-  data URL. Q6 must migrate to Supabase Storage bucket `recipe-photos` with RLS.
+  Mitigation ACTIVE: push skips `savedRecipes` when any photo is a data URL (Q6 guard).
+  Q6-B: migrate to Supabase Storage bucket `recipe-photos` with RLS (separate sprint).
 - **`ImportRecipeURL` doesn't auto-populate `videoUrl`** — TikTok/Instagram/YouTube links
-  lose the source reference. Defer to Q6 (needs `og-fetch` Edge function parsing `og:video`
-  + `twitter:player`).
-- **SyncKey covers ~10 of ~35 localStorage keys** — full audit table moved to
-  `docs/archive/` or reconstruct from Q6 sprint. Gap resolved in Supabase sprint.
-- **Supabase DB migration not applied** — `supabase/migrations/001_initial_schema.sql` ready
-  but intentionally deferred until features stable. Apply via `supabase db push` or SQL
-  Editor when Q6 unlocks.
-- **`useSupabasePersistence` flag not wired** — intentionally deferred, same Q6 trigger.
-- ~~**CSP header**~~ ✓ — shipped Q17 `[1.5.81]`. All 6 security headers now active in `vercel.json`.
+  lose the source reference. Needs `og-fetch` Edge function parsing `og:video`/`twitter:player`.
+- ~~**SyncKey wiring missing**~~ ✓ — Q6 wired 13 core SyncKeys in AppStateContext.
+- ~~**`useSupabasePersistence` flag not wired**~~ ✓ — Q6 wired via `useAuth()` edge trigger.
+- ~~**CSP header**~~ ✓ — shipped Q17 `[1.5.81]`. All 6 security headers active in `vercel.json`.
 - **Tag taxonomy regression** — `Recipe.tag: string` ad-hoc ES-literal (`'MI RECETA'`,
-  `'VEGANO'`) fails in EN filters. `Discovery.tsx:126` filters `r.tag === 'VEGANO'` while
-  `CreateRecipe` writes `tags[].includes('vegan')`. Requires `origin?: 'user'|'imported'|
-  'seed'` + `FoodTag` enum + 40+ site migration. Defer to Q16 codemod sprint.
-- **vendor-recharts chunk 102 KB gzip** — acceptable but monitor; ≤ 400 KB raw / 115 KB
-  gzip budget.
+  `'VEGANO'`) fails in EN filters. Requires `FoodTag` enum + 40+ site migration. Defer.
+- **vendor-recharts chunk 102 KB gzip** — acceptable but monitor; ≤ 400 KB raw / 115 KB gzip.
 
 ## Feature-freeze gate (triggers Q6 Supabase sprint)
 Execute Q6 ONLY when ALL hold:
@@ -65,16 +62,20 @@ Execute Q6 ONLY when ALL hold:
 - E2E green on last 3 commits to main
 
 ## Next sprint candidates (ordered, only pending)
-- ~~**R2**~~ ✓ · ~~**R3**~~ ✓ · ~~**R5**~~ ✓ · ~~**R7**~~ ✓ · ~~**R8**~~ ✓ · ~~**Q15**~~ ✓ · ~~**Q17**~~ ✓
-- **Q6** — Supabase integration. Gate re-evaluate: Q17 shipped with 0 model changes → data model
-  now stable for 1 sprint. Re-check all 6 gate criteria before starting Q6.
-- `calculateStreak` function in `gamification.ts` still has `@deprecated` tag — remove in Q6 cleanup.
+- ~~**R2**~~ ✓ · ~~**R3**~~ ✓ · ~~**R5**~~ ✓ · ~~**R7**~~ ✓ · ~~**R8**~~ ✓ · ~~**Q15**~~ ✓ · ~~**Q17**~~ ✓ · ~~**Q6**~~ ✓
+- **Owner actions** (non-code, unblock Supabase in production):
+  1. `supabase db push` (applies `001_initial_schema.sql`)
+  2. Add `VITE_SUPABASE_URL` + `VITE_SUPABASE_ANON_KEY` to Vercel project env vars
+- **Q6-B** — Recipe photo migration to Supabase Storage bucket `recipe-photos` + RLS.
+  Unblocks sync for recipes with multi-media photos. Medium complexity, deferred.
+- `calculateStreak` in `gamification.ts` still has `@deprecated` tag — remove when convenient.
 
 **Shipped sprints** (full detail in CHANGELOG.md): Q1-Q14, Q15.5 (design-system),
 Q16-B1, Q16-B2, Tab audit 2026-04-18, S3 tranche, Bevel PR 1-9, Q19 meal-taxonomy,
 Fase 1+2 multi-media recipes, Food Families P0-P16, R1 docs, R2 recipes editorial,
 **R3 Cocina collections**, **R5 CookMode deeper**, **R8 INDYA adoption**, **R7 CreateRecipe authoring**,
-**Q15 ICP-adaptive NutritionHero + calcStreaks sweep**, **Q17 CSP header + contrast audit**.
+**Q15 ICP-adaptive NutritionHero + calcStreaks sweep**, **Q17 CSP header + contrast audit**,
+**Q6 Supabase offline-first sync wiring** (pull-on-sign-in + push-on-change + Mi Cuenta).
 
 ## Repository compliance
 - `LICENSE`: Proprietary © 2026 RIAL FOOD WORLD S.L. Contact legal@rialfoodworld.com.

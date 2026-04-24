@@ -917,6 +917,13 @@ const en: Translations = {
     deleteAccountSuccess: 'Account deleted successfully',
     deleteAccountError: 'Error deleting account. Please try again.',
     notSignedIn: 'You are not signed in',
+    // Q6 — My account (Supabase)
+    accountSection: 'My Account',
+    accountConnected: 'Signed in as',
+    accountGuest: 'No account · local storage only',
+    accountSignIn: 'Sign in',
+    accountSignOut: 'Sign out',
+    accountSyncStatus: 'Data synced to the cloud',
     // Q14 — developer panel
     developer: 'Developer',
     loadDemoPersona: 'Load demo persona',
