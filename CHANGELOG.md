@@ -1,5 +1,88 @@
 # RIAL App - Changelog
 
+## [1.5.88] - 2026-04-25
+
+### refactor(ds): Fase C lote 2 — CreateRecipe typography + 2 nuevos primitives reutilizables
+
+Continuación de la **Fase C** de ADR-012. Esta vez, además de migrar la
+pantalla, **se extrajeron dos primitives** porque el patrón se repetía en 4-5
+call-sites distintos del repo. La directriz del owner fue explícita: "código
+limpio, global, componentes reutilizables a futuro, nada hardcodeado".
+
+**Pantalla migrada**: `src/features/recipes/screens/CreateRecipe.tsx` (1062
+líneas — formulario de autoría, 4 steps: meta → ingredientes → instrucciones
+→ review).
+
+#### Primitives nuevos en `src/components/patterns/`
+
+**`<MacroTile>`** — celda de macronutriente (kcal / Pro / Carbs / Fat).
+- Variants: `size: 'sm' | 'md'`, `surface: 'highest' | 'card'`.
+- Color del valor: `valueColorClassName` token-based (`text-primary`,
+  `text-macro-protein`, `text-macro-carbs`, `text-macro-fats`) — la paleta
+  macro queda bajo control del design system.
+- Etiqueta uppercase + tracking-widest + token `text-micro` ya internalizado.
+- Marca `data-macro-tile`, `data-size`, `data-surface` para discovery por
+  convention tests.
+- **Reemplaza inline duplication en**: CreateRecipe (totals + per-serving),
+  `RecipeNutritionBar.tsx` línea 40, `PortionSelector.tsx` línea 339 (los dos
+  últimos quedan pendientes de migrar en pasada de polish — primitives ya
+  están listos).
+
+**`<DashedAddButton>`** — CTA dashed-border "add another item".
+- Variants: `density: 'comfortable' | 'compact'`, `width: 'full' | 'auto'`,
+  `hideLabelOnMobile`, custom `icon` (default `Plus` de lucide).
+- Tipografía centralizada (`font-label text-micro font-bold tracking-widest
+  uppercase`) — un futuro tweak de Bricolage es 1-line edit.
+- Soporta `disabled` con opacity + cursor.
+- Marca `data-dashed-add-button`, `data-density`, `data-width`.
+- **Reemplaza inline duplication en**: CreateRecipe (add ingredient + paste
+  list + add step). Pendientes de migrar en polish: `Planner.tsx`,
+  `CreateStory`, `PhotoUploader`, `BarcodeScanner`.
+
+#### Mappings aplicados a CreateRecipe
+
+| Patrón anterior | Después | Hits |
+|---|---|---|
+| `<div bg-surface-container-highest p-2><span text-base ${color}>...` (totals) | `<MacroTile size="sm" valueColorClassName=...>` | 1 grid (4 tiles) |
+| `<div bg-surface-container-highest p-2><span text-lg ${color}>...` (per-serving) | `<MacroTile size="md" valueColorClassName=...>` | 1 grid (4 tiles) |
+| `<button border-2 border-dashed ... font-label text-xs font-bold>` (add ingredient) | `<DashedAddButton>` | 3 |
+| `<h3 font-headline text-lg font-bold uppercase>` (recipe preview title) | `<Heading level="h3">` | 1 |
+| `<h4 font-label text-micro overline-style>` (per-serving / suggestedTags / ingredients summary / steps summary) | `<Heading level="h4" variant="overline">` | 4 |
+| `<h4 font-headline font-bold text-sm text-tertiary truncate>` (ingredient row name) | `<Heading level="h4" className="text-body-sm tracking-tight truncate">` | 1 |
+| `<span class="block font-headline font-bold text-sm text-tertiary truncate">` (search rows) | swap `text-sm` → `text-body-sm` | 2 |
+| `<div class="text-sm">` (step number) | swap `text-sm` → `text-body-sm` | 1 |
+| `<span class="font-headline font-bold text-sm text-tertiary">` (verified-creator publish) | swap `text-sm` → `text-body-sm` | 1 |
+| `<button class="font-headline font-bold text-sm text-primary uppercase tracking-widest">` (paste-sheet add) | swap `text-sm` → `text-body-sm` | 1 |
+
+**Total**: 18 typography hits → 0. 2 grids colapsadas a `<MacroTile>`. 3
+botones inline a `<DashedAddButton>`. 5 conversiones a `<Heading>`. 6 token
+swaps semánticos.
+
+#### Allowlist
+Removido `src/features/recipes/screens/CreateRecipe.tsx` del
+`typographyMigrationAllowlist`. **0 errores** de `no-restricted-syntax` sin
+downgrade.
+
+#### Quality baseline (post-[1.5.88])
+- TypeScript: **0 errors**.
+- Tests: **1147/1147** passing — primitives nuevos sin regresión (call-sites
+  cubiertos via integración de CreateRecipe).
+- Design-system lint: **0 errors**, **1100 warnings** (-18 vs `[1.5.87]`
+  baseline 1118). Las 18 típicas de tipografía de CreateRecipe quedaron
+  resueltas; 3 warnings preexistentes de `any` en pasted-ingredient parser
+  quedan visibles fuera del scope (no típográficos).
+- Bundle: +0.5 KB gzip neto (2 primitives nuevos pero call-sites más finos).
+- i18n keys: 1871 (sin cambios — refactor no toca strings).
+
+#### Próximo
+- **Polish DRY**: adoptar MacroTile en `RecipeNutritionBar.tsx` +
+  `PortionSelector.tsx`; adoptar DashedAddButton en Planner / CreateStory /
+  PhotoUploader / BarcodeScanner.
+- **Lote 3**: pantallas sociales (PostDetail, CreatorProfile, CreatePost).
+- **Lote 4**: componentes wellness.
+
+---
+
 ## [1.5.87] - 2026-04-25
 
 ### refactor(ds): Fase C lote 1 — RecipeDetail typography migration

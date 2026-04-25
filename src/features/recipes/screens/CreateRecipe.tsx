@@ -19,6 +19,9 @@ import { variantToIngredient } from '../../food/utils/variant-to-ingredient';
 import type { FoodFamily, FoodVariant } from '../../../types/food-family';
 import { useAppState } from '../../../contexts/AppStateContext';
 import PageHeader from '../../../components/patterns/PageHeader';
+import MacroTile from '../../../components/patterns/MacroTile';
+import DashedAddButton from '../../../components/patterns/DashedAddButton';
+import { Heading } from '@/components/ui/Typography';
 
 const STEP_COUNT = 4;
 
@@ -538,10 +541,13 @@ export default function CreateRecipe({
                 { label: 'Carbs', value: `${totals.macros.carbs}g`, color: 'text-macro-carbs' },
                 { label: 'Fat', value: `${totals.macros.fats}g`, color: 'text-macro-fats' },
               ].map(m => (
-                <div key={m.label} className="bg-surface-container-highest rounded-sm p-2 text-center">
-                  <span className={`block font-headline font-bold text-base ${m.color}`}>{m.value}</span>
-                  <span className="text-micro font-label uppercase tracking-widest text-on-surface-variant">{m.label}</span>
-                </div>
+                <MacroTile
+                  key={m.label}
+                  size="sm"
+                  value={m.value}
+                  label={m.label}
+                  valueColorClassName={m.color}
+                />
               ))}
             </div>
             {servings > 1 && (
@@ -571,7 +577,7 @@ export default function CreateRecipe({
                   </button>
                 </div>
                 <div className="flex-1 min-w-0">
-                  <h4 className="font-headline font-bold text-sm text-tertiary truncate">{ing.name}</h4>
+                  <Heading level="h4" className="text-body-sm tracking-tight truncate">{ing.name}</Heading>
                   <p className="text-micro font-label uppercase tracking-widest text-on-surface-variant">
                     {ri.amount}g — {sm.calories} kcal · {sm.protein}g P
                   </p>
@@ -608,7 +614,7 @@ export default function CreateRecipe({
                     >
                       <Layers className="w-4 h-4 text-primary shrink-0" aria-hidden="true" />
                       <div className="flex-1 min-w-0">
-                        <span className="block font-headline font-bold text-sm text-tertiary truncate">{familyName}</span>
+                        <span className="block font-headline font-bold text-body-sm text-tertiary truncate">{familyName}</span>
                         <span className="block text-micro font-label uppercase tracking-widest text-on-surface-variant">
                           {canonical.macros.calories} kcal / 100g · {canonical.macros.protein}g P
                         </span>
@@ -628,7 +634,7 @@ export default function CreateRecipe({
                       className="w-full text-left px-4 py-3 hover:bg-surface-container transition-colors flex items-center gap-3"
                     >
                       <div className="flex-1 min-w-0">
-                        <span className="block font-headline font-bold text-sm text-tertiary truncate">{ing.name}</span>
+                        <span className="block font-headline font-bold text-body-sm text-tertiary truncate">{ing.name}</span>
                         <span className="block text-micro font-label uppercase tracking-widest text-on-surface-variant">
                           {ing.macros.calories} kcal / {ing.baseAmount}{ing.baseUnit} · {ing.macros.protein}g P
                         </span>
@@ -652,17 +658,19 @@ export default function CreateRecipe({
             </div>
           ) : (
             <div className="flex gap-2">
-              <button type="button" onClick={() => setIsSearching(true)}
-                className="flex-1 border-2 border-dashed border-outline-variant/30 p-4 rounded-sm flex items-center justify-center gap-2 text-on-surface-variant hover:text-primary hover:border-primary/50 transition-colors font-label text-xs font-bold tracking-widest uppercase">
-                <Plus className="w-4 h-4" /> {t.createRecipe.addIngredient}
-              </button>
-              <button type="button" onClick={() => setPasteSheetOpen(true)}
-                className="border-2 border-dashed border-outline-variant/30 px-4 py-4 rounded-sm flex items-center justify-center gap-1.5 text-on-surface-variant hover:text-primary hover:border-primary/50 transition-colors font-label text-xs font-bold tracking-widest uppercase shrink-0"
-                aria-label={t.createRecipe.pasteListTitle}
-              >
-                <ClipboardList className="w-4 h-4" />
-                <span className="hidden sm:inline">{t.createRecipe.pasteList}</span>
-              </button>
+              <DashedAddButton
+                label={t.createRecipe.addIngredient}
+                onClick={() => setIsSearching(true)}
+                className="flex-1"
+              />
+              <DashedAddButton
+                label={t.createRecipe.pasteList}
+                ariaLabel={t.createRecipe.pasteListTitle}
+                onClick={() => setPasteSheetOpen(true)}
+                icon={ClipboardList}
+                width="auto"
+                hideLabelOnMobile
+              />
             </div>
           )}
         </div>
@@ -679,7 +687,7 @@ export default function CreateRecipe({
             const timers = detectTimers(s.text);
             return (
               <div key={idx} className="flex gap-3 items-start">
-                <div className="w-8 h-8 rounded-full bg-primary/10 text-primary font-headline font-bold flex items-center justify-center shrink-0 mt-1 text-sm">
+                <div className="w-8 h-8 rounded-full bg-primary/10 text-primary font-headline font-bold flex items-center justify-center shrink-0 mt-1 text-body-sm">
                   {idx + 1}
                 </div>
                 <div className="flex-1 space-y-2">
@@ -748,10 +756,11 @@ export default function CreateRecipe({
             );
           })}
 
-          <button type="button" onClick={addStep}
-            className="w-full border-2 border-dashed border-outline-variant/30 p-3 rounded-sm flex items-center justify-center gap-2 text-on-surface-variant hover:text-primary hover:border-primary/50 transition-colors font-label text-xs font-bold tracking-widest uppercase">
-            <Plus className="w-4 h-4" /> {t.createRecipe.addStep}
-          </button>
+          <DashedAddButton
+            label={t.createRecipe.addStep}
+            onClick={addStep}
+            density="compact"
+          />
         </div>
       )}
 
@@ -764,7 +773,7 @@ export default function CreateRecipe({
               <Camera className="w-10 h-10 text-on-surface-variant/40" />
             </div>
             <div className="p-4 space-y-2">
-              <h3 className="font-headline text-lg font-bold uppercase text-tertiary">{title || '—'}</h3>
+              <Heading level="h3">{title || '—'}</Heading>
               {description && <p className="text-sm text-on-surface-variant line-clamp-2">{description}</p>}
               <div className="flex items-center gap-3 text-micro font-label uppercase tracking-widest text-on-surface-variant flex-wrap">
                 <span className="flex items-center gap-1"><Clock className="w-3 h-3" /> {prepTime ? `${prepTime} min` : '—'} + {cookTime ? `${cookTime} min` : '—'}</span>
@@ -812,7 +821,7 @@ export default function CreateRecipe({
 
           {/* Per-serving macros */}
           <div className="bg-surface-container-low p-4 rounded-sm border border-outline-variant/20">
-            <h4 className="font-label text-micro font-bold tracking-widest uppercase text-on-surface-variant mb-3">{t.createRecipe.perServing}</h4>
+            <Heading level="h4" variant="overline" className="text-on-surface-variant mb-3 text-micro">{t.createRecipe.perServing}</Heading>
             <div className="grid grid-cols-4 gap-2">
               {[
                 { label: 'kcal', value: perServing.calories, color: 'text-primary' },
@@ -820,10 +829,13 @@ export default function CreateRecipe({
                 { label: 'Carbs', value: `${perServing.carbs}g`, color: 'text-macro-carbs' },
                 { label: 'Fat', value: `${perServing.fats}g`, color: 'text-macro-fats' },
               ].map(m => (
-                <div key={m.label} className="bg-surface-container-highest rounded-sm p-2 text-center">
-                  <span className={`block font-headline font-bold text-lg ${m.color}`}>{m.value}</span>
-                  <span className="text-micro font-label uppercase tracking-widest text-on-surface-variant">{m.label}</span>
-                </div>
+                <MacroTile
+                  key={m.label}
+                  size="md"
+                  value={m.value}
+                  label={m.label}
+                  valueColorClassName={m.color}
+                />
               ))}
             </div>
           </div>
@@ -831,9 +843,9 @@ export default function CreateRecipe({
           {/* Auto tags */}
           {autoTags.length > 0 && (
             <div className="space-y-2">
-              <h4 className="font-label text-micro font-bold tracking-widest uppercase text-on-surface-variant">
+              <Heading level="h4" variant="overline" className="text-on-surface-variant text-micro">
                 {t.createRecipe.suggestedTags}
-              </h4>
+              </Heading>
               <div className="flex flex-wrap gap-1.5">
                 {autoTags.map(tag => (
                   <Badge key={tag} variant="outline" className="text-primary border-primary/30">{tag}</Badge>
@@ -844,9 +856,9 @@ export default function CreateRecipe({
 
           {/* Ingredient summary */}
           <div className="space-y-2">
-            <h4 className="font-label text-micro font-bold tracking-widest uppercase text-on-surface-variant">
+            <Heading level="h4" variant="overline" className="text-on-surface-variant text-micro">
               {recipeIngredients.length} {t.recipes.ingredients}
-            </h4>
+            </Heading>
             {recipeIngredients.map(ri => {
               const ing = ri.ingredient
                 ?? dictionary.find(i => i.id === ri.ingredientId);
@@ -863,9 +875,9 @@ export default function CreateRecipe({
           {/* Steps summary */}
           {steps.some(s => s.text.trim()) && (
             <div className="space-y-2">
-              <h4 className="font-label text-micro font-bold tracking-widest uppercase text-on-surface-variant">
+              <Heading level="h4" variant="overline" className="text-on-surface-variant text-micro">
                 {steps.filter(s => s.text.trim()).length} {t.recipes.steps}
-              </h4>
+              </Heading>
               {steps.filter(s => s.text.trim()).map((s, idx) => {
                 const timers = detectTimers(s.text);
                 return (
@@ -909,7 +921,7 @@ export default function CreateRecipe({
                 </div>
               </div>
               <div className="flex-1 min-w-0">
-                <span className="flex items-center gap-1.5 font-headline font-bold text-sm text-tertiary">
+                <span className="flex items-center gap-1.5 font-headline font-bold text-body-sm text-tertiary">
                   <BadgeCheck className="w-4 h-4 text-primary" />
                   {t.createRecipe.publishAsVerified}
                 </span>
@@ -981,7 +993,7 @@ export default function CreateRecipe({
             <button
               type="button"
               onClick={handlePasteConfirm}
-              className="font-headline font-bold text-sm text-primary uppercase tracking-widest"
+              className="font-headline font-bold text-body-sm text-primary uppercase tracking-widest"
             >
               {t.common.add}
             </button>

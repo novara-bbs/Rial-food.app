@@ -250,7 +250,6 @@ const typographyMigrationAllowlist = [
   'src/features/recipes/components/TimeTileComposite.tsx',
   'src/features/recipes/components/VideoSection.tsx',
   'src/features/recipes/screens/Cocina.tsx',
-  'src/features/recipes/screens/CreateRecipe.tsx',
   'src/features/recipes/screens/ImportRecipeURL.tsx',
   'src/features/social/components/FeedTabs.tsx',
   'src/features/social/components/PostCard.tsx',
