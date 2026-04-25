@@ -54,6 +54,8 @@ type ChipRowBaseProps = {
   options: ChipOption[];
   variant?: ChipRowVariant;
   tone?: ChipRowTone;
+  /** When true, pill/emoji variants wrap onto multiple rows instead of scrolling horizontally. */
+  wrap?: boolean;
   ariaLabel?: string;
   className?: string;
 };
@@ -81,6 +83,7 @@ export default function ChipRow(props: ChipRowProps) {
     options,
     variant = 'pill',
     tone = 'default',
+    wrap = false,
     ariaLabel,
     className,
   } = props;
@@ -137,7 +140,7 @@ export default function ChipRow(props: ChipRowProps) {
       data-variant={variant}
       data-mode={props.mode ?? 'single'}
       data-tone={tone}
-      className={cn('flex gap-2 overflow-x-auto hide-scrollbar', className)}
+      className={cn(wrap ? 'flex flex-wrap gap-2' : 'flex gap-2 overflow-x-auto hide-scrollbar', className)}
     >
       {options.map(opt => {
         const Icon = opt.icon;

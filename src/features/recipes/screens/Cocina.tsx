@@ -1,5 +1,5 @@
 import React, { useState, useMemo } from 'react';
-import { Plus, Link, ShoppingCart, Sparkles, Sunrise, Sun, Moon, Cookie } from 'lucide-react';
+import { Plus, Link, ShoppingCart, X } from 'lucide-react';
 import CollectionsCarousel from '../components/CollectionsCarousel';
 import { COLLECTIONS } from '../data/collections';
 import { useLocalStorageState } from '../../../hooks/useLocalStorageState';
@@ -95,12 +95,14 @@ export default function Cocina({ onAddMeal, onCreateRecipe, onNavigateToRecipe, 
   // match every slot (see `recipeFitsSlot`). "Quick" lives in `collections`
   // below — it's a time axis, not a slot, and conflating them in one row
   // confused users (Q19 meal-taxonomy refactor).
+  // Icons removed: Sunrise/Sun/Moon/Cookie don't add semantic value over the
+  // labels; pill+wrap layout fits all 5 chips in two compact rows on mobile.
   const mealCategories = [
-    { id: 'all', label: t.discovery.catAll, icon: Sparkles },
-    { id: 'breakfast', label: t.discovery.catBreakfast, icon: Sunrise },
-    { id: 'lunch', label: t.discovery.catLunch, icon: Sun },
-    { id: 'dinner', label: t.discovery.catDinner, icon: Moon },
-    { id: 'snack', label: t.discovery.catSnack, icon: Cookie },
+    { id: 'all', label: t.discovery.catAll },
+    { id: 'breakfast', label: t.discovery.catBreakfast },
+    { id: 'lunch', label: t.discovery.catLunch },
+    { id: 'dinner', label: t.discovery.catDinner },
+    { id: 'snack', label: t.discovery.catSnack },
   ];
 
   // FilterSheet sections (ADR-014). "Source" lives here now (was an inline
@@ -140,6 +142,51 @@ export default function Cocina({ onAddMeal, onCreateRecipe, onNavigateToRecipe, 
   ], [t]);
 
   const activeFilterCount = useMemo(() => countActive(filterValues), [filterValues]);
+
+  // Resolve a filter section id + value id → display label via i18n.
+  const getFilterLabel = (sectionId: string, valueId: string): string => {
+    const section = (t.filters as Record<string, unknown>)[sectionId];
+    if (section && typeof section === 'object') {
+      return (section as Record<string, string>)[valueId] ?? valueId;
+    }
+    return valueId;
+  };
+
+  // Flat list of currently active filter chips for the strip below the search row.
+  // Each entry carries enough info to dismiss its own filter on click.
+  const activeFilterChips = useMemo(() => {
+    const chips: { key: string; sectionId: string; valueId: string; label: string }[] = [];
+    // Source (single — skip 'all' which is the neutral default)
+    if (filterValues.source && filterValues.source !== 'all') {
+      chips.push({ key: `source:${filterValues.source}`, sectionId: 'source', valueId: filterValues.source as string, label: getFilterLabel('source', filterValues.source as string) });
+    }
+    // Diet (multi)
+    for (const d of (filterValues.diet as string[] | undefined) ?? []) {
+      chips.push({ key: `diet:${d}`, sectionId: 'diet', valueId: d, label: getFilterLabel('diet', d) });
+    }
+    // Time (single)
+    if (filterValues.time) {
+      chips.push({ key: `time:${filterValues.time}`, sectionId: 'time', valueId: filterValues.time as string, label: getFilterLabel('time', filterValues.time as string) });
+    }
+    // Difficulty (single)
+    if (filterValues.difficulty) {
+      chips.push({ key: `difficulty:${filterValues.difficulty}`, sectionId: 'difficulty', valueId: filterValues.difficulty as string, label: getFilterLabel('difficulty', filterValues.difficulty as string) });
+    }
+    return chips;
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [filterValues, t]);
+
+  // Dismiss a single filter chip from the active filters strip.
+  const handleDismissFilter = (sectionId: string, valueId: string) => {
+    const next = { ...filterValues };
+    if (Array.isArray(next[sectionId])) {
+      const arr = (next[sectionId] as string[]).filter(v => v !== valueId);
+      next[sectionId] = arr.length > 0 ? arr : null;
+    } else {
+      next[sectionId] = null;
+    }
+    setFilterValues(next);
+  };
 
   // Combined filters: slot (primary) + carousel collection + sheet facets +
   // search + sort. Source axis lives in `filterValues.source` (moved out of
@@ -279,15 +326,43 @@ export default function Cocina({ onAddMeal, onCreateRecipe, onNavigateToRecipe, 
               )}
             </div>
 
-            {/* Meal-type slot — icon ChipRow, single-select */}
+            {/* Active filters strip — shown when at least one sheet filter is active.
+                Each chip dismisses its own filter individually; Reset clears all. */}
+            {activeFilterCount > 0 && (
+              <div className="flex items-center gap-2 flex-wrap">
+                {activeFilterChips.map(chip => (
+                  <button
+                    key={chip.key}
+                    type="button"
+                    onClick={() => handleDismissFilter(chip.sectionId, chip.valueId)}
+                    className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-primary/10 text-primary border border-primary/25 text-micro font-label font-bold uppercase tracking-widest transition-colors hover:bg-primary/20"
+                  >
+                    {chip.label}
+                    <X className="w-3 h-3" aria-hidden="true" />
+                  </button>
+                ))}
+                <button
+                  type="button"
+                  onClick={() => setFilterValues({})}
+                  className="text-micro font-label font-bold uppercase tracking-widest text-on-surface-variant hover:text-primary transition-colors px-2 py-1.5 underline-offset-2 hover:underline"
+                >
+                  {t.filters.reset}
+                </button>
+              </div>
+            )}
+
+            {/* Meal-type slot — pill chips, single-select, wrap to 2 rows on mobile.
+                Icons removed: Sunrise/Sun/Moon/Cookie don't add semantic value
+                over the text labels and made each tile tall (icon-above text-below).
+                pill+wrap fits all 5 options in two compact rows without scrolling. */}
             <ChipRow
               mode="single"
-              variant="icon"
+              variant="pill"
+              wrap
               options={mealCategories}
               active={activeMealType}
               onChange={(id) => setActiveMealType(id ?? 'all')}
               ariaLabel={t.discovery.catAll}
-              className="-mx-6 px-6"
             />
 
             {/* Curated collections rail (R3) — editorial tiles with counts.
