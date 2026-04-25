@@ -3,6 +3,7 @@ import PageShell from '../../../components/PageShell';
 import { useState } from 'react';
 import { useI18n } from '../../../i18n';
 import PageHeader from '../../../components/patterns/PageHeader';
+import { Heading } from '@/components/ui/Typography';
 
 export default function AddTolerance({ onBack, onAddLog }: { onBack: () => void, onAddLog?: (log: any) => void }) {
   const { t } = useI18n();
@@ -40,17 +41,17 @@ export default function AddTolerance({ onBack, onAddLog }: { onBack: () => void,
             />
           </div>
           <div>
-            <h3 className="font-headline text-lg font-bold tracking-tight uppercase text-on-surface-variant mb-4 border-b border-outline-variant/20 pb-2">{t.tolerance.recentIngredients}</h3>
+            <Heading level="h3" className="text-body-lg tracking-tight text-on-surface-variant mb-4 border-b border-outline-variant/20 pb-2">{t.tolerance.recentIngredients}</Heading>
             <div className="space-y-2">
               {displayIngredients.map((ing, idx) => (
                 <button type="button" key={idx} onClick={() => setSelectedIngredient(ing)} className="w-full flex items-center justify-between p-4 bg-surface-container-low rounded-sm border border-outline-variant/20 hover:border-primary/30 transition-colors text-left group">
-                  <span className="font-headline font-bold text-base uppercase text-tertiary">{ing}</span>
+                  <span className="font-headline font-bold text-body uppercase text-tertiary">{ing}</span>
                   <Plus className="w-5 h-5 text-on-surface-variant group-hover:text-primary transition-colors" />
                 </button>
               ))}
               {displayIngredients.length === 0 && searchQuery.trim() && (
                 <button type="button" onClick={() => setSelectedIngredient(searchQuery)} className="w-full flex items-center justify-between p-4 bg-surface-container-low rounded-sm border border-primary/50 hover:bg-primary/10 transition-colors text-left">
-                  <span className="font-headline font-bold text-base uppercase text-primary">+ "{searchQuery}"</span>
+                  <span className="font-headline font-bold text-body uppercase text-primary">+ "{searchQuery}"</span>
                   <Plus className="w-5 h-5 text-primary" />
                 </button>
               )}
@@ -60,12 +61,12 @@ export default function AddTolerance({ onBack, onAddLog }: { onBack: () => void,
       ) : (
         <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
           <div className="bg-surface-container-low p-4 rounded-sm border border-outline-variant/20 flex justify-between items-center">
-            <span className="font-headline font-bold text-lg uppercase text-tertiary">{selectedIngredient}</span>
-            <button type="button" onClick={() => setSelectedIngredient(null)} className="text-xs font-label font-bold tracking-widest uppercase text-primary hover:underline">{t.common.edit}</button>
+            <span className="font-headline font-bold text-body-lg uppercase text-tertiary">{selectedIngredient}</span>
+            <button type="button" onClick={() => setSelectedIngredient(null)} className="text-micro font-label font-bold tracking-widest uppercase text-primary hover:underline">{t.common.edit}</button>
           </div>
 
           <section>
-            <h3 className="font-headline text-lg font-bold tracking-tight uppercase text-tertiary mb-4">{t.tolerance.toleranceLevel}</h3>
+            <Heading level="h3" className="text-body-lg tracking-tight mb-4">{t.tolerance.toleranceLevel}</Heading>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
               {[
                 { key: 'optimal' as const, icon: CheckCircle2, label: t.tolerance.levels.optimal, activeClass: 'border-primary bg-primary/10 text-primary' },
@@ -79,7 +80,7 @@ export default function AddTolerance({ onBack, onAddLog }: { onBack: () => void,
                       toleranceLevel === level.key ? level.activeClass : 'border-outline-variant/20 bg-surface-container-low text-on-surface-variant hover:border-primary/50'
                     }`}>
                     <Icon className="w-8 h-8" />
-                    <span className="font-label text-xs font-bold tracking-widest uppercase">{level.label}</span>
+                    <span className="font-label text-micro font-bold tracking-widest uppercase">{level.label}</span>
                   </button>
                 );
               })}
@@ -87,13 +88,13 @@ export default function AddTolerance({ onBack, onAddLog }: { onBack: () => void,
           </section>
 
           <section>
-            <h3 className="font-headline text-lg font-bold tracking-tight uppercase text-tertiary mb-4">{t.checkIn.symptoms}</h3>
+            <Heading level="h3" className="text-body-lg tracking-tight mb-4">{t.checkIn.symptoms}</Heading>
             <div className="flex flex-wrap gap-2">
               {symptomKeys.map(key => {
                 const label = (t.checkIn.symptomsList as Record<string, string>)[key] || key;
                 return (
                   <button type="button" key={key} onClick={() => toggleSymptom(label)}
-                    className={`px-4 py-2 rounded-full text-xs font-bold tracking-widest uppercase transition-all border ${
+                    className={`px-4 py-2 rounded-full text-micro font-bold tracking-widest uppercase transition-all border ${
                       selectedSymptoms.includes(label) ? 'bg-primary text-on-primary border-primary' : 'bg-surface-container-low text-on-surface-variant border-outline-variant/20 hover:border-primary/30'
                     }`}>
                     {label}
@@ -104,7 +105,7 @@ export default function AddTolerance({ onBack, onAddLog }: { onBack: () => void,
           </section>
 
           <section>
-            <h3 className="font-headline text-lg font-bold tracking-tight uppercase text-tertiary mb-4">{t.common.notes}</h3>
+            <Heading level="h3" className="text-body-lg tracking-tight mb-4">{t.common.notes}</Heading>
             <textarea
               value={notes}
               onChange={(e) => setNotes(e.target.value)}
@@ -122,7 +123,7 @@ export default function AddTolerance({ onBack, onAddLog }: { onBack: () => void,
                 onBack();
               }
             }}
-            className={`w-full py-4 rounded-sm font-headline font-bold text-lg uppercase tracking-widest transition-colors ${
+            className={`w-full py-4 rounded-sm font-headline font-bold text-body-lg uppercase tracking-widest transition-colors ${
               toleranceLevel ? 'bg-primary text-on-primary hover:bg-primary-container' : 'bg-surface-container-highest text-on-surface-variant cursor-not-allowed'
             }`}
           >

@@ -1,5 +1,75 @@
 # RIAL App - Changelog
 
+## [1.5.92] - 2026-04-25
+
+### refactor(ds): Fase C lote 4 — dominio wellness completo (16 archivos)
+
+Quinto y último lote de la **Fase C** de ADR-012. Migración tipográfica
+completa del dominio wellness. **~60 hits resueltos**, **16 archivos
+removidos del allowlist**. El dominio `src/features/wellness/` queda 100%
+migrado. Fase C completada.
+
+#### Archivos migrados
+
+**Componentes (10)**:
+
+`BodySnapshotCard.tsx` (1 hit): `text-base` weight card → `text-body`.
+
+`BodyTimeline.tsx` (1 hit): empty-state `text-sm` → `text-body-sm`.
+
+`ConsistencyCalendar.tsx` (6 hits): 2× streak `text-3xl` → `text-headline`; day-detail date `text-xs` → `text-micro`; 3× day-detail stats `text-lg` → `text-body-lg`.
+
+`InlineReflection.tsx` (5 hits): `<h2>` section toggle → `<Heading level="h2" variant="overline" className="text-body-sm flex items-center gap-2">`; 3× label `text-xs` → `text-micro`; save button `text-xs` → `text-micro`.
+
+`LatestReflectionCard.tsx` (1 hit): vitality value `text-sm` → `text-body-sm`.
+
+`RealFeelInline.tsx` (2 hits): `<h3>` panel title → `<Heading level="h3" variant="overline" className="text-body-sm text-primary">`; submit button `text-xs` → `text-micro`.
+
+`RitmoSection.tsx` (1 hit): `<h2>` accordion header → `<Heading level="h2" variant="overline" className="text-body-sm">`.
+
+`SnapshotDetailModal.tsx` (1 hit): weight value `text-2xl` → `text-title`.
+
+`WeeklyScoreCard.tsx` (4 hits): score ring `text-xl` → `text-title-sm`; 3× stat values `text-sm` → `text-body-sm`.
+
+`WeightTrendCard.tsx` (3 hits): 3× trend stats `text-lg` → `text-body-lg` (incl. template literal).
+
+**Pantallas (6)**:
+
+`DailyCheckIn.tsx` (~10 hits): 4× `<h3>` section headers → `<Heading level="h3" className="text-body-lg tracking-tight ...">`; 4× status button labels `font-label text-xs` → `text-micro`; 2× stat values `text-2xl` → `text-title`; CTA `text-lg` → `text-body-lg`.
+
+`AddTolerance.tsx` (~11 hits): 4× `<h3>` → `<Heading level="h3" className="text-body-lg tracking-tight mb-4">` (uno con override `text-on-surface-variant`); 2× ingredient names `text-base` → `text-body`; selected ingredient `text-lg` → `text-body-lg`; edit button `text-xs` → `text-micro`; tolerance level labels `font-label text-xs` → `text-micro`; symptom pills `text-xs` → `text-micro`; CTA `text-lg` → `text-body-lg`.
+
+`FastingTimer.tsx` (8 hits): protocol pills `text-xs` → `text-micro`; live timer `font-mono text-4xl` → `text-display` (font-mono preservado); idle timer `font-mono text-3xl` → `text-headline`; start/stop `text-sm` → `text-body-sm`; 2× stats `font-mono text-2xl` → `text-title`; `<h2>` history → `<Heading level="h2" className="text-body-sm mb-3">`; history item `text-xs` → `text-micro`.
+
+`Progress.tsx` (6 hits): 4× tab/sub-tab buttons `text-xs` → `text-micro` (incl. body sub-tabs via template literal); bienestar score `text-2xl` → `text-title`; correlation card `text-xs` → `text-micro`.
+
+`RealFeelDiary.tsx` (6 hits): 2× reality card labels `font-headline/font-label text-xs` → `text-micro`; 2× insight/correlation `text-sm` → `text-body-sm`; 2× weekly patterns `text-xs` → `text-micro`.
+
+`WeeklyCheckIn.tsx` (3 hits): 3× stat values `text-xl` → `text-title-sm`.
+
+#### Nota tipográfica — font-mono en FastingTimer
+Los displays de timer (`font-mono text-display/text-headline/text-title`)
+son un patrón justificado: `font-mono` provee ritmo monoespaciado estable
+para dígitos cambiantes (igual que los relojes de fitness apps: WHOOP, Oura,
+Garmin Connect). Se preserva como excepción documentada dentro de ADR-012.
+
+#### Allowlist removals (16 archivos)
+`BodySnapshotCard.tsx`, `BodyTimeline.tsx`, `ConsistencyCalendar.tsx`,
+`InlineReflection.tsx`, `LatestReflectionCard.tsx`, `RealFeelInline.tsx`,
+`RitmoSection.tsx`, `SnapshotDetailModal.tsx`, `WeeklyScoreCard.tsx`,
+`WeightTrendCard.tsx`, `AddTolerance.tsx`, `DailyCheckIn.tsx`,
+`FastingTimer.tsx`, `Progress.tsx`, `RealFeelDiary.tsx`, `WeeklyCheckIn.tsx`.
+0 errores `no-restricted-syntax` sin downgrade.
+
+#### Quality baseline (post-[1.5.92])
+- TypeScript: **0 errors**.
+- Tests: **1147/1147** passing.
+- Design-system lint: **0 errors**, **924 warnings** (-83 vs `[1.5.91]`).
+- Bundle: neutral (token swaps + Heading imports).
+- i18n: 1871 keys (sin cambios).
+
+---
+
 ## [1.5.91] - 2026-04-25
 
 ### refactor(ds): Fase C lote 3.5 — sociales restantes typography (14 archivos)

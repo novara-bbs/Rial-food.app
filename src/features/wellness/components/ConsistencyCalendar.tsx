@@ -51,13 +51,13 @@ export default function ConsistencyCalendar({
     >
       <div className="grid grid-cols-2 gap-4">
         <div className="bg-surface-container rounded-sm p-4 text-center">
-          <span className="font-headline font-black text-3xl text-primary">{todayStreak}</span>
+          <span className="font-headline font-black text-headline text-primary">{todayStreak}</span>
           <span className="font-label text-micro uppercase tracking-widest text-on-surface-variant block mt-1">
             {t.currentStreak || 'Racha actual'}
           </span>
         </div>
         <div className="bg-surface-container rounded-sm p-4 text-center">
-          <span className="font-headline font-black text-3xl text-on-surface-variant">{bestStreak}</span>
+          <span className="font-headline font-black text-headline text-on-surface-variant">{bestStreak}</span>
           <span className="font-label text-micro uppercase tracking-widest text-on-surface-variant block mt-1">
             {t.bestStreak || 'Mejor racha'}
           </span>
@@ -134,7 +134,7 @@ export default function ConsistencyCalendar({
         {selectedDayData && (
           <div className="mt-3 p-3 bg-surface-container rounded-sm border border-primary/20 animate-in fade-in slide-in-from-top-2">
             <div className="flex items-center justify-between mb-2">
-              <span className="font-headline text-xs font-bold uppercase tracking-widest text-tertiary">
+              <span className="font-headline text-micro font-bold uppercase tracking-widest text-tertiary">
                 {new Date(selectedDayData.date + 'T12:00:00').toLocaleDateString(localeStr, { weekday: 'short', day: 'numeric', month: 'short' })}
               </span>
               <button type="button" onClick={() => onSelectDay(null)} className="text-on-surface-variant hover:text-primary">
@@ -143,15 +143,15 @@ export default function ConsistencyCalendar({
             </div>
             <div className="flex items-center gap-4">
               <div className="text-center">
-                <span className="font-headline font-black text-lg text-primary">{selectedDayData.cal}</span>
+                <span className="font-headline font-black text-body-lg text-primary">{selectedDayData.cal}</span>
                 <span className="font-label text-micro uppercase tracking-widest text-on-surface-variant block">kcal</span>
               </div>
               <div className="text-center">
-                <span className="font-headline font-black text-lg text-tertiary">{selectedDayData.pro}g</span>
+                <span className="font-headline font-black text-body-lg text-tertiary">{selectedDayData.pro}g</span>
                 <span className="font-label text-micro uppercase tracking-widest text-on-surface-variant block">prot</span>
               </div>
               <div className="text-center">
-                <span className="font-headline font-black text-lg text-on-surface-variant">{selectedDayData.mealCount}</span>
+                <span className="font-headline font-black text-body-lg text-on-surface-variant">{selectedDayData.mealCount}</span>
                 <span className="font-label text-micro uppercase tracking-widest text-on-surface-variant block">{t.mealCount || 'comidas'}</span>
               </div>
               {selectedDayData.rfLevel && (

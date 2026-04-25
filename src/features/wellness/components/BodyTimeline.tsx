@@ -62,7 +62,7 @@ export default function BodyTimeline({ snapshots, unitSystem, onShare, shareLabe
     return (
       <SectionCard padding="none" spacing="none" className="border-dashed p-10 flex flex-col items-center gap-3 text-center">
         <Scale className="w-8 h-8 text-on-surface-variant/40" />
-        <p className="font-headline font-bold text-sm text-tertiary uppercase tracking-widest">
+        <p className="font-headline font-bold text-body-sm text-tertiary uppercase tracking-widest">
           {p.noSnapshotsTitle ?? 'Sin registros aún'}
         </p>
         <p className="text-xs text-on-surface-variant max-w-[200px]">

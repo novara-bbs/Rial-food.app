@@ -5,6 +5,7 @@ import { dateToLocal } from '../../../lib/dates';
 import DataSourceCaption from './DataSourceCaption';
 import Sparkline from '../../../components/Sparkline';
 import SectionCard from '../../../components/SectionCard';
+import { Heading } from '@/components/ui/Typography';
 
 interface RitmoSectionProps {
   history: DailyArchive[];
@@ -84,9 +85,9 @@ export default function RitmoSection({
         <div className="flex items-center gap-2">
           <Activity className="w-4 h-4 text-primary" aria-hidden="true" />
           <div className="flex flex-col items-start gap-1">
-            <h2 className="font-headline font-bold text-sm uppercase tracking-widest text-tertiary">
+            <Heading level="h2" variant="overline" className="text-body-sm">
               {title}
-            </h2>
+            </Heading>
             <DataSourceCaption kind="auto" label={captionLabel} />
           </div>
         </div>

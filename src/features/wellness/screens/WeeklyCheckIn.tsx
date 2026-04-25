@@ -66,15 +66,15 @@ export default function WeeklyCheckIn({ onBack }: { onBack: () => void }) {
             <div className="grid grid-cols-3 gap-3">
               <SectionCard padding="sm" spacing="none" className="text-center">
                 <span className="font-label text-micro uppercase tracking-widest text-on-surface-variant block">{t.weekly?.vitality || 'Vitalidad'}</span>
-                <span className="font-headline font-black text-xl text-primary">{pastEntry.avgVitality}</span>
+                <span className="font-headline font-black text-title-sm text-primary">{pastEntry.avgVitality}</span>
               </SectionCard>
               <SectionCard padding="sm" spacing="none" className="text-center">
                 <span className="font-label text-micro uppercase tracking-widest text-on-surface-variant block">{t.weekly?.logs || 'Registros'}</span>
-                <span className="font-headline font-black text-xl text-brand-secondary">{pastEntry.mealsLogged}</span>
+                <span className="font-headline font-black text-title-sm text-brand-secondary">{pastEntry.mealsLogged}</span>
               </SectionCard>
               <SectionCard padding="sm" spacing="none" className="text-center">
                 <span className="font-label text-micro uppercase tracking-widest text-on-surface-variant block">{t.weekly?.days || 'días'}</span>
-                <span className="font-headline font-black text-xl text-tertiary">{pastEntry.consistencyDays}/7</span>
+                <span className="font-headline font-black text-title-sm text-tertiary">{pastEntry.consistencyDays}/7</span>
               </SectionCard>
             </div>
 

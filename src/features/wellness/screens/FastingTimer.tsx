@@ -5,6 +5,7 @@ import { Play, Square, Clock, Trophy, Timer, CheckCircle2, StopCircle } from 'lu
 import { useI18n } from '../../../i18n';
 import { useLocalStorageState } from '../../../hooks/useLocalStorageState';
 import PageHeader from '../../../components/patterns/PageHeader';
+import { Heading } from '@/components/ui/Typography';
 
 const PROTOCOLS = [
   { id: '16:8', label: '16:8', fastHours: 16, eatHours: 8 },
@@ -74,7 +75,7 @@ export default function FastingTimer({ onBack }: { onBack: () => void }) {
             key={p.id}
             onClick={() => !isFasting && setProtocol(p)}
             disabled={isFasting}
-            className={`shrink-0 px-5 py-3 rounded-sm text-xs font-bold uppercase tracking-wider transition-all ${
+            className={`shrink-0 px-5 py-3 rounded-sm text-micro font-bold uppercase tracking-wider transition-all ${
               protocol.id === p.id
                 ? 'bg-primary text-on-primary'
                 : 'bg-surface-container-low border border-outline-variant/20 text-on-surface-variant hover:border-primary/50 disabled:opacity-50'
@@ -102,7 +103,7 @@ export default function FastingTimer({ onBack }: { onBack: () => void }) {
           <div className="absolute inset-0 flex flex-col items-center justify-center">
             {isFasting ? (
               <>
-                <span className="font-mono text-4xl font-black text-primary">{formatTime(elapsedMs)}</span>
+                <span className="font-mono text-display font-black text-primary">{formatTime(elapsedMs)}</span>
                 <span className="text-xs text-on-surface-variant mt-2 uppercase tracking-wider">
                   {isComplete ? '✓' : t.fasting.elapsed}
                 </span>
@@ -114,7 +115,7 @@ export default function FastingTimer({ onBack }: { onBack: () => void }) {
               </>
             ) : (
               <>
-                <span className="font-mono text-3xl font-black text-on-surface-variant">{protocol.fastHours}h</span>
+                <span className="font-mono text-headline font-black text-on-surface-variant">{protocol.fastHours}h</span>
                 <span className="text-xs text-on-surface-variant mt-1">{t.fasting.fasting}</span>
                 <span className="text-xs text-primary mt-1">{protocol.eatHours}h {t.fasting.eating}</span>
               </>
@@ -125,7 +126,7 @@ export default function FastingTimer({ onBack }: { onBack: () => void }) {
         {/* Start / Stop button */}
         <button type="button"
           onClick={isFasting ? handleStop : handleStart}
-          className={`mt-6 px-10 py-4 rounded-sm font-headline text-sm font-bold uppercase tracking-widest flex items-center gap-3 transition-all ${
+          className={`mt-6 px-10 py-4 rounded-sm font-headline text-body-sm font-bold uppercase tracking-widest flex items-center gap-3 transition-all ${
             isFasting
               ? 'bg-error/10 text-error border border-error/30 hover:bg-error/20'
               : 'bg-primary text-on-primary hover:opacity-90'
@@ -139,19 +140,19 @@ export default function FastingTimer({ onBack }: { onBack: () => void }) {
       <div className="flex gap-4">
         <SectionCard padding="none" spacing="none" className="flex-1 p-4 text-center">
           <Trophy className="w-5 h-5 text-primary mx-auto mb-2" />
-          <span className="font-mono text-2xl font-black text-tertiary">{completedCount}</span>
+          <span className="font-mono text-title font-black text-tertiary">{completedCount}</span>
           <p className="text-micro text-on-surface-variant uppercase tracking-widest mt-1">{t.fasting.completed}</p>
         </SectionCard>
         <SectionCard padding="none" spacing="none" className="flex-1 p-4 text-center">
           <Clock className="w-5 h-5 text-primary mx-auto mb-2" />
-          <span className="font-mono text-2xl font-black text-tertiary">{protocol.id}</span>
+          <span className="font-mono text-title font-black text-tertiary">{protocol.id}</span>
           <p className="text-micro text-on-surface-variant uppercase tracking-widest mt-1">{t.fasting.protocol}</p>
         </SectionCard>
       </div>
 
       {/* History */}
       <div>
-        <h2 className="font-headline text-sm font-bold uppercase tracking-widest text-tertiary mb-3">{t.fasting.history}</h2>
+        <Heading level="h2" className="text-body-sm mb-3">{t.fasting.history}</Heading>
         {fastingHistory.length === 0 ? (
           <div className="text-center py-8">
             <Timer className="w-8 h-8 text-on-surface-variant/40 mb-3" />
@@ -163,7 +164,7 @@ export default function FastingTimer({ onBack }: { onBack: () => void }) {
               <SectionCard key={h.id} padding="none" spacing="none" className="flex items-center gap-4 p-3">
                 {h.completed ? <CheckCircle2 className="w-5 h-5 text-primary shrink-0" /> : <StopCircle className="w-5 h-5 text-on-surface-variant/50 shrink-0" />}
                 <div className="flex-1">
-                  <span className="font-headline text-xs font-bold uppercase text-tertiary">{h.protocol}</span>
+                  <span className="font-headline text-micro font-bold uppercase text-tertiary">{h.protocol}</span>
                   <p className="text-micro text-on-surface-variant">{formatTime(h.durationMs)}</p>
                 </div>
                 <span className="text-micro text-on-surface-variant">{new Date(h.start).toLocaleDateString()}</span>

@@ -67,7 +67,7 @@ export default function BodySnapshotCard({ snapshot, previousKg, unitSystem, onT
         </div>
 
         <div className="flex items-baseline gap-2">
-          <span className="font-headline font-black text-base text-tertiary">
+          <span className="font-headline font-black text-body text-tertiary">
             {displayKg !== null ? `${displayKg} ${unit}` : '—'}
           </span>
           {delta !== null && delta !== 0 && (

@@ -5,39 +5,39 @@
 > prunes this file back down. Everything below should answer: *what's the release line,
 > what's the quality baseline, what's the next move, what's broken?*
 
-Last updated: **2026-04-25** — `[1.5.91]` Fase C lote 3.5 — dominio social
-completo. 14 archivos removidos del allowlist (~55 hits resueltos). El
-dominio `src/features/social/` queda 100% migrado. -74 warnings vs
-`[1.5.90]` baseline. Sin nuevos primitives.
+Last updated: **2026-04-25** — `[1.5.92]` **Fase C completada** — dominio
+wellness completo. 16 archivos removidos del allowlist (~60 hits). El
+dominio `src/features/wellness/` queda 100% migrado. -83 warnings vs
+`[1.5.91]` baseline. Excepción documentada: `font-mono` en FastingTimer
+para timer displays (WHOOP/Oura pattern — ritmo monoespaciado estable).
 
-Previo: `[1.5.90]` Fase C lote 3 (PostDetail + CreatePost + CreatorProfile,
-15 hits, -16 warnings) · `[1.5.89]` Polish DRY pass · `[1.5.88]` Fase C
-lote 2 — CreateRecipe + MacroTile + DashedAddButton primitives.
+Previo: `[1.5.91]` Lote 3.5 sociales (14 archivos, -74 warnings) ·
+`[1.5.90]` Lote 3 sociales (PostDetail + CreatePost + CreatorProfile) ·
+`[1.5.89]` Polish DRY · `[1.5.88]` CreateRecipe + MacroTile + DashedAddButton.
 
 ## Release snapshot
 - **Branch**: `main`, awaiting push to `rial-food/main` (local ahead 4 vs `6132d08`).
-- **Last shipped**: `[1.5.91]` Fase C lote 3.5 — dominio social completo.
-  **14 archivos**, ~55 hits. Dominio `src/features/social/` 100% migrado.
-  **Warnings totales**: ~1007 (-74 vs `[1.5.90]` baseline 1081).
-- **Previous**: `[1.5.90]` Fase C lote 3 (PostDetail/CreatePost/CreatorProfile,
-  -16 warnings). `[1.5.89]` Polish DRY. `[1.5.88]` Fase C lote 2 (MacroTile +
-  DashedAddButton). `[1.5.87]` Fase C lote 1 RecipeDetail. `[1.5.86]`
-  ADR-013 Filter system. `[1.5.85]` brand fonts. `[1.5.84]` Phase 1 Home.
-  `[1.5.83]` ADR-012. `[1.5.82]` Q6. `[1.5.81]` Q17 CSP.
-- **Active plan**: Lote 3.5 sealed. Next: **Lote 4 — wellness components**
-  (~16 archivos). Owner actions Supabase quedan deferred hasta que UX/UI esté
-  pulido (mandato del owner).
+- **Last shipped**: `[1.5.92]` **Fase C completada** — dominio wellness.
+  **16 archivos**, ~60 hits. `src/features/wellness/` 100% migrado.
+  **Warnings totales**: 924 (-83 vs `[1.5.91]` ~1007).
+- **Previous**: `[1.5.91]` Lote 3.5 sociales (14 archivos, -74 warnings).
+  `[1.5.90]` Lote 3 sociales (-16 warnings). `[1.5.89]` Polish DRY.
+  `[1.5.88]` Fase C lote 2 (MacroTile + DashedAddButton). `[1.5.87]` Fase C
+  lote 1 RecipeDetail. `[1.5.86]` ADR-013. `[1.5.85]` brand fonts.
+  `[1.5.84]` Phase 1 Home. `[1.5.83]` ADR-012. `[1.5.82]` Q6. `[1.5.81]` CSP.
+- **Active plan**: **Fase C completada** (ADR-012 migration). Pausa para
+  pensar (mandato del owner). Owner actions Supabase quedan deferred.
 - **Release target**: `rial-food/main` (`novara-bbs/Rial-food.app`). Origin `rial-food`.
 - **Vercel project**: `rial.app.v1.5` (id `prj_t11VHYQjptazjUx7Y2hWLz0IDAjg`).
 - **Governance**: work directly on `main`. "continua" = push approval post green preflight.
 
-## Quality baseline (post-[1.5.91], 2026-04-25)
+## Quality baseline (post-[1.5.92], 2026-04-25)
 - TypeScript: **0 errors** (`npx tsc --noEmit`)
 - Tests: **1147/1147** passing (69 files) — unchanged.
 - i18n symmetry: **1871** keys aligned ES ↔ EN (unchanged).
-- Design-system lint: **0 errors**, **~1007 warnings** (-74 vs `[1.5.90]`
-  baseline 1081 — 14 social archivos removidos del allowlist; ~55 hits resueltos).
-- Build main: neutral (token swaps, sin nuevos primitives).
+- Design-system lint: **0 errors**, **924 warnings** (-83 vs `[1.5.91]` ~1007
+  — 16 wellness archivos removidos del allowlist; ~60 hits resueltos).
+- Build main: neutral (token swaps, Heading imports, no nuevos primitives).
 - Security headers: HSTS + X-Frame-Options + nosniff + Permissions-Policy + Referrer-Policy + **CSP** ✓
 - Drift: `text-[Npx]` = **0**, SectionCard shape = **0**, ad-hoc `<hN>` typography
   outside allowlist = **0**, **inline chip reimplementation** = **0**, **inline
@@ -69,14 +69,10 @@ lote 2 — CreateRecipe + MacroTile + DashedAddButton primitives.
 - **vendor-recharts chunk 102 KB gzip** — acceptable but monitor; ≤ 400 KB raw / 115 KB gzip.
 
 ## Next sprint candidates (ordered, only pending)
-- ~~**R2**~~ ✓ · ~~**R3**~~ ✓ · ~~**R5**~~ ✓ · ~~**R7**~~ ✓ · ~~**R8**~~ ✓ · ~~**Q6**~~ ✓ · ~~**Q15**~~ ✓ · ~~**Q17**~~ ✓ · ~~**ADR-012**~~ ✓ · ~~**Phase 1 Home**~~ ✓ · ~~**ADR-013 Filter system**~~ ✓ · ~~**Fase C lote 1 RecipeDetail**~~ ✓ · ~~**Fase C lote 2 CreateRecipe + MacroTile + DashedAddButton**~~ ✓ · ~~**Polish DRY pass**~~ ✓ · ~~**Fase C lote 3**~~ ✓ · ~~**Fase C lote 3.5 — sociales completo**~~ ✓
-- **Fase C allowlist shrink** (UX/UI polish — prioridad antes de Supabase):
-  - ~~Lote 1 RecipeDetail~~ ✓
-  - ~~Lote 2 CreateRecipe + MacroTile + DashedAddButton primitives~~ ✓
-  - ~~Polish DRY (MacroTile en NutritionBar+PortionSelector, DashedAddButton en Planner)~~ ✓
-  - ~~Lote 3 sociales (PostDetail + CreatePost + CreatorProfile)~~ ✓
-  - ~~Lote 3.5 — sociales restantes (14 archivos, dominio social 100%)~~ ✓
-  - **Lote 4 — wellness (~16 archivos finales)** — NEXT
+- ~~**R2**~~ ✓ · ~~**R3**~~ ✓ · ~~**R5**~~ ✓ · ~~**R7**~~ ✓ · ~~**R8**~~ ✓ · ~~**Q6**~~ ✓ · ~~**Q15**~~ ✓ · ~~**Q17**~~ ✓ · ~~**ADR-012**~~ ✓ · ~~**Phase 1 Home**~~ ✓ · ~~**ADR-013**~~ ✓ · ~~**Fase C lote 1**~~ ✓ · ~~**Fase C lote 2**~~ ✓ · ~~**Polish DRY**~~ ✓ · ~~**Fase C lote 3**~~ ✓ · ~~**Fase C lote 3.5 sociales**~~ ✓ · ~~**Fase C lote 4 wellness**~~ ✓
+- ~~**Fase C allowlist shrink completa**~~ ✓ — todos los dominios migrados.
+  Restante en allowlist: dominio recipes + home + other (~32 archivos, fuera de
+  Fase C scope original). **Pausa antes de continuar** (owner mandate).
 - **Owner actions** (non-code, **diferido** hasta que UX/UI esté pulido —
   mandato explícito del owner en `[1.5.87]`): unblock Supabase en producción:
   1. `supabase db push` (applies `001_initial_schema.sql`)
@@ -103,6 +99,7 @@ Fase 1+2 multi-media recipes, Food Families P0-P16, R1 docs, R2 recipes editoria
 **[1.5.89] Polish DRY pass** — adopción de `MacroTile` en `RecipeNutritionBar` + `PortionSelector` y `DashedAddButton` en `Planner`; CreateStory/PhotoUploader/BarcodeScanner descartados por patrones distintos; -3 warnings sin allowlist removals.
 **[1.5.90] Fase C lote 3 — PostDetail/CreatePost/CreatorProfile** (15 hits, -16 warnings, 3 allowlist removals).
 **[1.5.91] Fase C lote 3.5 — dominio social completo** (14 archivos, ~55 hits, -74 warnings, 0 archivos sociales restantes en allowlist).
+**[1.5.92] Fase C lote 4 — dominio wellness completo + Fase C completada** (16 archivos, ~60 hits, -83 warnings; excepción font-mono documentada en FastingTimer).
 
 ## Repository compliance
 - `LICENSE`: Proprietary © 2026 RIAL FOOD WORLD S.L. Contact legal@rialfoodworld.com.

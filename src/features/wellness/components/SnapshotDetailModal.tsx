@@ -92,7 +92,7 @@ export default function SnapshotDetailModal({ open, onOpenChange, snapshot, unit
             <span className="font-label text-micro uppercase tracking-widest text-on-surface-variant">
               {p.weight ?? 'Peso'}
             </span>
-            <span className="font-headline font-black text-2xl text-tertiary">
+            <span className="font-headline font-black text-title text-tertiary">
               {displayKg !== null ? `${displayKg} ${unit}` : '—'}
             </span>
           </div>

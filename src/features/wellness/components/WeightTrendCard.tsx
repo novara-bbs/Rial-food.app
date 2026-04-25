@@ -114,7 +114,7 @@ export default function WeightTrendCard({
           <span className="font-label text-micro uppercase tracking-widest text-on-surface-variant block">
             {t.trend7d || 'Tendencia 7d'}
           </span>
-          <span className="font-headline font-black text-lg text-primary">
+          <span className="font-headline font-black text-body-lg text-primary">
             {currentEmaDisplay}
           </span>
         </div>
@@ -122,13 +122,13 @@ export default function WeightTrendCard({
           <span className="font-label text-micro uppercase tracking-widest text-on-surface-variant block">
             {t.weightRawLabel || 'Hoy'}
           </span>
-          <span className="font-headline font-black text-lg text-tertiary">
+          <span className="font-headline font-black text-body-lg text-tertiary">
             {currentDisplay}
           </span>
         </div>
         <div className="text-center">
           <span className="font-label text-micro uppercase tracking-widest text-on-surface-variant block">{t.change || 'Cambio'}</span>
-          <span className={`font-headline font-black text-lg ${
+          <span className={`font-headline font-black text-body-lg ${
             changeKg !== null
               ? (changeKg > 0 ? 'text-brand-secondary' : changeKg < 0 ? 'text-primary' : 'text-on-surface-variant')
               : 'text-on-surface-variant'

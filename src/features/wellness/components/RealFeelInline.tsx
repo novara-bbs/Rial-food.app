@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { X, Zap, Leaf, Brain } from 'lucide-react';
 import { useI18n } from '../../../i18n';
+import { Heading } from '@/components/ui/Typography';
 
 const EMOJIS = [
   { level: 1, emoji: '😴', key: 'terrible' },
@@ -94,9 +95,9 @@ export default function RealFeelInline({ onSubmit, onDismiss }: {
   return (
     <div className="bg-surface-container-low border border-primary/30 rounded-sm p-5 animate-in slide-in-from-bottom-4 fade-in duration-500">
       <div className="flex items-center justify-between mb-4">
-        <h3 className="font-headline text-sm font-bold uppercase tracking-widest text-primary">
+        <Heading level="h3" variant="overline" className="text-body-sm text-primary">
           {t.realFeel.howDoYouFeel}
-        </h3>
+        </Heading>
         <button type="button" onClick={() => { setVisible(false); onDismiss(); }} className="text-on-surface-variant hover:text-primary transition-colors p-1">
           <X className="w-4 h-4" />
         </button>
@@ -186,7 +187,7 @@ export default function RealFeelInline({ onSubmit, onDismiss }: {
 
           <button type="button"
             onClick={handleSubmit}
-            className="w-full py-3 bg-primary text-on-primary rounded-sm font-headline text-xs font-bold uppercase tracking-widest hover:opacity-90 transition-opacity"
+            className="w-full py-3 bg-primary text-on-primary rounded-sm font-headline text-micro font-bold uppercase tracking-widest hover:opacity-90 transition-opacity"
           >
             ✓ {t.common.done}
           </button>

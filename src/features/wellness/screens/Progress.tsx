@@ -309,7 +309,7 @@ export default function Progress({ onBack }: { onBack: () => void }) {
       <div className="flex border border-outline-variant/20 rounded-sm overflow-hidden">
         <button type="button"
           onClick={() => setTab('nutrition')}
-          className={`flex-1 py-3 font-headline text-xs font-bold uppercase tracking-widest transition-colors ${
+          className={`flex-1 py-3 font-headline text-micro font-bold uppercase tracking-widest transition-colors ${
             tab === 'nutrition' ? 'bg-primary text-on-primary' : 'bg-surface-container-low text-on-surface-variant'
           }`}
         >
@@ -317,7 +317,7 @@ export default function Progress({ onBack }: { onBack: () => void }) {
         </button>
         <button type="button"
           onClick={() => setTab('body')}
-          className={`flex-1 py-3 font-headline text-xs font-bold uppercase tracking-widest transition-colors ${
+          className={`flex-1 py-3 font-headline text-micro font-bold uppercase tracking-widest transition-colors ${
             tab === 'body' ? 'bg-primary text-on-primary' : 'bg-surface-container-low text-on-surface-variant'
           }`}
         >
@@ -339,7 +339,7 @@ export default function Progress({ onBack }: { onBack: () => void }) {
                   return (
                     <div key={meal.name} className="flex items-center gap-3 p-2.5 bg-surface-container rounded-sm">
                       <span className="text-base shrink-0">{medal}</span>
-                      <span className="flex-1 font-headline text-xs font-bold uppercase text-tertiary truncate">{meal.name}</span>
+                      <span className="flex-1 font-headline text-micro font-bold uppercase text-tertiary truncate">{meal.name}</span>
                       <span className="font-label text-micro text-on-surface-variant shrink-0">×{meal.count}</span>
                       <span className="font-label text-micro font-bold text-primary shrink-0">{Math.round(meal.totalCal / meal.count)} kcal</span>
                     </div>
@@ -404,7 +404,7 @@ export default function Progress({ onBack }: { onBack: () => void }) {
                 <div className="flex items-center gap-1.5">
                   <span className="text-2xl">{EMOJI_MAP[Math.round(bienestar.rawAvg) - 1] || '😐'}</span>
                   <div>
-                    <span className="font-headline font-black text-2xl text-primary">{bienestar.rawAvg.toFixed(1)}</span>
+                    <span className="font-headline font-black text-title text-primary">{bienestar.rawAvg.toFixed(1)}</span>
                     <span className="text-on-surface-variant text-sm ml-0.5">/5</span>
                   </div>
                 </div>
@@ -435,7 +435,7 @@ export default function Progress({ onBack }: { onBack: () => void }) {
                     <div key={cor.id} className="flex items-center gap-3 p-2 bg-surface-container rounded-sm">
                       <span className="text-lg shrink-0">{cor.emoji}</span>
                       <div className="flex-1 min-w-0">
-                        <p className="font-headline text-xs font-bold uppercase text-tertiary truncate">{cor.title}</p>
+                        <p className="font-headline text-micro font-bold uppercase text-tertiary truncate">{cor.title}</p>
                         <p className="text-micro text-on-surface-variant truncate">{cor.detail}</p>
                       </div>
                       <span className={`font-label text-micro font-bold ${cor.confidence >= 0.7 ? 'text-primary' : 'text-on-surface-variant'}`}>
@@ -473,7 +473,7 @@ export default function Progress({ onBack }: { onBack: () => void }) {
                 role="tab"
                 aria-selected={bodySubTab === st.id}
                 onClick={() => setBodySubTab(st.id)}
-                className={`flex-1 min-h-11 py-2.5 font-headline text-xs font-bold uppercase tracking-widest transition-colors ${
+                className={`flex-1 min-h-11 py-2.5 font-headline text-micro font-bold uppercase tracking-widest transition-colors ${
                   bodySubTab === st.id ? 'bg-primary text-on-primary' : 'bg-surface-container-low text-on-surface-variant'
                 }`}
               >

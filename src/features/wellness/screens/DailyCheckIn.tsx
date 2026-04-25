@@ -4,6 +4,7 @@ import BottomSheet from '@/components/ui/bottom-sheet';
 import { useState } from 'react';
 import { useI18n } from '../../../i18n';
 import PageHeader from '../../../components/patterns/PageHeader';
+import { Heading } from '@/components/ui/Typography';
 
 export default function DailyCheckIn({
   initialStatus,
@@ -38,7 +39,7 @@ export default function DailyCheckIn({
   const body = (
     <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
         <section>
-          <h3 className="font-headline text-lg font-bold tracking-tight uppercase text-tertiary mb-4">{t.checkIn.generalStatus}</h3>
+          <Heading level="h3" className="text-body-lg tracking-tight mb-4">{t.checkIn.generalStatus}</Heading>
           <div className="grid grid-cols-2 gap-3">
             <button type="button" 
               onClick={() => setStatus('optimal')}
@@ -49,7 +50,7 @@ export default function DailyCheckIn({
               }`}
             >
               <Zap className="w-6 h-6" />
-              <span className="font-label text-xs font-bold tracking-widest uppercase">{t.checkIn.optimal}</span>
+              <span className="font-label text-micro font-bold tracking-widest uppercase">{t.checkIn.optimal}</span>
               <span className="text-micro text-center opacity-80 leading-tight">{t.checkIn.highEnergy}</span>
             </button>
             <button type="button" 
@@ -61,7 +62,7 @@ export default function DailyCheckIn({
               }`}
             >
               <CheckCircle className="w-6 h-6" />
-              <span className="font-label text-xs font-bold tracking-widest uppercase">{t.checkIn.good}</span>
+              <span className="font-label text-micro font-bold tracking-widest uppercase">{t.checkIn.good}</span>
               <span className="text-micro text-center opacity-80 leading-tight">{t.checkIn.feelingNormal}</span>
             </button>
             <button type="button" 
@@ -73,7 +74,7 @@ export default function DailyCheckIn({
               }`}
             >
               <Battery className="w-6 h-6" />
-              <span className="font-label text-xs font-bold tracking-widest uppercase">{t.checkIn.tired}</span>
+              <span className="font-label text-micro font-bold tracking-widest uppercase">{t.checkIn.tired}</span>
               <span className="text-micro text-center opacity-80 leading-tight">{t.checkIn.lowEnergy}</span>
             </button>
             <button type="button" 
@@ -85,7 +86,7 @@ export default function DailyCheckIn({
               }`}
             >
               <AlertTriangle className="w-6 h-6" />
-              <span className="font-label text-xs font-bold tracking-widest uppercase">{t.checkIn.bad}</span>
+              <span className="font-label text-micro font-bold tracking-widest uppercase">{t.checkIn.bad}</span>
               <span className="text-micro text-center opacity-80 leading-tight">{t.checkIn.painBloating}</span>
             </button>
           </div>
@@ -93,10 +94,10 @@ export default function DailyCheckIn({
 
         <section>
           <div className="flex justify-between items-center mb-4">
-            <h3 className="font-headline text-lg font-bold tracking-tight uppercase text-tertiary flex items-center gap-2">
+            <Heading level="h3" className="text-body-lg tracking-tight flex items-center gap-2">
               <Moon className="w-5 h-5 text-primary" /> {t.checkIn.sleepDuration}
-            </h3>
-            <span className="font-headline text-2xl font-bold text-primary">{sleep}h</span>
+            </Heading>
+            <span className="font-headline text-title font-bold text-primary">{sleep}h</span>
           </div>
           <input 
             type="range" 
@@ -115,10 +116,10 @@ export default function DailyCheckIn({
 
         <section>
           <div className="flex justify-between items-center mb-4">
-            <h3 className="font-headline text-lg font-bold tracking-tight uppercase text-tertiary flex items-center gap-2">
+            <Heading level="h3" className="text-body-lg tracking-tight flex items-center gap-2">
               <Activity className="w-5 h-5 text-error" /> {t.checkIn.dailyEffort}
-            </h3>
-            <span className="font-headline text-2xl font-bold text-error">{stress}/10</span>
+            </Heading>
+            <span className="font-headline text-title font-bold text-error">{stress}/10</span>
           </div>
           <input 
             type="range" 
@@ -136,13 +137,13 @@ export default function DailyCheckIn({
         </section>
 
         <section>
-          <h3 className="font-headline text-lg font-bold tracking-tight uppercase text-tertiary mb-4">{t.checkIn.specificSymptoms}</h3>
+          <Heading level="h3" className="text-body-lg tracking-tight mb-4">{t.checkIn.specificSymptoms}</Heading>
           <div className="flex flex-wrap gap-3">
             {availableSymptoms.map(sym => (
               <button type="button" 
                 key={sym}
                 onClick={() => toggleSymptom(sym)}
-                className={`px-4 py-2 rounded-full font-label text-xs font-bold tracking-wider uppercase transition-colors border ${
+                className={`px-4 py-2 rounded-full font-label text-micro font-bold tracking-wider uppercase transition-colors border ${
                   symptoms.includes(sym)
                     ? 'bg-primary text-on-primary border-primary'
                     : 'bg-surface-container-low text-on-surface-variant border-outline-variant/30 hover:border-primary/50'
@@ -163,7 +164,7 @@ export default function DailyCheckIn({
               onBack();
             }
           }}
-          className={`w-full py-4 rounded-sm font-headline font-bold text-lg uppercase tracking-widest transition-colors mt-8 ${
+          className={`w-full py-4 rounded-sm font-headline font-bold text-body-lg uppercase tracking-widest transition-colors mt-8 ${
             status 
               ? 'bg-primary text-on-primary hover:bg-primary-container' 
               : 'bg-surface-container-highest text-on-surface-variant cursor-not-allowed'

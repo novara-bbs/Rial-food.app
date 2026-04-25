@@ -84,7 +84,7 @@ export default function LatestReflectionCard({ entries }: LatestReflectionCardPr
           <span className="font-label text-micro uppercase tracking-widest text-on-surface-variant">
             {p.ritmoVitality ?? 'Real Feel'}
           </span>
-          <span className="font-headline font-bold text-sm text-primary">{latest.avgVitality}</span>
+          <span className="font-headline font-bold text-body-sm text-primary">{latest.avgVitality}</span>
         </div>
       )}
 

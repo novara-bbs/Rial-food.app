@@ -164,8 +164,8 @@ export default function RealFeelDiary({ realFeelLogs = [], onBack }: { realFeelL
             {dailyRealities.map((r, i) => (
               <div key={i} className={`p-4 rounded-sm border ${r.tone === 'positive' ? 'bg-primary/5 border-primary/20' : 'bg-error/5 border-error/20'}`}>
                 <div className="text-xl mb-2">{r.icon}</div>
-                <p className="font-headline text-xs font-bold uppercase tracking-wide text-tertiary">{r.label}</p>
-                <p className={`font-label text-xs font-bold mt-1 ${r.tone === 'positive' ? 'text-primary' : 'text-error'}`}>{r.value}</p>
+                <p className="font-headline text-micro font-bold uppercase tracking-wide text-tertiary">{r.label}</p>
+                <p className={`font-label text-micro font-bold mt-1 ${r.tone === 'positive' ? 'text-primary' : 'text-error'}`}>{r.value}</p>
               </div>
             ))}
           </div>
@@ -187,7 +187,7 @@ export default function RealFeelDiary({ realFeelLogs = [], onBack }: { realFeelL
                   <UtensilsCrossed className="w-4 h-4" />
                 </div>
                 <div className="flex-1 min-w-0">
-                  <p className="font-headline text-sm font-bold uppercase text-tertiary truncate">{fi.ingredientName}</p>
+                  <p className="font-headline text-body-sm font-bold uppercase text-tertiary truncate">{fi.ingredientName}</p>
                   <p className="text-xs text-on-surface-variant">
                     {t.realFeel.insightLogs.replace('{count}', String(fi.count))} · avg {fi.avgLevel.toFixed(1)}/5
                     {fi.dominantTag && <span className="ml-1 text-micro bg-surface-container-highest px-1.5 py-0.5 rounded">{fi.dominantTag}</span>}
@@ -210,7 +210,7 @@ export default function RealFeelDiary({ realFeelLogs = [], onBack }: { realFeelL
                 <Zap className="w-4 h-4 text-primary shrink-0" />
                 <div>
                   <p className="text-micro font-bold uppercase tracking-widest text-on-surface-variant">{t.realFeel.energy}</p>
-                  <p className="font-headline text-xs font-bold text-tertiary uppercase">{ENERGY_LABELS[weeklyPatterns.energy]}</p>
+                  <p className="font-headline text-micro font-bold text-tertiary uppercase">{ENERGY_LABELS[weeklyPatterns.energy]}</p>
                 </div>
               </SectionCard>
             )}
@@ -219,7 +219,7 @@ export default function RealFeelDiary({ realFeelLogs = [], onBack }: { realFeelL
                 <Leaf className="w-4 h-4 text-primary shrink-0" />
                 <div>
                   <p className="text-micro font-bold uppercase tracking-widest text-on-surface-variant">{t.realFeel.digestion}</p>
-                  <p className="font-headline text-xs font-bold text-tertiary uppercase">{DIGESTION_LABELS[weeklyPatterns.digestion]}</p>
+                  <p className="font-headline text-micro font-bold text-tertiary uppercase">{DIGESTION_LABELS[weeklyPatterns.digestion]}</p>
                 </div>
               </SectionCard>
             )}
@@ -249,7 +249,7 @@ export default function RealFeelDiary({ realFeelLogs = [], onBack }: { realFeelL
                   {cor.tone === 'warning' ? <TrendingDown className="w-5 h-5" /> : cor.tone === 'positive' ? <TrendingUp className="w-5 h-5" /> : <Minus className="w-5 h-5" />}
                 </div>
                 <div className="flex-1">
-                  <p className="font-headline text-sm font-bold uppercase text-tertiary">{cor.title}</p>
+                  <p className="font-headline text-body-sm font-bold uppercase text-tertiary">{cor.title}</p>
                   <p className="text-xs text-on-surface-variant">{cor.detail}</p>
                 </div>
                 <span className="text-lg">{cor.emoji}</span>

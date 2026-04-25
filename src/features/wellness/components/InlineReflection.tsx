@@ -1,5 +1,6 @@
 import { CheckCircle2, XCircle, Target, ChevronDown, ChevronUp } from 'lucide-react';
 import SectionCard from '../../../components/SectionCard';
+import { Heading } from '@/components/ui/Typography';
 
 interface WeeklyEntry {
   workedWell: string;
@@ -45,10 +46,10 @@ export default function InlineReflection({
         onClick={onToggle}
         className="w-full flex items-center justify-between"
       >
-        <h2 className="font-headline font-bold text-sm uppercase tracking-widest text-tertiary flex items-center gap-2">
+        <Heading level="h2" variant="overline" className="text-body-sm flex items-center gap-2">
           <CheckCircle2 className="w-4 h-4 text-primary" />
           {t.reflectionTitle || 'Reflexión Semanal'}
-        </h2>
+        </Heading>
         {reflectionOpen
           ? <ChevronUp className="w-4 h-4 text-on-surface-variant" />
           : <ChevronDown className="w-4 h-4 text-on-surface-variant" />}
@@ -71,7 +72,7 @@ export default function InlineReflection({
       {reflectionOpen && (
         <div className="space-y-3 pt-2 border-t border-outline-variant/10 animate-in fade-in slide-in-from-top-2">
           <div>
-            <label className="font-headline text-xs font-bold uppercase tracking-widest text-primary block mb-1.5">
+            <label className="font-headline text-micro font-bold uppercase tracking-widest text-primary block mb-1.5">
               <CheckCircle2 className="w-3 h-3 inline mr-1 -mt-0.5" />
               {tWeekly.workedWellLabel || '¿Qué funcionó bien?'}
             </label>
@@ -84,7 +85,7 @@ export default function InlineReflection({
             />
           </div>
           <div>
-            <label className="font-headline text-xs font-bold uppercase tracking-widest text-error block mb-1.5">
+            <label className="font-headline text-micro font-bold uppercase tracking-widest text-error block mb-1.5">
               <XCircle className="w-3 h-3 inline mr-1 -mt-0.5" />
               {tWeekly.whatWasHardLabel || '¿Qué fue difícil?'}
             </label>
@@ -97,7 +98,7 @@ export default function InlineReflection({
             />
           </div>
           <div>
-            <label className="font-headline text-xs font-bold uppercase tracking-widest text-brand-secondary block mb-1.5">
+            <label className="font-headline text-micro font-bold uppercase tracking-widest text-brand-secondary block mb-1.5">
               <Target className="w-3 h-3 inline mr-1 -mt-0.5" />
               {tWeekly.focusNextLabel || 'Foco próxima semana'}
             </label>
@@ -111,7 +112,7 @@ export default function InlineReflection({
           </div>
           <div className="flex items-center gap-3">
             <button type="button" onClick={onSave}
-              className="flex-1 py-3 bg-primary text-on-primary rounded-sm font-headline font-bold text-xs uppercase tracking-widest hover:opacity-90 transition-opacity"
+              className="flex-1 py-3 bg-primary text-on-primary rounded-sm font-headline font-bold text-micro uppercase tracking-widest hover:opacity-90 transition-opacity"
             >
               {tWeekly.saveReflection || 'Guardar'}
             </button>
