@@ -1,5 +1,82 @@
 # RIAL App - Changelog
 
+## [1.5.87] - 2026-04-25
+
+### refactor(ds): Fase C lote 1 — RecipeDetail typography migration
+
+Continuación de la **Fase C** de ADR-012: migrar los call-sites del
+`typographyMigrationAllowlist` a los primitives `<Heading>` / `<Text>` y
+tokens semánticos, archivo por archivo, hasta que el allowlist quede vacío.
+
+**Pantalla migrada**: `src/features/recipes/screens/RecipeDetail.tsx` (1058
+líneas, una de las pantallas más visitadas de Cocina; abrir cualquier receta
+del feed aterriza aquí). Era el archivo con mayor densidad de drift en el
+allowlist (24 warnings de tipografía).
+
+**Mappings aplicados**:
+
+| Patrón anterior | Después | Hits |
+|---|---|---|
+| `<h2 text-lg font-headline ... text-tertiary>` (recipe-not-found) | `<Heading level="h3">` | 1 |
+| `<h3 text-sm font-headline ... text-tertiary>` (community notes) | `<Heading level="h4">` | 1 |
+| `<h4 text-sm font-headline ... text-tertiary>` (nutrition / micros / goal) | `<Heading level="h4">` | 3 |
+| `<h3 text-xs font-headline ... uppercase tracking-widest>` (more-from-creator) | `<Heading level="h4" variant="overline">` | 1 |
+| `<span class="font-headline font-bold text-xs ...">` (chips, badges, labels) | swap `text-xs` → `text-micro` (token) | 7 |
+| `<span class="font-label text-xs font-bold">` (community stat counts) | swap `text-xs` → `text-micro` | 3 |
+| `<p class="font-headline ... text-xs">` (goal-suggestion bullets) | swap `text-xs` → `text-micro` | 2 |
+| `<p class="font-headline ... text-sm">` (matchScore label) | swap `text-sm` → `text-body-sm` | 1 |
+| `<span class="text-primary font-headline text-2xl font-bold">` (matchScore %) | swap `text-2xl` → `text-title` | 1 |
+| `<span class="font-headline ... text-lg ...">` (servings counter) | swap `text-lg` → `text-body-lg` | 1 |
+| `<div class="font-headline ... text-sm">` (cook-step number) | swap `text-sm` → `text-body-sm` | 1 |
+| `<p class="font-headline ... text-xs uppercase truncate">` (creator recipe row) | swap `text-xs` → `text-micro` | 1 |
+
+**Excepción documentada (1)** — `<h2>` recipe hero (líneas 388-396):
+- Verified-mode swap a Fraunces serif vía `style={{ fontFamily:
+  'var(--font-serif)' }}` (ADR-011 § verified-mode override).
+- Tamaño responsive `text-2xl md:text-3xl`.
+- El primitive `<Heading>` no expone `style` por instancia ni breakpoints
+  responsivos. Se mantiene como `<h2>` raw con `// eslint-disable-next-line
+  no-restricted-syntax` y comentario que justifica la excepción.
+
+**Resultado del allowlist**: `src/features/recipes/screens/RecipeDetail.tsx`
+eliminado de `typographyMigrationAllowlist` en `eslint.config.mjs`. El
+fichero ahora reporta **0 errores de `no-restricted-syntax`** sin downgrade.
+Los 30 warnings restantes son `@typescript-eslint/no-explicit-any` sobre
+los props/handlers (out of scope; pendiente de un lote de tipado de la
+capa de recetas).
+
+**Files**:
+
+- `src/features/recipes/screens/RecipeDetail.tsx` — 22 sustituciones de
+  className + 4 conversiones a `<Heading>` + import de `Heading` desde
+  `@/components/ui/Typography` + comentario de excepción para el hero.
+- `eslint.config.mjs` — removido `'src/features/recipes/screens/RecipeDetail.tsx'`
+  de `typographyMigrationAllowlist`.
+- `CHANGELOG.md` + `docs/ai/state.md` — registro del lote.
+
+**Quality baseline**:
+
+- TypeScript: **0 errores** (sin cambios).
+- Lint: **0 errores**, **1118 warnings** (-31 vs `[1.5.86]` baseline 1149 —
+  refleja los 24 warnings de tipografía resueltos + 7 warnings adicionales
+  que el allowlist downgrade ocultaba sobre `font-headline + text-*` patrones
+  vecinos).
+- Tests: **1147/1147** passing (sin cambios — refactor estructural, no funcional).
+- i18n symmetry: **1871** keys aligned (sin cambios).
+- Bundle: `RecipeDetail` chunk = **73.0 KB raw / 18.6 KB gzip** (delta
+  imperceptible; el primitive `Heading` ya estaba en el bundle).
+
+**Próximos lotes (Fase C orden propuesto)**:
+
+1. ✅ **Lote 1** — RecipeDetail.tsx (este).
+2. **Lote 2** — CreateRecipe.tsx (~30 hits, formulario de autoría).
+3. **Lote 3** — Pantallas sociales (PostDetail, CreatorProfile, CreatePost — ~15 archivos, 4-8 hits cada uno).
+4. **Lote 4** — Componentes de wellness (~15 archivos finales).
+
+Allowlist actual: **84 archivos** (-1 vs `[1.5.86]`).
+
+---
+
 ## [1.5.86] - 2026-04-25
 
 ### feat(ds): filter system normalization — ChipRow + SortControl + Cocina dedup + ADR-013

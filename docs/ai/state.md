@@ -5,52 +5,51 @@
 > prunes this file back down. Everything below should answer: *what's the release line,
 > what's the quality baseline, what's the next move, what's broken?*
 
-Last updated: **2026-04-25** — `[1.5.86]` Filter system normalization per
-ADR-013 ("one axis = one primitive"). New `ChipRow` (modes single/multi,
-variants pill/icon/emoji, tone default/danger) + `SortControl` (native `<select>`
-under brand chrome). `FilterRow` → `@deprecated` shim. Cocina dedup (3 axes
-collapsed into `CollectionsCarousel`), Community pill→TabNav, FoodDictionary
-inline chips → ChipRow. Convention test `filter-system.test.ts` gates regressions.
+Last updated: **2026-04-25** — `[1.5.87]` Fase C lote 1 — RecipeDetail
+typography migration. `RecipeDetail.tsx` (1058 líneas, mayor densidad de
+drift en el allowlist) migrado a `<Heading>` + tokens semánticos: 22
+sustituciones de className + 4 conversiones a `<Heading>` + 1 excepción
+documentada (recipe hero con verified Fraunces + responsive `text-2xl
+md:text-3xl`). Removido del `typographyMigrationAllowlist`. Allowlist
+actual: 84 archivos (-1).
 
 ## Release snapshot
-- **Branch**: `main`, awaiting push to `rial-food/main` (local ahead 1 vs `128a5e4`).
-- **Last shipped**: `[1.5.86]` Filter system normalization. **Primitives**:
-  `ChipRow` and `SortControl` (canonical); `FilterRow` is now a `@deprecated`
-  shim delegating to `ChipRow`. **Cocina**: 3 duplicated axes (`verified / quick
-  / highProtein`) removed from the chip-row — live **only** in
-  `CollectionsCarousel` via the R3 registry. Inline `<select>` + `ArrowUpDown`
-  replaced by `SortControl` (same height as `SearchInput`, aligned in one flex
-  row). **Community**: FOR YOU / FOLLOWING / TRENDING migrated from `FilterRow
-  pill` to `TabNav` (source navigation now has `role="tablist"` + underline
-  indicator). **FoodDictionary**: 2 inline chip blocks → `ChipRow emoji`
-  (categories) + `ChipRow multi tone="danger"` (allergens, X prefix on selected).
-  **Other call-sites**: Discovery, AddMeal, ShoppingList migrated (simple rename
-  FilterRow → ChipRow). `FeedTabs` marked `@deprecated`. **Enforcement**:
-  `src/test/conventions/filter-system.test.ts` — invariant A (no inline chip
-  reimplementation in `features/**`, discriminator = `shrink-0 + rounded-* +
-  uppercase + tracking-widest + font-headline|label` on a `<button>`); invariant
-  B (no branded native `<select>` in `features/**/screens/*`). 1 allowlist entry:
-  AddMeal "Multi" mode toggle (standalone binary toggle, not a chip).
-- **Previous**: `[1.5.85]` brand font normalization (Bricolage Grotesque
-  + `--font-mono` alias). `[1.5.84]` Phase 1 Home rework. `[1.5.83]` ADR-012
-  `<Heading>` + `<Text>`. `[1.5.82]` Q6 Supabase sync. `[1.5.81]` Q17 CSP.
-  Q15 ✓, Q17 ✓, Q6 ✓, R1–R8 ✓, ADR-012 ✓, Phase 1 Home ✓, ADR-013 ✓.
-- **Active plan**: Filter layer sealed. Next: **Fase C allowlist shrink**
-  (remaining ~85 files to `<Heading>` / `<Text>`) or owner actions to unlock
-  Supabase in production (see risks).
+- **Branch**: `main`, awaiting push to `rial-food/main` (local ahead 1 vs `6132d08`).
+- **Last shipped**: `[1.5.87]` Fase C lote 1 — RecipeDetail typography.
+  **Pantalla**: `src/features/recipes/screens/RecipeDetail.tsx` (la más
+  visitada de Cocina). **Cambios**: 4 `<hN>` raw → `<Heading level="h3|h4">`
+  (recipe-not-found, community notes, nutrition info, micros, goal optimize)
+  + `<Heading level="h4" variant="overline">` para "more from creator". 22
+  spans/divs ad-hoc swap `text-{xs,sm,lg,2xl}` → tokens semánticos
+  (`text-micro`, `text-body-sm`, `text-body-lg`, `text-title`). **Excepción
+  documentada**: recipe hero `<h2>` con verified-mode Fraunces serif inline
+  (`style={{ fontFamily: 'var(--font-serif)' }}`) + responsive sizing — no
+  expresable vía `<Heading>`; `// eslint-disable-next-line` con comentario.
+  **Allowlist**: removido `RecipeDetail.tsx` (84 entradas, -1). 0 errores de
+  `no-restricted-syntax` sin downgrade. **Warnings totales**: 1118 (-31 vs
+  baseline 1149).
+- **Previous**: `[1.5.86]` Filter system normalization (ADR-013). `[1.5.85]`
+  brand font normalization (Bricolage Grotesque + `--font-mono` alias).
+  `[1.5.84]` Phase 1 Home rework. `[1.5.83]` ADR-012 `<Heading>` + `<Text>`.
+  `[1.5.82]` Q6 Supabase sync. `[1.5.81]` Q17 CSP. Q15 ✓, Q17 ✓, Q6 ✓, R1–R8 ✓,
+  ADR-012 ✓, Phase 1 Home ✓, ADR-013 ✓.
+- **Active plan**: Fase C lote 1 sealed. Next: **Lote 2 — CreateRecipe.tsx**
+  (~30 hits, formulario de autoría) → **Lote 3 — pantallas sociales** →
+  **Lote 4 — wellness components**. Owner actions Supabase quedan deferred
+  hasta que UX/UI esté pulido (mandato del owner).
 - **Release target**: `rial-food/main` (`novara-bbs/Rial-food.app`). Origin `rial-food`.
 - **Vercel project**: `rial.app.v1.5` (id `prj_t11VHYQjptazjUx7Y2hWLz0IDAjg`).
 - **Governance**: work directly on `main`. "continua" = push approval post green preflight.
 
-## Quality baseline (post-[1.5.86], 2026-04-25)
+## Quality baseline (post-[1.5.87], 2026-04-25)
 - TypeScript: **0 errors** (`npx tsc --noEmit`)
-- Tests: **1147/1147** passing (69 files) — +3 vs `[1.5.85]` baseline (1144):
-  2 from new `filter-system.test.ts` (invariants A + B) + 1 from extended
-  `primitives-export.test.ts` (filter primitives cell: `ChipRow`, `SortControl`,
-  `TabNav`, `SearchInput`, `FilterRow` shim).
-- i18n symmetry: **1871** keys aligned ES ↔ EN (unchanged — filter refactor is
-  structural, no new strings)
-- Design-system lint: **0 errors**, ~1149 warnings (typographyMigrationAllowlist hits)
+- Tests: **1147/1147** passing (69 files) — unchanged vs `[1.5.86]` (refactor
+  estructural sin nuevos tests).
+- i18n symmetry: **1871** keys aligned ES ↔ EN (unchanged — typography refactor
+  no toca strings)
+- Design-system lint: **0 errors**, **1118 warnings** (-31 vs `[1.5.86]`
+  baseline 1149 — RecipeDetail removido del allowlist resuelve 24 warnings de
+  tipografía + destapa 7 warnings vecinos que ya estaban en otros files)
 - Build main: bundle delta ≤ +1 KB gzip (2 new primitives, 6 call-sites thinner)
 - Security headers: HSTS + X-Frame-Options + nosniff + Permissions-Policy + Referrer-Policy + **CSP** ✓
 - Drift: `text-[Npx]` = **0**, SectionCard shape = **0**, ad-hoc `<hN>` typography
@@ -83,13 +82,16 @@ inline chips → ChipRow. Convention test `filter-system.test.ts` gates regressi
 - **vendor-recharts chunk 102 KB gzip** — acceptable but monitor; ≤ 400 KB raw / 115 KB gzip.
 
 ## Next sprint candidates (ordered, only pending)
-- ~~**R2**~~ ✓ · ~~**R3**~~ ✓ · ~~**R5**~~ ✓ · ~~**R7**~~ ✓ · ~~**R8**~~ ✓ · ~~**Q6**~~ ✓ · ~~**Q15**~~ ✓ · ~~**Q17**~~ ✓ · ~~**ADR-012**~~ ✓ · ~~**Phase 1 Home**~~ ✓ · ~~**ADR-013 Filter system**~~ ✓
-- **Owner actions** (non-code, unblock Supabase in production):
+- ~~**R2**~~ ✓ · ~~**R3**~~ ✓ · ~~**R5**~~ ✓ · ~~**R7**~~ ✓ · ~~**R8**~~ ✓ · ~~**Q6**~~ ✓ · ~~**Q15**~~ ✓ · ~~**Q17**~~ ✓ · ~~**ADR-012**~~ ✓ · ~~**Phase 1 Home**~~ ✓ · ~~**ADR-013 Filter system**~~ ✓ · ~~**Fase C lote 1 RecipeDetail**~~ ✓
+- **Fase C allowlist shrink** (UX/UI polish — prioridad antes de Supabase):
+  - ~~Lote 1 RecipeDetail~~ ✓
+  - **Lote 2 — CreateRecipe.tsx** (~30 hits, formulario de autoría)
+  - Lote 3 — pantallas sociales (PostDetail, CreatorProfile, CreatePost — ~15 archivos, 4-8 hits cada uno)
+  - Lote 4 — componentes de wellness (~15 archivos finales)
+- **Owner actions** (non-code, **diferido** hasta que UX/UI esté pulido —
+  mandato explícito del owner en `[1.5.87]`): unblock Supabase en producción:
   1. `supabase db push` (applies `001_initial_schema.sql`)
   2. Add `VITE_SUPABASE_URL` + `VITE_SUPABASE_ANON_KEY` to Vercel project env vars
-- **Fase C allowlist shrink** — migrate remaining ~85 files out of
-  `typographyMigrationAllowlist` to `<Heading>` / `<Text>`. Proposed lote order:
-  RecipeDetail → CreateRecipe → social screens → wellness components.
 - **Q6-B** — Recipe photo migration to Supabase Storage bucket `recipe-photos` + RLS.
   Unblocks sync for recipes with multi-media photos. Medium complexity, deferred.
 - **Phase 2 Home** — chips → bottom sheets (Hydration slider in-place); ADR-009 V3 justification per chip. Deferred.
@@ -106,7 +108,8 @@ Fase 1+2 multi-media recipes, Food Families P0-P16, R1 docs, R2 recipes editoria
 **ADR-012 typography primitives (`<Heading>`, `<Text>`) closing call-site layer**,
 **Phase 1 Home rework (chip-row + reorder + simple/advanced density)**,
 **[1.5.85] brand font normalization** (Bricolage Grotesque headline + `--font-mono` alias → JetBrains Mono; CMS-style proof),
-**[1.5.86] filter system normalization per ADR-013** (`ChipRow` + `SortControl` primitives; Cocina dedup; Community pill→TabNav; FoodDictionary inline chips → ChipRow; convention test invariants A + B).
+**[1.5.86] filter system normalization per ADR-013** (`ChipRow` + `SortControl` primitives; Cocina dedup; Community pill→TabNav; FoodDictionary inline chips → ChipRow; convention test invariants A + B),
+**[1.5.87] Fase C lote 1 — RecipeDetail typography migration** (4 `<hN>` raw → `<Heading>`; 22 spans/divs swap a tokens semánticos; 1 excepción documentada para hero verified Fraunces; allowlist 85→84).
 
 ## Repository compliance
 - `LICENSE`: Proprietary © 2026 RIAL FOOD WORLD S.L. Contact legal@rialfoodworld.com.

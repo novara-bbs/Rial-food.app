@@ -34,6 +34,7 @@ import { useLocalStorageState } from '../../../hooks/useLocalStorageState';
 import { useI18n } from '../../../i18n';
 import ConfirmDialog from '../../../components/ConfirmDialog';
 import RelatedRecipesCarousel from '../components/RelatedRecipesCarousel';
+import { Heading } from '@/components/ui/Typography';
 
 export default function RecipeDetail({ recipe, onBack, onSaveRecipe, isSaved, onAddToPlan, onLogMealNow, onAddToShoppingList, dictionary = [], userProfile }: { recipe: any, onBack: () => void, onSaveRecipe?: (r: any) => void, isSaved?: boolean, onAddToPlan?: (recipe: any, dayIndex: number, slot?: 'breakfast' | 'lunch' | 'dinner' | 'snack') => void, onLogMealNow?: (recipe: any, servings: number) => void, onAddToShoppingList?: (items: any[]) => void, dictionary?: any[], userProfile?: any }) {
   const { t } = useI18n();
@@ -89,7 +90,7 @@ export default function RecipeDetail({ recipe, onBack, onSaveRecipe, isSaved, on
         </button>
         <div className="text-center py-12">
           <ChefHat className="w-10 h-10 mx-auto text-on-surface-variant/40 mb-4" />
-          <h2 className="font-headline text-lg font-bold uppercase text-tertiary mb-2">{t.recipeDetail.recipeNotFound}</h2>
+          <Heading level="h3" className="mb-2">{t.recipeDetail.recipeNotFound}</Heading>
           <p className="text-sm text-on-surface-variant">{t.recipeDetail.recipeNotFoundDesc}</p>
         </div>
       </div>
@@ -385,11 +386,15 @@ export default function RecipeDetail({ recipe, onBack, onSaveRecipe, isSaved, on
 
         <div className="absolute bottom-4 left-6 right-6">
           <Badge className="mb-2">{data.tag}</Badge>
-          {/* verified: Fraunces serif title via inline style override (ADR-011 font-headline preserved) */}
-          <h2
-            className="font-headline text-2xl md:text-3xl font-bold tracking-tighter leading-tight text-tertiary uppercase"
-            style={isVerified ? { fontFamily: 'var(--font-serif)', textTransform: 'none' } : undefined}
-          >
+          {/*
+            Bespoke recipe hero: dual-mode title that swaps to Fraunces serif via
+            inline style for verified recipes (ADR-011 § verified-mode override) and
+            scales responsively (text-2xl md:text-3xl). The <Heading> primitive
+            doesn't expose responsive sizing or per-instance font swaps, so this
+            stays raw with both lint rules disabled inline.
+          */}
+          {/* eslint-disable-next-line no-restricted-syntax -- bespoke recipe hero with verified Fraunces serif inline override + responsive size; cannot use <Heading> primitive */}
+          <h2 className="font-headline text-2xl md:text-3xl font-bold tracking-tighter leading-tight text-tertiary uppercase" style={isVerified ? { fontFamily: 'var(--font-serif)', textTransform: 'none' } : undefined}>
             {data.title}
           </h2>
           {/* Classic time row — hidden for verified (replaced by TimeTileComposite below) */}
@@ -437,7 +442,7 @@ export default function RecipeDetail({ recipe, onBack, onSaveRecipe, isSaved, on
               <button type="button" onClick={() => { setSelectedCreatorId(data.publishedBy!); navigateTo('creator-profile'); }} className="flex items-center gap-3 flex-1 min-w-0">
                 <img src={creator.avatar} alt={creator.name} className="w-8 h-8 rounded-full object-cover border border-outline-variant/20" referrerPolicy="no-referrer" />
                 <div className="min-w-0">
-                  <span className="font-headline font-bold text-xs text-tertiary uppercase hover:text-primary transition-colors block truncate">@{creator.name}</span>
+                  <span className="font-headline font-bold text-micro text-tertiary uppercase hover:text-primary transition-colors block truncate">@{creator.name}</span>
                   <span className="font-label text-micro text-on-surface-variant tracking-widest uppercase block">{t.recipeDetail.createdBy}</span>
                 </div>
               </button>
@@ -462,7 +467,7 @@ export default function RecipeDetail({ recipe, onBack, onSaveRecipe, isSaved, on
           <div className="flex items-center justify-between bg-primary/10 border border-primary/20 rounded-sm px-4 py-3">
             <div className="flex items-center gap-2">
               <ChefHat className="w-4 h-4 text-primary" />
-              <span className="font-headline font-bold text-xs text-primary uppercase tracking-widest">{t.recipeDetail.yourRecipe || 'Tu Receta'}</span>
+              <span className="font-headline font-bold text-micro text-primary uppercase tracking-widest">{t.recipeDetail.yourRecipe || 'Tu Receta'}</span>
             </div>
             <div className="flex items-center gap-2">
               <Button
@@ -537,7 +542,7 @@ export default function RecipeDetail({ recipe, onBack, onSaveRecipe, isSaved, on
 
         {/* ── Serving + Family controls ── */}
         <div className="flex items-center justify-between mt-4 bg-surface-container-highest/50 p-3 rounded-sm border border-outline-variant/10">
-          <span className="font-headline font-bold text-xs uppercase text-tertiary tracking-tight">{t.recipeDetail.servings}</span>
+          <span className="font-headline font-bold text-micro uppercase text-tertiary tracking-tight">{t.recipeDetail.servings}</span>
           <div className="flex items-center gap-3">
             {/* HIG 44×44 tap targets — visual circle kept at 28px via inner span */}
             <button type="button" onClick={() => setServings(Math.max(1, servings - 1))} aria-label="Decrease servings" disabled={servings <= 1} className="min-w-11 min-h-11 flex items-center justify-center text-on-surface-variant hover:text-primary disabled:opacity-40 disabled:hover:text-on-surface-variant transition-colors">
@@ -545,7 +550,7 @@ export default function RecipeDetail({ recipe, onBack, onSaveRecipe, isSaved, on
                 <Minus className="w-3.5 h-3.5" />
               </span>
             </button>
-            <span className="font-headline font-bold text-lg text-tertiary w-6 text-center tabular-nums">{servings}</span>
+            <span className="font-headline font-bold text-body-lg text-tertiary w-6 text-center tabular-nums">{servings}</span>
             <button type="button" onClick={() => setServings(servings + 1)} aria-label="Increase servings" className="min-w-11 min-h-11 flex items-center justify-center text-on-surface-variant hover:text-primary transition-colors">
               <span className="w-7 h-7 rounded-full bg-surface-container-low border border-outline-variant/20 flex items-center justify-center">
                 <Plus className="w-3.5 h-3.5" />
@@ -598,9 +603,9 @@ export default function RecipeDetail({ recipe, onBack, onSaveRecipe, isSaved, on
                 <div className="flex items-center justify-between mb-2">
                   <div className="flex items-center gap-2">
                     <Activity className="w-4 h-4 text-primary" />
-                    <p className="font-headline text-sm font-bold text-tertiary uppercase">{t.recipeDetail.matchScore}</p>
+                    <p className="font-headline text-body-sm font-bold text-tertiary uppercase">{t.recipeDetail.matchScore}</p>
                   </div>
-                  <span className="text-primary font-headline text-2xl font-bold">{matchScore}%</span>
+                  <span className="text-primary font-headline text-title font-bold">{matchScore}%</span>
                 </div>
                 <p className="text-on-surface-variant text-xs leading-relaxed">
                   {t.recipeDetail.matchDescription.replace('{percent}', String(matchScore)).replace('{goal}', t.recipeDetail.goalMaxPerformance)}
@@ -636,7 +641,7 @@ export default function RecipeDetail({ recipe, onBack, onSaveRecipe, isSaved, on
             >
               <div className="flex items-center gap-3">
                 <ChefHat className="w-4 h-4 text-on-surface-variant group-hover:text-primary transition-colors" />
-                <span className="font-headline font-bold text-xs text-tertiary uppercase tracking-widest">
+                <span className="font-headline font-bold text-micro text-tertiary uppercase tracking-widest">
                   {(t.recipes as any).markAsCooked ?? 'Marcar como cocinada'}
                 </span>
               </div>
@@ -661,7 +666,7 @@ export default function RecipeDetail({ recipe, onBack, onSaveRecipe, isSaved, on
                   <div className="flex items-center gap-3">
                     <GitFork className="w-4 h-4 text-on-surface-variant group-hover:text-primary transition-colors" />
                     <div className="text-left">
-                      <span className="font-headline font-bold text-xs text-tertiary uppercase tracking-widest block">
+                      <span className="font-headline font-bold text-micro text-tertiary uppercase tracking-widest block">
                         {t.recipeDetail.createVersion || 'Crear mi versión'}
                       </span>
                       <span className="font-label text-micro text-on-surface-variant tracking-widest uppercase">
@@ -691,9 +696,9 @@ export default function RecipeDetail({ recipe, onBack, onSaveRecipe, isSaved, on
               if (recipeComments.length === 0) return null;
               return (
                 <section className="border-t border-outline-variant/20 pt-4">
-                  <h3 className="font-headline text-sm font-bold tracking-tight uppercase text-tertiary mb-3 flex items-center gap-2">
+                  <Heading level="h4" className="mb-3 flex items-center gap-2">
                     <MessageSquare className="w-4 h-4 text-primary" /> {t.recipeDetail.notes} ({recipeComments.length})
-                  </h3>
+                  </Heading>
                   {recipeComments.map((comment: any) => (
                     <div key={comment.id} className="bg-surface-container-low p-3 rounded-sm border border-outline-variant/10 mb-2">
                       <div className="flex items-center gap-2 mb-1">
@@ -814,7 +819,7 @@ export default function RecipeDetail({ recipe, onBack, onSaveRecipe, isSaved, on
             <div className="space-y-3">
               {cookSteps.map((step: any, idx: number) => (
                 <div key={step.id || idx} className="flex gap-3 p-3 bg-surface-container-low rounded-sm border border-outline-variant/10">
-                  <div className="w-7 h-7 rounded-full bg-primary/10 text-primary font-headline font-bold text-sm flex items-center justify-center shrink-0">
+                  <div className="w-7 h-7 rounded-full bg-primary/10 text-primary font-headline font-bold text-body-sm flex items-center justify-center shrink-0">
                     {idx + 1}
                   </div>
                   <p className="text-sm text-on-surface leading-relaxed pt-0.5">{typeof step === 'string' ? step : step.text}</p>
@@ -827,7 +832,7 @@ export default function RecipeDetail({ recipe, onBack, onSaveRecipe, isSaved, on
           <TabsContent value="nutrition" className="space-y-4 pt-4">
             {/* Detailed macros */}
             <div className="bg-surface-container-low p-4 rounded-sm border border-outline-variant/20">
-              <h4 className="font-headline text-sm font-bold tracking-tight uppercase text-tertiary mb-3">{t.recipeDetail.nutritionInfo}</h4>
+              <Heading level="h4" className="mb-3">{t.recipeDetail.nutritionInfo}</Heading>
               <div className="space-y-1.5">
                 {[
                   { label: t.recipeDetail.calories, value: `${Math.round(calculatedTotals.cal * s)} kcal`, bold: true },
@@ -851,7 +856,7 @@ export default function RecipeDetail({ recipe, onBack, onSaveRecipe, isSaved, on
             {/* Micronutrients */}
             {(Object.keys(calculatedTotals.micros.vitamins).length > 0 || Object.keys(calculatedTotals.micros.minerals).length > 0) && (
               <div className="bg-surface-container-low p-4 rounded-sm border border-outline-variant/20 space-y-3">
-                <h4 className="font-headline text-sm font-bold tracking-tight uppercase text-tertiary">{t.recipeDetail.micronutrients}</h4>
+                <Heading level="h4">{t.recipeDetail.micronutrients}</Heading>
 
                 {Object.keys(calculatedTotals.micros.vitamins).length > 0 && (
                   <div>
@@ -888,7 +893,7 @@ export default function RecipeDetail({ recipe, onBack, onSaveRecipe, isSaved, on
               <div className="bg-surface-container-low p-4 rounded-sm border border-outline-variant/20">
                 <div className="flex items-center gap-2 mb-3">
                   <Target className="w-4 h-4 text-primary" />
-                  <h4 className="font-headline text-sm font-bold tracking-tight uppercase text-tertiary">{t.recipeDetail.goalOptimize}</h4>
+                  <Heading level="h4">{t.recipeDetail.goalOptimize}</Heading>
                   <Badge variant="outline" className="text-primary border-primary/30 ml-auto">
                     {userProfile?.goal === 'gain' || userProfile?.goal === 'muscle' ? (t.recipeDetail.goalBulk || 'Volumen') : (t.recipeDetail.goalCut || 'Definición')}
                   </Badge>
@@ -899,13 +904,13 @@ export default function RecipeDetail({ recipe, onBack, onSaveRecipe, isSaved, on
                       <div className="flex-1 min-w-0">
                         {gs.type === 'add' && gs.ingredient && (
                           <>
-                            <p className="text-tertiary font-headline font-bold text-xs">+ {gs.ingredient.name}</p>
+                            <p className="text-tertiary font-headline font-bold text-micro">+ {gs.ingredient.name}</p>
                             <p className="text-on-surface-variant text-micro mt-0.5">{gs.rationale}</p>
                           </>
                         )}
                         {gs.type === 'swap' && gs.fromIngredient && gs.toIngredient && (
                           <>
-                            <p className="text-tertiary font-headline font-bold text-xs">{gs.fromIngredient.name} → {gs.toIngredient.name}</p>
+                            <p className="text-tertiary font-headline font-bold text-micro">{gs.fromIngredient.name} → {gs.toIngredient.name}</p>
                             <p className="text-on-surface-variant text-micro mt-0.5">{gs.rationale}</p>
                           </>
                         )}
@@ -945,15 +950,15 @@ export default function RecipeDetail({ recipe, onBack, onSaveRecipe, isSaved, on
             <div className="mt-6 flex items-center gap-4 p-3 bg-surface-container-highest/30 rounded-sm border border-outline-variant/10">
               <div className="flex items-center gap-1.5 text-on-surface-variant">
                 <Flame className="w-4 h-4" />
-                <span className="font-label text-xs font-bold">{totalLikes}</span>
+                <span className="font-label text-micro font-bold">{totalLikes}</span>
               </div>
               <div className="flex items-center gap-1.5 text-on-surface-variant">
                 <MessageSquare className="w-4 h-4" />
-                <span className="font-label text-xs font-bold">{relatedPosts.reduce((sum: number, p: any) => sum + (p.comments || 0), 0)}</span>
+                <span className="font-label text-micro font-bold">{relatedPosts.reduce((sum: number, p: any) => sum + (p.comments || 0), 0)}</span>
               </div>
               <div className="flex items-center gap-1.5 text-on-surface-variant">
                 <Bookmark className="w-4 h-4" />
-                <span className="font-label text-xs font-bold">{relatedPosts.reduce((sum: number, p: any) => sum + (p.saves || 0), 0) + totalSaves}</span>
+                <span className="font-label text-micro font-bold">{relatedPosts.reduce((sum: number, p: any) => sum + (p.saves || 0), 0) + totalSaves}</span>
               </div>
               <span className="font-label text-micro tracking-widest text-on-surface-variant uppercase ml-auto">{t.community?.title || 'Community'}</span>
             </div>
@@ -966,9 +971,9 @@ export default function RecipeDetail({ recipe, onBack, onSaveRecipe, isSaved, on
           if (creatorRecipes.length === 0) return null;
           return (
             <div className="mt-6">
-              <h3 className="font-headline font-bold text-xs uppercase text-tertiary tracking-widest mb-3">
+              <Heading level="h4" variant="overline" className="mb-3">
                 {t.postDetail?.moreFromCreator || 'More from this creator'}
-              </h3>
+              </Heading>
               <div className="space-y-2">
                 {creatorRecipes.map((r: any) => (
                   <button type="button"
@@ -980,7 +985,7 @@ export default function RecipeDetail({ recipe, onBack, onSaveRecipe, isSaved, on
                       <img src={r.img || r.image} alt={r.title} className="w-12 h-12 rounded-sm object-cover shrink-0" referrerPolicy="no-referrer" />
                     )}
                     <div className="flex-1 min-w-0">
-                      <p className="font-headline font-bold text-xs text-tertiary uppercase truncate">{r.title}</p>
+                      <p className="font-headline font-bold text-micro text-tertiary uppercase truncate">{r.title}</p>
                       <span className="font-label text-micro text-on-surface-variant tracking-widest uppercase">
                         {r.macros?.calories || r.cal || 0} kcal · {r.macros?.protein || r.pro || 0}g pro
                       </span>

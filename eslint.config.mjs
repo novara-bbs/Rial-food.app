@@ -252,7 +252,6 @@ const typographyMigrationAllowlist = [
   'src/features/recipes/screens/Cocina.tsx',
   'src/features/recipes/screens/CreateRecipe.tsx',
   'src/features/recipes/screens/ImportRecipeURL.tsx',
-  'src/features/recipes/screens/RecipeDetail.tsx',
   'src/features/social/components/FeedTabs.tsx',
   'src/features/social/components/PostCard.tsx',
   'src/features/social/components/ProgressPostCard.tsx',
