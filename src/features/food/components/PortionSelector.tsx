@@ -4,6 +4,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { useI18n } from '../../../i18n';
 import type { Ingredient, Macros } from '../../../types';
 import { formatWeight, getWeightUnit, toGrams, fromGrams, getQuickWeights, getWeightStep, type UnitSystem } from '../utils/units';
+import MacroTile from '../../../components/patterns/MacroTile';
 
 export interface PortionResult {
   servingId: string;
@@ -335,10 +336,13 @@ export default function PortionSelector({
             { label: t.portionSelector.carbs, value: `${scaled.carbs}g`, color: 'text-macro-carbs' },
             { label: t.portionSelector.fats, value: `${scaled.fats}g`, color: 'text-macro-fats' },
           ] as const).map(m => (
-            <div key={m.label} className="bg-surface-container-highest rounded-sm p-2 text-center">
-              <span className={`block font-headline font-bold text-lg ${m.color}`}>{m.value}</span>
-              <span className="text-micro font-label uppercase tracking-widest text-on-surface-variant">{m.label}</span>
-            </div>
+            <MacroTile
+              key={m.label}
+              size="md"
+              value={m.value}
+              label={m.label}
+              valueColorClassName={m.color}
+            />
           ))}
         </div>
       )}

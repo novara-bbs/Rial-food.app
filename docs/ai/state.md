@@ -5,7 +5,16 @@
 > prunes this file back down. Everything below should answer: *what's the release line,
 > what's the quality baseline, what's the next move, what's broken?*
 
-Last updated: **2026-04-25** — `[1.5.88]` Fase C lote 2 — CreateRecipe
+Last updated: **2026-04-25** — `[1.5.89]` Polish DRY pass — adopción de
+`<MacroTile>` en `RecipeNutritionBar` + `PortionSelector` y
+`<DashedAddButton>` en `Planner.tsx`. Cero allowlist removals (era el
+objetivo del polish), -3 warnings vs `[1.5.88]` baseline. Reaprovecha los
+primitives extraídos en `[1.5.88]`. CreateStory / PhotoUploader /
+BarcodeScanner descartados tras inspección — sus dashed-borders son
+patrones distintos (stacked hero placeholder + aspect-square upload tile +
+video container).
+
+Previo: **2026-04-25** — `[1.5.88]` Fase C lote 2 — CreateRecipe
 typography migration **+ 2 nuevos primitives reutilizables**.
 `CreateRecipe.tsx` (formulario de autoría, 1062 líneas) migrado:
 extracción de `<MacroTile>` (4 use-cases potenciales) y
@@ -17,8 +26,19 @@ variant="overline">` + token swaps semánticos (`text-sm` →
 Removido del `typographyMigrationAllowlist`.
 
 ## Release snapshot
-- **Branch**: `main`, awaiting push to `rial-food/main` (local ahead 2 vs `6132d08`).
-- **Last shipped**: `[1.5.88]` Fase C lote 2 — CreateRecipe typography +
+- **Branch**: `main`, awaiting push to `rial-food/main` (local ahead 3 vs `6132d08`).
+- **Last shipped**: `[1.5.89]` Polish DRY pass — adopción de primitives
+  `[1.5.88]` en call-sites cross-feature.
+  **Cambios**: `RecipeNutritionBar.tsx` (1 grid macro inline →
+  `<MacroTile size="md" surface="card">`), `PortionSelector.tsx` (1 grid
+  macro inline → `<MacroTile size="md">`), `Planner.tsx` ("add meal" inline
+  dashed → `<DashedAddButton>` + cleanup unused `Plus` import).
+  **Descartados** tras inspección: `CreateStory` (stacked hero placeholder
+  ≠ inline CTA), `PhotoUploader` (aspect-square upload tile con busy state
+  ≠ CTA simple), `BarcodeScanner` (video container, no es botón).
+  **Allowlist**: sin cambios. **Warnings totales**: 1097 (-3 vs
+  `[1.5.88]` baseline 1100).
+- **Previous**: `[1.5.88]` Fase C lote 2 — CreateRecipe typography +
   **2 nuevos primitives reutilizables**.
   **Pantalla**: `src/features/recipes/screens/CreateRecipe.tsx` (formulario
   de autoría, 4 steps, 1062 líneas).
@@ -46,28 +66,22 @@ Removido del `typographyMigrationAllowlist`.
   `[1.5.84]` Phase 1 Home rework. `[1.5.83]` ADR-012 `<Heading>` + `<Text>`.
   `[1.5.82]` Q6 Supabase sync. `[1.5.81]` Q17 CSP. Q15 ✓, Q17 ✓, Q6 ✓, R1–R8 ✓,
   ADR-012 ✓, Phase 1 Home ✓, ADR-013 ✓.
-- **Active plan**: Fase C lote 2 sealed. Next: **Polish pass** — adoptar
-  `<MacroTile>` en `RecipeNutritionBar.tsx` + `PortionSelector.tsx` y
-  `<DashedAddButton>` en Planner / CreateStory / PhotoUploader /
-  BarcodeScanner (deuda DRY oportunista, no bloquea lote 3). Luego **Lote 3
-  — pantallas sociales** (PostDetail, CreatorProfile, CreatePost — ~15
-  archivos × 4-8 hits) → **Lote 4 — wellness components**. Owner actions
-  Supabase quedan deferred hasta que UX/UI esté pulido (mandato del owner).
+- **Active plan**: Polish DRY sealed. Next: **Lote 3 — pantallas sociales**
+  (PostDetail, CreatorProfile, CreatePost — ~15 archivos × 4-8 hits) →
+  **Lote 4 — wellness components**. Owner actions Supabase quedan deferred
+  hasta que UX/UI esté pulido (mandato del owner).
 - **Release target**: `rial-food/main` (`novara-bbs/Rial-food.app`). Origin `rial-food`.
 - **Vercel project**: `rial.app.v1.5` (id `prj_t11VHYQjptazjUx7Y2hWLz0IDAjg`).
 - **Governance**: work directly on `main`. "continua" = push approval post green preflight.
 
-## Quality baseline (post-[1.5.88], 2026-04-25)
+## Quality baseline (post-[1.5.89], 2026-04-25)
 - TypeScript: **0 errors** (`npx tsc --noEmit`)
-- Tests: **1147/1147** passing (69 files) — unchanged vs `[1.5.87]` (refactor
-  estructural sin nuevos tests; primitives extraídos cubren su superficie via
-  call-site in CreateRecipe).
-- i18n symmetry: **1871** keys aligned ES ↔ EN (unchanged — typography refactor
-  no toca strings)
-- Design-system lint: **0 errors**, **1100 warnings** (-18 vs `[1.5.87]`
-  baseline 1118 — CreateRecipe removido del allowlist resuelve 21 warnings de
-  tipografía; +3 warnings preexistentes de `any` en pasted-ingredient parser
-  quedan visibles fuera del scope tipografía)
+- Tests: **1147/1147** passing (69 files) — unchanged vs `[1.5.88]`.
+- i18n symmetry: **1871** keys aligned ES ↔ EN (unchanged).
+- Design-system lint: **0 errors**, **1097 warnings** (-3 vs `[1.5.88]`
+  baseline 1100 — adopción de primitives en 3 call-sites elimina 3 typography
+  warnings preexistentes en files que siguen en el allowlist; sin allowlist
+  removals).
 - Build main: bundle delta ≤ +1 KB gzip (2 new primitives, 6 call-sites thinner)
 - Security headers: HSTS + X-Frame-Options + nosniff + Permissions-Policy + Referrer-Policy + **CSP** ✓
 - Drift: `text-[Npx]` = **0**, SectionCard shape = **0**, ad-hoc `<hN>` typography
@@ -100,14 +114,12 @@ Removido del `typographyMigrationAllowlist`.
 - **vendor-recharts chunk 102 KB gzip** — acceptable but monitor; ≤ 400 KB raw / 115 KB gzip.
 
 ## Next sprint candidates (ordered, only pending)
-- ~~**R2**~~ ✓ · ~~**R3**~~ ✓ · ~~**R5**~~ ✓ · ~~**R7**~~ ✓ · ~~**R8**~~ ✓ · ~~**Q6**~~ ✓ · ~~**Q15**~~ ✓ · ~~**Q17**~~ ✓ · ~~**ADR-012**~~ ✓ · ~~**Phase 1 Home**~~ ✓ · ~~**ADR-013 Filter system**~~ ✓ · ~~**Fase C lote 1 RecipeDetail**~~ ✓ · ~~**Fase C lote 2 CreateRecipe + MacroTile + DashedAddButton**~~ ✓
+- ~~**R2**~~ ✓ · ~~**R3**~~ ✓ · ~~**R5**~~ ✓ · ~~**R7**~~ ✓ · ~~**R8**~~ ✓ · ~~**Q6**~~ ✓ · ~~**Q15**~~ ✓ · ~~**Q17**~~ ✓ · ~~**ADR-012**~~ ✓ · ~~**Phase 1 Home**~~ ✓ · ~~**ADR-013 Filter system**~~ ✓ · ~~**Fase C lote 1 RecipeDetail**~~ ✓ · ~~**Fase C lote 2 CreateRecipe + MacroTile + DashedAddButton**~~ ✓ · ~~**Polish DRY pass**~~ ✓
 - **Fase C allowlist shrink** (UX/UI polish — prioridad antes de Supabase):
   - ~~Lote 1 RecipeDetail~~ ✓
   - ~~Lote 2 CreateRecipe + MacroTile + DashedAddButton primitives~~ ✓
-  - **Polish pass DRY** — adoptar MacroTile en `RecipeNutritionBar.tsx` +
-    `PortionSelector.tsx`; adoptar DashedAddButton en Planner / CreateStory
-    / PhotoUploader / BarcodeScanner. Sin nuevas allowlist removals.
-  - Lote 3 — pantallas sociales (PostDetail, CreatorProfile, CreatePost — ~15 archivos, 4-8 hits cada uno)
+  - ~~Polish DRY (MacroTile en NutritionBar+PortionSelector, DashedAddButton en Planner)~~ ✓
+  - **Lote 3 — pantallas sociales** (PostDetail, CreatorProfile, CreatePost — ~15 archivos, 4-8 hits cada uno)
   - Lote 4 — componentes de wellness (~15 archivos finales)
 - **Owner actions** (non-code, **diferido** hasta que UX/UI esté pulido —
   mandato explícito del owner en `[1.5.87]`): unblock Supabase en producción:
@@ -131,7 +143,8 @@ Fase 1+2 multi-media recipes, Food Families P0-P16, R1 docs, R2 recipes editoria
 **[1.5.85] brand font normalization** (Bricolage Grotesque headline + `--font-mono` alias → JetBrains Mono; CMS-style proof),
 **[1.5.86] filter system normalization per ADR-013** (`ChipRow` + `SortControl` primitives; Cocina dedup; Community pill→TabNav; FoodDictionary inline chips → ChipRow; convention test invariants A + B),
 **[1.5.87] Fase C lote 1 — RecipeDetail typography migration** (4 `<hN>` raw → `<Heading>`; 22 spans/divs swap a tokens semánticos; 1 excepción documentada para hero verified Fraunces; allowlist 85→84),
-**[1.5.88] Fase C lote 2 — CreateRecipe typography + 2 nuevos primitives reutilizables** (`<MacroTile>` + `<DashedAddButton>` extraídos a `src/components/patterns/`; 18 hits resueltos vía primitives + `<Heading>` overline + token swaps; allowlist -1).
+**[1.5.88] Fase C lote 2 — CreateRecipe typography + 2 nuevos primitives reutilizables** (`<MacroTile>` + `<DashedAddButton>` extraídos a `src/components/patterns/`; 18 hits resueltos vía primitives + `<Heading>` overline + token swaps; allowlist -1),
+**[1.5.89] Polish DRY pass** — adopción de `MacroTile` en `RecipeNutritionBar` + `PortionSelector` y `DashedAddButton` en `Planner`; CreateStory/PhotoUploader/BarcodeScanner descartados por patrones distintos; -3 warnings sin allowlist removals.
 
 ## Repository compliance
 - `LICENSE`: Proprietary © 2026 RIAL FOOD WORLD S.L. Contact legal@rialfoodworld.com.

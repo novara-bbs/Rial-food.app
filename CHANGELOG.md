@@ -1,5 +1,41 @@
 # RIAL App - Changelog
 
+## [1.5.89] - 2026-04-25
+
+### refactor(ds): Polish DRY pass — adopción cross-feature de MacroTile + DashedAddButton
+
+Pasada de polish que **reaprovecha** los dos primitives extraídos en
+`[1.5.88]` para eliminar duplicación inline en call-sites cross-feature.
+Sin allowlist removals (era el objetivo: cobrar la deuda DRY oportunista).
+
+**MacroTile adoptado en**:
+- `src/features/recipes/components/RecipeNutritionBar.tsx` — 1 grid de 4
+  macros (`size="md"` + `surface="card"`).
+- `src/features/food/components/PortionSelector.tsx` — 1 grid de 4 macros
+  en modo non-compact (`size="md"`, surface default `highest`).
+
+**DashedAddButton adoptado en**:
+- `src/features/planner/screens/Planner.tsx` — botón "add meal" del día
+  activo (densidad por defecto). Limpieza adicional: removido import
+  `Plus` de lucide-react que ya no se usa.
+
+**Descartados tras inspección** (patrones distintos al primitive):
+- `CreateStory.tsx` — placeholder hero `py-16` con icono apilado encima del
+  label. Layout vertical, no inline CTA.
+- `PhotoUploader.tsx` — tile cuadrado (`aspect-square`) con estados busy
+  vs idle (loader inline). Composición distinta.
+- `BarcodeScanner.tsx` — contenedor de video, no es botón.
+
+#### Quality baseline (post-[1.5.89])
+- TypeScript: **0 errors**.
+- Tests: **1147/1147** passing — primitives reutilizados sin regresión.
+- Design-system lint: **0 errors**, **1097 warnings** (-3 vs `[1.5.88]`
+  baseline 1100).
+- Bundle: neutral (call-sites más finos compensan re-uso de primitives).
+- i18n: 1871 keys (sin cambios).
+
+---
+
 ## [1.5.88] - 2026-04-25
 
 ### refactor(ds): Fase C lote 2 — CreateRecipe typography + 2 nuevos primitives reutilizables

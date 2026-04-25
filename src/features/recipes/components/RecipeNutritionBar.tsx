@@ -1,6 +1,7 @@
 import { ThumbsUp, AlertTriangle, Minus } from 'lucide-react';
 import { getFoodQuality } from '../../food/utils/nutrition';
 import { useI18n } from '../../../i18n';
+import MacroTile from '../../../components/patterns/MacroTile';
 
 interface Props {
   cal: number;
@@ -33,13 +34,14 @@ export default function RecipeNutritionBar({ cal, pro, carbs, fats, macros, hasA
     <div className={hasAttribution ? 'mt-3 relative z-10' : 'mt-4 relative z-10'}>
       <div className="grid grid-cols-4 gap-2">
         {nutrients.map((m) => (
-          <div
+          <MacroTile
             key={m.label}
-            className="bg-surface-container border border-outline-variant/30 rounded-sm p-3 text-center"
-          >
-            <span className={`block font-headline font-bold text-lg ${m.color}`}>{m.value}</span>
-            <span className="text-micro font-label uppercase tracking-widest text-on-surface-variant">{m.label}</span>
-          </div>
+            size="md"
+            surface="card"
+            value={m.value}
+            label={m.label}
+            valueColorClassName={m.color}
+          />
         ))}
       </div>
 

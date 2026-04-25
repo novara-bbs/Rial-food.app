@@ -1,10 +1,11 @@
-import { ShoppingCart, Plus, Clock, CheckCircle2, Utensils, BookOpen, LogIn, Trash2 } from 'lucide-react';
+import { ShoppingCart, Clock, CheckCircle2, Utensils, BookOpen, LogIn, Trash2 } from 'lucide-react';
 import SectionCard from '../../../components/SectionCard';
 import { useState } from 'react';
 import { toast } from 'sonner';
 import { useI18n } from '../../../i18n';
 import EmptyState from '../../../components/EmptyState';
 import ConfirmDialog from '../../../components/ConfirmDialog';
+import DashedAddButton from '../../../components/patterns/DashedAddButton';
 import { analyzeBatchCooking } from '../utils/batch-cooking';
 import { detectLeftovers } from '../utils/meal-reuse';
 
@@ -414,13 +415,11 @@ export default function Planner({
           )}
 
           {/* Add meal button */}
-          <button type="button"
+          <DashedAddButton
+            label={t.planner.addMealBtn}
+            ariaLabel={t.planner.addMealBtn}
             onClick={() => onAddMeal?.(activeDay)}
-            aria-label={t.planner.addMealBtn}
-            className="w-full border-2 border-dashed border-outline-variant/30 p-4 rounded-sm flex items-center justify-center gap-2 text-on-surface-variant hover:text-primary hover:border-primary/50 transition-colors font-label text-xs font-bold tracking-widest uppercase"
-          >
-            <Plus className="w-4 h-4" aria-hidden="true" /> {t.planner.addMealBtn}
-          </button>
+          />
         </div>
       </section>
 
