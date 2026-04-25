@@ -5,36 +5,33 @@
 > prunes this file back down. Everything below should answer: *what's the release line,
 > what's the quality baseline, what's the next move, what's broken?*
 
-Last updated: **2026-04-25** — `[1.5.94]` **Q16 — codemod tipado cuisine + dietaryTags** —
-`src/types/taxonomy.ts` (new) centraliza Cuisine/DietaryTag/TimeBucket/Difficulty.
-`Recipe` gana `cuisine?: Cuisine` + `dietaryTags?: DietaryTag[]`. `facets.ts` lee
-campo tipado primero, heurística como fallback. 46/46 seed recipes anotadas. +7 tests.
-Filtro Cuisine en Discovery ahora es funcional (era 100% 'other' antes).
+Last updated: **2026-04-25** — `[1.5.95]` **Cocina UX — active filter strip + pill chips** —
+`ChipRow` gana prop `wrap` (pill/emoji → `flex flex-wrap` en vez de scroll horizontal).
+Meal slot chips cambian de `variant="icon"` (tiles tall icon+texto) a `variant="pill" wrap`
+— 5 opciones en 2 filas compactas, sin scroll. Strip de filtros activos aparece entre
+search row y chips cuando `activeFilterCount > 0`: un chip dismissible por filtro + Reset.
 
-Previo: `[1.5.93]` Filter UX rework (ADR-014) · `[1.5.92]` Fase C lote 4 wellness ·
-`[1.5.91]` Lote 3.5 sociales · `[1.5.90]` Lote 3 sociales · `[1.5.89]` Polish DRY.
+Previo: `[1.5.94]` Q16 codemod tipado · `[1.5.93]` Filter UX rework (ADR-014) ·
+`[1.5.92]` Fase C lote 4 wellness · `[1.5.91]` Lote 3.5 sociales.
 
 ## Release snapshot
 - **Branch**: worktree `claude/hardcore-solomon-9da39e`, ahead of `rial-food/main`.
-- **Last shipped**: `[1.5.94]` **Q16 — codemod tipado** — `taxonomy.ts` (new)
-  + `Recipe.cuisine?`/`dietaryTags?` + `facets.ts` typed-first reads + 46 seed
-  recipes anotadas + 7 nuevos tests. 6 archivos nuevos/modificados. Filtro
-  Cuisine en Discovery operativo.
-- **Previous**: `[1.5.93]` Filter UX rework (ADR-014) — `FilterSheet` +
-  `FilterButton` + heurística `facets.ts`. `[1.5.92]` Fase C lote 4 wellness.
-  `[1.5.91]` Lote 3.5 sociales. `[1.5.90]` Lote 3. `[1.5.89]` Polish DRY.
-  `[1.5.88]` MacroTile + DashedAddButton. `[1.5.87]` Fase C lote 1. `[1.5.86]`
-  ADR-013. `[1.5.85]` brand fonts. `[1.5.84]` Phase 1 Home.
-- **Active plan**: `[1.5.94]` sealed. **Próximos**: active filters strip
-  (Cocina UX feedback), SortControl extended (calories-asc), Phase 2 Home.
+- **Last shipped**: `[1.5.95]` **Cocina UX** — meal slot chips → pill+wrap; active filter
+  strip con dismiss individual + Reset. 2 archivos modificados (ChipRow + Cocina).
+- **Previous**: `[1.5.94]` Q16 codemod tipado — `taxonomy.ts` + `Recipe.cuisine?`/
+  `dietaryTags?` + 46 seed recipes + 7 tests. `[1.5.93]` Filter UX rework (ADR-014).
+  `[1.5.92]` Fase C lote 4 wellness. `[1.5.91]` Lote 3.5 sociales. `[1.5.90]` Lote 3.
+  `[1.5.89]` Polish DRY. `[1.5.88]` MacroTile + DashedAddButton. `[1.5.87]` Fase C lote 1.
+- **Active plan**: `[1.5.95]` sealed. **Próximos**: SortControl extended (calories-asc),
+  Phase 2 Home, Q6-B recipe photos.
 - **Release target**: `rial-food/main` (`novara-bbs/Rial-food.app`). Origin `rial-food`.
 - **Vercel project**: `rial.app.v1.5` (id `prj_t11VHYQjptazjUx7Y2hWLz0IDAjg`).
 - **Governance**: work directly on `main`. "continua" = push approval post green preflight.
 
-## Quality baseline (post-[1.5.94], 2026-04-25)
+## Quality baseline (post-[1.5.95], 2026-04-25)
 - TypeScript: **0 errors** (`npx tsc --noEmit`)
-- Tests: **1187** passing (+7 Q16 typed-field priority tests vs [1.5.93]).
-- i18n symmetry: **1911** keys aligned ES ↔ EN (sin cambios vs [1.5.93]).
+- Tests: **1187** passing (sin cambios vs [1.5.94]).
+- i18n symmetry: **1911** keys aligned ES ↔ EN (sin cambios).
 - Design-system lint: **0 errors**, ~928 warnings (sin cambios).
 - Build main: size:check PASS — all budgets within limits.
 - Security headers: HSTS + X-Frame-Options + nosniff + Permissions-Policy + Referrer-Policy + **CSP** ✓

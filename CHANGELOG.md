@@ -1,5 +1,57 @@
 # RIAL App - Changelog
 
+## [1.5.95] - 2026-04-25
+
+### feat(cocina): active filter strip + meal slot pill chips
+
+Dos mejoras de densidad visual en la sección Cocina / Recetas:
+
+#### 1. Meal slot chips → pill+wrap
+
+Los chips de franja horaria (Todas/Desayuno/Comida/Cena/Snack) usaban
+`variant="icon"` que renderizaba cada chip como un tile tall
+(icono encima + texto debajo) en un row de scroll horizontal. Problema:
+en mobile sólo se veían 2-3 tiles, los demás requerían scroll, y los iconos
+(Sunrise/Sun/Moon/Cookie) no añadían valor semántico sobre las etiquetas de texto.
+
+Cambio: `variant="pill"` + nuevo prop `wrap` en `ChipRow`. Con `wrap={true}`
+el contenedor usa `flex flex-wrap gap-2` en lugar de `overflow-x-auto`. Los
+5 chips fluyen de forma natural en 2 filas compactas en mobile sin scroll.
+
+**`src/components/patterns/ChipRow.tsx`** — nuevo prop `wrap?: boolean`
+(sólo afecta a `variant="pill"` y `variant="emoji"`; `variant="icon"` mantiene
+su scroll horizontal). Añadido a `ChipRowBaseProps` + destructuring + className.
+
+**`src/features/recipes/screens/Cocina.tsx`**:
+- Imports lucide: eliminados `Sparkles, Sunrise, Sun, Moon, Cookie`; añadido `X`.
+- `mealCategories`: eliminada la propiedad `icon` de cada opción.
+- `<ChipRow>`: `variant="icon"` → `variant="pill" wrap`, `className="-mx-6 px-6"` eliminado.
+
+#### 2. Active filters strip
+
+Cuando el usuario tiene filtros activos en el FilterSheet (Source/Diet/Time/
+Difficulty) y navega a otra sección y vuelve, el `filterValues` se recupera
+de `localStorage` pero no había feedback visual de qué filtros estaban activos.
+
+El strip aparece entre el search row y los meal slot chips sólo cuando
+`activeFilterCount > 0`. Por cada filtro activo muestra un chip con:
+- La etiqueta i18n del valor (`t.filters.source.mine`, `t.filters.diet.vegan`, etc.)
+- Botón × inline que descarta ese filtro individual (`handleDismissFilter`)
+- Link "Reset" al final que limpia todos los filtros a la vez (`setFilterValues({})`)
+
+**`src/features/recipes/screens/Cocina.tsx`**:
+- `activeFilterChips` memo: construye `{key, sectionId, valueId, label}[]` desde `filterValues`.
+- `getFilterLabel(sectionId, valueId)` helper: resolución dinámica de etiqueta i18n.
+- `handleDismissFilter(sectionId, valueId)`: arrays → filtra el valor; scalares → `null`.
+
+#### Verificación
+- `npx tsc --noEmit` → 0 errores.
+- Tests: 1187 passing (sin cambios).
+- i18n: 1911 keys, sin cambios.
+- size:check PASS — delta ≤ +0.5 KB gzip (prop booleana + helpers inline).
+
+---
+
 ## [1.5.94] - 2026-04-25
 
 ### feat(types): Q16 — codemod tipado Recipe.cuisine + dietaryTags
