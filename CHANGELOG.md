@@ -1,5 +1,123 @@
 # RIAL App - Changelog
 
+## [1.5.93] - 2026-04-25
+
+### feat(ds): FilterSheet + facets heuristics — Cocina/Explore filter UX rework + ADR-014
+
+Sigue a `[1.5.86]` (ADR-013, primitives uniformes `ChipRow` + `SortControl`).
+Aquel sprint resolvió el problema **técnico** de filtros (1 axis = 1 primitive,
+shim de FilterRow, dedup invariant). Este sprint resuelve el problema **UX**:
+Cocina seguía con 5 superficies apiladas verticalmente; Discovery carecía
+completamente de facetas accionables.
+
+#### Nuevos primitives
+
+**`src/components/patterns/FilterSheet.tsx`** — wrapper sobre
+`<BottomSheet size="focus" headerLayout="cancel-action">` con:
+- `sections: FilterSection[]` cada una con `id`, `title`, `mode`
+  (`single` | `multi`), `options: ChipOption[]`, `defaultExpanded?`.
+- Cada sección renderiza como `<details>` accordion (primer item abierto por
+  default).
+- Cada body de sección renderiza un `<ChipRow>` con su mode.
+- **Buffered draft**: chip toggles actualizan estado local; sólo `Apply`
+  emite `onApply(draft)`. Cancel / X / swipe-down / backdrop descartan los
+  cambios pendientes.
+- Reset link en el body header limpia el draft (no auto-applica).
+- Footer sticky con CTA `Apply` primary full-width.
+- Header `actionSlot`: pill numérico `activeCount` cuando > 0.
+- Atributo `data-filter-sheet` para convention test.
+
+**`src/components/patterns/FilterButton.tsx`** — trigger compacto:
+- Icon `SlidersHorizontal` + opcional label.
+- Badge numérico circular en esquina cuando `activeCount > 0`.
+- Tint primary cuando `hasActive`.
+- Altura ≡ `SearchInput` para alineado flex-row.
+
+#### Nueva utility heurística
+
+**`src/features/recipes/utils/facets.ts`** — bridge sin tocar el modelo
+`Recipe`. Deriva `Cuisine` (8 valores), `DietaryTag` (7 valores; vegan→
+vegetarian implícito), `TimeBucket` (under15/30/60, over60), `Difficulty`
+(easy/medium/hard) desde `tags[]` + legacy `tag` + `prepTime`+`cookTime`
+parseado. Predicate `matchesFilters(recipe, values, opts?)` + counter
+`countActive(values)`. Recetas no clasificables → `'other'` / `[]` (escape
+valve seleccionable).
+- 31 unit tests pasando (parseMinutes, deriveCuisine golden seeds,
+  deriveDietaryTags vegan→vegetarian, deriveTimeBucket boundaries,
+  deriveDifficulty ES literals, matchesFilters por sección, countActive).
+- Q16 codemod tipado (`Recipe.cuisine` + `dietaryTags`) sigue diferido. Cuando
+  ship, swap implementaciones de `derive*`; API pública estable.
+
+#### Cambios call-site
+
+**`src/features/recipes/screens/Cocina.tsx`** — la ChipRow inline de Source
+(all/mine/imported/cooked) se elimina; mueve al FilterSheet como sección
+"Source" expanded por default. Layout final: TabNav → `Search + FilterButton +
+Sort` row → meal-slot ChipRow (icon, sigue visible) → CollectionsCarousel
+(idle: `activeCollection==='all' && !searchQuery && countActive===0`) →
+grid. FilterSheet expone Source / Diet / Time / Difficulty (4 secciones).
+**No incluye Cuisine** — vocabulario cerrado del usuario, las recetas propias
+suelen ser "lo que cocino habitualmente". `cocinaFilters` persiste vía
+`useLocalStorageState`.
+
+**`src/features/home/screens/Discovery.tsx`** — drop completo de la ChipRow
+visible de meal slot. Asimetría confirmada con el owner: Discovery esconde
+TODA la facetería detrás del FilterButton. Layout final: título → `Search +
+FilterButton + Sort` row (Sort es nuevo en Discovery, antes no existía) →
+**branch según `activeFilterCount`**:
+- `=== 0`: 5 swimlanes editoriales actuales + 2 CollectionBanners +
+  hero best-match (idle/discovery mode preservado intacto).
+- `> 0`: grid plano sorted reemplaza todas las swimlanes (Yummly pattern).
+  Header: "X recetas con tus filtros • Reset".
+
+FilterSheet en Discovery expone Cuisine (multi, default expanded — la más
+diferenciadora) / Diet (multi) / Time / Difficulty / MealSlot (single — el
+meal chip visible de antes ahora vive en el sheet).
+
+#### i18n (+40 keys ES/EN simétricas)
+
+Bloque nuevo `t.filters` con `title`, `apply`, `reset`, `activeFiltersGrid`
+plus sub-bloques `sections`, `source`, `cuisine`, `diet`, `time`, `difficulty`,
+`mealSlot`. Ningún cambio retro-compatible — los strings legacy
+(`t.recipes.all`, `t.discovery.cat*`) siguen existiendo.
+
+#### Docs + ADR + guardrails
+
+- **`docs/adr/ADR-014-filter-sheet.md`** (new) — decisión, matriz BottomSheet
+  vs Drawer/Modal/Mega-menu, asimetría Cocina/Discovery, por qué heurística-
+  ahora vs Q16-primero, decision tree extendido sobre ADR-013.
+- **`src/test/conventions/filter-sheet.test.ts`** (new):
+  - **Invariante E**: ≤ 1 `<FilterSheet>` por screen.
+  - **Invariante F**: si screen importa FilterSheet, debe importar también
+    FilterButton.
+- **`src/test/conventions/primitives-export.test.ts`** — añadido bloque
+  "advanced filter primitives (ADR-014)".
+- **`docs/PRIMITIVES.md`** — entradas FilterSheet + FilterButton en la tabla
+  de primitives + nueva sección "Advanced filter primitives" con ejemplo
+  Cocina + invariantes.
+- **`docs/DESIGN-SYSTEM.md` § 3c.2** — sub-tree de decisión "0-2 facetas →
+  inline / 3+ → FilterSheet" + tabla de asimetría Cocina/Discovery.
+- **`docs/NEW-SCREEN-CHECKLIST.md` § 6d** — añadido ítem "3+ facetas o
+  vocabulario amplio → FilterSheet detrás de FilterButton" + ítem sobre
+  capa heurística `facets.ts` mientras Q16 sigue diferido.
+
+#### Quality baseline (post-[1.5.93])
+- TypeScript: **0 errors**.
+- Tests: **1180** passing (1147 + 31 facets + 2 filter-sheet conv.).
+- i18n symmetry: **1911** keys aligned ES ↔ EN (+40 vs `[1.5.92]` 1871).
+- Design-system lint: **0 errors**, ~924 warnings (sin cambios).
+- Bundle delta: ≤ +3 KB gzip neto.
+
+#### Próximos pasos sugeridos
+- **Telemetría** sobre `filterValues` para identificar 1-2 quick-presets que
+  merezcan elevarse a chips visibles en Tier 1 de Discovery (ADR-014 § "Future
+  sprint").
+- **Q16 codemod tipado** — añade `Recipe.cuisine: Cuisine` + `dietaryTags:
+  DietaryTag[]` + migra seeds + sustituye implementaciones de `derive*` por
+  read directo. Mejora cobertura de filtros sin tocar UX.
+
+---
+
 ## [1.5.92] - 2026-04-25
 
 ### refactor(ds): Fase C lote 4 — dominio wellness completo (16 archivos)

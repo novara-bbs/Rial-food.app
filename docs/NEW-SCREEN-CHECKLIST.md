@@ -94,8 +94,10 @@ Si la pantalla expone cualquier superficie de filtrado / ordering / navegación 
 - [ ] **Dedup**: ninguna dimensión aparece en dos primitives a la vez. Si `verified`/`quick`/`highProtein` están en el R3 `COLLECTIONS` registry (via `CollectionsCarousel`), **no** se duplican en `ChipRow`
 - [ ] **No chip inline**: un `<button>` con `shrink-0` + `rounded-*` + `uppercase` + `tracking-widest` + `font-(headline|label)` dentro de `src/features/**` debe ir por `ChipRow` / `SegmentedTabs` / `TabNav`. El convention test `filter-system.test.ts` lo detecta
 - [ ] **`FilterRow` está deprecated** (shim que delega a `ChipRow`). Los imports nuevos usan `ChipRow` directamente
+- [ ] **3+ facetas o vocabulario amplio** → no apiles `ChipRow` verticalmente. Usa `<FilterSheet>` detrás de `<FilterButton>` (ADR-014). Considera asimetría: pantallas de "contenido propio del usuario" pueden mostrar 1-2 chips primarios visibles; pantallas de discovery esconden TODO en el sheet
+- [ ] **Sin facetas tipadas en el modelo** → usa la capa heurística `src/features/recipes/utils/facets.ts` (`matchesFilters`, `countActive`, `derive*`). Q16 (codemod tipado) sigue diferido
 
-**Referencia completa**: ADR-013 (`docs/adr/ADR-013-filter-system.md`) + `docs/PRIMITIVES.md` § Filter primitives.
+**Referencia completa**: ADR-013 + ADR-014 (`docs/adr/`) + `docs/PRIMITIVES.md` § Filter primitives + § Advanced filter primitives.
 
 ## 7. Theme parity
 

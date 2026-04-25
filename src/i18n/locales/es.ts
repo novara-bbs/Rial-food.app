@@ -349,6 +349,63 @@ const es = {
     cooked: 'Ya cocinadas',
     recipes: 'recetas',
   },
+  // Filter sheet (ADR-014) — advanced filter panel triggered from FilterButton
+  filters: {
+    title: 'Filtros',
+    apply: 'Aplicar',
+    reset: 'Reiniciar',
+    activeFiltersGrid: '{n} recetas con tus filtros',
+    sections: {
+      mealSlot: 'Momento del día',
+      source: 'Origen',
+      cuisine: 'Cocina',
+      diet: 'Dieta',
+      time: 'Tiempo',
+      difficulty: 'Dificultad',
+    },
+    source: {
+      all: 'Todas',
+      mine: 'Mías',
+      imported: 'Importadas',
+      cooked: 'Ya cocinadas',
+    },
+    cuisine: {
+      italian: 'Italiana',
+      mediterranean: 'Mediterránea',
+      mexican: 'Mexicana',
+      asian: 'Asiática',
+      american: 'Americana',
+      middleEastern: 'Oriente medio',
+      latin: 'Latina',
+      other: 'Otra',
+    },
+    diet: {
+      vegan: 'Vegana',
+      vegetarian: 'Vegetariana',
+      keto: 'Keto',
+      lowCarb: 'Low carb',
+      highProtein: 'Alta proteína',
+      glutenFree: 'Sin gluten',
+      dairyFree: 'Sin lácteos',
+    },
+    time: {
+      under15: 'Bajo 15 min',
+      under30: 'Bajo 30 min',
+      under60: 'Bajo 1 h',
+      over60: 'Más de 1 h',
+    },
+    difficulty: {
+      easy: 'Fácil',
+      medium: 'Medio',
+      hard: 'Difícil',
+    },
+    mealSlot: {
+      breakfast: 'Desayuno',
+      lunch: 'Comida',
+      dinner: 'Cena',
+      snack: 'Snack',
+    },
+  },
   // Import URL
   importUrl: {
     title: 'Importar receta',

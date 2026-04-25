@@ -36,6 +36,8 @@ Canonical components. Reach for these **before** writing JSX from scratch.
 | `FilterRow` | `src/components/patterns/FilterRow.tsx` | **Deprecated shim** → delegates to `ChipRow`. Kept so existing imports don't break | New code — import `ChipRow` directly |
 | `SearchInput` | `src/components/patterns/SearchInput.tsx` | Free-text filter at the top of a list | Facet filtering (use `ChipRow`); sort (use `SortControl`) |
 | `SortControl` | `src/components/patterns/SortControl.tsx` | Ordering — reorder without reducing. Native `<select>` under brand chrome, height ≡ `SearchInput` so both align in one flex row | Reducing set (use `ChipRow`); one-shot actions (use `Button` + menu) |
+| `FilterSheet` | `src/components/patterns/FilterSheet.tsx` | Advanced filter panel (ADR-014). 3+ facetas grouped into accordion sections inside a `BottomSheet size="focus"`. Buffered draft + Apply/Reset semantics | 0-2 facets (use inline `ChipRow`); ordering (use `SortControl`); modal forms (use `BottomSheet` directly) |
+| `FilterButton` | `src/components/patterns/FilterButton.tsx` | Trigger for `FilterSheet`. Compact icon button with numeric badge when `activeCount > 0`. Height ≡ `SearchInput` for flex-row alignment | Plain action button (use `Button`); navigation (use `TabNav`) |
 
 ---
 
@@ -408,6 +410,68 @@ Differs from `RadioCardGroup`: **no selection state** — each card is a one-sho
 - **No inline chip reimplementation.** A `<button>` in `src/features/**` that carries the full triad `shrink-0` + `rounded-*` + `uppercase` + `tracking-widest` + `font-(headline|label)` must come through `ChipRow` / `SegmentedTabs` / `TabNav`.
 - **No branded inline `<select>`.** A native `<select>` in `src/features/**/screens/*` with `font-(headline|label)` must route through `SortControl`.
 - **Dedup invariant.** No dimension appears on two primitives at once. If it's in the R3 `COLLECTIONS` registry (surfaced via `CollectionsCarousel`), it does **not** also appear in `ChipRow`.
+
+### Advanced filter primitives (ADR-014)
+
+When a screen has **3+ facetas** or wide vocabulary (cuisine + diet + time + difficulty), inline `ChipRow` stacking saturates the header. Use `FilterSheet` behind a `FilterButton`:
+
+| Pattern | Primitive | Notes |
+|---|---|---|
+| 1-2 inline chips | `ChipRow` (status quo) | Cocina meal-slot icon row |
+| 3+ grouped facetas | `FilterSheet` + `FilterButton` | Source/Diet/Time/Difficulty |
+| Heuristic facet derivation | `src/features/recipes/utils/facets.ts` | `deriveCuisine` / `deriveDietaryTags` / `deriveTimeBucket` / `deriveDifficulty` + `matchesFilters(recipe, values)` + `countActive(values)` |
+
+```tsx
+// FilterSheet — Cocina (4 sections, Source default expanded)
+import FilterSheet, { type FilterSection } from '@/components/patterns/FilterSheet';
+import FilterButton from '@/components/patterns/FilterButton';
+import { matchesFilters, countActive, DIETARY_TAGS, TIME_BUCKETS, DIFFICULTIES, type FilterValues } from '@/features/recipes/utils/facets';
+
+const [filterValues, setFilterValues] = useLocalStorageState<FilterValues>('cocinaFilters', {});
+const [filterOpen, setFilterOpen] = useState(false);
+const activeFilterCount = useMemo(() => countActive(filterValues), [filterValues]);
+
+const sections: FilterSection[] = [
+  { id: 'source',     title: t.filters.sections.source,     mode: 'single', defaultExpanded: true,
+    options: [{ id: 'all', label: t.filters.source.all }, /* … */] },
+  { id: 'diet',       title: t.filters.sections.diet,       mode: 'multi',
+    options: DIETARY_TAGS.map(d => ({ id: d, label: t.filters.diet[d] })) },
+  { id: 'time',       title: t.filters.sections.time,       mode: 'single',
+    options: TIME_BUCKETS.map(tb => ({ id: tb, label: t.filters.time[tb] })) },
+  { id: 'difficulty', title: t.filters.sections.difficulty, mode: 'single',
+    options: DIFFICULTIES.map(d => ({ id: d, label: t.filters.difficulty[d] })) },
+];
+
+<div className="flex gap-2 items-stretch">
+  <SearchInput value={q} onChange={setQ} className="flex-1" />
+  <FilterButton onClick={() => setFilterOpen(true)} activeCount={activeFilterCount} />
+  <SortControl options={sortOpts} active={sort} onChange={setSort} />
+</div>
+
+<FilterSheet
+  open={filterOpen}
+  onOpenChange={setFilterOpen}
+  sections={sections}
+  values={filterValues}
+  onApply={setFilterValues}
+  activeCount={activeFilterCount}
+/>
+
+// Apply in the recipe pipeline:
+const filtered = recipes.filter(r => matchesFilters(r, filterValues, {
+  sourceContext: { isMine, isImported, isCooked: r.cookedAt?.length > 0 },
+}));
+```
+
+**Cocina vs Discovery asymmetry (ADR-014 § 3):**
+
+- **Cocina** (mis recetas, vocabulario cerrado) keeps meal-slot `ChipRow icon` + `CollectionsCarousel` visible. Source / Diet / Time / Difficulty live behind the FilterButton.
+- **Discovery** (catálogo, vocabulario amplio) hides EVERY facet behind the FilterButton — no chips visible. Cuisine / Diet / Time / Difficulty / MealSlot. When `countActive > 0`, the swimlanes collapse into a single sorted grid (Yummly pattern).
+
+**Invariants (CI-enforced, see `src/test/conventions/filter-sheet.test.ts`):**
+
+- **Invariant E** — at most one `<FilterSheet>` per screen.
+- **Invariant F** — every screen importing `FilterSheet` must also import `FilterButton`.
 
 ---
 

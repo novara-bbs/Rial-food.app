@@ -15,6 +15,16 @@ import RecipeCard from '../../../components/patterns/RecipeCard';
 import ChipRow from '../../../components/patterns/ChipRow';
 import SortControl from '../../../components/patterns/SortControl';
 import TabNav from '../../../components/patterns/TabNav';
+import FilterButton from '../../../components/patterns/FilterButton';
+import FilterSheet, { type FilterSection } from '../../../components/patterns/FilterSheet';
+import {
+  matchesFilters,
+  countActive,
+  DIETARY_TAGS,
+  TIME_BUCKETS,
+  DIFFICULTIES,
+  type FilterValues,
+} from '../utils/facets';
 import { aggregateShoppingItems, detectCategory, AISLE_CATEGORIES } from '../../planner/utils/grocery';
 import Planner from '../../planner/screens/Planner';
 import ShoppingList from '../../planner/screens/ShoppingList';
@@ -44,6 +54,12 @@ export default function Cocina({ onAddMeal, onCreateRecipe, onNavigateToRecipe, 
   const [sortMode, setSortMode] = useLocalStorageState<'recommended' | 'recent' | 'quick' | 'highProtein' | 'mostCooked'>(
     'cocinaSort', 'recommended',
   );
+  // Advanced filter values (FilterSheet — Source/Diet/Time/Difficulty).
+  // Persisted so the user's last applied filter set survives navigation.
+  const [filterValues, setFilterValues] = useLocalStorageState<FilterValues>(
+    'cocinaFilters', {},
+  );
+  const [filterOpen, setFilterOpen] = useState(false);
 
   const parseMin = (v: any) => typeof v === 'number' ? v : parseInt(String(v)) || 0;
 
@@ -87,18 +103,49 @@ export default function Cocina({ onAddMeal, onCreateRecipe, onNavigateToRecipe, 
     { id: 'snack', label: t.discovery.catSnack, icon: Cookie },
   ];
 
-  // Source chip-row — one axis: "where does this recipe come from?" (all /
-  // mine / imported / cooked). Facet axes (quick / highProtein / verified /
-  // vegan…) live in CollectionsCarousel as curated tiles with count — kept
-  // out of the chip-row to avoid the duplicate-axis anti-pattern (ADR-013).
-  const sourceChips = [
-    { id: 'all', label: t.recipes.all, count: scoredRecipes.length },
-    { id: 'mine', label: t.recipes.myRecipes, count: scoredRecipes.filter(r => r.publishedBy === 'self' && r.tag !== 'IMPORTADA').length },
-    { id: 'imported', label: t.recipes.imported, count: scoredRecipes.filter(r => r.tag === 'IMPORTADA').length },
-    { id: 'cooked', label: (t.recipes as any).filterCooked ?? 'Ya cocinadas', count: scoredRecipes.filter(r => r.cookedAt?.length > 0).length },
-  ];
+  // FilterSheet sections (ADR-014). "Source" lives here now (was an inline
+  // ChipRow pre-[1.5.93] — moved into the sheet to reduce header saturation).
+  // Cocina intentionally omits "Cuisine" — vocabulario cerrado del usuario.
+  const filterSections: FilterSection[] = useMemo(() => [
+    {
+      id: 'source',
+      title: t.filters.sections.source,
+      mode: 'single',
+      defaultExpanded: true,
+      options: [
+        { id: 'all', label: t.filters.source.all },
+        { id: 'mine', label: t.filters.source.mine },
+        { id: 'imported', label: t.filters.source.imported },
+        { id: 'cooked', label: t.filters.source.cooked },
+      ],
+    },
+    {
+      id: 'diet',
+      title: t.filters.sections.diet,
+      mode: 'multi',
+      options: DIETARY_TAGS.map(d => ({ id: d, label: t.filters.diet[d] })),
+    },
+    {
+      id: 'time',
+      title: t.filters.sections.time,
+      mode: 'single',
+      options: TIME_BUCKETS.map(tb => ({ id: tb, label: t.filters.time[tb] })),
+    },
+    {
+      id: 'difficulty',
+      title: t.filters.sections.difficulty,
+      mode: 'single',
+      options: DIFFICULTIES.map(d => ({ id: d, label: t.filters.difficulty[d] })),
+    },
+  ], [t]);
 
-  // Combined filters: slot (primary) + collection (secondary) + search + sort.
+  const activeFilterCount = useMemo(() => countActive(filterValues), [filterValues]);
+
+  // Combined filters: slot (primary) + carousel collection + sheet facets +
+  // search + sort. Source axis lives in `filterValues.source` (moved out of
+  // the legacy chip-row); CollectionsCarousel still owns the curated tile
+  // selections (verified/quick/highProtein/vegan/lowCarb/batch/cooked) via
+  // `activeCollection`.
   const filteredRecipes = useMemo(() => {
     let list = scoredRecipes;
     if (activeMealType !== 'all') {
@@ -108,16 +155,25 @@ export default function Cocina({ onAddMeal, onCreateRecipe, onNavigateToRecipe, 
       const q = searchQuery.toLowerCase();
       list = list.filter(r => r.title?.toLowerCase().includes(q) || r.tag?.toLowerCase().includes(q) || r.description?.toLowerCase().includes(q));
     }
-    // Source predicates (chip-row axis)
-    if (activeCollection === 'mine') list = list.filter(r => r.publishedBy === 'self' && r.tag !== 'IMPORTADA');
-    else if (activeCollection === 'imported') list = list.filter(r => r.tag === 'IMPORTADA');
-    else if (activeCollection === 'cooked') list = list.filter(r => r.cookedAt?.length > 0);
-    else if (activeCollection !== 'all') {
-      // Curated collection predicates (carousel axis) — verified, quick,
-      // highProtein, vegan, lowCarb, batch, …. ADR-013 dedup: these live
-      // only in COLLECTIONS, not in sourceChips.
+    // Curated collection (carousel) — verified, quick, highProtein, vegan,
+    // lowCarb, batch, cooked. ADR-013 dedup: these live only in COLLECTIONS.
+    if (activeCollection !== 'all') {
       const registryCol = COLLECTIONS.find(c => c.id === activeCollection);
       if (registryCol) list = list.filter(registryCol.predicate);
+    }
+    // Advanced facets (FilterSheet — ADR-014). Source predicate evaluated via
+    // sourceContext computed per recipe (mine = self-published, not imported;
+    // imported = legacy `tag === 'IMPORTADA'`; cooked = has cookedAt entries).
+    if (activeFilterCount > 0) {
+      list = list.filter(r =>
+        matchesFilters(r, filterValues, {
+          sourceContext: {
+            isMine: r.publishedBy === 'self' && r.tag !== 'IMPORTADA',
+            isImported: r.tag === 'IMPORTADA',
+            isCooked: (r.cookedAt?.length ?? 0) > 0,
+          },
+        }),
+      );
     }
     // Sort
     const sorted = [...list];
@@ -127,7 +183,7 @@ export default function Cocina({ onAddMeal, onCreateRecipe, onNavigateToRecipe, 
     else if (sortMode === 'highProtein') sorted.sort((a, b) => (b.pro ?? 0) - (a.pro ?? 0));
     else if (sortMode === 'mostCooked') sorted.sort((a, b) => (b.cookedAt?.length ?? 0) - (a.cookedAt?.length ?? 0));
     return sorted;
-  }, [scoredRecipes, activeMealType, searchQuery, activeCollection, sortMode]);
+  }, [scoredRecipes, activeMealType, searchQuery, activeCollection, activeFilterCount, filterValues, sortMode]);
 
   const handleDeleteRecipe = (e: React.MouseEvent, id: number | string) => {
     e.stopPropagation();
@@ -197,6 +253,10 @@ export default function Cocina({ onAddMeal, onCreateRecipe, onNavigateToRecipe, 
                 placeholder={t.recipes.search}
                 className="flex-1"
               />
+              <FilterButton
+                onClick={() => setFilterOpen(true)}
+                activeCount={activeFilterCount}
+              />
               <SortControl
                 options={[
                   { id: 'recommended', label: (t.recipes as any).sortRecommended ?? 'Recomendadas' },
@@ -231,11 +291,11 @@ export default function Cocina({ onAddMeal, onCreateRecipe, onNavigateToRecipe, 
             />
 
             {/* Curated collections rail (R3) — editorial tiles with counts.
-                Only surfaced in the idle state; picking a tile collapses the
-                rail and filters via activeCollection. Facet axes (verified /
-                quick / high-protein / vegan / lowCarb / batch) live ONLY here
-                — not in the source chip-row below (ADR-013 dedup rule). */}
-            {activeCollection === 'all' && !searchQuery.trim() && (
+                Only surfaced in the idle state: no carousel selection, no
+                search, no advanced filters. The rail competes for vertical
+                space with the FilterSheet pill state, so we hide it the
+                moment the user signals an explicit query intent. */}
+            {activeCollection === 'all' && !searchQuery.trim() && activeFilterCount === 0 && (
               <CollectionsCarousel
                 recipes={scoredRecipes}
                 activeCollection={activeCollection}
@@ -243,17 +303,6 @@ export default function Cocina({ onAddMeal, onCreateRecipe, onNavigateToRecipe, 
                 className="mt-1"
               />
             )}
-
-            {/* Source chip-row — single-select across "where from?" axis. */}
-            <ChipRow
-              mode="single"
-              variant="pill"
-              options={sourceChips}
-              active={activeCollection}
-              onChange={(id) => setActiveCollection(id ?? 'all')}
-              ariaLabel={t.recipes.all}
-              className="-mx-6 px-6"
-            />
 
             {/* Recipe count label (if not Pro) */}
             {!isPro && (
@@ -270,9 +319,9 @@ export default function Cocina({ onAddMeal, onCreateRecipe, onNavigateToRecipe, 
                     {(t.common as any).clear ?? 'Limpiar búsqueda'}
                   </button>
                 </EmptyState>
-              ) : activeCollection !== 'all' ? (
+              ) : activeCollection !== 'all' || activeFilterCount > 0 ? (
                 <EmptyState icon="📂" description={(t.recipes as any).emptyFilterHint ?? 'Prueba otro filtro o busca por nombre'}>
-                  <button type="button" onClick={() => setActiveCollection('all')} className="px-6 py-3 bg-surface-container-highest border border-outline-variant/20 text-primary rounded-sm font-headline text-xs font-bold uppercase tracking-widest">
+                  <button type="button" onClick={() => { setActiveCollection('all'); setFilterValues({}); }} className="px-6 py-3 bg-surface-container-highest border border-outline-variant/20 text-primary rounded-sm font-headline text-xs font-bold uppercase tracking-widest">
                     {t.recipes.all}
                   </button>
                 </EmptyState>
@@ -303,6 +352,16 @@ export default function Cocina({ onAddMeal, onCreateRecipe, onNavigateToRecipe, 
                 ))}
               </div>
             )}
+
+            {/* Advanced filter panel — Source/Diet/Time/Difficulty (ADR-014). */}
+            <FilterSheet
+              open={filterOpen}
+              onOpenChange={setFilterOpen}
+              sections={filterSections}
+              values={filterValues}
+              onApply={setFilterValues}
+              activeCount={activeFilterCount}
+            />
           </PageShell>
         )}
 

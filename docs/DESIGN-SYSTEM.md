@@ -291,6 +291,34 @@ Plus one rail for editorial curation: **`CollectionsCarousel`** — curated taxo
 
 `FilterRow` is a `@deprecated` shim that delegates to `ChipRow`. New code imports `ChipRow` directly.
 
+### 3c.2 — When to escalate to `FilterSheet` (ADR-014)
+
+The decision tree above assumes inline placement. When a screen needs **3+ facetas grouped** or has **wide vocabulary** (cuisine + diet + time + difficulty across hundreds of items), stacking `ChipRow`s vertically saturates the header. Escalate to a panel:
+
+```
+                    Number of facetas?
+                           │
+            ┌──────────────┼──────────────┐
+           0-2            3+             3+ with
+            │              │            wide vocab
+       inline ChipRow  FilterSheet   FilterSheet (default
+       (per ADR-013)   behind        expanded section =
+                       FilterButton  most differentiating)
+```
+
+**Cocina vs Discovery asymmetry (ADR-014 § 3)**:
+
+| Surface | Visible chips | Behind FilterButton |
+|---|---|---|
+| `Cocina.tsx` (mis recetas) | meal-slot icon row + CollectionsCarousel (idle) | Source / Diet / Time / Difficulty |
+| `Discovery.tsx` (catálogo) | none | Cuisine (default expanded) / Diet / Time / Difficulty / MealSlot |
+
+**Discovery branch on `countActive`** — when the user activates ≥1 filter, the editorial swimlanes collapse into a single sorted grid (Yummly pattern). When all filters are reset, swimlanes return.
+
+**Heuristic facet derivation**: until the typed-tag codemod (Q16) ships, `src/features/recipes/utils/facets.ts` derives `Cuisine` / `DietaryTag` / `TimeBucket` / `Difficulty` from the existing `tags` + legacy `tag` + `prepTime/cookTime` strings. Recipes with no matching keyword fall to `'other'` / `[]` and remain selectable.
+
+**Enforced by**: `src/test/conventions/filter-sheet.test.ts` (invariant E ≤1 sheet per screen, invariant F sheet requires button).
+
 ---
 
 ## 4. How to extend

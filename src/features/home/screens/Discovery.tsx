@@ -1,4 +1,4 @@
-import { ChefHat, Sunrise, Sun, Moon, Cookie, Sparkles, ChevronRight } from 'lucide-react';
+import { ChefHat, ChevronRight, X } from 'lucide-react';
 import SearchInput from '../../../components/patterns/SearchInput';
 import React, { useState, useMemo } from 'react';
 import { toast } from 'sonner';
@@ -7,17 +7,39 @@ import EmptyState from '../../../components/EmptyState';
 import PageShell from '../../../components/PageShell';
 import RecipeCard from '../../../components/patterns/RecipeCard';
 import Swimlane from '../../../components/patterns/Swimlane';
-import ChipRow from '../../../components/patterns/ChipRow';
+import SortControl from '../../../components/patterns/SortControl';
+import FilterButton from '../../../components/patterns/FilterButton';
+import FilterSheet, { type FilterSection } from '../../../components/patterns/FilterSheet';
 import { useAppState } from '../../../contexts/AppStateContext';
+import { useLocalStorageState } from '../../../hooks/useLocalStorageState';
 import { calculateMatchScore } from '../../recipes/utils/matchScore';
 import { recipeFitsSlot } from '../../recipes/utils/meal-slot';
-import type { MealSlot } from '../../../types';
+import {
+  matchesFilters,
+  countActive,
+  CUISINES,
+  DIETARY_TAGS,
+  TIME_BUCKETS,
+  DIFFICULTIES,
+  type FilterValues,
+} from '../../recipes/utils/facets';
+import { MEAL_SLOTS, type MealSlot } from '../../../types/recipe';
 
 export default function Discovery({ onNavigateToRecipe, savedRecipes = [], onSaveRecipe }: { onNavigateToRecipe?: (recipe: any) => void, savedRecipes?: any[], onSaveRecipe?: (recipe: any) => void }) {
   const { t } = useI18n();
   const { userProfile, dictionary, dailyMacros } = useAppState();
-  const [activeCategory, setActiveCategory] = useState<string>('all');
   const [searchQuery, setSearchQuery] = useState('');
+  // Advanced filter values (FilterSheet — Cuisine/Diet/Time/Difficulty/Meal).
+  // Discovery shows ZERO chips visible (asymmetry vs Cocina) — every facet
+  // lives behind the FilterButton. Persisted so the user's last filter set
+  // survives navigation.
+  const [filterValues, setFilterValues] = useLocalStorageState<FilterValues>(
+    'discoveryFilters', {},
+  );
+  const [filterOpen, setFilterOpen] = useState(false);
+  const [sortMode, setSortMode] = useLocalStorageState<'recommended' | 'quick' | 'highProtein'>(
+    'discoverySort', 'recommended',
+  );
 
   const toggleSave = (e: React.MouseEvent, recipe: any) => {
     e.stopPropagation();
@@ -29,16 +51,48 @@ export default function Discovery({ onNavigateToRecipe, savedRecipes = [], onSav
     toast.success(t.discovery.sharedSuccess || 'Shared to community!');
   };
 
-  // Primary slot filter. Recipes without `suitableFor` are versatile and show
-  // under every slot. "Quick" used to live here — now surfaced via its own
-  // swimlane below, avoiding the eje-mixing (slot vs time) that confused users.
-  const categories = [
-    { id: 'all', label: t.discovery.catAll, icon: Sparkles },
-    { id: 'breakfast', label: t.discovery.catBreakfast, icon: Sunrise },
-    { id: 'lunch', label: t.discovery.catLunch, icon: Sun },
-    { id: 'dinner', label: t.discovery.catDinner, icon: Moon },
-    { id: 'snack', label: t.discovery.catSnack, icon: Cookie },
-  ];
+  // FilterSheet sections (ADR-014). Discovery prioritizes Cuisine (the most
+  // diferenciating axis for discovery) and hides everything — including meal
+  // slot — behind the FilterButton. Asymmetry vs Cocina is intentional:
+  // discovery is a wide-vocabulary search-and-graze surface.
+  const filterSections: FilterSection[] = useMemo(() => [
+    {
+      id: 'cuisine',
+      title: t.filters.sections.cuisine,
+      mode: 'multi',
+      defaultExpanded: true,
+      options: CUISINES.map(c => ({ id: c, label: t.filters.cuisine[c] })),
+    },
+    {
+      id: 'diet',
+      title: t.filters.sections.diet,
+      mode: 'multi',
+      options: DIETARY_TAGS.map(d => ({ id: d, label: t.filters.diet[d] })),
+    },
+    {
+      id: 'time',
+      title: t.filters.sections.time,
+      mode: 'single',
+      options: TIME_BUCKETS.map(tb => ({ id: tb, label: t.filters.time[tb] })),
+    },
+    {
+      id: 'difficulty',
+      title: t.filters.sections.difficulty,
+      mode: 'single',
+      options: DIFFICULTIES.map(d => ({ id: d, label: t.filters.difficulty[d] })),
+    },
+    {
+      id: 'mealSlot',
+      title: t.filters.sections.mealSlot,
+      mode: 'single',
+      options: MEAL_SLOTS.map(s => ({ id: s, label: t.filters.mealSlot[s] })),
+    },
+  ], [t]);
+
+  const activeFilterCount = useMemo(() => countActive(filterValues), [filterValues]);
+  // Branch: zero filters → editorial swimlanes (idle/discovery mode).
+  // ≥1 filter → flat sorted grid (Yummly-style narrowed search).
+  const isFiltered = activeFilterCount > 0;
 
   // Profile slice for match scoring — R8.3: derive foodDislikes from foodPreferences
   const profileSlice = useMemo(() => ({
@@ -68,13 +122,11 @@ export default function Discovery({ onNavigateToRecipe, savedRecipes = [], onSav
     });
   }, [savedRecipes, profileSlice, dictionary]);
 
-  // Apply category + search filter. Slot filter uses `recipeFitsSlot` so
-  // recipes without `suitableFor` (versatile) surface under every category.
+  // Apply search + advanced filters. Search narrows the base across all
+  // surfaces (swimlanes when isFiltered === false, grid when isFiltered).
+  // FilterSheet values use the heuristic `matchesFilters` over derived facets.
   const filteredBase = useMemo(() => {
     let list = scoredRecipes;
-    if (activeCategory !== 'all') {
-      list = list.filter(r => recipeFitsSlot(r, activeCategory as MealSlot));
-    }
     if (searchQuery.trim()) {
       const q = searchQuery.toLowerCase();
       list = list.filter(r =>
@@ -83,8 +135,21 @@ export default function Discovery({ onNavigateToRecipe, savedRecipes = [], onSav
         r.description?.toLowerCase().includes(q)
       );
     }
+    if (activeFilterCount > 0) {
+      list = list.filter(r => matchesFilters(r, filterValues));
+    }
     return list;
-  }, [scoredRecipes, activeCategory, searchQuery]);
+  }, [scoredRecipes, searchQuery, activeFilterCount, filterValues]);
+
+  // Sorted grid for filtered mode (Yummly pattern). Reuses same sort
+  // semantics as Cocina; "recent" omitted (Discovery shows seed catalog).
+  const sortedFilteredGrid = useMemo(() => {
+    const out = [...filteredBase];
+    if (sortMode === 'recommended') out.sort((a, b) => (b.matchScore ?? 0) - (a.matchScore ?? 0));
+    else if (sortMode === 'quick') out.sort((a, b) => (a.totalTime || 999) - (b.totalTime || 999));
+    else if (sortMode === 'highProtein') out.sort((a, b) => (b.pro ?? 0) - (a.pro ?? 0));
+    return out;
+  }, [filteredBase, sortMode]);
 
   // Swimlane data
   const forYou = useMemo(() =>
@@ -175,125 +240,183 @@ export default function Discovery({ onNavigateToRecipe, savedRecipes = [], onSav
         <h1 className="font-headline text-2xl font-bold tracking-tighter uppercase text-tertiary">{t.discovery.title}</h1>
       </div>
 
-      {/* 1. Search bar */}
-      <section className="px-6 pb-2">
-        <SearchInput
-          value={searchQuery}
-          onChange={setSearchQuery}
-          placeholder={t.discovery.searchPlaceholder}
-        />
-      </section>
-
-      {/* 2. Category icon row */}
-      <section className="px-6 pb-4">
-        <ChipRow
-          mode="single"
-          variant="icon"
-          options={categories}
-          active={activeCategory}
-          onChange={(id) => setActiveCategory(id ?? 'all')}
-          ariaLabel={t.discovery.title}
-        />
-      </section>
-
-      {/* 3. Hero compacto — best match */}
-      {editorialPick && (
-        <section className="px-6 mb-8">
-          <RecipeCard
-            recipe={editorialPick}
-            variant="hero"
-            onPress={() => onNavigateToRecipe && onNavigateToRecipe(editorialPick)}
+      {/* 1. Search + Filter + Sort. Asymmetry vs Cocina: Discovery exposes
+          ZERO chips visible — every faceta lives behind the FilterButton.
+          Sort is new on Discovery (didn't exist pre-[1.5.93]). */}
+      <section className="px-6 pb-3">
+        <div className="flex gap-2 items-stretch">
+          <SearchInput
+            value={searchQuery}
+            onChange={setSearchQuery}
+            placeholder={t.discovery.searchPlaceholder}
+            className="flex-1"
           />
-        </section>
-      )}
-
-      {/* No results state */}
-      {!hasAnyResults && (
-        <div className="px-6 py-12">
-          <EmptyState icon="🔍" title={t.common.noResults} description={t.empty.searchEmpty} />
+          <FilterButton
+            onClick={() => setFilterOpen(true)}
+            activeCount={activeFilterCount}
+          />
+          <SortControl
+            options={[
+              { id: 'recommended', label: (t.recipes as any).sortRecommended ?? 'Recomendadas' },
+              { id: 'quick', label: (t.recipes as any).sortQuick ?? 'Rápidas' },
+              { id: 'highProtein', label: (t.recipes as any).sortHighProtein ?? 'Alta proteína' },
+            ]}
+            active={sortMode}
+            onChange={(id) => setSortMode(id as typeof sortMode)}
+            ariaLabel={(t.recipes as any).sortRecommended ?? 'Sort'}
+          />
         </div>
+      </section>
+
+      {/* Branch: filtered → flat sorted grid (Yummly pattern). Idle →
+          editorial swimlanes preserved verbatim. */}
+      {isFiltered ? (
+        <>
+          <div className="px-6 pb-3 flex items-center justify-between gap-3">
+            <span className="font-label text-micro tracking-widest uppercase text-on-surface-variant">
+              {t.filters.activeFiltersGrid.replace('{n}', String(sortedFilteredGrid.length))}
+            </span>
+            <button
+              type="button"
+              onClick={() => setFilterValues({})}
+              className="inline-flex items-center gap-1 font-label text-micro font-bold tracking-widest uppercase text-primary hover:underline px-2 py-1 -mr-2"
+            >
+              <X className="w-3 h-3" aria-hidden="true" />
+              {t.filters.reset}
+            </button>
+          </div>
+          {sortedFilteredGrid.length === 0 ? (
+            <div className="px-6 py-12">
+              <EmptyState icon="🔍" title={t.common.noResults} description={t.empty.searchEmpty} />
+            </div>
+          ) : (
+            <div className="px-6 grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 pb-8">
+              {sortedFilteredGrid.map(r => (
+                <RecipeCard
+                  key={r.id}
+                  recipe={r}
+                  variant="grid"
+                  onPress={() => onNavigateToRecipe && onNavigateToRecipe(r)}
+                  onSave={(e) => toggleSave(e, r)}
+                  onShare={(e) => shareRecipe(e, r)}
+                  isSaved={savedRecipes.some((s: any) => s.id === r.id)}
+                />
+              ))}
+            </div>
+          )}
+        </>
+      ) : (
+        <>
+          {/* 2. Hero compacto — best match */}
+          {editorialPick && (
+            <section className="px-6 mb-8">
+              <RecipeCard
+                recipe={editorialPick}
+                variant="hero"
+                onPress={() => onNavigateToRecipe && onNavigateToRecipe(editorialPick)}
+              />
+            </section>
+          )}
+
+          {/* No results state (search but zero hits across all swimlanes) */}
+          {!hasAnyResults && (
+            <div className="px-6 py-12">
+              <EmptyState icon="🔍" title={t.common.noResults} description={t.empty.searchEmpty} />
+            </div>
+          )}
+
+          {/* 3. "Para ti" carousel */}
+          <Swimlane title={t.discovery.forYouTitle}>
+            {forYou.map(r => (
+              <RecipeCard
+                key={r.id}
+                recipe={r}
+                variant="carousel"
+                onPress={() => onNavigateToRecipe && onNavigateToRecipe(r)}
+                onShare={(e) => shareRecipe(e, r)}
+                onSave={(e) => toggleSave(e, r)}
+                isSaved={savedRecipes.some((s: any) => s.id === r.id)}
+              />
+            ))}
+          </Swimlane>
+
+          {/* 4. Collection banner: Meal Prep */}
+          <CollectionBanner title={t.discovery.collectionMealPrep} count={batchCount} bg="bg-primary" />
+
+          {/* 5. Quick meals carousel */}
+          <Swimlane title={t.discovery.quickMealsTitle}>
+            {quickMeals.map(r => (
+              <RecipeCard
+                key={r.id}
+                recipe={r}
+                variant="carousel"
+                onPress={() => onNavigateToRecipe && onNavigateToRecipe(r)}
+                onShare={(e) => shareRecipe(e, r)}
+                onSave={(e) => toggleSave(e, r)}
+                isSaved={savedRecipes.some((s: any) => s.id === r.id)}
+              />
+            ))}
+          </Swimlane>
+
+          {/* 6. High protein carousel */}
+          <Swimlane title={t.discovery.highProteinTitle}>
+            {highProtein.map(r => (
+              <RecipeCard
+                key={r.id}
+                recipe={r}
+                variant="carousel"
+                onPress={() => onNavigateToRecipe && onNavigateToRecipe(r)}
+                onShare={(e) => shareRecipe(e, r)}
+                onSave={(e) => toggleSave(e, r)}
+                isSaved={savedRecipes.some((s: any) => s.id === r.id)}
+              />
+            ))}
+          </Swimlane>
+
+          {/* 7. Collection banner: Vegan */}
+          <CollectionBanner title={t.discovery.collectionVegan} count={veganCount} bg="bg-tertiary" />
+
+          {/* 8. By time-of-day carousel */}
+          <Swimlane title={mealTimeTitle}>
+            {mealTimeRecipes.map(r => (
+              <RecipeCard
+                key={r.id}
+                recipe={r}
+                variant="carousel"
+                onPress={() => onNavigateToRecipe && onNavigateToRecipe(r)}
+                onShare={(e) => shareRecipe(e, r)}
+                onSave={(e) => toggleSave(e, r)}
+                isSaved={savedRecipes.some((s: any) => s.id === r.id)}
+              />
+            ))}
+          </Swimlane>
+
+          {/* 9. Batch cooking carousel */}
+          <Swimlane title={t.discovery.batchCookingTitle}>
+            {batchCooking.map(r => (
+              <RecipeCard
+                key={r.id}
+                recipe={r}
+                variant="carousel"
+                onPress={() => onNavigateToRecipe && onNavigateToRecipe(r)}
+                onShare={(e) => shareRecipe(e, r)}
+                onSave={(e) => toggleSave(e, r)}
+                isSaved={savedRecipes.some((s: any) => s.id === r.id)}
+              />
+            ))}
+          </Swimlane>
+        </>
       )}
 
-      {/* 4. "Para ti" carousel */}
-      <Swimlane title={t.discovery.forYouTitle}>
-        {forYou.map(r => (
-          <RecipeCard
-            key={r.id}
-            recipe={r}
-            variant="carousel"
-            onPress={() => onNavigateToRecipe && onNavigateToRecipe(r)}
-            onShare={(e) => shareRecipe(e, r)}
-            onSave={(e) => toggleSave(e, r)}
-            isSaved={savedRecipes.some((s: any) => s.id === r.id)}
-          />
-        ))}
-      </Swimlane>
-
-      {/* 5. Collection banner: Meal Prep */}
-      <CollectionBanner title={t.discovery.collectionMealPrep} count={batchCount} bg="bg-primary" />
-
-      {/* 6. Quick meals carousel */}
-      <Swimlane title={t.discovery.quickMealsTitle}>
-        {quickMeals.map(r => (
-          <RecipeCard
-            key={r.id}
-            recipe={r}
-            variant="carousel"
-            onPress={() => onNavigateToRecipe && onNavigateToRecipe(r)}
-            onShare={(e) => shareRecipe(e, r)}
-            onSave={(e) => toggleSave(e, r)}
-            isSaved={savedRecipes.some((s: any) => s.id === r.id)}
-          />
-        ))}
-      </Swimlane>
-
-      {/* 7. High protein carousel */}
-      <Swimlane title={t.discovery.highProteinTitle}>
-        {highProtein.map(r => (
-          <RecipeCard
-            key={r.id}
-            recipe={r}
-            variant="carousel"
-            onPress={() => onNavigateToRecipe && onNavigateToRecipe(r)}
-            onShare={(e) => shareRecipe(e, r)}
-            onSave={(e) => toggleSave(e, r)}
-            isSaved={savedRecipes.some((s: any) => s.id === r.id)}
-          />
-        ))}
-      </Swimlane>
-
-      {/* 8. Collection banner: Vegan */}
-      <CollectionBanner title={t.discovery.collectionVegan} count={veganCount} bg="bg-tertiary" />
-
-      {/* 9. By time-of-day carousel */}
-      <Swimlane title={mealTimeTitle}>
-        {mealTimeRecipes.map(r => (
-          <RecipeCard
-            key={r.id}
-            recipe={r}
-            variant="carousel"
-            onPress={() => onNavigateToRecipe && onNavigateToRecipe(r)}
-            onShare={(e) => shareRecipe(e, r)}
-            onSave={(e) => toggleSave(e, r)}
-            isSaved={savedRecipes.some((s: any) => s.id === r.id)}
-          />
-        ))}
-      </Swimlane>
-
-      {/* 10. Batch cooking carousel */}
-      <Swimlane title={t.discovery.batchCookingTitle}>
-        {batchCooking.map(r => (
-          <RecipeCard
-            key={r.id}
-            recipe={r}
-            variant="carousel"
-            onPress={() => onNavigateToRecipe && onNavigateToRecipe(r)}
-            onShare={(e) => shareRecipe(e, r)}
-            onSave={(e) => toggleSave(e, r)}
-            isSaved={savedRecipes.some((s: any) => s.id === r.id)}
-          />
-        ))}
-      </Swimlane>
+      {/* Advanced filter panel — Cuisine/Diet/Time/Difficulty/MealSlot (ADR-014). */}
+      <FilterSheet
+        open={filterOpen}
+        onOpenChange={setFilterOpen}
+        sections={filterSections}
+        values={filterValues}
+        onApply={setFilterValues}
+        activeCount={activeFilterCount}
+      />
     </PageShell>
   );
 }

@@ -24,6 +24,8 @@ import ChipRow from '@/components/patterns/ChipRow';
 import FilterRow from '@/components/patterns/FilterRow';
 import SearchInput from '@/components/patterns/SearchInput';
 import SortControl from '@/components/patterns/SortControl';
+import FilterSheet from '@/components/patterns/FilterSheet';
+import FilterButton from '@/components/patterns/FilterButton';
 import Sparkline from '@/components/Sparkline';
 import DayGridCalendar from '@/components/DayGridCalendar';
 import OnboardingScaffold from '@/components/OnboardingScaffold';
@@ -60,6 +62,11 @@ describe('Primitives — canonical exports (ADR-001)', () => {
     expect(FilterRow).toBeTruthy(); // shim — kept until next cleanup sprint
     expect(SearchInput).toBeTruthy();
     expect(SortControl).toBeTruthy();
+  });
+
+  it('exports the advanced filter primitives (ADR-014)', () => {
+    expect(FilterSheet).toBeTruthy();
+    expect(FilterButton).toBeTruthy();
   });
 
   it('exports the nav + chrome primitives', () => {

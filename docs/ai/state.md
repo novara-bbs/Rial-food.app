@@ -5,39 +5,47 @@
 > prunes this file back down. Everything below should answer: *what's the release line,
 > what's the quality baseline, what's the next move, what's broken?*
 
-Last updated: **2026-04-25** — `[1.5.92]` **Fase C completada** — dominio
-wellness completo. 16 archivos removidos del allowlist (~60 hits). El
-dominio `src/features/wellness/` queda 100% migrado. -83 warnings vs
-`[1.5.91]` baseline. Excepción documentada: `font-mono` en FastingTimer
-para timer displays (WHOOP/Oura pattern — ritmo monoespaciado estable).
+Last updated: **2026-04-25** — `[1.5.93]` **Filter UX rework (ADR-014)** —
+nuevos primitives `FilterSheet` + `FilterButton` (BottomSheet wrapper con
+accordion sections, buffered draft, Apply/Reset). Cocina deshace el Source
+ChipRow → mueve a sección dentro del sheet (4 superficies header → 4 + sheet
+condicional). Discovery gana Sort por primera vez + esconde TODA la facetería
+(cuisine/diet/time/difficulty/mealSlot) detrás del FilterButton; cuando hay
+filtros activos las swimlanes editoriales colapsan en un grid plano (Yummly
+pattern). Heurística `facets.ts` deriva cuisine/diet/time/difficulty desde
+`tags`+`tag` legacy + `XXM` strings — Q16 codemod tipado sigue diferido.
 
-Previo: `[1.5.91]` Lote 3.5 sociales (14 archivos, -74 warnings) ·
-`[1.5.90]` Lote 3 sociales (PostDetail + CreatePost + CreatorProfile) ·
-`[1.5.89]` Polish DRY · `[1.5.88]` CreateRecipe + MacroTile + DashedAddButton.
+Previo: `[1.5.92]` Fase C lote 4 wellness completo · `[1.5.91]` Lote 3.5
+sociales · `[1.5.90]` Lote 3 sociales · `[1.5.89]` Polish DRY · `[1.5.88]`
+CreateRecipe + MacroTile + DashedAddButton.
 
 ## Release snapshot
 - **Branch**: `main`, awaiting push to `rial-food/main` (local ahead 4 vs `6132d08`).
-- **Last shipped**: `[1.5.92]` **Fase C completada** — dominio wellness.
-  **16 archivos**, ~60 hits. `src/features/wellness/` 100% migrado.
-  **Warnings totales**: 924 (-83 vs `[1.5.91]` ~1007).
-- **Previous**: `[1.5.91]` Lote 3.5 sociales (14 archivos, -74 warnings).
-  `[1.5.90]` Lote 3 sociales (-16 warnings). `[1.5.89]` Polish DRY.
-  `[1.5.88]` Fase C lote 2 (MacroTile + DashedAddButton). `[1.5.87]` Fase C
-  lote 1 RecipeDetail. `[1.5.86]` ADR-013. `[1.5.85]` brand fonts.
-  `[1.5.84]` Phase 1 Home. `[1.5.83]` ADR-012. `[1.5.82]` Q6. `[1.5.81]` CSP.
-- **Active plan**: **Fase C completada** (ADR-012 migration). Pausa para
-  pensar (mandato del owner). Owner actions Supabase quedan deferred.
+- **Last shipped**: `[1.5.93]` **Filter UX rework (ADR-014)** — nuevos
+  `FilterSheet` + `FilterButton` + heurística `facets.ts`. Cocina mueve
+  Source ChipRow al sheet; Discovery esconde todo (cuisine/diet/time/
+  difficulty/mealSlot) y branchea grid-vs-swimlanes según `countActive`.
+  +40 i18n keys (`t.filters` ES/EN simétrico). 5 archivos nuevos + 7
+  modificados. ADR-014 + convention test (invariantes E + F).
+- **Previous**: `[1.5.92]` Fase C lote 4 wellness completo (16 archivos,
+  -83 warnings). `[1.5.91]` Lote 3.5 sociales (14 archivos, -74 warnings).
+  `[1.5.90]` Lote 3 sociales. `[1.5.89]` Polish DRY. `[1.5.88]` MacroTile +
+  DashedAddButton. `[1.5.87]` Fase C lote 1 RecipeDetail. `[1.5.86]` ADR-013
+  filter system primitives. `[1.5.85]` brand fonts. `[1.5.84]` Phase 1 Home.
+- **Active plan**: `[1.5.93]` sealed. **Pausa para pensar** sobre próximas
+  prioridades (owner mandate post-Fase C). Owner actions Supabase quedan
+  deferred. Q16 codemod tipado (`Recipe.cuisine` + `dietaryTags`) sigue en
+  backlog y desbloquearía la cobertura de los filtros sin cambios de UX.
 - **Release target**: `rial-food/main` (`novara-bbs/Rial-food.app`). Origin `rial-food`.
 - **Vercel project**: `rial.app.v1.5` (id `prj_t11VHYQjptazjUx7Y2hWLz0IDAjg`).
 - **Governance**: work directly on `main`. "continua" = push approval post green preflight.
 
-## Quality baseline (post-[1.5.92], 2026-04-25)
+## Quality baseline (post-[1.5.93], 2026-04-25)
 - TypeScript: **0 errors** (`npx tsc --noEmit`)
-- Tests: **1147/1147** passing (69 files) — unchanged.
-- i18n symmetry: **1871** keys aligned ES ↔ EN (unchanged).
-- Design-system lint: **0 errors**, **924 warnings** (-83 vs `[1.5.91]` ~1007
-  — 16 wellness archivos removidos del allowlist; ~60 hits resueltos).
-- Build main: neutral (token swaps, Heading imports, no nuevos primitives).
+- Tests: **1147 + 31 (facets) + 2 (filter-sheet conv.) = 1180** passing.
+- i18n symmetry: **1911** keys aligned ES ↔ EN (+40 nuevas claves `t.filters`).
+- Design-system lint: **0 errors**, ~924 warnings (sin cambios vs `[1.5.92]`).
+- Build main: bundle delta esperado ≤ +3 KB gzip neto (FilterSheet + FilterButton + facets utility, todos tree-shakeables).
 - Security headers: HSTS + X-Frame-Options + nosniff + Permissions-Policy + Referrer-Policy + **CSP** ✓
 - Drift: `text-[Npx]` = **0**, SectionCard shape = **0**, ad-hoc `<hN>` typography
   outside allowlist = **0**, **inline chip reimplementation** = **0**, **inline
@@ -100,6 +108,7 @@ Fase 1+2 multi-media recipes, Food Families P0-P16, R1 docs, R2 recipes editoria
 **[1.5.90] Fase C lote 3 — PostDetail/CreatePost/CreatorProfile** (15 hits, -16 warnings, 3 allowlist removals).
 **[1.5.91] Fase C lote 3.5 — dominio social completo** (14 archivos, ~55 hits, -74 warnings, 0 archivos sociales restantes en allowlist).
 **[1.5.92] Fase C lote 4 — dominio wellness completo + Fase C completada** (16 archivos, ~60 hits, -83 warnings; excepción font-mono documentada en FastingTimer).
+**[1.5.93] Filter UX rework (ADR-014)** — `FilterSheet` + `FilterButton` primitives + `facets.ts` heurística; Cocina mueve Source axis al sheet; Discovery esconde toda facetería + branch grid-vs-swimlanes; +40 i18n keys; ADR-014 + invariantes E + F.
 
 ## Repository compliance
 - `LICENSE`: Proprietary © 2026 RIAL FOOD WORLD S.L. Contact legal@rialfoodworld.com.
@@ -121,6 +130,12 @@ Fase 1+2 multi-media recipes, Food Families P0-P16, R1 docs, R2 recipes editoria
   facets → `ChipRow` (single/multi, pill/icon/emoji, default/danger), ordering
   → `SortControl`, search → `SearchInput`, curated collections → `CollectionsCarousel`.
   `FilterRow` is a `@deprecated` shim.
+- Advanced filter panel (ADR-014). 3+ facetas grouped → `FilterSheet` behind
+  `FilterButton`. BottomSheet `size="focus"` + accordion sections + buffered draft +
+  Apply/Reset. Heurística `src/features/recipes/utils/facets.ts` deriva
+  cuisine/diet/time/difficulty desde campos existentes hasta que Q16 codemod
+  ship. Asimetría Cocina (chips visibles + sheet) vs Discovery (todo en sheet
+  + branch grid-vs-swimlanes).
 - Market research docs: `docs/market/` (not auto-loaded — read on demand)
 
 ## When to update this file
