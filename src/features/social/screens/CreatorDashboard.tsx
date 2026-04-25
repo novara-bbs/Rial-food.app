@@ -48,21 +48,21 @@ export default function CreatorDashboard({ onBack }: { onBack: () => void }) {
         <Card className="bg-surface-container-low border-outline-variant/20">
           <CardContent className="p-4 text-center">
             <Eye className="w-5 h-5 text-primary mx-auto mb-1" />
-            <p className="font-headline font-black text-2xl text-tertiary">{(totalViews / 1000).toFixed(1)}k</p>
+            <p className="font-headline font-black text-title text-tertiary">{(totalViews / 1000).toFixed(1)}k</p>
             <p className="font-label text-micro uppercase tracking-widest text-on-surface-variant">{cd.views}</p>
           </CardContent>
         </Card>
         <Card className="bg-surface-container-low border-outline-variant/20">
           <CardContent className="p-4 text-center">
             <Bookmark className="w-5 h-5 text-brand-secondary mx-auto mb-1" />
-            <p className="font-headline font-black text-2xl text-tertiary">{(totalSaves / 1000).toFixed(1)}k</p>
+            <p className="font-headline font-black text-title text-tertiary">{(totalSaves / 1000).toFixed(1)}k</p>
             <p className="font-label text-micro uppercase tracking-widest text-on-surface-variant">{cd.saves}</p>
           </CardContent>
         </Card>
         <Card className="bg-surface-container-low border-outline-variant/20">
           <CardContent className="p-4 text-center">
             <DollarSign className="w-5 h-5 text-primary mx-auto mb-1" />
-            <p className="font-headline font-black text-2xl text-tertiary">0€</p>
+            <p className="font-headline font-black text-title text-tertiary">0€</p>
             <p className="font-label text-micro uppercase tracking-widest text-on-surface-variant">{cd.revenue}</p>
           </CardContent>
         </Card>
@@ -70,15 +70,15 @@ export default function CreatorDashboard({ onBack }: { onBack: () => void }) {
 
       <Tabs defaultValue="analytics">
         <TabsList variant="line" className="w-full">
-          <TabsTrigger value="analytics" className="font-headline text-xs font-bold uppercase tracking-widest">{cd.analytics}</TabsTrigger>
-          <TabsTrigger value="recipes" className="font-headline text-xs font-bold uppercase tracking-widest">{cd.recipes}</TabsTrigger>
-          <TabsTrigger value="revenue" className="font-headline text-xs font-bold uppercase tracking-widest">{cd.revenue}</TabsTrigger>
+          <TabsTrigger value="analytics" className="font-headline text-micro font-bold uppercase tracking-widest">{cd.analytics}</TabsTrigger>
+          <TabsTrigger value="recipes" className="font-headline text-micro font-bold uppercase tracking-widest">{cd.recipes}</TabsTrigger>
+          <TabsTrigger value="revenue" className="font-headline text-micro font-bold uppercase tracking-widest">{cd.revenue}</TabsTrigger>
         </TabsList>
 
         <TabsContent value="analytics" className="space-y-4 mt-4">
           <Card className="bg-surface-container-low border-outline-variant/20">
             <CardHeader className="pb-2">
-              <CardTitle className="font-headline text-sm font-bold uppercase tracking-widest text-tertiary flex items-center gap-2">
+              <CardTitle className="font-headline text-body-sm font-bold uppercase tracking-widest text-tertiary flex items-center gap-2">
                 <TrendingUp className="w-4 h-4 text-primary" /> {cd.growth}
               </CardTitle>
             </CardHeader>
@@ -94,11 +94,11 @@ export default function CreatorDashboard({ onBack }: { onBack: () => void }) {
 
               <div className="flex items-center justify-between">
                 <span className="font-body text-sm text-on-surface-variant">{cd.publishedRecipes}</span>
-                <span className="font-headline font-black text-lg text-tertiary">{savedRecipes.length}</span>
+                <span className="font-headline font-black text-body-lg text-tertiary">{savedRecipes.length}</span>
               </div>
               <div className="flex items-center justify-between">
                 <span className="font-body text-sm text-on-surface-variant">{cd.saveRate}</span>
-                <span className="font-headline font-black text-lg text-primary">10.6%</span>
+                <span className="font-headline font-black text-body-lg text-primary">10.6%</span>
               </div>
             </CardContent>
           </Card>
@@ -109,10 +109,10 @@ export default function CreatorDashboard({ onBack }: { onBack: () => void }) {
             <Card key={i} className="bg-surface-container-low border-outline-variant/20">
               <CardContent className="p-4 flex items-center gap-4">
                 <div className="w-8 h-8 bg-primary/10 rounded-sm flex items-center justify-center shrink-0">
-                  <span className="font-headline font-black text-sm text-primary">#{i + 1}</span>
+                  <span className="font-headline font-black text-body-sm text-primary">#{i + 1}</span>
                 </div>
                 <div className="flex-1 min-w-0">
-                  <p className="font-body text-sm font-medium text-on-surface truncate">{recipe.name}</p>
+                  <p className="font-body text-body-sm font-medium text-on-surface truncate">{recipe.name}</p>
                   <div className="flex gap-3 mt-1">
                     <span className="font-label text-micro uppercase tracking-widest text-on-surface-variant flex items-center gap-1">
                       <Eye className="w-3 h-3" /> {(recipe.views / 1000).toFixed(1)}k
@@ -122,7 +122,7 @@ export default function CreatorDashboard({ onBack }: { onBack: () => void }) {
                     </span>
                   </div>
                 </div>
-                <span className="font-headline font-black text-sm text-primary shrink-0">{recipe.revenue.toFixed(0)}€</span>
+                <span className="font-headline font-black text-body-sm text-primary shrink-0">{recipe.revenue.toFixed(0)}€</span>
               </CardContent>
             </Card>
           ))}
@@ -131,7 +131,7 @@ export default function CreatorDashboard({ onBack }: { onBack: () => void }) {
         <TabsContent value="revenue" className="space-y-4 mt-4">
           <Card className="bg-surface-container-low border-outline-variant/20">
             <CardHeader className="pb-2">
-              <CardTitle className="font-headline text-sm font-bold uppercase tracking-widest text-tertiary flex items-center gap-2">
+              <CardTitle className="font-headline text-body-sm font-bold uppercase tracking-widest text-tertiary flex items-center gap-2">
                 <BarChart3 className="w-4 h-4 text-primary" /> {cd.breakdown}
               </CardTitle>
             </CardHeader>
@@ -140,7 +140,7 @@ export default function CreatorDashboard({ onBack }: { onBack: () => void }) {
                 <div key={i} className="space-y-1">
                   <div className="flex items-center justify-between">
                     <span className="font-label text-micro uppercase tracking-widest text-on-surface-variant">{m.month} 2026</span>
-                    <span className="font-headline font-bold text-sm text-tertiary">{m.amount}€</span>
+                    <span className="font-headline font-bold text-body-sm text-tertiary">{m.amount}€</span>
                   </div>
                   <Progress value={(m.amount / 400) * 100} className="h-1.5" />
                 </div>

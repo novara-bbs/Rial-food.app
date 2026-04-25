@@ -4,6 +4,7 @@ import { toast } from 'sonner';
 import { useI18n } from '../../../i18n';
 import { useAppState } from '../../../contexts/AppStateContext';
 import BottomSheet from '../../../components/ui/bottom-sheet';
+import { Heading } from '@/components/ui/Typography';
 
 interface PublishRecipeSheetProps {
   recipe: any;
@@ -63,7 +64,7 @@ export default function PublishRecipeSheet({ recipe, onClose }: PublishRecipeShe
             />
           )}
           <div>
-            <h4 className="font-headline font-bold text-caption uppercase text-tertiary">{recipe.title}</h4>
+            <Heading level="h4" className="text-caption">{recipe.title}</Heading>
             <div className="flex gap-2 mt-1">
               <span className="font-label text-micro tracking-widest text-primary">
                 {recipe.macros?.calories || recipe.cal || 0} kcal

@@ -1,5 +1,65 @@
 # RIAL App - Changelog
 
+## [1.5.91] - 2026-04-25
+
+### refactor(ds): Fase C lote 3.5 — sociales restantes typography (14 archivos)
+
+Cuarto lote de la **Fase C** de ADR-012. Migración tipográfica completa del
+dominio social: todos los archivos restantes en
+`typographyMigrationAllowlist` bajo `src/features/social/`. **~55 hits
+resueltos**, **14 archivos removidos del allowlist**. El dominio social
+queda 100% migrado.
+
+#### Archivos migrados
+
+**Componentes (5)**:
+
+`ProgressPostCard.tsx` (1 hit): `text-lg` stat → `text-body-lg`.
+
+`FeedTabs.tsx` (3 hits, deprecated): 3× TabsTrigger `text-xs font-bold` → `text-micro`.
+
+`PostCard.tsx` (3 hits): 2× perf stat spans `font-headline text-2xl` → `text-title`; `<h4>` recipe card → `<Heading level="h4">` (default ya provee `text-body-lg`).
+
+`PublishRecipeSheet.tsx` (1 hit): `<h4 ... text-caption uppercase>` → `<Heading level="h4" className="text-caption">`.
+
+`RecipePicker.tsx` (1 hit): `<h4 ... text-caption uppercase truncate>` → `<Heading level="h4" className="text-caption truncate">`.
+
+**Pantallas (9)**:
+
+`Community.tsx` (1 hit): `<h2 text-3xl md:text-4xl>` hero → `<Heading level="h2" className="text-headline md:text-display mt-1">`.
+
+`Notifications.tsx` (1 hit): `<h3 font-label text-micro>` group label → `<Heading level="h3" variant="overline" className="font-label text-micro ...">` (font-label override vía cn()).
+
+`Challenges.tsx` (4 hits): 2× `<h3>` section headers → `<Heading level="h3" variant="overline" className="text-body-sm ...">`, 2× `<h4>` titles → `<Heading level="h4" className="text-body-sm">`.
+
+`ChallengeDetail.tsx` (3 hits): `<h2 text-xl>` challenge title → `<Heading level="h2" className="text-title-sm mt-3">`; 2× stat spans `text-lg` → `text-body-lg`.
+
+`Discover.tsx` (9 hits): `<h2 text-3xl md:text-4xl>` hero → `<Heading level="h2" className="text-headline md:text-display">`, 5× `<h3 text-lg>` section headers → `<Heading level="h3" className="text-body-lg">`, 3× `<h4 text-caption>` card titles → `<Heading level="h4" className="text-body-sm">`.
+
+`CreateStory.tsx` (4 hits): textarea `text-2xl` story input → `text-title`; 2× perf stat spans `text-4xl` → `text-display`; `<h3 text-xl>` recipe preview → `<Heading level="h3" className="text-title-sm">`.
+
+`CreatorDashboard.tsx` (14 hits): 3× stat value `text-2xl` → `text-title`; 3× TabsTrigger `text-xs` → `text-micro`; 2× CardTitle `text-sm font-bold` → `text-body-sm`; 2× stat count `text-lg` → `text-body-lg`; 2× recipe count `text-sm` → `text-body-sm`; 1× creator name `text-sm` → `text-body-sm`; 1× milestone label `text-sm` → `text-body-sm`.
+
+`CreatorVerification.tsx` (10 hits): `<h2 text-2xl>` → `<Heading level="h2">`; 2× `<h3 text-sm uppercase>` → `<Heading level="h3" variant="overline" className="text-body-sm">`; 6× inline spans `text-xs/sm` → `text-micro/text-body-sm`; 1× CTA `text-sm` → `text-body-sm`.
+
+`StoryViewer.tsx` (5 hits): author name `text-sm` → `text-body-sm`; text-slide `text-2xl` → `text-title`; 2× perf overlay `text-4xl` → `text-display`; `<h3 text-xl>` recipe slide → `<Heading level="h3" className="text-title-sm text-on-overlay">`.
+
+#### Allowlist removals (14 archivos)
+`FeedTabs.tsx`, `PostCard.tsx`, `ProgressPostCard.tsx`, `PublishRecipeSheet.tsx`,
+`RecipePicker.tsx`, `ChallengeDetail.tsx`, `Challenges.tsx`, `Community.tsx`,
+`CreateStory.tsx`, `CreatorDashboard.tsx`, `CreatorVerification.tsx`,
+`Discover.tsx`, `Notifications.tsx`, `StoryViewer.tsx`.
+0 errores `no-restricted-syntax` sin downgrade.
+
+#### Quality baseline (post-[1.5.91])
+- TypeScript: **0 errors**.
+- Tests: **1147/1147** passing.
+- Design-system lint: **0 errors**, **~1007 warnings** (-74 vs `[1.5.90]`).
+- Bundle: neutral (token swaps, sin nuevos primitives).
+- i18n: 1871 keys (sin cambios).
+
+---
+
 ## [1.5.90] - 2026-04-25
 
 ### refactor(ds): Fase C lote 3 — pantallas sociales typography (PostDetail / CreatePost / CreatorProfile)

@@ -2,6 +2,7 @@ import { Search, ChefHat } from 'lucide-react';
 import { useState, useMemo } from 'react';
 import BottomSheet from '@/components/ui/bottom-sheet';
 import { useI18n } from '../../../i18n';
+import { Heading } from '@/components/ui/Typography';
 
 interface RecipePickerProps {
   open: boolean;
@@ -64,7 +65,7 @@ export default function RecipePicker({ open, onOpenChange, recipes, onSelect }: 
                   <img src={recipe.img || recipe.image} alt="" className="w-12 h-12 rounded-sm object-cover shrink-0" referrerPolicy="no-referrer" />
                 )}
                 <div className="flex-1 min-w-0">
-                  <h4 className="font-headline font-bold text-caption uppercase text-tertiary truncate">{recipe.title}</h4>
+                  <Heading level="h4" className="text-caption truncate">{recipe.title}</Heading>
                   <div className="flex gap-2 mt-1">
                     <span className="font-label text-micro tracking-widest text-primary">{recipe.macros?.calories || recipe.cal || 0} kcal</span>
                     <span className="font-label text-micro tracking-widest text-on-surface-variant">{recipe.macros?.protein || recipe.pro || 0}g P</span>

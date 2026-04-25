@@ -4,6 +4,7 @@ import { useI18n } from '../../../i18n';
 import { useAppState } from '../../../contexts/AppStateContext';
 import { cleanExpiredStories } from '../handlers/story-handlers';
 import type { StorySlide } from '../../../types/social';
+import { Heading } from '@/components/ui/Typography';
 
 const SLIDE_DURATION = 5000;
 
@@ -118,7 +119,7 @@ export default function StoryViewer({ onBack }: { onBack: () => void }) {
       {/* Author info */}
       <div className="absolute top-8 left-4 z-20 flex items-center gap-3">
         <img src={currentStory.authorAvatar} alt={currentStory.authorName} className="w-8 h-8 rounded-full object-cover border border-on-overlay/50" referrerPolicy="no-referrer" />
-        <span className="text-on-overlay font-headline font-bold text-sm uppercase tracking-wider">{currentStory.authorName}</span>
+        <span className="text-on-overlay font-headline font-bold text-body-sm uppercase tracking-wider">{currentStory.authorName}</span>
         <span className="text-on-overlay/50 font-label text-micro tracking-widest uppercase">
           {formatRelativeTime(currentStory.createdAt)}
         </span>
@@ -152,7 +153,7 @@ function SlideContent({ slide, recoveryLabel, strainLabel }: { slide: StorySlide
           className="w-full max-w-md rounded-sm p-8 flex items-center justify-center min-h-[300px]"
           style={{ backgroundColor: slide.backgroundColor || '#1a1a2e' }}
         >
-          <p className="text-on-overlay text-2xl font-headline font-bold text-center leading-relaxed">{slide.content}</p>
+          <p className="text-on-overlay text-title font-headline font-bold text-center leading-relaxed">{slide.content}</p>
         </div>
       );
     case 'performance':
@@ -160,12 +161,12 @@ function SlideContent({ slide, recoveryLabel, strainLabel }: { slide: StorySlide
         <div className="bg-surface-container-low/20 backdrop-blur rounded-sm p-8 grid grid-cols-2 gap-8 max-w-sm">
           <div className="flex flex-col items-center text-center">
             <Activity className="w-10 h-10 text-primary mb-3" />
-            <span className="font-headline text-4xl font-black text-on-overlay">{slide.performance?.recovery}%</span>
+            <span className="font-headline text-display font-black text-on-overlay">{slide.performance?.recovery}%</span>
             <span className="font-label text-xs tracking-widest text-primary uppercase mt-2">{recoveryLabel}</span>
           </div>
           <div className="flex flex-col items-center text-center">
             <TrendingUp className="w-10 h-10 text-brand-secondary mb-3" />
-            <span className="font-headline text-4xl font-black text-on-overlay">{slide.performance?.strain}</span>
+            <span className="font-headline text-display font-black text-on-overlay">{slide.performance?.strain}</span>
             <span className="font-label text-xs tracking-widest text-brand-secondary uppercase mt-2">{strainLabel}</span>
           </div>
         </div>
@@ -177,7 +178,7 @@ function SlideContent({ slide, recoveryLabel, strainLabel }: { slide: StorySlide
             <img src={slide.recipe.img} alt={slide.recipe.title} className="w-full h-48 object-cover" referrerPolicy="no-referrer" />
           )}
           <div className="p-6">
-            <h3 className="font-headline font-bold text-xl uppercase text-on-overlay">{slide.recipe?.title}</h3>
+            <Heading level="h3" className="text-title-sm text-on-overlay">{slide.recipe?.title}</Heading>
             <div className="flex gap-4 mt-3">
               <span className="font-label text-sm tracking-widest text-primary">{slide.recipe?.cal} kcal</span>
               <span className="font-label text-sm tracking-widest text-on-overlay/70">{slide.recipe?.pro}g P</span>

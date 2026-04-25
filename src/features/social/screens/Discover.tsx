@@ -8,6 +8,7 @@ import { useNavigation } from '../../../contexts/NavigationContext';
 import { useAppState } from '../../../contexts/AppStateContext';
 import { MOCK_CREATORS } from '../data/seed-creators';
 import { getTrendingFeed } from '../utils/feed-algorithm';
+import { Heading } from '@/components/ui/Typography';
 
 /**
  * Discover — recommends creators, challenges, trending posts and hashtags.
@@ -73,7 +74,7 @@ export default function Discover() {
       {/* Header */}
       <section>
         <span className="font-mono text-micro font-bold tracking-[0.3em] text-primary uppercase">{disc.engineTitle}</span>
-        <h2 className="font-headline text-3xl md:text-4xl font-bold tracking-tighter uppercase text-tertiary mt-1">{disc.title}</h2>
+        <Heading level="h2" className="text-headline md:text-display mt-1">{disc.title}</Heading>
 
         {/* Search */}
         <SearchInput
@@ -89,7 +90,7 @@ export default function Discover() {
         <section>
           <div className="flex items-center gap-2 mb-4">
             <Compass className="w-4 h-4 text-primary" />
-            <h3 className="font-headline text-lg font-bold uppercase text-tertiary tracking-tight">{disc.recommendedCreators}</h3>
+            <Heading level="h3" className="text-body-lg">{disc.recommendedCreators}</Heading>
           </div>
           <div className="space-y-3">
             {filteredCreators.map(creator => {
@@ -106,7 +107,7 @@ export default function Discover() {
                     <img src={creator.avatar} alt="" className="w-12 h-12 rounded-full object-cover border-2 border-outline-variant/20" referrerPolicy="no-referrer" />
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center gap-2">
-                        <h4 className="font-headline font-bold text-body-sm uppercase text-tertiary">@{creator.name}</h4>
+                        <Heading level="h4" className="text-body-sm">@{creator.name}</Heading>
                         {creator.verified && <CheckCircle2 className="w-3.5 h-3.5 text-primary shrink-0" />}
                       </div>
                       <span className="text-micro font-bold uppercase tracking-wider bg-primary/10 text-primary px-1.5 py-0.5 rounded inline-block mt-0.5">{creator.badge}</span>
@@ -143,13 +144,13 @@ export default function Discover() {
             <div className="w-8 h-8 bg-primary/20 rounded-full flex items-center justify-center text-primary">
               <Activity className="w-4 h-4" />
             </div>
-            <h3 className="font-headline text-lg font-bold uppercase text-tertiary tracking-tight">{t.challenges.title}</h3>
+            <Heading level="h3" className="text-body-lg">{t.challenges.title}</Heading>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="bg-background p-4 rounded-sm border border-outline-variant/20 flex justify-between items-center hover:border-primary/50 transition-colors">
               <div>
-                <h4 className="font-headline font-bold text-body-sm uppercase text-tertiary">{t.community.greenChallenge}</h4>
+                <Heading level="h4" className="text-body-sm">{t.community.greenChallenge}</Heading>
                 <p className="text-micro text-on-surface-variant uppercase tracking-widest mt-1">{t.community.challengeParticipants.replace('{count}', '1,240')} · {t.community.challengeDaysLeft.replace('{count}', '3')}</p>
                 <div className="h-1 w-32 bg-surface-container-highest mt-3 rounded-full overflow-hidden">
                   <div className="h-full bg-primary" style={{ width: '65%' }} />
@@ -171,7 +172,7 @@ export default function Discover() {
 
             <div className="bg-background p-4 rounded-sm border border-outline-variant/20 flex justify-between items-center hover:border-brand-secondary/50 transition-colors">
               <div>
-                <h4 className="font-headline font-bold text-body-sm uppercase text-tertiary">{t.community.hydrationChallenge}</h4>
+                <Heading level="h4" className="text-body-sm">{t.community.hydrationChallenge}</Heading>
                 <p className="text-micro text-on-surface-variant uppercase tracking-widest mt-1">{t.community.challengeParticipants.replace('{count}', '850')} · {t.community.challengeOngoing}</p>
                 <div className="h-1 w-32 bg-surface-container-highest mt-3 rounded-full overflow-hidden">
                   <div className="h-full bg-brand-secondary" style={{ width: '40%' }} />
@@ -199,7 +200,7 @@ export default function Discover() {
         <section>
           <div className="flex items-center gap-2 mb-4">
             <TrendingUp className="w-4 h-4 text-primary" />
-            <h3 className="font-headline text-lg font-bold uppercase text-tertiary tracking-tight">{disc.trendingPosts}</h3>
+            <Heading level="h3" className="text-body-lg">{disc.trendingPosts}</Heading>
           </div>
           <div className="space-y-3">
             {trendingPosts.map(post => (
@@ -237,7 +238,7 @@ export default function Discover() {
         <section>
           <div className="flex items-center gap-2 mb-4">
             <Users className="w-4 h-4 text-primary" />
-            <h3 className="font-headline text-lg font-bold uppercase text-tertiary tracking-tight">{disc.yourCreators}</h3>
+            <Heading level="h3" className="text-body-lg">{disc.yourCreators}</Heading>
           </div>
           <div className="flex gap-4 overflow-x-auto hide-scrollbar pb-2">
             {followedCreatorsList.map(creator => (
@@ -260,7 +261,7 @@ export default function Discover() {
       <section>
         <div className="flex items-center gap-2 mb-4">
           <span className="text-primary font-bold text-body-sm" aria-hidden="true">#</span>
-          <h3 className="font-headline text-lg font-bold uppercase text-tertiary tracking-tight">{disc.popularTags}</h3>
+          <Heading level="h3" className="text-body-lg">{disc.popularTags}</Heading>
         </div>
         <div className="flex flex-wrap gap-2">
           {['mealprep', 'altaproteina', 'realfood', 'fitness', 'recetassanas', 'bulking', 'vegan', 'singluten'].map(tag => (

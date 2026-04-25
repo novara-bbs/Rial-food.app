@@ -7,6 +7,7 @@ import ImagePicker from '../components/ImagePicker';
 import PageHeader from '../../../components/patterns/PageHeader';
 import RecipePicker from '../components/RecipePicker';
 import type { StorySlide } from '../../../types/social';
+import { Heading } from '@/components/ui/Typography';
 
 const COLORS = ['#1a1a2e', '#0d3b66', '#2d6a4f', '#6b2737', '#4a1942', '#1b1b2f'];
 
@@ -103,7 +104,7 @@ export default function CreateStory({ onBack }: { onBack: () => void }) {
                 value={textContent}
                 onChange={(e) => setTextContent(e.target.value)}
                 placeholder={t.stories.writeStory}
-                className="w-full bg-transparent text-on-overlay text-2xl font-headline font-bold text-center focus:outline-none resize-none min-h-[200px] placeholder:text-on-overlay/50"
+                className="w-full bg-transparent text-on-overlay text-title font-headline font-bold text-center focus:outline-none resize-none min-h-[200px] placeholder:text-on-overlay/50"
                 maxLength={200}
               />
             </div>
@@ -125,12 +126,12 @@ export default function CreateStory({ onBack }: { onBack: () => void }) {
           <div className="bg-surface-container-low rounded-sm p-8 grid grid-cols-2 gap-8 max-w-sm mx-auto mt-12">
             <div className="flex flex-col items-center text-center">
               <Activity className="w-10 h-10 text-primary mb-3" />
-              <span className="font-headline text-4xl font-black text-tertiary">{userPerformance.recovery}%</span>
+              <span className="font-headline text-display font-black text-tertiary">{userPerformance.recovery}%</span>
               <span className="font-label text-caption tracking-widest text-primary uppercase mt-2">{t.community.recovery}</span>
             </div>
             <div className="flex flex-col items-center text-center">
               <Activity className="w-10 h-10 text-brand-secondary mb-3" />
-              <span className="font-headline text-4xl font-black text-tertiary">{userPerformance.strain}</span>
+              <span className="font-headline text-display font-black text-tertiary">{userPerformance.strain}</span>
               <span className="font-label text-caption tracking-widest text-brand-secondary uppercase mt-2">{t.community.strain}</span>
             </div>
             <p className="col-span-2 text-center text-caption text-on-surface-variant mt-4">{t.stories.performanceAuto}</p>
@@ -145,7 +146,7 @@ export default function CreateStory({ onBack }: { onBack: () => void }) {
                   <img src={selectedRecipe.img} alt={selectedRecipe.title} className="w-full h-48 object-cover" referrerPolicy="no-referrer" />
                 )}
                 <div className="p-6">
-                  <h3 className="font-headline font-bold text-xl uppercase text-tertiary">{selectedRecipe.title}</h3>
+                  <Heading level="h3" className="text-title-sm">{selectedRecipe.title}</Heading>
                   <div className="flex gap-4 mt-3">
                     <span className="font-label text-body-sm tracking-widest text-primary">{selectedRecipe.cal} kcal</span>
                     <span className="font-label text-body-sm tracking-widest text-on-surface-variant">{selectedRecipe.pro}g P</span>

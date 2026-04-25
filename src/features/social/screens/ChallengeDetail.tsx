@@ -4,6 +4,7 @@ import { useMemo } from 'react';
 import { useI18n } from '../../../i18n';
 import { useAppState } from '../../../contexts/AppStateContext';
 import PageHeader from '../../../components/patterns/PageHeader';
+import { Heading } from '@/components/ui/Typography';
 import SectionCard from '../../../components/SectionCard';
 
 const MOCK_LEADERBOARD = [
@@ -73,7 +74,7 @@ export default function ChallengeDetail({ onBack, challengeId }: { onBack: () =>
       {/* Hero */}
       <SectionCard padding="lg" spacing="none" className="text-center">
         <span className="text-5xl" aria-hidden="true">{challenge.icon}</span>
-        <h2 className="font-headline font-bold text-xl uppercase text-tertiary mt-3">{ct[challenge.titleKey] || challengeId}</h2>
+        <Heading level="h2" className="text-title-sm mt-3">{ct[challenge.titleKey] || challengeId}</Heading>
         <p className="text-body-sm text-on-surface-variant mt-2">{ct[challenge.descKey] || ''}</p>
         <div className="flex justify-center gap-6 mt-4 text-body-sm text-on-surface-variant">
           <span className="font-label tracking-widest uppercase">{challenge.days} {ct.days}</span>
@@ -135,7 +136,7 @@ export default function ChallengeDetail({ onBack, challengeId }: { onBack: () =>
         <div className="space-y-2">
           {MOCK_LEADERBOARD.map((entry) => (
             <div key={entry.rank} className="flex items-center gap-3 p-2">
-              <span className={`font-headline font-black text-lg w-8 text-center ${entry.rank <= 3 ? 'text-primary' : 'text-on-surface-variant'}`}>
+              <span className={`font-headline font-black text-body-lg w-8 text-center ${entry.rank <= 3 ? 'text-primary' : 'text-on-surface-variant'}`}>
                 {entry.rank === 1 ? '🥇' : entry.rank === 2 ? '🥈' : entry.rank === 3 ? '🥉' : `#${entry.rank}`}
               </span>
               <img src={entry.avatar} alt={entry.name} className="w-8 h-8 rounded-full object-cover" referrerPolicy="no-referrer" />
@@ -145,7 +146,7 @@ export default function ChallengeDetail({ onBack, challengeId }: { onBack: () =>
           ))}
           {isJoined && (
             <div className="flex items-center gap-3 p-2 bg-primary/5 rounded-sm border border-primary/20">
-              <span className="font-headline font-black text-lg w-8 text-center text-on-surface-variant">#{MOCK_LEADERBOARD.length + 1}</span>
+              <span className="font-headline font-black text-body-lg w-8 text-center text-on-surface-variant">#{MOCK_LEADERBOARD.length + 1}</span>
               <div className="w-8 h-8 rounded-full bg-primary/20 flex items-center justify-center text-primary font-bold text-body-sm">{ct.youInitial || 'TÚ'}</div>
               <span className="font-headline font-bold text-body-sm uppercase text-primary flex-1">{ct.you}</span>
               <span className="font-label text-micro tracking-widest text-primary uppercase">{streak}d</span>

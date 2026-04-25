@@ -5,6 +5,7 @@ import { useI18n } from '../../../i18n';
 import { useNavigation } from '../../../contexts/NavigationContext';
 import { useAppState } from '../../../contexts/AppStateContext';
 import PageHeader from '../../../components/patterns/PageHeader';
+import { Heading } from '@/components/ui/Typography';
 
 const CHALLENGES = [
   { id: 'green-7', titleKey: 'greenChallenge', icon: '🥬', days: 7, participants: 1240, color: 'primary' },
@@ -37,9 +38,9 @@ export default function Challenges({ onBack }: { onBack: () => void }) {
       {/* Joined challenges */}
       {joinedChallenges.length > 0 && (
         <section className="space-y-3">
-          <h3 className="font-headline text-body-sm font-bold uppercase tracking-widest text-tertiary flex items-center gap-2">
+          <Heading level="h3" variant="overline" className="text-body-sm flex items-center gap-2">
             <Trophy className="w-4 h-4 text-primary" /> {t.challenges.yourChallenges}
-          </h3>
+          </Heading>
           {CHALLENGES.filter(c => joinedChallenges.includes(c.id)).map(challenge => {
             const daysIn = getDaysInChallenge(challenge.id, challenge.days);
             const progress = (daysIn / challenge.days) * 100;
@@ -55,9 +56,9 @@ export default function Challenges({ onBack }: { onBack: () => void }) {
                   >
                     <span className="text-2xl" aria-hidden="true">{challenge.icon}</span>
                     <div className="min-w-0">
-                      <h4 className="font-headline font-bold text-body-sm uppercase text-tertiary">
+                      <Heading level="h4" className="text-body-sm">
                         {challengeTitle}
-                      </h4>
+                      </Heading>
                       <p className="text-micro text-on-surface-variant uppercase tracking-widest mt-0.5">
                         {t.challenges.dayProgress.replace('{current}', String(daysIn)).replace('{total}', String(challenge.days))}
                       </p>
@@ -82,9 +83,9 @@ export default function Challenges({ onBack }: { onBack: () => void }) {
 
       {/* Available challenges */}
       <section className="space-y-3">
-        <h3 className="font-headline text-body-sm font-bold uppercase tracking-widest text-tertiary flex items-center gap-2">
+        <Heading level="h3" variant="overline" className="text-body-sm flex items-center gap-2">
           <Activity className="w-4 h-4 text-on-surface-variant" /> {t.challenges.available}
-        </h3>
+        </Heading>
         {CHALLENGES.map(challenge => {
           const isJoined = joinedChallenges.includes(challenge.id);
           const challengeTitle = t.challenges[challenge.titleKey as keyof typeof t.challenges] as string || challenge.titleKey;
@@ -99,9 +100,9 @@ export default function Challenges({ onBack }: { onBack: () => void }) {
                 >
                   <span className="text-2xl" aria-hidden="true">{challenge.icon}</span>
                   <div className="min-w-0">
-                    <h4 className="font-headline font-bold text-body-sm uppercase text-tertiary">
+                    <Heading level="h4" className="text-body-sm">
                       {challengeTitle}
-                    </h4>
+                    </Heading>
                     <div className="flex items-center gap-3 mt-1 text-micro text-on-surface-variant uppercase tracking-widest">
                       <span className="flex items-center gap-1"><Clock className="w-3 h-3" aria-hidden="true" /> {challenge.days} {t.challenges.days}</span>
                       <span className="flex items-center gap-1"><Flame className="w-3 h-3" aria-hidden="true" /> {challenge.participants}</span>

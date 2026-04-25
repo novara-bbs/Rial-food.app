@@ -1,4 +1,5 @@
 import { useMemo, useState } from 'react';
+import { Heading } from '@/components/ui/Typography';
 import PageShell from '../../../components/PageShell';
 import { Plus } from 'lucide-react';
 import ConfirmDialog from '../../../components/ConfirmDialog';
@@ -99,7 +100,7 @@ export default function Community({ communityPosts = [], onAddComment }: { commu
         <div className="flex justify-between items-end mb-6">
           <div>
             <span className="font-mono text-micro font-bold tracking-[0.3em] text-primary uppercase">{t.community.globalCommunity}</span>
-            <h2 className="font-headline text-3xl md:text-4xl font-bold tracking-tighter uppercase text-tertiary mt-1">{t.community.title}</h2>
+            <Heading level="h2" className="text-headline md:text-display mt-1">{t.community.title}</Heading>
           </div>
           <button type="button"
             onClick={() => navigateTo('create-post')}

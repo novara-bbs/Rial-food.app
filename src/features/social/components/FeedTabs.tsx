@@ -20,9 +20,9 @@ export default function FeedTabs({ forYouContent, followingContent, trendingCont
   return (
     <Tabs defaultValue="forYou">
       <TabsList variant="line" className="w-full">
-        <TabsTrigger value="forYou" className="font-headline text-xs font-bold uppercase tracking-widest">{feed.forYou || 'For You'}</TabsTrigger>
-        <TabsTrigger value="following" className="font-headline text-xs font-bold uppercase tracking-widest">{feed.following || 'Following'}</TabsTrigger>
-        <TabsTrigger value="trending" className="font-headline text-xs font-bold uppercase tracking-widest">{feed.trending || 'Trending'}</TabsTrigger>
+        <TabsTrigger value="forYou" className="font-headline text-micro font-bold uppercase tracking-widest">{feed.forYou || 'For You'}</TabsTrigger>
+        <TabsTrigger value="following" className="font-headline text-micro font-bold uppercase tracking-widest">{feed.following || 'Following'}</TabsTrigger>
+        <TabsTrigger value="trending" className="font-headline text-micro font-bold uppercase tracking-widest">{feed.trending || 'Trending'}</TabsTrigger>
       </TabsList>
       <TabsContent value="forYou" className="mt-4">{forYouContent}</TabsContent>
       <TabsContent value="following" className="mt-4">{followingContent}</TabsContent>

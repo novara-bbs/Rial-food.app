@@ -6,6 +6,7 @@ import { toast } from 'sonner';
 import { useAppState } from '../../../contexts/AppStateContext';
 import { useI18n } from '../../../i18n';
 import PageHeader from '../../../components/patterns/PageHeader';
+import { Heading } from '@/components/ui/Typography';
 
 interface Requirement {
   label: string;
@@ -67,7 +68,7 @@ export default function CreatorVerification({ onBack }: { onBack: () => void }) 
           <div className="w-24 h-24 bg-primary/20 rounded-full flex items-center justify-center mx-auto">
             <Clock className="w-12 h-12 text-primary animate-pulse" />
           </div>
-          <h2 className="font-headline text-2xl font-bold uppercase text-tertiary">{t.creator.underReview}</h2>
+          <Heading level="h2">{t.creator.underReview}</Heading>
           <p className="text-on-surface-variant font-body text-sm max-w-sm mx-auto leading-relaxed">
             {t.creator.reviewDescription}
           </p>
@@ -92,8 +93,8 @@ export default function CreatorVerification({ onBack }: { onBack: () => void }) 
       {/* Progress bar */}
       <SectionCard padding="md" spacing="md">
         <div className="flex items-center justify-between">
-          <span className="font-headline text-xs font-bold uppercase tracking-widest text-tertiary">{t.creator.progress}</span>
-          <span className="font-headline text-sm font-black text-primary">{metCount}/4 {t.creator.requirementsCount}</span>
+          <span className="font-headline text-micro font-bold uppercase tracking-widest text-tertiary">{t.creator.progress}</span>
+          <span className="font-headline text-body-sm font-black text-primary">{metCount}/4 {t.creator.requirementsCount}</span>
         </div>
         <div className="w-full h-2 bg-surface-container-highest rounded-full overflow-hidden">
           <div
@@ -105,7 +106,7 @@ export default function CreatorVerification({ onBack }: { onBack: () => void }) 
 
       {/* Requirements checklist */}
       <div className="space-y-3">
-        <h3 className="font-headline text-sm font-bold uppercase tracking-widest text-tertiary">{t.creator.requirements}</h3>
+        <Heading level="h3" variant="overline" className="text-body-sm">{t.creator.requirements}</Heading>
         {requirements.map((req, i) => (
           <div
             key={i}
@@ -118,11 +119,11 @@ export default function CreatorVerification({ onBack }: { onBack: () => void }) 
             <div className={`w-8 h-8 rounded-full flex items-center justify-center shrink-0 ${req.met ? 'bg-primary' : 'bg-surface-container-highest'}`}>
               {req.met
                 ? <Check className="w-4 h-4 text-on-primary" />
-                : <span className="font-headline font-black text-xs text-on-surface-variant">{i + 1}</span>
+                : <span className="font-headline font-black text-micro text-on-surface-variant">{i + 1}</span>
               }
             </div>
             <div className="flex-1">
-              <p className={`font-body text-sm font-medium ${req.met ? 'text-primary' : 'text-on-surface'}`}>{req.label}</p>
+              <p className={`font-body text-body-sm font-medium ${req.met ? 'text-primary' : 'text-on-surface'}`}>{req.label}</p>
               {!req.met && (
                 <p className="font-label text-micro uppercase tracking-widest text-on-surface-variant mt-0.5">
                   {typeof req.current === 'number' && req.current < req.target
@@ -140,7 +141,7 @@ export default function CreatorVerification({ onBack }: { onBack: () => void }) 
 
       {/* Badge selection */}
       <div className="space-y-3">
-        <h3 className="font-headline text-sm font-bold uppercase tracking-widest text-tertiary">{t.creator.selectBadge}</h3>
+        <Heading level="h3" variant="overline" className="text-body-sm">{t.creator.selectBadge}</Heading>
         <div className="grid grid-cols-2 gap-3">
           {BADGES.map(badge => (
             <button type="button"
@@ -153,7 +154,7 @@ export default function CreatorVerification({ onBack }: { onBack: () => void }) 
               }`}
             >
               <badge.icon className={`w-6 h-6 mb-2 ${selectedBadge === badge.id ? 'text-primary' : 'text-on-surface-variant'}`} />
-              <p className={`font-headline font-bold text-sm uppercase ${selectedBadge === badge.id ? 'text-primary' : 'text-tertiary'}`}>
+              <p className={`font-headline font-bold text-body-sm uppercase ${selectedBadge === badge.id ? 'text-primary' : 'text-tertiary'}`}>
                 {badge.label}
               </p>
               <p className="font-label text-micro uppercase tracking-widest text-on-surface-variant mt-1 leading-relaxed">
@@ -171,7 +172,7 @@ export default function CreatorVerification({ onBack }: { onBack: () => void }) 
 
       {/* Bio */}
       <div>
-        <label className="font-headline text-xs font-bold uppercase tracking-widest text-tertiary block mb-2">
+        <label className="font-headline text-micro font-bold uppercase tracking-widest text-tertiary block mb-2">
           {t.creator.aboutYou} <span className="text-on-surface-variant font-normal normal-case">{t.creator.optional}</span>
         </label>
         <textarea
@@ -188,7 +189,7 @@ export default function CreatorVerification({ onBack }: { onBack: () => void }) 
         <button type="button"
           onClick={handleApply}
           disabled={!allMet && metCount < 2}
-          className="w-full py-4 bg-primary text-on-primary rounded-sm font-headline font-bold text-sm uppercase tracking-widest hover:opacity-90 transition-opacity disabled:opacity-40 flex items-center justify-center gap-2"
+          className="w-full py-4 bg-primary text-on-primary rounded-sm font-headline font-bold text-body-sm uppercase tracking-widest hover:opacity-90 transition-opacity disabled:opacity-40 flex items-center justify-center gap-2"
         >
           <BadgeCheck className="w-5 h-5" />
           {allMet ? t.creator.applyVerification : `${t.creator.apply} (${metCount}/4 ${t.creator.requirementsCount})`}

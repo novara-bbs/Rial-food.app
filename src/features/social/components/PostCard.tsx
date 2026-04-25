@@ -4,6 +4,7 @@ import { useI18n } from '../../../i18n';
 import type { CommunityPost } from '../../../types/social';
 import type { UnitSystem } from '../../food/utils/units';
 import ProgressPostCard from './ProgressPostCard';
+import { Heading } from '@/components/ui/Typography';
 
 interface PostCardProps {
   post: CommunityPost;
@@ -123,12 +124,12 @@ export default function PostCard({
             <div className="bg-background rounded-sm border border-outline-variant/20 p-4 grid grid-cols-2 gap-4 mb-2">
               <div className="flex flex-col items-center justify-center text-center p-2">
                 <Activity className="w-6 h-6 text-primary mb-2" />
-                <span className="font-headline text-2xl font-bold text-tertiary">{post.performance.recovery}%</span>
+                <span className="font-headline text-title font-bold text-tertiary">{post.performance.recovery}%</span>
                 <span className="font-label text-caption tracking-widest text-primary uppercase mt-1">{t.community.recovery}</span>
               </div>
               <div className="flex flex-col items-center justify-center text-center p-2 border-l border-outline-variant/20">
                 <TrendingUp className="w-6 h-6 text-brand-secondary mb-2" />
-                <span className="font-headline text-2xl font-bold text-tertiary">{post.performance.strain}</span>
+                <span className="font-headline text-title font-bold text-tertiary">{post.performance.strain}</span>
                 <span className="font-label text-caption tracking-widest text-brand-secondary uppercase mt-1">{t.community.strain}</span>
               </div>
             </div>
@@ -146,7 +147,7 @@ export default function PostCard({
                 <div className="absolute inset-0 bg-gradient-to-t from-background to-transparent opacity-80" />
                 <div className="absolute bottom-3 left-3 right-3">
                   <span className="bg-primary text-on-primary text-micro font-black px-2 py-1 tracking-widest uppercase rounded-sm mb-1 inline-block">{post.recipe.tag}</span>
-                  <h4 className="font-headline font-bold text-lg uppercase text-tertiary">{post.recipe.title}</h4>
+                  <Heading level="h4">{post.recipe.title}</Heading>
                 </div>
                 {/* "View recipe" hint on hover */}
                 <div className="absolute top-3 right-3 opacity-0 group-hover:opacity-100 transition-opacity">

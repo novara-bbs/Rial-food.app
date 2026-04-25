@@ -7,6 +7,7 @@ import { useNavigation } from '../../../contexts/NavigationContext';
 import EmptyState from '../../../components/EmptyState';
 import PageHeader from '../../../components/patterns/PageHeader';
 import type { Notification as NotificationType } from '../../../types/social';
+import { Heading } from '@/components/ui/Typography';
 
 const ICON_MAP: Record<string, React.ReactNode> = {
   like: <Flame className="w-4 h-4 text-primary" />,
@@ -94,7 +95,7 @@ export default function Notifications({ onBack }: { onBack: () => void }) {
     if (items.length === 0) return null;
     return (
       <div className="space-y-1">
-        <h3 className="font-label text-micro tracking-[0.3em] text-on-surface-variant uppercase px-2 py-2">{label}</h3>
+        <Heading level="h3" variant="overline" className="font-label text-micro tracking-[0.3em] text-on-surface-variant px-2 py-2">{label}</Heading>
         {items.map(n => (
           <button
             key={n.id}

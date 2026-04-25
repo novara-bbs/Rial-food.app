@@ -45,7 +45,7 @@ export default function ProgressPostCard({ post, unitSystem, currentLabel, since
               <span className="font-label text-micro uppercase tracking-widest text-on-surface-variant block">
                 {currentLabel}
               </span>
-              <span className="font-headline font-black text-lg text-tertiary">
+              <span className="font-headline font-black text-body-lg text-tertiary">
                 {currentDisplay} {unit}
               </span>
             </div>
