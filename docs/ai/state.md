@@ -5,17 +5,15 @@
 > prunes this file back down. Everything below should answer: *what's the release line,
 > what's the quality baseline, what's the next move, what's broken?*
 
-Last updated: **2026-04-25** — `[1.5.89]` Polish DRY pass — adopción de
-`<MacroTile>` en `RecipeNutritionBar` + `PortionSelector` y
-`<DashedAddButton>` en `Planner.tsx`. Cero allowlist removals (era el
-objetivo del polish), -3 warnings vs `[1.5.88]` baseline. Reaprovecha los
-primitives extraídos en `[1.5.88]`. CreateStory / PhotoUploader /
-BarcodeScanner descartados tras inspección — sus dashed-borders son
-patrones distintos (stacked hero placeholder + aspect-square upload tile +
-video container).
+Last updated: **2026-04-25** — `[1.5.90]` Fase C lote 3 — pantallas sociales
+(`PostDetail` + `CreatePost` + `CreatorProfile`) migradas a `<Heading>` +
+tokens semánticos. 15 typography hits resueltos, 3 archivos removidos del
+allowlist. -16 warnings vs `[1.5.89]` baseline. Sin nuevos primitives
+(patrones ya cubiertos por `<Heading>` overline + token swaps).
 
-Previo: **2026-04-25** — `[1.5.88]` Fase C lote 2 — CreateRecipe
-typography migration **+ 2 nuevos primitives reutilizables**.
+Previo: `[1.5.89]` Polish DRY pass (MacroTile + DashedAddButton adopción
+cross-feature) · `[1.5.88]` Fase C lote 2 — CreateRecipe + 2 nuevos
+primitives reutilizables.
 `CreateRecipe.tsx` (formulario de autoría, 1062 líneas) migrado:
 extracción de `<MacroTile>` (4 use-cases potenciales) y
 `<DashedAddButton>` (5 use-cases potenciales) a
@@ -26,20 +24,26 @@ variant="overline">` + token swaps semánticos (`text-sm` →
 Removido del `typographyMigrationAllowlist`.
 
 ## Release snapshot
-- **Branch**: `main`, awaiting push to `rial-food/main` (local ahead 3 vs `6132d08`).
-- **Last shipped**: `[1.5.89]` Polish DRY pass — adopción de primitives
-  `[1.5.88]` en call-sites cross-feature.
-  **Cambios**: `RecipeNutritionBar.tsx` (1 grid macro inline →
-  `<MacroTile size="md" surface="card">`), `PortionSelector.tsx` (1 grid
-  macro inline → `<MacroTile size="md">`), `Planner.tsx` ("add meal" inline
-  dashed → `<DashedAddButton>` + cleanup unused `Plus` import).
-  **Descartados** tras inspección: `CreateStory` (stacked hero placeholder
-  ≠ inline CTA), `PhotoUploader` (aspect-square upload tile con busy state
-  ≠ CTA simple), `BarcodeScanner` (video container, no es botón).
-  **Allowlist**: sin cambios. **Warnings totales**: 1097 (-3 vs
-  `[1.5.88]` baseline 1100).
-- **Previous**: `[1.5.88]` Fase C lote 2 — CreateRecipe typography +
-  **2 nuevos primitives reutilizables**.
+- **Branch**: `main`, awaiting push to `rial-food/main` (local ahead 4 vs `6132d08`).
+- **Last shipped**: `[1.5.90]` Fase C lote 3 — pantallas sociales typography
+  migration.
+  **Pantallas migradas** (3 archivos, 15 hits totales):
+    - `PostDetail.tsx` (2 hits) — 2 `<h3>` raw "all comments" / "more from
+      creator" → `<Heading level="h3" variant="overline">`.
+    - `CreatePost.tsx` (2 hits) — 2 `<span text-xl font-bold>` performance
+      stats (recovery%, strain) → swap `text-xl` → `text-title-sm`.
+    - `CreatorProfile.tsx` (11 hits) — 1 `<h2 text-lg>` user @name →
+      `<Heading level="h2" className="text-title-sm">`; 3 stats
+      `<span font-black text-lg>` → swap a `text-body-lg`; 4 botones/tabs
+      con `text-xs font-bold uppercase tracking-widest` → swap `text-xs` →
+      `text-micro`; 2 detail counts `text-sm font-bold` → swap `text-sm` →
+      `text-body-sm`.
+  **Allowlist**: removidos `PostDetail`, `CreatePost`, `CreatorProfile` (3
+  archivos). 0 errores `no-restricted-syntax` sin downgrade.
+  **Warnings totales**: 1081 (-16 vs `[1.5.89]` baseline 1097).
+- **Previous**: `[1.5.89]` Polish DRY pass (MacroTile + DashedAddButton
+  adopción cross-feature). `[1.5.88]` Fase C lote 2 — CreateRecipe +
+  primitives.
   **Pantalla**: `src/features/recipes/screens/CreateRecipe.tsx` (formulario
   de autoría, 4 steps, 1062 líneas).
   **Primitives extraídos** a `src/components/patterns/`:
@@ -66,22 +70,23 @@ Removido del `typographyMigrationAllowlist`.
   `[1.5.84]` Phase 1 Home rework. `[1.5.83]` ADR-012 `<Heading>` + `<Text>`.
   `[1.5.82]` Q6 Supabase sync. `[1.5.81]` Q17 CSP. Q15 ✓, Q17 ✓, Q6 ✓, R1–R8 ✓,
   ADR-012 ✓, Phase 1 Home ✓, ADR-013 ✓.
-- **Active plan**: Polish DRY sealed. Next: **Lote 3 — pantallas sociales**
-  (PostDetail, CreatorProfile, CreatePost — ~15 archivos × 4-8 hits) →
-  **Lote 4 — wellness components**. Owner actions Supabase quedan deferred
-  hasta que UX/UI esté pulido (mandato del owner).
+- **Active plan**: Lote 3 sealed. Next: **Lote 3.5 — pantallas sociales
+  restantes** (CreateStory, CreatorDashboard, Discover, ChallengeDetail,
+  Challenges, CreatorVerification, Notifications, StoryViewer + componentes
+  asociados — quedan ~13 archivos sociales en allowlist). Luego **Lote 4 —
+  wellness components** (~15 archivos). Owner actions Supabase quedan
+  deferred hasta que UX/UI esté pulido (mandato del owner).
 - **Release target**: `rial-food/main` (`novara-bbs/Rial-food.app`). Origin `rial-food`.
 - **Vercel project**: `rial.app.v1.5` (id `prj_t11VHYQjptazjUx7Y2hWLz0IDAjg`).
 - **Governance**: work directly on `main`. "continua" = push approval post green preflight.
 
-## Quality baseline (post-[1.5.89], 2026-04-25)
+## Quality baseline (post-[1.5.90], 2026-04-25)
 - TypeScript: **0 errors** (`npx tsc --noEmit`)
-- Tests: **1147/1147** passing (69 files) — unchanged vs `[1.5.88]`.
+- Tests: **1147/1147** passing (69 files) — unchanged vs `[1.5.89]`.
 - i18n symmetry: **1871** keys aligned ES ↔ EN (unchanged).
-- Design-system lint: **0 errors**, **1097 warnings** (-3 vs `[1.5.88]`
-  baseline 1100 — adopción de primitives en 3 call-sites elimina 3 typography
-  warnings preexistentes en files que siguen en el allowlist; sin allowlist
-  removals).
+- Design-system lint: **0 errors**, **1081 warnings** (-16 vs `[1.5.89]`
+  baseline 1097 — 3 social screens removidas del allowlist resuelve 15
+  warnings de tipografía + 1 vecino destapado en otro file).
 - Build main: bundle delta ≤ +1 KB gzip (2 new primitives, 6 call-sites thinner)
 - Security headers: HSTS + X-Frame-Options + nosniff + Permissions-Policy + Referrer-Policy + **CSP** ✓
 - Drift: `text-[Npx]` = **0**, SectionCard shape = **0**, ad-hoc `<hN>` typography
@@ -114,12 +119,13 @@ Removido del `typographyMigrationAllowlist`.
 - **vendor-recharts chunk 102 KB gzip** — acceptable but monitor; ≤ 400 KB raw / 115 KB gzip.
 
 ## Next sprint candidates (ordered, only pending)
-- ~~**R2**~~ ✓ · ~~**R3**~~ ✓ · ~~**R5**~~ ✓ · ~~**R7**~~ ✓ · ~~**R8**~~ ✓ · ~~**Q6**~~ ✓ · ~~**Q15**~~ ✓ · ~~**Q17**~~ ✓ · ~~**ADR-012**~~ ✓ · ~~**Phase 1 Home**~~ ✓ · ~~**ADR-013 Filter system**~~ ✓ · ~~**Fase C lote 1 RecipeDetail**~~ ✓ · ~~**Fase C lote 2 CreateRecipe + MacroTile + DashedAddButton**~~ ✓ · ~~**Polish DRY pass**~~ ✓
+- ~~**R2**~~ ✓ · ~~**R3**~~ ✓ · ~~**R5**~~ ✓ · ~~**R7**~~ ✓ · ~~**R8**~~ ✓ · ~~**Q6**~~ ✓ · ~~**Q15**~~ ✓ · ~~**Q17**~~ ✓ · ~~**ADR-012**~~ ✓ · ~~**Phase 1 Home**~~ ✓ · ~~**ADR-013 Filter system**~~ ✓ · ~~**Fase C lote 1 RecipeDetail**~~ ✓ · ~~**Fase C lote 2 CreateRecipe + MacroTile + DashedAddButton**~~ ✓ · ~~**Polish DRY pass**~~ ✓ · ~~**Fase C lote 3 sociales (PostDetail/CreatePost/CreatorProfile)**~~ ✓
 - **Fase C allowlist shrink** (UX/UI polish — prioridad antes de Supabase):
   - ~~Lote 1 RecipeDetail~~ ✓
   - ~~Lote 2 CreateRecipe + MacroTile + DashedAddButton primitives~~ ✓
   - ~~Polish DRY (MacroTile en NutritionBar+PortionSelector, DashedAddButton en Planner)~~ ✓
-  - **Lote 3 — pantallas sociales** (PostDetail, CreatorProfile, CreatePost — ~15 archivos, 4-8 hits cada uno)
+  - ~~Lote 3 sociales (PostDetail + CreatePost + CreatorProfile)~~ ✓
+  - **Lote 3.5 — sociales restantes** (CreateStory, CreatorDashboard, Discover, ChallengeDetail, Challenges, CreatorVerification, Notifications, StoryViewer + componentes — ~13 archivos)
   - Lote 4 — componentes de wellness (~15 archivos finales)
 - **Owner actions** (non-code, **diferido** hasta que UX/UI esté pulido —
   mandato explícito del owner en `[1.5.87]`): unblock Supabase en producción:

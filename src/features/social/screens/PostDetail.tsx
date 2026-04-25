@@ -8,6 +8,7 @@ import { useAppState } from '../../../contexts/AppStateContext';
 import { useNavigation } from '../../../contexts/NavigationContext';
 import PostCard from '../components/PostCard';
 import PageHeader from '../../../components/patterns/PageHeader';
+import { Heading } from '@/components/ui/Typography';
 
 export default function PostDetail({ onBack }: { onBack: () => void }) {
   const { t } = useI18n();
@@ -77,7 +78,7 @@ export default function PostDetail({ onBack }: { onBack: () => void }) {
       {/* All comments */}
       {post.commentsList && post.commentsList.length > 0 && (
         <div className="space-y-3">
-          <h3 className="font-headline font-bold text-caption uppercase text-tertiary tracking-widest">{t.postDetail.allComments} ({post.commentsList.length})</h3>
+          <Heading level="h3" variant="overline" className="text-caption">{t.postDetail.allComments} ({post.commentsList.length})</Heading>
           {post.commentsList.map((comment: any) => (
             <SectionCard key={comment.id} padding="none" spacing="none" className="flex gap-3 p-3">
               <div className="w-8 h-8 rounded-full bg-surface-container-highest flex items-center justify-center text-caption font-bold text-tertiary shrink-0">
@@ -123,7 +124,7 @@ export default function PostDetail({ onBack }: { onBack: () => void }) {
           a11y issue (was clickable div inside a page). */}
       {morePosts.length > 0 && (
         <div className="space-y-3">
-          <h3 className="font-headline font-bold text-caption uppercase text-tertiary tracking-widest">{t.postDetail.moreFromCreator}</h3>
+          <Heading level="h3" variant="overline" className="text-caption">{t.postDetail.moreFromCreator}</Heading>
           {morePosts.map((p: any) => (
             <button type="button"
               key={p.id}

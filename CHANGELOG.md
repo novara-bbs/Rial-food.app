@@ -1,5 +1,60 @@
 # RIAL App - Changelog
 
+## [1.5.90] - 2026-04-25
+
+### refactor(ds): Fase C lote 3 — pantallas sociales typography (PostDetail / CreatePost / CreatorProfile)
+
+Tercer lote de la **Fase C** de ADR-012. Migración tipográfica de las 3
+pantallas sociales canónicas que aún quedaban en el
+`typographyMigrationAllowlist`. Sin nuevos primitives — los patrones ya
+están cubiertos por `<Heading variant="overline">` + token swaps
+semánticos. **15 hits resueltos**, **3 archivos removidos del allowlist**.
+
+#### Mappings por archivo
+
+**`src/features/social/screens/PostDetail.tsx`** (2 hits):
+| Patrón anterior | Después |
+|---|---|
+| `<h3 ... text-caption uppercase>` "all comments" | `<Heading level="h3" variant="overline" className="text-caption">` |
+| `<h3 ... text-caption uppercase>` "more from creator" | `<Heading level="h3" variant="overline" className="text-caption">` |
+
+**`src/features/social/screens/CreatePost.tsx`** (2 hits):
+| Patrón anterior | Después |
+|---|---|
+| `text-xl` recovery% stat | `text-title-sm` |
+| `text-xl` strain stat | `text-title-sm` |
+
+**`src/features/social/screens/CreatorProfile.tsx`** (11 hits):
+| Patrón anterior | Después |
+|---|---|
+| `<h2 ... text-lg uppercase ... truncate>@name` | `<Heading level="h2" className="text-title-sm truncate">` |
+| `font-headline font-black text-lg` (3x stats: followers/posts/recipes) | `text-body-lg` |
+| `text-xs ... uppercase tracking-widest` settings button | `text-micro` |
+| `text-xs ... uppercase tracking-widest` follow button | `text-micro` |
+| `text-xs ... uppercase tracking-widest` (3x TabsTrigger: posts/recipes/about) | `text-micro` |
+| `font-headline font-bold text-sm` (2x detail counts: streak/recipes) | `text-body-sm` |
+
+**Allowlist removals** (`eslint.config.mjs`): `PostDetail.tsx`,
+`CreatePost.tsx`, `CreatorProfile.tsx`. 0 errores
+`no-restricted-syntax` sin downgrade.
+
+#### Quality baseline (post-[1.5.90])
+- TypeScript: **0 errors**.
+- Tests: **1147/1147** passing — refactor estructural sin nuevos casos.
+- Design-system lint: **0 errors**, **1081 warnings** (-16 vs `[1.5.89]`
+  baseline 1097 — 15 typography hits resueltos + 1 vecino destapado en
+  otro file).
+- Bundle: neutral (token swaps, sin nuevos imports/primitives).
+- i18n: 1871 keys (sin cambios).
+
+#### Próximos pasos
+- **Lote 3.5** — sociales restantes (CreateStory, CreatorDashboard,
+  Discover, ChallengeDetail, Challenges, CreatorVerification,
+  Notifications, StoryViewer + componentes asociados — ~13 archivos).
+- **Lote 4** — componentes wellness (~15 archivos finales).
+
+---
+
 ## [1.5.89] - 2026-04-25
 
 ### refactor(ds): Polish DRY pass — adopción cross-feature de MacroTile + DashedAddButton

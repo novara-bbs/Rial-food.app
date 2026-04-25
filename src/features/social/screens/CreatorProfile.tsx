@@ -10,6 +10,7 @@ import PageHeader from '../../../components/patterns/PageHeader';
 import RecipeCard from '../../../components/patterns/RecipeCard';
 import { CREATORS_MAP } from '../data/seed-creators';
 import SectionCard from '../../../components/SectionCard';
+import { Heading } from '@/components/ui/Typography';
 
 export default function CreatorProfile({ onBack }: { onBack: () => void }) {
   const { t } = useI18n();
@@ -76,7 +77,7 @@ export default function CreatorProfile({ onBack }: { onBack: () => void }) {
           <img src={creator.avatar} alt={creator.name} className="w-20 h-20 rounded-full object-cover border-2 border-primary/30" referrerPolicy="no-referrer" />
           <div className="flex-1 min-w-0">
             <div className="flex items-center gap-2">
-              <h2 className="font-headline font-bold text-lg uppercase text-tertiary truncate">@{creator.name}</h2>
+              <Heading level="h2" className="text-title-sm truncate">@{creator.name}</Heading>
               {creator.verified && <CheckCircle2 className="w-4 h-4 text-primary shrink-0" />}
             </div>
             {creator.badge && (
@@ -91,15 +92,15 @@ export default function CreatorProfile({ onBack }: { onBack: () => void }) {
         {/* Stats row */}
         <div className="grid grid-cols-3 gap-4 mt-5 pt-5 border-t border-outline-variant/10">
           <div className="text-center">
-            <span className="font-headline font-black text-lg text-tertiary">{creator.followers >= 1000 ? `${(creator.followers / 1000).toFixed(1)}K` : creator.followers}</span>
+            <span className="font-headline font-black text-body-lg text-tertiary">{creator.followers >= 1000 ? `${(creator.followers / 1000).toFixed(1)}K` : creator.followers}</span>
             <span className="font-label text-micro uppercase tracking-widest text-on-surface-variant block mt-0.5">{cp.followers}</span>
           </div>
           <div className="text-center">
-            <span className="font-headline font-black text-lg text-tertiary">{creatorPosts.length}</span>
+            <span className="font-headline font-black text-body-lg text-tertiary">{creatorPosts.length}</span>
             <span className="font-label text-micro uppercase tracking-widest text-on-surface-variant block mt-0.5">{cp.posts}</span>
           </div>
           <div className="text-center">
-            <span className="font-headline font-black text-lg text-tertiary">{creator.recipes}</span>
+            <span className="font-headline font-black text-body-lg text-tertiary">{creator.recipes}</span>
             <span className="font-label text-micro uppercase tracking-widest text-on-surface-variant block mt-0.5">{cp.recipes}</span>
           </div>
         </div>
@@ -109,14 +110,14 @@ export default function CreatorProfile({ onBack }: { onBack: () => void }) {
           {isSelf ? (
             <button type="button"
               onClick={() => navigateTo('settings')}
-              className="w-full py-2.5 bg-surface-container-highest text-on-surface-variant rounded-sm font-headline text-xs font-bold uppercase tracking-widest flex items-center justify-center gap-2 hover:text-primary transition-colors"
+              className="w-full py-2.5 bg-surface-container-highest text-on-surface-variant rounded-sm font-headline text-micro font-bold uppercase tracking-widest flex items-center justify-center gap-2 hover:text-primary transition-colors"
             >
               <Settings className="w-4 h-4" /> {cp.editProfile}
             </button>
           ) : (
             <button type="button"
               onClick={toggleFollow}
-              className={`w-full py-2.5 rounded-sm font-headline text-xs font-bold uppercase tracking-widest flex items-center justify-center gap-2 transition-all ${
+              className={`w-full py-2.5 rounded-sm font-headline text-micro font-bold uppercase tracking-widest flex items-center justify-center gap-2 transition-all ${
                 isFollowing
                   ? 'bg-surface-container-highest text-on-surface-variant border border-outline-variant/30 hover:border-error/50 hover:text-error'
                   : 'bg-primary text-on-primary hover:opacity-90'
@@ -131,9 +132,9 @@ export default function CreatorProfile({ onBack }: { onBack: () => void }) {
       {/* Tabs: Posts | Recipes | About */}
       <Tabs defaultValue="posts">
         <TabsList variant="line" className="w-full">
-          <TabsTrigger value="posts" className="font-headline text-xs font-bold uppercase tracking-widest">{cp.posts}</TabsTrigger>
-          <TabsTrigger value="recipes" className="font-headline text-xs font-bold uppercase tracking-widest">{cp.recipes}</TabsTrigger>
-          <TabsTrigger value="about" className="font-headline text-xs font-bold uppercase tracking-widest">{cp.about}</TabsTrigger>
+          <TabsTrigger value="posts" className="font-headline text-micro font-bold uppercase tracking-widest">{cp.posts}</TabsTrigger>
+          <TabsTrigger value="recipes" className="font-headline text-micro font-bold uppercase tracking-widest">{cp.recipes}</TabsTrigger>
+          <TabsTrigger value="about" className="font-headline text-micro font-bold uppercase tracking-widest">{cp.about}</TabsTrigger>
         </TabsList>
 
         <TabsContent value="posts" className="space-y-4 mt-4">
@@ -217,14 +218,14 @@ export default function CreatorProfile({ onBack }: { onBack: () => void }) {
               <div className="flex items-center gap-2">
                 <Flame className="w-4 h-4 text-primary" />
                 <div>
-                  <span className="font-headline font-bold text-sm text-tertiary">{creator.streak}</span>
+                  <span className="font-headline font-bold text-body-sm text-tertiary">{creator.streak}</span>
                   <span className="font-label text-micro uppercase tracking-widest text-on-surface-variant block">{cp.streakDays}</span>
                 </div>
               </div>
               <div className="flex items-center gap-2">
                 <Calendar className="w-4 h-4 text-on-surface-variant" />
                 <div>
-                  <span className="font-headline font-bold text-sm text-tertiary">{creator.recipes}</span>
+                  <span className="font-headline font-bold text-body-sm text-tertiary">{creator.recipes}</span>
                   <span className="font-label text-micro uppercase tracking-widest text-on-surface-variant block">{cp.recipes}</span>
                 </div>
               </div>

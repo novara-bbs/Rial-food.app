@@ -88,12 +88,12 @@ export default function CreatePost({ onBack, onCreatePost }: { onBack: () => voi
               <button type="button" onClick={() => setAttachPerformance(false)} aria-label={t.common.delete} className="absolute -top-2 -right-2 w-6 h-6 bg-error text-on-error rounded-full flex items-center justify-center text-micro font-bold shadow-elev-3">X</button>
               <div className="flex flex-col items-center justify-center text-center p-2">
                 <Activity className="w-5 h-5 text-primary mb-1" />
-                <span className="font-headline text-xl font-bold text-tertiary">{userPerformance.recovery}%</span>
+                <span className="font-headline text-title-sm font-bold text-tertiary">{userPerformance.recovery}%</span>
                 <span className="font-label text-micro tracking-widest text-primary uppercase">{t.community.recovery}</span>
               </div>
               <div className="flex flex-col items-center justify-center text-center p-2 border-l border-outline-variant/20">
                 <TrendingUp className="w-5 h-5 text-brand-secondary mb-1" />
-                <span className="font-headline text-xl font-bold text-tertiary">{userPerformance.strain}</span>
+                <span className="font-headline text-title-sm font-bold text-tertiary">{userPerformance.strain}</span>
                 <span className="font-label text-micro tracking-widest text-brand-secondary uppercase">{t.community.strain}</span>
               </div>
             </div>
