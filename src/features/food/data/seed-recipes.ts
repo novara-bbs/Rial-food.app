@@ -15,6 +15,8 @@ export const SEED_RECIPES = [
     videoUrl: 'https://www.youtube.com/watch?v=JcIjRDzIa-A',
     tag: 'GUARDADO',
     verified: 'rial' as const,
+    cuisine: 'asian' as const,
+    dietaryTags: ['highProtein'] as const,
     suitableFor: ['lunch', 'dinner'] as const,
     recipeIngredients: [
       { id: 'ri_1', ingredientId: 'ing_2', amount: 200, unit: 'g' },
@@ -40,6 +42,8 @@ export const SEED_RECIPES = [
     img: 'https://images.unsplash.com/photo-1606787366850-de6330128bfc?auto=format&fit=crop&w=600&q=80',
     tag: 'GUARDADO',
     verified: 'rial' as const,
+    cuisine: 'other' as const,
+    dietaryTags: ['highProtein'] as const,
     suitableFor: ['lunch', 'dinner'] as const,
     recipeIngredients: [
       { id: 'ri_4', ingredientId: 'ing_1', amount: 150, unit: 'g' },
@@ -65,6 +69,8 @@ export const SEED_RECIPES = [
     img: 'https://images.unsplash.com/photo-1517673400267-0251240c3562?auto=format&fit=crop&w=600&q=80',
     tag: 'GUARDADO',
     verified: 'rial' as const,
+    cuisine: 'other' as const,
+    dietaryTags: ['vegetarian', 'highProtein'] as const,
     suitableFor: ['breakfast'] as const,
     recipeIngredients: [
       { id: 'ri_7', ingredientId: 'ing_8', amount: 30, unit: 'g' },
@@ -88,6 +94,8 @@ export const SEED_RECIPES = [
     img: 'https://images.unsplash.com/photo-1546833999-b9f581a1996d?auto=format&fit=crop&w=600&q=80',
     tag: 'VEGANO',
     verified: 'rial' as const,
+    cuisine: 'asian' as const,
+    dietaryTags: ['vegan', 'vegetarian', 'glutenFree'] as const,
     suitableFor: ['lunch', 'dinner'] as const,
     recipeIngredients: [
       { id: 'ri_cl1', ingredientId: 'ing_15', amount: 200, unit: 'g' },
@@ -116,6 +124,8 @@ export const SEED_RECIPES = [
     videoUrl: 'https://www.tiktok.com/@thatdudecancook/video/7234567890123456789',
     tag: 'EXPRESS',
     verified: 'rial' as const,
+    cuisine: 'other' as const,
+    dietaryTags: ['vegetarian'] as const,
     suitableFor: ['breakfast'] as const,
     recipeIngredients: [
       { id: 'ri_ta1', ingredientId: 'ing_8', amount: 60, unit: 'g' },
@@ -139,6 +149,8 @@ export const SEED_RECIPES = [
     img: 'https://images.unsplash.com/photo-1626700051175-6818013e1d4f?auto=format&fit=crop&w=600&q=80',
     tag: 'EXPRESS',
     verified: 'rial' as const,
+    cuisine: 'american' as const,
+    dietaryTags: ['highProtein'] as const,
     suitableFor: ['lunch', 'dinner'] as const,
     recipeIngredients: [
       { id: 'ri_w1', ingredientId: 'ing_1', amount: 120, unit: 'g' },
@@ -162,6 +174,8 @@ export const SEED_RECIPES = [
     img: 'https://images.unsplash.com/photo-1553530666-ba11a7da3888?auto=format&fit=crop&w=600&q=80',
     tag: 'EXPRESS',
     verified: 'rial' as const,
+    cuisine: 'other' as const,
+    dietaryTags: ['highProtein'] as const,
     suitableFor: ['breakfast'] as const,
     recipeIngredients: [
       { id: 'ri_b1', ingredientId: 'ing_9', amount: 30, unit: 'g' },
@@ -185,6 +199,8 @@ export const SEED_RECIPES = [
     img: 'https://images.unsplash.com/photo-1455619452474-d2be8b1e70cd?auto=format&fit=crop&w=600&q=80',
     tag: 'BATCH',
     verified: 'rial' as const,
+    cuisine: 'american' as const,
+    dietaryTags: ['highProtein'] as const,
     suitableFor: ['lunch', 'dinner'] as const,
     recipeIngredients: [
       { id: 'ri_ch1', ingredientId: 'ing_1', amount: 250, unit: 'g' },
@@ -208,6 +224,8 @@ export const SEED_RECIPES = [
     macros: { calories: 380, protein: 28, carbs: 15, fats: 24, saturatedFat: 8, transFat: 0, sugar: 4 },
     img: 'https://images.unsplash.com/photo-1540189549336-e6e99c3679fe?auto=format&fit=crop&w=600&q=80',
     tag: 'EXPRESS',
+    cuisine: 'mediterranean' as const,
+    dietaryTags: ['highProtein', 'glutenFree'] as const,
     suitableFor: ['lunch', 'dinner'] as const,
     recipeIngredients: [
       { id: 'ri_eg1', ingredientId: 'ing_1', amount: 100, unit: 'g' },
@@ -230,6 +248,8 @@ export const SEED_RECIPES = [
     macros: { calories: 480, protein: 20, carbs: 65, fats: 12, saturatedFat: 2, transFat: 0, sugar: 4 },
     img: 'https://images.unsplash.com/photo-1621996346565-e3dbc646d9a9?auto=format&fit=crop&w=600&q=80',
     tag: 'VEGANO',
+    cuisine: 'italian' as const,
+    dietaryTags: ['vegan', 'vegetarian'] as const,
     suitableFor: ['lunch', 'dinner'] as const,
     recipeIngredients: [
       { id: 'ri_pi1', ingredientId: 'ing_6', amount: 100, unit: 'g' },
@@ -252,6 +272,8 @@ export const SEED_RECIPES = [
     macros: { calories: 310, protein: 22, carbs: 28, fats: 12, saturatedFat: 4, transFat: 0, sugar: 2 },
     img: 'https://images.unsplash.com/photo-1525351484163-7529414344d8?auto=format&fit=crop&w=600&q=80',
     tag: 'EXPRESS',
+    cuisine: 'other' as const,
+    dietaryTags: ['vegetarian'] as const,
     suitableFor: ['breakfast'] as const,
     recipeIngredients: [
       { id: 'ri_th1', ingredientId: 'ing_9', amount: 100, unit: 'g' },
@@ -274,6 +296,8 @@ export const SEED_RECIPES = [
     macros: { calories: 450, protein: 18, carbs: 55, fats: 16, saturatedFat: 2, transFat: 0, sugar: 8 },
     img: 'https://images.unsplash.com/photo-1512621776951-a57141f2eefd?auto=format&fit=crop&w=600&q=80',
     tag: 'VEGANO',
+    cuisine: 'middleEastern' as const,
+    dietaryTags: ['vegan', 'vegetarian', 'glutenFree'] as const,
     suitableFor: ['lunch', 'dinner'] as const,
     recipeIngredients: [
       { id: 'ri_bb1', ingredientId: 'ing_15', amount: 150, unit: 'g' },
@@ -296,6 +320,8 @@ export const SEED_RECIPES = [
     macros: { calories: 180, protein: 12, carbs: 22, fats: 6, saturatedFat: 1, transFat: 0, sugar: 8 },
     img: 'https://images.unsplash.com/photo-1622484212850-eb596d769edc?auto=format&fit=crop&w=600&q=80',
     tag: 'BATCH',
+    cuisine: 'other' as const,
+    dietaryTags: ['vegetarian', 'highProtein'] as const,
     suitableFor: ['snack'] as const,
     recipeIngredients: [
       { id: 'ri_be1', ingredientId: 'ing_8', amount: 100, unit: 'g' },
@@ -323,6 +349,8 @@ export const SEED_RECIPES = [
       'https://images.unsplash.com/photo-1603046891744-1f76eb10aec1?auto=format&fit=crop&w=1200&q=80',
     ],
     tag: 'MI RECETA',
+    cuisine: 'other' as const,
+    dietaryTags: ['vegetarian'] as const,
     suitableFor: ['breakfast'] as const,
     recipeIngredients: [
       { id: 'ri_mt1', ingredientId: 'ing_4', amount: 80, unit: 'g' },
@@ -345,6 +373,8 @@ export const SEED_RECIPES = [
     macros: { calories: 280, protein: 30, carbs: 32, fats: 4, saturatedFat: 1, transFat: 0, sugar: 16 },
     img: 'https://images.unsplash.com/photo-1553530666-ba11a7da3888?auto=format&fit=crop&w=600&q=80',
     tag: 'MI RECETA',
+    cuisine: 'other' as const,
+    dietaryTags: ['vegetarian', 'highProtein'] as const,
     suitableFor: ['snack'] as const,
     recipeIngredients: [
       { id: 'ri_bp1', ingredientId: 'ing_9', amount: 30, unit: 'g' },
@@ -372,6 +402,8 @@ export const SEED_RECIPES = [
       'https://images.unsplash.com/photo-1543339308-43e59d6b73a6?auto=format&fit=crop&w=1200&q=80',
     ],
     tag: 'MI RECETA',
+    cuisine: 'mediterranean' as const,
+    dietaryTags: ['vegan', 'vegetarian', 'glutenFree'] as const,
     suitableFor: ['lunch', 'dinner'] as const,
     recipeIngredients: [
       { id: 'ri_bm1', ingredientId: 'ing_32', amount: 200, unit: 'g' },
@@ -395,6 +427,8 @@ export const SEED_RECIPES = [
     macros: { calories: 680, protein: 48, carbs: 52, fats: 32, saturatedFat: 4.5, transFat: 0, sugar: 12 },
     img: 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&w=600&q=80',
     tag: 'MI RECETA',
+    cuisine: 'asian' as const,
+    dietaryTags: ['highProtein'] as const,
     suitableFor: ['lunch', 'dinner'] as const,
     forkedFrom: {
       recipeId: 1,
@@ -425,6 +459,8 @@ export const SEED_RECIPES = [
     macros: { calories: 410, protein: 28, carbs: 48, fats: 14, saturatedFat: 3, transFat: 0, sugar: 12 },
     img: 'https://images.unsplash.com/photo-1517673400267-0251440c45dc?auto=format&fit=crop&w=600&q=80',
     tag: 'MI RECETA',
+    cuisine: 'other' as const,
+    dietaryTags: ['vegetarian', 'highProtein'] as const,
     suitableFor: ['breakfast'] as const,
     recipeIngredients: [
       { id: 'ri_oo1', ingredientId: 'ing_7', amount: 50, unit: 'g' },
@@ -446,6 +482,8 @@ export const SEED_RECIPES = [
     macros: { calories: 620, protein: 52, carbs: 40, fats: 26, saturatedFat: 4, transFat: 0, sugar: 3 },
     img: 'https://images.unsplash.com/photo-1490645935967-10de6ba17061?auto=format&fit=crop&w=600&q=80',
     tag: 'MI RECETA',
+    cuisine: 'italian' as const,
+    dietaryTags: ['highProtein'] as const,
     suitableFor: ['lunch', 'dinner'] as const,
     forkedFrom: {
       recipeId: 2,
@@ -475,6 +513,8 @@ export const SEED_RECIPES = [
     macros: { calories: 380, protein: 22, carbs: 48, fats: 10, saturatedFat: 2, transFat: 0, sugar: 14 },
     img: 'https://images.unsplash.com/photo-1567620905732-2d1ec7ab7445?auto=format&fit=crop&w=600&q=80',
     tag: 'EXPRESS',
+    cuisine: 'other' as const,
+    dietaryTags: ['vegetarian', 'highProtein'] as const,
     suitableFor: ['breakfast'] as const,
     tags: ['EXPRESS', 'DESAYUNO'],
     recipeIngredients: [
@@ -500,6 +540,8 @@ export const SEED_RECIPES = [
     macros: { calories: 420, protein: 15, carbs: 62, fats: 14, saturatedFat: 5, transFat: 0, sugar: 28 },
     img: 'https://images.unsplash.com/photo-1511690743698-d9d85f2fbf38?auto=format&fit=crop&w=600&q=80',
     tag: 'VEGANO',
+    cuisine: 'other' as const,
+    dietaryTags: ['vegan', 'vegetarian'] as const,
     suitableFor: ['breakfast'] as const,
     tags: ['VEGANO', 'DESAYUNO'],
     recipeIngredients: [
@@ -524,6 +566,8 @@ export const SEED_RECIPES = [
     macros: { calories: 350, protein: 25, carbs: 38, fats: 10, saturatedFat: 3, transFat: 0, sugar: 18 },
     img: 'https://images.unsplash.com/photo-1488477181946-6428a0291777?auto=format&fit=crop&w=600&q=80',
     tag: 'EXPRESS',
+    cuisine: 'other' as const,
+    dietaryTags: ['vegetarian', 'highProtein'] as const,
     suitableFor: ['breakfast'] as const,
     tags: ['EXPRESS', 'DESAYUNO'],
     recipeIngredients: [
@@ -547,6 +591,8 @@ export const SEED_RECIPES = [
     macros: { calories: 440, protein: 22, carbs: 36, fats: 24, saturatedFat: 5, transFat: 0, sugar: 3 },
     img: 'https://images.unsplash.com/photo-1484723091739-30a097e8f929?auto=format&fit=crop&w=600&q=80',
     tag: 'DESAYUNO',
+    cuisine: 'other' as const,
+    dietaryTags: ['vegetarian'] as const,
     suitableFor: ['breakfast'] as const,
     tags: ['DESAYUNO'],
     recipeIngredients: [
@@ -571,6 +617,8 @@ export const SEED_RECIPES = [
     macros: { calories: 280, protein: 18, carbs: 38, fats: 6, saturatedFat: 1, transFat: 0, sugar: 22 },
     img: 'https://images.unsplash.com/photo-1553530666-ba11a7da3888?auto=format&fit=crop&w=600&q=80',
     tag: 'VEGANO',
+    cuisine: 'other' as const,
+    dietaryTags: ['vegan', 'vegetarian', 'glutenFree'] as const,
     suitableFor: ['breakfast'] as const,
     tags: ['VEGANO', 'EXPRESS'],
     recipeIngredients: [
@@ -595,6 +643,8 @@ export const SEED_RECIPES = [
     macros: { calories: 490, protein: 35, carbs: 42, fats: 18, saturatedFat: 4, transFat: 0, sugar: 3 },
     img: 'https://images.unsplash.com/photo-1565299507177-b0ac66763828?auto=format&fit=crop&w=600&q=80',
     tag: 'ALTO PROTEÍNA',
+    cuisine: 'other' as const,
+    dietaryTags: ['highProtein'] as const,
     suitableFor: ['breakfast'] as const,
     tags: ['ALTO PROTEÍNA'],
     recipeIngredients: [
@@ -621,6 +671,8 @@ export const SEED_RECIPES = [
     macros: { calories: 180, protein: 6, carbs: 28, fats: 6, saturatedFat: 2, transFat: 0, sugar: 16 },
     img: 'https://images.unsplash.com/photo-1490645935967-10de6ba17061?auto=format&fit=crop&w=600&q=80',
     tag: 'VEGANO',
+    cuisine: 'other' as const,
+    dietaryTags: ['vegan', 'vegetarian', 'glutenFree'] as const,
     suitableFor: ['snack'] as const,
     tags: ['VEGANO', 'SNACK'],
     recipeIngredients: [
@@ -645,6 +697,8 @@ export const SEED_RECIPES = [
     macros: { calories: 220, protein: 9, carbs: 24, fats: 10, saturatedFat: 1, transFat: 0, sugar: 4 },
     img: 'https://images.unsplash.com/photo-1541014741259-de529411b96a?auto=format&fit=crop&w=600&q=80',
     tag: 'VEGANO',
+    cuisine: 'middleEastern' as const,
+    dietaryTags: ['vegan', 'vegetarian', 'glutenFree'] as const,
     suitableFor: ['snack'] as const,
     tags: ['VEGANO', 'EXPRESS'],
     recipeIngredients: [
@@ -669,6 +723,8 @@ export const SEED_RECIPES = [
     macros: { calories: 160, protein: 18, carbs: 14, fats: 3, saturatedFat: 1, transFat: 0, sugar: 10 },
     img: 'https://images.unsplash.com/photo-1488477181946-6428a0291777?auto=format&fit=crop&w=600&q=80',
     tag: 'EXPRESS',
+    cuisine: 'other' as const,
+    dietaryTags: ['vegetarian', 'highProtein'] as const,
     suitableFor: ['snack'] as const,
     tags: ['EXPRESS', 'SNACK'],
     recipeIngredients: [
@@ -692,6 +748,8 @@ export const SEED_RECIPES = [
     macros: { calories: 300, protein: 40, carbs: 22, fats: 4, saturatedFat: 1, transFat: 0, sugar: 14 },
     img: 'https://images.unsplash.com/photo-1502741224143-90386d7f8c82?auto=format&fit=crop&w=600&q=80',
     tag: 'ALTO PROTEÍNA',
+    cuisine: 'other' as const,
+    dietaryTags: ['highProtein'] as const,
     suitableFor: ['snack'] as const,
     tags: ['ALTO PROTEÍNA'],
     recipeIngredients: [
@@ -715,6 +773,8 @@ export const SEED_RECIPES = [
     macros: { calories: 240, protein: 8, carbs: 18, fats: 16, saturatedFat: 2, transFat: 0, sugar: 8 },
     img: 'https://images.unsplash.com/photo-1622484212850-eb596d769edc?auto=format&fit=crop&w=600&q=80',
     tag: 'SNACK',
+    cuisine: 'other' as const,
+    dietaryTags: ['vegan', 'vegetarian', 'glutenFree'] as const,
     suitableFor: ['snack'] as const,
     tags: ['SNACK', 'EXPRESS'],
     recipeIngredients: [
@@ -739,6 +799,8 @@ export const SEED_RECIPES = [
     macros: { calories: 250, protein: 20, carbs: 22, fats: 8, saturatedFat: 4, transFat: 0, sugar: 12 },
     img: 'https://images.unsplash.com/photo-1578985545062-69928b1d9587?auto=format&fit=crop&w=600&q=80',
     tag: 'POSTRE',
+    cuisine: 'other' as const,
+    dietaryTags: ['vegetarian', 'highProtein'] as const,
     suitableFor: ['snack'] as const,
     tags: ['POSTRE'],
     recipeIngredients: [
@@ -763,6 +825,8 @@ export const SEED_RECIPES = [
     macros: { calories: 200, protein: 5, carbs: 42, fats: 4, saturatedFat: 1, transFat: 0, sugar: 24 },
     img: 'https://images.unsplash.com/photo-1567206563064-6f60f40a2b57?auto=format&fit=crop&w=600&q=80',
     tag: 'VEGANO',
+    cuisine: 'other' as const,
+    dietaryTags: ['vegan', 'vegetarian', 'glutenFree'] as const,
     suitableFor: ['snack'] as const,
     tags: ['VEGANO', 'POSTRE'],
     recipeIngredients: [
@@ -787,6 +851,8 @@ export const SEED_RECIPES = [
     macros: { calories: 280, protein: 8, carbs: 44, fats: 9, saturatedFat: 3, transFat: 0, sugar: 20 },
     img: 'https://images.unsplash.com/photo-1578985545062-69928b1d9587?auto=format&fit=crop&w=600&q=80',
     tag: 'VEGANO',
+    cuisine: 'other' as const,
+    dietaryTags: ['vegan', 'vegetarian'] as const,
     suitableFor: ['snack'] as const,
     tags: ['VEGANO', 'POSTRE'],
     recipeIngredients: [
@@ -811,6 +877,8 @@ export const SEED_RECIPES = [
     macros: { calories: 310, protein: 15, carbs: 28, fats: 16, saturatedFat: 8, transFat: 0, sugar: 18 },
     img: 'https://images.unsplash.com/photo-1533134242443-d4fd215305ad?auto=format&fit=crop&w=600&q=80',
     tag: 'POSTRE',
+    cuisine: 'other' as const,
+    dietaryTags: ['vegetarian'] as const,
     suitableFor: ['snack'] as const,
     tags: ['POSTRE'],
     recipeIngredients: [
@@ -836,6 +904,8 @@ export const SEED_RECIPES = [
     macros: { calories: 320, protein: 8, carbs: 66, fats: 3, saturatedFat: 0, transFat: 0, sugar: 1 },
     img: 'https://images.unsplash.com/photo-1517611884905-9d0fd28a76f3?auto=format&fit=crop&w=600&q=80',
     tag: 'BATCH',
+    cuisine: 'other' as const,
+    dietaryTags: ['vegan', 'vegetarian', 'glutenFree'] as const,
     suitableFor: ['lunch', 'dinner'] as const,
     tags: ['BATCH'],
     recipeIngredients: [
@@ -860,6 +930,8 @@ export const SEED_RECIPES = [
     macros: { calories: 380, protein: 52, carbs: 4, fats: 16, saturatedFat: 3, transFat: 0, sugar: 1 },
     img: 'https://images.unsplash.com/photo-1598515214211-89d3c73ae83b?auto=format&fit=crop&w=600&q=80',
     tag: 'BATCH',
+    cuisine: 'mediterranean' as const,
+    dietaryTags: ['highProtein', 'lowCarb'] as const,
     suitableFor: ['lunch', 'dinner'] as const,
     tags: ['BATCH', 'ALTO PROTEÍNA'],
     recipeIngredients: [
@@ -884,6 +956,8 @@ export const SEED_RECIPES = [
     macros: { calories: 410, protein: 24, carbs: 58, fats: 9, saturatedFat: 1, transFat: 0, sugar: 8 },
     img: 'https://images.unsplash.com/photo-1547592166-23ac45744acd?auto=format&fit=crop&w=600&q=80',
     tag: 'BATCH',
+    cuisine: 'mediterranean' as const,
+    dietaryTags: ['vegan', 'vegetarian', 'glutenFree'] as const,
     suitableFor: ['lunch', 'dinner'] as const,
     tags: ['BATCH', 'VEGANO'],
     recipeIngredients: [
@@ -909,6 +983,8 @@ export const SEED_RECIPES = [
     macros: { calories: 120, protein: 4, carbs: 10, fats: 8, saturatedFat: 1, transFat: 0, sugar: 5 },
     img: 'https://images.unsplash.com/photo-1517611884905-9d0fd28a76f3?auto=format&fit=crop&w=600&q=80',
     tag: 'BATCH',
+    cuisine: 'mediterranean' as const,
+    dietaryTags: ['vegan', 'vegetarian', 'glutenFree'] as const,
     suitableFor: ['lunch', 'dinner'] as const,
     tags: ['BATCH', 'EXPRESS'],
     recipeIngredients: [
@@ -933,6 +1009,8 @@ export const SEED_RECIPES = [
     macros: { calories: 180, protein: 5, carbs: 28, fats: 7, saturatedFat: 1, transFat: 0, sugar: 14 },
     img: 'https://images.unsplash.com/photo-1517611884905-9d0fd28a76f3?auto=format&fit=crop&w=600&q=80',
     tag: 'BATCH',
+    cuisine: 'mediterranean' as const,
+    dietaryTags: ['vegan', 'vegetarian', 'glutenFree'] as const,
     suitableFor: ['lunch', 'dinner'] as const,
     tags: ['BATCH', 'VEGANO'],
     recipeIngredients: [
@@ -958,6 +1036,8 @@ export const SEED_RECIPES = [
     macros: { calories: 580, protein: 48, carbs: 12, fats: 38, saturatedFat: 6, transFat: 0, sugar: 3 },
     img: 'https://images.unsplash.com/photo-1559847844-5315695dadae?auto=format&fit=crop&w=600&q=80',
     tag: 'MEDITERRÁNEO',
+    cuisine: 'mediterranean' as const,
+    dietaryTags: ['highProtein', 'lowCarb'] as const,
     suitableFor: ['lunch', 'dinner'] as const,
     tags: ['MEDITERRÁNEO'],
     recipeIngredients: [
@@ -983,6 +1063,8 @@ export const SEED_RECIPES = [
     macros: { calories: 620, protein: 38, carbs: 72, fats: 18, saturatedFat: 3, transFat: 0, sugar: 5 },
     img: 'https://images.unsplash.com/photo-1473093295043-cdd812d0e601?auto=format&fit=crop&w=600&q=80',
     tag: 'MEDITERRÁNEO',
+    cuisine: 'mediterranean' as const,
+    dietaryTags: ['highProtein'] as const,
     suitableFor: ['lunch', 'dinner'] as const,
     tags: ['MEDITERRÁNEO'],
     recipeIngredients: [
@@ -1009,6 +1091,8 @@ export const SEED_RECIPES = [
     macros: { calories: 480, protein: 26, carbs: 62, fats: 12, saturatedFat: 1, transFat: 0, sugar: 9 },
     img: 'https://images.unsplash.com/photo-1547592166-23ac45744acd?auto=format&fit=crop&w=600&q=80',
     tag: 'MEDITERRÁNEO',
+    cuisine: 'mediterranean' as const,
+    dietaryTags: ['vegan', 'vegetarian', 'glutenFree'] as const,
     suitableFor: ['lunch', 'dinner'] as const,
     tags: ['MEDITERRÁNEO', 'VEGANO'],
     recipeIngredients: [
@@ -1033,6 +1117,8 @@ export const SEED_RECIPES = [
     macros: { calories: 520, protein: 44, carbs: 8, fats: 34, saturatedFat: 9, transFat: 0, sugar: 2 },
     img: 'https://images.unsplash.com/photo-1598515214211-89d3c73ae83b?auto=format&fit=crop&w=600&q=80',
     tag: 'MEDITERRÁNEO',
+    cuisine: 'mediterranean' as const,
+    dietaryTags: ['highProtein', 'lowCarb'] as const,
     suitableFor: ['lunch', 'dinner'] as const,
     tags: ['MEDITERRÁNEO'],
     recipeIngredients: [
@@ -1058,6 +1144,8 @@ export const SEED_RECIPES = [
     macros: { calories: 410, protein: 35, carbs: 38, fats: 12, saturatedFat: 3, transFat: 0, sugar: 8 },
     img: 'https://images.unsplash.com/photo-1567620905732-2d1ec7ab7445?auto=format&fit=crop&w=600&q=80',
     tag: 'MI RECETA',
+    cuisine: 'other' as const,
+    dietaryTags: ['vegetarian', 'highProtein'] as const,
     suitableFor: ['breakfast'] as const,
     forkedFrom: {
       recipeId: 'tortitas-avena-platano-marta',
@@ -1087,6 +1175,8 @@ export const SEED_RECIPES = [
     macros: { calories: 380, protein: 28, carbs: 22, fats: 20, saturatedFat: 5, transFat: 0, sugar: 4 },
     img: 'https://images.unsplash.com/photo-1540189549336-e6e99c3679fe?auto=format&fit=crop&w=600&q=80',
     tag: 'MI RECETA',
+    cuisine: 'other' as const,
+    dietaryTags: ['highProtein'] as const,
     suitableFor: ['lunch', 'dinner'] as const,
     recipeIngredients: [
       { id: 'ri_155', ingredientId: 'ing_1', amount: 130, unit: 'g' },
@@ -1110,6 +1200,8 @@ export const SEED_RECIPES = [
     macros: { calories: 450, protein: 42, carbs: 36, fats: 16, saturatedFat: 3, transFat: 0, sugar: 4 },
     img: 'https://images.unsplash.com/photo-1565299507177-b0ac66763828?auto=format&fit=crop&w=600&q=80',
     tag: 'MI RECETA',
+    cuisine: 'middleEastern' as const,
+    dietaryTags: ['highProtein'] as const,
     suitableFor: ['lunch', 'dinner'] as const,
     recipeIngredients: [
       { id: 'ri_158', ingredientId: 'ing_1', amount: 160, unit: 'g' },

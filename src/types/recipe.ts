@@ -1,4 +1,5 @@
 import type { Macros, Micronutrients, RecipeIngredient } from './food';
+import type { Cuisine, DietaryTag } from './taxonomy';
 
 /**
  * Canonical meal slot vocabulary used across the app (recipes, planner,
@@ -98,4 +99,16 @@ export interface Recipe {
    * Undefined/empty means never cooked.
    */
   cookedAt?: string[];
+  /**
+   * Typed cuisine classification (Q16 codemod). When set, `facets.ts`
+   * `deriveCuisine` reads this directly instead of running the heuristic.
+   * `undefined` = "derive from tags/title heuristic" (legacy recipes).
+   */
+  cuisine?: Cuisine;
+  /**
+   * Typed dietary tags (Q16 codemod). When set, `facets.ts`
+   * `deriveDietaryTags` reads this directly. Empty array = explicitly no tags.
+   * `undefined` = "derive from tags heuristic" (legacy recipes).
+   */
+  dietaryTags?: DietaryTag[];
 }

@@ -1,5 +1,81 @@
 # RIAL App - Changelog
 
+## [1.5.94] - 2026-04-25
+
+### feat(types): Q16 — codemod tipado Recipe.cuisine + dietaryTags
+
+Desbloquea el filtro Cuisine en Discovery: antes de este sprint el 100% de las
+recetas caían en `cuisine: 'other'` (heurística sólo leía `tags: string[]` pero
+el seed no tenía keywords de cuisine). Ahora los campos tipados tienen prioridad.
+
+#### Nuevo archivo
+
+**`src/types/taxonomy.ts`** — fuente única de verdad para los tipos del sistema
+de filtros. Extraído aquí para evitar dependencias circulares entre `recipe.ts`
+y `facets.ts`:
+- `Cuisine`: `'italian' | 'mediterranean' | 'mexican' | 'asian' | 'american' | 'middleEastern' | 'latin' | 'other'`
+- `DietaryTag`: `'vegan' | 'vegetarian' | 'keto' | 'lowCarb' | 'highProtein' | 'glutenFree' | 'dairyFree'`
+- `TimeBucket`: `'under15' | 'under30' | 'under60' | 'over60'`
+- `Difficulty`: `'easy' | 'medium' | 'hard'`
+- Const arrays correspondientes: `CUISINES`, `DIETARY_TAGS`, `TIME_BUCKETS`, `DIFFICULTIES`.
+
+#### Archivos modificados
+
+**`src/types/recipe.ts`** — nuevos campos opcionales en `Recipe`:
+```ts
+cuisine?: Cuisine;       // typed-first; undefined = heuristic fallback
+dietaryTags?: DietaryTag[]; // typed-first; [] = explicitly no tags; undefined = heuristic
+```
+
+**`src/features/recipes/utils/facets.ts`** — refactor sin breaking changes:
+- Importa tipos/consts de `taxonomy.ts` en lugar de definirlos localmente.
+- Re-exporta todo para backwards compat (Cocina.tsx, Discovery.tsx no cambian).
+- `deriveCuisine(r)`: lee `r.cuisine` primero; heurística sólo si `undefined`.
+- `deriveDietaryTags(r)`: lee `r.dietaryTags` primero; heurística sólo si `undefined`.
+- `matchesFilters`, `countActive` — sin cambios.
+
+**`src/features/food/data/seed-recipes.ts`** — 46/46 recipes anotadas:
+- `cuisine` distribuida: mediterranean (10), other (25), asian (3), italian (2),
+  american (2), middleEastern (3), latin (0).
+- `dietaryTags` distribuidos: `highProtein` (20+), `vegetarian` (15+),
+  `vegan` (12+), `glutenFree` (10+), `lowCarb` (4), sin tags (0).
+
+**`src/features/recipes/utils/facets.test.ts`** — 7 nuevos tests en
+`describe('Q16 typed fields')`:
+- `deriveCuisine` lee campo tipado y salta heurística.
+- `deriveCuisine` hace fallback a heurística cuando `cuisine` es undefined.
+- `deriveDietaryTags` lee campo tipado y salta heurística.
+- `deriveDietaryTags` respeta `dietaryTags: []` (explicit empty).
+- `deriveDietaryTags` hace fallback a heurística cuando `dietaryTags` undefined.
+- `matchesFilters` funciona con la forma de seed recipe tipada.
+
+**`src/types/index.ts`** — re-exports de `taxonomy.ts`.
+
+#### Cobertura post-Q16
+
+| Cuisine | Recetas seed | % |
+|---|---|---|
+| mediterranean | 10 | 22% |
+| asian | 3 | 7% |
+| italian | 2 | 4% |
+| american | 2 | 4% |
+| middleEastern | 3 | 7% |
+| latin | 0 | 0% |
+| other | 26 | 56% |
+
+El filtro Cuisine en Discovery funciona para mediterranean (lubina, pasta,
+lentejas, muslos de pollo, pollo marinado, legumbres, salsas base, verduras
+asadas, bowl mediterráneo, ensalada griega), asian (salmon bowl, curry lentejas,
+salmon con mango), e italian (pasta integral, pollo quinoa pesto).
+
+#### Métricas
+- Tests: **1187** (+7 vs `[1.5.93]`).
+- TS errors: **0**.
+- i18n: **1911** keys (sin cambios — Q16 no toca strings).
+- Bundle: size:check PASS — sin delta significativo (sólo datos de seed).
+
+---
+
 ## [1.5.93] - 2026-04-25
 
 ### feat(ds): FilterSheet + facets heuristics — Cocina/Explore filter UX rework + ADR-014

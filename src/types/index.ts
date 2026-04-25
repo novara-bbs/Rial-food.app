@@ -3,6 +3,8 @@ export type { FoodFamily, FoodVariant, VariantType, FoodSource, VariantBrand, Ma
 export { VARIANT_TYPES, FOOD_SOURCES } from './food-family';
 export type { RecipeStep, Recipe, MealSlot } from './recipe';
 export { MEAL_SLOTS } from './recipe';
+export type { Cuisine, DietaryTag, TimeBucket, Difficulty } from './taxonomy';
+export { CUISINES, DIETARY_TAGS, TIME_BUCKETS, DIFFICULTIES } from './taxonomy';
 export type { User, AppState } from './user';
 export type { DailyCheckIn, ToleranceLog } from './wellness';
 export type { CommunityPost, PostComment, Story, StorySlide, Notification } from './social';

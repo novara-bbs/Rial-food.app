@@ -1,81 +1,32 @@
 /**
- * Recipe facets — heuristic derivation layer (ADR-014).
+ * Recipe facets — heuristic derivation layer (ADR-014) + typed field reads (Q16).
  *
- * The canonical `Recipe` model does not carry typed `cuisine` or
- * `dietaryTags` fields; that taxonomy migration (Q16 codemod) is deferred.
- * In the meantime, the FilterSheet UX needs facet predicates today.
+ * Priority: typed fields on the Recipe model are read first. If absent,
+ * the heuristic runs as a fallback for legacy/user-created recipes.
  *
- * This module derives facets at read-time from existing fields:
+ * Typed fields (added in Q16):
+ *   - `recipe.cuisine?: Cuisine`      — set on all seed recipes
+ *   - `recipe.dietaryTags?: DietaryTag[]` — set on all seed recipes
+ *
+ * Heuristic sources (legacy / user recipes without typed fields):
  *   - `tags: string[]`            (ES uppercase free-form: `MEDITERRÁNEO`, `VEGANO`, …)
  *   - legacy `tag: string`        (singular, runtime-only — read defensively)
  *   - `prepTime` + `cookTime`     (string `XXM` minutes, sometimes `Xh Ymin`)
  *   - `difficulty`                (ES literal `Fácil` / `Medio` / `Difícil`)
  *   - `suitableFor: MealSlot[]`   (canonical meal slots)
  *
- * Recipes that don't match any cuisine keyword fall to `cuisine: 'other'` —
- * still selectable as an escape valve. Same for `dietaryTags: []` (no match).
- *
- * When the Q16 codemod ships and adds typed fields, swap the `derive*`
- * implementations to read the typed fields directly; the public API
- * (`matchesFilters`, `countActive`) stays stable.
+ * When the typed fields are present the heuristics are skipped entirely, so
+ * `matchesFilters` + `countActive` are stable across both code paths.
  */
 
 import type { Recipe, MealSlot } from '../../../types/recipe';
+import type { Cuisine, DietaryTag, TimeBucket, Difficulty } from '../../../types/taxonomy';
+import { CUISINES, DIETARY_TAGS, TIME_BUCKETS, DIFFICULTIES } from '../../../types/taxonomy';
 
-// ─── Public taxonomies ────────────────────────────────────────────────────
-
-export type Cuisine =
-  | 'italian'
-  | 'mediterranean'
-  | 'mexican'
-  | 'asian'
-  | 'american'
-  | 'middleEastern'
-  | 'latin'
-  | 'other';
-
-export type DietaryTag =
-  | 'vegan'
-  | 'vegetarian'
-  | 'keto'
-  | 'lowCarb'
-  | 'highProtein'
-  | 'glutenFree'
-  | 'dairyFree';
-
-export type TimeBucket = 'under15' | 'under30' | 'under60' | 'over60';
-
-export type Difficulty = 'easy' | 'medium' | 'hard';
-
-export const CUISINES: readonly Cuisine[] = [
-  'italian',
-  'mediterranean',
-  'mexican',
-  'asian',
-  'american',
-  'middleEastern',
-  'latin',
-  'other',
-] as const;
-
-export const DIETARY_TAGS: readonly DietaryTag[] = [
-  'vegan',
-  'vegetarian',
-  'keto',
-  'lowCarb',
-  'highProtein',
-  'glutenFree',
-  'dairyFree',
-] as const;
-
-export const TIME_BUCKETS: readonly TimeBucket[] = [
-  'under15',
-  'under30',
-  'under60',
-  'over60',
-] as const;
-
-export const DIFFICULTIES: readonly Difficulty[] = ['easy', 'medium', 'hard'] as const;
+// Re-export taxonomy types + consts so existing import sites
+// (`Cocina.tsx`, `Discovery.tsx`, test files) don't need updating.
+export type { Cuisine, DietaryTag, TimeBucket, Difficulty };
+export { CUISINES, DIETARY_TAGS, TIME_BUCKETS, DIFFICULTIES };
 
 // ─── FilterSheet value envelope ───────────────────────────────────────────
 
@@ -124,7 +75,13 @@ const CUISINE_KEYWORDS: Record<Exclude<Cuisine, 'other'>, string[]> = {
   latin: ['latina', 'latino', 'latin ', 'latam'],
 };
 
+/**
+ * Derive the cuisine for a recipe.
+ * If `recipe.cuisine` is set (typed field, Q16), it is returned directly.
+ * Otherwise the heuristic runs over `tags[]` + legacy `tag`.
+ */
 export function deriveCuisine(r: Recipe): Cuisine {
+  if (r.cuisine !== undefined) return r.cuisine;
   const text = getAllTagText(r);
   for (const cuisine of CUISINES) {
     if (cuisine === 'other') continue;
@@ -144,7 +101,13 @@ const DIET_KEYWORDS: Record<DietaryTag, string[]> = {
   dairyFree: ['sin lacteos', 'dairy free', 'dairy-free', 'dairyfree'],
 };
 
+/**
+ * Derive the dietary tags for a recipe.
+ * If `recipe.dietaryTags` is set (typed field, Q16), it is returned directly.
+ * Otherwise the heuristic runs over `tags[]` + legacy `tag`.
+ */
 export function deriveDietaryTags(r: Recipe): DietaryTag[] {
+  if (r.dietaryTags !== undefined) return r.dietaryTags;
   const text = getAllTagText(r);
   const out: DietaryTag[] = [];
   for (const diet of DIETARY_TAGS) {

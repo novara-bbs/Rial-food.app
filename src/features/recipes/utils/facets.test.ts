@@ -209,3 +209,45 @@ describe('matchesFilters', () => {
     ).toBe(false);
   });
 });
+
+// ─── Q16 typed field priority ─────────────────────────────────────────────
+
+describe('Q16 typed fields — typed field wins over heuristic', () => {
+  it('deriveCuisine reads typed cuisine field and skips heuristic', () => {
+    // Recipe has no tags that match 'italian', but cuisine field says so.
+    const r = makeRecipe({ cuisine: 'italian', tags: [] });
+    expect(deriveCuisine(r)).toBe('italian');
+  });
+
+  it('deriveCuisine falls back to heuristic when cuisine field is undefined', () => {
+    const r = makeRecipe({ tags: ['MEDITERRÁNEO'] });
+    expect(deriveCuisine(r)).toBe('mediterranean');
+  });
+
+  it('deriveDietaryTags reads typed dietaryTags field and skips heuristic', () => {
+    // Recipe has no VEGANO tag but dietaryTags says vegan.
+    const r = makeRecipe({ dietaryTags: ['vegan', 'vegetarian'], tags: [] });
+    expect(deriveDietaryTags(r)).toEqual(['vegan', 'vegetarian']);
+  });
+
+  it('deriveDietaryTags returns empty array when typed field is empty []', () => {
+    const r = makeRecipe({ dietaryTags: [], tag: 'VEGANO' });
+    // Typed empty array = explicitly no tags; heuristic skipped.
+    expect(deriveDietaryTags(r)).toEqual([]);
+  });
+
+  it('deriveDietaryTags falls back to heuristic when dietaryTags is undefined', () => {
+    const r = makeRecipe({ tag: 'VEGANO' });
+    const tags = deriveDietaryTags(r);
+    expect(tags).toContain('vegan');
+    expect(tags).toContain('vegetarian');
+  });
+
+  it('matchesFilters works with typed cuisine on seed recipe shape', () => {
+    const r = makeRecipe({ cuisine: 'asian', dietaryTags: ['highProtein'] });
+    expect(matchesFilters(r, { cuisine: ['asian'] })).toBe(true);
+    expect(matchesFilters(r, { cuisine: ['italian'] })).toBe(false);
+    expect(matchesFilters(r, { diet: ['highProtein'] })).toBe(true);
+    expect(matchesFilters(r, { diet: ['vegan'] })).toBe(false);
+  });
+});

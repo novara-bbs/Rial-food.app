@@ -5,47 +5,38 @@
 > prunes this file back down. Everything below should answer: *what's the release line,
 > what's the quality baseline, what's the next move, what's broken?*
 
-Last updated: **2026-04-25** — `[1.5.93]` **Filter UX rework (ADR-014)** —
-nuevos primitives `FilterSheet` + `FilterButton` (BottomSheet wrapper con
-accordion sections, buffered draft, Apply/Reset). Cocina deshace el Source
-ChipRow → mueve a sección dentro del sheet (4 superficies header → 4 + sheet
-condicional). Discovery gana Sort por primera vez + esconde TODA la facetería
-(cuisine/diet/time/difficulty/mealSlot) detrás del FilterButton; cuando hay
-filtros activos las swimlanes editoriales colapsan en un grid plano (Yummly
-pattern). Heurística `facets.ts` deriva cuisine/diet/time/difficulty desde
-`tags`+`tag` legacy + `XXM` strings — Q16 codemod tipado sigue diferido.
+Last updated: **2026-04-25** — `[1.5.94]` **Q16 — codemod tipado cuisine + dietaryTags** —
+`src/types/taxonomy.ts` (new) centraliza Cuisine/DietaryTag/TimeBucket/Difficulty.
+`Recipe` gana `cuisine?: Cuisine` + `dietaryTags?: DietaryTag[]`. `facets.ts` lee
+campo tipado primero, heurística como fallback. 46/46 seed recipes anotadas. +7 tests.
+Filtro Cuisine en Discovery ahora es funcional (era 100% 'other' antes).
 
-Previo: `[1.5.92]` Fase C lote 4 wellness completo · `[1.5.91]` Lote 3.5
-sociales · `[1.5.90]` Lote 3 sociales · `[1.5.89]` Polish DRY · `[1.5.88]`
-CreateRecipe + MacroTile + DashedAddButton.
+Previo: `[1.5.93]` Filter UX rework (ADR-014) · `[1.5.92]` Fase C lote 4 wellness ·
+`[1.5.91]` Lote 3.5 sociales · `[1.5.90]` Lote 3 sociales · `[1.5.89]` Polish DRY.
 
 ## Release snapshot
-- **Branch**: `main`, awaiting push to `rial-food/main` (local ahead 4 vs `6132d08`).
-- **Last shipped**: `[1.5.93]` **Filter UX rework (ADR-014)** — nuevos
-  `FilterSheet` + `FilterButton` + heurística `facets.ts`. Cocina mueve
-  Source ChipRow al sheet; Discovery esconde todo (cuisine/diet/time/
-  difficulty/mealSlot) y branchea grid-vs-swimlanes según `countActive`.
-  +40 i18n keys (`t.filters` ES/EN simétrico). 5 archivos nuevos + 7
-  modificados. ADR-014 + convention test (invariantes E + F).
-- **Previous**: `[1.5.92]` Fase C lote 4 wellness completo (16 archivos,
-  -83 warnings). `[1.5.91]` Lote 3.5 sociales (14 archivos, -74 warnings).
-  `[1.5.90]` Lote 3 sociales. `[1.5.89]` Polish DRY. `[1.5.88]` MacroTile +
-  DashedAddButton. `[1.5.87]` Fase C lote 1 RecipeDetail. `[1.5.86]` ADR-013
-  filter system primitives. `[1.5.85]` brand fonts. `[1.5.84]` Phase 1 Home.
-- **Active plan**: `[1.5.93]` sealed. **Pausa para pensar** sobre próximas
-  prioridades (owner mandate post-Fase C). Owner actions Supabase quedan
-  deferred. Q16 codemod tipado (`Recipe.cuisine` + `dietaryTags`) sigue en
-  backlog y desbloquearía la cobertura de los filtros sin cambios de UX.
+- **Branch**: worktree `claude/hardcore-solomon-9da39e`, ahead of `rial-food/main`.
+- **Last shipped**: `[1.5.94]` **Q16 — codemod tipado** — `taxonomy.ts` (new)
+  + `Recipe.cuisine?`/`dietaryTags?` + `facets.ts` typed-first reads + 46 seed
+  recipes anotadas + 7 nuevos tests. 6 archivos nuevos/modificados. Filtro
+  Cuisine en Discovery operativo.
+- **Previous**: `[1.5.93]` Filter UX rework (ADR-014) — `FilterSheet` +
+  `FilterButton` + heurística `facets.ts`. `[1.5.92]` Fase C lote 4 wellness.
+  `[1.5.91]` Lote 3.5 sociales. `[1.5.90]` Lote 3. `[1.5.89]` Polish DRY.
+  `[1.5.88]` MacroTile + DashedAddButton. `[1.5.87]` Fase C lote 1. `[1.5.86]`
+  ADR-013. `[1.5.85]` brand fonts. `[1.5.84]` Phase 1 Home.
+- **Active plan**: `[1.5.94]` sealed. **Próximos**: active filters strip
+  (Cocina UX feedback), SortControl extended (calories-asc), Phase 2 Home.
 - **Release target**: `rial-food/main` (`novara-bbs/Rial-food.app`). Origin `rial-food`.
 - **Vercel project**: `rial.app.v1.5` (id `prj_t11VHYQjptazjUx7Y2hWLz0IDAjg`).
 - **Governance**: work directly on `main`. "continua" = push approval post green preflight.
 
-## Quality baseline (post-[1.5.93], 2026-04-25)
+## Quality baseline (post-[1.5.94], 2026-04-25)
 - TypeScript: **0 errors** (`npx tsc --noEmit`)
-- Tests: **1147 + 31 (facets) + 2 (filter-sheet conv.) = 1180** passing.
-- i18n symmetry: **1911** keys aligned ES ↔ EN (+40 nuevas claves `t.filters`).
-- Design-system lint: **0 errors**, ~924 warnings (sin cambios vs `[1.5.92]`).
-- Build main: bundle delta esperado ≤ +3 KB gzip neto (FilterSheet + FilterButton + facets utility, todos tree-shakeables).
+- Tests: **1187** passing (+7 Q16 typed-field priority tests vs [1.5.93]).
+- i18n symmetry: **1911** keys aligned ES ↔ EN (sin cambios vs [1.5.93]).
+- Design-system lint: **0 errors**, ~928 warnings (sin cambios).
+- Build main: size:check PASS — all budgets within limits.
 - Security headers: HSTS + X-Frame-Options + nosniff + Permissions-Policy + Referrer-Policy + **CSP** ✓
 - Drift: `text-[Npx]` = **0**, SectionCard shape = **0**, ad-hoc `<hN>` typography
   outside allowlist = **0**, **inline chip reimplementation** = **0**, **inline
@@ -73,7 +64,9 @@ CreateRecipe + MacroTile + DashedAddButton.
 - ~~**`useSupabasePersistence` flag not wired**~~ ✓ — Q6 wired via `useAuth()` edge trigger.
 - ~~**CSP header**~~ ✓ — shipped Q17 `[1.5.81]`. All 6 security headers active in `vercel.json`.
 - **Tag taxonomy regression** — `Recipe.tag: string` ad-hoc ES-literal (`'MI RECETA'`,
-  `'VEGANO'`) fails in EN filters. Requires `FoodTag` enum + 40+ site migration. Defer.
+  `'VEGANO'`) fails in EN filters. `cuisine`/`dietaryTags` are now typed (Q16 ✓);
+  remaining drift is `tag`/`tags` free-form strings. Requires `FoodTag` enum + 40+ site
+  migration for full resolution. Defer.
 - **vendor-recharts chunk 102 KB gzip** — acceptable but monitor; ≤ 400 KB raw / 115 KB gzip.
 
 ## Next sprint candidates (ordered, only pending)
@@ -88,8 +81,9 @@ CreateRecipe + MacroTile + DashedAddButton.
 - **Q6-B** — Recipe photo migration to Supabase Storage bucket `recipe-photos` + RLS.
   Unblocks sync for recipes with multi-media photos. Medium complexity, deferred.
 - **Phase 2 Home** — chips → bottom sheets (Hydration slider in-place); ADR-009 V3 justification per chip. Deferred.
-- **Tag taxonomy codemod (Q16)** — `Recipe.tag: string` ES-literal drift blocks EN filters
-  (see Active risks).
+- ~~**Tag taxonomy codemod (Q16)**~~ ✓ — `cuisine?` + `dietaryTags?` añadidos a `Recipe`;
+  46 seed recipes anotadas; heurística como fallback para recetas de usuario. Sprint [1.5.94].
+  Remaining: `Recipe.tag: string` free-form ES literals (FoodTag enum — defer).
 - `calculateStreak` in `gamification.ts` still has `@deprecated` tag — remove when convenient.
 
 **Shipped sprints** (full detail in CHANGELOG.md): Q1-Q14, Q15.5 (design-system),
