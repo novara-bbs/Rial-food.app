@@ -1,11 +1,15 @@
-/* RIAL font system ([1.5.84] normalization).
-   4 tokens, 4 families, 100 % Google Fonts (no self-host, CSP-clean):
+/* RIAL font system ([1.5.84] normalization, [1.5.108] body → Satoshi self-hosted).
+   4 tokens, 4 families. Satoshi + JetBrains Mono are self-hosted (public/fonts/);
+   Bricolage Grotesque + Fraunces via Google Fonts. CSP font-src 'self' is satisfied
+   because self-hosted fonts load from the same origin.
    - --font-headline → Bricolage Grotesque (variable, opsz 12..96, wght 200..800)
      Warm modernist grotesque with editorial personality. Replaces Space Grotesk
      (over-saturated in dev-tool / v0-template branding). Target ICP = premium-
      nutrition female 25–45; reference pairing seen in Food52, Substack creator
      pages, Bon Appétit web.
-   - --font-body → Inter (standard sans body, excellent multilingual ES/EN).
+   - --font-body → Satoshi (variable, wght 300..900). Geometric sans-serif with
+     premium warmth. Self-hosted via public/fonts/satoshi/. Replaces Inter which
+     was blocked by CSP font-src 'self' in production.
    - --font-serif → Fraunces (variable, opsz 9..144) for editorial hero moments
      (R2.5 verified-recipe titles + ADR-012 <Heading variant="editorial">).
    - --font-label / --font-mono → JetBrains Mono (numeric readouts, caps labels).
@@ -13,7 +17,24 @@
      brand mono instead of the OS-default stack.
    Only Fraunces's large-opsz variants are fetched when a screen renders serif
    text; Bricolage is critical-path because Heading/default is everywhere. */
-@import url('https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,200..800&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap');
+
+/* Satoshi — self-hosted variable font (public/fonts/satoshi/). */
+@font-face {
+  font-family: "Satoshi";
+  src: url('/fonts/satoshi/Satoshi-Variable.woff2') format('woff2');
+  font-weight: 300 900;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Satoshi";
+  src: url('/fonts/satoshi/Satoshi-VariableItalic.woff2') format('woff2');
+  font-weight: 300 900;
+  font-style: italic;
+  font-display: swap;
+}
+
+@import url('https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,200..800&family=JetBrains+Mono:wght@400;500;600;700&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..900;1,9..144,300..900&display=swap');
 @import "tailwindcss";
 @import "tw-animate-css";
@@ -91,7 +112,7 @@
      Cap-friendly at tracking-tight/tighter, humanist warmth at display sizes.
      Google Fonts `opsz 12..96, wght 200..800`. */
   --font-headline: "Bricolage Grotesque", system-ui, sans-serif;
-  --font-body: "Inter", sans-serif;
+  --font-body: "Satoshi", system-ui, sans-serif;
   /* Brand mono — JetBrains Mono. Two aliases so both `font-label` (semantic
      RIAL token) and `font-mono` (generic Tailwind utility inherited by ~30
      call-sites: FastingTimer, Onboarding, Profile stats, CookTimer, KPI tiles…)
