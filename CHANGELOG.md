@@ -1,5 +1,68 @@
 # RIAL App - Changelog
 
+## [1.5.101] - 2026-04-26
+
+### feat(ds): dead-code removal + auth/AI typography migration — allowlist -6 (-25 warnings)
+
+Sprint de calidad múltiple: eliminación de código muerto, limpieza de
+deprecaciones y migración de tipografía en las pantallas que el usuario ve
+nada más abrir la app (auth) y en el módulo de IA.
+
+#### Dead-code removal
+
+**`FilterRow.tsx` eliminado** (`src/components/patterns/FilterRow.tsx`):
+- Shim de compatibilidad que reexportaba `ChipRow`. Cero importadores en
+  features desde `[1.5.86]` cuando todo migró a `ChipRow`. Misión cumplida.
+- `primitives-export.test.ts`: importación + assertion eliminadas; comentario
+  de estado `// FilterRow shim deleted [1.5.101]` añadido.
+- `eslint.config.mjs` allowlist: entrada removida.
+- `collections.ts`: comentario stale de `FilterRow pills` actualizado.
+
+**`getLoggingStreak` @deprecated eliminado** (`src/hooks/useDailyReset.ts`):
+- Función deprecada desde Q13 con `@deprecated` tag y `Scheduled for removal
+  in Q14`. Cero callers no-test. Eliminadas las ~55 líneas de implementación.
+- Reemplazante canónico: `calcStreaks({ history, realFeelLogs }).mealLog`
+  en `src/features/wellness/utils/streaks.ts`.
+
+#### Fase C typography migrations (5 archivos, allowlist -5)
+
+**`src/features/auth/screens/Login.tsx`**:
+- `<h1>` raw → `<Heading level="h1" className="font-black tracking-widest">`
+- Brand logo "R": `text-3xl font-black` → `text-headline font-black` (semantic)
+- CTA button: `text-xs font-bold` → `text-label font-bold` (semantic)
+- OAuth buttons: `text-sm font-medium` → `text-body-sm font-medium` (semantic)
+- Divider: `font-label text-micro uppercase tracking-widest` →
+  `font-headline text-micro normal-case tracking-normal` ([1.5.98-99] convention)
+
+**`src/features/auth/screens/Signup.tsx`**:
+- `<h1>` → `<Heading level="h1">`, `<h2>` email-confirmation → `<Heading level="h2">`
+- Brand logo "R": `text-3xl font-black` → `text-headline font-black`
+- CTA button: `text-xs font-bold` → `text-label font-bold`
+- Password hint + legal note: `font-label uppercase tracking-widest` →
+  `font-headline normal-case tracking-normal`
+
+**`src/features/auth/screens/ForgotPassword.tsx`**:
+- Dos `<h2>` raw (form + success state) → `<Heading level="h2">`
+- CTA button: `text-xs font-bold` → `text-label font-bold`
+
+**`src/features/ai/screens/AICoach.tsx`**:
+- Dos `<h2>` encabezados (`text-2xl/xl font-bold`) → `<Heading level="h2">`
+- `<h3>` pro-gate → `<Heading level="h3">`
+- Upgrade CTA: `text-lg font-bold` → `text-body-lg font-bold` (semantic)
+
+**`src/features/dev/components/DemoSeedCard.tsx`**:
+- `<h2 className="... text-sm font-bold ...">` → `<Heading level="h4" className="tracking-widest">`
+
+#### Métricas
+
+- TS: 0 errores
+- Tests: 1188 passing (sin cambios)
+- i18n: 1913 keys (sin cambios)
+- Design-system lint: **0 errors, 902 warnings** (-25 vs [1.5.100])
+- Allowlist: **47 archivos** (-6 vs [1.5.100])
+
+---
+
 ## [1.5.100] - 2026-04-26
 
 ### fix(ci): resolve ESLint v9 + react-hooks plugin incompatibility — CI passing again

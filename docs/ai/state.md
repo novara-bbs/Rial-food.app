@@ -5,36 +5,36 @@
 > prunes this file back down. Everything below should answer: *what's the release line,
 > what's the quality baseline, what's the next move, what's broken?*
 
-Last updated: **2026-04-26** — `[1.5.100]` **CI fix** — ESLint v9 + react-hooks
-plugin incompatibility resolved. Removed undefined `reactHooks` registration from
-`eslint.config.mjs` (was crashing config load); removed two orphaned
-`eslint-disable-next-line react-hooks/exhaustive-deps` comments from Discovery.tsx
-+ Cocina.tsx. CI lint now passes: 0 errors, 927 warnings.
+Last updated: **2026-04-26** — `[1.5.101]` **Dead-code + auth/AI typography** —
+`FilterRow.tsx` shim deleted (zero consumers); `getLoggingStreak` @deprecated removed
+(Q13 deuda); auth screens (Login/Signup/ForgotPassword) + AICoach + DemoSeedCard
+migrados a `<Heading>` + tokens semánticos. Allowlist **47 archivos** (-6). Lint:
+0 errors, **902 warnings** (-25).
 
-Previo: `[1.5.99]` Nav/search/filter-layer typography (BottomNav + TabNav +
-SearchInput bug + SortControl + FilterButton) · `[1.5.98]` Chip typography +
-carousel · `[1.5.97]` Global chip system polish.
+Previo: `[1.5.100]` CI fix (ESLint v9 crash) · `[1.5.99]` Nav/search/filter typography
+· `[1.5.98]` Chip typography + carousel.
 
 ## Release snapshot
 - **Branch**: worktree `claude/hardcore-solomon-9da39e`, ahead of `rial-food/main`.
-- **Last shipped**: `[1.5.100]` **CI fix** — 3 archivos. ESLint v9 crash resolved
-  (undefined `reactHooks` variable in config removed); 2 orphaned disable comments
-  removed from Discovery.tsx + Cocina.tsx. CI lint: 0 errors.
-- **Previous**: `[1.5.99]` Nav/search/filter-layer typography (5 archivos). `[1.5.98]`
-  Chip typography + carousel (6 archivos). `[1.5.97]` Global chip polish (11 archivos).
-- **Active plan**: `[1.5.100]` sealed. **Próximos**: Phase 2 Home, Q6-B
+- **Last shipped**: `[1.5.101]` **Dead-code + auth/AI typography** — 10 archivos.
+  FilterRow deleted; getLoggingStreak removed; Login + Signup + ForgotPassword +
+  AICoach + DemoSeedCard migrados. Allowlist 47 (-6). 902 warnings (-25).
+- **Previous**: `[1.5.100]` CI fix (3 archivos). `[1.5.99]` Nav/search/filter
+  typography (5 archivos). `[1.5.98]` Chip typography + carousel (6 archivos).
+- **Active plan**: `[1.5.101]` sealed. **Próximos**: Phase 2 Home, Q6-B
   recipe photos, owner-actions Supabase prod env.
 - **Release target**: `rial-food/main` (`novara-bbs/Rial-food.app`). Origin `rial-food`.
 - **Vercel project**: `rial.app.v1.5` (id `prj_t11VHYQjptazjUx7Y2hWLz0IDAjg`).
 - **Governance**: work directly on `main`. "continua" = push approval post green preflight.
 
-## Quality baseline (post-[1.5.100], 2026-04-26)
+## Quality baseline (post-[1.5.101], 2026-04-26)
 - TypeScript: **0 errors** (`npx tsc --noEmit`)
 - Tests: **1188** passing (sin cambios).
 - i18n symmetry: **1913** keys aligned ES ↔ EN (sin cambios).
-- Design-system lint: **0 errors**, **927 warnings** (sin cambios desde [1.5.99]).
+- Design-system lint: **0 errors**, **902 warnings** (-25 vs [1.5.100]; allowlist 47 archivos, -6).
 - Build main: size:check PASS — all budgets within limits.
-- **CI status**: ✅ verde — ESLint config crash + disable-comment orphans resueltos ([1.5.100]).
+- **CI status**: ✅ verde — ESLint config crash resuelto ([1.5.100]).
+- `calculateStreak` @deprecated: ✓ eliminado ([1.5.101]).
 - Security headers: HSTS + X-Frame-Options + nosniff + Permissions-Policy + Referrer-Policy + **CSP** ✓
 - Drift: `text-[Npx]` = **0**, SectionCard shape = **0**, ad-hoc `<hN>` typography
   outside allowlist = **0**, **inline chip reimplementation** = **0**, **inline
@@ -82,7 +82,7 @@ carousel · `[1.5.97]` Global chip system polish.
 - ~~**Tag taxonomy codemod (Q16)**~~ ✓ — `cuisine?` + `dietaryTags?` añadidos a `Recipe`;
   46 seed recipes anotadas; heurística como fallback para recetas de usuario. Sprint [1.5.94].
   Remaining: `Recipe.tag: string` free-form ES literals (FoodTag enum — defer).
-- `calculateStreak` in `gamification.ts` still has `@deprecated` tag — remove when convenient.
+- ~~`calculateStreak` @deprecated~~ ✓ — `getLoggingStreak` removed [1.5.101].
 
 **Shipped sprints** (full detail in CHANGELOG.md): Q1-Q14, Q15.5 (design-system),
 Q16-B1, Q16-B2, Tab audit 2026-04-18, S3 tranche, Bevel PR 1-9, Q19 meal-taxonomy,

@@ -6,8 +6,7 @@
  * object (must be side-effect-free, no closures over mutable state).
  *
  * Used by:
- *  - `Cocina.tsx` horizontal collections carousel (discovery entry points)
- *  - `FilterRow` pills (secondary quick-filter row — same predicates)
+ *  - `Cocina.tsx` horizontal collections carousel via `CollectionsCarousel` → `ChipRow emoji`
  *
  * Predicates operate on the "scored recipe" shape augmented by Cocina:
  *   { ...Recipe, matchScore, cal, pro, totalTime, time }

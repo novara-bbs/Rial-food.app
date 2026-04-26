@@ -6,6 +6,7 @@ import { User, Mail, Lock, Eye, EyeOff, UserPlus } from 'lucide-react';
 import { toast } from 'sonner';
 import { signUpWithEmail } from '../../../lib/supabase';
 import { useI18n } from '../../../i18n';
+import { Heading } from '@/components/ui/Typography';
 
 interface SignupProps {
   onNavigateToLogin: () => void;
@@ -47,9 +48,9 @@ export default function Signup({ onNavigateToLogin }: SignupProps) {
           <Mail className="w-9 h-9 text-primary" />
         </div>
         <div>
-          <h2 className="font-headline text-xl font-black uppercase tracking-widest text-tertiary mb-2">
+          <Heading level="h2" className="font-black tracking-widest mb-2">
             {t.auth.checkEmail}
-          </h2>
+          </Heading>
           <p className="font-body text-sm text-on-surface-variant max-w-xs">
             {t.auth.checkEmailDesc}
           </p>
@@ -71,10 +72,10 @@ export default function Signup({ onNavigateToLogin }: SignupProps) {
         {/* Logo */}
         <div className="mb-10 flex flex-col items-center gap-3">
           <div className="w-20 h-20 rounded-2xl bg-primary flex items-center justify-center shadow-elev-3 shadow-primary/25">
-            <span className="font-headline text-3xl font-black text-on-primary">R</span>
+            <span className="font-headline text-headline font-black text-on-primary">R</span>
           </div>
           <div className="text-center">
-            <h1 className="font-headline text-2xl font-black uppercase tracking-widest text-tertiary">RIAL</h1>
+            <Heading level="h1" className="font-black tracking-widest">RIAL</Heading>
             <p className="font-body text-sm text-on-surface-variant mt-1">{t.auth.createAccountTagline}</p>
           </div>
         </div>
@@ -131,7 +132,7 @@ export default function Signup({ onNavigateToLogin }: SignupProps) {
           </div>
 
           {/* Password hint */}
-          <p className="font-label text-micro text-on-surface-variant/60 uppercase tracking-widest px-1">
+          <p className="font-headline text-micro normal-case tracking-normal text-on-surface-variant/60 px-1">
             {t.auth.passwordHint}
           </p>
 
@@ -139,7 +140,7 @@ export default function Signup({ onNavigateToLogin }: SignupProps) {
           <button
             type="submit"
             disabled={loading || !isValid}
-            className="w-full py-3.5 bg-primary text-on-primary rounded-xl font-headline text-xs font-bold uppercase tracking-widest flex items-center justify-center gap-2 hover:bg-primary/90 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+            className="w-full py-3.5 bg-primary text-on-primary rounded-xl font-headline text-label font-bold uppercase tracking-widest flex items-center justify-center gap-2 hover:bg-primary/90 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
           >
             {loading ? (
               <div className="w-4 h-4 border-2 border-on-primary/40 border-t-on-primary rounded-full animate-spin" />
@@ -150,7 +151,7 @@ export default function Signup({ onNavigateToLogin }: SignupProps) {
           </button>
 
           {/* Legal note */}
-          <p className="font-label text-micro text-on-surface-variant uppercase tracking-widest text-center leading-relaxed px-2">
+          <p className="font-headline text-micro normal-case tracking-normal text-on-surface-variant text-center leading-relaxed px-2">
             {t.auth.legalNote}
           </p>
         </form>

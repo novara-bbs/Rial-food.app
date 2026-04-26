@@ -191,7 +191,7 @@ const typographyMigrationAllowlist = [
   'src/components/SectionCard.tsx',
   'src/components/SelectList.tsx',
   'src/components/Sidebar.tsx',
-  'src/components/patterns/FilterRow.tsx',
+  // FilterRow.tsx deleted [1.5.101] — shim removed, all call-sites on ChipRow
   'src/components/patterns/RecipeCard.tsx',
   // TabNav removed [1.5.99]: text-xs font-bold → text-micro font-semibold normal-case
   'src/components/ui/button.tsx',
@@ -199,11 +199,11 @@ const typographyMigrationAllowlist = [
   'src/components/ui/input.tsx',
   'src/components/ui/label.tsx',
   'src/components/ui/tabs.tsx',
-  'src/features/ai/screens/AICoach.tsx',
-  'src/features/auth/screens/ForgotPassword.tsx',
-  'src/features/auth/screens/Login.tsx',
-  'src/features/auth/screens/Signup.tsx',
-  'src/features/dev/components/DemoSeedCard.tsx',
+  // AICoach.tsx migrated [1.5.101]: text-2xl/xl font-bold → <Heading>, text-lg → text-body-lg
+  // ForgotPassword.tsx migrated [1.5.101]: <h2> → <Heading>, text-xs → text-label
+  // Login.tsx migrated [1.5.101]: <h1> → <Heading>, text-3xl → text-headline, text-xs → text-label
+  // Signup.tsx migrated [1.5.101]: same as Login + password hint/legal note font-label → font-headline
+  // DemoSeedCard.tsx migrated [1.5.101]: <h2> → <Heading level="h4">
   'src/features/food/components/BarcodeScanner.tsx',
   'src/features/food/components/FamilyCard.tsx',
   'src/features/food/components/PortionSelector.tsx',

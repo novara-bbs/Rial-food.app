@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Sparkles, Trash2, Loader2 } from 'lucide-react';
 import { toast } from 'sonner';
 import { useAppState } from '../../../contexts/AppStateContext';
+import { Heading } from '@/components/ui/Typography';
 
 interface DemoSeedCardProps {
   /**
@@ -55,9 +56,7 @@ export default function DemoSeedCard({ forceVisible = false }: DemoSeedCardProps
       <div className="flex items-start gap-2">
         <Sparkles className="w-4 h-4 text-brand-secondary shrink-0 mt-0.5" aria-hidden="true" />
         <div className="flex-1 min-w-0">
-          <h2 className="font-headline font-bold text-sm uppercase tracking-widest text-tertiary">
-            Modo demo · Rial
-          </h2>
+          <Heading level="h4" className="tracking-widest">Modo demo · Rial</Heading>
           <p className="text-caption text-on-surface-variant mt-1 leading-relaxed">
             Carga 30 días coherentes con <strong>Clara</strong> (ICP Cut): peso 72.4 → 69.1 kg,
             macros, hidratación, movimiento, fotos de progreso, reflexiones semanales y posts.

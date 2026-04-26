@@ -21,7 +21,6 @@ import BottomNav from '@/components/BottomNav';
 import PageHeader from '@/components/patterns/PageHeader';
 import TabNav from '@/components/patterns/TabNav';
 import ChipRow from '@/components/patterns/ChipRow';
-import FilterRow from '@/components/patterns/FilterRow';
 import SearchInput from '@/components/patterns/SearchInput';
 import SortControl from '@/components/patterns/SortControl';
 import FilterSheet from '@/components/patterns/FilterSheet';
@@ -59,7 +58,7 @@ describe('Primitives — canonical exports (ADR-001)', () => {
   it('exports the filter primitives (ADR-013)', () => {
     expect(TabNav).toBeTruthy();
     expect(ChipRow).toBeTruthy();
-    expect(FilterRow).toBeTruthy(); // shim — kept until next cleanup sprint
+    // FilterRow shim deleted [1.5.101] — all call-sites migrated to ChipRow.
     expect(SearchInput).toBeTruthy();
     expect(SortControl).toBeTruthy();
   });

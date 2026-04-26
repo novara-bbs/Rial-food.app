@@ -3,6 +3,7 @@ import { ArrowLeft, Send, Bot, User, Sparkles, Lock, Crown, Zap, Activity, Utens
 import SectionCard from '../../../components/SectionCard';
 import ReactMarkdown from 'react-markdown';
 import { useI18n } from '../../../i18n';
+import { Heading } from '@/components/ui/Typography';
 import { generateAIResponse, buildSystemPrompt } from '../lib/gemini';
 import { logger } from '../../../lib/logger';
 import { useLocalStorageState } from '../../../hooks/useLocalStorageState';
@@ -91,9 +92,9 @@ export default function AICoach({
           </button>
           <div>
             <span className="font-label text-xs tracking-[0.2em] text-primary uppercase block">{t.aiCoach.brand}</span>
-            <h2 className="font-headline text-2xl font-bold tracking-tighter uppercase text-tertiary flex items-center gap-2">
+            <Heading level="h2" className="flex items-center gap-2">
               <Sparkles className="w-6 h-6 text-primary" /> {t.aiCoach.title}
-            </h2>
+            </Heading>
           </div>
         </header>
 
@@ -101,11 +102,11 @@ export default function AICoach({
           <div className="w-24 h-24 rounded-full bg-surface-container-highest flex items-center justify-center mb-4">
             <Lock className="w-10 h-10 text-on-surface-variant" />
           </div>
-          <h3 className="font-headline text-headline font-bold text-tertiary uppercase">{t.aiCoach.proRequired}</h3>
+          <Heading level="h3">{t.aiCoach.proRequired}</Heading>
           <p className="text-on-surface-variant max-w-md">{t.aiCoach.proMessage}</p>
           <button type="button"
             onClick={onBack}
-            className="px-8 py-4 bg-primary text-on-primary rounded-sm font-headline font-bold text-lg uppercase tracking-widest hover:bg-primary/90 transition-colors flex items-center gap-2"
+            className="px-8 py-4 bg-primary text-on-primary rounded-sm font-headline text-body-lg font-bold uppercase tracking-widest hover:bg-primary/90 transition-colors flex items-center gap-2"
           >
             <Crown className="w-5 h-5" /> {t.aiCoach.upgradePrompt}
           </button>
@@ -125,9 +126,9 @@ export default function AICoach({
         </button>
         <div className="flex-1">
           <span className="font-label text-xs tracking-[0.2em] text-primary uppercase block">{t.aiCoach.proFeature}</span>
-          <h2 className="font-headline text-xl font-bold tracking-tighter uppercase text-tertiary flex items-center gap-2">
+          <Heading level="h2" className="flex items-center gap-2">
             <Sparkles className="w-5 h-5 text-primary" /> {t.aiCoach.title}
-          </h2>
+          </Heading>
         </div>
         {messages.length > 1 && (
           <div className="relative">

@@ -6,6 +6,7 @@ import { Mail, ArrowLeft, Send } from 'lucide-react';
 import { toast } from 'sonner';
 import { resetPassword } from '../../../lib/supabase';
 import { useI18n } from '../../../i18n';
+import { Heading } from '@/components/ui/Typography';
 
 interface ForgotPasswordProps {
   onBack: () => void;
@@ -49,7 +50,7 @@ export default function ForgotPassword({ onBack }: ForgotPasswordProps) {
             <div className="w-16 h-16 rounded-full bg-primary/15 flex items-center justify-center mx-auto">
               <Mail className="w-7 h-7 text-primary" />
             </div>
-            <h2 className="font-headline text-xl font-black uppercase tracking-widest text-tertiary">{t.auth.checkEmail}</h2>
+            <Heading level="h2" className="font-black tracking-widest">{t.auth.checkEmail}</Heading>
             <p className="font-body text-sm text-on-surface-variant">{t.auth.resetEmailDesc}</p>
             <button type="button" onClick={onBack} className="font-body text-sm text-primary hover:underline">
               {t.auth.backToLogin}
@@ -58,9 +59,9 @@ export default function ForgotPassword({ onBack }: ForgotPasswordProps) {
         ) : (
           <>
             <div className="mb-8 text-center">
-              <h2 className="font-headline text-xl font-black uppercase tracking-widest text-tertiary mb-2">
+              <Heading level="h2" className="font-black tracking-widest mb-2">
                 {t.auth.forgotPassword}
-              </h2>
+              </Heading>
               <p className="font-body text-sm text-on-surface-variant max-w-xs">
                 {t.auth.forgotPasswordDesc}
               </p>
@@ -82,7 +83,7 @@ export default function ForgotPassword({ onBack }: ForgotPasswordProps) {
               <button
                 type="submit"
                 disabled={loading || !email}
-                className="w-full py-3.5 bg-primary text-on-primary rounded-xl font-headline text-xs font-bold uppercase tracking-widest flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+                className="w-full py-3.5 bg-primary text-on-primary rounded-xl font-headline text-label font-bold uppercase tracking-widest flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 {loading ? (
                   <div className="w-4 h-4 border-2 border-on-primary/40 border-t-on-primary rounded-full animate-spin" />

@@ -154,59 +154,6 @@ export function getNutritionHistory(): DailyArchive[] {
   }
 }
 
-/**
- * Compute current logging streak (consecutive days with meals logged).
- *
- * @deprecated Q13 — use `calcStreaks({ history, realFeelLogs }).mealLog` from
- * `features/wellness/utils/streaks.ts` for a single source of truth that
- * covers both meal-log and Real-Feel streaks. Scheduled for removal in Q14.
- */
-export function getLoggingStreak(history: DailyArchive[]): { current: number; best: number } {
-  if (history.length === 0) return { current: 0, best: 0 };
-
-  const dates = history
-    .filter(h => h.mealCount > 0)
-    .map(h => h.date)
-    .sort()
-    .reverse();
-
-  if (dates.length === 0) return { current: 0, best: 0 };
-
-  let best = 0;
-  let streak = 1;
-  const today = todayLocal();
-
-  // Check if today or yesterday is in the streak
-  const dayMs = 86_400_000;
-  const todayMs = new Date(today).getTime();
-  const lastLogMs = new Date(dates[0]).getTime();
-  const gapFromToday = (todayMs - lastLogMs) / dayMs;
-
-  // First pass: compute best streak across all history
-  for (let i = 1; i < dates.length; i++) {
-    const prev = new Date(dates[i - 1]).getTime();
-    const curr = new Date(dates[i]).getTime();
-    if (prev - curr === dayMs) {
-      streak++;
-    } else {
-      best = Math.max(best, streak);
-      streak = 1;
-    }
-  }
-  best = Math.max(best, streak);
-
-  // Compute current streak from the end
-  let current = 1;
-  for (let i = 1; i < dates.length; i++) {
-    const prev = new Date(dates[i - 1]).getTime();
-    const curr = new Date(dates[i]).getTime();
-    if (prev - curr === dayMs) {
-      current++;
-    } else {
-      break;
-    }
-  }
-  if (gapFromToday > 1) current = 0;
-
-  return { current, best };
-}
+// getLoggingStreak removed [1.5.101] — deprecated since Q13.
+// Use calcStreaks({ history, realFeelLogs }).mealLog from
+// src/features/wellness/utils/streaks.ts instead.

@@ -7,6 +7,7 @@ import { Mail, Lock, Eye, EyeOff, LogIn, Apple } from 'lucide-react';
 import { toast } from 'sonner';
 import { signInWithEmail, signInWithGoogle, signInWithApple } from '../../../lib/supabase';
 import { useI18n } from '../../../i18n';
+import { Heading } from '@/components/ui/Typography';
 
 interface LoginProps {
   onBack?: () => void;
@@ -60,10 +61,10 @@ export default function Login({ onNavigateToSignup, onForgotPassword }: LoginPro
         {/* Logo */}
         <div className="mb-10 flex flex-col items-center gap-3">
           <div className="w-20 h-20 rounded-2xl bg-primary flex items-center justify-center shadow-elev-3 shadow-primary/25">
-            <span className="font-headline text-3xl font-black text-on-primary">R</span>
+            <span className="font-headline text-headline font-black text-on-primary">R</span>
           </div>
           <div className="text-center">
-            <h1 className="font-headline text-2xl font-black uppercase tracking-widest text-tertiary">RIAL</h1>
+            <Heading level="h1" className="font-black tracking-widest">RIAL</Heading>
             <p className="font-body text-sm text-on-surface-variant mt-1">{t.auth.tagline}</p>
           </div>
         </div>
@@ -117,7 +118,7 @@ export default function Login({ onNavigateToSignup, onForgotPassword }: LoginPro
           <button
             type="submit"
             disabled={loading || !email || !password}
-            className="w-full py-3.5 bg-primary text-on-primary rounded-xl font-headline text-xs font-bold uppercase tracking-widest flex items-center justify-center gap-2 hover:bg-primary/90 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+            className="w-full py-3.5 bg-primary text-on-primary rounded-xl font-headline text-label font-bold uppercase tracking-widest flex items-center justify-center gap-2 hover:bg-primary/90 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
           >
             {loading ? (
               <div className="w-4 h-4 border-2 border-on-primary/40 border-t-on-primary rounded-full animate-spin" />
@@ -131,7 +132,7 @@ export default function Login({ onNavigateToSignup, onForgotPassword }: LoginPro
         {/* Divider */}
         <div className="w-full max-w-sm flex items-center gap-3 my-5">
           <div className="flex-1 h-px bg-outline-variant/30" />
-          <span className="font-label text-micro uppercase tracking-widest text-on-surface-variant">{t.auth.orContinueWith}</span>
+          <span className="font-headline text-micro normal-case tracking-normal text-on-surface-variant">{t.auth.orContinueWith}</span>
           <div className="flex-1 h-px bg-outline-variant/30" />
         </div>
 
@@ -141,7 +142,7 @@ export default function Login({ onNavigateToSignup, onForgotPassword }: LoginPro
           <button
             type="button"
             onClick={handleApple}
-            className="w-full py-3.5 bg-surface-container-highest border border-outline-variant/30 rounded-xl font-body text-sm font-medium text-on-surface flex items-center justify-center gap-3 hover:bg-surface-container-low transition-colors"
+            className="w-full py-3.5 bg-surface-container-highest border border-outline-variant/30 rounded-xl font-body text-body-sm font-medium text-on-surface flex items-center justify-center gap-3 hover:bg-surface-container-low transition-colors"
           >
             <Apple className="w-4 h-4" />
             {t.auth.continueWithApple}
@@ -149,7 +150,7 @@ export default function Login({ onNavigateToSignup, onForgotPassword }: LoginPro
           <button
             type="button"
             onClick={handleGoogle}
-            className="w-full py-3.5 bg-surface-container-highest border border-outline-variant/30 rounded-xl font-body text-sm font-medium text-on-surface flex items-center justify-center gap-3 hover:bg-surface-container-low transition-colors"
+            className="w-full py-3.5 bg-surface-container-highest border border-outline-variant/30 rounded-xl font-body text-body-sm font-medium text-on-surface flex items-center justify-center gap-3 hover:bg-surface-container-low transition-colors"
           >
             {/* Google G icon */}
             <svg className="w-4 h-4" viewBox="0 0 24 24" aria-hidden="true">
