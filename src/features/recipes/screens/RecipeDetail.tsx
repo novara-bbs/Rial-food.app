@@ -1,4 +1,4 @@
-import { ArrowLeft, Clock, Flame, Activity, Minus, CheckCircle2, Circle, Plus, MessageSquare, Bookmark, X, Users, ShoppingCart, ChefHat, UtensilsCrossed, Share2, ExternalLink, Pencil, Trash2, GitFork, Crown, RefreshCw } from 'lucide-react';
+import { ArrowLeft, Clock, Flame, Minus, CheckCircle2, Circle, Plus, MessageSquare, Bookmark, X, Users, ShoppingCart, ChefHat, Share2, ExternalLink, Pencil, Trash2, GitFork, RefreshCw } from 'lucide-react';
 import featureFlags from '../../../lib/featureFlags';
 import TimeTileComposite from '../components/TimeTileComposite';
 import AuthorAttributionCard from '../components/AuthorAttributionCard';
@@ -12,8 +12,7 @@ import MediaLightbox from '../components/MediaLightbox';
 import VideoSection from '../components/VideoSection';
 import PublishRecipeSheet from '../../social/components/PublishRecipeSheet';
 import RecipeNutritionBar from '../components/RecipeNutritionBar';
-import RecipeSubstitutionPicker from '../components/RecipeSubstitutionPicker';
-import RecipeDaySelectorSheet from '../components/RecipeDaySelectorSheet';
+// RecipeSubstitutionPicker + RecipeDaySelectorSheet moved to RecipeOverviewTab (Phase 3.1).
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -23,7 +22,7 @@ import { toast } from 'sonner';
 import { getRecipeSwaps } from '../utils/substitutions';
 import { calculateMatchScore } from '../utils/matchScore';
 import { getGoalSuggestions } from '../utils/goalOptimizer';
-import { defaultSlotFor } from '../utils/meal-slot';
+// defaultSlotFor moved to RecipeOverviewTab (Phase 3.1).
 import { trackRecipeView } from '../../social/utils/analytics';
 import { CREATORS_MAP } from '../../social/data/seed-creators';
 import { useNavigation } from '../../../contexts/NavigationContext';
@@ -37,6 +36,7 @@ import ConfirmDialog from '../../../components/ConfirmDialog';
 import RelatedRecipesCarousel from '../components/RelatedRecipesCarousel';
 import RecipeStepsTab from '../components/detail/RecipeStepsTab';
 import RecipeNutritionTab from '../components/detail/RecipeNutritionTab';
+import RecipeOverviewTab from '../components/detail/RecipeOverviewTab';
 import { Heading } from '@/components/ui/Typography';
 
 export default function RecipeDetail({ recipe, onBack, onSaveRecipe, isSaved, onAddToPlan, onLogMealNow, onAddToShoppingList, dictionary = [], userProfile }: { recipe: any, onBack: () => void, onSaveRecipe?: (r: any) => void, isSaved?: boolean, onAddToPlan?: (recipe: any, dayIndex: number, slot?: 'breakfast' | 'lunch' | 'dinner' | 'snack') => void, onLogMealNow?: (recipe: any, servings: number) => void, onAddToShoppingList?: (items: any[]) => void, dictionary?: any[], userProfile?: any }) {
@@ -596,133 +596,26 @@ export default function RecipeDetail({ recipe, onBack, onSaveRecipe, isSaved, on
           </TabsList>
 
           {/* ── Tab 1: Overview ── */}
-          <TabsContent value="overview" className="space-y-6 pt-4">
-            <p className="text-sm text-on-surface-variant leading-relaxed">{data.description}</p>
-
-            {/* Match score */}
-            <div className="bg-primary/5 border border-primary/20 rounded-sm p-4 relative overflow-hidden">
-              <div className="absolute top-0 right-0 p-3 opacity-5">
-                <Activity className="w-20 h-20" />
-              </div>
-              <div className="relative z-10">
-                <div className="flex items-center justify-between mb-2">
-                  <div className="flex items-center gap-2">
-                    <Activity className="w-4 h-4 text-primary" />
-                    <p className="font-headline text-body-sm font-bold text-tertiary uppercase">{t.recipeDetail.matchScore}</p>
-                  </div>
-                  <span className="text-primary font-headline text-title font-bold">{matchScore}%</span>
-                </div>
-                <p className="text-on-surface-variant text-xs leading-relaxed">
-                  {t.recipeDetail.matchDescription.replace('{percent}', String(matchScore)).replace('{goal}', t.recipeDetail.goalMaxPerformance)}
-                </p>
-                <div className="w-full bg-surface-container-highest h-1.5 rounded-full overflow-hidden mt-3">
-                  <div className="bg-primary h-full rounded-full" style={{ width: `${matchScore}%` }} />
-                </div>
-              </div>
-            </div>
-
-            {/* Smart swapper — powered by user preferences */}
-            <RecipeSubstitutionPicker
-              swapSuggestions={swapSuggestions}
-              onApplySwap={applySwap}
-              hasPreferences={!!(Object.keys(userProfile?.foodPreferences ?? {}).length || userProfile?.intolerances?.length)}
-            />
-
-            {/* Quick actions — primary */}
-            <div ref={quickActionsRef} className="flex flex-col sm:flex-row gap-3">
-              <Button variant="brand" className="flex-1" onClick={() => onLogMealNow && onLogMealNow(getModifiedRecipe(), servings)}>
-                <UtensilsCrossed className="w-4 h-4 mr-2" /> {t.recipeDetail.logMeal}
-              </Button>
-              <Button variant="outline" className="flex-1" onClick={() => setShowDaySelector(true)}>
-                {t.recipeDetail.addToPlan}
-              </Button>
-            </div>
-
-            {/* Mark as Cooked — universal, NYT Cooking pattern (R2.3) */}
-            <button
-              type="button"
-              onClick={() => handleMarkAsCooked(getModifiedRecipe())}
-              className="w-full flex items-center justify-between min-h-11 px-4 py-3 bg-surface-container-low rounded-sm border border-outline-variant/20 hover:border-primary/30 transition-colors group"
-            >
-              <div className="flex items-center gap-3">
-                <ChefHat className="w-4 h-4 text-on-surface-variant group-hover:text-primary transition-colors" />
-                <span className="font-headline font-semibold text-micro text-tertiary uppercase tracking-widest">
-                  {(t.recipes as any).markAsCooked ?? 'Marcar como cocinada'}
-                </span>
-              </div>
-              {cookedCount > 0 && (
-                <span className="font-label text-micro uppercase tracking-widest text-primary">
-                  {((t.recipes as any).cookedNTimes ?? 'Cocinada {n} veces').replace('{n}', String(cookedCount))}
-                </span>
-              )}
-            </button>
-
-            {/* Versionar — secondary action, Pro-only */}
-            {data.publishedBy !== 'self' && (
-              <div className="border-t border-outline-variant/10 pt-3">
-                <button
-                  type="button"
-                  onClick={() => {
-                    if (!isPro) { navigateTo('rial-plus'); return; }
-                    setShowDuplicateConfirm(true);
-                  }}
-                  className="w-full flex items-center justify-between min-h-11 px-4 py-3 bg-surface-container-low rounded-sm border border-outline-variant/20 hover:border-primary/30 transition-colors group"
-                >
-                  <div className="flex items-center gap-3">
-                    <GitFork className="w-4 h-4 text-on-surface-variant group-hover:text-primary transition-colors" />
-                    <div className="text-left">
-                      <span className="font-headline font-semibold text-micro text-tertiary uppercase tracking-widest block">
-                        {t.recipeDetail.createVersion || 'Crear mi versión'}
-                      </span>
-                      <span className="font-label text-micro text-on-surface-variant tracking-widest uppercase">
-                        {t.recipeDetail.versionDesc || 'Duplicar y personalizar esta receta'}
-                      </span>
-                    </div>
-                  </div>
-                  {!isPro && <Crown className="w-4 h-4 text-brand-secondary" />}
-                </button>
-              </div>
-            )}
-
-            {showDaySelector && (
-              <RecipeDaySelectorSheet
-                defaultSlot={defaultSlotFor(data)}
-                onSelect={(idx, slot) => { onAddToPlan?.(getModifiedRecipe(), idx, slot); setShowDaySelector(false); }}
-                onClose={() => setShowDaySelector(false)}
-              />
-            )}
-
-            {/* Community notes — from posts that reference this recipe */}
-            {(() => {
-              const recipeComments = communityPosts
-                .filter((p: any) => p.recipe && String(p.recipe.id) === String(data.id) && p.commentsList?.length > 0)
-                .flatMap((p: any) => p.commentsList)
-                .slice(0, 3);
-              if (recipeComments.length === 0) return null;
-              return (
-                <section className="border-t border-outline-variant/20 pt-4">
-                  <Heading level="h4" className="mb-3 flex items-center gap-2">
-                    <MessageSquare className="w-4 h-4 text-primary" /> {t.recipeDetail.notes} ({recipeComments.length})
-                  </Heading>
-                  {recipeComments.map((comment: any) => (
-                    <div key={comment.id} className="bg-surface-container-low p-3 rounded-sm border border-outline-variant/10 mb-2">
-                      <div className="flex items-center gap-2 mb-1">
-                        {comment.authorImg ? (
-                          <img src={comment.authorImg} alt={comment.author} className="w-5 h-5 rounded-full object-cover" referrerPolicy="no-referrer" />
-                        ) : (
-                          <div className="w-5 h-5 rounded-full bg-surface-container-highest flex items-center justify-center text-micro font-bold text-tertiary">
-                            {comment.author?.charAt(0)}
-                          </div>
-                        )}
-                        <span className="font-headline font-semibold text-micro uppercase text-tertiary">{comment.author}</span>
-                      </div>
-                      <p className="text-caption text-on-surface-variant leading-relaxed">"{comment.text}"</p>
-                    </div>
-                  ))}
-                </section>
-              );
-            })()}
-          </TabsContent>
+          <RecipeOverviewTab
+            data={data}
+            matchScore={matchScore}
+            swapSuggestions={swapSuggestions}
+            applySwap={applySwap}
+            userProfile={userProfile}
+            isPro={isPro}
+            cookedCount={cookedCount}
+            servings={servings}
+            quickActionsRef={quickActionsRef}
+            getModifiedRecipe={getModifiedRecipe}
+            onLogMealNow={onLogMealNow}
+            onAddToPlan={onAddToPlan}
+            handleMarkAsCooked={handleMarkAsCooked}
+            showDaySelector={showDaySelector}
+            setShowDaySelector={setShowDaySelector}
+            setShowDuplicateConfirm={setShowDuplicateConfirm}
+            navigateTo={navigateTo}
+            communityPosts={communityPosts}
+          />
 
           {/* ── Tab 2: Ingredients ── */}
           <TabsContent value="ingredients" className="space-y-4 pt-4">
