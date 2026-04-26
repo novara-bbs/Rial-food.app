@@ -5,29 +5,35 @@
 > prunes this file back down. Everything below should answer: *what's the release line,
 > what's the quality baseline, what's the next move, what's broken?*
 
-Last updated: **2026-04-26** — `[1.5.103]` hooks exhaustive-deps sweep · `[1.5.102]` RecipeCard
-KS redesign (image + info-block, sin blur) · `[1.5.101]` Dead-code + auth/AI typography.
+Last updated: **2026-04-26** — `[1.5.109]` chip/badge weight + pill padding · `[1.5.108]`
+Satoshi self-hosted body font · `[1.5.107]` scroll restoration goBack + recipe nav fix.
 
 ## Release snapshot
-- **Branch**: `main`, ahead of `rial-food/main`.
-- **Last shipped**: `[1.5.103]` hooks sweep (9 archivos, 0 react-hooks errors).
-  `[1.5.102]` RecipeCard KS pattern. `[1.5.101]` Dead-code + auth/AI typography (902 warnings, -25).
-- **Previous**: `[1.5.100]` CI fix · `[1.5.99]` Nav typography · `[1.5.98]` Chip typography.
+- **Branch**: `main`, synced with `rial-food/main`.
+- **Last shipped**: `[1.5.109]` chip/badge refinement (.badge-card utility, font-black → font-semibold,
+  px-4 py-2 → px-3 py-1.5). `[1.5.108]` Satoshi self-hosted (Inter was CSP-blocked in prod).
+  `[1.5.107]` Fase 2 scroll restoration on goBack + navigateToRecipe passes recipeId.
+  `[1.5.106]` Scroll simplification. `[1.5.105]` Scroll goBack. `[1.5.104]` Scroll reset Fase 1.
+- **Previous**: `[1.5.103]` hooks sweep · `[1.5.102]` RecipeCard KS · `[1.5.101]` dead-code.
 - **Active plan**: sprints sellados. **Próximos**: Phase 2 Home, Q6-B recipe photos,
   owner-actions Supabase prod env.
 - **Release target**: `rial-food/main` (`novara-bbs/Rial-food.app`). Origin `rial-food`.
 - **Vercel project**: `rial.app.v1.5` (id `prj_t11VHYQjptazjUx7Y2hWLz0IDAjg`).
 - **Governance**: work directly on `main`. "continua" = push approval post green preflight.
 
-## Quality baseline (post-[1.5.103], 2026-04-26)
+## Quality baseline (post-[1.5.109], 2026-04-26)
 - TypeScript: **0 errors** (`npx tsc --noEmit`)
 - Tests: **1188/1188** passing (71 files)
 - i18n symmetry: **1913** keys aligned ES ↔ EN
-- Design-system lint: **0 errors**, **928 warnings** (0 react-hooks errors; allowlist 47 archivos)
+- Design-system lint: **0 errors**, **903 warnings** (0 react-hooks errors; allowlist 47 archivos)
 - Build main: size:check PASS — all budgets within limits.
-- **CI status**: ✅ verde — ESLint + react-hooks sweep completo.
+- **CI status**: ✅ verde.
 - `calculateStreak` @deprecated: ✓ eliminado ([1.5.101]). FilterRow shim: ✓ deleted ([1.5.101]).
 - Security headers: HSTS + X-Frame-Options + nosniff + Permissions-Policy + Referrer-Policy + **CSP** ✓
+- Font: `--font-body` = **Satoshi** self-hosted (`public/fonts/satoshi/`). Inter eliminado
+  (era bloqueado por CSP `font-src 'self'` en producción). Bricolage + Fraunces + JetBrains Mono → GFonts.
+- Scroll UX: forward reset to top ✓ · goBack restores position ✓ ([1.5.104–107]).
+- `.badge-card` utility en `@layer components` — fuente de verdad para badges de imagen.
 - Drift: `text-[Npx]` = **0**, SectionCard shape = **0**, ad-hoc `<hN>` typography
   outside allowlist = **0**, **inline chip reimplementation** = **0**, **inline
   branded `<select>`** = **0** (ADR-013 guardrails)
@@ -93,6 +99,9 @@ Fase 1+2 multi-media recipes, Food Families P0-P16, R1 docs, R2 recipes editoria
 **[1.5.91] Fase C lote 3.5 — dominio social completo** (14 archivos, ~55 hits, -74 warnings, 0 archivos sociales restantes en allowlist).
 **[1.5.92] Fase C lote 4 — dominio wellness completo + Fase C completada** (16 archivos, ~60 hits, -83 warnings; excepción font-mono documentada en FastingTimer).
 **[1.5.93] Filter UX rework (ADR-014)** — `FilterSheet` + `FilterButton` primitives + `facets.ts` heurística; Cocina mueve Source axis al sheet; Discovery esconde toda facetería + branch grid-vs-swimlanes; +40 i18n keys; ADR-014 + invariantes E + F.
+**[1.5.104–107] Scroll UX** — Fase 1: reset to top on every nav. Fase 2: goBack restores saved scrollY (captured synchronously in `navigateTo` via `scrollCaptureRef`; `useLayoutEffect` in App.tsx applies before paint). `navigateToRecipe` passes `{ recipeId }` so same-screen recipe drill-down pushes history correctly.
+**[1.5.108] Satoshi body font** — Inter (Google Fonts, CSP-blocked in prod) replaced by Satoshi variable self-hosted in `public/fonts/satoshi/`. `font-src 'self'` CSP satisfied. Whoop competitor screenshots added to `docs/market/`.
+**[1.5.109] Chip/badge refinement** — `.badge-card` + `.label-caps` in `@layer components` (reusable). RecipeCard badges: `font-black` → `font-semibold`, `tracking-widest` → `tracking-wide`. ChipRow + ActiveFilterStrip: `px-4 py-2` → `px-3 py-1.5` (3:1 → 2:1 height/font ratio). `badge.tsx`: explicit `font-headline`.
 
 ## Repository compliance
 - `LICENSE`: Proprietary © 2026 RIAL FOOD WORLD S.L. Contact legal@rialfoodworld.com.

@@ -1,5 +1,66 @@
 # RIAL App - Changelog
 
+## [1.5.109] - 2026-04-26
+
+### fix(ds): chip/badge weight refinement + .badge-card global utility
+
+- **`.badge-card` + `.label-caps`** added to `@layer components` in `src/index.css`.
+  Single source of truth for image-overlay badges and small-caps metadata labels.
+  `badge-card`: `font-headline text-micro font-semibold px-1.5 py-0.5 rounded-sm shadow-elev-1`.
+- **RecipeCard** tag/score/macro badges now compose `.badge-card` + color utilities.
+  `font-black` (900) → `font-semibold` (600); `tracking-widest` → `tracking-wide` on tag badge.
+  Bricolage Grotesque at wght 900 was visually oversized on frosted image overlays at 10px.
+- **ChipRow + ActiveFilterStrip**: `px-4 py-2` → `px-3 py-1.5`. With `text-micro` (10px),
+  the old padding created a 3:1 height-to-font ratio (balloon effect). New ratio is 2:1.
+- **badge.tsx** (shadcn): explicit `font-headline` added — was inheriting body font (Satoshi)
+  after `[1.5.108]` migration instead of brand headline as intended.
+- PRIMITIVES.md + ADR-013 canonical chip spec updated to `px-3 py-1.5`.
+
+---
+
+## [1.5.108] - 2026-04-26
+
+### feat(ds): self-host Satoshi as body font; replace Inter
+
+- **Inter removed** from Google Fonts import. Inter was silently blocked in production
+  by `CSP font-src 'self'` — app was falling back to system-ui in prod.
+- **Satoshi variable font** self-hosted in `public/fonts/satoshi/` (2 files: normal + italic
+  woff2, wght 300–900). Loads from same origin — CSP-clean.
+- `--font-body` token updated: `"Satoshi", system-ui, sans-serif`.
+- `@font-face` declarations added to `src/index.css` above Google Fonts imports.
+- **Whoop competitor screenshots** (10 PNGs) added to `docs/market/Competitor Images/Whoop/`.
+
+---
+
+## [1.5.107] - 2026-04-26
+
+### fix(ux): Fase 2 scroll restoration on goBack + same-screen recipe navigation
+
+- **NavigationContext**: `NavItem` stores `scrollY` captured synchronously inside `navigateTo()`
+  before `setHistory` — the only moment before React swaps DOM and browser clamps scrollTop.
+  `scrollCaptureRef` registered from App.tsx. `scrollYToRestore` + `registerScrollCapture` exposed.
+- **App.tsx**: two `useLayoutEffect`s — one registers scroll capture fn, one restores/resets
+  scroll before paint (deps: `currentScreen + screenData + scrollYToRestore`).
+- **AppStateContext `navigateToRecipe`**: now passes `{ recipeId: recipe.id }` as NavigationData.
+  Previously called `navigateTo('recipe-detail')` with no data, triggering NavigationContext
+  self-nav guard which collapsed recipe→recipe transitions as no-ops. Fix enables:
+  - Scroll resets to 0 when tapping "More from this creator" or "You might also like" recipes.
+  - Back from a related recipe returns to the previous recipe (not Cocina).
+
+---
+
+## [1.5.104–106] - 2026-04-26
+
+### fix(ux): scroll reset to top on screen navigation (Fase 1)
+
+- Single `<main>` scroll container never unmounts — `scrollTop` persisted across screens.
+- `mainRef` + `useLayoutEffect([currentScreen])` in App.tsx resets scroll before paint.
+- `useLayoutEffect` chosen over `useEffect`: fires before paint so no flash of stale position.
+- Iterative refinement across 3 commits: initial `useEffect` → `useLayoutEffect` →
+  simplified single-ref architecture (dropped scroll map, added `scrollCaptureRef`).
+
+---
+
 ## [1.5.103] - 2026-04-26
 
 ### fix(lint): React hooks exhaustive-deps sweep — 9 archivos, 0 errores
