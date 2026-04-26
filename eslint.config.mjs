@@ -182,13 +182,17 @@ const designSystemRules = [
 const typographyMigrationAllowlist = [
   'src/App.tsx',
   'src/components/ConfirmDialog.tsx',
-  'src/components/DayGridCalendar.tsx',
+  // DayGridCalendar moved to patterns/ in [1.5.112]
+  'src/components/patterns/DayGridCalendar.tsx',
   'src/components/EmptyState.tsx',
   'src/components/ErrorBoundary.tsx',
-  'src/components/GdprConsent.tsx',
+  // GdprConsent moved to features/legal/ in [1.5.112]
+  'src/features/legal/components/GdprConsent.tsx',
   'src/components/GlobalHeader.tsx',
-  'src/components/OnboardingScaffold.tsx',
-  'src/components/RadioCardGroup.tsx',
+  // OnboardingScaffold moved to features/profile/ in [1.5.112]
+  'src/features/profile/components/OnboardingScaffold.tsx',
+  // RadioCardGroup moved to components/ui/ in [1.5.112]
+  'src/components/ui/RadioCardGroup.tsx',
   'src/components/SectionCard.tsx',
   'src/components/SelectList.tsx',
   'src/components/Sidebar.tsx',

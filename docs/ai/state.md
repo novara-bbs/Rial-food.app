@@ -5,15 +5,14 @@
 > prunes this file back down. Everything below should answer: *what's the release line,
 > what's the quality baseline, what's the next move, what's broken?*
 
-Last updated: **2026-04-26** — `[1.5.109]` chip/badge weight + pill padding · `[1.5.108]`
-Satoshi self-hosted body font · `[1.5.107]` scroll restoration goBack + recipe nav fix.
+Last updated: **2026-04-26** — `[1.5.112]` human-onboarding docs + orphan relocation + dev guard.
 
 ## Release snapshot
-- **Branch**: `main`, synced with `rial-food/main`.
-- **Last shipped**: `[1.5.109]` chip/badge refinement (.badge-card utility, font-black → font-semibold,
-  px-4 py-2 → px-3 py-1.5). `[1.5.108]` Satoshi self-hosted (Inter was CSP-blocked in prod).
-  `[1.5.107]` Fase 2 scroll restoration on goBack + navigateToRecipe passes recipeId.
-  `[1.5.106]` Scroll simplification. `[1.5.105]` Scroll goBack. `[1.5.104]` Scroll reset Fase 1.
+- **Branch**: `main`, **1 commit ahead** of `rial-food/main` (not yet pushed).
+- **Last committed**: `[1.5.112]` Phase 1 (6 onboarding docs + README/DESIGN-SYSTEM/i18n updates) +
+  Phase 2.1 (IS_DEV guard on demo handlers) + Phase 2.2 (4 orphan components relocated) +
+  Phase 2.3 (gemini.ts → src/lib/). TS 0 errors, 1188/1188 tests.
+- **Last pushed**: `[1.5.109]` chip/badge refinement · `[1.5.108]` Satoshi font · `[1.5.107]` scroll fix.
 - **Previous**: `[1.5.103]` hooks sweep · `[1.5.102]` RecipeCard KS · `[1.5.101]` dead-code.
 - **Active plan**: sprints sellados. **Próximos**: Phase 2 Home, Q6-B recipe photos,
   owner-actions Supabase prod env.

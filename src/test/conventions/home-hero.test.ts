@@ -50,12 +50,13 @@ const HOME_SRC = fs.readFileSync(
   path.resolve(ROOT, 'src/features/home/screens/Home.tsx'),
   'utf8',
 );
+// Post-Phase 2.4: locales split by domain. Home keys live in the `home` domain.
 const ES_SRC = fs.readFileSync(
-  path.resolve(ROOT, 'src/i18n/locales/es.ts'),
+  path.resolve(ROOT, 'src/i18n/locales/es/home.ts'),
   'utf8',
 );
 const EN_SRC = fs.readFileSync(
-  path.resolve(ROOT, 'src/i18n/locales/en.ts'),
+  path.resolve(ROOT, 'src/i18n/locales/en/home.ts'),
   'utf8',
 );
 

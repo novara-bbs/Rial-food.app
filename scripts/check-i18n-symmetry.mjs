@@ -21,8 +21,25 @@ import ts from 'typescript';
 
 const here = path.dirname(url.fileURLToPath(import.meta.url));
 const root = path.resolve(here, '..');
-const esPath = path.join(root, 'src/i18n/locales/es.ts');
-const enPath = path.join(root, 'src/i18n/locales/en.ts');
+const localesDir = path.join(root, 'src/i18n/locales');
+
+/**
+ * Resolve the locale source: folder of domain files (post-Phase 2.4) or
+ * legacy single file (pre-Phase 2.4). Prefers folder when both exist.
+ * Returns array of file paths to parse.
+ */
+function resolveLocaleFiles(locale) {
+  const folder = path.join(localesDir, locale);
+  const file = path.join(localesDir, `${locale}.ts`);
+  if (fs.existsSync(folder) && fs.statSync(folder).isDirectory()) {
+    return fs.readdirSync(folder)
+      .filter(f => f.endsWith('.ts') && f !== 'index.ts')
+      .sort()
+      .map(f => path.join(folder, f));
+  }
+  if (fs.existsSync(file)) return [file];
+  throw new Error(`Locale ${locale} not found at ${folder} or ${file}`);
+}
 
 /**
  * Walks a TypeScript source file and returns the first object-literal
@@ -82,6 +99,17 @@ function keysOf(filePath) {
   return keys;
 }
 
+/** Combine keys from all files belonging to a locale (post-split = many files; legacy = one). */
+function keysOfLocale(locale) {
+  const files = resolveLocaleFiles(locale);
+  const merged = new Set();
+  for (const f of files) {
+    const partial = keysOf(f);
+    for (const k of partial) merged.add(k);
+  }
+  return merged;
+}
+
 function diff(a, b) {
   const out = [];
   for (const k of a) if (!b.has(k)) out.push(k);
@@ -89,8 +117,8 @@ function diff(a, b) {
 }
 
 try {
-  const es = keysOf(esPath);
-  const en = keysOf(enPath);
+  const es = keysOfLocale('es');
+  const en = keysOfLocale('en');
   const missingInEn = diff(es, en);
   const missingInEs = diff(en, es);
 
