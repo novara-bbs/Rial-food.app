@@ -388,7 +388,11 @@ export default function RecipeDetail({ recipe, onBack, onSaveRecipe, isSaved, on
         </div>
 
         <div className="absolute bottom-4 left-6 right-6">
-          <Badge className="mb-2">{data.tag}</Badge>
+          {data.tag && (
+            <span className="badge-card bg-surface/90 backdrop-blur-md text-primary uppercase tracking-wide mb-2 inline-flex">
+              {data.tag}
+            </span>
+          )}
           {/*
             Bespoke recipe hero: dual-mode title that swaps to Fraunces serif via
             inline style for verified recipes (ADR-011 § verified-mode override) and
@@ -402,7 +406,7 @@ export default function RecipeDetail({ recipe, onBack, onSaveRecipe, isSaved, on
           </h2>
           {/* Classic time row — hidden for verified (replaced by TimeTileComposite below) */}
           {!isVerified && (
-            <div className="flex items-center gap-3 mt-1.5 text-on-surface-variant text-xs font-label uppercase tracking-widest">
+            <div className="flex items-center gap-3 mt-1.5 text-on-surface-variant text-label font-label uppercase tracking-widest">
               <span className="flex items-center gap-1"><Clock className="w-3.5 h-3.5" /> {data.prepTime} + {data.cookTime}</span>
               <span>•</span>
               <span>{data.difficulty}</span>
