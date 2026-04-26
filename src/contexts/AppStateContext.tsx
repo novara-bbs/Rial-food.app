@@ -1,41 +1,31 @@
 import React, { createContext, useContext, useMemo, useCallback, useEffect, useRef } from 'react';
-import { toast } from 'sonner';
 import { Recipe, DailyCheckIn as DailyCheckInType, Ingredient } from '../types';
 import type { FoodVariant } from '../types/food-family';
-import { useLocalStorageState } from '../hooks/useLocalStorageState';
 import { useDailyReset, DailyArchive } from '../hooks/useDailyReset';
 import { useNavigation } from './NavigationContext';
 import { createHandleLogMeal, createHandleLogMealNow, DailyLogEntry, FoodHistoryEntry } from '../features/food/handlers/meal-handlers';
 import { useI18n } from '../i18n';
 // Recipe handler imports moved to useRecipeState (Phase 2.5).
-import { createHandleCreatePost, createHandleAddComment } from '../features/social/handlers/social-handlers';
-import { createHandlePublishStory, createHandleMarkStoryViewed } from '../features/social/handlers/story-handlers';
-import { createHandleFollowCreator } from '../features/social/handlers/creator-handlers';
-import {
-  createHandleJoinChallenge,
-  createHandleLeaveChallenge,
-  createHandleCheckInChallenge,
-  createHandleToggleChallenge,
-  type ChallengeProgress,
-} from '../features/social/handlers/challenge-handlers';
-import type { Story, StorySlide, Notification as NotificationType } from '../types/social';
+// Social handler imports moved to useSocialState (Phase 2.5).
+import type { Story, StorySlide } from '../types/social';
+import type { ChallengeProgress } from '../features/social/handlers/challenge-handlers';
 // Wellness handler imports moved to useWellnessState (Phase 2.5).
 import type { LogWeightArgs } from '../features/wellness/handlers/weight-handlers';
 import { createHandleLoadDemoSeed, createHandleClearDemoSeed } from '../features/dev/handlers/demo-seed-handlers';
-import { shouldReseed, setStoredSeedVersion } from '../lib/seedVersion';
 import { IS_DEV } from '../config/env';
 // getRecipeSlots + ingredientIdToFamilyVariant moved to useRecipeState (Phase 2.5).
 import { logger } from '../lib/logger';
 import type { BodySnapshot } from '../types/wellness';
 import type { CommunityPost } from '../types/social';
 import { useAuth } from './AuthContext';
-import { syncOnSignIn, pushToCloud } from '../lib/sync';
+import { syncOnSignIn } from '../lib/sync';
 import { useProfileState } from './state/useProfileState';
 import { useVitalsState, type DailyMacros } from './state/useVitalsState';
 import { useUITransientState } from './state/useUITransientState';
 import { usePlannerState } from './state/usePlannerState';
 import { useFoodState } from './state/useFoodState';
 import { useRecipeState } from './state/useRecipeState';
+import { useSocialState } from './state/useSocialState';
 import { useWellnessState } from './state/useWellnessState';
 import type { UserProfile } from '../types/user';
 import type { ShoppingItem } from '../types/planner';
@@ -226,11 +216,7 @@ export function AppStateProvider({ children }: { children: React.ReactNode }) {
     recipeToEdit, setRecipeToEdit,
   } = useUITransientState();
 
-  const [likedPosts, setLikedPosts] = useLocalStorageState<number[]>('likedPosts', []);
-  const [savedPosts, setSavedPosts] = useLocalStorageState<number[]>('savedPosts', []);
-
-  // Toggle handlers are declared further down, after `setCommunityPosts` is
-  // bound, so the callback closure captures the correct setter.
+  // likedPosts + savedPosts (and their toggle handlers) moved to useSocialState (Phase 2.5).
 
   // Profile state — extracted to useProfileState hook (Phase 2.5, ADR-015).
   // Owns: isPro, showAIBot, isFirstTime, miseEnPlaceEnabled, userProfile.
@@ -306,88 +292,30 @@ export function AppStateProvider({ children }: { children: React.ReactNode }) {
     handleImportRecipe,
   } = useRecipeState({ setMealPlan, setShoppingList, setSelectedRecipe, navigateTo, t });
 
-  const [communityPosts, setCommunityPosts] = useLocalStorageState<any[]>('communityPosts', []);
-  useEffect(() => {
-    if (!shouldReseed('communityPosts', 'communityPosts')) return;
-    import('../features/social/data/seed-posts')
-      .then((m) => {
-        // replace: demo content, Q6 will swap this for backend-sourced posts.
-        setCommunityPosts(m.SEED_POSTS);
-        setStoredSeedVersion('communityPosts');
-      })
-      .catch((err) => logger.warn('seed.communityPosts load failed', { err }));
-  }, [setCommunityPosts]);
-
-  // Toggles for like/save. Kept id-list for per-user state (cross-device sync +
-  // fast lookup) AND mutate canonical `post.likes`/`post.saves` counter on
-  // `communityPosts` so PostCard can render the real total. Prior code rendered
-  // `post.likes + (isLiked ? 1 : 0)` — cosmetic-only, broke for other-user
-  // likes coming from backend at Q6. Declared after `setCommunityPosts` is
-  // bound (React captures closure at definition time).
-  const toggleLikePost = useCallback((postId: number) => {
-    setLikedPosts((prev: number[]) => {
-      const willLike = !prev.includes(postId);
-      setCommunityPosts((posts: any[]) =>
-        posts.map(p => p.id === postId
-          ? { ...p, likes: Math.max(0, (p.likes || 0) + (willLike ? 1 : -1)) }
-          : p,
-        ),
-      );
-      return willLike ? [...prev, postId] : prev.filter(id => id !== postId);
-    });
-  }, [setLikedPosts, setCommunityPosts]);
-
-  const toggleSavePost = useCallback((postId: number) => {
-    setSavedPosts((prev: number[]) => {
-      const willSave = !prev.includes(postId);
-      setCommunityPosts((posts: any[]) =>
-        posts.map(p => p.id === postId
-          ? { ...p, saves: Math.max(0, (p.saves || 0) + (willSave ? 1 : -1)) }
-          : p,
-        ),
-      );
-      return willSave ? [...prev, postId] : prev.filter(id => id !== postId);
-    });
-  }, [setSavedPosts, setCommunityPosts]);
-
-  // toleranceLogs + realFeelLogs moved to useWellnessState (Phase 2.5).
-
-  // Stories — lazy-seeded
-  const [communityStories, setCommunityStories] = useLocalStorageState<Story[]>('communityStories', []);
-  useEffect(() => {
-    if (!shouldReseed('communityStories', 'communityStories')) return;
-    import('../features/social/data/seed-stories')
-      .then((m) => {
-        // replace: demo content, Q6 will swap for backend-sourced stories.
-        setCommunityStories(m.SEED_STORIES);
-        setStoredSeedVersion('communityStories');
-      })
-      .catch((err) => logger.warn('seed.communityStories load failed', { err }));
-  }, [setCommunityStories]);
-
-  // Notifications
-  const [notifications, setNotifications] = useLocalStorageState<NotificationType[]>('notifications', []);
-  const markAllNotificationsRead = useCallback(() => {
-    setNotifications((prev: NotificationType[]) => prev.map(n => ({ ...n, read: true })));
-  }, [setNotifications]);
-  const markNotificationRead = useCallback((notificationId: string) => {
-    setNotifications((prev: NotificationType[]) =>
-      prev.map(n => (n.id === notificationId ? { ...n, read: true } : n)),
-    );
-  }, [setNotifications]);
-
-  // selectedChallengeId moved to useUITransientState (Phase 2.5).
-
-  // Social graph + challenge persistence — single writer via factory handler.
-  // Prior to Wave 3 these were declared inline in each screen
-  // (Discover/CreatorProfile/Community/Challenges/ChallengeDetail/
-  // CreatorVerification), which caused stale-snapshot bugs: a toggle from
-  // Discover wasn't reflected in Community until unmount. Centralising the
-  // setters here means every consumer sees the same ref via context.
-  const [followedCreators, setFollowedCreators] = useLocalStorageState<string[]>('followedCreators', []);
-  const [joinedChallenges, setJoinedChallenges] = useLocalStorageState<string[]>('joinedChallenges', []);
-  const [challengeJoinDates, setChallengeJoinDates] = useLocalStorageState<Record<string, string>>('challengeJoinDates', {});
-  const [challengeProgress, setChallengeProgress] = useLocalStorageState<Record<string, ChallengeProgress>>('challengeProgress', {});
+  // Social state — extracted to useSocialState (Phase 2.5).
+  // Owns 9 persisted vars (community/stories/notifications/likes/saves/
+  // social-graph/challenges) + 4 inline callbacks + 9 handler factories +
+  // ref-getter pattern + 6 sync effects.
+  const {
+    communityPosts, setCommunityPosts,
+    communityStories, setCommunityStories,
+    notifications, markAllNotificationsRead, markNotificationRead,
+    likedPosts, toggleLikePost,
+    savedPosts, toggleSavePost,
+    followedCreators,
+    joinedChallenges,
+    challengeJoinDates,
+    challengeProgress,
+    handleCreatePost,
+    handleAddComment,
+    handlePublishStory,
+    handleMarkStoryViewed,
+    handleFollowCreator,
+    handleJoinChallenge,
+    handleLeaveChallenge,
+    handleCheckInChallenge,
+    handleToggleChallenge,
+  } = useSocialState({ userProfile, t, navigateTo });
 
   // Wellness state — extracted to useWellnessState (Phase 2.5).
   // Owns toleranceLogs, realFeelLogs, weightHistory, nutritionHistory + 4 lazy
@@ -466,12 +394,8 @@ export function AppStateProvider({ children }: { children: React.ReactNode }) {
   // isPro, isFirstTime sync moved to useProfileState (Phase 2.5).
   // dailyLog, foodHistory, favoriteIds, userFoods, userVariants,
   // userVariantBarcodes sync moved to useFoodState (Phase 2.5).
-  useEffect(() => { pushToCloud('likedPosts', likedPosts); }, [likedPosts]);
-  useEffect(() => { pushToCloud('savedPosts', savedPosts); }, [savedPosts]);
-  useEffect(() => { pushToCloud('followedCreators', followedCreators); }, [followedCreators]);
-  useEffect(() => { pushToCloud('joinedChallenges', joinedChallenges); }, [joinedChallenges]);
-  useEffect(() => { pushToCloud('challengeJoinDates', challengeJoinDates); }, [challengeJoinDates]);
-  useEffect(() => { pushToCloud('challengeProgress', challengeProgress); }, [challengeProgress]);
+  // likedPosts, savedPosts, followedCreators, joinedChallenges,
+  // challengeJoinDates, challengeProgress sync moved to useSocialState (Phase 2.5).
   // ──────────────────────────────────────────────────────────────────────────────
 
   // ─── Handlers (delegated to feature modules, memoized to prevent re-renders) ──
@@ -490,71 +414,9 @@ export function AppStateProvider({ children }: { children: React.ReactNode }) {
   // addToleranceLog, realFeelLog, checkIn, completeCheckIn, shareProgress)
   // moved to useWellnessState (Phase 2.5).
   // recipeToEdit moved to useUITransientState (Phase 2.5).
-  // Ref getters so the social/story handlers always see the latest userProfile
-  // and translation table without invalidating their identity every render.
-  const userProfileRef = useRef(userProfile);
-  useEffect(() => { userProfileRef.current = userProfile; }, [userProfile]);
-  const tRef = useRef(t);
-  useEffect(() => { tRef.current = t; }, [t]);
-  const getUserProfile = useCallback(() => userProfileRef.current, []);
-  const getT = useCallback(() => tRef.current, []);
-  const handleCreatePost = useMemo(
-    () => createHandleCreatePost({ setCommunityPosts, navigateTo, getUserProfile, getT }),
-    [setCommunityPosts, navigateTo, getUserProfile, getT],
-  );
-  const handlePublishStory = useMemo(
-    () => createHandlePublishStory({ setCommunityStories, navigateTo, getUserProfile, getT }),
-    [setCommunityStories, navigateTo, getUserProfile, getT],
-  );
-  const handleMarkStoryViewed = useMemo(
-    () => createHandleMarkStoryViewed({ setCommunityStories }),
-    [setCommunityStories],
-  );
-  const handleAddComment = useMemo(
-    () => createHandleAddComment({ setCommunityPosts, getUserProfile, getT }),
-    [setCommunityPosts, getUserProfile, getT],
-  );
-  const notifyToast = useCallback((msg: string) => toast.success(msg), []);
-  const handleFollowCreator = useMemo(
-    () => createHandleFollowCreator({ setFollowedCreators, getT, notify: notifyToast }),
-    [setFollowedCreators, getT, notifyToast],
-  );
-  const handleJoinChallenge = useMemo(
-    () => createHandleJoinChallenge({
-      setJoinedChallenges,
-      setJoinDates: setChallengeJoinDates,
-      setChallengeProgress,
-      getT,
-      notify: notifyToast,
-    }),
-    [setJoinedChallenges, setChallengeJoinDates, setChallengeProgress, getT, notifyToast],
-  );
-  const handleLeaveChallenge = useMemo(
-    () => createHandleLeaveChallenge({
-      setJoinedChallenges,
-      setChallengeProgress,
-      getT,
-      notify: notifyToast,
-    }),
-    [setJoinedChallenges, setChallengeProgress, getT, notifyToast],
-  );
-  const handleCheckInChallenge = useMemo(
-    () => createHandleCheckInChallenge({ setChallengeProgress, getT, notify: notifyToast }),
-    [setChallengeProgress, getT, notifyToast],
-  );
-  // Wrapper toggle — readlinked to a ref of `joinedChallenges` so the handler
-  // always sees the latest list (otherwise toggling right after a join would
-  // still see the pre-join snapshot and double-add).
-  const joinedChallengesRef = useRef(joinedChallenges);
-  useEffect(() => { joinedChallengesRef.current = joinedChallenges; }, [joinedChallenges]);
-  const handleToggleChallenge = useMemo(
-    () => createHandleToggleChallenge({
-      getJoinedChallenges: () => joinedChallengesRef.current,
-      handleJoinChallenge,
-      handleLeaveChallenge,
-    }),
-    [handleJoinChallenge, handleLeaveChallenge],
-  );
+  // Social handlers (createPost, addComment, publishStory, markStoryViewed,
+  // followCreator, joinChallenge, leaveChallenge, checkInChallenge,
+  // toggleChallenge) + ref-getter pattern moved to useSocialState (Phase 2.5).
   // Wellness handlers (addToleranceLog, realFeelLog, checkIn, completeCheckIn,
   // shareProgress) moved to useWellnessState (Phase 2.5).
   const handleLoadDemoSeed = useMemo(
