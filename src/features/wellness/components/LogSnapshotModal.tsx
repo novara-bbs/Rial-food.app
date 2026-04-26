@@ -64,7 +64,7 @@ export default function LogSnapshotModal({
       setPhotoExpanded(false);
       setMeasureExpanded(false);
     }
-  }, [open, initialSnapshot?.date, initialDate]);
+  }, [open, initialSnapshot, initialDate, today, unitSystem]);
 
   const handlePhotoUpload = async (file: File | undefined) => {
     if (!file) return;

@@ -81,32 +81,14 @@ export default function RecipeDetail({ recipe, onBack, onSaveRecipe, isSaved, on
     );
   };
 
-  // ── Early return if no recipe ────────────────
-  if (!recipe) {
-    return (
-      <div className="px-6 max-w-4xl mx-auto pt-8 space-y-4">
-        <button type="button" onClick={onBack} className="p-2 hover:bg-surface-container-highest rounded-sm transition-colors" aria-label={t.common?.back || 'Back'}>
-          <ArrowLeft className="w-5 h-5" />
-        </button>
-        <div className="text-center py-12">
-          <ChefHat className="w-10 h-10 mx-auto text-on-surface-variant/40 mb-4" />
-          <Heading level="h3" className="mb-2">{t.recipeDetail.recipeNotFound}</Heading>
-          <p className="text-sm text-on-surface-variant">{t.recipeDetail.recipeNotFoundDesc}</p>
-        </div>
-      </div>
-    );
-  }
-  const data = recipe;
-
-  const instructions = recipe?.instructions || [];
-
-  // ── Calculated totals ────────────────────────
+  // ── Derived memos — declared before any early return (Rules of Hooks) ──────
   const calculatedTotals = useMemo(() => {
-    const cal = data.macros?.calories || 0;
-    const pro = data.macros?.protein || 0;
-    const carbs = data.macros?.carbs || 0;
-    const fats = data.macros?.fats || 0;
-    const micros = data.micros || { vitamins: {}, minerals: {}, others: {} };
+    if (!recipe) return { cal: 0, pro: 0, carbs: 0, fats: 0, micros: { vitamins: {}, minerals: {}, others: {} } as Micronutrients };
+    const cal = recipe.macros?.calories || 0;
+    const pro = recipe.macros?.protein || 0;
+    const carbs = recipe.macros?.carbs || 0;
+    const fats = recipe.macros?.fats || 0;
+    const micros = recipe.micros || { vitamins: {}, minerals: {}, others: {} };
 
     let extraCal = 0, extraPro = 0, extraCarbs = 0, extraFats = 0;
     const extraMicros: Micronutrients = { vitamins: {}, minerals: {}, others: {} };
@@ -156,30 +138,51 @@ export default function RecipeDetail({ recipe, onBack, onSaveRecipe, isSaved, on
       fats: Math.round(fats + extraFats),
       micros: combinedMicros,
     };
-  }, [data, extraIngredients, dictionary]);
+  }, [recipe, extraIngredients, dictionary]);
 
   // ── Smart substitutions (real, based on user prefs) ──
   const swapSuggestions = useMemo(() => {
-    if (!data.recipeIngredients?.length) return [];
-    return getRecipeSwaps(data.recipeIngredients, userProfile || {}, dictionary);
-  }, [data.recipeIngredients, userProfile, dictionary]);
+    if (!recipe?.recipeIngredients?.length) return [];
+    return getRecipeSwaps(recipe.recipeIngredients, userProfile || {}, dictionary);
+  }, [recipe?.recipeIngredients, userProfile, dictionary]);
 
   const matchScore = useMemo(() => {
+    if (!recipe) return 0;
     // R8.3: derive foodDislikes from foodPreferences
     const foodDislikes = Object.entries(userProfile?.foodPreferences ?? {})
       .filter(([, v]) => v === 'dislike')
       .map(([id]) => id);
-    return calculateMatchScore(data, {
+    return calculateMatchScore(recipe, {
       goal: userProfile?.goal,
       foodDislikes,
       intolerances: userProfile?.intolerances,
       dailyTarget: userProfile?.dailyTarget,
     }, dictionary);
-  }, [data, userProfile, dictionary]);
+  }, [recipe, userProfile, dictionary]);
 
   const goalSuggestions = useMemo(() => {
-    return getGoalSuggestions(data, userProfile || {}, dictionary);
-  }, [data, userProfile, dictionary]);
+    if (!recipe) return [];
+    return getGoalSuggestions(recipe, userProfile || {}, dictionary);
+  }, [recipe, userProfile, dictionary]);
+
+  // ── Early return if no recipe ────────────────
+  if (!recipe) {
+    return (
+      <div className="px-6 max-w-4xl mx-auto pt-8 space-y-4">
+        <button type="button" onClick={onBack} className="p-2 hover:bg-surface-container-highest rounded-sm transition-colors" aria-label={t.common?.back || 'Back'}>
+          <ArrowLeft className="w-5 h-5" />
+        </button>
+        <div className="text-center py-12">
+          <ChefHat className="w-10 h-10 mx-auto text-on-surface-variant/40 mb-4" />
+          <Heading level="h2" className="mb-2">{t.recipeDetail.recipeNotFound}</Heading>
+          <p className="text-sm text-on-surface-variant">{t.recipeDetail.recipeNotFoundDesc}</p>
+        </div>
+      </div>
+    );
+  }
+  const data = recipe;
+
+  const instructions = recipe?.instructions || [];
 
   const applySwap = (fromId: string, toIngredient: any) => {
     // Replace in extraIngredients or recipe ingredients state

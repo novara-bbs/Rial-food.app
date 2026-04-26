@@ -13,8 +13,8 @@
  *
  * Pattern: KS "You might also like" + NYT "More to try" (IMG_1162).
  */
-import { Clock, ChefHat } from 'lucide-react';
 import { useI18n } from '../../../i18n';
+import RecipeCard from '../../../components/patterns/RecipeCard';
 
 // ─── helpers ─────────────────────────────────────────────────────────────────
 
@@ -99,40 +99,19 @@ export default function RelatedRecipesCarousel({
         {heading}
       </h3>
       <div className="flex gap-3 overflow-x-auto scrollbar-none px-6 pb-2">
-        {related.map((recipe: any) => {
-          const timeStr = formatTime(recipe);
-          const img: string | undefined = recipe.image ?? recipe.img;
-
-          return (
-            <button
-              key={recipe.id}
-              type="button"
-              onClick={() => onNavigate(recipe)}
-              className="flex-shrink-0 w-40 bg-surface-container-highest border border-outline-variant/10 rounded-sm overflow-hidden text-left hover:border-primary/40 transition-colors"
-            >
-              {/* Thumbnail */}
-              <div className="h-24 bg-surface-container-highest overflow-hidden flex items-center justify-center">
-                {img ? (
-                  <img src={img} alt={recipe.title ?? ''} className="w-full h-full object-cover" />
-                ) : (
-                  <ChefHat className="w-8 h-8 text-on-surface-variant/40" aria-hidden="true" />
-                )}
-              </div>
-              {/* Info */}
-              <div className="p-2">
-                <p className="font-headline font-bold text-xs text-tertiary uppercase tracking-tight leading-tight line-clamp-2">
-                  {recipe.title}
-                </p>
-                {timeStr && (
-                  <p className="font-label text-micro text-on-surface-variant mt-1 flex items-center gap-1">
-                    <Clock className="w-3 h-3" aria-hidden="true" />
-                    {timeStr}
-                  </p>
-                )}
-              </div>
-            </button>
-          );
-        })}
+        {related.map((recipe: any) => (
+          <RecipeCard
+            key={recipe.id}
+            recipe={{
+              id: recipe.id,
+              title: recipe.title,
+              img: recipe.image ?? recipe.img,
+              time: formatTime(recipe),
+            }}
+            variant="compact"
+            onPress={() => onNavigate(recipe)}
+          />
+        ))}
       </div>
     </div>
   );

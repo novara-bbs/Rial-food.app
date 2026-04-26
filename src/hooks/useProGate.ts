@@ -66,7 +66,8 @@ export function useProGate() {
   const { navigateTo } = useNavigation();
   const { t } = useI18n();
 
-  // On native: verify entitlement with RevenueCat on mount (with 7-day offline cache)
+  // On native: verify entitlement with RevenueCat on mount (with 7-day offline cache).
+  // Intentionally mount-only — re-checking on every isPro change would cause a loop.
   useEffect(() => {
     if (!isNative) return;
     const cached = getCachedRCPro();
@@ -79,6 +80,7 @@ export function useProGate() {
         // Offline — trust cached value if available
         if (cached !== null && cached !== isPro) setIsPro(cached);
       });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const showGate = () => {

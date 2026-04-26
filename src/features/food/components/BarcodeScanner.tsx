@@ -286,6 +286,7 @@ export default function BarcodeScanner({
     // Intentional mount-only effect: startScanner + lookupBarcode are
     // re-created every render but the camera only boots once on mount;
     // html5-qrcode teardown lives in the cleanup above.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const handleManualSubmit = () => {

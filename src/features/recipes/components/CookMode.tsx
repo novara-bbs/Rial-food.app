@@ -105,7 +105,7 @@ export default function CookMode({
         setIsSpeaking(false);
       }
     }
-  });
+  }, [current, voiceSupported]);
 
   useEffect(() => {
     return () => {

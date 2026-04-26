@@ -1,5 +1,45 @@
 # RIAL App - Changelog
 
+## [1.5.103] - 2026-04-26
+
+### fix(lint): React hooks exhaustive-deps sweep — 9 archivos, 0 errores
+
+Sweep completo de `exhaustive-deps` en 9 archivos. Setters de `useState` son
+referencias estables — sin cambio de comportamiento.
+
+- **AppStateContext.tsx**: 7 setters añadidos a sus arrays de deps.
+- **PortionSelector.tsx**: `buildDescription` → `useCallback` con deps propias.
+- **CookMode.tsx**: `useEffect` sin deps → `[current, voiceSupported]`.
+- **StoryViewer.tsx**: deps corregidas `[currentStory, handleMarkStoryViewed]`.
+- **LogSnapshotModal.tsx**: deps extendidas `[open, initialSnapshot, initialDate, today, unitSystem]`.
+- **BarcodeScanner.tsx**, **StoryViewer.tsx**, **useProGate.ts**: `eslint-disable`
+  para efectos mount-only intencionales documentados.
+- **SettingsNutrition.tsx**: `const foodPreferences` declarada en scope del componente (fix TS error).
+
+Resultado: 928 problemas (0 errores, 928 warnings). Tests: 1188/1188 ✓.
+
+---
+
+## [1.5.102] - 2026-04-26
+
+### feat(design-system): RecipeCard — Kitchen Stories pattern (image + info-block, sin blur)
+
+Rediseño completo de la anatomía de RecipeCard tras QA visual: el approach gradient + backdrop-blur
+obscurecía la fotografía culinaria. Migrado al patrón Kitchen Stories — image-zone con aspect-ratio
+fijo + info-block sólido `bg-surface` debajo.
+
+- **Eliminados gradient overlay + backdrop-blur layers** sobre la fotografía. Foto 100% nítida.
+- **Image zone**: 4:3 (carousel/grid), aspect-video (hero), square (compact).
+- **Info-block sólido `bg-surface`**: contraste AAA garantizado (20.4:1 light, 17.8:1 dark).
+- **Footprint estable**: `line-clamp-2` + altura fija (h-[100px] carousel/grid, h-28 hero, h-16 compact).
+- **TimeBadge top-left**: pill `bg-surface/95 backdrop-blur-md` — blur confinado, foto nítida.
+- **shadow-elev-1** en action buttons (ADR-010).
+- **RelatedRecipesCarousel**: inline button → `<RecipeCard variant="compact">`.
+- **RecipeDetail hero**: gradient suave revertido (screen header, no card).
+- `docs/PRIMITIVES.md` actualizado con anatomy diagram + variant table.
+
+---
+
 ## [1.5.101] - 2026-04-26
 
 ### feat(ds): dead-code removal + auth/AI typography migration — allowlist -6 (-25 warnings)

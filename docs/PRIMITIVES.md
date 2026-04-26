@@ -39,6 +39,31 @@ Canonical components. Reach for these **before** writing JSX from scratch.
 | `FilterSheet` | `src/components/patterns/FilterSheet.tsx` | Advanced filter panel (ADR-014). 3+ facetas grouped into accordion sections inside a `BottomSheet size="focus"`. Buffered draft + Apply/Reset semantics | 0-2 facets (use inline `ChipRow`); ordering (use `SortControl`); modal forms (use `BottomSheet` directly) |
 | `FilterButton` | `src/components/patterns/FilterButton.tsx` | Trigger for `FilterSheet`. Compact icon button with numeric badge when `activeCount > 0`. Height ≡ `SearchInput` for flex-row alignment | Plain action button (use `Button`); navigation (use `TabNav`) |
 | `ActiveFilterStrip` | `src/components/patterns/ActiveFilterStrip.tsx` | Shows currently-applied facets as dismissible chips with optional Reset link (delivery-app convention — Uber Eats / Glovo). Tinted styling (`bg-primary/10`) distinguishes from solid-active ChipRow chips. Auto-hides when chips array is empty. | Selecting filters (use `ChipRow` or `FilterSheet`); display-only badges (use plain `<span>`) |
+| `RecipeCard` | `src/components/patterns/RecipeCard.tsx` | Any recipe card in a swimlane, grid, hero spot, or related carousel. **Always prefer over inline recipe button/div.** Four `variant` values (see below). | PostCard social post embeds (keep as-is); mini row-pickers (48×48 thumbnails — pending `RecipeRow` primitive) |
+
+**`RecipeCard` anatomy** — all variants use the same Kitchen-Stories pattern: image-zone with overlays + solid `bg-surface` info-block below. **No gradient/blur over the food photography.** Footprint is stable regardless of title length thanks to `line-clamp-2` + fixed info-block height.
+
+```
+┌─ image zone (aspect-ratio fixed) ──┐
+│  [TimeBadge] [♥][⋮]                │ ← top overlays (compact pills, time + actions)
+│  [Tag]                              │
+│  [Match%]                           │
+│            ░░░░░░                   │ ← clean food photo, no gradient
+│         ░░░░ photo ░░░░             │
+│            ░░░░░░                   │
+├─ info-block (bg-surface, h-fixed) ─┤
+│  TITLE LINE-CLAMP-2                 │ ← font-black, text-tertiary
+│  @creator                           │ ← optional byline
+│  ⏱ kcal      [pro pill]             │ ← inline macros, no chip bg
+└─────────────────────────────────────┘
+```
+
+| variant | Card size | Image zone | Info-block | Context | Shows |
+|---|---|---|---|---|---|
+| `hero` | full width (image aspect-video + info h-28) | `aspect-video` | `h-28`, `p-4` | 1 editorial pick per screen (Discovery "best match") | TimeBadge + tag + BEST MATCH%, title XL, kcal + PRO |
+| `carousel` | `w-52 h-64` (208×256, info ~39%) | `aspect-[4/3]` (~156px) | `h-[100px]`, `p-3` | Horizontal swimlanes (Discovery FOR YOU, Quick meals; CreatorProfile) | TimeBadge + tag + match top-left, share + save top-right, title, @creator/forkedFrom, kcal + PRO |
+| `grid` | `h-64 w-full` (info ~39%) | `aspect-[4/3]` | `h-[100px]`, `p-3` | 2/3/4-col grid (Cocina main grid) | TimeBadge + tag + match top-left, delete top-right, title, @creator/forkedFrom, kcal + PRO |
+| `compact` | `w-40 h-56` (info ~29%) | `aspect-square` | `h-16`, `p-2.5` | Related / "more like this" carousels (RelatedRecipesCarousel) | TimeBadge top-left, title — no actions, no author, no macros |
 
 ---
 
@@ -306,6 +331,44 @@ Emits `data-variant={variant}` for introspection. Title renders as `<h3>` to pre
 ```
 
 Semantics: outer `<div role="radiogroup">` + each card `<button role="radio" aria-checked>`. Active state uses theme tokens (`border-primary bg-primary/10 ring-1 ring-primary/40`) — no hex, no `dark:`. Trailing `<Check />` on the selected card. Emits `data-selected={selected}` per card. HIG-sized tap area via `p-4`.
+
+### RecipeCard
+
+All four variants share the same Kitchen-Stories pattern: **image-zone with overlays + solid `bg-surface` info-block below** (no gradient/blur over the photo). Title is `font-black` + `line-clamp-2` for stable footprint regardless of title length. Image aspect-ratios are fixed per variant: 4:3 (carousel/grid), aspect-video (hero), square (compact).
+
+```tsx
+// Horizontal swimlane
+<RecipeCard
+  recipe={recipe}
+  variant="carousel"
+  onPress={() => navigate(recipe)}
+  onSave={(e) => { e.stopPropagation(); toggleSave(recipe.id); }}
+  onShare={(e) => { e.stopPropagation(); share(recipe); }}
+  isSaved={savedIds.has(recipe.id)}
+/>
+
+// Responsive grid (Cocina)
+<RecipeCard
+  recipe={recipe}
+  variant="grid"
+  onPress={() => navigate(recipe)}
+  onDelete={(e) => { e.stopPropagation(); confirmDelete(recipe.id); }}
+/>
+
+// Editorial hero (1 per screen)
+<RecipeCard recipe={bestMatch} variant="hero" onPress={() => navigate(bestMatch)} />
+
+// Related / "more like this" carousel — no actions, no macros, no author
+<RecipeCard
+  recipe={{ id: r.id, title: r.title, img: r.image ?? r.img, time: formatTime(r) }}
+  variant="compact"
+  onPress={() => navigate(r)}
+/>
+```
+
+**Light/dark contrast (verified)**: title `text-tertiary` over info-block `bg-surface` → 20.4:1 AAA in light, 17.8:1 AAA in dark. The solid info-block guarantees contrast by system, not dependent on photo colors.
+
+**When NOT to use RecipeCard:** PostCard social embeds (keep hybrid as-is); 48×48 row-picker thumbnails (pending `RecipeRow` primitive).
 
 ### SelectList (PR 9, playbook §4.11)
 ```tsx

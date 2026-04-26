@@ -71,8 +71,8 @@ export default function Progress({ onBack }: { onBack: () => void }) {
 
   const history = nutritionHistory as DailyArchive[];
   const snapshots = weightHistory as BodySnapshot[];
-  const now = new Date();
-  const todayDate = now.toISOString().slice(0, 10);
+  const now = useMemo(() => new Date(), []);
+  const todayDate = useMemo(() => now.toISOString().slice(0, 10), [now]);
 
   // ─── Canonical streaks (Q13 coherence) ──────────────────────────────────────
   const todayHasRealFeel = (realFeelLogs || []).some(
@@ -86,7 +86,7 @@ export default function Progress({ onBack }: { onBack: () => void }) {
       todayHasRealFeel,
       now,
     }),
-    [history, realFeelLogs, dailyLog.length, todayHasRealFeel],
+    [history, realFeelLogs, dailyLog.length, todayHasRealFeel, now],
   );
 
   // ─── This Week Stats via canonical helper (Q13 coherence) ───────────────────
@@ -113,7 +113,7 @@ export default function Progress({ onBack }: { onBack: () => void }) {
     });
 
     return { thisAvg, lastAvg, calDelta, proteinHitDays, daysLogged: curr.daysLogged, bars };
-  }, [history, dailyMacros]);
+  }, [history, dailyMacros, now]);
 
   // ─── Weekly Score (0-100) ───────────────────────────────────────────────────
   const weeklyScore = useMemo(() => {
@@ -127,13 +127,13 @@ export default function Progress({ onBack }: { onBack: () => void }) {
   // ─── Top Meals This Week (canonical util — shared with WeeklyInsightsCard) ──
   const topMeals = useMemo(
     () => calcTopMeals(history, dailyLog as any[], now, 0, 3),
-    [history, dailyLog],
+    [history, dailyLog, now],
   );
 
   // ─── Weekly Insight (narrative recap — PR 6a) ──────────────────────────────
   const weightTrend = useMemo(
     () => calcWeightTrend(snapshots, userProfile?.targetWeight ?? null, now),
-    [snapshots, userProfile?.targetWeight],
+    [snapshots, userProfile?.targetWeight, now],
   );
   const weekInsight = useMemo(() => {
     const target: MacroTarget = dailyMacros.target ?? { cal: 2400, pro: 180, carbs: 250, fats: 65 };
@@ -158,7 +158,7 @@ export default function Progress({ onBack }: { onBack: () => void }) {
       },
       formatWeightDelta: (kg: number) => `${bodyWeightFromKg(kg, unitSystem).toFixed(1)} ${unit}`,
     });
-  }, [history, dailyMacros, weightTrend, streaks.mealLog, topMeals, userProfile, unitSystem, t.progress]);
+  }, [history, dailyMacros, weightTrend, streaks.mealLog, topMeals, userProfile, unitSystem, t.progress, now]);
 
   // ─── Day Detail (for calendar tap) ──────────────────────────────────────────
   const selectedDayData = useMemo(() => {
@@ -173,7 +173,7 @@ export default function Progress({ onBack }: { onBack: () => void }) {
     if (!archive) return null;
     const rf = (realFeelLogs || []).find((l: any) => l.date && l.date.slice(0, 10) === selectedDay);
     return { date: archive.date, cal: archive.macros.consumed.cal, pro: archive.macros.consumed.pro, mealCount: archive.mealCount, rfLevel: rf?.level };
-  }, [selectedDay, history, dailyLog, realFeelLogs]);
+  }, [selectedDay, history, dailyLog, realFeelLogs, todayDate]);
 
   // ─── Bienestar (conditional on RF data) ─────────────────────────────────────
   const bienestar = useMemo(() => {
@@ -192,7 +192,7 @@ export default function Progress({ onBack }: { onBack: () => void }) {
     const set = new Set(history.filter(h => h.mealCount > 0).map(h => h.date));
     if (dailyLog.length > 0) set.add(todayDate);
     return set;
-  }, [history, dailyLog]);
+  }, [history, dailyLog, todayDate]);
   const rfDates = useMemo(
     () => new Set((realFeelLogs || []).map((l: any) => l.date ? l.date.slice(0, 10) : null).filter(Boolean)),
     [realFeelLogs],
@@ -204,7 +204,7 @@ export default function Progress({ onBack }: { onBack: () => void }) {
     ws.setDate(now.getDate() - now.getDay());
     ws.setHours(0, 0, 0, 0);
     return ws;
-  }, []);
+  }, [now]);
   const weekStartISO = weekStartDate.toISOString();
   const latestEntry = weeklyEntries[0];
 

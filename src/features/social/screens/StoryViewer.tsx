@@ -29,6 +29,7 @@ export default function StoryViewer({ onBack }: { onBack: () => void }) {
   // re-entry to StoryViewer starts cleanly. Intentionally empty deps.
   useEffect(() => {
     if (selectedStoryAuthorId) setSelectedStoryAuthorId(null);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const currentStory = activeStories[storyIndex];
@@ -39,7 +40,7 @@ export default function StoryViewer({ onBack }: { onBack: () => void }) {
     if (currentStory && handleMarkStoryViewed) {
       handleMarkStoryViewed(currentStory.id);
     }
-  }, [currentStory?.id]);
+  }, [currentStory, handleMarkStoryViewed]);
 
   const advanceSlide = useCallback(() => {
     if (!currentStory) return;

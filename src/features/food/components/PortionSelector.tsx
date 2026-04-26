@@ -91,13 +91,13 @@ export default function PortionSelector({
 
   // ─── Description builder ────────────────────────────────────────────────────
 
-  function buildDescription(sid: string, qty: number, grams: number, inputMode: InputMode): string {
+  const buildDescription = useCallback((sid: string, qty: number, grams: number, inputMode: InputMode): string => {
     if (inputMode === 'weight') return formatWeight(grams, unitSystem, baseUnit);
     const serving = ingredient.servingSizes.find(s => s.id === sid) ?? defaultServing;
     if (!serving) return formatWeight(grams, unitSystem, baseUnit);
     const name = locale === 'es' ? serving.name : serving.nameEn;
     return qty === 1 ? name : `${qty} × ${name}`;
-  }
+  }, [unitSystem, baseUnit, ingredient.servingSizes, defaultServing, locale]);
 
   // ─── Change emitters ───────────────────────────────────────────────────────
 
@@ -109,7 +109,7 @@ export default function PortionSelector({
       scaledMacros: scaleMacros(ingredient.macros, ingredient.baseAmount, grams),
       portionDescription: buildDescription(sid, qty, grams, inputMode),
     });
-  }, [ingredient, defaultServing, onChange, locale, baseUnit, unitSystem]);
+  }, [ingredient.macros, ingredient.baseAmount, onChange, buildDescription]);
 
   const handleServingChange = (id: string) => {
     setServingId(id);

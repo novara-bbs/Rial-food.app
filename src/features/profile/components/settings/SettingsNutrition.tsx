@@ -19,17 +19,16 @@ interface Props {
 export default function SettingsNutrition({ dailyMacros, setDailyMacros, userProfile, setUserProfile, dictionary, hydration, setHydration, movement, setMovement }: Props) {
   const { t } = useI18n();
   const [dislikeSearch, setDislikeSearch] = useState('');
-
-  // R8.3: foodPreferences replaces foodDislikes as source of truth
   const foodPreferences: Record<string, 'like' | 'dislike'> = userProfile?.foodPreferences ?? {};
 
   const prefSearchResults = useMemo(() => {
     if (!dislikeSearch || dislikeSearch.length < 2) return [];
+    const prefs: Record<string, 'like' | 'dislike'> = userProfile?.foodPreferences ?? {};
     const q = dislikeSearch.toLowerCase();
     return dictionary
-      .filter((d) => (d.name.toLowerCase().includes(q) || d.nameEn.toLowerCase().includes(q)) && !foodPreferences[d.id])
+      .filter((d) => (d.name.toLowerCase().includes(q) || d.nameEn.toLowerCase().includes(q)) && !prefs[d.id])
       .slice(0, 6);
-  }, [dislikeSearch, dictionary, foodPreferences]);
+  }, [dislikeSearch, dictionary, userProfile?.foodPreferences]);
 
   const toggleDietaryPreference = (pref: string) => {
     if (!setUserProfile) return;

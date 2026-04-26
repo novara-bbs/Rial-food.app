@@ -1,6 +1,7 @@
 import js from '@eslint/js';
 import tseslint from 'typescript-eslint';
 import reactRefresh from 'eslint-plugin-react-refresh';
+import reactHooks from 'eslint-plugin-react-hooks';
 
 // --- Design-System guardrails ------------------------------------------------
 // These regex-based `no-restricted-syntax` rules enforce the rules in
@@ -275,6 +276,7 @@ const q16MigrationAllowlist = [
 ];
 
 export default tseslint.config(
+  reactHooks.configs['recommended-latest'],
   {
     ignores: [
       'dist/',
