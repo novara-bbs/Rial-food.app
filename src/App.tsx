@@ -53,7 +53,7 @@ export default function App() {
   const isOnline = useOnlineStatus();
   const { status: authStatus, isSupabaseEnabled } = useAuth();
   const [authScreen, setAuthScreen] = useState<'login' | 'signup' | 'forgot' | null>(null);
-  const { currentScreen, previousScreen, navigateTo } = useNavigation();
+  const { currentScreen, previousScreen, historyLength, navigateTo } = useNavigation();
   const {
     isPro, showAIBot,
     isFirstTime, setIsFirstTime,
@@ -87,16 +87,28 @@ export default function App() {
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
   const [showConsent, setShowConsent] = useState(() => !hasGivenConsent());
 
-  // Reset the global scroll container to the top on every screen change so a
-  // new screen always opens from its top — matches the native iOS/Android
-  // pattern. The single `<main>` below is the only scrollable surface and
-  // never unmounts, so without this its scrollTop persists across navigations.
-  // Scroll restoration on `goBack` (preserve previous position) is a planned
-  // follow-up that requires storing scrollY per history entry.
+  // Native-style scroll management: forward nav resets to top, back nav
+  // restores the previous scroll position. The single <main> below never
+  // unmounts, so scrollTop persists across screen changes without this.
+  // scrollMap stores scrollTop per history-stack index (not screen name) so
+  // the same screen appearing twice at different depths is handled correctly.
   const mainRef = useRef<HTMLElement>(null);
+  const scrollMapRef = useRef<Map<number, number>>(new Map());
+  const prevHistoryLengthRef = useRef(historyLength);
   useEffect(() => {
-    mainRef.current?.scrollTo({ top: 0, left: 0, behavior: 'instant' });
-  }, [currentScreen]);
+    const prev = prevHistoryLengthRef.current;
+    const cur = historyLength;
+    if (cur < prev) {
+      // goBack: restore saved scroll for the screen we're returning to
+      const saved = scrollMapRef.current.get(cur - 1) ?? 0;
+      mainRef.current?.scrollTo({ top: saved, left: 0, behavior: 'instant' });
+    } else {
+      // navigateTo: capture outgoing scroll, then reset incoming screen to top
+      scrollMapRef.current.set(prev - 1, mainRef.current?.scrollTop ?? 0);
+      mainRef.current?.scrollTo({ top: 0, left: 0, behavior: 'instant' });
+    }
+    prevHistoryLengthRef.current = cur;
+  }, [currentScreen, historyLength]);
 
   const aiCoachMemory = useMemo(() => {
     const weekAgoDate = dateToLocal(new Date(Date.now() - 7 * 86_400_000));

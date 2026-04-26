@@ -21,6 +21,7 @@ interface NavigationContextType {
   currentScreen: string;
   previousScreen: string;
   screenData: NavigationData;
+  historyLength: number;
   navigateTo: (screen: string, data?: NavigationData) => void;
   goBack: () => void;
 }
@@ -75,8 +76,8 @@ export function NavigationProvider({ children }: { children: React.ReactNode }) 
   }, []);
 
   const value = useMemo<NavigationContextType>(
-    () => ({ currentScreen, previousScreen, screenData, navigateTo, goBack }),
-    [currentScreen, previousScreen, screenData, navigateTo, goBack],
+    () => ({ currentScreen, previousScreen, screenData, historyLength: history.length, navigateTo, goBack }),
+    [currentScreen, previousScreen, screenData, history.length, navigateTo, goBack],
   );
 
   return <NavigationContext.Provider value={value}>{children}</NavigationContext.Provider>;
