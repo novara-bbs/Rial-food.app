@@ -33,6 +33,7 @@ import type { CommunityPost } from '../types/social';
 import { useAuth } from './AuthContext';
 import { syncOnSignIn, pushToCloud } from '../lib/sync';
 import { useProfileState } from './state/useProfileState';
+import { useVitalsState, type DailyMacros } from './state/useVitalsState';
 import type { UserProfile } from '../types/user';
 
 // ─── Types ───────────────────────────────────────────────────────────────────
@@ -192,10 +193,8 @@ interface AppStateContextType {
 // UserProfile + FamilyMember moved to src/types/user.ts in Phase 2.5 [1.5.116].
 // See ADR-015. Re-export here so existing internal references keep working.
 
-interface DailyMacros {
-  consumed: { cal: number; pro: number; carbs: number; fats: number };
-  target: { cal: number; pro: number; carbs: number; fats: number };
-}
+// DailyMacros moved to src/contexts/state/useVitalsState.ts in Phase 2.5 [1.5.117].
+// See ADR-015. Re-imported above for local references.
 
 interface ShoppingItem {
   id: number;
@@ -239,26 +238,15 @@ export function AppStateProvider({ children }: { children: React.ReactNode }) {
     userProfile, setUserProfile,
   } = useProfileState();
 
-  const [checkInStatus, setCheckInStatus] = useLocalStorageState<DailyCheckInType | null>('checkInStatus', null);
-
-  // Fresh-install starts at zero — the hardcoded 840 cal / 45 g pro default used
-  // to show as if the user had already eaten before ever logging anything.
-  // "Lo que ves es lo que has hecho" → zeros for consumed, zeros for intake.
-  const [dailyMacros, setDailyMacros] = useLocalStorageState<DailyMacros>('dailyMacros', {
-    consumed: { cal: 0, pro: 0, carbs: 0, fats: 0 },
-    target: { cal: 2400, pro: 180, carbs: 250, fats: 65 },
-  });
-
-  const [hydration, setHydration] = useLocalStorageState('hydration', { consumed: 0, target: 10 });
-
-  const [movement, setMovement] = useLocalStorageState('movement', {
-    steps: 0,
-    target: 10000,
-    activeMinutes: 0,
-    activeTarget: 45,
-  });
-
-  const [dailyGoal, setDailyGoal] = useLocalStorageState('dailyGoal', '');
+  // Vitals state — extracted to useVitalsState hook (Phase 2.5, ADR-015).
+  // Owns: dailyMacros, hydration, movement, dailyGoal, checkInStatus + 4 sync effects.
+  const {
+    dailyMacros, setDailyMacros,
+    hydration, setHydration,
+    movement, setMovement,
+    dailyGoal, setDailyGoal,
+    checkInStatus, setCheckInStatus,
+  } = useVitalsState();
 
   // User-created / scanned foods
   const [userFoods, setUserFoods] = useLocalStorageState<Ingredient[]>('userFoods', []);
@@ -688,7 +676,7 @@ export function AppStateProvider({ children }: { children: React.ReactNode }) {
     if (!hasDataUrl) pushToCloud('savedRecipes', savedRecipes);
   }, [savedRecipes]);
   // userProfile sync moved to useProfileState (Phase 2.5).
-  useEffect(() => { pushToCloud('dailyMacros', dailyMacros); }, [dailyMacros]);
+  // dailyMacros sync moved to useVitalsState (Phase 2.5).
   useEffect(() => { pushToCloud('mealPlan', mealPlan); }, [mealPlan]);
   useEffect(() => { pushToCloud('shoppingList', shoppingList); }, [shoppingList]);
   useEffect(() => { pushToCloud('realFeelLogs', realFeelLogs); }, [realFeelLogs]);
@@ -699,10 +687,7 @@ export function AppStateProvider({ children }: { children: React.ReactNode }) {
   useEffect(() => { pushToCloud('dailyLog', dailyLog); }, [dailyLog]);
   useEffect(() => { pushToCloud('foodHistory', foodHistory); }, [foodHistory]);
   useEffect(() => { pushToCloud('favoriteIds', favoriteIds); }, [favoriteIds]);
-  // Wave 2 — previously declared in SyncKey but missing pushToCloud wiring.
-  useEffect(() => { pushToCloud('hydration', hydration); }, [hydration]);
-  useEffect(() => { pushToCloud('movement', movement); }, [movement]);
-  useEffect(() => { pushToCloud('dailyGoal', dailyGoal); }, [dailyGoal]);
+  // hydration / movement / dailyGoal sync moved to useVitalsState (Phase 2.5).
   // isFirstTime sync moved to useProfileState (Phase 2.5).
   useEffect(() => { pushToCloud('userFoods', userFoods); }, [userFoods]);
   useEffect(() => { pushToCloud('userVariants', userVariants); }, [userVariants]);
