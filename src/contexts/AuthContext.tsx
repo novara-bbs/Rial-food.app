@@ -68,6 +68,17 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const signOut = async () => {
     if (!client) return;
     await client.auth.signOut();
+    // Clear user-owned data to prevent cross-user contamination on shared devices.
+    // Preserved: rial-locale (language pref), rial_theme (UI pref), rial_gdpr_consent_v1 (legal).
+    const preserve = new Set(['rial-locale', 'rial_theme', 'rial_gdpr_consent_v1']);
+    const allKeys: string[] = [];
+    for (let i = 0; i < localStorage.length; i++) {
+      const k = localStorage.key(i);
+      if (k) allKeys.push(k);
+    }
+    allKeys
+      .filter(k => (k.startsWith('rial_') || k.startsWith('rial-')) && !preserve.has(k))
+      .forEach(k => localStorage.removeItem(k));
     setUser(null);
     setSession(null);
     setStatus('guest');

@@ -1,0 +1,258 @@
+#!/usr/bin/env node
+/**
+ * Split monolithic i18n locale files into domain-scoped modules.
+ *
+ * Reads `src/i18n/locales/{es,en}.ts` (each ~2200 lines), partitions each
+ * top-level section into one of 10 domain files, and writes a composer
+ * `index.ts` that re-spreads everything into the same shape the rest of
+ * the app expects. The exported `Translations` type and default exports
+ * are preserved unchanged.
+ *
+ * Run once:
+ *   node scripts/split-i18n-locales.mjs
+ *
+ * Verify:
+ *   npx tsc --noEmit
+ *   npm run check:i18n
+ *   npm run test
+ */
+import fs from 'node:fs';
+import path from 'node:path';
+import { fileURLToPath } from 'node:url';
+
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
+const ROOT = path.resolve(__dirname, '..');
+const LOCALES_DIR = path.join(ROOT, 'src/i18n/locales');
+
+// ─── Domain mapping ────────────────────────────────────────────────────────
+// Each top-level section name in es.ts/en.ts is assigned to exactly one domain.
+const DOMAIN_MAP = {
+  common:   ['common', 'empty', 'confirm', 'toast', 'offline'],
+  nav:      ['nav', 'tabs', 'header', 'globalHeader', 'fab', 'more', 'filters'],
+  home:     ['home', 'checkIn', 'guidedSetup', 'kcalBreakdown', 'mealSlot', 'realFeel'],
+  food:     ['scanner', 'portionSelector', 'addMealScreen', 'mealToasts', 'foodDictionary', 'contextualScore'],
+  recipes:  ['cocina', 'recipes', 'collections', 'importUrl', 'createRecipe', 'recipeDetail', 'cookMode', 'miseEnPlace'],
+  planner:  ['plan', 'shoppingList', 'planner', 'shopping'],
+  social:   ['social', 'community', 'createPost', 'postCard', 'postDetail', 'stories', 'notifications', 'share', 'feed', 'discover', 'explore', 'discovery', 'creator', 'creatorDashboard', 'creatorProfile'],
+  wellness: ['weekly', 'weeklyReview', 'tolerance', 'fasting', 'pantry', 'progress'],
+  profile:  ['profile', 'onboarding', 'auth', 'legal', 'rialPlus', 'gamification', 'challenges'],
+  settings: ['settings', 'aiCoach'],
+};
+
+const DOMAIN_ORDER = Object.keys(DOMAIN_MAP);
+
+// Reverse: section -> domain
+const SECTION_TO_DOMAIN = {};
+for (const [domain, sections] of Object.entries(DOMAIN_MAP)) {
+  for (const s of sections) SECTION_TO_DOMAIN[s] = domain;
+}
+
+// ─── Parser: extract top-level sections ────────────────────────────────────
+/**
+ * Walk the file char-by-char tracking brace depth (skipping strings/comments)
+ * to find each top-level section starting at column 2 like `  sectionName: {`.
+ * Returns map of section name -> raw text block (including the trailing `},`).
+ */
+function extractSections(srcText) {
+  const sections = {};
+  const sectionOrder = [];
+  const lines = srcText.split('\n');
+
+  let i = 0;
+  while (i < lines.length) {
+    const line = lines[i];
+    const m = line.match(/^  ([a-zA-Z_-]+):\s*\{/);
+    if (!m) { i++; continue; }
+
+    const name = m[1];
+    let depth = 0;
+    const startLine = i;
+
+    // Walk forward until brace depth returns to 0
+    for (let j = i; j < lines.length; j++) {
+      depth += countBraceDelta(lines[j]);
+      if (depth === 0) {
+        // Inclusive end: capture lines startLine..j
+        const block = lines.slice(startLine, j + 1).join('\n');
+        sections[name] = block;
+        sectionOrder.push(name);
+        i = j + 1;
+        break;
+      }
+    }
+  }
+
+  return { sections, sectionOrder };
+}
+
+/** Count net `{` minus `}` in a line, ignoring contents of strings + line comments. */
+function countBraceDelta(line) {
+  let depth = 0;
+  let inString = false;
+  let stringChar = '';
+
+  for (let k = 0; k < line.length; k++) {
+    const ch = line[k];
+
+    // Line comment ends the line for our purposes
+    if (!inString && ch === '/' && line[k + 1] === '/') break;
+
+    if (inString) {
+      if (ch === '\\') { k++; continue; } // skip escaped char
+      if (ch === stringChar) { inString = false; }
+      continue;
+    }
+
+    if (ch === "'" || ch === '"' || ch === '`') {
+      inString = true;
+      stringChar = ch;
+      continue;
+    }
+
+    if (ch === '{') depth++;
+    else if (ch === '}') depth--;
+  }
+  return depth;
+}
+
+// ─── Group sections by domain (preserving original order within domain) ────
+function groupByDomain(sections, sectionOrder) {
+  const grouped = Object.fromEntries(DOMAIN_ORDER.map(d => [d, []]));
+  const orphans = [];
+
+  for (const name of sectionOrder) {
+    const domain = SECTION_TO_DOMAIN[name];
+    if (!domain) {
+      orphans.push(name);
+      continue;
+    }
+    grouped[domain].push({ name, block: sections[name] });
+  }
+
+  return { grouped, orphans };
+}
+
+// ─── Domain file writer (es) ───────────────────────────────────────────────
+// Each extracted block already ends with `},` from the source, so blocks
+// concatenate cleanly with a single newline between them.
+function buildDomainFileEs(domainName, items) {
+  const body = items.map(({ block }) => block).join('\n');
+  return `// Auto-generated by scripts/split-i18n-locales.mjs.
+// To add/edit/remove a key, edit this file directly. Symmetry with EN is
+// validated by \`npm run check:i18n\`.
+const ${domainName} = {
+${body}
+};
+
+export default ${domainName};
+`;
+}
+
+// ─── Domain file writer (en) ───────────────────────────────────────────────
+// EN files are typed against Pick<Translations, ...> for safety, so each
+// domain file declares the exact section keys it owns.
+function buildDomainFileEn(domainName, items) {
+  const sectionNames = items.map(it => `'${it.name}'`).join(' | ');
+  const body = items.map(({ block }) => block).join('\n');
+  return `// Auto-generated by scripts/split-i18n-locales.mjs.
+import type { Translations } from '../es';
+
+const ${domainName}: Pick<Translations, ${sectionNames}> = {
+${body}
+};
+
+export default ${domainName};
+`;
+}
+
+// ─── Composer index files ──────────────────────────────────────────────────
+function buildEsIndex() {
+  const imports = DOMAIN_ORDER.map(d => `import ${d} from './${d}';`).join('\n');
+  const spreads = DOMAIN_ORDER.map(d => `  ...${d},`).join('\n');
+  return `// Auto-generated composer for ES locale.
+// Edit individual domain files (./common.ts, ./home.ts, etc.) — not this index.
+${imports}
+
+const es = {
+${spreads}
+};
+
+// Deep-string type so EN can use looser literal types per key.
+type DeepString<T> = {
+  [K in keyof T]: T[K] extends string ? string : T[K] extends string[] ? string[] : DeepString<T[K]>;
+};
+export type Translations = DeepString<typeof es>;
+
+export default es;
+`;
+}
+
+function buildEnIndex() {
+  const imports = DOMAIN_ORDER.map(d => `import ${d} from './${d}';`).join('\n');
+  const spreads = DOMAIN_ORDER.map(d => `  ...${d},`).join('\n');
+  return `// Auto-generated composer for EN locale.
+// Edit individual domain files (./common.ts, ./home.ts, etc.) — not this index.
+import type { Translations } from '../es';
+${imports}
+
+const en: Translations = {
+${spreads}
+};
+
+export default en;
+`;
+}
+
+// ─── Main ──────────────────────────────────────────────────────────────────
+function processLocale(locale) {
+  const srcPath = path.join(LOCALES_DIR, `${locale}.ts`);
+  const outDir = path.join(LOCALES_DIR, locale);
+
+  console.log(`\n→ Processing ${locale}.ts`);
+  const srcText = fs.readFileSync(srcPath, 'utf8');
+  const { sections, sectionOrder } = extractSections(srcText);
+  console.log(`  parsed ${sectionOrder.length} top-level sections`);
+
+  const { grouped, orphans } = groupByDomain(sections, sectionOrder);
+  if (orphans.length > 0) {
+    console.error(`  ❌ ORPHAN SECTIONS (not mapped to any domain): ${orphans.join(', ')}`);
+    process.exit(1);
+  }
+
+  // Verify all expected sections are present
+  const allExpected = Object.values(DOMAIN_MAP).flat();
+  const missing = allExpected.filter(s => !sections[s]);
+  if (missing.length > 0) {
+    console.error(`  ❌ MISSING SECTIONS in ${locale}.ts: ${missing.join(', ')}`);
+    process.exit(1);
+  }
+
+  if (!fs.existsSync(outDir)) fs.mkdirSync(outDir, { recursive: true });
+
+  let totalLines = 0;
+  for (const domain of DOMAIN_ORDER) {
+    const items = grouped[domain];
+    const content = locale === 'es'
+      ? buildDomainFileEs(domain, items)
+      : buildDomainFileEn(domain, items);
+    const outPath = path.join(outDir, `${domain}.ts`);
+    fs.writeFileSync(outPath, content);
+    const lc = content.split('\n').length;
+    totalLines += lc;
+    console.log(`  ${domain}.ts (${items.length} sections, ${lc} lines)`);
+  }
+
+  // Index composer
+  const indexContent = locale === 'es' ? buildEsIndex() : buildEnIndex();
+  fs.writeFileSync(path.join(outDir, 'index.ts'), indexContent);
+  console.log(`  index.ts (composer, ${indexContent.split('\n').length} lines)`);
+  console.log(`  total: ${totalLines + indexContent.split('\n').length} lines across ${DOMAIN_ORDER.length + 1} files`);
+}
+
+processLocale('es');
+processLocale('en');
+
+console.log('\n✓ Locale split complete. Next steps:');
+console.log('  1. Update src/i18n/index.ts to import from ./locales/es and ./locales/en (auto-resolves to index.ts).');
+console.log('  2. Delete src/i18n/locales/es.ts and src/i18n/locales/en.ts after tsc passes.');
+console.log('  3. Run: npx tsc --noEmit && npm run check:i18n && npm run test');

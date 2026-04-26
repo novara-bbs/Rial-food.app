@@ -11,7 +11,7 @@ import { useNavigation } from './contexts/NavigationContext';
 import { useAppState } from './contexts/AppStateContext';
 import { useOnlineStatus } from './hooks/useOnlineStatus';
 import { useAuth } from './contexts/AuthContext';
-import GdprConsent, { hasGivenConsent } from './components/GdprConsent';
+import GdprConsent, { hasGivenConsent } from './features/legal/components/GdprConsent';
 import GlobalLogSnapshotModal from './features/wellness/components/GlobalLogSnapshotModal';
 import { Toaster } from 'sonner';
 import { screens } from './config/routes';

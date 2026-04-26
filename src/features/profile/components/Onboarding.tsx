@@ -7,8 +7,8 @@ import KcalBreakdownCard from './KcalBreakdownCard';
 import { getBodyWeightUnit, getHeightUnit } from '../../food/utils/units';
 import { INPUT_SURFACE_CLASSES } from '@/components/ui/surface';
 import SectionCard from '../../../components/SectionCard';
-import OnboardingScaffold from '../../../components/OnboardingScaffold';
-import RadioCardGroup, { type RadioCardOption } from '../../../components/RadioCardGroup';
+import OnboardingScaffold from './OnboardingScaffold';
+import RadioCardGroup, { type RadioCardOption } from '@/components/ui/RadioCardGroup';
 
 interface OnboardingData {
   goal: string;

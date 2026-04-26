@@ -1,37 +1,34 @@
-import React, { createContext, useContext, useState, useMemo, useCallback, useEffect, useRef } from 'react';
-import { toast } from 'sonner';
+import React, { createContext, useContext, useMemo, useCallback, useEffect, useRef } from 'react';
 import { Recipe, DailyCheckIn as DailyCheckInType, Ingredient } from '../types';
 import type { FoodVariant } from '../types/food-family';
-import { useLocalStorageState } from '../hooks/useLocalStorageState';
 import { useDailyReset, DailyArchive } from '../hooks/useDailyReset';
 import { useNavigation } from './NavigationContext';
-import { Allergen } from '../types';
 import { createHandleLogMeal, createHandleLogMealNow, DailyLogEntry, FoodHistoryEntry } from '../features/food/handlers/meal-handlers';
 import { useI18n } from '../i18n';
-import { createHandleSaveRecipe, createHandleAddToPlan, createHandleCreateRecipeSubmit, createHandleImportRecipe, createHandleDeleteRecipe, createHandleDuplicateRecipe, createHandleMarkAsCooked } from '../features/recipes/handlers/recipe-handlers';
-import { createHandleCreatePost, createHandleAddComment } from '../features/social/handlers/social-handlers';
-import { createHandlePublishStory, createHandleMarkStoryViewed } from '../features/social/handlers/story-handlers';
-import { createHandleFollowCreator } from '../features/social/handlers/creator-handlers';
-import {
-  createHandleJoinChallenge,
-  createHandleLeaveChallenge,
-  createHandleCheckInChallenge,
-  createHandleToggleChallenge,
-  type ChallengeProgress,
-} from '../features/social/handlers/challenge-handlers';
-import type { Story, StorySlide, Notification as NotificationType, SocialLinks } from '../types/social';
-import { createHandleAddToleranceLog, createHandleRealFeelLog, createHandleCheckIn, createHandleCompleteCheckIn } from '../features/wellness/handlers/wellness-handlers';
-import { createHandleLogWeight, createHandleUpdateSnapshot, createHandleDeleteSnapshot, type LogWeightArgs } from '../features/wellness/handlers/weight-handlers';
-import { createHandleShareProgress } from '../features/wellness/handlers/progress-share-handlers';
+// Recipe handler imports moved to useRecipeState (Phase 2.5).
+// Social handler imports moved to useSocialState (Phase 2.5).
+import type { Story, StorySlide } from '../types/social';
+import type { ChallengeProgress } from '../features/social/handlers/challenge-handlers';
+// Wellness handler imports moved to useWellnessState (Phase 2.5).
+import type { LogWeightArgs } from '../features/wellness/handlers/weight-handlers';
 import { createHandleLoadDemoSeed, createHandleClearDemoSeed } from '../features/dev/handlers/demo-seed-handlers';
-import { shouldReseed, setStoredSeedVersion } from '../lib/seedVersion';
-import { getRecipeSlots } from '../features/recipes/utils/meal-slot';
-import { ingredientIdToFamilyVariant } from '../features/food/utils/food-family-resolver';
+import { IS_DEV } from '../config/env';
+// getRecipeSlots + ingredientIdToFamilyVariant moved to useRecipeState (Phase 2.5).
 import { logger } from '../lib/logger';
 import type { BodySnapshot } from '../types/wellness';
 import type { CommunityPost } from '../types/social';
 import { useAuth } from './AuthContext';
-import { syncOnSignIn, pushToCloud } from '../lib/sync';
+import { syncOnSignIn } from '../lib/sync';
+import { useProfileState } from './state/useProfileState';
+import { useVitalsState, type DailyMacros } from './state/useVitalsState';
+import { useUITransientState } from './state/useUITransientState';
+import { usePlannerState } from './state/usePlannerState';
+import { useFoodState } from './state/useFoodState';
+import { useRecipeState } from './state/useRecipeState';
+import { useSocialState } from './state/useSocialState';
+import { useWellnessState } from './state/useWellnessState';
+import type { UserProfile } from '../types/user';
+import type { ShoppingItem } from '../types/planner';
 
 // ─── Types ───────────────────────────────────────────────────────────────────
 
@@ -180,74 +177,20 @@ interface AppStateContextType {
     kind?: 'snapshot' | 'milestone';
     author?: { id?: string; name?: string; img?: string; role?: string };
   }) => CommunityPost;
-  handleLoadDemoSeed: () => Promise<void>;
-  handleClearDemoSeed: () => void;
+  handleLoadDemoSeed?: () => Promise<void>;
+  handleClearDemoSeed?: () => void;
   navigateToRecipe: (recipe: any) => void;
   recipeToEdit: any;
   setRecipeToEdit: (recipe: any) => void;
 }
 
-interface FamilyMember {
-  id: string;
-  name: string;
-  age: number;
-  goal: string;
-  activityLevel?: string;
-}
+// UserProfile + FamilyMember moved to src/types/user.ts in Phase 2.5 [1.5.116].
+// See ADR-015. Re-export here so existing internal references keep working.
 
-interface UserProfile {
-  name: string;
-  age: number;
-  height: number;
-  weight: number;
-  gender: string;
-  goal: string;
-  activity: string;
-  trains: boolean;
-  dietaryPreferences: string[];
-  /** 'metric' (g/ml) or 'imperial' (oz/fl oz). Default: metric */
-  unitSystem?: 'metric' | 'imperial';
-  /**
-   * Trinario food preferences — R8.3.
-   * Record<ingredientId, 'like' | 'dislike' | null>
-   * null = neutral (removed from map in practice).
-   * Replaces `foodDislikes` as the source of truth; `foodDislikes` is kept
-   * as a derived getter in profileSlices for backward-compat with utils.
-   */
-  foodPreferences?: Record<string, 'like' | 'dislike'>;
-  /** @deprecated Use foodPreferences. Kept for migration compatibility. */
-  foodDislikes?: string[];
-  /** Declared food intolerances/allergies */
-  intolerances?: Allergen[];
-  /** Short bio for creator profile */
-  bio?: string;
-  /** Social media links for creator profile */
-  socialLinks?: SocialLinks;
-  /** Target weight in kg — for goal tracking */
-  targetWeight?: number;
-  /** Family members for meal scaling */
-  family?: FamilyMember[];
-  /** Dashboard display mode */
-  mode?: 'simple' | 'advanced';
-  /** Avatar URL */
-  avatar?: string;
-  /** Free-form private notes (allergies, supplements, medication). Max 500 chars. R8.4. */
-  personalNotes?: string;
-  /** Creator verification flag — set by admin. Enables "Publish as verified recipe" checkbox in CreateRecipe. R7.3. */
-  isVerifiedCreator?: boolean;
-}
+// DailyMacros moved to src/contexts/state/useVitalsState.ts in Phase 2.5 [1.5.117].
+// See ADR-015. Re-imported above for local references.
 
-interface DailyMacros {
-  consumed: { cal: number; pro: number; carbs: number; fats: number };
-  target: { cal: number; pro: number; carbs: number; fats: number };
-}
-
-interface ShoppingItem {
-  id: number;
-  name: string;
-  category: string;
-  checked: boolean;
-}
+// ShoppingItem moved to src/types/planner.ts in Phase 2.5 [1.5.119].
 
 // Body-state types defined in src/types/wellness.ts
 export type { BodySnapshot, BodyMeasurements } from '../types/wellness';
@@ -260,148 +203,55 @@ export function AppStateProvider({ children }: { children: React.ReactNode }) {
   const { navigateTo, previousScreen } = useNavigation();
   const { t } = useI18n();
 
-  // UI state (not persisted)
-  const [selectedRecipe, setSelectedRecipe] = useState<Recipe | null>(null);
-  const [targetPlanDay, setTargetPlanDay] = useState<number | null>(null);
-  const [openScannerOnAddMeal, setOpenScannerOnAddMeal] = useState<boolean>(false);
-  const [selectedStoryAuthorId, setSelectedStoryAuthorId] = useState<string | null>(null);
-  const [selectedCreatorId, setSelectedCreatorId] = useState<string | null>(null);
-  const [selectedPostId, setSelectedPostId] = useState<number | null>(null);
-  const [likedPosts, setLikedPosts] = useLocalStorageState<number[]>('likedPosts', []);
-  const [savedPosts, setSavedPosts] = useLocalStorageState<number[]>('savedPosts', []);
+  // UI transient state (not persisted) — extracted to useUITransientState (Phase 2.5).
+  // Includes selectedChallengeId + recipeToEdit (previously declared further down).
+  const {
+    selectedRecipe, setSelectedRecipe,
+    selectedCreatorId, setSelectedCreatorId,
+    selectedPostId, setSelectedPostId,
+    selectedStoryAuthorId, setSelectedStoryAuthorId,
+    selectedChallengeId, setSelectedChallengeId,
+    targetPlanDay, setTargetPlanDay,
+    openScannerOnAddMeal, setOpenScannerOnAddMeal,
+    recipeToEdit, setRecipeToEdit,
+  } = useUITransientState();
 
-  // Toggle handlers are declared further down, after `setCommunityPosts` is
-  // bound, so the callback closure captures the correct setter.
+  // likedPosts + savedPosts (and their toggle handlers) moved to useSocialState (Phase 2.5).
 
-  // Persisted state
-  const [isPro, setIsPro] = useLocalStorageState<boolean>('isPro', false);
-  const [showAIBot, setShowAIBot] = useLocalStorageState<boolean>('showAIBot', true);
-  const [isFirstTime, setIsFirstTime] = useLocalStorageState<boolean>('isFirstTime', true);
-  // R5: pre-cook mise-en-place screen. Default true — user can opt-out per session.
-  const [miseEnPlaceEnabled, setMiseEnPlaceEnabled] = useLocalStorageState<boolean>('miseEnPlacePreCook', true);
-  const [checkInStatus, setCheckInStatus] = useLocalStorageState<DailyCheckInType | null>('checkInStatus', null);
+  // Profile state — extracted to useProfileState hook (Phase 2.5, ADR-015).
+  // Owns: isPro, showAIBot, isFirstTime, miseEnPlaceEnabled, userProfile.
+  // Plus the R8.3 foodDislikes→foodPreferences migration and 3 sync effects.
+  const {
+    isPro, setIsPro,
+    showAIBot, setShowAIBot,
+    isFirstTime, setIsFirstTime,
+    miseEnPlaceEnabled, setMiseEnPlaceEnabled,
+    userProfile, setUserProfile,
+  } = useProfileState();
 
-  const [userProfile, setUserProfile] = useLocalStorageState<UserProfile>('userProfile', {
-    name: '',
-    age: 32,
-    height: 175,
-    weight: 78,
-    gender: 'female',
-    goal: 'maintain',
-    activity: 'active',
-    trains: false,
-    dietaryPreferences: [],
-  });
+  // Vitals state — extracted to useVitalsState hook (Phase 2.5, ADR-015).
+  // Owns: dailyMacros, hydration, movement, dailyGoal, checkInStatus + 4 sync effects.
+  const {
+    dailyMacros, setDailyMacros,
+    hydration, setHydration,
+    movement, setMovement,
+    dailyGoal, setDailyGoal,
+    checkInStatus, setCheckInStatus,
+  } = useVitalsState();
 
-  // R8.3 — migrate foodDislikes[] → foodPreferences Record (eager, idempotent).
-  useEffect(() => {
-    setUserProfile((prev: any) => {
-      if (!prev?.foodDislikes?.length) return prev;
-      if (prev.foodPreferences) return prev; // already migrated
-      const foodPreferences: Record<string, 'like' | 'dislike'> = {};
-      (prev.foodDislikes as string[]).forEach((id: string) => {
-        foodPreferences[id] = 'dislike';
-      });
-      return { ...prev, foodPreferences };
-    });
-  }, [setUserProfile]);
-
-  // Fresh-install starts at zero — the hardcoded 840 cal / 45 g pro default used
-  // to show as if the user had already eaten before ever logging anything.
-  // "Lo que ves es lo que has hecho" → zeros for consumed, zeros for intake.
-  const [dailyMacros, setDailyMacros] = useLocalStorageState<DailyMacros>('dailyMacros', {
-    consumed: { cal: 0, pro: 0, carbs: 0, fats: 0 },
-    target: { cal: 2400, pro: 180, carbs: 250, fats: 65 },
-  });
-
-  const [hydration, setHydration] = useLocalStorageState('hydration', { consumed: 0, target: 10 });
-
-  const [movement, setMovement] = useLocalStorageState('movement', {
-    steps: 0,
-    target: 10000,
-    activeMinutes: 0,
-    activeTarget: 45,
-  });
-
-  const [dailyGoal, setDailyGoal] = useLocalStorageState('dailyGoal', '');
-
-  // User-created / scanned foods
-  const [userFoods, setUserFoods] = useLocalStorageState<Ingredient[]>('userFoods', []);
-
-  const addUserFood = useCallback((food: Ingredient) => {
-    setUserFoods((prev: Ingredient[]) => {
-      // Avoid duplicates by id
-      if (prev.some(f => f.id === food.id)) return prev;
-      return [food, ...prev];
-    });
-    toast.success(t.mealToasts.foodSaved);
-  }, [setUserFoods, t]);
-
-  // User variants: brand/product FoodVariants stored under a FoodFamily.
-  // New localStorage key — no seedVersion bump (user-only data, no seed to merge).
-  const [userVariants, setUserVariants] = useLocalStorageState<FoodVariant[]>('userVariants', []);
-  const [userVariantBarcodes, setUserVariantBarcodes] = useLocalStorageState<Record<string, string>>('userVariantBarcodes', {});
-
-  const addUserVariant = useCallback((variant: FoodVariant) => {
-    setUserVariants((prev: FoodVariant[]) => {
-      if (prev.some(v => v.id === variant.id)) return prev;
-      return [variant, ...prev];
-    });
-    toast.success(t.mealToasts.foodSaved);
-  }, [setUserVariants, t]);
-
-  const updateUserVariant = useCallback((id: string, updates: Partial<Pick<FoodVariant, 'brand' | 'macros'>>) => {
-    setUserVariants((prev: FoodVariant[]) =>
-      prev.map(v => v.id === id ? { ...v, ...updates } : v),
-    );
-  }, [setUserVariants]);
-
-  const removeUserVariant = useCallback((id: string) => {
-    setUserVariants((prev: FoodVariant[]) => prev.filter(v => v.id !== id));
-    setUserVariantBarcodes((prev: Record<string, string>) => {
-      const next = { ...prev };
-      Object.keys(next).forEach(barcode => {
-        if (next[barcode] === id) delete next[barcode];
-      });
-      return next;
-    });
-  }, [setUserVariants, setUserVariantBarcodes]);
-
-  const addVariantBarcode = useCallback((barcode: string, variantId: string) => {
-    setUserVariantBarcodes((prev: Record<string, string>) => ({ ...prev, [barcode]: variantId }));
-  }, [setUserVariantBarcodes]);
-
-  // Ingredient dictionary (lazy-loaded to keep ~90KB out of the initial bundle)
-  const [baseDictionary, setBaseDictionary] = useState<Ingredient[]>([]);
-  useEffect(() => {
-    let cancelled = false;
-    import('../features/food/data/ingredients').then((m) => {
-      if (!cancelled) setBaseDictionary(m.INGREDIENT_DICTIONARY);
-    });
-    return () => { cancelled = true; };
-  }, []);
-
-  const mergedDictionary = useMemo(
-    () => [...baseDictionary, ...userFoods],
-    [baseDictionary, userFoods],
-  );
-
-  // Seed FoodVariants — lazy-loaded from food-variants.ts to keep them out of
-  // the initial bundle (same pattern as baseDictionary above).
-  const [baseFoodVariants, setBaseFoodVariants] = useState<FoodVariant[]>([]);
-  useEffect(() => {
-    let cancelled = false;
-    import('../features/food/data/food-variants').then((m) => {
-      if (!cancelled) setBaseFoodVariants(m.FOOD_VARIANTS as FoodVariant[]);
-    }).catch((err) => logger.warn('food-variants lazy load failed', { err }));
-    return () => { cancelled = true; };
-  }, []);
-
-  /** Unified variant pool used by matchFamilyForScan + searchFamilies (P5/P3). */
-  const mergedVariants = useMemo<FoodVariant[]>(
-    () => [...baseFoodVariants, ...userVariants],
-    [baseFoodVariants, userVariants],
-  );
+  // Food state — extracted to useFoodState (Phase 2.5, ADR-015).
+  // Owns userFoods, userVariants, userVariantBarcodes, dailyLog, foodHistory,
+  // favoriteIds + their wrapper callbacks + lazy-loaded dictionary/variants
+  // + 6 sync effects.
+  const {
+    userFoods, addUserFood,
+    userVariants, addUserVariant, updateUserVariant, removeUserVariant,
+    userVariantBarcodes, addVariantBarcode,
+    mergedDictionary, mergedVariants,
+    dailyLog, setDailyLog,
+    foodHistory, setFoodHistory,
+    favoriteIds, toggleFavorite, setFavoriteIds,
+  } = useFoodState({ t });
 
   // Seeded content — all lazy-loaded on first mount via `shouldReseed()`.
   // The presence-only guard used before meant bumps to a seed file never
@@ -424,280 +274,70 @@ export function AppStateProvider({ children }: { children: React.ReactNode }) {
   // write lands between `shouldReseed()` and the async `.then()`.
   // `.catch()` is added so a failed chunk (network flake, CDN edge issue)
   // surfaces in DevTools instead of disappearing silently.
-  const [savedRecipes, setSavedRecipes] = useLocalStorageState<any[]>('savedRecipes', []);
-  useEffect(() => {
-    if (!shouldReseed('savedRecipes', 'savedRecipes')) return;
-    import('../features/food/data/seed-recipes')
-      .then((m) => {
-        // preserve-user: keep user-created + imported recipes; replace the rest.
-        setSavedRecipes((prev: any[]) => {
-          if (prev.length === 0) return m.SEED_RECIPES;
-          const userOwned = prev.filter(
-            (r) => r && (r.publishedBy === 'self' || r.tag === 'IMPORTADA'),
-          );
-          const userIds = new Set(userOwned.map((r) => r.id));
-          const seedFresh = m.SEED_RECIPES.filter((r: any) => !userIds.has(r.id));
-          return [...userOwned, ...seedFresh];
-        });
-        setStoredSeedVersion('savedRecipes');
-      })
-      .catch((err) => logger.warn('seed.savedRecipes load failed', { err }));
-  }, [setSavedRecipes]);
+  // Planner state — extracted to usePlannerState (Phase 2.5, ADR-015).
+  // Owns mealPlan + shoppingList + their lazy seeds + 2 sync effects.
+  const { mealPlan, setMealPlan, shoppingList, setShoppingList } = usePlannerState();
 
-  // Q19 meal-taxonomy: one-shot idempotent migration. Normalises any surviving
-  // legacy `mealType` string into the canonical `suitableFor: MealSlot[]`
-  // shape so storage isn't hybrid forever. Idempotent — skips when every
-  // recipe already matches the target shape.
-  useEffect(() => {
-    setSavedRecipes((prev: any[]) => {
-      if (!prev.length) return prev;
-      const needsMigration = prev.some(
-        (r) => r && r.mealType && (!r.suitableFor || r.suitableFor.length === 0),
-      );
-      if (!needsMigration) return prev;
-      return prev.map((r) => {
-        if (!r || r.suitableFor?.length) return r;
-        const slots = getRecipeSlots(r);
-        if (!slots) return r;
-        const { mealType: _legacy, ...rest } = r;
-        return { ...rest, suitableFor: slots };
-      });
-    });
-  }, [setSavedRecipes]);
+  // Recipe state — extracted to useRecipeState (Phase 2.5).
+  // Owns savedRecipes + 2 migrations + 7 handlers + navigateToRecipe + sync.
+  const {
+    savedRecipes, setSavedRecipes,
+    navigateToRecipe,
+    handleSaveRecipe,
+    handleAddToPlan,
+    handleCreateRecipeSubmit,
+    handleDeleteRecipe,
+    handleMarkAsCooked,
+    handleDuplicateRecipe,
+    handleImportRecipe,
+  } = useRecipeState({ setMealPlan, setShoppingList, setSelectedRecipe, navigateTo, t });
 
-  // P4.4 — RecipeIngredient hydration: for legacy `ingredientId`-only entries
-  // that lack `familyId`, populate `familyId` (and `variantId`) in memory so
-  // `resolveRecipeIngredient()` can resolve them via the new dual-schema path.
-  // This does NOT rewrite localStorage — it is an in-memory projection only.
-  // A future seedVersion bump + eager migration will persist the change.
-  // Idempotent: skips recipes where every ingredient already has `familyId`.
-  useEffect(() => {
-    setSavedRecipes((prev: any[]) => {
-      if (!prev.length) return prev;
-      const needsMigration = prev.some((r: any) =>
-        r?.recipeIngredients?.some((ri: any) => !ri.familyId && ri.ingredientId),
-      );
-      if (!needsMigration) return prev;
-      return prev.map((r: any) => {
-        if (!r?.recipeIngredients) return r;
-        const migratedRIs = r.recipeIngredients.map((ri: any) => {
-          if (ri.familyId || !ri.ingredientId) return ri;
-          const mapped = ingredientIdToFamilyVariant(ri.ingredientId);
-          if (!mapped) return ri;
-          return { ...ri, familyId: mapped.familyId, variantId: mapped.variantId };
-        });
-        return { ...r, recipeIngredients: migratedRIs };
-      });
-    });
-  }, [setSavedRecipes]);
+  // Social state — extracted to useSocialState (Phase 2.5).
+  // Owns 9 persisted vars (community/stories/notifications/likes/saves/
+  // social-graph/challenges) + 4 inline callbacks + 9 handler factories +
+  // ref-getter pattern + 6 sync effects.
+  const {
+    communityPosts, setCommunityPosts,
+    communityStories, setCommunityStories,
+    notifications, markAllNotificationsRead, markNotificationRead,
+    likedPosts, toggleLikePost,
+    savedPosts, toggleSavePost,
+    followedCreators,
+    joinedChallenges,
+    challengeJoinDates,
+    challengeProgress,
+    handleCreatePost,
+    handleAddComment,
+    handlePublishStory,
+    handleMarkStoryViewed,
+    handleFollowCreator,
+    handleJoinChallenge,
+    handleLeaveChallenge,
+    handleCheckInChallenge,
+    handleToggleChallenge,
+  } = useSocialState({ userProfile, t, navigateTo });
 
-  const [mealPlan, setMealPlan] = useLocalStorageState<Record<number, any[]>>('mealPlan', {});
-  useEffect(() => {
-    if (!shouldReseed('mealPlan', 'mealPlan')) return;
-    import('../features/planner/data/seed-meal-plan')
-      .then((m) => {
-        // preserve-if-nonempty: user's existing plan is sacred.
-        setMealPlan((prev: Record<number, any[]>) =>
-          Object.keys(prev).length === 0 ? m.SEED_MEAL_PLAN : prev,
-        );
-        setStoredSeedVersion('mealPlan');
-      })
-      .catch((err) => logger.warn('seed.mealPlan load failed', { err }));
-  }, [setMealPlan]);
+  // Wellness state — extracted to useWellnessState (Phase 2.5).
+  // Owns toleranceLogs, realFeelLogs, weightHistory, nutritionHistory + 4 lazy
+  // seeds + weeklyCheckIns seed + 4 sync effects + 8 handlers.
+  const {
+    toleranceLogs, setToleranceLogs,
+    realFeelLogs, setRealFeelLogs,
+    weightHistory, setWeightHistory,
+    nutritionHistory, setNutritionHistory,
+    handleLogWeight, handleUpdateSnapshot, handleDeleteSnapshot,
+    handleAddToleranceLog, handleRealFeelLog,
+    handleCheckIn, handleCompleteCheckIn,
+    handleShareProgress,
+  } = useWellnessState({
+    setUserProfile,
+    setCheckInStatus,
+    setCommunityPosts,
+    dailyLog,
+    navigateTo,
+  });
 
-  const [shoppingList, setShoppingList] = useLocalStorageState<ShoppingItem[]>('shoppingList', []);
-  useEffect(() => {
-    if (!shouldReseed('shoppingList', 'shoppingList')) return;
-    import('../features/planner/data/seed-shopping')
-      .then((m) => {
-        // preserve-if-nonempty: user may have a real list in progress.
-        setShoppingList((prev: ShoppingItem[]) =>
-          prev.length === 0 ? m.SEED_SHOPPING_LIST : prev,
-        );
-        setStoredSeedVersion('shoppingList');
-      })
-      .catch((err) => logger.warn('seed.shoppingList load failed', { err }));
-  }, [setShoppingList]);
-
-  const [communityPosts, setCommunityPosts] = useLocalStorageState<any[]>('communityPosts', []);
-  useEffect(() => {
-    if (!shouldReseed('communityPosts', 'communityPosts')) return;
-    import('../features/social/data/seed-posts')
-      .then((m) => {
-        // replace: demo content, Q6 will swap this for backend-sourced posts.
-        setCommunityPosts(m.SEED_POSTS);
-        setStoredSeedVersion('communityPosts');
-      })
-      .catch((err) => logger.warn('seed.communityPosts load failed', { err }));
-  }, [setCommunityPosts]);
-
-  // Toggles for like/save. Kept id-list for per-user state (cross-device sync +
-  // fast lookup) AND mutate canonical `post.likes`/`post.saves` counter on
-  // `communityPosts` so PostCard can render the real total. Prior code rendered
-  // `post.likes + (isLiked ? 1 : 0)` — cosmetic-only, broke for other-user
-  // likes coming from backend at Q6. Declared after `setCommunityPosts` is
-  // bound (React captures closure at definition time).
-  const toggleLikePost = useCallback((postId: number) => {
-    setLikedPosts((prev: number[]) => {
-      const willLike = !prev.includes(postId);
-      setCommunityPosts((posts: any[]) =>
-        posts.map(p => p.id === postId
-          ? { ...p, likes: Math.max(0, (p.likes || 0) + (willLike ? 1 : -1)) }
-          : p,
-        ),
-      );
-      return willLike ? [...prev, postId] : prev.filter(id => id !== postId);
-    });
-  }, [setLikedPosts, setCommunityPosts]);
-
-  const toggleSavePost = useCallback((postId: number) => {
-    setSavedPosts((prev: number[]) => {
-      const willSave = !prev.includes(postId);
-      setCommunityPosts((posts: any[]) =>
-        posts.map(p => p.id === postId
-          ? { ...p, saves: Math.max(0, (p.saves || 0) + (willSave ? 1 : -1)) }
-          : p,
-        ),
-      );
-      return willSave ? [...prev, postId] : prev.filter(id => id !== postId);
-    });
-  }, [setSavedPosts, setCommunityPosts]);
-
-  const [toleranceLogs, setToleranceLogs] = useLocalStorageState<any[]>('toleranceLogs', []);
-  useEffect(() => {
-    if (!shouldReseed('toleranceLogs', 'toleranceLogs')) return;
-    import('../features/wellness/data/seed-tolerance')
-      .then((m) => {
-        // preserve-if-nonempty: a user's tolerance journal is their record.
-        setToleranceLogs((prev: any[]) =>
-          prev.length === 0 ? m.SEED_TOLERANCE_LOGS : prev,
-        );
-        setStoredSeedVersion('toleranceLogs');
-      })
-      .catch((err) => logger.warn('seed.toleranceLogs load failed', { err }));
-  }, [setToleranceLogs]);
-
-  const [realFeelLogs, setRealFeelLogs] = useLocalStorageState<any[]>('realFeelLogs', []);
-
-  // Stories — lazy-seeded
-  const [communityStories, setCommunityStories] = useLocalStorageState<Story[]>('communityStories', []);
-  useEffect(() => {
-    if (!shouldReseed('communityStories', 'communityStories')) return;
-    import('../features/social/data/seed-stories')
-      .then((m) => {
-        // replace: demo content, Q6 will swap for backend-sourced stories.
-        setCommunityStories(m.SEED_STORIES);
-        setStoredSeedVersion('communityStories');
-      })
-      .catch((err) => logger.warn('seed.communityStories load failed', { err }));
-  }, [setCommunityStories]);
-
-  // Notifications
-  const [notifications, setNotifications] = useLocalStorageState<NotificationType[]>('notifications', []);
-  const markAllNotificationsRead = useCallback(() => {
-    setNotifications((prev: NotificationType[]) => prev.map(n => ({ ...n, read: true })));
-  }, [setNotifications]);
-  const markNotificationRead = useCallback((notificationId: string) => {
-    setNotifications((prev: NotificationType[]) =>
-      prev.map(n => (n.id === notificationId ? { ...n, read: true } : n)),
-    );
-  }, [setNotifications]);
-
-  // Challenge detail
-  const [selectedChallengeId, setSelectedChallengeId] = useState<string | null>(null);
-
-  // Social graph + challenge persistence — single writer via factory handler.
-  // Prior to Wave 3 these were declared inline in each screen
-  // (Discover/CreatorProfile/Community/Challenges/ChallengeDetail/
-  // CreatorVerification), which caused stale-snapshot bugs: a toggle from
-  // Discover wasn't reflected in Community until unmount. Centralising the
-  // setters here means every consumer sees the same ref via context.
-  const [followedCreators, setFollowedCreators] = useLocalStorageState<string[]>('followedCreators', []);
-  const [joinedChallenges, setJoinedChallenges] = useLocalStorageState<string[]>('joinedChallenges', []);
-  const [challengeJoinDates, setChallengeJoinDates] = useLocalStorageState<Record<string, string>>('challengeJoinDates', {});
-  const [challengeProgress, setChallengeProgress] = useLocalStorageState<Record<string, ChallengeProgress>>('challengeProgress', {});
-
-  // Weight & nutrition history (persistent across days)
-  const [weightHistory, setWeightHistory] = useLocalStorageState<BodySnapshot[]>('weightHistory', []);
-  const [nutritionHistory, setNutritionHistory] = useLocalStorageState<DailyArchive[]>('nutritionHistory', []);
-
-  // Weight history — lazy-seeded
-  useEffect(() => {
-    if (!shouldReseed('weightHistory', 'weightHistory')) return;
-    import('../features/wellness/data/seed-body-snapshots')
-      .then((m) => {
-        // preserve-if-nonempty: user's weight history is their record.
-        setWeightHistory((prev: BodySnapshot[]) =>
-          prev.length === 0 ? m.BODY_SNAPSHOT_SEED : prev,
-        );
-        setStoredSeedVersion('weightHistory');
-      })
-      .catch((err) => logger.warn('seed.weightHistory load failed', { err }));
-  }, [setWeightHistory]);
-
-  // Nutrition history — lazy-seeded
-  useEffect(() => {
-    if (!shouldReseed('nutritionHistory', 'nutritionHistory')) return;
-    import('../features/wellness/data/seed-nutrition-history')
-      .then((m) => {
-        // preserve-if-nonempty: user's daily archive is their record.
-        setNutritionHistory((prev: DailyArchive[]) =>
-          prev.length === 0 ? m.SEED_NUTRITION_HISTORY : prev,
-        );
-        setStoredSeedVersion('nutritionHistory');
-      })
-      .catch((err) => logger.warn('seed.nutritionHistory load failed', { err }));
-  }, [setNutritionHistory]);
-
-  // RealFeel logs — lazy-seeded
-  useEffect(() => {
-    if (!shouldReseed('realFeelLogs', 'realFeelLogs')) return;
-    import('../features/wellness/data/seed-real-feel-logs')
-      .then((m) => {
-        // preserve-if-nonempty: user's mood/feel journal is their record.
-        setRealFeelLogs((prev: any[]) =>
-          prev.length === 0 ? m.SEED_REAL_FEEL_LOGS : prev,
-        );
-        setStoredSeedVersion('realFeelLogs');
-      })
-      .catch((err) => logger.warn('seed.realFeelLogs load failed', { err }));
-  }, [setRealFeelLogs]);
-
-  // Weekly check-ins — lazy-seeded. Writes directly to localStorage because
-  // WeeklyCheckIn screen owns its own `useLocalStorageState('weeklyCheckIns')`;
-  // we just pre-populate the slot before the screen mounts.
-  useEffect(() => {
-    if (!shouldReseed('weeklyCheckIns', 'weeklyCheckIns')) return;
-    import('../features/wellness/data/seed-weekly-checkins')
-      .then((m) => {
-        // preserve-if-nonempty: only seed if no check-ins exist yet. We can't
-        // use a React setter here, so read-then-write with JSON.parse guard.
-        try {
-          const raw = window.localStorage.getItem('weeklyCheckIns');
-          const existing = raw ? JSON.parse(raw) : [];
-          if (!Array.isArray(existing) || existing.length === 0) {
-            window.localStorage.setItem('weeklyCheckIns', JSON.stringify(m.SEED_WEEKLY_CHECKINS));
-          }
-        } catch {
-          window.localStorage.setItem('weeklyCheckIns', JSON.stringify(m.SEED_WEEKLY_CHECKINS));
-        }
-        setStoredSeedVersion('weeklyCheckIns');
-      })
-      .catch((err) => logger.warn('seed.weeklyCheckIns load failed', { err }));
-  }, []);
-
-  // Daily food diary log (persisted, cleared manually or on new day)
-  const [dailyLog, setDailyLog] = useLocalStorageState<DailyLogEntry[]>('dailyLog', []);
-
-  // Persistent food history & favorites (NOT reset daily)
-  const [foodHistory, setFoodHistory] = useLocalStorageState<FoodHistoryEntry[]>('foodHistory', []);
-  const [favoriteIds, setFavoriteIds] = useLocalStorageState<string[]>('favoriteIds', []);
-
-  const toggleFavorite = useCallback((foodId: string) => {
-    setFavoriteIds((prev: string[]) =>
-      prev.includes(foodId) ? prev.filter(id => id !== foodId) : [...prev, foodId]
-    );
-  }, [setFavoriteIds]);
+  // dailyLog, foodHistory, favoriteIds + toggleFavorite moved to useFoodState (Phase 2.5).
 
   // Reset daily counters when calendar date changes (midnight rollover)
   useDailyReset({ setDailyLog, setDailyMacros, setHydration, setMovement });
@@ -743,38 +383,23 @@ export function AppStateProvider({ children }: { children: React.ReactNode }) {
   }, [authStatus, applyRemoteData]);
 
   // Push on change — no-op when Supabase is unconfigured or user not signed in.
-  // savedRecipes: skip when any recipe has a data-URL photo (Supabase row-size guard ~1 MB).
-  useEffect(() => {
-    const hasDataUrl = savedRecipes.some(
-      (r: any) =>
-        r?.photos?.some((p: string) => p?.startsWith('data:')) ||
-        r?.steps?.some((s: any) => s?.photoUrl?.startsWith('data:')),
-    );
-    if (!hasDataUrl) pushToCloud('savedRecipes', savedRecipes);
-  }, [savedRecipes]);
-  useEffect(() => { pushToCloud('userProfile', userProfile); }, [userProfile]);
-  useEffect(() => { pushToCloud('dailyMacros', dailyMacros); }, [dailyMacros]);
-  useEffect(() => { pushToCloud('mealPlan', mealPlan); }, [mealPlan]);
-  useEffect(() => { pushToCloud('shoppingList', shoppingList); }, [shoppingList]);
-  useEffect(() => { pushToCloud('realFeelLogs', realFeelLogs); }, [realFeelLogs]);
-  useEffect(() => { pushToCloud('toleranceLogs', toleranceLogs); }, [toleranceLogs]);
-  useEffect(() => { pushToCloud('weightHistory', weightHistory); }, [weightHistory]);
-  useEffect(() => { pushToCloud('nutritionHistory', nutritionHistory); }, [nutritionHistory]);
-  useEffect(() => { pushToCloud('isPro', isPro); }, [isPro]);
-  useEffect(() => { pushToCloud('dailyLog', dailyLog); }, [dailyLog]);
-  useEffect(() => { pushToCloud('foodHistory', foodHistory); }, [foodHistory]);
-  useEffect(() => { pushToCloud('favoriteIds', favoriteIds); }, [favoriteIds]);
+  // savedRecipes sync (with data-URL guard) moved to useRecipeState (Phase 2.5).
+  // userProfile sync moved to useProfileState (Phase 2.5).
+  // dailyMacros, hydration, movement, dailyGoal sync moved to useVitalsState (Phase 2.5).
+  // mealPlan + shoppingList sync moved to usePlannerState (Phase 2.5).
+  // userFoods, userVariants, userVariantBarcodes, dailyLog, foodHistory,
+  // favoriteIds sync moved to useFoodState (Phase 2.5).
+  // mealPlan + shoppingList sync moved to usePlannerState (Phase 2.5).
+  // realFeelLogs, toleranceLogs, weightHistory, nutritionHistory sync moved to useWellnessState (Phase 2.5).
+  // isPro, isFirstTime sync moved to useProfileState (Phase 2.5).
+  // dailyLog, foodHistory, favoriteIds, userFoods, userVariants,
+  // userVariantBarcodes sync moved to useFoodState (Phase 2.5).
+  // likedPosts, savedPosts, followedCreators, joinedChallenges,
+  // challengeJoinDates, challengeProgress sync moved to useSocialState (Phase 2.5).
   // ──────────────────────────────────────────────────────────────────────────────
 
   // ─── Handlers (delegated to feature modules, memoized to prevent re-renders) ──
-
-  const navigateToRecipe = useCallback((recipe: any) => {
-    setSelectedRecipe(recipe);
-    // Mark the Guided Setup "Explora una receta" step complete (Home.tsx reads this key).
-    // useLocalStorageState prefixes with `rial_` — the reader on Home.tsx:250 checks `rial_recipeViewed`.
-    try { window.localStorage.setItem('rial_recipeViewed', '1'); } catch { /* private mode */ }
-    navigateTo('recipe-detail', { recipeId: recipe.id });
-  }, [navigateTo]);
+  // navigateToRecipe + 7 recipe handlers moved to useRecipeState (Phase 2.5).
 
   const handleLogMeal = useMemo(
     () => createHandleLogMeal({ targetPlanDay, setMealPlan, setShoppingList, setTargetPlanDay, setDailyMacros, setDailyLog, setFoodHistory, navigateTo, previousScreen, t }),
@@ -784,134 +409,18 @@ export function AppStateProvider({ children }: { children: React.ReactNode }) {
     () => createHandleLogMealNow({ setDailyMacros, setDailyLog, setFoodHistory, navigateTo, t }),
     [setDailyMacros, setDailyLog, setFoodHistory, navigateTo, t],
   );
-  const handleSaveRecipe = useMemo(
-    () => createHandleSaveRecipe({ setSavedRecipes, t }),
-    [setSavedRecipes, t],
-  );
-  const handleAddToPlan = useMemo(
-    () => createHandleAddToPlan({ setSavedRecipes, setMealPlan, setShoppingList, navigateTo, t }),
-    [setSavedRecipes, setMealPlan, setShoppingList, navigateTo, t],
-  );
-  const handleCreateRecipeSubmit = useMemo(
-    () => createHandleCreateRecipeSubmit({ setSavedRecipes, navigateTo, t }),
-    [setSavedRecipes, navigateTo, t],
-  );
-  const handleDeleteRecipe = useMemo(
-    () => createHandleDeleteRecipe({ setSavedRecipes, navigateTo, t }),
-    [setSavedRecipes, navigateTo, t],
-  );
-  const handleMarkAsCooked = useMemo(
-    () => createHandleMarkAsCooked({ setSavedRecipes, t }),
-    [setSavedRecipes, t],
-  );
-  const handleDuplicateRecipe = useMemo(
-    () => createHandleDuplicateRecipe({ setSavedRecipes, navigateTo, t }),
-    [setSavedRecipes, navigateTo, t],
-  );
-  const handleLogWeight = useMemo(
-    () => createHandleLogWeight({ setWeightHistory, setUserProfile }),
-    [setWeightHistory, setUserProfile],
-  );
-  const handleUpdateSnapshot = useMemo(
-    () => createHandleUpdateSnapshot({ setWeightHistory }),
-    [setWeightHistory],
-  );
-  const handleDeleteSnapshot = useMemo(
-    () => createHandleDeleteSnapshot({ setWeightHistory, setUserProfile }),
-    [setWeightHistory, setUserProfile],
-  );
-  const handleImportRecipe = useMemo(
-    () => createHandleImportRecipe({ setSavedRecipes, navigateTo, t }),
-    [setSavedRecipes, navigateTo, t],
-  );
-  const [recipeToEdit, setRecipeToEdit] = useState<any>(null);
-  // Ref getters so the social/story handlers always see the latest userProfile
-  // and translation table without invalidating their identity every render.
-  const userProfileRef = useRef(userProfile);
-  useEffect(() => { userProfileRef.current = userProfile; }, [userProfile]);
-  const tRef = useRef(t);
-  useEffect(() => { tRef.current = t; }, [t]);
-  const getUserProfile = useCallback(() => userProfileRef.current, []);
-  const getT = useCallback(() => tRef.current, []);
-  const handleCreatePost = useMemo(
-    () => createHandleCreatePost({ setCommunityPosts, navigateTo, getUserProfile, getT }),
-    [setCommunityPosts, navigateTo, getUserProfile, getT],
-  );
-  const handlePublishStory = useMemo(
-    () => createHandlePublishStory({ setCommunityStories, navigateTo, getUserProfile, getT }),
-    [setCommunityStories, navigateTo, getUserProfile, getT],
-  );
-  const handleMarkStoryViewed = useMemo(
-    () => createHandleMarkStoryViewed({ setCommunityStories }),
-    [setCommunityStories],
-  );
-  const handleAddComment = useMemo(
-    () => createHandleAddComment({ setCommunityPosts, getUserProfile, getT }),
-    [setCommunityPosts, getUserProfile, getT],
-  );
-  const notifyToast = useCallback((msg: string) => toast.success(msg), []);
-  const handleFollowCreator = useMemo(
-    () => createHandleFollowCreator({ setFollowedCreators, getT, notify: notifyToast }),
-    [setFollowedCreators, getT, notifyToast],
-  );
-  const handleJoinChallenge = useMemo(
-    () => createHandleJoinChallenge({
-      setJoinedChallenges,
-      setJoinDates: setChallengeJoinDates,
-      setChallengeProgress,
-      getT,
-      notify: notifyToast,
-    }),
-    [setJoinedChallenges, setChallengeJoinDates, setChallengeProgress, getT, notifyToast],
-  );
-  const handleLeaveChallenge = useMemo(
-    () => createHandleLeaveChallenge({
-      setJoinedChallenges,
-      setChallengeProgress,
-      getT,
-      notify: notifyToast,
-    }),
-    [setJoinedChallenges, setChallengeProgress, getT, notifyToast],
-  );
-  const handleCheckInChallenge = useMemo(
-    () => createHandleCheckInChallenge({ setChallengeProgress, getT, notify: notifyToast }),
-    [setChallengeProgress, getT, notifyToast],
-  );
-  // Wrapper toggle — readlinked to a ref of `joinedChallenges` so the handler
-  // always sees the latest list (otherwise toggling right after a join would
-  // still see the pre-join snapshot and double-add).
-  const joinedChallengesRef = useRef(joinedChallenges);
-  useEffect(() => { joinedChallengesRef.current = joinedChallenges; }, [joinedChallenges]);
-  const handleToggleChallenge = useMemo(
-    () => createHandleToggleChallenge({
-      getJoinedChallenges: () => joinedChallengesRef.current,
-      handleJoinChallenge,
-      handleLeaveChallenge,
-    }),
-    [handleJoinChallenge, handleLeaveChallenge],
-  );
-  const handleAddToleranceLog = useMemo(
-    () => createHandleAddToleranceLog({ setToleranceLogs, navigateTo }),
-    [setToleranceLogs, navigateTo],
-  );
-  const handleRealFeelLog = useMemo(
-    () => createHandleRealFeelLog({ setRealFeelLogs, getDailyLog: () => dailyLog }),
-    [setRealFeelLogs, dailyLog],
-  );
-  const handleCheckIn = useMemo(
-    () => createHandleCheckIn({ setCheckInStatus, navigateTo }),
-    [setCheckInStatus, navigateTo],
-  );
-  const handleCompleteCheckIn = useMemo(
-    () => createHandleCompleteCheckIn({ setCheckInStatus, navigateTo }),
-    [setCheckInStatus, navigateTo],
-  );
-  const handleShareProgress = useMemo(
-    () => createHandleShareProgress({ setCommunityPosts }),
-    [setCommunityPosts],
-  );
+  // Recipe handlers moved to useRecipeState (Phase 2.5).
+  // Wellness handlers (logWeight, updateSnapshot, deleteSnapshot,
+  // addToleranceLog, realFeelLog, checkIn, completeCheckIn, shareProgress)
+  // moved to useWellnessState (Phase 2.5).
+  // recipeToEdit moved to useUITransientState (Phase 2.5).
+  // Social handlers (createPost, addComment, publishStory, markStoryViewed,
+  // followCreator, joinChallenge, leaveChallenge, checkInChallenge,
+  // toggleChallenge) + ref-getter pattern moved to useSocialState (Phase 2.5).
+  // Wellness handlers (addToleranceLog, realFeelLog, checkIn, completeCheckIn,
+  // shareProgress) moved to useWellnessState (Phase 2.5).
   const handleLoadDemoSeed = useMemo(
-    () => createHandleLoadDemoSeed({
+    () => IS_DEV ? createHandleLoadDemoSeed({
       setUserProfile,
       setDailyMacros,
       setHydration,
@@ -928,7 +437,7 @@ export function AppStateProvider({ children }: { children: React.ReactNode }) {
       setCommunityPosts,
       setCommunityStories,
       setToleranceLogs,
-    }),
+    }) : undefined,
     [
       setUserProfile, setDailyMacros, setHydration, setMovement, setDailyGoal,
       setDailyLog, setFoodHistory, setWeightHistory, setNutritionHistory,
@@ -937,7 +446,7 @@ export function AppStateProvider({ children }: { children: React.ReactNode }) {
     ],
   );
   const handleClearDemoSeed = useMemo(
-    () => createHandleClearDemoSeed({
+    () => IS_DEV ? createHandleClearDemoSeed({
       setUserProfile,
       setDailyMacros,
       setHydration,
@@ -954,7 +463,7 @@ export function AppStateProvider({ children }: { children: React.ReactNode }) {
       setCommunityPosts,
       setCommunityStories,
       setToleranceLogs,
-    }),
+    }) : undefined,
     [
       setUserProfile, setDailyMacros, setHydration, setMovement, setDailyGoal,
       setDailyLog, setFoodHistory, setWeightHistory, setNutritionHistory,

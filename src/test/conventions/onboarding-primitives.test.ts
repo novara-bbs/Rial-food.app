@@ -27,17 +27,17 @@ import { describe, it, expect } from 'vitest';
 import fs from 'node:fs';
 import path from 'node:path';
 
-import OnboardingScaffold from '@/components/OnboardingScaffold';
-import RadioCardGroup, { type RadioCardOption } from '@/components/RadioCardGroup';
+import OnboardingScaffold from '@/features/profile/components/OnboardingScaffold';
+import RadioCardGroup, { type RadioCardOption } from '@/components/ui/RadioCardGroup';
 import SelectList, { type SelectListItem } from '@/components/SelectList';
 
 const ROOT = process.cwd();
 const SCAFFOLD_SRC = fs.readFileSync(
-  path.resolve(ROOT, 'src/components/OnboardingScaffold.tsx'),
+  path.resolve(ROOT, 'src/features/profile/components/OnboardingScaffold.tsx'),
   'utf8',
 );
 const RADIO_SRC = fs.readFileSync(
-  path.resolve(ROOT, 'src/components/RadioCardGroup.tsx'),
+  path.resolve(ROOT, 'src/components/ui/RadioCardGroup.tsx'),
   'utf8',
 );
 const SELECT_SRC = fs.readFileSync(
@@ -159,11 +159,11 @@ describe('SelectList — anatomy (§4.11, IMG_0958 pattern)', () => {
 
 describe('Onboarding.tsx — consumer sanity', () => {
   it('imports OnboardingScaffold', () => {
-    expect(ONBOARDING_SRC).toContain("from '../../../components/OnboardingScaffold'");
+    expect(ONBOARDING_SRC).toContain("from './OnboardingScaffold'");
   });
 
   it('imports RadioCardGroup', () => {
-    expect(ONBOARDING_SRC).toContain("from '../../../components/RadioCardGroup'");
+    expect(ONBOARDING_SRC).toContain("from '@/components/ui/RadioCardGroup'");
   });
 
   it('mounts <OnboardingScaffold> for each of the 6 steps', () => {
