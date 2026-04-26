@@ -35,7 +35,9 @@ import { syncOnSignIn, pushToCloud } from '../lib/sync';
 import { useProfileState } from './state/useProfileState';
 import { useVitalsState, type DailyMacros } from './state/useVitalsState';
 import { useUITransientState } from './state/useUITransientState';
+import { usePlannerState } from './state/usePlannerState';
 import type { UserProfile } from '../types/user';
+import type { ShoppingItem } from '../types/planner';
 
 // ─── Types ───────────────────────────────────────────────────────────────────
 
@@ -197,12 +199,7 @@ interface AppStateContextType {
 // DailyMacros moved to src/contexts/state/useVitalsState.ts in Phase 2.5 [1.5.117].
 // See ADR-015. Re-imported above for local references.
 
-interface ShoppingItem {
-  id: number;
-  name: string;
-  category: string;
-  checked: boolean;
-}
+// ShoppingItem moved to src/types/planner.ts in Phase 2.5 [1.5.119].
 
 // Body-state types defined in src/types/wellness.ts
 export type { BodySnapshot, BodyMeasurements } from '../types/wellness';
@@ -421,33 +418,9 @@ export function AppStateProvider({ children }: { children: React.ReactNode }) {
     });
   }, [setSavedRecipes]);
 
-  const [mealPlan, setMealPlan] = useLocalStorageState<Record<number, any[]>>('mealPlan', {});
-  useEffect(() => {
-    if (!shouldReseed('mealPlan', 'mealPlan')) return;
-    import('../features/planner/data/seed-meal-plan')
-      .then((m) => {
-        // preserve-if-nonempty: user's existing plan is sacred.
-        setMealPlan((prev: Record<number, any[]>) =>
-          Object.keys(prev).length === 0 ? m.SEED_MEAL_PLAN : prev,
-        );
-        setStoredSeedVersion('mealPlan');
-      })
-      .catch((err) => logger.warn('seed.mealPlan load failed', { err }));
-  }, [setMealPlan]);
-
-  const [shoppingList, setShoppingList] = useLocalStorageState<ShoppingItem[]>('shoppingList', []);
-  useEffect(() => {
-    if (!shouldReseed('shoppingList', 'shoppingList')) return;
-    import('../features/planner/data/seed-shopping')
-      .then((m) => {
-        // preserve-if-nonempty: user may have a real list in progress.
-        setShoppingList((prev: ShoppingItem[]) =>
-          prev.length === 0 ? m.SEED_SHOPPING_LIST : prev,
-        );
-        setStoredSeedVersion('shoppingList');
-      })
-      .catch((err) => logger.warn('seed.shoppingList load failed', { err }));
-  }, [setShoppingList]);
+  // Planner state — extracted to usePlannerState (Phase 2.5, ADR-015).
+  // Owns mealPlan + shoppingList + their lazy seeds + 2 sync effects.
+  const { mealPlan, setMealPlan, shoppingList, setShoppingList } = usePlannerState();
 
   const [communityPosts, setCommunityPosts] = useLocalStorageState<any[]>('communityPosts', []);
   useEffect(() => {
@@ -683,8 +656,7 @@ export function AppStateProvider({ children }: { children: React.ReactNode }) {
   }, [savedRecipes]);
   // userProfile sync moved to useProfileState (Phase 2.5).
   // dailyMacros sync moved to useVitalsState (Phase 2.5).
-  useEffect(() => { pushToCloud('mealPlan', mealPlan); }, [mealPlan]);
-  useEffect(() => { pushToCloud('shoppingList', shoppingList); }, [shoppingList]);
+  // mealPlan + shoppingList sync moved to usePlannerState (Phase 2.5).
   useEffect(() => { pushToCloud('realFeelLogs', realFeelLogs); }, [realFeelLogs]);
   useEffect(() => { pushToCloud('toleranceLogs', toleranceLogs); }, [toleranceLogs]);
   useEffect(() => { pushToCloud('weightHistory', weightHistory); }, [weightHistory]);
