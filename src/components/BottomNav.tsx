@@ -45,7 +45,7 @@ export default function BottomNav({ currentScreen, setCurrentScreen, onOpenCreat
             }`}
           >
             <Icon className={`w-6 h-6 mb-1 ${isActive ? 'fill-primary/20' : ''}`} aria-hidden="true" />
-            <span className="font-label text-micro font-bold tracking-[0.1em] uppercase">{item.label}</span>
+            <span className="font-headline text-micro font-semibold normal-case tracking-normal">{item.label}</span>
           </button>
         );
       })}

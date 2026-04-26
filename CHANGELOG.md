@@ -1,5 +1,53 @@
 # RIAL App - Changelog
 
+## [1.5.99] - 2026-04-26
+
+### feat(ds): nav / search / filter-layer typography normalization
+
+Auditoria global de tipografía en componentes de navegación, búsqueda y
+filtros. Todos usaban `font-label` (JetBrains Mono, monospace) +
+`uppercase tracking-widest font-bold` — el mismo patrón que `[1.5.98]`
+normalizó en los chips. Se propaga la normalización a todos los componentes
+de la capa de UI donde el usuario interactúa directamente.
+
+#### Componentes normalizados (5 archivos)
+
+**`src/components/BottomNav.tsx`** — etiquetas de tabs del nav inferior:
+- Antes: `font-label text-micro font-bold tracking-[0.1em] uppercase` (JetBrains Mono, mayúsculas, tracking arbitrario)
+- Ahora: `font-headline text-micro font-semibold normal-case tracking-normal`
+
+**`src/components/patterns/SearchInput.tsx`** — campo de texto de búsqueda (**bug UX crítico**):
+- Antes: `font-label tracking-widest uppercase` — el texto que escribía el usuario se mostraba en JetBrains Mono en MAYÚSCULAS. Buscar "pollo asado" mostraba "POLLO ASADO" en fuente monoespaciada. Completamente incorrecto para un campo de entrada de texto libre.
+- Ahora: `font-headline tracking-normal` — texto en Bricolage Grotesque, case normal, tracking standard.
+
+**`src/components/patterns/SortControl.tsx`** — etiqueta del control de orden:
+- Antes: `text-micro font-label font-bold uppercase tracking-widest`
+- Ahora: `text-micro font-headline font-semibold normal-case tracking-normal`
+
+**`src/components/patterns/FilterButton.tsx`** — etiqueta opcional del botón filtro:
+- Antes: `font-label text-micro font-bold uppercase tracking-widest` — inconsistente con la badge count del mismo componente (que ya usaba `font-headline`)
+- Ahora: `font-headline text-micro font-semibold normal-case tracking-normal` — coherente con el badge
+
+**`src/components/patterns/TabNav.tsx`** — tabs de navegación de fuente (Mis Recetas / Comunidad / Favoritos):
+- Antes: `font-headline text-xs font-bold tracking-widest uppercase` — font family correcta pero `text-xs font-bold` generaba lint warning (ADR-012)
+- Ahora: `font-headline text-micro font-semibold normal-case tracking-normal` — lint warning eliminado
+
+#### Componentes auditados y dejados intencionalmente
+
+- **`button.tsx`** — CTAs primarios: `uppercase tracking-widest` en botones de acción primaria es convención internacional correcta (diferencia semántica entre "acción" y "etiqueta de navegación"). No tocar.
+- **`Typography.tsx`** — design token primitives (`<Heading variant="overline">`, `<Text variant="label">`): son los tokens de diseño, no drift.
+- **`MacroTile`, `StatTile`, `ConstantTile`** — readouts numéricos: JetBrains Mono para cifras es intencional (figuras tabulares, alineación de decimales).
+- **`bottom-sheet.tsx` subtítulo** — propagación global de alto riesgo; diferido.
+
+#### Métricas
+
+- TS: 0 errores
+- Tests: 1188 passing (sin cambios)
+- i18n: 1913 keys (sin cambios)
+- Design-system lint: 927 warnings (-1 vs [1.5.98]; TabNav `text-xs font-bold` warning eliminado)
+
+---
+
 ## [1.5.98] - 2026-04-26
 
 ### feat(ds): chip typography normalization + carousel UX

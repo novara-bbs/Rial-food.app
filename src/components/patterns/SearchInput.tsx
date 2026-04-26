@@ -36,7 +36,7 @@ export default function SearchInput({
         onChange={e => onChange(e.target.value)}
         placeholder={placeholder}
         className={cn(
-          'w-full bg-surface-container-low border border-outline-variant/30 rounded-sm text-tertiary font-label tracking-widest uppercase placeholder:text-on-surface-variant/50 focus:outline-none focus:border-primary transition-colors',
+          'w-full bg-surface-container-low border border-outline-variant/30 rounded-sm text-tertiary font-headline tracking-normal placeholder:text-on-surface-variant/50 focus:outline-none focus:border-primary transition-colors',
           isSm
             ? 'py-2 pl-10 pr-4 text-sm'
             : 'py-3 pl-12 text-sm',
