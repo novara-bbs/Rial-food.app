@@ -1,7 +1,7 @@
 /**
  * FilterSheet invariants — ADR-014.
  *
- * Two regressions we want to fail loudly on:
+ * Three regressions we want to fail loudly on:
  *
  *   E. Multiple FilterSheet mounts in the same screen — there should never
  *      be more than one advanced filter panel per screen (a second one
@@ -12,7 +12,14 @@
  *      affordance from the screen body, so the user can't open it. Either
  *      delete the import or wire a `<FilterButton>`.
  *
- * Both checks are cheap text-pattern heuristics over the source file.
+ *   G. FilterSheet imported without ActiveFilterStrip ([1.5.97]) — every
+ *      advanced-filter flow needs visible feedback of what's currently
+ *      applied. Without the strip, users don't see persisted filters when
+ *      they return to the screen, and they reimplement inline pills
+ *      (the anti-pattern Cocina shipped briefly in [1.5.95] and corrected
+ *      in [1.5.97]).
+ *
+ * All checks are cheap text-pattern heuristics over the source file.
  * Allowlists track documented exceptions.
  */
 
@@ -28,6 +35,12 @@ const MULTI_SHEET_ALLOWLIST = new Set<string>([
 /** Files allowed to import FilterSheet without FilterButton (e.g. headless usage). */
 const NO_TRIGGER_ALLOWLIST = new Set<string>([
   // (empty — every screen using FilterSheet must also render a FilterButton)
+]);
+
+/** Files allowed to import FilterSheet without ActiveFilterStrip (e.g. screens
+ *  with intentionally invisible applied-filter feedback). */
+const NO_STRIP_ALLOWLIST = new Set<string>([
+  // (empty — every screen using FilterSheet must also render an ActiveFilterStrip)
 ]);
 
 function walk(dir: string): string[] {
@@ -79,6 +92,20 @@ describe('ADR-014 — FilterSheet invariants', () => {
       if (!importsSheet) continue;
       const importsButton = /from ['"][^'"]*patterns\/FilterButton['"]/.test(src);
       if (!importsButton) violators.push(rel);
+    }
+    expect(violators).toEqual([]);
+  });
+
+  it('Invariant G — screens importing FilterSheet must also import ActiveFilterStrip', () => {
+    const violators: string[] = [];
+    for (const file of screenFiles) {
+      const rel = relativePosixPath(file);
+      if (NO_STRIP_ALLOWLIST.has(rel)) continue;
+      const src = fs.readFileSync(file, 'utf8');
+      const importsSheet = /from ['"][^'"]*patterns\/FilterSheet['"]/.test(src);
+      if (!importsSheet) continue;
+      const importsStrip = /from ['"][^'"]*patterns\/ActiveFilterStrip['"]/.test(src);
+      if (!importsStrip) violators.push(rel);
     }
     expect(violators).toEqual([]);
   });

@@ -1,4 +1,4 @@
-import { ChefHat, ChevronRight, X } from 'lucide-react';
+import { ChefHat, ChevronRight } from 'lucide-react';
 import SearchInput from '../../../components/patterns/SearchInput';
 import React, { useState, useMemo } from 'react';
 import { toast } from 'sonner';
@@ -10,6 +10,7 @@ import Swimlane from '../../../components/patterns/Swimlane';
 import SortControl from '../../../components/patterns/SortControl';
 import FilterButton from '../../../components/patterns/FilterButton';
 import FilterSheet, { type FilterSection } from '../../../components/patterns/FilterSheet';
+import ActiveFilterStrip, { type ActiveFilterChip } from '../../../components/patterns/ActiveFilterStrip';
 import { useAppState } from '../../../contexts/AppStateContext';
 import { useLocalStorageState } from '../../../hooks/useLocalStorageState';
 import { calculateMatchScore } from '../../recipes/utils/matchScore';
@@ -93,6 +94,67 @@ export default function Discovery({ onNavigateToRecipe, savedRecipes = [], onSav
   // Branch: zero filters → editorial swimlanes (idle/discovery mode).
   // ≥1 filter → flat sorted grid (Yummly-style narrowed search).
   const isFiltered = activeFilterCount > 0;
+
+  // Per-facet emoji used in the ActiveFilterStrip (canonical mapping aligned
+  // with Cocina — see PRIMITIVES.md). Cuisine + mealSlot use 🍽️/🥪 since
+  // both refer to "what kind of dish"; diet/time/difficulty match Cocina.
+  const FACET_EMOJI: Record<string, string> = {
+    cuisine: '🍽️',
+    diet: '🌱',
+    time: '⏱️',
+    difficulty: '⭐',
+    mealSlot: '🥪',
+  };
+
+  // Resolve a section/value → display label via i18n.
+  const getFilterLabel = (sectionId: string, valueId: string): string => {
+    const section = (t.filters as Record<string, unknown>)[sectionId];
+    if (section && typeof section === 'object') {
+      return (section as Record<string, string>)[valueId] ?? valueId;
+    }
+    return valueId;
+  };
+
+  // Active filter chips for the ActiveFilterStrip (Invariant G).
+  const activeFilterChips = useMemo<ActiveFilterChip[]>(() => {
+    const chips: ActiveFilterChip[] = [];
+    for (const c of (filterValues.cuisine as string[] | undefined) ?? []) {
+      chips.push({ key: `cuisine:${c}`, label: getFilterLabel('cuisine', c), emoji: FACET_EMOJI.cuisine });
+    }
+    for (const d of (filterValues.diet as string[] | undefined) ?? []) {
+      chips.push({ key: `diet:${d}`, label: getFilterLabel('diet', d), emoji: FACET_EMOJI.diet });
+    }
+    if (filterValues.time) {
+      const v = filterValues.time as string;
+      chips.push({ key: `time:${v}`, label: getFilterLabel('time', v), emoji: FACET_EMOJI.time });
+    }
+    if (filterValues.difficulty) {
+      const v = filterValues.difficulty as string;
+      chips.push({ key: `difficulty:${v}`, label: getFilterLabel('difficulty', v), emoji: FACET_EMOJI.difficulty });
+    }
+    if (filterValues.mealSlot) {
+      const v = filterValues.mealSlot as string;
+      chips.push({ key: `mealSlot:${v}`, label: getFilterLabel('mealSlot', v), emoji: FACET_EMOJI.mealSlot });
+    }
+    return chips;
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [filterValues, t]);
+
+  // Dismiss a single chip — parses the composite key and removes the value.
+  const handleDismissByKey = (key: string) => {
+    const sepIdx = key.indexOf(':');
+    if (sepIdx < 0) return;
+    const sectionId = key.slice(0, sepIdx);
+    const valueId = key.slice(sepIdx + 1);
+    const next = { ...filterValues };
+    if (Array.isArray(next[sectionId])) {
+      const arr = (next[sectionId] as string[]).filter(v => v !== valueId);
+      next[sectionId] = arr.length > 0 ? arr : null;
+    } else {
+      next[sectionId] = null;
+    }
+    setFilterValues(next);
+  };
 
   // Profile slice for match scoring — R8.3: derive foodDislikes from foodPreferences
   const profileSlice = useMemo(() => ({
@@ -272,18 +334,18 @@ export default function Discovery({ onNavigateToRecipe, savedRecipes = [], onSav
           editorial swimlanes preserved verbatim. */}
       {isFiltered ? (
         <>
-          <div className="px-6 pb-3 flex items-center justify-between gap-3">
-            <span className="font-label text-micro tracking-widest uppercase text-on-surface-variant">
+          <div className="px-6 pb-3 space-y-2">
+            <span className="block font-label text-micro tracking-widest uppercase text-on-surface-variant">
               {t.filters.activeFiltersGrid.replace('{n}', String(sortedFilteredGrid.length))}
             </span>
-            <button
-              type="button"
-              onClick={() => setFilterValues({})}
-              className="inline-flex items-center gap-1 font-label text-micro font-bold tracking-widest uppercase text-primary hover:underline px-2 py-1 -mr-2"
-            >
-              <X className="w-3 h-3" aria-hidden="true" />
-              {t.filters.reset}
-            </button>
+            {/* ActiveFilterStrip (Invariant G) — dismissible chip per applied
+                filter + Reset link. Replaces the prior inline X+Reset button
+                in [1.5.97] for canonical chip uniformity. */}
+            <ActiveFilterStrip
+              chips={activeFilterChips}
+              onDismiss={handleDismissByKey}
+              onReset={() => setFilterValues({})}
+            />
           </div>
           {sortedFilteredGrid.length === 0 ? (
             <div className="px-6 py-12">

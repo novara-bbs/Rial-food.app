@@ -32,12 +32,13 @@ Canonical components. Reach for these **before** writing JSX from scratch.
 | `RadioCardGroup` | `src/components/RadioCardGroup.tsx` | Exclusive selector rendered as vertical stack of cards with WAI-ARIA radiogroup semantics (2–5 options) | Non-exclusive selection (use checkboxes); side-by-side pills (raw buttons); > 5 options (use `<select>` or `SelectList`) |
 | `SelectList` | `src/components/SelectList.tsx` | Vertical card list where each item is a nav trigger with trailing chevron (no selection state) | Exclusive selection (use `RadioCardGroup`); menus or dropdowns (use `DropdownMenu`) |
 | `TabNav` | `src/components/patterns/TabNav.tsx` | Source / type / view navigation — 1-of-N **required**, underline indicator, `role="tablist"` | Optional filtering (use `ChipRow single`); compact card-scoped toggles (use `SegmentedTabs`) |
-| `ChipRow` | `src/components/patterns/ChipRow.tsx` | Faceted filtering — `mode="single"` (0-or-1 optional) / `mode="multi"` (0-to-N). Variants `pill` / `icon` / `emoji`; tone `default` / `danger` (excluded-state) | Source navigation (use `TabNav`); sort (use `SortControl`); curated editorial collections (use `CollectionsCarousel`) |
+| `ChipRow` | `src/components/patterns/ChipRow.tsx` | Faceted filtering — `mode="single"` (0-or-1 optional) / `mode="multi"` (0-to-N). Variants `pill` (canonical) / `emoji` (emoji-LEFT prefix) / ~~`icon`~~ (deprecated [1.5.97], do not use). Tone `default` / `danger` (excluded-state). `wrap` flag for pill/emoji avoids horizontal scroll. | Source navigation (use `TabNav`); sort (use `SortControl`); curated editorial collections (use `CollectionsCarousel`); applied-filter feedback (use `ActiveFilterStrip`) |
 | `FilterRow` | `src/components/patterns/FilterRow.tsx` | **Deprecated shim** → delegates to `ChipRow`. Kept so existing imports don't break | New code — import `ChipRow` directly |
 | `SearchInput` | `src/components/patterns/SearchInput.tsx` | Free-text filter at the top of a list | Facet filtering (use `ChipRow`); sort (use `SortControl`) |
 | `SortControl` | `src/components/patterns/SortControl.tsx` | Ordering — reorder without reducing. Native `<select>` under brand chrome, height ≡ `SearchInput` so both align in one flex row | Reducing set (use `ChipRow`); one-shot actions (use `Button` + menu) |
 | `FilterSheet` | `src/components/patterns/FilterSheet.tsx` | Advanced filter panel (ADR-014). 3+ facetas grouped into accordion sections inside a `BottomSheet size="focus"`. Buffered draft + Apply/Reset semantics | 0-2 facets (use inline `ChipRow`); ordering (use `SortControl`); modal forms (use `BottomSheet` directly) |
 | `FilterButton` | `src/components/patterns/FilterButton.tsx` | Trigger for `FilterSheet`. Compact icon button with numeric badge when `activeCount > 0`. Height ≡ `SearchInput` for flex-row alignment | Plain action button (use `Button`); navigation (use `TabNav`) |
+| `ActiveFilterStrip` | `src/components/patterns/ActiveFilterStrip.tsx` | Shows currently-applied facets as dismissible chips with optional Reset link (delivery-app convention — Uber Eats / Glovo). Tinted styling (`bg-primary/10`) distinguishes from solid-active ChipRow chips. Auto-hides when chips array is empty. | Selecting filters (use `ChipRow` or `FilterSheet`); display-only badges (use plain `<span>`) |
 
 ---
 
@@ -336,7 +337,7 @@ Differs from `RadioCardGroup`: **no selection state** — each card is a one-sho
 | Compact 1-of-N inside a card/dialog | `SegmentedTabs` | Pill container, ≤5 options |
 | Ordering (reorder, not reduce) | `SortControl` | Native `<select>` + brand chrome |
 | Free-text search | `SearchInput` | Always the top row |
-| Curated editorial collections with count | `CollectionsCarousel` | Rail — not a filter |
+| Curated editorial collections with count | `CollectionsCarousel` | Rail of curated picks — wraps `ChipRow emoji wrap` since [1.5.97] (canonical chip style; no more icon-above-text tiles) |
 
 ```tsx
 // TabNav — source nav (forYou / following / trending)
@@ -361,10 +362,13 @@ Differs from `RadioCardGroup`: **no selection state** — each card is a one-sho
   ariaLabel={t.cocina.sourceAria}
 />
 
-// ChipRow icon — meal-type selector (tiles with vertical icon + label)
+// ChipRow pill + wrap — meal-type selector (compact, no horizontal scroll).
+// Migrated in [1.5.95] from the deprecated `variant="icon"` (icon-above-text
+// tiles wasted vertical space). Pill+wrap fits all 5 chips in two rows.
 <ChipRow
   mode="single"
-  variant="icon"
+  variant="pill"
+  wrap
   options={mealCategories}
   active={activeMeal}
   onChange={setActiveMeal}
@@ -461,17 +465,35 @@ const sections: FilterSection[] = [
 const filtered = recipes.filter(r => matchesFilters(r, filterValues, {
   sourceContext: { isMine, isImported, isCooked: r.cookedAt?.length > 0 },
 }));
+
+// ActiveFilterStrip — applied-filter feedback below the search row
+// (delivery-app convention). Each chip dismisses its own filter; Reset
+// clears all. Auto-hides when chips array is empty — caller need not gate.
+import ActiveFilterStrip, { type ActiveFilterChip } from '@/components/patterns/ActiveFilterStrip';
+
+const activeFilterChips: ActiveFilterChip[] = useMemo(() => [
+  ...(filterValues.diet ?? []).map(d => ({ key: `diet:${d}`, label: t.filters.diet[d], emoji: '🌱' })),
+  ...(filterValues.time ? [{ key: `time:${filterValues.time}`, label: t.filters.time[filterValues.time], emoji: '⏱️' }] : []),
+  // …other facets
+], [filterValues, t]);
+
+<ActiveFilterStrip
+  chips={activeFilterChips}
+  onDismiss={(key) => removeFromFilterValues(key)}
+  onReset={() => setFilterValues({})}
+/>
 ```
 
 **Cocina vs Discovery asymmetry (ADR-014 § 3):**
 
-- **Cocina** (mis recetas, vocabulario cerrado) keeps meal-slot `ChipRow icon` + `CollectionsCarousel` visible. Source / Diet / Time / Difficulty live behind the FilterButton.
+- **Cocina** (mis recetas, vocabulario cerrado) keeps meal-slot `ChipRow pill wrap` + `CollectionsCarousel` (also `ChipRow emoji wrap` since [1.5.97]) visible. Source / Diet / Time / Difficulty live behind the FilterButton with feedback via `ActiveFilterStrip`.
 - **Discovery** (catálogo, vocabulario amplio) hides EVERY facet behind the FilterButton — no chips visible. Cuisine / Diet / Time / Difficulty / MealSlot. When `countActive > 0`, the swimlanes collapse into a single sorted grid (Yummly pattern).
 
 **Invariants (CI-enforced, see `src/test/conventions/filter-sheet.test.ts`):**
 
 - **Invariant E** — at most one `<FilterSheet>` per screen.
 - **Invariant F** — every screen importing `FilterSheet` must also import `FilterButton`.
+- **Invariant G** — every screen importing `FilterSheet` must also import `ActiveFilterStrip` (every advanced-filter flow needs visible feedback of what's applied; [1.5.97]).
 
 ---
 

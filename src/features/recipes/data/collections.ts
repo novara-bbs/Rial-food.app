@@ -17,11 +17,22 @@ export interface RecipeCollection {
   id: string;
   /** i18n key — must exist in t.collections */
   labelKey: string;
-  /** lucide-react icon name as string — resolved by the consumer */
+  /**
+   * @deprecated Lucide icon name; superseded by `emoji` in [1.5.97] when
+   * CollectionsCarousel migrated to ChipRow emoji variant. Kept for backwards
+   * compatibility with any external consumer; remove in next major.
+   */
   icon: string;
   /**
-   * Tailwind bg color class for the collection card hero.
-   * Keep to design-token classes (bg-primary, bg-tertiary, etc.)
+   * Optional emoji prefix (delivery-app convention — Uber Eats / Glovo). Only
+   * set when the emoji unambiguously represents the concept; absent when no
+   * universally-readable emoji exists for the predicate (e.g. lowCarb).
+   */
+  emoji?: string;
+  /**
+   * @deprecated Editorial hero color per collection — dropped in [1.5.97]
+   * for canonical chip uniformity (ADR-013). Field preserved to avoid
+   * breaking any external snapshot/import tooling; ignore in new code.
    */
   heroColor: string;
   /**
@@ -36,6 +47,7 @@ export const COLLECTIONS: RecipeCollection[] = [
     id: 'verified',
     labelKey: 'collections.verified',
     icon: 'BadgeCheck',
+    emoji: '✅',
     heroColor: 'bg-primary',
     predicate: (r) => r.verified != null,
   },
@@ -43,6 +55,7 @@ export const COLLECTIONS: RecipeCollection[] = [
     id: 'quick',
     labelKey: 'collections.quick',
     icon: 'Zap',
+    emoji: '⚡',
     heroColor: 'bg-tertiary',
     predicate: (r) => r.totalTime > 0 && r.totalTime <= 20,
   },
@@ -50,6 +63,7 @@ export const COLLECTIONS: RecipeCollection[] = [
     id: 'highProtein',
     labelKey: 'collections.highProtein',
     icon: 'Dumbbell',
+    emoji: '🥩',
     heroColor: 'bg-brand-secondary',
     predicate: (r) => (r.pro ?? r.macros?.protein ?? 0) >= 30,
   },
@@ -57,6 +71,7 @@ export const COLLECTIONS: RecipeCollection[] = [
     id: 'vegan',
     labelKey: 'collections.vegan',
     icon: 'Leaf',
+    emoji: '🌱',
     heroColor: 'bg-primary',
     predicate: (r) =>
       !!(r.dietaryTags?.includes('vegan') ||
@@ -69,6 +84,7 @@ export const COLLECTIONS: RecipeCollection[] = [
     id: 'lowCarb',
     labelKey: 'collections.lowCarb',
     icon: 'Minus',
+    // No emoji: no universal symbol for "low-carb"; text alone is clearer.
     heroColor: 'bg-tertiary',
     predicate: (r) => (r.macros?.carbs ?? r.macros?.carbohydrates ?? 100) < 20,
   },
@@ -76,6 +92,7 @@ export const COLLECTIONS: RecipeCollection[] = [
     id: 'batch',
     labelKey: 'collections.batch',
     icon: 'Package',
+    emoji: '📦',
     heroColor: 'bg-secondary',
     predicate: (r) => (r.servings ?? 1) >= 4,
   },
@@ -83,6 +100,7 @@ export const COLLECTIONS: RecipeCollection[] = [
     id: 'cooked',
     labelKey: 'collections.cooked',
     icon: 'ChefHat',
+    emoji: '👨‍🍳',
     heroColor: 'bg-primary',
     predicate: (r) => Array.isArray(r.cookedAt) && r.cookedAt.length > 0,
   },

@@ -1,5 +1,5 @@
 import React, { useState, useMemo } from 'react';
-import { Plus, Link, ShoppingCart, X } from 'lucide-react';
+import { Plus, Link, ShoppingCart } from 'lucide-react';
 import CollectionsCarousel from '../components/CollectionsCarousel';
 import { COLLECTIONS } from '../data/collections';
 import { useLocalStorageState } from '../../../hooks/useLocalStorageState';
@@ -17,6 +17,7 @@ import SortControl from '../../../components/patterns/SortControl';
 import TabNav from '../../../components/patterns/TabNav';
 import FilterButton from '../../../components/patterns/FilterButton';
 import FilterSheet, { type FilterSection } from '../../../components/patterns/FilterSheet';
+import ActiveFilterStrip, { type ActiveFilterChip } from '../../../components/patterns/ActiveFilterStrip';
 import {
   matchesFilters,
   countActive,
@@ -152,32 +153,53 @@ export default function Cocina({ onAddMeal, onCreateRecipe, onNavigateToRecipe, 
     return valueId;
   };
 
-  // Flat list of currently active filter chips for the strip below the search row.
-  // Each entry carries enough info to dismiss its own filter on click.
-  const activeFilterChips = useMemo(() => {
-    const chips: { key: string; sectionId: string; valueId: string; label: string }[] = [];
+  // Per-facet emoji used in the ActiveFilterStrip — semantic shortcut so the
+  // user can scan WHICH facet a chip belongs to without reading the label.
+  // Picked carefully (delivery-app convention): only when emoji ↔ concept is
+  // unambiguous. 🍽️ = origen/source · 🌱 = dieta/diet · ⏱️ = tiempo/time ·
+  // ⭐ = dificultad/difficulty. Keep aligned with PRIMITIVES.md docs.
+  const FACET_EMOJI: Record<string, string> = {
+    source: '🍽️',
+    diet: '🌱',
+    time: '⏱️',
+    difficulty: '⭐',
+  };
+
+  // Flat list of currently active filter chips for the ActiveFilterStrip.
+  // Each entry carries `key = "sectionId:valueId"` so onDismiss can dispatch
+  // back to the right facet via `handleDismissByKey`.
+  const activeFilterChips = useMemo<ActiveFilterChip[]>(() => {
+    const chips: ActiveFilterChip[] = [];
     // Source (single — skip 'all' which is the neutral default)
     if (filterValues.source && filterValues.source !== 'all') {
-      chips.push({ key: `source:${filterValues.source}`, sectionId: 'source', valueId: filterValues.source as string, label: getFilterLabel('source', filterValues.source as string) });
+      const v = filterValues.source as string;
+      chips.push({ key: `source:${v}`, label: getFilterLabel('source', v), emoji: FACET_EMOJI.source });
     }
     // Diet (multi)
     for (const d of (filterValues.diet as string[] | undefined) ?? []) {
-      chips.push({ key: `diet:${d}`, sectionId: 'diet', valueId: d, label: getFilterLabel('diet', d) });
+      chips.push({ key: `diet:${d}`, label: getFilterLabel('diet', d), emoji: FACET_EMOJI.diet });
     }
     // Time (single)
     if (filterValues.time) {
-      chips.push({ key: `time:${filterValues.time}`, sectionId: 'time', valueId: filterValues.time as string, label: getFilterLabel('time', filterValues.time as string) });
+      const v = filterValues.time as string;
+      chips.push({ key: `time:${v}`, label: getFilterLabel('time', v), emoji: FACET_EMOJI.time });
     }
     // Difficulty (single)
     if (filterValues.difficulty) {
-      chips.push({ key: `difficulty:${filterValues.difficulty}`, sectionId: 'difficulty', valueId: filterValues.difficulty as string, label: getFilterLabel('difficulty', filterValues.difficulty as string) });
+      const v = filterValues.difficulty as string;
+      chips.push({ key: `difficulty:${v}`, label: getFilterLabel('difficulty', v), emoji: FACET_EMOJI.difficulty });
     }
     return chips;
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [filterValues, t]);
 
-  // Dismiss a single filter chip from the active filters strip.
-  const handleDismissFilter = (sectionId: string, valueId: string) => {
+  // Dismiss a single filter chip — receives the composite key from the strip
+  // (`"sectionId:valueId"`) and routes the removal to the right facet field.
+  const handleDismissByKey = (key: string) => {
+    const sepIdx = key.indexOf(':');
+    if (sepIdx < 0) return;
+    const sectionId = key.slice(0, sepIdx);
+    const valueId = key.slice(sepIdx + 1);
     const next = { ...filterValues };
     if (Array.isArray(next[sectionId])) {
       const arr = (next[sectionId] as string[]).filter(v => v !== valueId);
@@ -328,30 +350,14 @@ export default function Cocina({ onAddMeal, onCreateRecipe, onNavigateToRecipe, 
               )}
             </div>
 
-            {/* Active filters strip — shown when at least one sheet filter is active.
-                Each chip dismisses its own filter individually; Reset clears all. */}
-            {activeFilterCount > 0 && (
-              <div className="flex items-center gap-2 flex-wrap">
-                {activeFilterChips.map(chip => (
-                  <button
-                    key={chip.key}
-                    type="button"
-                    onClick={() => handleDismissFilter(chip.sectionId, chip.valueId)}
-                    className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-primary/10 text-primary border border-primary/25 text-micro font-label font-bold uppercase tracking-widest transition-colors hover:bg-primary/20"
-                  >
-                    {chip.label}
-                    <X className="w-3 h-3" aria-hidden="true" />
-                  </button>
-                ))}
-                <button
-                  type="button"
-                  onClick={() => setFilterValues({})}
-                  className="text-micro font-label font-bold uppercase tracking-widest text-on-surface-variant hover:text-primary transition-colors px-2 py-1.5 underline-offset-2 hover:underline"
-                >
-                  {t.filters.reset}
-                </button>
-              </div>
-            )}
+            {/* Active filters strip — canonical primitive (ADR-014).
+                Renders nothing when chips array is empty (ActiveFilterStrip
+                gates internally). Padding aligned with ChipRow pill canonical. */}
+            <ActiveFilterStrip
+              chips={activeFilterChips}
+              onDismiss={handleDismissByKey}
+              onReset={() => setFilterValues({})}
+            />
 
             {/* Meal-type slot — pill chips, single-select, wrap to 2 rows on mobile.
                 Icons removed: Sunrise/Sun/Moon/Cookie don't add semantic value

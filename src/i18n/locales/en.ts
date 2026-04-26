@@ -349,6 +349,7 @@ const en: Translations = {
     title: 'Filters',
     apply: 'Apply',
     reset: 'Reset',
+    removeAriaLabel: 'Remove filter {label}',
     activeFiltersGrid: '{n} recipes match your filters',
     sections: {
       mealSlot: 'Meal',

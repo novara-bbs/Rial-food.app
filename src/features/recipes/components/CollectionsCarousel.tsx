@@ -1,34 +1,31 @@
 /**
- * CollectionsCarousel — R3.
+ * CollectionsCarousel — R3 (refactored in [1.5.97]).
  *
- * Horizontal scrolling row of collection cards shown above the recipe grid
- * when no filter is active. Each card taps into a curated collection.
+ * Compact emoji-prefixed pill rail of curated recipe collections, shown above
+ * the recipe grid in Cocina when no filter is active. Single-select; tapping
+ * an active chip deselects.
  *
- * Pattern: NYT Cooking folder strip + KS collection cards (IMG_1144, IMG_1162).
+ * Migration history:
+ *   - Original: tall icon-above-text tiles (`min-w-[112px]`, Lucide icon stack).
+ *   - [1.5.97]: ChipRow `variant="emoji"` `mode="single"` `wrap` — eliminates
+ *     icon-above-text anti-pattern (delivery-app convention: emoji LEFT of
+ *     label, single line, wrap to multiple rows). Editorial heroColor per
+ *     collection dropped for canonical chip uniformity (ADR-013).
+ *
+ * Counts and predicates preserved end-to-end. Hidden when a collection's
+ * predicate matches zero recipes (skip-empty behaviour identical to pre-1.5.97).
  */
-import { BadgeCheck, Zap, Dumbbell, Leaf, Minus, Package, ChefHat } from 'lucide-react';
-import type { LucideIcon } from 'lucide-react';
+import ChipRow from '../../../components/patterns/ChipRow';
+import type { ChipOption } from '../../../components/patterns/ChipRow';
 import { COLLECTIONS } from '../data/collections';
 import { useI18n } from '../../../i18n';
-
-// ─── icon map ────────────────────────────────────────────────────────────────
-
-const ICON_MAP: Record<string, LucideIcon> = {
-  BadgeCheck,
-  Zap,
-  Dumbbell,
-  Leaf,
-  Minus,
-  Package,
-  ChefHat,
-};
 
 // ─── types ───────────────────────────────────────────────────────────────────
 
 export interface CollectionsCarouselProps {
   /** All scored recipes — used to compute live counts. */
   recipes: any[];
-  /** Currently active collection id. */
+  /** Currently active collection id (`'all'` = no selection). */
   activeCollection: string;
   onSelect: (id: string) => void;
   className?: string;
@@ -40,7 +37,7 @@ export default function CollectionsCarousel({
   recipes,
   activeCollection,
   onSelect,
-  className = '',
+  className,
 }: CollectionsCarouselProps) {
   const { t } = useI18n();
 
@@ -53,41 +50,30 @@ export default function CollectionsCarousel({
     return labelKey;
   };
 
-  return (
-    <div className={`-mx-6 px-6 overflow-x-auto scrollbar-none ${className}`}>
-      <div className="flex gap-3 pb-2" style={{ width: 'max-content' }}>
-        {COLLECTIONS.map((col) => {
-          const count = recipes.filter(col.predicate).length;
-          if (count === 0) return null; // hide empty collections
-          const Icon = ICON_MAP[col.icon] ?? ChefHat;
-          const isActive = activeCollection === col.id;
+  // Build options list — drop empty collections (predicate matches 0 recipes).
+  const options: ChipOption[] = COLLECTIONS.flatMap((col) => {
+    const count = recipes.filter(col.predicate).length;
+    if (count === 0) return [];
+    return [{
+      id: col.id,
+      label: getLabel(col.labelKey),
+      emoji: col.emoji,
+      count,
+    }];
+  });
 
-          return (
-            <button
-              key={col.id}
-              type="button"
-              onClick={() => onSelect(isActive ? 'all' : col.id)}
-              className={[
-                'flex flex-col items-start gap-2 p-3 rounded-sm min-w-[112px] transition-all',
-                isActive
-                  ? `${col.heroColor} text-on-primary shadow-elev-1`
-                  : 'bg-surface-container-low border border-outline-variant/20 text-on-surface hover:border-primary/40',
-              ].join(' ')}
-              aria-pressed={isActive}
-            >
-              <Icon className={`w-5 h-5 ${isActive ? 'text-on-primary' : 'text-primary'}`} aria-hidden="true" />
-              <div className="text-left">
-                <p className={`font-headline font-bold text-xs uppercase tracking-widest leading-tight ${isActive ? 'text-on-primary' : 'text-tertiary'}`}>
-                  {getLabel(col.labelKey)}
-                </p>
-                <p className={`font-label text-micro mt-0.5 ${isActive ? 'text-on-primary/70' : 'text-on-surface-variant'}`}>
-                  {count} {(t as any).collections?.recipes ?? 'recetas'}
-                </p>
-              </div>
-            </button>
-          );
-        })}
-      </div>
-    </div>
+  if (options.length === 0) return null;
+
+  return (
+    <ChipRow
+      variant="emoji"
+      mode="single"
+      wrap
+      active={activeCollection === 'all' ? null : activeCollection}
+      onChange={(id) => onSelect(id ?? 'all')}
+      options={options}
+      ariaLabel={(t as any).collections?.title ?? 'Colecciones'}
+      className={className}
+    />
   );
 }

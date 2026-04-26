@@ -25,7 +25,7 @@ Bottom-sheet beats side-drawer / centered-modal / mega-menu on mobile because (a
 
 ## Decision
 
-### 1. Two new primitives in `src/components/patterns/`
+### 1. Two new primitives in `src/components/patterns/` (+ third primitive added in [1.5.97])
 
 - **`FilterSheet`** — wraps `BottomSheet size="focus" headerLayout="cancel-action"` with:
   - `sections: FilterSection[]` — each section has `id`, `title`, `mode` (`single` | `multi`), `options: ChipOption[]`, and optional `defaultExpanded`.
@@ -38,6 +38,8 @@ Bottom-sheet beats side-drawer / centered-modal / mega-menu on mobile because (a
   - Carries `data-filter-sheet` for the convention test.
 
 - **`FilterButton`** — compact trigger (icon `SlidersHorizontal`, height matches `SearchInput`) with a numeric badge in the top-right when `activeCount > 0`. Carries `data-filter-button`.
+
+- **`ActiveFilterStrip`** (added [1.5.97]) — companion primitive that renders the user's currently-applied facets as dismissible chips with an optional Reset link. Tinted styling (`bg-primary/10 text-primary border border-primary/25`) distinguishes from solid-active `ChipRow` chips. Eliminates the inline pill anti-pattern (each screen reimplementing its own dismiss chip): one canonical primitive, one canonical typography. Auto-hides when the chips array is empty. Carries `data-active-filter-strip`. Required companion to `FilterSheet` per Invariant G.
 
 ### 2. New utility `src/features/recipes/utils/facets.ts`
 
@@ -56,7 +58,7 @@ When the deferred Q16 codemod ships and adds typed `cuisine` + `dietaryTags` to 
 
 | Pantalla | Visible chips | FilterSheet sections | Branch on filter |
 |---|---|---|---|
-| **Cocina** | `TabNav` + meal-slot `ChipRow icon` (kept) + `CollectionsCarousel` (idle) | Source / Diet / Time / Difficulty (4) | None — same grid always; carousel hides when filters active |
+| **Cocina** | `TabNav` + meal-slot `ChipRow pill wrap` ([1.5.95]) + `CollectionsCarousel` rendered as `ChipRow emoji wrap` ([1.5.97], idle only) + `ActiveFilterStrip` ([1.5.97], gated on `activeFilterCount > 0`) | Source / Diet / Time / Difficulty (4) | None — same grid always; carousel hides when filters active |
 | **Explore (Discovery)** | None (asymmetry confirmed with user) | Cuisine / Diet / Time / Difficulty / MealSlot (5) | When `countActive > 0` → flat sorted grid replaces all swimlanes (Yummly pattern) |
 
 Why asymmetric: Cocina is the user's own ~30 recipes — vocabulario cerrado, the user knows them, meal slot + collections carry semantic value visible. Explore is the ~50+ catalog — vocabulario amplio, hiding everything behind one button avoids prejudging the user's discovery intent.
@@ -98,6 +100,7 @@ Choice: **(A)**. The user explicitly approved heuristic-now in plan-mode questio
 
 - **Invariant E**: at most one `<FilterSheet>` mounted per screen (cheap text scan over `*.tsx` under `src/features/*/screens/`).
 - **Invariant F**: any screen importing `FilterSheet` must also import `FilterButton` (no sheet without a visible trigger).
+- **Invariant G** (added [1.5.97]): any screen importing `FilterSheet` must also import `ActiveFilterStrip` (no advanced-filter flow without applied-filter feedback). Prevents future screens from reintroducing the inline-pill anti-pattern that Cocina shipped briefly in [1.5.95] and corrected in [1.5.97].
 
 ## Consequences
 

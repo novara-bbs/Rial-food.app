@@ -355,6 +355,7 @@ const es = {
     title: 'Filtros',
     apply: 'Aplicar',
     reset: 'Reiniciar',
+    removeAriaLabel: 'Quitar filtro {label}',
     activeFiltersGrid: '{n} recetas con tus filtros',
     sections: {
       mealSlot: 'Momento del día',

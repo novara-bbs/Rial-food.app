@@ -1,5 +1,159 @@
 # RIAL App - Changelog
 
+## [1.5.97] - 2026-04-26
+
+### feat(ds): global chip system polish — ActiveFilterStrip primitive + Collections emoji rail + ChipRow icon deprecated
+
+Sprint global de uniformidad chips, motivado por feedback del owner: "todos
+los chips, en todas las secciones, sintonía total en tipografía/texto/estilo,
+emoji sólo cuando aporta valor, NUNCA icon-arriba-text-abajo". Inspiración
+de competidores indirectos (Uber Eats / Glovo / Just Eat) — patrón filter chip
+horizontal con emoji-LEFT, browse tile en superficie distinta, active filter
+strip dismissible bajo el search row.
+
+#### Nuevo primitive
+
+**`src/components/patterns/ActiveFilterStrip.tsx`** — canonical
+applied-filter feedback row (ADR-014). Reemplaza la implementación inline
+de pills dismissibles que cada screen reimplementaba a mano:
+
+```tsx
+<ActiveFilterStrip
+  chips={[{ key: 'diet:vegan', label: 'Vegano', emoji: '🌱' }]}
+  onDismiss={(key) => removeFilter(key)}
+  onReset={() => clearAllFilters()}
+/>
+```
+
+- Auto-hide cuando `chips.length === 0`.
+- Estilo tinted (`bg-primary/10 text-primary border border-primary/25`)
+  diferenciado de chips activos sólidos de ChipRow.
+- Padding canonical alineado con ChipRow pill (`px-4 py-2 rounded-full`)
+  — corrige drift introducido en `[1.5.95]`.
+- `data-active-filter-strip` para convention test invariante G.
+
+#### Migraciones
+
+**`src/features/recipes/screens/Cocina.tsx`** — strip inline (deuda
+introducida en `[1.5.95]`) → `<ActiveFilterStrip>`. Helper
+`handleDismissFilter(sectionId, valueId)` refactor a
+`handleDismissByKey(key)` que parsea `"sectionId:valueId"`. Mapping
+emoji por facet añadido (🍽️ source · 🌱 diet · ⏱️ time · ⭐ difficulty)
+para scan rápido de qué facet es cada chip activo. Eliminado import `X`
+de lucide (vive ahora en el primitive).
+
+**`src/features/home/screens/Discovery.tsx`** — primer strip en Discovery
+(antes mostraba solo "X recetas con tus filtros • Reset"). Mismo helper
+emoji por facet + dismiss por key. Permite al usuario ver qué filtros
+están activos al volver a Discovery (filtros persistidos via
+`useLocalStorageState 'discoveryFilters'`). Eliminado el botón inline
+X+Reset (sustituido por la lógica integrada del strip).
+
+**`src/features/recipes/components/CollectionsCarousel.tsx`** — rewrite
+completo. Antes: tiles altos `min-w-[112px]` con Lucide icon ARRIBA del
+texto + segunda línea de count → 2 filas internas → desperdicio vertical
+(el anti-pattern que el owner quería erradicar). Ahora: wrapper minimal
+sobre `<ChipRow variant="emoji" mode="single" wrap>` — emoji LEFT-of-label,
+single-line, wrap a múltiples filas en mobile. ICON_MAP + 7 imports Lucide
+eliminados. Count y predicate preservados end-to-end.
+
+**`src/features/recipes/data/collections.ts`** — añadido campo
+`emoji?: string` al type `RecipeCollection`. Populado selectivamente
+(decisión consciente: solo donde el emoji **realmente representa** el
+concepto):
+
+| Collection | Emoji | Razón |
+|---|---|---|
+| Verificadas | ✅ | Universal, semántica directa |
+| Express | ⚡ | Universal, "rápido" |
+| Alta proteína | 🥩 | Comida directa |
+| Vegano | 🌱 | Universal, planta |
+| Bajo carbo | (sin) | Ningún emoji captura "low-carb" sin ambigüedad |
+| Batch | 📦 | Caja = batch cooking |
+| Cocinadas | 👨‍🍳 | Chef = cocinar |
+
+`heroColor` y `icon` marcados `@deprecated` (preservados para evitar
+breaking change con consumidores externos; ignorar en código nuevo).
+
+**`src/components/patterns/ChipRow.tsx`** — `variant="icon"` marcado
+`@deprecated since [1.5.97]`. Sin consumidores live tras la migración
+de meal slots de Cocina (`[1.5.95]`) y Collections (`[1.5.97]`). Código
+preservado para evitar breaking change con eventuales snapshot tests.
+Será eliminado en next major. JSDoc explica la razón (icon-above-text
+desperdicia espacio + rara vez aporta valor semántico) y la migración
+recomendada (pill + opt.icon, o variant="emoji").
+
+#### Documentación + guardrails
+
+**`docs/PRIMITIVES.md`** — actualizada tabla de primitives:
+- `ChipRow`: doc updated to mark `icon` deprecated, `wrap` flag explained.
+- `ActiveFilterStrip`: nueva fila + ejemplo completo en sección
+  "Advanced filter primitives".
+- `CollectionsCarousel`: nota que ahora wrappea `ChipRow emoji wrap`.
+- Asimetría Cocina/Discovery actualizada (ambas usan strip).
+- Invariante G añadido a la lista CI-enforced.
+
+**`docs/adr/ADR-014-filter-sheet.md`** — sección 1 expandida con
+descripción del primitive `ActiveFilterStrip`. Tabla de uso Cocina vs
+Discovery actualizada. Invariante G documentada.
+
+**`src/test/conventions/filter-sheet.test.ts`** — invariante G añadido:
+toda screen importando `FilterSheet` debe importar también
+`ActiveFilterStrip`. Allowlist `NO_STRIP_ALLOWLIST` reservado para
+excepciones intencionales (vacío). Documentación del invariante
+referencia el patrón anti-pattern que se está bloqueando.
+
+#### i18n
+
+ES + EN simétrico (1913 keys, +1):
+- `t.filters.removeAriaLabel = 'Quitar filtro {label}' / 'Remove filter {label}'`
+  — usado por ActiveFilterStrip para aria-label del botón × por chip.
+
+#### Verificación
+- `npx tsc --noEmit` → 0 errores.
+- Tests: **1188 passing** (+1 invariante G).
+- i18n: **1913 keys** ES↔EN simétrico.
+- Bundle: ~ -1 KB gzip neto (Lucide imports eliminados de Carousel >
+  primitive nuevo).
+- size:check PASS — todos los budgets en límites.
+
+#### Best practices delivery-app extraídas (referencia para futuros sprints)
+
+Investigación competidores indirectos (Uber Eats / Glovo / Just Eat / Yummly):
+
+1. **Filter chip = horizontal pill, emoji-LEFT cuando aporta valor**
+   ✅ adoptado en este sprint
+2. **Browse tile = superficie distinta** (cards más grandes, foto/illustration)
+   — RIAL: `RecipeCard` ya cumple
+3. **Active filter strip dismissible** bajo el search row
+   ✅ adoptado en este sprint
+4. **Filter button + sheet** con badge numérico
+   ✅ ya cumplíamos desde `[1.5.93]`
+5. **Sort separado** del filtro
+   ✅ ya cumplíamos
+6. **Quick presets** (e.g. "Top rated", "Free delivery") inline arriba
+   del listado — **diferido** hasta tener telemetría de uso real.
+7. **Density toggle** (list vs grid) — **diferido**, decisión consciente.
+8. **Sticky search compresible** al scroll — **diferido**, fuera de scope.
+
+---
+
+## [1.5.96] - 2026-04-26
+
+### feat(cocina): add caloriesAsc sort option
+
+Sexta opción de orden en Cocina — "Menos calorías" / "Lowest cal". Ordena
+las recetas de menor a mayor `macros.calories` poniendo primero las más
+ligeras. Útil para usuarios con objetivo de déficit calórico. Recetas sin
+dato de calorías se ordenan al final (sentinel `9999`).
+
+3 archivos modificados:
+- `src/i18n/locales/es.ts` + `en.ts` — `t.recipes.sortCaloriesAsc` (1912 keys)
+- `src/features/recipes/screens/Cocina.tsx` — sortMode union extendido,
+  opción añadida a SortControl, branch sort logic.
+
+---
+
 ## [1.5.95] - 2026-04-25
 
 ### feat(cocina): active filter strip + meal slot pill chips

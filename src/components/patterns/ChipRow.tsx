@@ -26,6 +26,22 @@ import { cn } from '../../lib/utils';
  */
 
 export type ChipRowMode = 'single' | 'multi';
+
+/**
+ * Visual layout variants for chip rendering.
+ *
+ * - `pill`: horizontal rounded chips with optional Lucide icon prefix + label
+ *   + optional count suffix. **Canonical** for filter selectors.
+ * - `emoji`: same as pill but shows an emoji glyph LEFT of the label
+ *   (delivery-app convention — Uber Eats / Glovo / Just Eat). Use when the
+ *   emoji unambiguously represents the concept.
+ * - `icon`: **@deprecated since [1.5.97]** — vertical icon-on-top + label
+ *   tiles. Wastes vertical space; the icons rarely add semantic value over
+ *   a clean text label. No live consumers as of [1.5.97]; the variant is
+ *   kept compiling to avoid breaking any external snapshot test, but new
+ *   code should use `pill` (with optional `icon` in `ChipOption`) or
+ *   `emoji`. Will be removed in the next major.
+ */
 export type ChipRowVariant = 'pill' | 'icon' | 'emoji';
 export type ChipRowTone = 'default' | 'danger';
 
