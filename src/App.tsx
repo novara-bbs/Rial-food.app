@@ -1,4 +1,4 @@
-import { useState, useMemo, Suspense } from 'react';
+import { useEffect, useMemo, useRef, useState, Suspense } from 'react';
 import Onboarding from './features/profile/components/Onboarding';
 import Sidebar from './components/Sidebar';
 import BottomNav from './components/BottomNav';
@@ -86,6 +86,17 @@ export default function App() {
 
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
   const [showConsent, setShowConsent] = useState(() => !hasGivenConsent());
+
+  // Reset the global scroll container to the top on every screen change so a
+  // new screen always opens from its top — matches the native iOS/Android
+  // pattern. The single `<main>` below is the only scrollable surface and
+  // never unmounts, so without this its scrollTop persists across navigations.
+  // Scroll restoration on `goBack` (preserve previous position) is a planned
+  // follow-up that requires storing scrollY per history entry.
+  const mainRef = useRef<HTMLElement>(null);
+  useEffect(() => {
+    mainRef.current?.scrollTo({ top: 0, left: 0, behavior: 'instant' });
+  }, [currentScreen]);
 
   const aiCoachMemory = useMemo(() => {
     const weekAgoDate = dateToLocal(new Date(Date.now() - 7 * 86_400_000));
@@ -246,7 +257,7 @@ export default function App() {
             userAvatar={userProfile?.avatar}
             hasUnreadNotifications={hasUnreadNotifications}
           />
-          <main className="flex-1 overflow-y-auto pb-24 md:pb-8 pt-4 hide-scrollbar">
+          <main ref={mainRef} className="flex-1 overflow-y-auto pb-24 md:pb-8 pt-4 hide-scrollbar">
             <ErrorBoundary>
               <Suspense fallback={<LoadingSkeleton />}>
                 <div className="animate-in fade-in slide-in-from-bottom-4 duration-500">
