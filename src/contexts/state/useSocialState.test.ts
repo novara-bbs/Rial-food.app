@@ -116,18 +116,14 @@ describe('useSocialState — toggleSavePost (mirrors like)', () => {
 
 describe('useSocialState — notification reads', () => {
   it('markAllNotificationsRead flips read=true on every notification', () => {
+    // Seed before the first render so the hook initializes with notifications.
+    window.localStorage.setItem('notifications', JSON.stringify([
+      { id: 'n1', read: false, type: 'like' },
+      { id: 'n2', read: false, type: 'follow' },
+    ]));
     const { result } = renderHook(() => useSocialState(makeDeps()));
-    act(() => {
-      // Direct setter not exposed publicly; use markNotificationRead first to seed
-      window.localStorage.setItem('notifications', JSON.stringify([
-        { id: 'n1', read: false, type: 'like' },
-        { id: 'n2', read: false, type: 'follow' },
-      ]));
-    });
-    // Re-render hook to pick up seeded localStorage.
-    const { result: r2 } = renderHook(() => useSocialState(makeDeps()));
-    act(() => r2.current.markAllNotificationsRead());
-    expect(r2.current.notifications.every(n => n.read === true)).toBe(true);
+    act(() => result.current.markAllNotificationsRead());
+    expect(result.current.notifications.every(n => n.read === true)).toBe(true);
   });
 
   it('markNotificationRead flips a single notification by id', () => {
