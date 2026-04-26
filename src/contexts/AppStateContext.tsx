@@ -5,7 +5,6 @@ import type { FoodVariant } from '../types/food-family';
 import { useLocalStorageState } from '../hooks/useLocalStorageState';
 import { useDailyReset, DailyArchive } from '../hooks/useDailyReset';
 import { useNavigation } from './NavigationContext';
-import { Allergen } from '../types';
 import { createHandleLogMeal, createHandleLogMealNow, DailyLogEntry, FoodHistoryEntry } from '../features/food/handlers/meal-handlers';
 import { useI18n } from '../i18n';
 import { createHandleSaveRecipe, createHandleAddToPlan, createHandleCreateRecipeSubmit, createHandleImportRecipe, createHandleDeleteRecipe, createHandleDuplicateRecipe, createHandleMarkAsCooked } from '../features/recipes/handlers/recipe-handlers';
@@ -19,7 +18,7 @@ import {
   createHandleToggleChallenge,
   type ChallengeProgress,
 } from '../features/social/handlers/challenge-handlers';
-import type { Story, StorySlide, Notification as NotificationType, SocialLinks } from '../types/social';
+import type { Story, StorySlide, Notification as NotificationType } from '../types/social';
 import { createHandleAddToleranceLog, createHandleRealFeelLog, createHandleCheckIn, createHandleCompleteCheckIn } from '../features/wellness/handlers/wellness-handlers';
 import { createHandleLogWeight, createHandleUpdateSnapshot, createHandleDeleteSnapshot, type LogWeightArgs } from '../features/wellness/handlers/weight-handlers';
 import { createHandleShareProgress } from '../features/wellness/handlers/progress-share-handlers';
@@ -33,6 +32,8 @@ import type { BodySnapshot } from '../types/wellness';
 import type { CommunityPost } from '../types/social';
 import { useAuth } from './AuthContext';
 import { syncOnSignIn, pushToCloud } from '../lib/sync';
+import { useProfileState } from './state/useProfileState';
+import type { UserProfile } from '../types/user';
 
 // ─── Types ───────────────────────────────────────────────────────────────────
 
@@ -188,55 +189,8 @@ interface AppStateContextType {
   setRecipeToEdit: (recipe: any) => void;
 }
 
-interface FamilyMember {
-  id: string;
-  name: string;
-  age: number;
-  goal: string;
-  activityLevel?: string;
-}
-
-interface UserProfile {
-  name: string;
-  age: number;
-  height: number;
-  weight: number;
-  gender: string;
-  goal: string;
-  activity: string;
-  trains: boolean;
-  dietaryPreferences: string[];
-  /** 'metric' (g/ml) or 'imperial' (oz/fl oz). Default: metric */
-  unitSystem?: 'metric' | 'imperial';
-  /**
-   * Trinario food preferences — R8.3.
-   * Record<ingredientId, 'like' | 'dislike' | null>
-   * null = neutral (removed from map in practice).
-   * Replaces `foodDislikes` as the source of truth; `foodDislikes` is kept
-   * as a derived getter in profileSlices for backward-compat with utils.
-   */
-  foodPreferences?: Record<string, 'like' | 'dislike'>;
-  /** @deprecated Use foodPreferences. Kept for migration compatibility. */
-  foodDislikes?: string[];
-  /** Declared food intolerances/allergies */
-  intolerances?: Allergen[];
-  /** Short bio for creator profile */
-  bio?: string;
-  /** Social media links for creator profile */
-  socialLinks?: SocialLinks;
-  /** Target weight in kg — for goal tracking */
-  targetWeight?: number;
-  /** Family members for meal scaling */
-  family?: FamilyMember[];
-  /** Dashboard display mode */
-  mode?: 'simple' | 'advanced';
-  /** Avatar URL */
-  avatar?: string;
-  /** Free-form private notes (allergies, supplements, medication). Max 500 chars. R8.4. */
-  personalNotes?: string;
-  /** Creator verification flag — set by admin. Enables "Publish as verified recipe" checkbox in CreateRecipe. R7.3. */
-  isVerifiedCreator?: boolean;
-}
+// UserProfile + FamilyMember moved to src/types/user.ts in Phase 2.5 [1.5.116].
+// See ADR-015. Re-export here so existing internal references keep working.
 
 interface DailyMacros {
   consumed: { cal: number; pro: number; carbs: number; fats: number };
@@ -274,38 +228,18 @@ export function AppStateProvider({ children }: { children: React.ReactNode }) {
   // Toggle handlers are declared further down, after `setCommunityPosts` is
   // bound, so the callback closure captures the correct setter.
 
-  // Persisted state
-  const [isPro, setIsPro] = useLocalStorageState<boolean>('isPro', false);
-  const [showAIBot, setShowAIBot] = useLocalStorageState<boolean>('showAIBot', true);
-  const [isFirstTime, setIsFirstTime] = useLocalStorageState<boolean>('isFirstTime', true);
-  // R5: pre-cook mise-en-place screen. Default true — user can opt-out per session.
-  const [miseEnPlaceEnabled, setMiseEnPlaceEnabled] = useLocalStorageState<boolean>('miseEnPlacePreCook', true);
+  // Profile state — extracted to useProfileState hook (Phase 2.5, ADR-015).
+  // Owns: isPro, showAIBot, isFirstTime, miseEnPlaceEnabled, userProfile.
+  // Plus the R8.3 foodDislikes→foodPreferences migration and 3 sync effects.
+  const {
+    isPro, setIsPro,
+    showAIBot, setShowAIBot,
+    isFirstTime, setIsFirstTime,
+    miseEnPlaceEnabled, setMiseEnPlaceEnabled,
+    userProfile, setUserProfile,
+  } = useProfileState();
+
   const [checkInStatus, setCheckInStatus] = useLocalStorageState<DailyCheckInType | null>('checkInStatus', null);
-
-  const [userProfile, setUserProfile] = useLocalStorageState<UserProfile>('userProfile', {
-    name: '',
-    age: 32,
-    height: 175,
-    weight: 78,
-    gender: 'female',
-    goal: 'maintain',
-    activity: 'active',
-    trains: false,
-    dietaryPreferences: [],
-  });
-
-  // R8.3 — migrate foodDislikes[] → foodPreferences Record (eager, idempotent).
-  useEffect(() => {
-    setUserProfile((prev: any) => {
-      if (!prev?.foodDislikes?.length) return prev;
-      if (prev.foodPreferences) return prev; // already migrated
-      const foodPreferences: Record<string, 'like' | 'dislike'> = {};
-      (prev.foodDislikes as string[]).forEach((id: string) => {
-        foodPreferences[id] = 'dislike';
-      });
-      return { ...prev, foodPreferences };
-    });
-  }, [setUserProfile]);
 
   // Fresh-install starts at zero — the hardcoded 840 cal / 45 g pro default used
   // to show as if the user had already eaten before ever logging anything.
@@ -753,7 +687,7 @@ export function AppStateProvider({ children }: { children: React.ReactNode }) {
     );
     if (!hasDataUrl) pushToCloud('savedRecipes', savedRecipes);
   }, [savedRecipes]);
-  useEffect(() => { pushToCloud('userProfile', userProfile); }, [userProfile]);
+  // userProfile sync moved to useProfileState (Phase 2.5).
   useEffect(() => { pushToCloud('dailyMacros', dailyMacros); }, [dailyMacros]);
   useEffect(() => { pushToCloud('mealPlan', mealPlan); }, [mealPlan]);
   useEffect(() => { pushToCloud('shoppingList', shoppingList); }, [shoppingList]);
@@ -761,7 +695,7 @@ export function AppStateProvider({ children }: { children: React.ReactNode }) {
   useEffect(() => { pushToCloud('toleranceLogs', toleranceLogs); }, [toleranceLogs]);
   useEffect(() => { pushToCloud('weightHistory', weightHistory); }, [weightHistory]);
   useEffect(() => { pushToCloud('nutritionHistory', nutritionHistory); }, [nutritionHistory]);
-  useEffect(() => { pushToCloud('isPro', isPro); }, [isPro]);
+  // isPro sync moved to useProfileState (Phase 2.5).
   useEffect(() => { pushToCloud('dailyLog', dailyLog); }, [dailyLog]);
   useEffect(() => { pushToCloud('foodHistory', foodHistory); }, [foodHistory]);
   useEffect(() => { pushToCloud('favoriteIds', favoriteIds); }, [favoriteIds]);
@@ -769,7 +703,7 @@ export function AppStateProvider({ children }: { children: React.ReactNode }) {
   useEffect(() => { pushToCloud('hydration', hydration); }, [hydration]);
   useEffect(() => { pushToCloud('movement', movement); }, [movement]);
   useEffect(() => { pushToCloud('dailyGoal', dailyGoal); }, [dailyGoal]);
-  useEffect(() => { pushToCloud('isFirstTime', isFirstTime); }, [isFirstTime]);
+  // isFirstTime sync moved to useProfileState (Phase 2.5).
   useEffect(() => { pushToCloud('userFoods', userFoods); }, [userFoods]);
   useEffect(() => { pushToCloud('userVariants', userVariants); }, [userVariants]);
   useEffect(() => { pushToCloud('userVariantBarcodes', userVariantBarcodes); }, [userVariantBarcodes]);
