@@ -328,6 +328,7 @@ const en: Translations = {
     sortQuick: 'Quick',
     sortHighProtein: 'High protein',
     sortMostCooked: 'Most cooked',
+    sortCaloriesAsc: 'Lowest cal',
     emptyFilterTitle: 'No results',
     emptyFilterHint: 'Try another filter or search by name',
     emptySearchHint: 'No matches for "{query}"',

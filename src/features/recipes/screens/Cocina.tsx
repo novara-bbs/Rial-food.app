@@ -51,7 +51,7 @@ export default function Cocina({ onAddMeal, onCreateRecipe, onNavigateToRecipe, 
   const [searchQuery, setSearchQuery] = useState('');
   const [activeCollection, setActiveCollection] = useState('all');
   const [activeMealType, setActiveMealType] = useState<string>('all');
-  const [sortMode, setSortMode] = useLocalStorageState<'recommended' | 'recent' | 'quick' | 'highProtein' | 'mostCooked'>(
+  const [sortMode, setSortMode] = useLocalStorageState<'recommended' | 'recent' | 'quick' | 'highProtein' | 'mostCooked' | 'caloriesAsc'>(
     'cocinaSort', 'recommended',
   );
   // Advanced filter values (FilterSheet — Source/Diet/Time/Difficulty).
@@ -229,6 +229,7 @@ export default function Cocina({ onAddMeal, onCreateRecipe, onNavigateToRecipe, 
     else if (sortMode === 'quick') sorted.sort((a, b) => (a.totalTime || 999) - (b.totalTime || 999));
     else if (sortMode === 'highProtein') sorted.sort((a, b) => (b.pro ?? 0) - (a.pro ?? 0));
     else if (sortMode === 'mostCooked') sorted.sort((a, b) => (b.cookedAt?.length ?? 0) - (a.cookedAt?.length ?? 0));
+    else if (sortMode === 'caloriesAsc') sorted.sort((a, b) => (a.cal ?? 9999) - (b.cal ?? 9999));
     return sorted;
   }, [scoredRecipes, activeMealType, searchQuery, activeCollection, activeFilterCount, filterValues, sortMode]);
 
@@ -311,6 +312,7 @@ export default function Cocina({ onAddMeal, onCreateRecipe, onNavigateToRecipe, 
                   { id: 'quick', label: (t.recipes as any).sortQuick ?? 'Rápidas' },
                   { id: 'highProtein', label: (t.recipes as any).sortHighProtein ?? 'Alta proteína' },
                   { id: 'mostCooked', label: (t.recipes as any).sortMostCooked ?? 'Más cocinadas' },
+                  { id: 'caloriesAsc', label: (t.recipes as any).sortCaloriesAsc ?? 'Menos calorías' },
                 ]}
                 active={sortMode}
                 onChange={(id) => setSortMode(id as typeof sortMode)}

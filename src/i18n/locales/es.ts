@@ -334,6 +334,7 @@ const es = {
     sortQuick: 'Rápidas',
     sortHighProtein: 'Alta proteína',
     sortMostCooked: 'Más cocinadas',
+    sortCaloriesAsc: 'Menos calorías',
     emptyFilterTitle: 'Sin resultados',
     emptyFilterHint: 'Prueba otro filtro o busca por nombre',
     emptySearchHint: 'No hay coincidencias para "{query}"',
