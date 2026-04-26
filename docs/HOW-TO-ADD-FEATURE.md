@@ -83,7 +83,7 @@ export function targetForUser(weightKg: number): number {
 }
 ```
 
-Y el test en `src/features/wellness/utils/hydration.test.ts`. **Toda función pura debe tener test.**
+Y el test en `src/features/wellness/utils/hydration.test.ts`. **Toda función pura debe tener test.** Para hooks y componentes consulta los patterns en [`docs/TESTING-PATTERNS.md`](TESTING-PATTERNS.md).
 
 ### Paso 4 — Handler factory
 
