@@ -48,7 +48,7 @@ export default function BatchCookingSuggestions({ mealPlan }: BatchCookingSugges
           </p>
         </div>
         <div className="flex items-center gap-2 shrink-0">
-          <span className="font-label text-micro font-bold uppercase tracking-widest bg-brand-secondary/20 text-brand-secondary px-2 py-0.5 rounded">
+          <span className="font-label text-micro font-semibold uppercase tracking-widest bg-brand-secondary/20 text-brand-secondary px-2 py-0.5 rounded">
             {analysis.sessions.length}
           </span>
           {expanded
@@ -81,7 +81,7 @@ export default function BatchCookingSuggestions({ mealPlan }: BatchCookingSugges
                 </div>
                 <div className="shrink-0 flex items-center gap-1 text-brand-secondary">
                   <Clock className="w-3 h-3" />
-                  <span className="font-label text-micro font-bold uppercase tracking-widest">
+                  <span className="font-label text-micro font-semibold uppercase tracking-widest">
                     {tc.batchTimeSaved.replace('{mins}', String(session.timeSavedMins))}
                   </span>
                 </div>

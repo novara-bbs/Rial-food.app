@@ -150,7 +150,7 @@ export default function BeforeAfterCompare({
           <button
             type="button"
             onClick={onLogSnapshot}
-            className="mx-auto inline-flex items-center gap-2 px-4 py-2.5 rounded-full bg-primary text-on-primary text-micro font-bold uppercase tracking-widest min-h-11 hover:bg-primary/90"
+            className="mx-auto inline-flex items-center gap-2 px-4 py-2.5 rounded-full bg-primary text-on-primary text-micro font-semibold uppercase tracking-widest min-h-11 hover:bg-primary/90"
           >
             <Camera className="w-4 h-4" aria-hidden="true" />
             {copy.notEnoughCta ?? 'Registrar foto'}
@@ -193,11 +193,11 @@ export default function BeforeAfterCompare({
               >
                 <img src={snap.photoUrl} alt="" className="w-full h-full object-cover" />
                 {isBefore && (
-                  <span className="absolute top-1 left-1 px-1.5 py-0.5 rounded-sm bg-primary text-on-primary text-micro font-bold uppercase tracking-widest">
+                  <span className="absolute top-1 left-1 px-1.5 py-0.5 rounded-sm bg-primary text-on-primary text-micro font-semibold uppercase tracking-widest">
                     {beforeLabelUpper}
                   </span>
                 )}
-                <span className="absolute bottom-0 inset-x-0 bg-black/50 text-white text-micro font-bold uppercase tracking-widest px-1 py-0.5 text-center">
+                <span className="absolute bottom-0 inset-x-0 bg-black/50 text-white text-micro font-semibold uppercase tracking-widest px-1 py-0.5 text-center">
                   {formatDate(snap.date)}
                 </span>
               </button>
@@ -209,7 +209,7 @@ export default function BeforeAfterCompare({
           <button
             type="button"
             onClick={reset}
-            className="mt-2 text-micro font-bold uppercase tracking-widest text-primary self-start inline-flex items-center gap-1.5 min-h-11"
+            className="mt-2 text-micro font-semibold uppercase tracking-widest text-primary self-start inline-flex items-center gap-1.5 min-h-11"
           >
             <ArrowLeft className="w-3.5 h-3.5" aria-hidden="true" />
             {copy.reset ?? 'Elegir otras'}
@@ -233,11 +233,11 @@ export default function BeforeAfterCompare({
         <div className="space-y-1">
           <div className="relative aspect-[3/4] rounded-sm overflow-hidden bg-surface-container-high">
             <img src={before.photoUrl} alt="" className="w-full h-full object-cover" />
-            <span className="absolute top-1.5 left-1.5 px-1.5 py-0.5 rounded-sm bg-primary text-on-primary text-micro font-bold uppercase tracking-widest">
+            <span className="absolute top-1.5 left-1.5 px-1.5 py-0.5 rounded-sm bg-primary text-on-primary text-micro font-semibold uppercase tracking-widest">
               {beforeLabelUpper}
             </span>
           </div>
-          <p className="text-micro font-bold uppercase tracking-widest text-on-surface-variant text-center">
+          <p className="text-micro font-semibold uppercase tracking-widest text-on-surface-variant text-center">
             {formatDate(before.date)}
           </p>
           <p className="font-headline font-black text-title-sm text-tertiary text-center">
@@ -248,11 +248,11 @@ export default function BeforeAfterCompare({
         <div className="space-y-1">
           <div className="relative aspect-[3/4] rounded-sm overflow-hidden bg-surface-container-high">
             <img src={after.photoUrl} alt="" className="w-full h-full object-cover" />
-            <span className="absolute top-1.5 left-1.5 px-1.5 py-0.5 rounded-sm bg-primary text-on-primary text-micro font-bold uppercase tracking-widest">
+            <span className="absolute top-1.5 left-1.5 px-1.5 py-0.5 rounded-sm bg-primary text-on-primary text-micro font-semibold uppercase tracking-widest">
               {afterLabelUpper}
             </span>
           </div>
-          <p className="text-micro font-bold uppercase tracking-widest text-on-surface-variant text-center">
+          <p className="text-micro font-semibold uppercase tracking-widest text-on-surface-variant text-center">
             {formatDate(after.date)}
           </p>
           <p className="font-headline font-black text-title-sm text-tertiary text-center">
@@ -275,7 +275,7 @@ export default function BeforeAfterCompare({
         <button
           type="button"
           onClick={swap}
-          className="inline-flex items-center gap-1.5 px-3 py-2 rounded-sm bg-surface-container-high text-on-surface text-micro font-bold uppercase tracking-widest min-h-11 hover:bg-surface-container-highest"
+          className="inline-flex items-center gap-1.5 px-3 py-2 rounded-sm bg-surface-container-high text-on-surface text-micro font-semibold uppercase tracking-widest min-h-11 hover:bg-surface-container-highest"
         >
           <ArrowLeftRight className="w-3.5 h-3.5" aria-hidden="true" />
           {copy.swap ?? 'Intercambiar'}
@@ -283,7 +283,7 @@ export default function BeforeAfterCompare({
         <button
           type="button"
           onClick={reset}
-          className="inline-flex items-center gap-1.5 px-3 py-2 rounded-sm bg-surface-container-high text-on-surface text-micro font-bold uppercase tracking-widest min-h-11 hover:bg-surface-container-highest"
+          className="inline-flex items-center gap-1.5 px-3 py-2 rounded-sm bg-surface-container-high text-on-surface text-micro font-semibold uppercase tracking-widest min-h-11 hover:bg-surface-container-highest"
         >
           <ArrowLeft className="w-3.5 h-3.5" aria-hidden="true" />
           {copy.reset ?? 'Elegir otras'}
@@ -292,7 +292,7 @@ export default function BeforeAfterCompare({
           <button
             type="button"
             onClick={() => onShare(before, after)}
-            className="inline-flex items-center gap-1.5 px-3 py-2 rounded-sm bg-primary text-on-primary text-micro font-bold uppercase tracking-widest min-h-11 hover:bg-primary/90 ml-auto"
+            className="inline-flex items-center gap-1.5 px-3 py-2 rounded-sm bg-primary text-on-primary text-micro font-semibold uppercase tracking-widest min-h-11 hover:bg-primary/90 ml-auto"
           >
             <Share2 className="w-3.5 h-3.5" aria-hidden="true" />
             {copy.shareLabel ?? 'Compartir'}

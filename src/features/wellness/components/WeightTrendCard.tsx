@@ -57,7 +57,7 @@ export default function WeightTrendCard({
   const emaPath = buildPath(last30Ema, minKg, range);
 
   const deltaBadge = trend.emaWeekDelta !== null ? (
-    <div className={`flex items-center gap-1 text-micro font-bold uppercase tracking-widest ${
+    <div className={`flex items-center gap-1 text-micro font-semibold uppercase tracking-widest ${
       trend.emaWeekDelta > 0 ? 'text-brand-secondary' : trend.emaWeekDelta < 0 ? 'text-primary' : 'text-on-surface-variant'
     }`}>
       {trend.emaWeekDelta > 0 ? <TrendingUp className="w-3.5 h-3.5" /> : trend.emaWeekDelta < 0 ? <TrendingDown className="w-3.5 h-3.5" /> : null}

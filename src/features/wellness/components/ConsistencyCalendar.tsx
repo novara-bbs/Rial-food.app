@@ -134,7 +134,7 @@ export default function ConsistencyCalendar({
         {selectedDayData && (
           <div className="mt-3 p-3 bg-surface-container rounded-sm border border-primary/20 animate-in fade-in slide-in-from-top-2">
             <div className="flex items-center justify-between mb-2">
-              <span className="font-headline text-micro font-bold uppercase tracking-widest text-tertiary">
+              <span className="font-headline text-micro font-semibold uppercase tracking-widest text-tertiary">
                 {new Date(selectedDayData.date + 'T12:00:00').toLocaleDateString(localeStr, { weekday: 'short', day: 'numeric', month: 'short' })}
               </span>
               <button type="button" onClick={() => onSelectDay(null)} className="text-on-surface-variant hover:text-primary">

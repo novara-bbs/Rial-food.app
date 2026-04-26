@@ -1,16 +1,18 @@
-import { CheckCircle2, Calendar, ChefHat, Flame, Settings, UserPlus, UserCheck, Instagram, Youtube, Globe, Music2 } from 'lucide-react';
+import { CheckCircle2, Calendar, ChefHat, Flame, Settings, Instagram, Youtube, Globe, Music2 } from 'lucide-react';
 import PageShell from '../../../components/PageShell';
 import { useMemo } from 'react';
 import { useI18n } from '../../../i18n';
 import { useAppState } from '../../../contexts/AppStateContext';
 import { useNavigation } from '../../../contexts/NavigationContext';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
+import { Button } from '@/components/ui/button';
 import EmptyState from '../../../components/EmptyState';
 import PageHeader from '../../../components/patterns/PageHeader';
 import RecipeCard from '../../../components/patterns/RecipeCard';
 import { CREATORS_MAP } from '../data/seed-creators';
 import SectionCard from '../../../components/SectionCard';
 import { Heading } from '@/components/ui/Typography';
+import { FollowButton } from '@/components/patterns/FollowButton';
 
 export default function CreatorProfile({ onBack }: { onBack: () => void }) {
   const { t } = useI18n();
@@ -49,8 +51,7 @@ export default function CreatorProfile({ onBack }: { onBack: () => void }) {
 
   const isFollowing = followedCreators.includes(creator.id);
 
-  const toggleFollow = (e: React.MouseEvent) => {
-    e.stopPropagation();
+  const toggleFollow = () => {
     handleFollowCreator(creator.id);
   };
 
@@ -81,7 +82,7 @@ export default function CreatorProfile({ onBack }: { onBack: () => void }) {
               {creator.verified && <CheckCircle2 className="w-4 h-4 text-primary shrink-0" />}
             </div>
             {creator.badge && (
-              <span className="text-micro font-bold uppercase tracking-wider bg-primary/10 text-primary px-2 py-0.5 rounded inline-block mt-1">{creator.badge}</span>
+              <span className="badge-card bg-primary/10 text-primary uppercase tracking-wide mt-1">{creator.badge}</span>
             )}
             {creator.bio && (
               <p className="text-xs text-on-surface-variant mt-2 leading-relaxed">{creator.bio}</p>
@@ -108,23 +109,21 @@ export default function CreatorProfile({ onBack }: { onBack: () => void }) {
         {/* Action button */}
         <div className="mt-5">
           {isSelf ? (
-            <button type="button"
+            <Button
+              type="button"
+              variant="outline"
               onClick={() => navigateTo('settings')}
-              className="w-full py-2.5 bg-surface-container-highest text-on-surface-variant rounded-sm font-headline text-micro font-bold uppercase tracking-widest flex items-center justify-center gap-2 hover:text-primary transition-colors"
+              className="w-full"
             >
-              <Settings className="w-4 h-4" /> {cp.editProfile}
-            </button>
+              <Settings /> {cp.editProfile}
+            </Button>
           ) : (
-            <button type="button"
-              onClick={toggleFollow}
-              className={`w-full py-2.5 rounded-sm font-headline text-micro font-bold uppercase tracking-widest flex items-center justify-center gap-2 transition-all ${
-                isFollowing
-                  ? 'bg-surface-container-highest text-on-surface-variant border border-outline-variant/30 hover:border-error/50 hover:text-error'
-                  : 'bg-primary text-on-primary hover:opacity-90'
-              }`}
-            >
-              {isFollowing ? <><UserCheck className="w-4 h-4" /> {cp.following}</> : <><UserPlus className="w-4 h-4" /> {cp.follow}</>}
-            </button>
+            <FollowButton
+              isFollowing={isFollowing}
+              onToggle={toggleFollow}
+              size="default"
+              className="w-full"
+            />
           )}
         </div>
       </SectionCard>
@@ -211,7 +210,7 @@ export default function CreatorProfile({ onBack }: { onBack: () => void }) {
             {creator.badge && (
               <div className="flex items-center gap-2">
                 <span className="font-label text-micro uppercase tracking-widest text-on-surface-variant">{cp.badge}</span>
-                <span className="text-micro font-bold uppercase tracking-wider bg-primary/10 text-primary px-2 py-0.5 rounded">{creator.badge}</span>
+                <span className="badge-card bg-primary/10 text-primary uppercase tracking-wide">{creator.badge}</span>
               </div>
             )}
             <div className="grid grid-cols-2 gap-3 pt-3 border-t border-outline-variant/10">

@@ -164,6 +164,18 @@ Defaults can be overridden via the `copy` prop (`{ noData, noRange, noTrends, st
 
 **Sizes (ADR-003):** `default` = 44px, `sm` = 36px (documented density), `lg` = 48px, `icon` = 44×44, `icon-sm` = 36×36, `icon-lg` = 48×48.
 
+### FollowButton ([1.5.111])
+Single source of truth for "Follow / Following" toggle across the app. Wraps
+`<Button>` with consistent `UserPlus`/`UserCheck` icons and i18n labels
+(`t.creatorProfile.follow` / `following`). Defaults to `size="sm"`.
+```tsx
+<FollowButton isFollowing={isFollowing} onToggle={toggleFollow} />
+<FollowButton isFollowing={isFollowing} onToggle={toggleFollow} size="default" className="w-full" />
+```
+Used by RecipeDetail (creator strip) and CreatorProfile (full-width CTA).
+Discover renders a status-only `.badge-card` span — not a toggle button —
+because the parent card already navigates to the profile on tap.
+
 ### EmptyState
 ```tsx
 <EmptyState

@@ -38,7 +38,7 @@ export default function WeeklyMiniDash({ calAvg, proteinHitDays, totalDays, week
         </div>
       </div>
       <div className="flex items-center justify-center gap-1 mt-3 pt-2 border-t border-outline-variant/10">
-        <span className="text-micro font-bold uppercase tracking-widest text-primary group-hover:underline">{t.home.viewProgress}</span>
+        <span className="text-micro font-semibold uppercase tracking-widest text-primary group-hover:underline">{t.home.viewProgress}</span>
         <ChevronRight className="w-3 h-3 text-primary" />
       </div>
     </button>

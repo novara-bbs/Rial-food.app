@@ -188,14 +188,14 @@ export default function LogSnapshotModal({
                   <input ref={photoInputRef} type="file" accept="image/*" capture="environment" className="hidden"
                     onChange={e => handlePhotoUpload(e.target.files?.[0])} />
                   <button type="button" onClick={() => photoInputRef.current?.click()}
-                    className="flex-1 min-h-11 flex items-center justify-center gap-1.5 bg-primary/10 text-primary py-2 rounded-sm text-micro font-bold uppercase tracking-widest hover:bg-primary/20 transition-colors">
+                    className="flex-1 min-h-11 flex items-center justify-center gap-1.5 bg-primary/10 text-primary py-2 rounded-sm text-micro font-semibold uppercase tracking-widest hover:bg-primary/20 transition-colors">
                     <Camera className="w-3.5 h-3.5" aria-hidden="true" />
                     {p.takePhoto ?? 'Cámara'}
                   </button>
                   <input ref={galleryInputRef} type="file" accept="image/*" className="hidden"
                     onChange={e => handlePhotoUpload(e.target.files?.[0])} />
                   <button type="button" onClick={() => galleryInputRef.current?.click()}
-                    className="flex-1 min-h-11 flex items-center justify-center gap-1.5 bg-surface-container-highest text-on-surface-variant py-2 rounded-sm text-micro font-bold uppercase tracking-widest hover:text-tertiary transition-colors">
+                    className="flex-1 min-h-11 flex items-center justify-center gap-1.5 bg-surface-container-highest text-on-surface-variant py-2 rounded-sm text-micro font-semibold uppercase tracking-widest hover:text-tertiary transition-colors">
                     <ImageIcon className="w-3.5 h-3.5" aria-hidden="true" />
                     {p.choosePhoto ?? 'Galería'}
                   </button>

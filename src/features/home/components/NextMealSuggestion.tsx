@@ -25,7 +25,7 @@ export default function NextMealSuggestion({ suggestion, onTap }: {
         <UtensilsCrossed className="w-4 h-4 text-primary" />
       </div>
       <div className="flex-1 text-left min-w-0">
-        <span className="text-micro font-bold uppercase tracking-widest text-primary block">
+        <span className="text-micro font-semibold uppercase tracking-widest text-primary block">
           {suggestion.source === 'plan' ? t.home.nextUp : t.home.suggestedForYou}
         </span>
         <span className="text-label font-bold text-tertiary uppercase tracking-widest truncate block">{suggestion.title}</span>

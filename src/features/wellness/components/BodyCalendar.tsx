@@ -93,7 +93,7 @@ export default function BodyCalendar({ snapshots, unitSystem }: BodyCalendarProp
               <button
                 type="button"
                 onClick={() => setLogDate(todayLocal())}
-                className="inline-flex items-center gap-1.5 bg-primary text-on-primary px-3 py-1.5 rounded-sm text-micro font-bold uppercase tracking-widest hover:opacity-90 transition-opacity"
+                className="inline-flex items-center gap-1.5 bg-primary text-on-primary px-3 py-1.5 rounded-sm text-micro font-semibold uppercase tracking-widest hover:opacity-90 transition-opacity"
               >
                 {p.logFirstSnapshot ?? 'Registrar primer snapshot'}
               </button>

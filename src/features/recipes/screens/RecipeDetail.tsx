@@ -17,6 +17,7 @@ import RecipeDaySelectorSheet from '../components/RecipeDaySelectorSheet';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
+import { FollowButton } from '@/components/patterns/FollowButton';
 import { Micronutrients } from '../../../types';
 import { toast } from 'sonner';
 import { getRecipeSwaps } from '../utils/substitutions';
@@ -449,20 +450,15 @@ export default function RecipeDetail({ recipe, onBack, onSaveRecipe, isSaved, on
               <button type="button" onClick={() => { setSelectedCreatorId(data.publishedBy!); navigateTo('creator-profile'); }} className="flex items-center gap-3 flex-1 min-w-0">
                 <img src={creator.avatar} alt={creator.name} className="w-8 h-8 rounded-full object-cover border border-outline-variant/20" referrerPolicy="no-referrer" />
                 <div className="min-w-0">
-                  <span className="font-headline font-bold text-micro text-tertiary uppercase hover:text-primary transition-colors block truncate">@{creator.name}</span>
+                  <span className="font-headline font-semibold text-micro text-tertiary uppercase hover:text-primary transition-colors block truncate">@{creator.name}</span>
                   <span className="font-label text-micro text-on-surface-variant tracking-widest uppercase block">{t.recipeDetail.createdBy}</span>
                 </div>
               </button>
-              <button type="button"
-                onClick={toggleFollowCreator}
-                className={`shrink-0 whitespace-nowrap min-h-11 px-3 py-1.5 rounded-sm text-micro font-bold uppercase tracking-widest transition-all ${
-                  isFollowingCreator
-                    ? 'bg-surface-container-highest text-on-surface-variant border border-outline-variant/30'
-                    : 'bg-primary text-on-primary hover:opacity-90'
-                }`}
-              >
-                {isFollowingCreator ? t.creatorProfile?.following : t.creatorProfile?.follow}
-              </button>
+              <FollowButton
+                isFollowing={isFollowingCreator}
+                onToggle={toggleFollowCreator}
+                size="sm"
+              />
             </div>
           </div>
         );
@@ -474,7 +470,7 @@ export default function RecipeDetail({ recipe, onBack, onSaveRecipe, isSaved, on
           <div className="flex items-center justify-between bg-primary/10 border border-primary/20 rounded-sm px-4 py-3">
             <div className="flex items-center gap-2">
               <ChefHat className="w-4 h-4 text-primary" />
-              <span className="font-headline font-bold text-micro text-primary uppercase tracking-widest">{t.recipeDetail.yourRecipe || 'Tu Receta'}</span>
+              <span className="font-headline font-semibold text-micro uppercase tracking-wider">{t.recipeDetail.yourRecipe || 'Tu Receta'}</span>
             </div>
             <div className="flex items-center gap-2">
               <Button
@@ -549,7 +545,7 @@ export default function RecipeDetail({ recipe, onBack, onSaveRecipe, isSaved, on
 
         {/* ── Serving + Family controls ── */}
         <div className="flex items-center justify-between mt-4 bg-surface-container-highest/50 p-3 rounded-sm border border-outline-variant/10">
-          <span className="font-headline font-bold text-micro uppercase text-tertiary tracking-tight">{t.recipeDetail.servings}</span>
+          <span className="font-headline font-semibold text-micro uppercase text-tertiary tracking-tight">{t.recipeDetail.servings}</span>
           <div className="flex items-center gap-3">
             {/* HIG 44×44 tap targets — visual circle kept at 28px via inner span */}
             <button type="button" onClick={() => setServings(Math.max(1, servings - 1))} aria-label="Decrease servings" disabled={servings <= 1} className="min-w-11 min-h-11 flex items-center justify-center text-on-surface-variant hover:text-primary disabled:opacity-40 disabled:hover:text-on-surface-variant transition-colors">
@@ -570,12 +566,12 @@ export default function RecipeDetail({ recipe, onBack, onSaveRecipe, isSaved, on
           <div className="mt-3 p-3 bg-surface-container-low rounded-sm border border-outline-variant/20">
             <div className="flex items-center gap-2 mb-2">
               <Users className="w-3.5 h-3.5 text-primary" />
-              <span className="font-label text-micro font-bold tracking-widest uppercase text-tertiary">{t.recipeDetail.family}</span>
+              <span className="font-label text-micro font-semibold tracking-widest uppercase text-tertiary">{t.recipeDetail.family}</span>
             </div>
             <div className="flex flex-wrap gap-2">
-              <button type="button" className={`min-h-11 px-2.5 py-1 rounded-sm font-label text-micro font-bold tracking-widest uppercase border transition-all ${selectedFamily.length === 0 ? 'bg-primary text-on-primary border-primary' : 'bg-surface-container-highest text-on-surface-variant border-outline-variant/20'}`} onClick={() => setSelectedFamily([])}>{t.recipeDetail.onlyMe}</button>
+              <button type="button" className={`min-h-11 px-2.5 py-1 rounded-sm font-label text-micro font-semibold tracking-widest uppercase border transition-all ${selectedFamily.length === 0 ? 'bg-primary text-on-primary border-primary' : 'bg-surface-container-highest text-on-surface-variant border-outline-variant/20'}`} onClick={() => setSelectedFamily([])}>{t.recipeDetail.onlyMe}</button>
               {familyMembers.map((member: any) => (
-                <button type="button" key={member.id} className={`min-h-11 px-2.5 py-1 rounded-sm font-label text-micro font-bold tracking-widest uppercase border transition-all ${selectedFamily.includes(member.id) ? 'bg-primary text-on-primary border-primary' : 'bg-surface-container-highest text-on-surface-variant border-outline-variant/20'}`} onClick={() => toggleFamilyMember(member.id)}>+ {member.name}</button>
+                <button type="button" key={member.id} className={`min-h-11 px-2.5 py-1 rounded-sm font-label text-micro font-semibold tracking-widest uppercase border transition-all ${selectedFamily.includes(member.id) ? 'bg-primary text-on-primary border-primary' : 'bg-surface-container-highest text-on-surface-variant border-outline-variant/20'}`} onClick={() => toggleFamilyMember(member.id)}>+ {member.name}</button>
               ))}
             </div>
             <p className="mt-2 font-label text-micro text-on-surface-variant uppercase tracking-wider">
@@ -648,7 +644,7 @@ export default function RecipeDetail({ recipe, onBack, onSaveRecipe, isSaved, on
             >
               <div className="flex items-center gap-3">
                 <ChefHat className="w-4 h-4 text-on-surface-variant group-hover:text-primary transition-colors" />
-                <span className="font-headline font-bold text-micro text-tertiary uppercase tracking-widest">
+                <span className="font-headline font-semibold text-micro text-tertiary uppercase tracking-widest">
                   {(t.recipes as any).markAsCooked ?? 'Marcar como cocinada'}
                 </span>
               </div>
@@ -673,7 +669,7 @@ export default function RecipeDetail({ recipe, onBack, onSaveRecipe, isSaved, on
                   <div className="flex items-center gap-3">
                     <GitFork className="w-4 h-4 text-on-surface-variant group-hover:text-primary transition-colors" />
                     <div className="text-left">
-                      <span className="font-headline font-bold text-micro text-tertiary uppercase tracking-widest block">
+                      <span className="font-headline font-semibold text-micro text-tertiary uppercase tracking-widest block">
                         {t.recipeDetail.createVersion || 'Crear mi versión'}
                       </span>
                       <span className="font-label text-micro text-on-surface-variant tracking-widest uppercase">
@@ -716,7 +712,7 @@ export default function RecipeDetail({ recipe, onBack, onSaveRecipe, isSaved, on
                             {comment.author?.charAt(0)}
                           </div>
                         )}
-                        <span className="font-headline font-bold text-micro uppercase text-tertiary">{comment.author}</span>
+                        <span className="font-headline font-semibold text-micro uppercase text-tertiary">{comment.author}</span>
                       </div>
                       <p className="text-caption text-on-surface-variant leading-relaxed">"{comment.text}"</p>
                     </div>
@@ -992,7 +988,7 @@ export default function RecipeDetail({ recipe, onBack, onSaveRecipe, isSaved, on
                       <img src={r.img || r.image} alt={r.title} className="w-12 h-12 rounded-sm object-cover shrink-0" referrerPolicy="no-referrer" />
                     )}
                     <div className="flex-1 min-w-0">
-                      <p className="font-headline font-bold text-micro text-tertiary uppercase truncate">{r.title}</p>
+                      <p className="font-headline font-semibold text-micro text-tertiary uppercase truncate">{r.title}</p>
                       <span className="font-label text-micro text-on-surface-variant tracking-widest uppercase">
                         {r.macros?.calories || r.cal || 0} kcal · {r.macros?.protein || r.pro || 0}g pro
                       </span>

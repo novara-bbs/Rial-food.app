@@ -80,22 +80,22 @@ export default function BodySnapshotCard({ snapshot, previousKg, unitSystem, onT
         {hasMeasurements && (
           <div className="flex flex-wrap gap-1.5 pt-0.5">
             {m.chestCm != null && (
-              <span className="text-micro font-bold uppercase tracking-widest bg-surface-container-highest text-on-surface-variant px-1.5 py-0.5 rounded-sm">
+              <span className="text-micro font-semibold uppercase tracking-widest bg-surface-container-highest text-on-surface-variant px-1.5 py-0.5 rounded-sm">
                 P {m.chestCm}
               </span>
             )}
             {m.waistCm != null && (
-              <span className="text-micro font-bold uppercase tracking-widest bg-surface-container-highest text-on-surface-variant px-1.5 py-0.5 rounded-sm">
+              <span className="text-micro font-semibold uppercase tracking-widest bg-surface-container-highest text-on-surface-variant px-1.5 py-0.5 rounded-sm">
                 C {m.waistCm}
               </span>
             )}
             {m.hipsCm != null && (
-              <span className="text-micro font-bold uppercase tracking-widest bg-surface-container-highest text-on-surface-variant px-1.5 py-0.5 rounded-sm">
+              <span className="text-micro font-semibold uppercase tracking-widest bg-surface-container-highest text-on-surface-variant px-1.5 py-0.5 rounded-sm">
                 Ca {m.hipsCm}
               </span>
             )}
             {m.bodyFatPct != null && (
-              <span className="text-micro font-bold uppercase tracking-widest bg-primary/10 text-primary px-1.5 py-0.5 rounded-sm">
+              <span className="text-micro font-semibold uppercase tracking-widest bg-primary/10 text-primary px-1.5 py-0.5 rounded-sm">
                 {m.bodyFatPct}%
               </span>
             )}

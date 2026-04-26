@@ -242,7 +242,7 @@ export default function NutritionHeroRing({ dailyMacros, mode = 'advanced', exer
             <div key={m.key} className="flex flex-col gap-1.5" data-testid={`macro-col-${m.key}`}>
               <div className="flex items-center gap-1.5">
                 <span className={`w-2 h-2 rounded-full shrink-0 ${m.dotClass}`} aria-hidden="true" />
-                <span className="font-label text-micro font-bold uppercase tracking-widest text-on-surface-variant truncate">
+                <span className="font-label text-micro font-semibold uppercase tracking-widest text-on-surface-variant truncate">
                   {m.label}
                 </span>
               </div>
@@ -264,7 +264,7 @@ export default function NutritionHeroRing({ dailyMacros, mode = 'advanced', exer
       {/* ICP-adaptive goal-status chip (Q15) — only shown when user has a goal set. */}
       {goalStatus && (
         <div
-          className={`flex items-center justify-center gap-2 px-3 py-2 rounded-sm font-label text-micro font-bold uppercase tracking-widest transition-colors ${
+          className={`flex items-center justify-center gap-2 px-3 py-2 rounded-sm font-label text-micro font-semibold uppercase tracking-widest transition-colors ${
             goalStatus.isPositive
               ? 'bg-primary/10 text-primary'
               : 'bg-error/10 text-error'

@@ -12,7 +12,6 @@ export const SEED_RECIPES = [
       'https://images.unsplash.com/photo-1519708227418-c8fd9a32b7a2?auto=format&fit=crop&w=1200&q=80',
       'https://images.unsplash.com/photo-1535140728325-a4d3707eee94?auto=format&fit=crop&w=1200&q=80',
     ],
-    videoUrl: 'https://www.youtube.com/watch?v=JcIjRDzIa-A',
     tag: 'GUARDADO',
     verified: 'rial' as const,
     cuisine: 'asian' as const,

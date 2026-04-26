@@ -187,7 +187,7 @@ export default function ProgressPreviewCard({
         <button
           type="button"
           onClick={() => openWithDate()}
-          className="flex items-center gap-1.5 bg-primary/10 text-primary px-4 min-h-11 rounded-full text-micro font-bold uppercase tracking-widest hover:bg-primary/20 transition-colors"
+          className="flex items-center gap-1.5 bg-primary/10 text-primary px-4 min-h-11 rounded-full text-micro font-semibold uppercase tracking-widest hover:bg-primary/20 transition-colors"
         >
           <Plus className="w-3 h-3" aria-hidden="true" />
           {t.home.logWeight ?? 'Registrar peso'}
@@ -196,7 +196,7 @@ export default function ProgressPreviewCard({
           <button
             type="button"
             onClick={onNavigateToProgress}
-            className="flex items-center gap-1 ml-auto text-micro font-bold uppercase tracking-widest text-on-surface-variant hover:text-primary transition-colors min-h-11 px-3"
+            className="flex items-center gap-1 ml-auto text-micro font-semibold uppercase tracking-widest text-on-surface-variant hover:text-primary transition-colors min-h-11 px-3"
           >
             {t.home.viewDetails ?? 'Ver detalles'}
             <ChevronRight className="w-3 h-3" aria-hidden="true" />

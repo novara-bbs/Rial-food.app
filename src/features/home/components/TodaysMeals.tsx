@@ -257,14 +257,14 @@ export default function TodaysMeals({
               </div>
               <div className="flex-1 min-w-0">
                 <div className="flex items-center gap-2">
-                  <span className="text-micro font-bold uppercase tracking-wider bg-primary/10 text-primary px-1.5 py-0.5 rounded">{meal.type || meal.time}</span>
+                  <span className="text-micro font-semibold uppercase tracking-wider bg-primary/10 text-primary px-1.5 py-0.5 rounded">{meal.type || meal.time}</span>
                 </div>
                 <h3 className="font-headline text-sm font-bold text-tertiary uppercase truncate mt-0.5">{meal.title}</h3>
                 <span className="text-micro text-on-surface-variant font-mono">{meal.cal} {t.common.kcal}</span>
               </div>
               <button type="button"
                 onClick={(e) => { e.stopPropagation(); onLogMealNow?.(meal, 1); }}
-                className="shrink-0 px-4 min-h-11 bg-primary text-on-primary rounded-sm text-micro font-bold uppercase tracking-widest hover:opacity-90 transition-opacity"
+                className="shrink-0 px-4 min-h-11 bg-primary text-on-primary rounded-sm text-micro font-semibold uppercase tracking-widest hover:opacity-90 transition-opacity"
               >
                 {t.home.logIt}
               </button>

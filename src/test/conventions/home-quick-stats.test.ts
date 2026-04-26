@@ -53,7 +53,7 @@ describe('HomeQuickStats — Phase 1 chip-row anatomy', () => {
   });
 
   it('each chip uses a min-h-11 HIG-compliant touch target', () => {
-    expect(COMPONENT_SRC).toMatch(/min-h-11[^'"`]*px-4[^'"`]*rounded-full/);
+    expect(COMPONENT_SRC).toMatch(/min-h-11[^'"`]*px-3[^'"`]*rounded-full/);
   });
 
   it('exposes onNavigate with the 4 canonical targets', () => {

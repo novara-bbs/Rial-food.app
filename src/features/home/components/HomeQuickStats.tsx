@@ -34,7 +34,7 @@ interface HomeQuickStatsProps {
 }
 
 const CHIP_BASE =
-  'inline-flex items-center gap-1.5 min-h-11 px-4 rounded-full border border-outline-variant bg-surface shadow-elev-1 hover:bg-surface-container transition-colors whitespace-nowrap font-label text-micro font-bold uppercase tracking-widest snap-start';
+  'inline-flex items-center gap-1.5 min-h-11 px-3 rounded-full border border-outline-variant bg-surface shadow-elev-1 hover:bg-surface-container transition-colors whitespace-nowrap font-headline text-micro font-semibold normal-case tracking-normal snap-start';
 
 export default function HomeQuickStats({
   mode,

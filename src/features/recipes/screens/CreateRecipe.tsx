@@ -11,6 +11,7 @@ import { Badge } from '@/components/ui/badge';
 import PortionSelector, { scaleMacros } from '../../food/components/PortionSelector';
 import MealSlotMultiSelect from '../../food/components/MealSlotMultiSelect';
 import PhotoUploader from '../components/PhotoUploader';
+import VideoSection from '../components/VideoSection';
 import VariantPickerSheet from '../../food/components/VariantPickerSheet';
 import { getRecipeSlots } from '../utils/meal-slot';
 import { getFoodQuality } from '../../food/utils/nutrition';
@@ -361,13 +362,6 @@ export default function CreateRecipe({
       : [],
     [searchQuery, mergedVariants],
   );
-
-  /** Detect YouTube video ID for embed */
-  const youtubeId = useMemo(() => {
-    if (!videoUrl) return null;
-    const m = videoUrl.match(/(?:youtu\.be\/|youtube\.com\/(?:watch\?v=|embed\/|shorts\/))([a-zA-Z0-9_-]{11})/);
-    return m?.[1] ?? null;
-  }, [videoUrl]);
 
   /** Detect source type from URL */
   const detectedSourceType = useMemo(() => {
@@ -794,21 +788,8 @@ export default function CreateRecipe({
             </div>
           </div>
 
-          {/* Video preview */}
-          {youtubeId && (
-            <div className="rounded-sm overflow-hidden border border-outline-variant/20">
-              <div className="aspect-video bg-surface-container-low relative">
-                <iframe
-                  src={`https://www.youtube-nocookie.com/embed/${youtubeId}`}
-                  title="Recipe video"
-                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                  sandbox="allow-scripts allow-same-origin allow-presentation"
-                  allowFullScreen
-                  className="absolute inset-0 w-full h-full"
-                />
-              </div>
-            </div>
-          )}
+          {/* Video preview — reuses <VideoSection> so creator preview = production render */}
+          {videoUrl && <VideoSection videoUrl={videoUrl} />}
 
           {/* Source link */}
           {sourceUrl && (

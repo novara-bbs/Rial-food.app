@@ -81,35 +81,35 @@ export default function NutritionHero({ dailyMacros, mode = 'advanced', exercise
           <div className="space-y-3">
             <div className="grid grid-cols-3 gap-3 text-center" data-testid="hero-kcal-3col">
               <div className="flex flex-col items-center gap-1">
-                <span className="font-label text-micro font-bold uppercase tracking-widest text-on-surface-variant">
+                <span className="font-label text-micro font-semibold uppercase tracking-widest text-on-surface-variant">
                   {t.home.consumed}
                 </span>
                 <span className="font-headline font-bold text-title-lg text-on-surface tabular-nums leading-none">
                   {dailyMacros.consumed.cal}
                 </span>
-                <span className="font-label text-micro font-bold uppercase tracking-wider text-on-surface-variant">
+                <span className="font-label text-micro font-semibold uppercase tracking-wider text-on-surface-variant">
                   {t.home.kcal}
                 </span>
               </div>
               <div className="flex flex-col items-center gap-1">
-                <span className="font-label text-micro font-bold uppercase tracking-widest text-on-surface-variant">
+                <span className="font-label text-micro font-semibold uppercase tracking-widest text-on-surface-variant">
                   {t.home.remaining}
                 </span>
                 <span className="font-headline font-bold text-title-lg text-primary tabular-nums leading-none">
                   {remaining}
                 </span>
-                <span className="font-label text-micro font-bold uppercase tracking-wider text-on-surface-variant">
+                <span className="font-label text-micro font-semibold uppercase tracking-wider text-on-surface-variant">
                   {t.home.kcal}
                 </span>
               </div>
               <div className="flex flex-col items-center gap-1">
-                <span className="font-label text-micro font-bold uppercase tracking-widest text-on-surface-variant">
+                <span className="font-label text-micro font-semibold uppercase tracking-widest text-on-surface-variant">
                   {t.home.target}
                 </span>
                 <span className="font-headline font-bold text-title-lg text-on-surface tabular-nums leading-none">
                   {dailyMacros.target.cal}
                 </span>
-                <span className="font-label text-micro font-bold uppercase tracking-wider text-on-surface-variant">
+                <span className="font-label text-micro font-semibold uppercase tracking-wider text-on-surface-variant">
                   {t.home.kcal}
                 </span>
               </div>

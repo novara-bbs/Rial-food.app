@@ -64,7 +64,7 @@ export default function HomeHeader({
           className="flex items-center gap-1.5 bg-brand-secondary/10 text-brand-secondary min-h-11 px-4 rounded-full border border-brand-secondary/20 shadow-elev-1 hover:bg-brand-secondary/15 hover:border-brand-secondary/40 transition-colors"
         >
           <Flame className="w-4 h-4" aria-hidden="true" />
-          <span className="font-bold text-micro uppercase tracking-widest">
+          <span className="font-semibold text-micro uppercase tracking-widest">
             {t.home.streak}: {streakDays} {t.home.days}
             {showBest && (
               <span className="opacity-60 ml-1">

@@ -427,7 +427,7 @@ export default function AddMeal({
           />
           <button type="button"
             onClick={() => { setMultiMode(!multiMode); if (multiMode) setMultiQueue([]); }}
-            className={`px-3 rounded-sm border font-label text-micro font-bold uppercase tracking-widest transition-colors flex items-center gap-1.5 shrink-0 ${
+            className={`px-3 rounded-sm border font-label text-micro font-semibold uppercase tracking-widest transition-colors flex items-center gap-1.5 shrink-0 ${
               multiMode ? 'bg-primary text-on-primary border-primary' : 'bg-surface-container-low text-on-surface-variant border-outline-variant/30 hover:border-primary/50'
             }`}
             aria-label={t.addMealScreen?.multiAdd || 'Multi-add'}
@@ -624,7 +624,7 @@ export default function AddMeal({
               <Trash2 className="w-4 h-4" />
             </button>
             <button type="button" onClick={logMultiQueue}
-              className="bg-primary text-on-primary px-4 py-2.5 rounded-sm font-headline text-micro font-bold uppercase tracking-widest hover:opacity-90 transition-opacity">
+              className="bg-primary text-on-primary px-4 py-2.5 rounded-sm font-headline text-micro font-semibold uppercase tracking-widest hover:opacity-90 transition-opacity">
               {t.addMealScreen?.logAll?.replace('{count}', String(multiQueue.length)) || `Registrar (${multiQueue.length})`}
             </button>
           </div>

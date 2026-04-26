@@ -19,7 +19,7 @@ export default function DayStatusChip({ status }: { status: DayStatus }) {
 
   return (
     <span
-      className={`inline-flex items-center min-h-11 px-3 rounded-full border font-label text-micro font-bold uppercase tracking-widest ${CLASS_BY_STATUS[status]}`}
+      className={`inline-flex items-center min-h-11 px-3 rounded-full border font-label text-micro font-semibold uppercase tracking-widest ${CLASS_BY_STATUS[status]}`}
       data-testid={`day-status-chip-${status}`}
       aria-live="polite"
     >

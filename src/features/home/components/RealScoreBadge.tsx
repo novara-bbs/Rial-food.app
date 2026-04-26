@@ -17,7 +17,7 @@ export default function RealScoreBadge({ avgVitality, trend, onTap }: {
       aria-label={t.home.vitalityAria.replace('{n}', String(avgVitality))}
     >
       <Heart className="w-3.5 h-3.5" />
-      <span className="font-bold text-micro uppercase tracking-widest">{avgVitality}</span>
+      <span className="font-semibold text-micro uppercase tracking-widest">{avgVitality}</span>
       {trend === 'up' && <TrendingUp className="w-3 h-3" />}
       {trend === 'down' && <TrendingDown className="w-3 h-3" />}
     </button>

@@ -110,7 +110,7 @@ export default function Discover() {
                         <Heading level="h4" className="text-body-sm">@{creator.name}</Heading>
                         {creator.verified && <CheckCircle2 className="w-3.5 h-3.5 text-primary shrink-0" />}
                       </div>
-                      <span className="text-micro font-bold uppercase tracking-wider bg-primary/10 text-primary px-1.5 py-0.5 rounded inline-block mt-0.5">{creator.badge}</span>
+                      <span className="badge-card bg-primary/10 text-primary uppercase tracking-wide mt-0.5">{creator.badge}</span>
                       <p className="text-body-sm text-on-surface-variant mt-1 line-clamp-1">{creator.bio}</p>
                     </div>
                     <div className="flex flex-col items-end gap-1.5 shrink-0">
@@ -118,7 +118,7 @@ export default function Discover() {
                         <span className="flex items-center gap-1"><Users className="w-3 h-3" /> {(creator.followers / 1000).toFixed(1)}K</span>
                         <span className="flex items-center gap-1"><BookOpen className="w-3 h-3" /> {creator.recipes}</span>
                       </div>
-                      <span className={`px-3 py-1 rounded-sm text-micro font-bold uppercase tracking-widest ${
+                      <span className={`badge-card uppercase tracking-wide ${
                         isFollowing
                           ? 'bg-surface-container-highest text-on-surface-variant border border-outline-variant/30'
                           : 'bg-primary text-on-primary'
