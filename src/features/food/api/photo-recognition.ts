@@ -2,7 +2,7 @@
  * Photo-based meal recognition using Gemini Vision.
  * Analyzes food photos and returns detected items with estimated portions and macros.
  */
-import { generateGeminiText } from '../../ai/lib/gemini';
+import { generateGeminiText } from '@/lib/gemini';
 import { GEMINI_API_KEY, SUPABASE_URL } from '../../../config/env';
 
 export interface DetectedFood {

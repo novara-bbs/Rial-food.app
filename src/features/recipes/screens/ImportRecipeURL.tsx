@@ -6,7 +6,7 @@ import { Link, CheckCircle2, AlertTriangle, Loader2, FileText, HelpCircle, Chevr
 import { useI18n } from '../../../i18n';
 import PageHeader from '../../../components/patterns/PageHeader';
 import { logger } from '../../../lib/logger';
-import { generateGeminiText } from '../../ai/lib/gemini';
+import { generateGeminiText } from '@/lib/gemini';
 import { GEMINI_API_KEY, SUPABASE_URL } from '../../../config/env';
 import { enhanceIngredients, EnhancedIngredient, RecipeIntelligenceResult } from '../utils/recipe-intelligence';
 import MealSlotMultiSelect from '../../food/components/MealSlotMultiSelect';

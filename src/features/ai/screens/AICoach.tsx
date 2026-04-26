@@ -4,7 +4,7 @@ import SectionCard from '../../../components/SectionCard';
 import ReactMarkdown from 'react-markdown';
 import { useI18n } from '../../../i18n';
 import { Heading } from '@/components/ui/Typography';
-import { generateAIResponse, buildSystemPrompt } from '../lib/gemini';
+import { generateAIResponse, buildSystemPrompt } from '@/lib/gemini';
 import { logger } from '../../../lib/logger';
 import { useLocalStorageState } from '../../../hooks/useLocalStorageState';
 import { useAIMessageGate } from '../../../hooks/useProGate';

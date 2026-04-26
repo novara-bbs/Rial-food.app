@@ -25,6 +25,7 @@ import { createHandleLogWeight, createHandleUpdateSnapshot, createHandleDeleteSn
 import { createHandleShareProgress } from '../features/wellness/handlers/progress-share-handlers';
 import { createHandleLoadDemoSeed, createHandleClearDemoSeed } from '../features/dev/handlers/demo-seed-handlers';
 import { shouldReseed, setStoredSeedVersion } from '../lib/seedVersion';
+import { IS_DEV } from '../config/env';
 import { getRecipeSlots } from '../features/recipes/utils/meal-slot';
 import { ingredientIdToFamilyVariant } from '../features/food/utils/food-family-resolver';
 import { logger } from '../lib/logger';
@@ -180,8 +181,8 @@ interface AppStateContextType {
     kind?: 'snapshot' | 'milestone';
     author?: { id?: string; name?: string; img?: string; role?: string };
   }) => CommunityPost;
-  handleLoadDemoSeed: () => Promise<void>;
-  handleClearDemoSeed: () => void;
+  handleLoadDemoSeed?: () => Promise<void>;
+  handleClearDemoSeed?: () => void;
   navigateToRecipe: (recipe: any) => void;
   recipeToEdit: any;
   setRecipeToEdit: (recipe: any) => void;
@@ -911,7 +912,7 @@ export function AppStateProvider({ children }: { children: React.ReactNode }) {
     [setCommunityPosts],
   );
   const handleLoadDemoSeed = useMemo(
-    () => createHandleLoadDemoSeed({
+    () => IS_DEV ? createHandleLoadDemoSeed({
       setUserProfile,
       setDailyMacros,
       setHydration,
@@ -928,7 +929,7 @@ export function AppStateProvider({ children }: { children: React.ReactNode }) {
       setCommunityPosts,
       setCommunityStories,
       setToleranceLogs,
-    }),
+    }) : undefined,
     [
       setUserProfile, setDailyMacros, setHydration, setMovement, setDailyGoal,
       setDailyLog, setFoodHistory, setWeightHistory, setNutritionHistory,
@@ -937,7 +938,7 @@ export function AppStateProvider({ children }: { children: React.ReactNode }) {
     ],
   );
   const handleClearDemoSeed = useMemo(
-    () => createHandleClearDemoSeed({
+    () => IS_DEV ? createHandleClearDemoSeed({
       setUserProfile,
       setDailyMacros,
       setHydration,
@@ -954,7 +955,7 @@ export function AppStateProvider({ children }: { children: React.ReactNode }) {
       setCommunityPosts,
       setCommunityStories,
       setToleranceLogs,
-    }),
+    }) : undefined,
     [
       setUserProfile, setDailyMacros, setHydration, setMovement, setDailyGoal,
       setDailyLog, setFoodHistory, setWeightHistory, setNutritionHistory,

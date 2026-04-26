@@ -5,7 +5,7 @@
  */
 import { Shield } from 'lucide-react';
 import BottomSheet from '@/components/ui/bottom-sheet';
-import { useI18n } from '../i18n';
+import { useI18n } from '@/i18n';
 
 const CONSENT_KEY = 'rial_gdpr_consent_v1';
 

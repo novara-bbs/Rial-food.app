@@ -2,9 +2,25 @@
 
 > Real nutrition. Real recipes. Real community.
 
-> Agents: start at [AGENTS.md](AGENTS.md). Contributors: see [docs/CONTRIBUTING.md](docs/CONTRIBUTING.md).
+> **New here?** Start at [docs/FIRST-DAY.md](docs/FIRST-DAY.md). **Agents?** Start at [AGENTS.md](AGENTS.md). **Contributors?** See [docs/CONTRIBUTING.md](docs/CONTRIBUTING.md).
 
 RIAL is a mobile-first nutrition platform that combines tracking, recipes, meal planning, wellness logging, social community features, and creator workflows in one app.
+
+## I'm new — read in this order
+
+1. **[docs/FIRST-DAY.md](docs/FIRST-DAY.md)** — setup + tour visual + tu primer cambio (~2 horas).
+2. **[docs/GLOSSARY.md](docs/GLOSSARY.md)** — qué significa ICP, Real Feel, Cocina vs Discovery, NutritionHero…
+3. **[docs/ARCHITECTURE.md](docs/ARCHITECTURE.md)** — capas, data model, engines.
+4. **[docs/SITEMAP.md](docs/SITEMAP.md)** — navegación state-based (sin React Router — crítico).
+5. **[docs/DESIGN-SYSTEM.md](docs/DESIGN-SYSTEM.md)** + **[docs/PRIMITIVES.md](docs/PRIMITIVES.md)** — antes de crear cualquier cosa.
+
+Vas a tocar algo concreto:
+- **Pantalla nueva** → [docs/NEW-SCREEN-CHECKLIST.md](docs/NEW-SCREEN-CHECKLIST.md) (obligatorio)
+- **Feature nueva** → [docs/HOW-TO-ADD-FEATURE.md](docs/HOW-TO-ADD-FEATURE.md)
+- **Auth / sync / Supabase local** → [docs/SUPABASE-LOCAL.md](docs/SUPABASE-LOCAL.md)
+- **Push a producción** → [docs/RELEASE.md](docs/RELEASE.md)
+- **Reglas de negocio** → [docs/RULES.md](docs/RULES.md)
+- **i18n** → [docs/i18n-dictionary.md](docs/i18n-dictionary.md)
 
 ## Quick Start
 
@@ -62,6 +78,25 @@ docs/
 
 ## Core Docs
 
+### For humans (onboarding)
+| Document | Purpose |
+| --- | --- |
+| `docs/FIRST-DAY.md` | Setup + tour visual + primer cambio |
+| `docs/GLOSSARY.md` | Términos de dominio (ICP, Real Feel, NutritionHero, …) |
+| `docs/SITEMAP.md` | Mapa de pantallas y navegación state-based |
+| `docs/ARCHITECTURE.md` | System architecture reference |
+| `docs/DESIGN-SYSTEM.md` | Tokens, themes, tipografía, do/don't |
+| `docs/PRIMITIVES.md` | Componentes canónicos del DS |
+| `docs/NEW-SCREEN-CHECKLIST.md` | Obligatorio para cualquier pantalla nueva |
+| `docs/HOW-TO-ADD-FEATURE.md` | Receta paso-a-paso para extender el producto |
+| `docs/SUPABASE-LOCAL.md` | Cómo desarrollar contra Supabase (o sin él) |
+| `docs/RELEASE.md` | Workflow web + Capacitor + rollback |
+| `docs/CONTRIBUTING.md` | Workflow general y checklist por feature |
+| `docs/RULES.md` | Business rules y product logic |
+| `docs/i18n-dictionary.md` | Cómo añadir / editar traducciones |
+| `CHANGELOG.md` | Release history |
+
+### For agents (vibe-coding context)
 | Document | Purpose |
 | --- | --- |
 | `AGENTS.md` | Universal repo entrypoint for development agents |
@@ -69,12 +104,8 @@ docs/
 | `docs/ai/project.md` | Stable project architecture and deployment map |
 | `docs/ai/workflow.md` | Collaboration, verification, and documentation workflow |
 | `docs/ai/state.md` | Current release snapshot and active risks |
-| `docs/ai/reference.md` | Skills, tool compatibility, dev-AI vs product-AI boundary (consolidated) |
+| `docs/ai/reference.md` | Skills, tool compatibility, dev-AI vs product-AI boundary |
 | `docs/ai/handoffs.md` | Partial-memory handoff template and task log |
-| `docs/ARCHITECTURE.md` | System architecture reference |
-| `docs/CONTRIBUTING.md` | Development workflow and contribution checklist |
-| `docs/RULES.md` | Business rules and product logic |
-| `CHANGELOG.md` | Release history |
 
 ## Multi-agent setup
 

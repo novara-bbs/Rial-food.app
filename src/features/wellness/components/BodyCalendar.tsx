@@ -3,7 +3,7 @@ import { Ruler, Camera } from 'lucide-react';
 import { useI18n } from '../../../i18n';
 import SnapshotDetailModal from './SnapshotDetailModal';
 import LogSnapshotModal from './LogSnapshotModal';
-import DayGridCalendar from '../../../components/DayGridCalendar';
+import DayGridCalendar from '@/components/patterns/DayGridCalendar';
 import SectionCard from '../../../components/SectionCard';
 import type { BodySnapshot } from '../../../types/wellness';
 import type { UnitSystem } from '../../food/utils/units';

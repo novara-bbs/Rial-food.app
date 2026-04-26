@@ -1,5 +1,5 @@
-import { GEMINI_API_KEY, SUPABASE_URL, SUPABASE_ANON_KEY } from '../../../config/env';
-import { getSupabaseClient } from '../../../lib/supabase';
+import { GEMINI_API_KEY, SUPABASE_URL, SUPABASE_ANON_KEY } from '../config/env';
+import { getSupabaseClient } from './supabase';
 
 /** Singleton Gemini client - used only in dev/web fallback mode. */
 let client: any = null; // any: Gemini SDK types not available at build time

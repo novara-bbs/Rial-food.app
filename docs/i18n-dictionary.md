@@ -14,6 +14,55 @@
 3. Add `Locale` type union member
 4. Add flag button in `Settings.tsx` language section
 
+## Adding or editing a translation key
+
+> **Regla dura (ADR-004):** ES y EN deben ser simétricos siempre. `npm run check:i18n` lo bloquea en preflight.
+
+### Caso 1 — Nueva key
+
+1. Decide la **sección semántica** (`home`, `recipes`, `wellness.hydration`, …). Si dudas, mira `src/i18n/locales/es.ts` y reusa el namespace más cercano. Crear un namespace nuevo solo si la feature lo justifica.
+2. Edita **los dos archivos a la vez**:
+   - `src/i18n/locales/es.ts` → añade la key con texto Spanish.
+   - `src/i18n/locales/en.ts` → añade **la misma key** en la **misma posición** con la traducción English.
+3. En el componente:
+   ```tsx
+   import { useI18n } from '@/i18n';
+   const { t } = useI18n();
+   return <span>{t.miSeccion.miKey}</span>;
+   ```
+   El acceso es **type-safe** (`t` tiene el tipo derivado de `es.ts`) — si la key no existe el TS te lo dice en compile-time.
+4. Verifica simetría:
+   ```bash
+   npm run check:i18n
+   ```
+5. Si la key es interpolable, usa `{placeholder}` y resuelve en el call-site con `.replace()` (ver § "Template strings" más abajo).
+
+### Caso 2 — Renombrar una key existente
+
+1. Busca todas las referencias: `Grep` por `t.miSeccion.miKey`.
+2. Cambia la key en **ambos** locales y todos los call-sites en el mismo commit.
+3. `npm run check:i18n` + `npx tsc --noEmit` deben pasar (TS atrapará call-sites no migrados).
+
+### Caso 3 — Eliminar una key
+
+1. Confirma que **ningún** call-site la use (`Grep`).
+2. Elimina de **ambos** locales en el mismo commit.
+3. `npm run check:i18n`.
+
+### Anti-patterns
+
+| ❌ No hagas | ✅ Hazlo así |
+|---|---|
+| `<button>Guardar</button>` (string ES hardcoded) | `<button>{t.common.save}</button>` |
+| Añadir key solo en `es.ts` "para luego" | Siempre las dos a la vez |
+| `aria-label="Increase"` en JSX | Usa una key i18n para aria-labels también |
+| `<option>Fácil</option>` ES literal en select | Mapea opciones desde un array i18n |
+| Crear `src/i18n/locales/es-mx.ts` para variante regional | No tenemos plan para variantes regionales — coordina antes |
+
+### Cuándo `check:i18n` no es suficiente
+
+`check:i18n` valida **simetría de keys**, no detecta strings hardcodeados que nunca pasan por `t.*`. Drift conocido se sweep manualmente. Si añades JSX con texto literal, **inclúyelo en i18n** desde el principio — auditar después es más caro.
+
 ## Key Sections
 
 ### nav — Navigation labels
