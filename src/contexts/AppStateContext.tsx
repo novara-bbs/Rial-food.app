@@ -765,6 +765,20 @@ export function AppStateProvider({ children }: { children: React.ReactNode }) {
   useEffect(() => { pushToCloud('dailyLog', dailyLog); }, [dailyLog]);
   useEffect(() => { pushToCloud('foodHistory', foodHistory); }, [foodHistory]);
   useEffect(() => { pushToCloud('favoriteIds', favoriteIds); }, [favoriteIds]);
+  // Wave 2 — previously declared in SyncKey but missing pushToCloud wiring.
+  useEffect(() => { pushToCloud('hydration', hydration); }, [hydration]);
+  useEffect(() => { pushToCloud('movement', movement); }, [movement]);
+  useEffect(() => { pushToCloud('dailyGoal', dailyGoal); }, [dailyGoal]);
+  useEffect(() => { pushToCloud('isFirstTime', isFirstTime); }, [isFirstTime]);
+  useEffect(() => { pushToCloud('userFoods', userFoods); }, [userFoods]);
+  useEffect(() => { pushToCloud('userVariants', userVariants); }, [userVariants]);
+  useEffect(() => { pushToCloud('userVariantBarcodes', userVariantBarcodes); }, [userVariantBarcodes]);
+  useEffect(() => { pushToCloud('likedPosts', likedPosts); }, [likedPosts]);
+  useEffect(() => { pushToCloud('savedPosts', savedPosts); }, [savedPosts]);
+  useEffect(() => { pushToCloud('followedCreators', followedCreators); }, [followedCreators]);
+  useEffect(() => { pushToCloud('joinedChallenges', joinedChallenges); }, [joinedChallenges]);
+  useEffect(() => { pushToCloud('challengeJoinDates', challengeJoinDates); }, [challengeJoinDates]);
+  useEffect(() => { pushToCloud('challengeProgress', challengeProgress); }, [challengeProgress]);
   // ──────────────────────────────────────────────────────────────────────────────
 
   // ─── Handlers (delegated to feature modules, memoized to prevent re-renders) ──

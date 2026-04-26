@@ -548,13 +548,13 @@ export default function RecipeDetail({ recipe, onBack, onSaveRecipe, isSaved, on
           <span className="font-headline font-semibold text-micro uppercase text-tertiary tracking-tight">{t.recipeDetail.servings}</span>
           <div className="flex items-center gap-3">
             {/* HIG 44×44 tap targets — visual circle kept at 28px via inner span */}
-            <button type="button" onClick={() => setServings(Math.max(1, servings - 1))} aria-label="Decrease servings" disabled={servings <= 1} className="min-w-11 min-h-11 flex items-center justify-center text-on-surface-variant hover:text-primary disabled:opacity-40 disabled:hover:text-on-surface-variant transition-colors">
+            <button type="button" onClick={() => setServings(Math.max(1, servings - 1))} aria-label={t.common.decreaseServings} disabled={servings <= 1} className="min-w-11 min-h-11 flex items-center justify-center text-on-surface-variant hover:text-primary disabled:opacity-40 disabled:hover:text-on-surface-variant transition-colors">
               <span className="w-7 h-7 rounded-full bg-surface-container-low border border-outline-variant/20 flex items-center justify-center">
                 <Minus className="w-3.5 h-3.5" />
               </span>
             </button>
             <span className="font-headline font-bold text-body-lg text-tertiary w-6 text-center tabular-nums">{servings}</span>
-            <button type="button" onClick={() => setServings(servings + 1)} aria-label="Increase servings" className="min-w-11 min-h-11 flex items-center justify-center text-on-surface-variant hover:text-primary transition-colors">
+            <button type="button" onClick={() => setServings(servings + 1)} aria-label={t.common.increaseServings} className="min-w-11 min-h-11 flex items-center justify-center text-on-surface-variant hover:text-primary transition-colors">
               <span className="w-7 h-7 rounded-full bg-surface-container-low border border-outline-variant/20 flex items-center justify-center">
                 <Plus className="w-3.5 h-3.5" />
               </span>

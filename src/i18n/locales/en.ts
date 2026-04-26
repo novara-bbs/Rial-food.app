@@ -1034,6 +1034,10 @@ const en: Translations = {
     register: 'Register',
     close: 'Close',
     add: 'Add',
+    camera: 'Camera',
+    gallery: 'Gallery',
+    decreaseServings: 'Decrease servings',
+    increaseServings: 'Increase servings',
   },
   checkIn: {
     title: 'Daily Check-in',

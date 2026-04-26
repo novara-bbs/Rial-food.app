@@ -1,6 +1,7 @@
 import { Camera, Image as ImageIcon, X } from 'lucide-react';
 import { useRef } from 'react';
 import { compressImage } from '../utils/image-utils';
+import { useI18n } from '@/i18n';
 
 interface ImagePickerProps {
   image: string | null;
@@ -8,6 +9,7 @@ interface ImagePickerProps {
 }
 
 export default function ImagePicker({ image, onImageChange }: ImagePickerProps) {
+  const { t } = useI18n();
   const cameraRef = useRef<HTMLInputElement>(null);
   const galleryRef = useRef<HTMLInputElement>(null);
 
@@ -38,14 +40,14 @@ export default function ImagePicker({ image, onImageChange }: ImagePickerProps) 
       <button type="button"
         onClick={() => cameraRef.current?.click()}
         className="w-10 h-10 rounded-full bg-surface-container-low flex items-center justify-center text-on-surface-variant hover:text-primary hover:bg-primary/10 transition-colors"
-        aria-label="Camera"
+        aria-label={t.common.camera}
       >
         <Camera className="w-5 h-5" />
       </button>
       <button type="button"
         onClick={() => galleryRef.current?.click()}
         className="w-10 h-10 rounded-full bg-surface-container-low flex items-center justify-center text-on-surface-variant hover:text-brand-secondary hover:bg-brand-secondary/10 transition-colors"
-        aria-label="Gallery"
+        aria-label={t.common.gallery}
       >
         <ImageIcon className="w-5 h-5" />
       </button>

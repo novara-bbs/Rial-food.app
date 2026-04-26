@@ -1056,6 +1056,10 @@ const es = {
     register: 'Registrar',
     close: 'Cerrar',
     add: 'Añadir',
+    camera: 'Cámara',
+    gallery: 'Galería',
+    decreaseServings: 'Reducir porciones',
+    increaseServings: 'Aumentar porciones',
   },
   // DailyCheckIn / Tolerance
   checkIn: {
