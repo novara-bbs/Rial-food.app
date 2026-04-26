@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState, Suspense } from 'react';
+import { useLayoutEffect, useMemo, useRef, useState, Suspense } from 'react';
 import Onboarding from './features/profile/components/Onboarding';
 import Sidebar from './components/Sidebar';
 import BottomNav from './components/BottomNav';
@@ -53,7 +53,7 @@ export default function App() {
   const isOnline = useOnlineStatus();
   const { status: authStatus, isSupabaseEnabled } = useAuth();
   const [authScreen, setAuthScreen] = useState<'login' | 'signup' | 'forgot' | null>(null);
-  const { currentScreen, previousScreen, historyLength, navigateTo } = useNavigation();
+  const { currentScreen, previousScreen, navigateTo } = useNavigation();
   const {
     isPro, showAIBot,
     isFirstTime, setIsFirstTime,
@@ -87,28 +87,15 @@ export default function App() {
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
   const [showConsent, setShowConsent] = useState(() => !hasGivenConsent());
 
-  // Native-style scroll management: forward nav resets to top, back nav
-  // restores the previous scroll position. The single <main> below never
-  // unmounts, so scrollTop persists across screen changes without this.
-  // scrollMap stores scrollTop per history-stack index (not screen name) so
-  // the same screen appearing twice at different depths is handled correctly.
+  // The single <main> never unmounts between screen changes, so scrollTop
+  // persists without this reset. useLayoutEffect runs before paint so there
+  // is no visible flash of the old position when entering a new screen.
+  // Scroll restoration on goBack requires intercepting navigateTo before the
+  // DOM swap — deferred to a future sprint (needs beforeNavigate hook in context).
   const mainRef = useRef<HTMLElement>(null);
-  const scrollMapRef = useRef<Map<number, number>>(new Map());
-  const prevHistoryLengthRef = useRef(historyLength);
-  useEffect(() => {
-    const prev = prevHistoryLengthRef.current;
-    const cur = historyLength;
-    if (cur < prev) {
-      // goBack: restore saved scroll for the screen we're returning to
-      const saved = scrollMapRef.current.get(cur - 1) ?? 0;
-      mainRef.current?.scrollTo({ top: saved, left: 0, behavior: 'instant' });
-    } else {
-      // navigateTo: capture outgoing scroll, then reset incoming screen to top
-      scrollMapRef.current.set(prev - 1, mainRef.current?.scrollTop ?? 0);
-      mainRef.current?.scrollTo({ top: 0, left: 0, behavior: 'instant' });
-    }
-    prevHistoryLengthRef.current = cur;
-  }, [currentScreen, historyLength]);
+  useLayoutEffect(() => {
+    mainRef.current?.scrollTo({ top: 0, left: 0, behavior: 'instant' });
+  }, [currentScreen]);
 
   const aiCoachMemory = useMemo(() => {
     const weekAgoDate = dateToLocal(new Date(Date.now() - 7 * 86_400_000));
