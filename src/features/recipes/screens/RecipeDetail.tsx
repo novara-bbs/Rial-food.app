@@ -1,4 +1,4 @@
-import { ArrowLeft, Clock, Flame, MessageSquare, Bookmark, ChefHat, Share2, ExternalLink, Pencil, Trash2, GitFork } from 'lucide-react';
+import { ArrowLeft, Flame, MessageSquare, Bookmark, ChefHat, ExternalLink, Pencil, Trash2, GitFork } from 'lucide-react';
 import featureFlags from '../../../lib/featureFlags';
 import TimeTileComposite from '../components/TimeTileComposite';
 import AuthorAttributionCard from '../components/AuthorAttributionCard';
@@ -7,7 +7,7 @@ import StickyCookCTA from '../components/StickyCookCTA';
 import { useState, useMemo, useEffect, useRef } from 'react';
 import CookMode from '../components/CookMode';
 import MiseEnPlaceScreen from '../components/MiseEnPlaceScreen';
-import HeroGallery from '../components/HeroGallery';
+// HeroGallery moved to RecipeHero (Phase 3.1).
 import MediaLightbox from '../components/MediaLightbox';
 import VideoSection from '../components/VideoSection';
 import PublishRecipeSheet from '../../social/components/PublishRecipeSheet';
@@ -39,6 +39,7 @@ import RecipeNutritionTab from '../components/detail/RecipeNutritionTab';
 import RecipeOverviewTab from '../components/detail/RecipeOverviewTab';
 import RecipeIngredientsTab from '../components/detail/RecipeIngredientsTab';
 import RecipeServingsControls from '../components/detail/RecipeServingsControls';
+import RecipeHero from '../components/detail/RecipeHero';
 import { Heading } from '@/components/ui/Typography';
 
 export default function RecipeDetail({ recipe, onBack, onSaveRecipe, isSaved, onAddToPlan, onLogMealNow, onAddToShoppingList, dictionary = [], userProfile }: { recipe: any, onBack: () => void, onSaveRecipe?: (r: any) => void, isSaved?: boolean, onAddToPlan?: (recipe: any, dayIndex: number, slot?: 'breakfast' | 'lunch' | 'dinner' | 'snack') => void, onLogMealNow?: (recipe: any, servings: number) => void, onAddToShoppingList?: (items: any[]) => void, dictionary?: any[], userProfile?: any }) {
@@ -356,69 +357,24 @@ export default function RecipeDetail({ recipe, onBack, onSaveRecipe, isSaved, on
     )}
     <div>
       {/* ══ Hero Image / Gallery ══ */}
-      {/* verified: taller bleed hero (65 vh) — classic: compact card (h-56/h-72) */}
-      <div className={`relative w-full overflow-hidden ${isVerified ? 'h-[65vh] max-h-[520px]' : 'h-56 md:h-72'}`}>
-        <HeroGallery
-          photos={galleryPhotos}
-          alt={data.title}
-          onTap={galleryPhotos.length > 0 ? (idx) => setLightboxIdx(idx) : undefined}
-          className="absolute inset-0"
-        />
-        <div className="absolute inset-0 bg-gradient-to-t from-background via-background/40 to-transparent pointer-events-none" />
-
-        <button type="button" onClick={onBack} aria-label={t.common.back} className="absolute top-4 left-4 w-10 h-10 bg-surface/80 backdrop-blur-md rounded-full flex items-center justify-center text-tertiary hover:bg-primary hover:text-on-primary transition-colors z-10">
-          <ArrowLeft className="w-5 h-5" />
-        </button>
-
-        <div className="absolute top-4 right-4 flex gap-2 z-10">
-          <button type="button" onClick={() => setShowPublishSheet(true)} aria-label={t.recipeDetail.shareToFeed} className="w-10 h-10 bg-surface/80 backdrop-blur-md rounded-full flex items-center justify-center text-tertiary hover:bg-primary hover:text-on-primary transition-colors">
-            <Share2 className="w-5 h-5" />
-          </button>
-          <button
-            type="button"
-            onClick={() => {
-              if (!onSaveRecipe) return;
-              if (isSaved) {
-                setShowUnsaveConfirm(true);
-              } else {
-                onSaveRecipe(getModifiedRecipe());
-              }
-            }}
-            aria-label={t.common.save}
-            aria-pressed={!!isSaved}
-            className="w-10 h-10 bg-surface/80 backdrop-blur-md rounded-full flex items-center justify-center text-tertiary hover:bg-primary hover:text-on-primary transition-colors"
-          >
-            <Bookmark className={`w-5 h-5 ${isSaved ? 'fill-primary text-primary' : ''}`} />
-          </button>
-        </div>
-
-        <div className="absolute bottom-4 left-6 right-6">
-          {data.tag && (
-            <span className="badge-card bg-surface/90 backdrop-blur-md text-primary uppercase tracking-wide mb-2 inline-flex">
-              {data.tag}
-            </span>
-          )}
-          {/*
-            Bespoke recipe hero: dual-mode title that swaps to Fraunces serif via
-            inline style for verified recipes (ADR-011 § verified-mode override) and
-            scales responsively (text-2xl md:text-3xl). The <Heading> primitive
-            doesn't expose responsive sizing or per-instance font swaps, so this
-            stays raw with both lint rules disabled inline.
-          */}
-          {/* eslint-disable-next-line no-restricted-syntax -- bespoke recipe hero with verified Fraunces serif inline override + responsive size; cannot use <Heading> primitive */}
-          <h2 className="font-headline text-2xl md:text-3xl font-bold tracking-tighter leading-tight text-tertiary uppercase" style={isVerified ? { fontFamily: 'var(--font-serif)', textTransform: 'none' } : undefined}>
-            {data.title}
-          </h2>
-          {/* Classic time row — hidden for verified (replaced by TimeTileComposite below) */}
-          {!isVerified && (
-            <div className="flex items-center gap-3 mt-1.5 text-on-surface-variant text-label font-label uppercase tracking-widest">
-              <span className="flex items-center gap-1"><Clock className="w-3.5 h-3.5" /> {data.prepTime} + {data.cookTime}</span>
-              <span>•</span>
-              <span>{data.difficulty}</span>
-            </div>
-          )}
-        </div>
-      </div>
+      <RecipeHero
+        data={data}
+        isVerified={isVerified}
+        galleryPhotos={galleryPhotos}
+        onBack={onBack}
+        setLightboxIdx={setLightboxIdx}
+        onSharePress={() => setShowPublishSheet(true)}
+        onBookmarkPress={() => {
+          if (!onSaveRecipe) return;
+          if (isSaved) {
+            setShowUnsaveConfirm(true);
+          } else {
+            onSaveRecipe(getModifiedRecipe());
+          }
+        }}
+        isSaved={isSaved}
+        onSaveRecipe={onSaveRecipe}
+      />
 
       {/* ══ Verified editorial additions (flag-gated) ══ */}
       {isVerified && (
