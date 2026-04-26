@@ -8,9 +8,9 @@ import { useState, useMemo, useEffect, useRef } from 'react';
 import CookMode from '../components/CookMode';
 import MiseEnPlaceScreen from '../components/MiseEnPlaceScreen';
 // HeroGallery moved to RecipeHero (Phase 3.1).
-import MediaLightbox from '../components/MediaLightbox';
+// MediaLightbox moved to RecipeDetailModals (Phase 3.1).
 import VideoSection from '../components/VideoSection';
-import PublishRecipeSheet from '../../social/components/PublishRecipeSheet';
+// PublishRecipeSheet moved to RecipeDetailModals (Phase 3.1).
 import RecipeNutritionBar from '../components/RecipeNutritionBar';
 // RecipeSubstitutionPicker + RecipeDaySelectorSheet moved to RecipeOverviewTab (Phase 3.1).
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
@@ -27,12 +27,12 @@ import { trackRecipeView } from '../../social/utils/analytics';
 import { CREATORS_MAP } from '../../social/data/seed-creators';
 import { useNavigation } from '../../../contexts/NavigationContext';
 import { useAppState } from '../../../contexts/AppStateContext';
-import VariantPickerSheet from '../../food/components/VariantPickerSheet';
+// VariantPickerSheet moved to RecipeDetailModals (Phase 3.1).
 import { FOOD_FAMILIES } from '../../food/data/food-families';
 import type { FoodFamily, FoodVariant } from '../../../types/food-family';
 import { useLocalStorageState } from '../../../hooks/useLocalStorageState';
 import { useI18n } from '../../../i18n';
-import ConfirmDialog from '../../../components/ConfirmDialog';
+// ConfirmDialog moved to RecipeDetailModals (Phase 3.1).
 import RelatedRecipesCarousel from '../components/RelatedRecipesCarousel';
 import RecipeStepsTab from '../components/detail/RecipeStepsTab';
 import RecipeNutritionTab from '../components/detail/RecipeNutritionTab';
@@ -40,6 +40,7 @@ import RecipeOverviewTab from '../components/detail/RecipeOverviewTab';
 import RecipeIngredientsTab from '../components/detail/RecipeIngredientsTab';
 import RecipeServingsControls from '../components/detail/RecipeServingsControls';
 import RecipeHero from '../components/detail/RecipeHero';
+import RecipeDetailModals from '../components/detail/RecipeDetailModals';
 import { Heading } from '@/components/ui/Typography';
 
 export default function RecipeDetail({ recipe, onBack, onSaveRecipe, isSaved, onAddToPlan, onLogMealNow, onAddToShoppingList, dictionary = [], userProfile }: { recipe: any, onBack: () => void, onSaveRecipe?: (r: any) => void, isSaved?: boolean, onAddToPlan?: (recipe: any, dayIndex: number, slot?: 'breakfast' | 'lunch' | 'dinner' | 'snack') => void, onLogMealNow?: (recipe: any, servings: number) => void, onAddToShoppingList?: (items: any[]) => void, dictionary?: any[], userProfile?: any }) {
@@ -649,58 +650,29 @@ export default function RecipeDetail({ recipe, onBack, onSaveRecipe, isSaved, on
         />
       </div>
     </div>
-    {showPublishSheet && (
-      <PublishRecipeSheet
-        recipe={getModifiedRecipe()}
-        onClose={() => setShowPublishSheet(false)}
-      />
-    )}
-    <MediaLightbox
-      photos={galleryPhotos}
-      startIndex={lightboxIdx ?? 0}
-      open={lightboxIdx !== null}
-      onOpenChange={(o) => { if (!o) setLightboxIdx(null); }}
-      alt={data.title}
+    <RecipeDetailModals
+      data={data}
+      getModifiedRecipe={getModifiedRecipe}
+      galleryPhotos={galleryPhotos}
+      showPublishSheet={showPublishSheet}
+      setShowPublishSheet={setShowPublishSheet}
+      lightboxIdx={lightboxIdx}
+      setLightboxIdx={setLightboxIdx}
+      showDeleteConfirm={showDeleteConfirm}
+      setShowDeleteConfirm={setShowDeleteConfirm}
+      handleDeleteRecipe={handleDeleteRecipe}
+      showDuplicateConfirm={showDuplicateConfirm}
+      setShowDuplicateConfirm={setShowDuplicateConfirm}
+      handleDuplicateRecipe={handleDuplicateRecipe}
+      showUnsaveConfirm={showUnsaveConfirm}
+      setShowUnsaveConfirm={setShowUnsaveConfirm}
+      onSaveRecipe={onSaveRecipe}
+      swapTarget={swapTarget}
+      setSwapTarget={setSwapTarget}
+      mergedVariants={mergedVariants}
+      userVariants={userVariants}
+      applyVariantSwap={applyVariantSwap}
     />
-    <ConfirmDialog
-      open={showDeleteConfirm}
-      onOpenChange={setShowDeleteConfirm}
-      title={t.confirm.deleteRecipe}
-      description={t.confirm.deleteRecipeDesc}
-      confirmLabel={t.confirm.yes}
-      cancelLabel={t.confirm.cancel}
-      variant="destructive"
-      onConfirm={() => handleDeleteRecipe(data.id)}
-    />
-    <ConfirmDialog
-      open={showDuplicateConfirm}
-      onOpenChange={setShowDuplicateConfirm}
-      title={t.recipeDetail.createVersion || 'Crear mi versión'}
-      description={`${t.recipeDetail.duplicateConfirmDesc || 'Se creará una copia editable de'} "${data.title}"${data.publishedByName ? ` ${t.recipeDetail.by || 'de'} ${data.publishedByName}` : ''}. ${t.recipeDetail.duplicateConfirmHint || 'Podrás modificarla y hacerla tuya.'}`}
-      confirmLabel={t.recipeDetail.duplicate || 'Duplicar'}
-      cancelLabel={t.confirm.cancel}
-      onConfirm={() => handleDuplicateRecipe(getModifiedRecipe())}
-    />
-    <ConfirmDialog
-      open={showUnsaveConfirm}
-      onOpenChange={setShowUnsaveConfirm}
-      title={t.confirm.unsaveRecipe || '¿Desguardar esta receta?'}
-      description={t.confirm.unsaveRecipeDesc || 'La receta saldrá de tu Bóveda. Podrás volver a guardarla en cualquier momento.'}
-      confirmLabel={t.confirm.yes}
-      cancelLabel={t.confirm.cancel}
-      variant="destructive"
-      onConfirm={() => onSaveRecipe && onSaveRecipe(getModifiedRecipe())}
-    />
-    {swapTarget && (
-      <VariantPickerSheet
-        family={swapTarget.family}
-        allVariants={mergedVariants}
-        userVariants={userVariants}
-        open={Boolean(swapTarget)}
-        onOpenChange={(open) => { if (!open) setSwapTarget(null); }}
-        onSelect={applyVariantSwap}
-      />
-    )}
     </>
   );
 }
