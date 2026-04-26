@@ -97,7 +97,7 @@ Allowlist files (documented exceptions) ship in the test itself, one line per en
 <ChipRow options={[{id:'quick'}, …]} />
 
 // ✗ Inline chip with the canonical chip styles
-<button className="rounded-full px-4 py-2 font-headline uppercase tracking-widest …">
+<button className="rounded-full px-3 py-1.5 font-headline font-semibold normal-case tracking-normal …">
 ```
 
 ## Consequences

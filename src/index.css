@@ -148,6 +148,20 @@
 }
 
 @layer components {
+  /* ── Reusable badge shapes ────────────────────────────────────────────────
+     .badge-card  — base shape for image-overlay badges (RecipeCard, etc.).
+                    Apply color/bg utilities on top: bg-surface/95, bg-primary…
+     .label-caps  — small-caps metadata label (author handle, byline, etc.).
+                    Equivalent to <Text variant="micro"> but usable as a plain
+                    className without importing the primitive.
+  ──────────────────────────────────────────────────────────────────────── */
+  .badge-card {
+    @apply inline-flex items-center font-headline text-micro font-semibold px-1.5 py-0.5 rounded-sm shadow-elev-1;
+  }
+  .label-caps {
+    @apply font-label text-micro uppercase tracking-widest text-on-surface-variant;
+  }
+
   .prose-custom {
     --tw-prose-body: var(--on-surface-variant);
     --tw-prose-headings: var(--tertiary);

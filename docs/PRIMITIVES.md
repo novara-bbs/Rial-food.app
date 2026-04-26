@@ -397,7 +397,7 @@ Single source of truth for every filter chip in the app — enforced via `ChipRo
 
 | State | Classes |
 |---|---|
-| Base shape | `shrink-0 px-4 py-2 rounded-full text-micro font-headline font-semibold normal-case tracking-normal` |
+| Base shape | `shrink-0 px-3 py-1.5 rounded-full text-micro font-headline font-semibold normal-case tracking-normal` |
 | Active (solid) | `bg-primary text-on-primary` |
 | Inactive | `bg-surface-container-low border border-outline-variant/20 text-on-surface-variant hover:border-primary/50` |
 | Applied-filter strip (tinted) | `bg-primary/10 text-primary border border-primary/25` — lives in `ActiveFilterStrip` |
@@ -408,6 +408,11 @@ tracking-widest font-bold` → `font-semibold normal-case tracking-normal`. Size
 `text-micro` (RIAL semantic token). The old style made chips look visually heavy even at
 10px (monospace all-caps with max tracking). The new style looks dramatically smaller and
 cleaner — delivery-app convention (Uber Eats / Glovo / Just Eat) and enterprise-ready.
+
+**Padding rationale** ([1.5.109]): reduced from `px-4 py-2` → `px-3 py-1.5`. With
+`text-micro` (10px), `py-2` (8px each side) gave a 3:1 height-to-font ratio — balloon
+effect. `py-1.5` (6px) restores a natural 2:1 proportion. Touch targets are provided
+by the parent scroll row hit area, not the pill visual size.
 
 **Layout**: default is **single-row horizontal scroll carousel** (`overflow-x-auto
 hide-scrollbar`). Use `wrap` prop only for intentional multi-row contexts (e.g.

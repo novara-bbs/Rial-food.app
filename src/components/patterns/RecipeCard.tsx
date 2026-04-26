@@ -132,18 +132,18 @@ export default function RecipeCard({
         {/* Top-left badges column — TimeBadge + Tag + Match */}
         <div className="absolute top-2 left-2 flex flex-col gap-1 items-start">
           {recipe.time && (
-            <span className="bg-surface/95 backdrop-blur-md text-tertiary text-micro font-headline font-bold px-1.5 py-0.5 rounded-sm flex items-center gap-1 shadow-elev-1">
+            <span className="badge-card bg-surface/95 backdrop-blur-md text-tertiary gap-1">
               <Clock className="w-2.5 h-2.5 text-primary" />
               {recipe.time}
             </span>
           )}
           {recipe.tag && variant !== 'compact' && (
-            <span className="bg-surface/95 backdrop-blur-md text-primary text-micro font-black px-1.5 py-0.5 tracking-widest uppercase rounded-sm shadow-elev-1">
+            <span className="badge-card bg-surface/95 backdrop-blur-md text-primary uppercase tracking-wide">
               {recipe.tag}
             </span>
           )}
           {recipe.matchScore !== undefined && variant !== 'compact' && (
-            <span className="bg-primary text-on-primary text-micro font-black px-1.5 py-0.5 rounded-sm w-fit uppercase tracking-tighter shadow-elev-1">
+            <span className="badge-card bg-primary text-on-primary w-fit uppercase tracking-tight">
               {matchLabel}
             </span>
           )}
@@ -215,7 +215,7 @@ export default function RecipeCard({
               </span>
             )}
             {(recipe.pro ?? 0) >= 30 && (
-              <span className="bg-primary/15 text-primary px-1.5 py-0.5 rounded-sm font-black uppercase tracking-tighter">
+              <span className="badge-card bg-primary/15 text-primary uppercase tracking-tight">
                 {recipe.pro}g pro
               </span>
             )}
