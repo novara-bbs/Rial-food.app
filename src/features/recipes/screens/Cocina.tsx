@@ -190,7 +190,6 @@ export default function Cocina({ onAddMeal, onCreateRecipe, onNavigateToRecipe, 
       chips.push({ key: `difficulty:${v}`, label: getFilterLabel('difficulty', v), emoji: FACET_EMOJI.difficulty });
     }
     return chips;
-  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [filterValues, t]);
 
   // Dismiss a single filter chip — receives the composite key from the strip

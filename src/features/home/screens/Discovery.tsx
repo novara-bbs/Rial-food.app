@@ -137,7 +137,6 @@ export default function Discovery({ onNavigateToRecipe, savedRecipes = [], onSav
       chips.push({ key: `mealSlot:${v}`, label: getFilterLabel('mealSlot', v), emoji: FACET_EMOJI.mealSlot });
     }
     return chips;
-  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [filterValues, t]);
 
   // Dismiss a single chip — parses the composite key and removes the value.

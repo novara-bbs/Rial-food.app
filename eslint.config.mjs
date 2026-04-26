@@ -193,7 +193,7 @@ const typographyMigrationAllowlist = [
   'src/components/Sidebar.tsx',
   'src/components/patterns/FilterRow.tsx',
   'src/components/patterns/RecipeCard.tsx',
-  'src/components/patterns/TabNav.tsx',
+  // TabNav removed [1.5.99]: text-xs font-bold → text-micro font-semibold normal-case
   'src/components/ui/button.tsx',
   'src/components/ui/dialog.tsx',
   'src/components/ui/input.tsx',
@@ -296,6 +296,12 @@ export default tseslint.config(
   {
     plugins: {
       'react-refresh': reactRefresh,
+      // NOTE: eslint-plugin-react-hooks v4.x is NOT compatible with ESLint v9
+      // flat config — importing + registering it crashes ESLint internally
+      // (source-code-traverser.js). Use v5+ for flat config support.
+      // For now: no react-hooks plugin registration. Keep eslint-disable-next-line
+      // comments for react-hooks rules REMOVED from all files to avoid
+      // "Definition for rule not found" errors in CI.
     },
     rules: {
       'react-refresh/only-export-components': ['warn', { allowConstantExport: true }],

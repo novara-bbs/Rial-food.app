@@ -1,5 +1,60 @@
 # RIAL App - Changelog
 
+## [1.5.100] - 2026-04-26
+
+### fix(ci): resolve ESLint v9 + react-hooks plugin incompatibility — CI passing again
+
+**Root cause**: `eslint-plugin-react-hooks` v4.6.2 was listed in `devDependencies`
+but never imported/registered in `eslint.config.mjs` (ESLint v9 flat config requires
+explicit plugin registration — no auto-discovery). Two feature files used
+`// eslint-disable-next-line react-hooks/exhaustive-deps` comments which, in ESLint v9,
+reference a rule from an unregistered plugin → promoted to **ERROR** (exit code 1) →
+CI failed on every push since the flat config was adopted.
+
+Attempting to register `eslint-plugin-react-hooks` v4.6.2 in ESLint v9.39.4 flat
+config causes an internal crash (`source-code-traverser.js`) — v4.x was written for
+ESLint v8 legacy config API. v5+ has proper flat config support.
+
+#### Changes (3 files)
+
+**`eslint.config.mjs`**:
+- Removed the incomplete `'react-hooks': reactHooks` plugin registration (variable
+  was undefined — no matching import existed, causing ESLint to crash loading config).
+- Added explanatory comment: v4 incompatible with v9; upgrade to v5+ when ready.
+- Removed `react-hooks/rules-of-hooks` and `react-hooks/exhaustive-deps` rule entries
+  (moot while plugin is unregistered).
+
+**`src/features/home/screens/Discovery.tsx`** (line ~140):
+- Removed `// eslint-disable-next-line react-hooks/exhaustive-deps` above `useMemo`
+  deps `[filterValues, t]`. The omitted dependency (`getFilterLabel`) is stable
+  across renders (pure function defined from stable closures) — suppression was correct
+  intent but the comment itself was the CI blocker.
+
+**`src/features/recipes/screens/Cocina.tsx`** (line ~193):
+- Same pattern — removed the disable comment. Same reasoning: `getFilterLabel` stable.
+
+#### Know-how documented
+
+ESLint v9 flat config CI failure pattern:
+1. `eslint-plugin-react-hooks` v4.x → **do NOT import/register** in ESLint v9 flat config.
+   It crashes ESLint's internal traverser. This is a known upstream compatibility gap.
+2. In ESLint v9 flat config, `eslint-disable-next-line <plugin>/<rule>` where `<plugin>`
+   is not registered → **ERROR** (not a warning, not silently ignored) → CI exits 1.
+3. Fix path A (used here): remove disable comments + remove plugin registration.
+4. Fix path B (future): upgrade `eslint-plugin-react-hooks` to **v5+** (flat config
+   native support), then re-add import + registration in `eslint.config.mjs`.
+   When doing so, add rules: `react-hooks/rules-of-hooks: error` + `react-hooks/exhaustive-deps: warn`.
+
+#### Métricas post-fix
+
+- TS: 0 errores
+- Tests: 1188 passing (sin cambios)
+- i18n: 1913 keys (sin cambios)
+- Design-system lint: **0 errors, 927 warnings** (sin cambios)
+- CI: **verde** — `eslint.config.mjs` carga sin crash; no disable comments huérfanos
+
+---
+
 ## [1.5.99] - 2026-04-26
 
 ### feat(ds): nav / search / filter-layer typography normalization
