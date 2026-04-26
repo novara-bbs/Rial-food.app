@@ -5,13 +5,15 @@
 > prunes this file back down. Everything below should answer: *what's the release line,
 > what's the quality baseline, what's the next move, what's broken?*
 
-Last updated: **2026-04-26** — `[1.5.112]` human-onboarding docs + orphan relocation + dev guard.
+Last updated: **2026-04-26** — `[1.5.114]` i18n locale split into 10 domain modules.
 
 ## Release snapshot
-- **Branch**: `main`, **1 commit ahead** of `rial-food/main` (not yet pushed).
-- **Last committed**: `[1.5.112]` Phase 1 (6 onboarding docs + README/DESIGN-SYSTEM/i18n updates) +
-  Phase 2.1 (IS_DEV guard on demo handlers) + Phase 2.2 (4 orphan components relocated) +
-  Phase 2.3 (gemini.ts → src/lib/). TS 0 errors, 1188/1188 tests.
+- **Branch**: `main`, **3 commits ahead** of `rial-food/main` (not yet pushed).
+- **Last committed**: `[1.5.114]` Phase 2.4 i18n domain split (es.ts 2281 + en.ts 2225 →
+  22 files of 80-345 lines via codemod, 1917 keys symmetric). `[1.5.113]` sign-out
+  localStorage clear + 13 missing SyncKey effects + 4 i18n hardcoded fixes +
+  `docs/ARCHITECTURE-INTERNALS.md`. `[1.5.112]` Phase 1 (6 onboarding docs) +
+  Phase 2.1-2.3 (dev guard + 4 orphan relocations + gemini.ts move).
 - **Last pushed**: `[1.5.109]` chip/badge refinement · `[1.5.108]` Satoshi font · `[1.5.107]` scroll fix.
 - **Previous**: `[1.5.103]` hooks sweep · `[1.5.102]` RecipeCard KS · `[1.5.101]` dead-code.
 - **Active plan**: sprints sellados. **Próximos**: Phase 2 Home, Q6-B recipe photos,
