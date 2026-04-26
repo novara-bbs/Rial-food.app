@@ -1,4 +1,4 @@
-import { ArrowLeft, Clock, Flame, Activity, Minus, CheckCircle2, Circle, Plus, MessageSquare, Bookmark, X, Users, ShoppingCart, ChefHat, UtensilsCrossed, Target, Share2, ExternalLink, Pencil, Trash2, GitFork, Crown, RefreshCw } from 'lucide-react';
+import { ArrowLeft, Clock, Flame, Activity, Minus, CheckCircle2, Circle, Plus, MessageSquare, Bookmark, X, Users, ShoppingCart, ChefHat, UtensilsCrossed, Share2, ExternalLink, Pencil, Trash2, GitFork, Crown, RefreshCw } from 'lucide-react';
 import featureFlags from '../../../lib/featureFlags';
 import TimeTileComposite from '../components/TimeTileComposite';
 import AuthorAttributionCard from '../components/AuthorAttributionCard';
@@ -35,6 +35,8 @@ import { useLocalStorageState } from '../../../hooks/useLocalStorageState';
 import { useI18n } from '../../../i18n';
 import ConfirmDialog from '../../../components/ConfirmDialog';
 import RelatedRecipesCarousel from '../components/RelatedRecipesCarousel';
+import RecipeStepsTab from '../components/detail/RecipeStepsTab';
+import RecipeNutritionTab from '../components/detail/RecipeNutritionTab';
 import { Heading } from '@/components/ui/Typography';
 
 export default function RecipeDetail({ recipe, onBack, onSaveRecipe, isSaved, onAddToPlan, onLogMealNow, onAddToShoppingList, dictionary = [], userProfile }: { recipe: any, onBack: () => void, onSaveRecipe?: (r: any) => void, isSaved?: boolean, onAddToPlan?: (recipe: any, dayIndex: number, slot?: 'breakfast' | 'lunch' | 'dinner' | 'snack') => void, onLogMealNow?: (recipe: any, servings: number) => void, onAddToShoppingList?: (items: any[]) => void, dictionary?: any[], userProfile?: any }) {
@@ -809,138 +811,18 @@ export default function RecipeDetail({ recipe, onBack, onSaveRecipe, isSaved, on
           </TabsContent>
 
           {/* ── Tab 3: Steps ── */}
-          <TabsContent value="steps" className="space-y-4 pt-4">
-            <div className="flex items-center justify-between mb-2">
-              <span className="font-label text-micro uppercase tracking-widest text-on-surface-variant">
-                {cookSteps.length} {t.recipeDetail.stepsCount}
-              </span>
-              <Button variant="brand" size="sm" onClick={openCookMode}>
-                <ChefHat className="w-3.5 h-3.5 mr-1.5" /> {t.recipeDetail.cookMode}
-              </Button>
-            </div>
-
-            <div className="space-y-3">
-              {cookSteps.map((step: any, idx: number) => (
-                <div key={step.id || idx} className="flex gap-3 p-3 bg-surface-container-low rounded-sm border border-outline-variant/10">
-                  <div className="w-7 h-7 rounded-full bg-primary/10 text-primary font-headline font-bold text-body-sm flex items-center justify-center shrink-0">
-                    {idx + 1}
-                  </div>
-                  <p className="text-sm text-on-surface leading-relaxed pt-0.5">{typeof step === 'string' ? step : step.text}</p>
-                </div>
-              ))}
-            </div>
-          </TabsContent>
+          <RecipeStepsTab cookSteps={cookSteps} openCookMode={openCookMode} />
 
           {/* ── Tab 4: Nutrition ── */}
-          <TabsContent value="nutrition" className="space-y-4 pt-4">
-            {/* Detailed macros */}
-            <div className="bg-surface-container-low p-4 rounded-sm border border-outline-variant/20">
-              <Heading level="h4" className="mb-3">{t.recipeDetail.nutritionInfo}</Heading>
-              <div className="space-y-1.5">
-                {[
-                  { label: t.recipeDetail.calories, value: `${Math.round(calculatedTotals.cal * s)} kcal`, bold: true },
-                  { label: t.recipeDetail.proteinLabel, value: `${Math.round(calculatedTotals.pro * s)}g` },
-                  { label: t.recipeDetail.carbsLabel, value: `${Math.round(calculatedTotals.carbs * s)}g` },
-                  { label: t.recipeDetail.fatsLabel, value: `${Math.round(calculatedTotals.fats * s)}g` },
-                  { label: t.recipeDetail.saturatedFat, value: `${Math.round((data.macros?.saturatedFat || 0) * s)}g` },
-                  { label: t.recipeDetail.sugar, value: `${Math.round((data.macros?.sugar || 0) * s)}g` },
-                  { label: t.recipeDetail.fiber, value: `${Math.round((data.macros?.fiber || data.micros?.others?.fiber || 0) * s)}g` },
-                  { label: t.recipeDetail.cholesterol, value: `${Math.round((data.micros?.others?.cholesterol || 0) * s)}mg` },
-                  { label: t.recipeDetail.sodium, value: `${Math.round((data.micros?.minerals?.sodium || 0) * s)}mg` },
-                ].map(row => (
-                  <div key={row.label} className={`flex justify-between py-1.5 border-b border-outline-variant/10 text-sm ${row.bold ? 'font-bold' : ''}`}>
-                    <span className="text-on-surface-variant">{row.label}</span>
-                    <span className="text-tertiary font-mono">{row.value}</span>
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            {/* Micronutrients */}
-            {(Object.keys(calculatedTotals.micros.vitamins).length > 0 || Object.keys(calculatedTotals.micros.minerals).length > 0) && (
-              <div className="bg-surface-container-low p-4 rounded-sm border border-outline-variant/20 space-y-3">
-                <Heading level="h4">{t.recipeDetail.micronutrients}</Heading>
-
-                {Object.keys(calculatedTotals.micros.vitamins).length > 0 && (
-                  <div>
-                    <span className="font-label text-micro uppercase tracking-widest text-on-surface-variant">{t.recipeDetail.vitamins}</span>
-                    <div className="flex flex-wrap gap-1.5 mt-1">
-                      {Object.entries(calculatedTotals.micros.vitamins).map(([key, value]) => (
-                        <div key={key} className="bg-surface-container-highest px-2 py-1 rounded-sm">
-                          <span className="font-label text-micro uppercase tracking-wider text-on-surface-variant">{key} </span>
-                          <span className="font-mono text-xs text-tertiary">{Math.round((value as number) * s)}</span>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                )}
-
-                {Object.keys(calculatedTotals.micros.minerals).length > 0 && (
-                  <div>
-                    <span className="font-label text-micro uppercase tracking-widest text-on-surface-variant">{t.recipeDetail.minerals}</span>
-                    <div className="flex flex-wrap gap-1.5 mt-1">
-                      {Object.entries(calculatedTotals.micros.minerals).map(([key, value]) => (
-                        <div key={key} className="bg-surface-container-highest px-2 py-1 rounded-sm">
-                          <span className="font-label text-micro uppercase tracking-wider text-on-surface-variant">{key} </span>
-                          <span className="font-mono text-xs text-tertiary">{Math.round((value as number) * s)}mg</span>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                )}
-              </div>
-            )}
-
-            {/* Goal Optimization */}
-            {goalSuggestions.length > 0 && (
-              <div className="bg-surface-container-low p-4 rounded-sm border border-outline-variant/20">
-                <div className="flex items-center gap-2 mb-3">
-                  <Target className="w-4 h-4 text-primary" />
-                  <Heading level="h4">{t.recipeDetail.goalOptimize}</Heading>
-                  <Badge variant="outline" className="text-primary border-primary/30 ml-auto">
-                    {userProfile?.goal === 'gain' || userProfile?.goal === 'muscle' ? (t.recipeDetail.goalBulk || 'Volumen') : (t.recipeDetail.goalCut || 'Definición')}
-                  </Badge>
-                </div>
-                <div className="space-y-2">
-                  {goalSuggestions.map((gs, i) => (
-                    <div key={i} className="bg-surface-container-highest p-3 rounded-sm border border-outline-variant/10 flex items-center gap-3">
-                      <div className="flex-1 min-w-0">
-                        {gs.type === 'add' && gs.ingredient && (
-                          <>
-                            <p className="text-tertiary font-headline font-bold text-micro">+ {gs.ingredient.name}</p>
-                            <p className="text-on-surface-variant text-micro mt-0.5">{gs.rationale}</p>
-                          </>
-                        )}
-                        {gs.type === 'swap' && gs.fromIngredient && gs.toIngredient && (
-                          <>
-                            <p className="text-tertiary font-headline font-bold text-micro">{gs.fromIngredient.name} → {gs.toIngredient.name}</p>
-                            <p className="text-on-surface-variant text-micro mt-0.5">{gs.rationale}</p>
-                          </>
-                        )}
-                      </div>
-                      <Button variant="outline" size="sm" onClick={() => {
-                        if (gs.type === 'add' && gs.ingredient) {
-                          const portion = gs.ingredient.servingSizes?.[0]?.grams || 30;
-                          setExtraIngredients(prev => [...prev, {
-                            id: `goal-${Date.now()}`,
-                            ingredientId: gs.ingredient!.id,
-                            ingredient: gs.ingredient,
-                            amount: portion,
-                            unit: gs.ingredient!.baseUnit,
-                          }]);
-                          toast.success(t.recipeDetail.ingredientAdded?.replace('{name}', gs.ingredient.name) || `${gs.ingredient.name} añadido`);
-                        } else if (gs.type === 'swap' && gs.fromIngredient && gs.toIngredient) {
-                          applySwap(gs.fromIngredient.id, gs.toIngredient);
-                        }
-                      }}>
-                        {gs.type === 'add' ? (t.recipeDetail.addForGoal?.replace('{cal}', String(gs.macroImpact.cal)) || `+${gs.macroImpact.cal} kcal`) : (t.recipeDetail.substitute)}
-                      </Button>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            )}
-          </TabsContent>
+          <RecipeNutritionTab
+            data={data}
+            calculatedTotals={calculatedTotals}
+            s={s}
+            goalSuggestions={goalSuggestions}
+            userProfile={userProfile}
+            setExtraIngredients={setExtraIngredients}
+            applySwap={applySwap}
+          />
         </Tabs>
 
         {/* ══ Community stats ══ */}
