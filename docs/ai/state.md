@@ -5,17 +5,17 @@
 > prunes this file back down. Everything below should answer: *what's the release line,
 > what's the quality baseline, what's the next move, what's broken?*
 
-Last updated: **2026-04-26** — `[1.5.127]` Phase 3.1 partial: RecipeDetail 1066 → 750 lines (-30%) via 5 detail components.
+Last updated: **2026-04-26** — `[1.5.129]` Phase 3.1 COMPLETE: RecipeDetail 1066 → 678 lines (-36%) via 7 detail components.
 
 ## Release snapshot
-- **Branch**: `main`, **17 commits ahead** of `rial-food/main` (not yet pushed).
-- **Last committed**: `[1.5.124-127]` Phase 3.1 RecipeDetail decomposition
-  (Steps, Nutrition, Overview, Ingredients, ServingsControls section components).
-  `[1.5.116-123]` Phase 2.5 complete (8 domain hooks, AppStateContext
-  1075 → 584 lines). `[1.5.114]` Phase 2.4 i18n domain split. `[1.5.113]`
-  sign-out localStorage clear + 13 SyncKey effects + ARCHITECTURE-INTERNALS.md.
-  `[1.5.112]` Phase 1 onboarding docs + Phase 2.1-2.3 (dev guard, orphan
-  relocations, gemini move).
+- **Branch**: `main`, **20 commits ahead** of `rial-food/main` (not yet pushed).
+- **Last committed**: `[1.5.124-129]` Phase 3.1 COMPLETE — 7 RecipeDetail
+  section components (Steps, Nutrition, Overview, Ingredients, Servings,
+  Hero, Modals). `[1.5.116-123]` Phase 2.5 complete (8 domain hooks,
+  AppStateContext 1075 → 584 lines). `[1.5.114]` Phase 2.4 i18n domain
+  split. `[1.5.113]` sign-out localStorage clear + 13 SyncKey effects +
+  ARCHITECTURE-INTERNALS.md. `[1.5.112]` Phase 1 onboarding docs +
+  Phase 2.1-2.3 (dev guard, orphan relocations, gemini move).
 - **Last pushed**: `[1.5.109]` chip/badge refinement · `[1.5.108]` Satoshi font.
 - **Previous**: `[1.5.103]` hooks sweep · `[1.5.102]` RecipeCard KS · `[1.5.101]` dead-code.
 - **Active plan**: sprints sellados. **Próximos**: Phase 2 Home, Q6-B recipe photos,
@@ -31,6 +31,7 @@ Last updated: **2026-04-26** — `[1.5.127]` Phase 3.1 partial: RecipeDetail 106
 - Design-system lint: **0 errors**, ~900 warnings (0 react-hooks errors)
 - Build main: size:check PASS — all budgets within limits.
 - **AppStateContext**: 1075 → 584 lines (-46%), composer of 8 domain hooks.
+- **RecipeDetail**: 1066 → 678 lines (-36%), composer of 7 detail components.
 - **CI status**: ✅ verde.
 - `calculateStreak` @deprecated: ✓ eliminado ([1.5.101]). FilterRow shim: ✓ deleted ([1.5.101]).
 - Security headers: HSTS + X-Frame-Options + nosniff + Permissions-Policy + Referrer-Policy + **CSP** ✓

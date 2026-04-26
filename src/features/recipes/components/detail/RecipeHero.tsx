@@ -101,13 +101,14 @@ export default function RecipeHero({
           doesn't expose responsive sizing or per-instance font swaps, so this
           stays raw with both lint rules disabled inline.
         */}
-        {/* eslint-disable-next-line no-restricted-syntax -- bespoke recipe hero with verified Fraunces serif inline override + responsive size; cannot use <Heading> primitive */}
+        {/* eslint-disable no-restricted-syntax -- bespoke recipe hero with verified Fraunces serif inline override + responsive size; cannot use <Heading> primitive */}
         <h2
           className="font-headline text-2xl md:text-3xl font-bold tracking-tighter leading-tight text-tertiary uppercase"
           style={isVerified ? { fontFamily: 'var(--font-serif)', textTransform: 'none' } : undefined}
         >
           {data.title}
         </h2>
+        {/* eslint-enable no-restricted-syntax */}
         {/* Classic time row — hidden for verified (replaced by TimeTileComposite below) */}
         {!isVerified && (
           <div className="flex items-center gap-3 mt-1.5 text-on-surface-variant text-label font-label uppercase tracking-widest">
