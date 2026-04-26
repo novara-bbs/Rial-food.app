@@ -5,16 +5,18 @@
 > prunes this file back down. Everything below should answer: *what's the release line,
 > what's the quality baseline, what's the next move, what's broken?*
 
-Last updated: **2026-04-26** — `[1.5.114]` i18n locale split into 10 domain modules.
+Last updated: **2026-04-26** — `[1.5.123]` Phase 2.5 complete: AppStateContext 1075 → 584 lines (-46%) via 8 domain hooks.
 
 ## Release snapshot
-- **Branch**: `main`, **3 commits ahead** of `rial-food/main` (not yet pushed).
-- **Last committed**: `[1.5.114]` Phase 2.4 i18n domain split (es.ts 2281 + en.ts 2225 →
-  22 files of 80-345 lines via codemod, 1917 keys symmetric). `[1.5.113]` sign-out
-  localStorage clear + 13 missing SyncKey effects + 4 i18n hardcoded fixes +
-  `docs/ARCHITECTURE-INTERNALS.md`. `[1.5.112]` Phase 1 (6 onboarding docs) +
-  Phase 2.1-2.3 (dev guard + 4 orphan relocations + gemini.ts move).
-- **Last pushed**: `[1.5.109]` chip/badge refinement · `[1.5.108]` Satoshi font · `[1.5.107]` scroll fix.
+- **Branch**: `main`, **12 commits ahead** of `rial-food/main` (not yet pushed).
+- **Last committed**: `[1.5.123]` Phase 2.5 final hook (useSocialState).
+  `[1.5.116-122]` 7 prior hook extractions (Profile, Vitals, UI transient,
+  Planner, Food, Recipe, Wellness). `[1.5.115]` ADR-015 plan.
+  `[1.5.114]` Phase 2.4 i18n domain split (codemod). `[1.5.113]` sign-out
+  localStorage clear + 13 SyncKey effects + ARCHITECTURE-INTERNALS.md.
+  `[1.5.112]` Phase 1 onboarding docs + Phase 2.1-2.3 (dev guard, orphan
+  relocations, gemini move).
+- **Last pushed**: `[1.5.109]` chip/badge refinement · `[1.5.108]` Satoshi font.
 - **Previous**: `[1.5.103]` hooks sweep · `[1.5.102]` RecipeCard KS · `[1.5.101]` dead-code.
 - **Active plan**: sprints sellados. **Próximos**: Phase 2 Home, Q6-B recipe photos,
   owner-actions Supabase prod env.
@@ -22,12 +24,13 @@ Last updated: **2026-04-26** — `[1.5.114]` i18n locale split into 10 domain mo
 - **Vercel project**: `rial.app.v1.5` (id `prj_t11VHYQjptazjUx7Y2hWLz0IDAjg`).
 - **Governance**: work directly on `main`. "continua" = push approval post green preflight.
 
-## Quality baseline (post-[1.5.109], 2026-04-26)
+## Quality baseline (post-[1.5.123], 2026-04-26)
 - TypeScript: **0 errors** (`npx tsc --noEmit`)
 - Tests: **1188/1188** passing (71 files)
-- i18n symmetry: **1913** keys aligned ES ↔ EN
-- Design-system lint: **0 errors**, **903 warnings** (0 react-hooks errors; allowlist 47 archivos)
+- i18n symmetry: **1917** keys aligned ES ↔ EN (post-[1.5.113] common.* additions)
+- Design-system lint: **0 errors**, ~900 warnings (0 react-hooks errors)
 - Build main: size:check PASS — all budgets within limits.
+- **AppStateContext**: 1075 → 584 lines (-46%), composer of 8 domain hooks.
 - **CI status**: ✅ verde.
 - `calculateStreak` @deprecated: ✓ eliminado ([1.5.101]). FilterRow shim: ✓ deleted ([1.5.101]).
 - Security headers: HSTS + X-Frame-Options + nosniff + Permissions-Policy + Referrer-Policy + **CSP** ✓
