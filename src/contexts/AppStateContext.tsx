@@ -773,7 +773,7 @@ export function AppStateProvider({ children }: { children: React.ReactNode }) {
     // Mark the Guided Setup "Explora una receta" step complete (Home.tsx reads this key).
     // useLocalStorageState prefixes with `rial_` — the reader on Home.tsx:250 checks `rial_recipeViewed`.
     try { window.localStorage.setItem('rial_recipeViewed', '1'); } catch { /* private mode */ }
-    navigateTo('recipe-detail');
+    navigateTo('recipe-detail', { recipeId: recipe.id });
   }, [navigateTo]);
 
   const handleLogMeal = useMemo(

@@ -53,7 +53,7 @@ export default function App() {
   const isOnline = useOnlineStatus();
   const { status: authStatus, isSupabaseEnabled } = useAuth();
   const [authScreen, setAuthScreen] = useState<'login' | 'signup' | 'forgot' | null>(null);
-  const { currentScreen, previousScreen, navigateTo } = useNavigation();
+  const { currentScreen, previousScreen, screenData, scrollYToRestore, navigateTo, registerScrollCapture } = useNavigation();
   const {
     isPro, showAIBot,
     isFirstTime, setIsFirstTime,
@@ -87,15 +87,20 @@ export default function App() {
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
   const [showConsent, setShowConsent] = useState(() => !hasGivenConsent());
 
-  // The single <main> never unmounts between screen changes, so scrollTop
-  // persists without this reset. useLayoutEffect runs before paint so there
-  // is no visible flash of the old position when entering a new screen.
-  // Scroll restoration on goBack requires intercepting navigateTo before the
-  // DOM swap — deferred to a future sprint (needs beforeNavigate hook in context).
+  // Native scroll management: forward nav → top, goBack → restore saved position.
+  // scrollCaptureRef is registered into NavigationContext so navigateTo() can
+  // read scrollTop synchronously before setHistory — the only reliable moment,
+  // since React swaps DOM children immediately after and may clamp scrollTop.
   const mainRef = useRef<HTMLElement>(null);
   useLayoutEffect(() => {
-    mainRef.current?.scrollTo({ top: 0, left: 0, behavior: 'instant' });
-  }, [currentScreen]);
+    registerScrollCapture(() => mainRef.current?.scrollTop ?? 0);
+    return () => registerScrollCapture(null);
+  }, [registerScrollCapture]);
+  // screenData in deps catches same-screen navigations (e.g. recipe-detail →
+  // recipe-detail with a different recipe) where currentScreen doesn't change.
+  useLayoutEffect(() => {
+    mainRef.current?.scrollTo({ top: scrollYToRestore, left: 0, behavior: 'instant' });
+  }, [currentScreen, screenData, scrollYToRestore]);
 
   const aiCoachMemory = useMemo(() => {
     const weekAgoDate = dateToLocal(new Date(Date.now() - 7 * 86_400_000));
