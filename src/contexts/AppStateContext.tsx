@@ -7,7 +7,7 @@ import { useDailyReset, DailyArchive } from '../hooks/useDailyReset';
 import { useNavigation } from './NavigationContext';
 import { createHandleLogMeal, createHandleLogMealNow, DailyLogEntry, FoodHistoryEntry } from '../features/food/handlers/meal-handlers';
 import { useI18n } from '../i18n';
-import { createHandleSaveRecipe, createHandleAddToPlan, createHandleCreateRecipeSubmit, createHandleImportRecipe, createHandleDeleteRecipe, createHandleDuplicateRecipe, createHandleMarkAsCooked } from '../features/recipes/handlers/recipe-handlers';
+// Recipe handler imports moved to useRecipeState (Phase 2.5).
 import { createHandleCreatePost, createHandleAddComment } from '../features/social/handlers/social-handlers';
 import { createHandlePublishStory, createHandleMarkStoryViewed } from '../features/social/handlers/story-handlers';
 import { createHandleFollowCreator } from '../features/social/handlers/creator-handlers';
@@ -25,8 +25,7 @@ import { createHandleShareProgress } from '../features/wellness/handlers/progres
 import { createHandleLoadDemoSeed, createHandleClearDemoSeed } from '../features/dev/handlers/demo-seed-handlers';
 import { shouldReseed, setStoredSeedVersion } from '../lib/seedVersion';
 import { IS_DEV } from '../config/env';
-import { getRecipeSlots } from '../features/recipes/utils/meal-slot';
-import { ingredientIdToFamilyVariant } from '../features/food/utils/food-family-resolver';
+// getRecipeSlots + ingredientIdToFamilyVariant moved to useRecipeState (Phase 2.5).
 import { logger } from '../lib/logger';
 import type { BodySnapshot } from '../types/wellness';
 import type { CommunityPost } from '../types/social';
@@ -37,6 +36,7 @@ import { useVitalsState, type DailyMacros } from './state/useVitalsState';
 import { useUITransientState } from './state/useUITransientState';
 import { usePlannerState } from './state/usePlannerState';
 import { useFoodState } from './state/useFoodState';
+import { useRecipeState } from './state/useRecipeState';
 import type { UserProfile } from '../types/user';
 import type { ShoppingItem } from '../types/planner';
 
@@ -288,76 +288,23 @@ export function AppStateProvider({ children }: { children: React.ReactNode }) {
   // write lands between `shouldReseed()` and the async `.then()`.
   // `.catch()` is added so a failed chunk (network flake, CDN edge issue)
   // surfaces in DevTools instead of disappearing silently.
-  const [savedRecipes, setSavedRecipes] = useLocalStorageState<any[]>('savedRecipes', []);
-  useEffect(() => {
-    if (!shouldReseed('savedRecipes', 'savedRecipes')) return;
-    import('../features/food/data/seed-recipes')
-      .then((m) => {
-        // preserve-user: keep user-created + imported recipes; replace the rest.
-        setSavedRecipes((prev: any[]) => {
-          if (prev.length === 0) return m.SEED_RECIPES;
-          const userOwned = prev.filter(
-            (r) => r && (r.publishedBy === 'self' || r.tag === 'IMPORTADA'),
-          );
-          const userIds = new Set(userOwned.map((r) => r.id));
-          const seedFresh = m.SEED_RECIPES.filter((r: any) => !userIds.has(r.id));
-          return [...userOwned, ...seedFresh];
-        });
-        setStoredSeedVersion('savedRecipes');
-      })
-      .catch((err) => logger.warn('seed.savedRecipes load failed', { err }));
-  }, [setSavedRecipes]);
-
-  // Q19 meal-taxonomy: one-shot idempotent migration. Normalises any surviving
-  // legacy `mealType` string into the canonical `suitableFor: MealSlot[]`
-  // shape so storage isn't hybrid forever. Idempotent — skips when every
-  // recipe already matches the target shape.
-  useEffect(() => {
-    setSavedRecipes((prev: any[]) => {
-      if (!prev.length) return prev;
-      const needsMigration = prev.some(
-        (r) => r && r.mealType && (!r.suitableFor || r.suitableFor.length === 0),
-      );
-      if (!needsMigration) return prev;
-      return prev.map((r) => {
-        if (!r || r.suitableFor?.length) return r;
-        const slots = getRecipeSlots(r);
-        if (!slots) return r;
-        const { mealType: _legacy, ...rest } = r;
-        return { ...rest, suitableFor: slots };
-      });
-    });
-  }, [setSavedRecipes]);
-
-  // P4.4 — RecipeIngredient hydration: for legacy `ingredientId`-only entries
-  // that lack `familyId`, populate `familyId` (and `variantId`) in memory so
-  // `resolveRecipeIngredient()` can resolve them via the new dual-schema path.
-  // This does NOT rewrite localStorage — it is an in-memory projection only.
-  // A future seedVersion bump + eager migration will persist the change.
-  // Idempotent: skips recipes where every ingredient already has `familyId`.
-  useEffect(() => {
-    setSavedRecipes((prev: any[]) => {
-      if (!prev.length) return prev;
-      const needsMigration = prev.some((r: any) =>
-        r?.recipeIngredients?.some((ri: any) => !ri.familyId && ri.ingredientId),
-      );
-      if (!needsMigration) return prev;
-      return prev.map((r: any) => {
-        if (!r?.recipeIngredients) return r;
-        const migratedRIs = r.recipeIngredients.map((ri: any) => {
-          if (ri.familyId || !ri.ingredientId) return ri;
-          const mapped = ingredientIdToFamilyVariant(ri.ingredientId);
-          if (!mapped) return ri;
-          return { ...ri, familyId: mapped.familyId, variantId: mapped.variantId };
-        });
-        return { ...r, recipeIngredients: migratedRIs };
-      });
-    });
-  }, [setSavedRecipes]);
-
   // Planner state — extracted to usePlannerState (Phase 2.5, ADR-015).
   // Owns mealPlan + shoppingList + their lazy seeds + 2 sync effects.
   const { mealPlan, setMealPlan, shoppingList, setShoppingList } = usePlannerState();
+
+  // Recipe state — extracted to useRecipeState (Phase 2.5).
+  // Owns savedRecipes + 2 migrations + 7 handlers + navigateToRecipe + sync.
+  const {
+    savedRecipes, setSavedRecipes,
+    navigateToRecipe,
+    handleSaveRecipe,
+    handleAddToPlan,
+    handleCreateRecipeSubmit,
+    handleDeleteRecipe,
+    handleMarkAsCooked,
+    handleDuplicateRecipe,
+    handleImportRecipe,
+  } = useRecipeState({ setMealPlan, setShoppingList, setSelectedRecipe, navigateTo, t });
 
   const [communityPosts, setCommunityPosts] = useLocalStorageState<any[]>('communityPosts', []);
   useEffect(() => {
@@ -571,15 +518,7 @@ export function AppStateProvider({ children }: { children: React.ReactNode }) {
   }, [authStatus, applyRemoteData]);
 
   // Push on change — no-op when Supabase is unconfigured or user not signed in.
-  // savedRecipes: skip when any recipe has a data-URL photo (Supabase row-size guard ~1 MB).
-  useEffect(() => {
-    const hasDataUrl = savedRecipes.some(
-      (r: any) =>
-        r?.photos?.some((p: string) => p?.startsWith('data:')) ||
-        r?.steps?.some((s: any) => s?.photoUrl?.startsWith('data:')),
-    );
-    if (!hasDataUrl) pushToCloud('savedRecipes', savedRecipes);
-  }, [savedRecipes]);
+  // savedRecipes sync (with data-URL guard) moved to useRecipeState (Phase 2.5).
   // userProfile sync moved to useProfileState (Phase 2.5).
   // dailyMacros, hydration, movement, dailyGoal sync moved to useVitalsState (Phase 2.5).
   // mealPlan + shoppingList sync moved to usePlannerState (Phase 2.5).
@@ -602,14 +541,7 @@ export function AppStateProvider({ children }: { children: React.ReactNode }) {
   // ──────────────────────────────────────────────────────────────────────────────
 
   // ─── Handlers (delegated to feature modules, memoized to prevent re-renders) ──
-
-  const navigateToRecipe = useCallback((recipe: any) => {
-    setSelectedRecipe(recipe);
-    // Mark the Guided Setup "Explora una receta" step complete (Home.tsx reads this key).
-    // useLocalStorageState prefixes with `rial_` — the reader on Home.tsx:250 checks `rial_recipeViewed`.
-    try { window.localStorage.setItem('rial_recipeViewed', '1'); } catch { /* private mode */ }
-    navigateTo('recipe-detail', { recipeId: recipe.id });
-  }, [navigateTo]);
+  // navigateToRecipe + 7 recipe handlers moved to useRecipeState (Phase 2.5).
 
   const handleLogMeal = useMemo(
     () => createHandleLogMeal({ targetPlanDay, setMealPlan, setShoppingList, setTargetPlanDay, setDailyMacros, setDailyLog, setFoodHistory, navigateTo, previousScreen, t }),
@@ -619,30 +551,9 @@ export function AppStateProvider({ children }: { children: React.ReactNode }) {
     () => createHandleLogMealNow({ setDailyMacros, setDailyLog, setFoodHistory, navigateTo, t }),
     [setDailyMacros, setDailyLog, setFoodHistory, navigateTo, t],
   );
-  const handleSaveRecipe = useMemo(
-    () => createHandleSaveRecipe({ setSavedRecipes, t }),
-    [setSavedRecipes, t],
-  );
-  const handleAddToPlan = useMemo(
-    () => createHandleAddToPlan({ setSavedRecipes, setMealPlan, setShoppingList, navigateTo, t }),
-    [setSavedRecipes, setMealPlan, setShoppingList, navigateTo, t],
-  );
-  const handleCreateRecipeSubmit = useMemo(
-    () => createHandleCreateRecipeSubmit({ setSavedRecipes, navigateTo, t }),
-    [setSavedRecipes, navigateTo, t],
-  );
-  const handleDeleteRecipe = useMemo(
-    () => createHandleDeleteRecipe({ setSavedRecipes, navigateTo, t }),
-    [setSavedRecipes, navigateTo, t],
-  );
-  const handleMarkAsCooked = useMemo(
-    () => createHandleMarkAsCooked({ setSavedRecipes, t }),
-    [setSavedRecipes, t],
-  );
-  const handleDuplicateRecipe = useMemo(
-    () => createHandleDuplicateRecipe({ setSavedRecipes, navigateTo, t }),
-    [setSavedRecipes, navigateTo, t],
-  );
+  // Recipe handlers (handleSaveRecipe, handleAddToPlan, handleCreateRecipeSubmit,
+  // handleDeleteRecipe, handleMarkAsCooked, handleDuplicateRecipe, handleImportRecipe)
+  // moved to useRecipeState (Phase 2.5).
   const handleLogWeight = useMemo(
     () => createHandleLogWeight({ setWeightHistory, setUserProfile }),
     [setWeightHistory, setUserProfile],
@@ -654,10 +565,6 @@ export function AppStateProvider({ children }: { children: React.ReactNode }) {
   const handleDeleteSnapshot = useMemo(
     () => createHandleDeleteSnapshot({ setWeightHistory, setUserProfile }),
     [setWeightHistory, setUserProfile],
-  );
-  const handleImportRecipe = useMemo(
-    () => createHandleImportRecipe({ setSavedRecipes, navigateTo, t }),
-    [setSavedRecipes, navigateTo, t],
   );
   // recipeToEdit moved to useUITransientState (Phase 2.5).
   // Ref getters so the social/story handlers always see the latest userProfile
