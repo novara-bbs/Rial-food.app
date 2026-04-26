@@ -5,39 +5,39 @@
 > prunes this file back down. Everything below should answer: *what's the release line,
 > what's the quality baseline, what's the next move, what's broken?*
 
-Last updated: **2026-04-26** — `[1.5.97]` **Global chip system polish** —
-nuevo primitive `ActiveFilterStrip` (canonical applied-filter feedback,
-delivery-app convention) + Cocina migra strip inline a primitive + Discovery
-estrena strip + `CollectionsCarousel` rewrite a `ChipRow emoji wrap`
-(erradicado anti-pattern icon-above-text en tiles editoriales) + `ChipRow
-variant="icon"` deprecado (sin consumidores live) + canonical chip style
-documentado + invariante G CI-enforced.
+Last updated: **2026-04-26** — `[1.5.98]` **Chip typography normalization +
+carousel UX** — chip font migrada de `font-label` (JetBrains Mono, monospace) a
+`font-headline` (Bricolage Grotesque, brand sans-serif); `uppercase
+tracking-widest font-bold` → `font-semibold normal-case tracking-normal`;
+CollectionsCarousel + meal slot chips: `wrap` eliminado → carrusel de fila
+única con scroll horizontal (Uber Eats/Glovo convention); FilterSheet Reset
+button tipografía normalizada; PRIMITIVES.md actualizado con canonical chip
+style table.
 
-Previo: `[1.5.96]` SortControl caloriesAsc · `[1.5.95]` Cocina UX (meal slot
-pill+wrap, active strip inline) · `[1.5.94]` Q16 codemod tipado · `[1.5.93]`
-Filter UX rework (ADR-014).
+Previo: `[1.5.97]` Global chip system polish (ActiveFilterStrip + Cocina/Discovery
++ CollectionsCarousel emoji rail + invariante G) · `[1.5.96]` caloriesAsc sort ·
+`[1.5.95]` Cocina UX (meal slot pill+wrap) · `[1.5.94]` Q16 codemod tipado.
 
 ## Release snapshot
 - **Branch**: worktree `claude/hardcore-solomon-9da39e`, ahead of `rial-food/main`.
-- **Last shipped**: `[1.5.97]` **Global chip system polish** — primitive
-  `ActiveFilterStrip` + Cocina/Discovery migration + CollectionsCarousel
-  emoji rail + ChipRow `variant="icon"` deprecated + invariante G. 11 archivos
-  (1 nuevo + 10 modificados). Bundle ~ -1 KB gzip neto (pierde Lucide imports
-  de Carousel; gana ~30 líneas de primitive).
-- **Previous**: `[1.5.96]` caloriesAsc sort en Cocina (3 archivos, 5 líneas).
-  `[1.5.95]` Cocina UX (meal slot → pill+wrap, active filter strip inline).
-  `[1.5.94]` Q16 codemod tipado. `[1.5.93]` Filter UX rework (ADR-014).
-  `[1.5.92]` Fase C lote 4 wellness. `[1.5.91]` Lote 3.5 sociales.
-- **Active plan**: `[1.5.97]` sealed. **Próximos**: Phase 2 Home, Q6-B
+- **Last shipped**: `[1.5.98]` **Chip typography + carousel** — 6 archivos
+  modificados. ChipRow/ActiveFilterStrip/FilterSheet: `font-headline font-semibold
+  normal-case tracking-normal` (elimina JetBrains Mono + uppercase en chips).
+  CollectionsCarousel + meal slots: `wrap` eliminado → single-row carousel.
+  PRIMITIVES.md: canonical chip style table.
+- **Previous**: `[1.5.97]` Global chip system polish (ActiveFilterStrip primitive
+  + Cocina/Discovery + CollectionsCarousel emoji rail + invariante G, 11 archivos).
+  `[1.5.96]` caloriesAsc. `[1.5.95]` Cocina UX. `[1.5.94]` Q16 codemod.
+- **Active plan**: `[1.5.98]` sealed. **Próximos**: Phase 2 Home, Q6-B
   recipe photos, owner-actions Supabase prod env.
 - **Release target**: `rial-food/main` (`novara-bbs/Rial-food.app`). Origin `rial-food`.
 - **Vercel project**: `rial.app.v1.5` (id `prj_t11VHYQjptazjUx7Y2hWLz0IDAjg`).
 - **Governance**: work directly on `main`. "continua" = push approval post green preflight.
 
-## Quality baseline (post-[1.5.97], 2026-04-26)
+## Quality baseline (post-[1.5.98], 2026-04-26)
 - TypeScript: **0 errors** (`npx tsc --noEmit`)
-- Tests: **1188** passing (+1 invariante G CI vs [1.5.96]).
-- i18n symmetry: **1913** keys aligned ES ↔ EN (+1 `t.filters.removeAriaLabel` vs [1.5.96]).
+- Tests: **1188** passing (sin cambios vs [1.5.97] — puramente visual).
+- i18n symmetry: **1913** keys aligned ES ↔ EN (sin cambios).
 - Design-system lint: **0 errors**, ~928 warnings (sin cambios).
 - Build main: size:check PASS — all budgets within limits.
 - Security headers: HSTS + X-Frame-Options + nosniff + Permissions-Policy + Referrer-Policy + **CSP** ✓
@@ -125,10 +125,11 @@ Fase 1+2 multi-media recipes, Food Families P0-P16, R1 docs, R2 recipes editoria
   primitives (ADR-012). Raw `<h1..h4>` banned in features outside allowlist.
 - Filter layer: one axis = one primitive (ADR-013). Source nav → `TabNav`,
   facets → `ChipRow` (single/multi, pill/emoji[/~~icon~~ deprecated since
-  [1.5.97]], default/danger, optional `wrap`), ordering → `SortControl`,
-  search → `SearchInput`, curated collections → `CollectionsCarousel`
-  (`ChipRow emoji wrap` wrapper since [1.5.97]). `FilterRow` is a
-  `@deprecated` shim.
+  [1.5.97]], default/danger; default layout single-row carousel, `wrap` opt-in),
+  ordering → `SortControl`, search → `SearchInput`, curated collections →
+  `CollectionsCarousel` (`ChipRow emoji` single-row carousel since [1.5.98]).
+  Chip font: Bricolage Grotesque `font-semibold normal-case` ([1.5.98]).
+  `FilterRow` is a `@deprecated` shim.
 - Advanced filter panel (ADR-014). 3+ facetas grouped → `FilterSheet` behind
   `FilterButton`. BottomSheet `size="focus"` + accordion sections + buffered draft +
   Apply/Reset. Applied-filter feedback → `ActiveFilterStrip` (canonical primitive

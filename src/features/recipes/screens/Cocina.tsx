@@ -359,14 +359,14 @@ export default function Cocina({ onAddMeal, onCreateRecipe, onNavigateToRecipe, 
               onReset={() => setFilterValues({})}
             />
 
-            {/* Meal-type slot — pill chips, single-select, wrap to 2 rows on mobile.
+            {/* Meal-type slot — pill chips, single-select, single-row scrollable.
                 Icons removed: Sunrise/Sun/Moon/Cookie don't add semantic value
                 over the text labels and made each tile tall (icon-above text-below).
-                pill+wrap fits all 5 options in two compact rows without scrolling. */}
+                Single-row carousel (no wrap) — Uber Eats / Glovo convention,
+                delivers clean horizontal scroll on mobile [1.5.98]. */}
             <ChipRow
               mode="single"
               variant="pill"
-              wrap
               options={mealCategories}
               active={activeMealType}
               onChange={(id) => setActiveMealType(id ?? 'all')}

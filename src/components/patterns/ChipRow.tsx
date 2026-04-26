@@ -171,7 +171,7 @@ export default function ChipRow(props: ChipRowProps) {
             aria-pressed={props.mode === 'multi' ? active : undefined}
             onClick={() => handleToggle(props, opt.id)}
             className={cn(
-              'shrink-0 px-4 py-2 rounded-full text-micro font-label font-bold uppercase tracking-widest transition-all',
+              'shrink-0 px-4 py-2 rounded-full text-micro font-headline font-semibold normal-case tracking-normal transition-all',
               active
                 ? tone === 'danger'
                   ? 'bg-error/15 text-error border border-error/30'

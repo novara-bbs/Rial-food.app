@@ -7,10 +7,12 @@
  *
  * Migration history:
  *   - Original: tall icon-above-text tiles (`min-w-[112px]`, Lucide icon stack).
- *   - [1.5.97]: ChipRow `variant="emoji"` `mode="single"` `wrap` — eliminates
+ *   - [1.5.97]: ChipRow `variant="emoji"` `mode="single"` — eliminates
  *     icon-above-text anti-pattern (delivery-app convention: emoji LEFT of
- *     label, single line, wrap to multiple rows). Editorial heroColor per
+ *     label, single-row scrollable carousel). Editorial heroColor per
  *     collection dropped for canonical chip uniformity (ADR-013).
+ *   - [1.5.98]: `wrap` removed → single-row horizontal scroll carousel
+ *     (Uber Eats / Glovo convention). Font: Bricolage Grotesque via ChipRow.
  *
  * Counts and predicates preserved end-to-end. Hidden when a collection's
  * predicate matches zero recipes (skip-empty behaviour identical to pre-1.5.97).
@@ -68,7 +70,6 @@ export default function CollectionsCarousel({
     <ChipRow
       variant="emoji"
       mode="single"
-      wrap
       active={activeCollection === 'all' ? null : activeCollection}
       onChange={(id) => onSelect(id ?? 'all')}
       options={options}

@@ -1,5 +1,70 @@
 # RIAL App - Changelog
 
+## [1.5.98] - 2026-04-26
+
+### feat(ds): chip typography normalization + carousel UX
+
+Sprint de calidad visual motivado por feedback del owner: "la letra de las chips
+es muy grande, que tengan la fuente bien normalizada igual que hemos hecho con
+headers; y en vez de un grid en los filtros de cocina, que sean en una fila como
+un carrusel; la letra en el filtro de Explora cuando se abre es otra font, revisa".
+
+#### Cambios tipográficos (3 primitives)
+
+**`ChipRow.tsx`** — canonical chip button typography:
+- Antes: `text-micro font-label font-bold uppercase tracking-widest` (JetBrains Mono, monospace, todo-caps, tracking ancho → visualmente muy pesado incluso a 10px)
+- Ahora: `text-micro font-headline font-semibold normal-case tracking-normal` (Bricolage Grotesque, brand variable sans-serif; misma talla pero aspecto drásticamente más limpio al eliminar uppercase + tracking-widest + monospace)
+- Alinea chips con el sistema tipográfico general del app (mismo principio que ADR-012 normalizó headings)
+- Referencia: Uber Eats / Glovo / Just Eat usan sans-serif normal-case para filter chips
+
+**`ActiveFilterStrip.tsx`** — mismo cambio en chip buttons + Reset link:
+- Chips: `text-xs font-headline font-semibold normal-case tracking-normal`
+- Reset link: `text-xs font-headline font-medium normal-case tracking-normal`
+
+**`FilterSheet.tsx`** — Reset button:
+- Antes: `font-label text-micro font-bold uppercase tracking-widest` (misma incoherencia que chips)
+- Ahora: `font-headline text-xs font-medium normal-case tracking-normal`
+- Resuelve la inconsistencia de font que el owner reportó al abrir el FilterSheet en Discovery
+
+#### Carousel UX (2 componentes)
+
+**`CollectionsCarousel.tsx`** — eliminado `wrap` de `ChipRow`:
+- Antes ([1.5.97]): `ChipRow emoji wrap` → múltiples filas (grid)
+- Ahora ([1.5.98]): `ChipRow emoji` → fila única con scroll horizontal (carrusel)
+- El comportamiento por defecto de `ChipRow` sin `wrap` es `overflow-x-auto hide-scrollbar` — exactamente el patrón "swipeable chip row" de Uber Eats
+
+**`Cocina.tsx`** — meal slot chips:
+- Antes ([1.5.95]): `variant="pill" wrap` → 2 filas (grid)
+- Ahora ([1.5.98]): `variant="pill"` → fila única carrusel
+- Las 5 opciones (Desayuno/Almuerzo/Comida/Merienda/Cena) visibles en scroll horizontal sin ocupar 2 filas
+
+#### Documentación
+
+**`docs/PRIMITIVES.md`**:
+- Nueva sección "Canonical chip style ([1.5.98])" — tabla de referencia con las clases exactas
+  para Active / Inactive / Applied-filter-strip
+- Rationale tipográfico documentado
+- Layout default ("carousel") vs `wrap` ("multi-row") clarificado
+- CollectionsCarousel description actualizado
+
+#### Archivos modificados (6)
+
+1. `src/components/patterns/ChipRow.tsx` — chip button className
+2. `src/components/patterns/ActiveFilterStrip.tsx` — chip + Reset link className
+3. `src/components/patterns/FilterSheet.tsx` — Reset button className
+4. `src/features/recipes/components/CollectionsCarousel.tsx` — `wrap` eliminado
+5. `src/features/recipes/screens/Cocina.tsx` — `wrap` eliminado de meal slots
+6. `docs/PRIMITIVES.md` — canonical chip style table + carousel layout docs
+
+#### Métricas
+
+- TS: 0 errores
+- Tests: 1188 passing (sin cambios — sprint puramente visual/CSS)
+- i18n: 1913 keys (sin cambios)
+- Bundle: sin cambios (sólo CSS class strings)
+
+---
+
 ## [1.5.97] - 2026-04-26
 
 ### feat(ds): global chip system polish — ActiveFilterStrip primitive + Collections emoji rail + ChipRow icon deprecated
