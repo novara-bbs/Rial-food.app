@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState, useMemo, useCallback, useEffect, useRef } from 'react';
+import React, { createContext, useContext, useMemo, useCallback, useEffect, useRef } from 'react';
 import { toast } from 'sonner';
 import { Recipe, DailyCheckIn as DailyCheckInType, Ingredient } from '../types';
 import type { FoodVariant } from '../types/food-family';
@@ -36,6 +36,7 @@ import { useProfileState } from './state/useProfileState';
 import { useVitalsState, type DailyMacros } from './state/useVitalsState';
 import { useUITransientState } from './state/useUITransientState';
 import { usePlannerState } from './state/usePlannerState';
+import { useFoodState } from './state/useFoodState';
 import type { UserProfile } from '../types/user';
 import type { ShoppingItem } from '../types/planner';
 
@@ -252,83 +253,19 @@ export function AppStateProvider({ children }: { children: React.ReactNode }) {
     checkInStatus, setCheckInStatus,
   } = useVitalsState();
 
-  // User-created / scanned foods
-  const [userFoods, setUserFoods] = useLocalStorageState<Ingredient[]>('userFoods', []);
-
-  const addUserFood = useCallback((food: Ingredient) => {
-    setUserFoods((prev: Ingredient[]) => {
-      // Avoid duplicates by id
-      if (prev.some(f => f.id === food.id)) return prev;
-      return [food, ...prev];
-    });
-    toast.success(t.mealToasts.foodSaved);
-  }, [setUserFoods, t]);
-
-  // User variants: brand/product FoodVariants stored under a FoodFamily.
-  // New localStorage key — no seedVersion bump (user-only data, no seed to merge).
-  const [userVariants, setUserVariants] = useLocalStorageState<FoodVariant[]>('userVariants', []);
-  const [userVariantBarcodes, setUserVariantBarcodes] = useLocalStorageState<Record<string, string>>('userVariantBarcodes', {});
-
-  const addUserVariant = useCallback((variant: FoodVariant) => {
-    setUserVariants((prev: FoodVariant[]) => {
-      if (prev.some(v => v.id === variant.id)) return prev;
-      return [variant, ...prev];
-    });
-    toast.success(t.mealToasts.foodSaved);
-  }, [setUserVariants, t]);
-
-  const updateUserVariant = useCallback((id: string, updates: Partial<Pick<FoodVariant, 'brand' | 'macros'>>) => {
-    setUserVariants((prev: FoodVariant[]) =>
-      prev.map(v => v.id === id ? { ...v, ...updates } : v),
-    );
-  }, [setUserVariants]);
-
-  const removeUserVariant = useCallback((id: string) => {
-    setUserVariants((prev: FoodVariant[]) => prev.filter(v => v.id !== id));
-    setUserVariantBarcodes((prev: Record<string, string>) => {
-      const next = { ...prev };
-      Object.keys(next).forEach(barcode => {
-        if (next[barcode] === id) delete next[barcode];
-      });
-      return next;
-    });
-  }, [setUserVariants, setUserVariantBarcodes]);
-
-  const addVariantBarcode = useCallback((barcode: string, variantId: string) => {
-    setUserVariantBarcodes((prev: Record<string, string>) => ({ ...prev, [barcode]: variantId }));
-  }, [setUserVariantBarcodes]);
-
-  // Ingredient dictionary (lazy-loaded to keep ~90KB out of the initial bundle)
-  const [baseDictionary, setBaseDictionary] = useState<Ingredient[]>([]);
-  useEffect(() => {
-    let cancelled = false;
-    import('../features/food/data/ingredients').then((m) => {
-      if (!cancelled) setBaseDictionary(m.INGREDIENT_DICTIONARY);
-    });
-    return () => { cancelled = true; };
-  }, []);
-
-  const mergedDictionary = useMemo(
-    () => [...baseDictionary, ...userFoods],
-    [baseDictionary, userFoods],
-  );
-
-  // Seed FoodVariants — lazy-loaded from food-variants.ts to keep them out of
-  // the initial bundle (same pattern as baseDictionary above).
-  const [baseFoodVariants, setBaseFoodVariants] = useState<FoodVariant[]>([]);
-  useEffect(() => {
-    let cancelled = false;
-    import('../features/food/data/food-variants').then((m) => {
-      if (!cancelled) setBaseFoodVariants(m.FOOD_VARIANTS as FoodVariant[]);
-    }).catch((err) => logger.warn('food-variants lazy load failed', { err }));
-    return () => { cancelled = true; };
-  }, []);
-
-  /** Unified variant pool used by matchFamilyForScan + searchFamilies (P5/P3). */
-  const mergedVariants = useMemo<FoodVariant[]>(
-    () => [...baseFoodVariants, ...userVariants],
-    [baseFoodVariants, userVariants],
-  );
+  // Food state — extracted to useFoodState (Phase 2.5, ADR-015).
+  // Owns userFoods, userVariants, userVariantBarcodes, dailyLog, foodHistory,
+  // favoriteIds + their wrapper callbacks + lazy-loaded dictionary/variants
+  // + 6 sync effects.
+  const {
+    userFoods, addUserFood,
+    userVariants, addUserVariant, updateUserVariant, removeUserVariant,
+    userVariantBarcodes, addVariantBarcode,
+    mergedDictionary, mergedVariants,
+    dailyLog, setDailyLog,
+    foodHistory, setFoodHistory,
+    favoriteIds, toggleFavorite, setFavoriteIds,
+  } = useFoodState({ t });
 
   // Seeded content — all lazy-loaded on first mount via `shouldReseed()`.
   // The presence-only guard used before meant bumps to a seed file never
@@ -588,18 +525,7 @@ export function AppStateProvider({ children }: { children: React.ReactNode }) {
       .catch((err) => logger.warn('seed.weeklyCheckIns load failed', { err }));
   }, []);
 
-  // Daily food diary log (persisted, cleared manually or on new day)
-  const [dailyLog, setDailyLog] = useLocalStorageState<DailyLogEntry[]>('dailyLog', []);
-
-  // Persistent food history & favorites (NOT reset daily)
-  const [foodHistory, setFoodHistory] = useLocalStorageState<FoodHistoryEntry[]>('foodHistory', []);
-  const [favoriteIds, setFavoriteIds] = useLocalStorageState<string[]>('favoriteIds', []);
-
-  const toggleFavorite = useCallback((foodId: string) => {
-    setFavoriteIds((prev: string[]) =>
-      prev.includes(foodId) ? prev.filter(id => id !== foodId) : [...prev, foodId]
-    );
-  }, [setFavoriteIds]);
+  // dailyLog, foodHistory, favoriteIds + toggleFavorite moved to useFoodState (Phase 2.5).
 
   // Reset daily counters when calendar date changes (midnight rollover)
   useDailyReset({ setDailyLog, setDailyMacros, setHydration, setMovement });
@@ -655,21 +581,18 @@ export function AppStateProvider({ children }: { children: React.ReactNode }) {
     if (!hasDataUrl) pushToCloud('savedRecipes', savedRecipes);
   }, [savedRecipes]);
   // userProfile sync moved to useProfileState (Phase 2.5).
-  // dailyMacros sync moved to useVitalsState (Phase 2.5).
+  // dailyMacros, hydration, movement, dailyGoal sync moved to useVitalsState (Phase 2.5).
+  // mealPlan + shoppingList sync moved to usePlannerState (Phase 2.5).
+  // userFoods, userVariants, userVariantBarcodes, dailyLog, foodHistory,
+  // favoriteIds sync moved to useFoodState (Phase 2.5).
   // mealPlan + shoppingList sync moved to usePlannerState (Phase 2.5).
   useEffect(() => { pushToCloud('realFeelLogs', realFeelLogs); }, [realFeelLogs]);
   useEffect(() => { pushToCloud('toleranceLogs', toleranceLogs); }, [toleranceLogs]);
   useEffect(() => { pushToCloud('weightHistory', weightHistory); }, [weightHistory]);
   useEffect(() => { pushToCloud('nutritionHistory', nutritionHistory); }, [nutritionHistory]);
-  // isPro sync moved to useProfileState (Phase 2.5).
-  useEffect(() => { pushToCloud('dailyLog', dailyLog); }, [dailyLog]);
-  useEffect(() => { pushToCloud('foodHistory', foodHistory); }, [foodHistory]);
-  useEffect(() => { pushToCloud('favoriteIds', favoriteIds); }, [favoriteIds]);
-  // hydration / movement / dailyGoal sync moved to useVitalsState (Phase 2.5).
-  // isFirstTime sync moved to useProfileState (Phase 2.5).
-  useEffect(() => { pushToCloud('userFoods', userFoods); }, [userFoods]);
-  useEffect(() => { pushToCloud('userVariants', userVariants); }, [userVariants]);
-  useEffect(() => { pushToCloud('userVariantBarcodes', userVariantBarcodes); }, [userVariantBarcodes]);
+  // isPro, isFirstTime sync moved to useProfileState (Phase 2.5).
+  // dailyLog, foodHistory, favoriteIds, userFoods, userVariants,
+  // userVariantBarcodes sync moved to useFoodState (Phase 2.5).
   useEffect(() => { pushToCloud('likedPosts', likedPosts); }, [likedPosts]);
   useEffect(() => { pushToCloud('savedPosts', savedPosts); }, [savedPosts]);
   useEffect(() => { pushToCloud('followedCreators', followedCreators); }, [followedCreators]);
