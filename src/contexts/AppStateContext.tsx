@@ -19,9 +19,8 @@ import {
   type ChallengeProgress,
 } from '../features/social/handlers/challenge-handlers';
 import type { Story, StorySlide, Notification as NotificationType } from '../types/social';
-import { createHandleAddToleranceLog, createHandleRealFeelLog, createHandleCheckIn, createHandleCompleteCheckIn } from '../features/wellness/handlers/wellness-handlers';
-import { createHandleLogWeight, createHandleUpdateSnapshot, createHandleDeleteSnapshot, type LogWeightArgs } from '../features/wellness/handlers/weight-handlers';
-import { createHandleShareProgress } from '../features/wellness/handlers/progress-share-handlers';
+// Wellness handler imports moved to useWellnessState (Phase 2.5).
+import type { LogWeightArgs } from '../features/wellness/handlers/weight-handlers';
 import { createHandleLoadDemoSeed, createHandleClearDemoSeed } from '../features/dev/handlers/demo-seed-handlers';
 import { shouldReseed, setStoredSeedVersion } from '../lib/seedVersion';
 import { IS_DEV } from '../config/env';
@@ -37,6 +36,7 @@ import { useUITransientState } from './state/useUITransientState';
 import { usePlannerState } from './state/usePlannerState';
 import { useFoodState } from './state/useFoodState';
 import { useRecipeState } from './state/useRecipeState';
+import { useWellnessState } from './state/useWellnessState';
 import type { UserProfile } from '../types/user';
 import type { ShoppingItem } from '../types/planner';
 
@@ -350,21 +350,7 @@ export function AppStateProvider({ children }: { children: React.ReactNode }) {
     });
   }, [setSavedPosts, setCommunityPosts]);
 
-  const [toleranceLogs, setToleranceLogs] = useLocalStorageState<any[]>('toleranceLogs', []);
-  useEffect(() => {
-    if (!shouldReseed('toleranceLogs', 'toleranceLogs')) return;
-    import('../features/wellness/data/seed-tolerance')
-      .then((m) => {
-        // preserve-if-nonempty: a user's tolerance journal is their record.
-        setToleranceLogs((prev: any[]) =>
-          prev.length === 0 ? m.SEED_TOLERANCE_LOGS : prev,
-        );
-        setStoredSeedVersion('toleranceLogs');
-      })
-      .catch((err) => logger.warn('seed.toleranceLogs load failed', { err }));
-  }, [setToleranceLogs]);
-
-  const [realFeelLogs, setRealFeelLogs] = useLocalStorageState<any[]>('realFeelLogs', []);
+  // toleranceLogs + realFeelLogs moved to useWellnessState (Phase 2.5).
 
   // Stories — lazy-seeded
   const [communityStories, setCommunityStories] = useLocalStorageState<Story[]>('communityStories', []);
@@ -403,74 +389,25 @@ export function AppStateProvider({ children }: { children: React.ReactNode }) {
   const [challengeJoinDates, setChallengeJoinDates] = useLocalStorageState<Record<string, string>>('challengeJoinDates', {});
   const [challengeProgress, setChallengeProgress] = useLocalStorageState<Record<string, ChallengeProgress>>('challengeProgress', {});
 
-  // Weight & nutrition history (persistent across days)
-  const [weightHistory, setWeightHistory] = useLocalStorageState<BodySnapshot[]>('weightHistory', []);
-  const [nutritionHistory, setNutritionHistory] = useLocalStorageState<DailyArchive[]>('nutritionHistory', []);
-
-  // Weight history — lazy-seeded
-  useEffect(() => {
-    if (!shouldReseed('weightHistory', 'weightHistory')) return;
-    import('../features/wellness/data/seed-body-snapshots')
-      .then((m) => {
-        // preserve-if-nonempty: user's weight history is their record.
-        setWeightHistory((prev: BodySnapshot[]) =>
-          prev.length === 0 ? m.BODY_SNAPSHOT_SEED : prev,
-        );
-        setStoredSeedVersion('weightHistory');
-      })
-      .catch((err) => logger.warn('seed.weightHistory load failed', { err }));
-  }, [setWeightHistory]);
-
-  // Nutrition history — lazy-seeded
-  useEffect(() => {
-    if (!shouldReseed('nutritionHistory', 'nutritionHistory')) return;
-    import('../features/wellness/data/seed-nutrition-history')
-      .then((m) => {
-        // preserve-if-nonempty: user's daily archive is their record.
-        setNutritionHistory((prev: DailyArchive[]) =>
-          prev.length === 0 ? m.SEED_NUTRITION_HISTORY : prev,
-        );
-        setStoredSeedVersion('nutritionHistory');
-      })
-      .catch((err) => logger.warn('seed.nutritionHistory load failed', { err }));
-  }, [setNutritionHistory]);
-
-  // RealFeel logs — lazy-seeded
-  useEffect(() => {
-    if (!shouldReseed('realFeelLogs', 'realFeelLogs')) return;
-    import('../features/wellness/data/seed-real-feel-logs')
-      .then((m) => {
-        // preserve-if-nonempty: user's mood/feel journal is their record.
-        setRealFeelLogs((prev: any[]) =>
-          prev.length === 0 ? m.SEED_REAL_FEEL_LOGS : prev,
-        );
-        setStoredSeedVersion('realFeelLogs');
-      })
-      .catch((err) => logger.warn('seed.realFeelLogs load failed', { err }));
-  }, [setRealFeelLogs]);
-
-  // Weekly check-ins — lazy-seeded. Writes directly to localStorage because
-  // WeeklyCheckIn screen owns its own `useLocalStorageState('weeklyCheckIns')`;
-  // we just pre-populate the slot before the screen mounts.
-  useEffect(() => {
-    if (!shouldReseed('weeklyCheckIns', 'weeklyCheckIns')) return;
-    import('../features/wellness/data/seed-weekly-checkins')
-      .then((m) => {
-        // preserve-if-nonempty: only seed if no check-ins exist yet. We can't
-        // use a React setter here, so read-then-write with JSON.parse guard.
-        try {
-          const raw = window.localStorage.getItem('weeklyCheckIns');
-          const existing = raw ? JSON.parse(raw) : [];
-          if (!Array.isArray(existing) || existing.length === 0) {
-            window.localStorage.setItem('weeklyCheckIns', JSON.stringify(m.SEED_WEEKLY_CHECKINS));
-          }
-        } catch {
-          window.localStorage.setItem('weeklyCheckIns', JSON.stringify(m.SEED_WEEKLY_CHECKINS));
-        }
-        setStoredSeedVersion('weeklyCheckIns');
-      })
-      .catch((err) => logger.warn('seed.weeklyCheckIns load failed', { err }));
-  }, []);
+  // Wellness state — extracted to useWellnessState (Phase 2.5).
+  // Owns toleranceLogs, realFeelLogs, weightHistory, nutritionHistory + 4 lazy
+  // seeds + weeklyCheckIns seed + 4 sync effects + 8 handlers.
+  const {
+    toleranceLogs, setToleranceLogs,
+    realFeelLogs, setRealFeelLogs,
+    weightHistory, setWeightHistory,
+    nutritionHistory, setNutritionHistory,
+    handleLogWeight, handleUpdateSnapshot, handleDeleteSnapshot,
+    handleAddToleranceLog, handleRealFeelLog,
+    handleCheckIn, handleCompleteCheckIn,
+    handleShareProgress,
+  } = useWellnessState({
+    setUserProfile,
+    setCheckInStatus,
+    setCommunityPosts,
+    dailyLog,
+    navigateTo,
+  });
 
   // dailyLog, foodHistory, favoriteIds + toggleFavorite moved to useFoodState (Phase 2.5).
 
@@ -525,10 +462,7 @@ export function AppStateProvider({ children }: { children: React.ReactNode }) {
   // userFoods, userVariants, userVariantBarcodes, dailyLog, foodHistory,
   // favoriteIds sync moved to useFoodState (Phase 2.5).
   // mealPlan + shoppingList sync moved to usePlannerState (Phase 2.5).
-  useEffect(() => { pushToCloud('realFeelLogs', realFeelLogs); }, [realFeelLogs]);
-  useEffect(() => { pushToCloud('toleranceLogs', toleranceLogs); }, [toleranceLogs]);
-  useEffect(() => { pushToCloud('weightHistory', weightHistory); }, [weightHistory]);
-  useEffect(() => { pushToCloud('nutritionHistory', nutritionHistory); }, [nutritionHistory]);
+  // realFeelLogs, toleranceLogs, weightHistory, nutritionHistory sync moved to useWellnessState (Phase 2.5).
   // isPro, isFirstTime sync moved to useProfileState (Phase 2.5).
   // dailyLog, foodHistory, favoriteIds, userFoods, userVariants,
   // userVariantBarcodes sync moved to useFoodState (Phase 2.5).
@@ -551,21 +485,10 @@ export function AppStateProvider({ children }: { children: React.ReactNode }) {
     () => createHandleLogMealNow({ setDailyMacros, setDailyLog, setFoodHistory, navigateTo, t }),
     [setDailyMacros, setDailyLog, setFoodHistory, navigateTo, t],
   );
-  // Recipe handlers (handleSaveRecipe, handleAddToPlan, handleCreateRecipeSubmit,
-  // handleDeleteRecipe, handleMarkAsCooked, handleDuplicateRecipe, handleImportRecipe)
-  // moved to useRecipeState (Phase 2.5).
-  const handleLogWeight = useMemo(
-    () => createHandleLogWeight({ setWeightHistory, setUserProfile }),
-    [setWeightHistory, setUserProfile],
-  );
-  const handleUpdateSnapshot = useMemo(
-    () => createHandleUpdateSnapshot({ setWeightHistory }),
-    [setWeightHistory],
-  );
-  const handleDeleteSnapshot = useMemo(
-    () => createHandleDeleteSnapshot({ setWeightHistory, setUserProfile }),
-    [setWeightHistory, setUserProfile],
-  );
+  // Recipe handlers moved to useRecipeState (Phase 2.5).
+  // Wellness handlers (logWeight, updateSnapshot, deleteSnapshot,
+  // addToleranceLog, realFeelLog, checkIn, completeCheckIn, shareProgress)
+  // moved to useWellnessState (Phase 2.5).
   // recipeToEdit moved to useUITransientState (Phase 2.5).
   // Ref getters so the social/story handlers always see the latest userProfile
   // and translation table without invalidating their identity every render.
@@ -632,26 +555,8 @@ export function AppStateProvider({ children }: { children: React.ReactNode }) {
     }),
     [handleJoinChallenge, handleLeaveChallenge],
   );
-  const handleAddToleranceLog = useMemo(
-    () => createHandleAddToleranceLog({ setToleranceLogs, navigateTo }),
-    [setToleranceLogs, navigateTo],
-  );
-  const handleRealFeelLog = useMemo(
-    () => createHandleRealFeelLog({ setRealFeelLogs, getDailyLog: () => dailyLog }),
-    [setRealFeelLogs, dailyLog],
-  );
-  const handleCheckIn = useMemo(
-    () => createHandleCheckIn({ setCheckInStatus, navigateTo }),
-    [setCheckInStatus, navigateTo],
-  );
-  const handleCompleteCheckIn = useMemo(
-    () => createHandleCompleteCheckIn({ setCheckInStatus, navigateTo }),
-    [setCheckInStatus, navigateTo],
-  );
-  const handleShareProgress = useMemo(
-    () => createHandleShareProgress({ setCommunityPosts }),
-    [setCommunityPosts],
-  );
+  // Wellness handlers (addToleranceLog, realFeelLog, checkIn, completeCheckIn,
+  // shareProgress) moved to useWellnessState (Phase 2.5).
   const handleLoadDemoSeed = useMemo(
     () => IS_DEV ? createHandleLoadDemoSeed({
       setUserProfile,
