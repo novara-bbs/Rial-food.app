@@ -34,6 +34,7 @@ import { useAuth } from './AuthContext';
 import { syncOnSignIn, pushToCloud } from '../lib/sync';
 import { useProfileState } from './state/useProfileState';
 import { useVitalsState, type DailyMacros } from './state/useVitalsState';
+import { useUITransientState } from './state/useUITransientState';
 import type { UserProfile } from '../types/user';
 
 // ─── Types ───────────────────────────────────────────────────────────────────
@@ -214,13 +215,19 @@ export function AppStateProvider({ children }: { children: React.ReactNode }) {
   const { navigateTo, previousScreen } = useNavigation();
   const { t } = useI18n();
 
-  // UI state (not persisted)
-  const [selectedRecipe, setSelectedRecipe] = useState<Recipe | null>(null);
-  const [targetPlanDay, setTargetPlanDay] = useState<number | null>(null);
-  const [openScannerOnAddMeal, setOpenScannerOnAddMeal] = useState<boolean>(false);
-  const [selectedStoryAuthorId, setSelectedStoryAuthorId] = useState<string | null>(null);
-  const [selectedCreatorId, setSelectedCreatorId] = useState<string | null>(null);
-  const [selectedPostId, setSelectedPostId] = useState<number | null>(null);
+  // UI transient state (not persisted) — extracted to useUITransientState (Phase 2.5).
+  // Includes selectedChallengeId + recipeToEdit (previously declared further down).
+  const {
+    selectedRecipe, setSelectedRecipe,
+    selectedCreatorId, setSelectedCreatorId,
+    selectedPostId, setSelectedPostId,
+    selectedStoryAuthorId, setSelectedStoryAuthorId,
+    selectedChallengeId, setSelectedChallengeId,
+    targetPlanDay, setTargetPlanDay,
+    openScannerOnAddMeal, setOpenScannerOnAddMeal,
+    recipeToEdit, setRecipeToEdit,
+  } = useUITransientState();
+
   const [likedPosts, setLikedPosts] = useLocalStorageState<number[]>('likedPosts', []);
   const [savedPosts, setSavedPosts] = useLocalStorageState<number[]>('savedPosts', []);
 
@@ -526,8 +533,7 @@ export function AppStateProvider({ children }: { children: React.ReactNode }) {
     );
   }, [setNotifications]);
 
-  // Challenge detail
-  const [selectedChallengeId, setSelectedChallengeId] = useState<string | null>(null);
+  // selectedChallengeId moved to useUITransientState (Phase 2.5).
 
   // Social graph + challenge persistence — single writer via factory handler.
   // Prior to Wave 3 these were declared inline in each screen
@@ -758,7 +764,7 @@ export function AppStateProvider({ children }: { children: React.ReactNode }) {
     () => createHandleImportRecipe({ setSavedRecipes, navigateTo, t }),
     [setSavedRecipes, navigateTo, t],
   );
-  const [recipeToEdit, setRecipeToEdit] = useState<any>(null);
+  // recipeToEdit moved to useUITransientState (Phase 2.5).
   // Ref getters so the social/story handlers always see the latest userProfile
   // and translation table without invalidating their identity every render.
   const userProfileRef = useRef(userProfile);
