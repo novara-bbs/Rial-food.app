@@ -5,18 +5,22 @@
 > prunes this file back down. Everything below should answer: *what's the release line,
 > what's the quality baseline, what's the next move, what's broken?*
 
-Last updated: **2026-04-26** — `[1.5.129]` Phase 3.1 COMPLETE: RecipeDetail 1066 → 678 lines (-36%) via 7 detail components.
+Last updated: **2026-04-26** — `[1.5.133]` Sprint 1 safety nets COMPLETE: 79 hook tests + 55 component tests + TESTING-PATTERNS.md cookbook.
 
 ## Release snapshot
-- **Branch**: `main`, **20 commits ahead** of `rial-food/main` (not yet pushed).
-- **Last committed**: `[1.5.124-129]` Phase 3.1 COMPLETE — 7 RecipeDetail
-  section components (Steps, Nutrition, Overview, Ingredients, Servings,
-  Hero, Modals). `[1.5.116-123]` Phase 2.5 complete (8 domain hooks,
-  AppStateContext 1075 → 584 lines). `[1.5.114]` Phase 2.4 i18n domain
-  split. `[1.5.113]` sign-out localStorage clear + 13 SyncKey effects +
-  ARCHITECTURE-INTERNALS.md. `[1.5.112]` Phase 1 onboarding docs +
-  Phase 2.1-2.3 (dev guard, orphan relocations, gemini move).
-- **Last pushed**: `[1.5.109]` chip/badge refinement · `[1.5.108]` Satoshi font.
+- **Branch**: `main`, **synced** with `rial-food/main` at `d871d95`.
+- **Last shipped (5 PRs merged in one session 2026-04-26)**:
+    - **PR #10** `[1.5.112-130]` — Structural cleanup: Phase 2.4 (i18n
+      split via codemod) + Phase 2.5 (8 domain hooks, AppStateContext
+      1075 → 584) + Phase 3.1 (7 RecipeDetail components, 1066 → 678).
+    - **PR #11** `[1.5.115]` — ROADMAP-2026.md strategic plan.
+    - **PR #12** `[1.5.131-132]` — Sprint 1 hook tests: 79 unit tests
+      across 8 files. Locks the contracts of every state hook.
+    - **PR #13** `[1.5.133]` — Sprint 1 component tests: 55 unit tests
+      across 7 files + new `renderWithProviders` helper.
+    - **PR #14** `[1.5.133b]` — TESTING-PATTERNS.md cookbook (200+ lines)
+      capturing the patterns for future contributors.
+- **Previous**: `[1.5.109]` chip/badge refinement · `[1.5.108]` Satoshi font.
 - **Previous**: `[1.5.103]` hooks sweep · `[1.5.102]` RecipeCard KS · `[1.5.101]` dead-code.
 - **Active plan**: sprints sellados. **Próximos**: Phase 2 Home, Q6-B recipe photos,
   owner-actions Supabase prod env.
@@ -24,14 +28,16 @@ Last updated: **2026-04-26** — `[1.5.129]` Phase 3.1 COMPLETE: RecipeDetail 10
 - **Vercel project**: `rial.app.v1.5` (id `prj_t11VHYQjptazjUx7Y2hWLz0IDAjg`).
 - **Governance**: work directly on `main`. "continua" = push approval post green preflight.
 
-## Quality baseline (post-[1.5.123], 2026-04-26)
+## Quality baseline (post-Sprint 1, 2026-04-26)
 - TypeScript: **0 errors** (`npx tsc --noEmit`)
-- Tests: **1188/1188** passing (71 files)
-- i18n symmetry: **1917** keys aligned ES ↔ EN (post-[1.5.113] common.* additions)
-- Design-system lint: **0 errors**, ~900 warnings (0 react-hooks errors)
+- Tests: **1316/1316** passing (86 files; +145 tests this session)
+- i18n symmetry: **1917** keys aligned ES ↔ EN
+- Design-system lint: **0 errors**, ~876 warnings (0 react-hooks errors)
 - Build main: size:check PASS — all budgets within limits.
 - **AppStateContext**: 1075 → 584 lines (-46%), composer of 8 domain hooks.
 - **RecipeDetail**: 1066 → 678 lines (-36%), composer of 7 detail components.
+- **i18n locales**: 4506 → 22 domain files via codemod.
+- **Test coverage** (new artifacts): 8/8 hooks + 7/7 detail components.
 - **CI status**: ✅ verde.
 - `calculateStreak` @deprecated: ✓ eliminado ([1.5.101]). FilterRow shim: ✓ deleted ([1.5.101]).
 - Security headers: HSTS + X-Frame-Options + nosniff + Permissions-Policy + Referrer-Policy + **CSP** ✓
