@@ -12,6 +12,7 @@ import PostCard from '../components/PostCard';
 import StoryRingsRow from '../components/StoryRingsRow';
 import { rankFeed, getFollowingFeed, getTrendingFeed } from '../utils/feed-algorithm';
 import type { CommunityPost } from '../../../types/social';
+import type { Recipe } from '../../../types';
 
 type FeedMode = 'forYou' | 'following' | 'trending';
 
@@ -89,7 +90,7 @@ export default function Community({ communityPosts = [], onAddComment }: { commu
       onNavigateToPost={() => { setSelectedPostId(post.id); navigateTo('post-detail'); }}
       onNavigateToRecipe={(recipe) => {
         const full = savedRecipes.find((r) => String(r.id) === String(recipe.id));
-        navigateToRecipe(full || { ...recipe, macros: { calories: recipe.cal, protein: recipe.pro, carbs: recipe.carbs, fats: recipe.fats } });
+        navigateToRecipe(full || { ...recipe, macros: { calories: recipe.cal, protein: recipe.pro, carbs: recipe.carbs, fats: recipe.fats } } as unknown as Recipe);
       }}
     />
   );

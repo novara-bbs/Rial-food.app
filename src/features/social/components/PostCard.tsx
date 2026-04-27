@@ -24,7 +24,7 @@ interface PostCardProps {
   onComment?: (text: string) => void;
   onNavigateToProfile?: (authorId: string) => void;
   onNavigateToPost?: () => void;
-  onNavigateToRecipe?: (recipe: any) => void;
+  onNavigateToRecipe?: (recipe: NonNullable<CommunityPost['recipe']>) => void;
 }
 
 export default function PostCard({

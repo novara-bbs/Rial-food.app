@@ -1,4 +1,5 @@
 import { Search, ChefHat } from 'lucide-react';
+import type { Recipe } from '../../../types';
 import { useState, useMemo } from 'react';
 import BottomSheet from '@/components/ui/bottom-sheet';
 import { useI18n } from '../../../i18n';
@@ -7,7 +8,7 @@ import { Heading } from '@/components/ui/Typography';
 interface RecipePickerProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
-  recipes: any[];
+  recipes: Recipe[];
   onSelect: (recipe: { id: string; title: string; cal: number; pro: number; carbs: number; fats: number; time: string; img: string; tag: string }) => void;
 }
 
@@ -18,7 +19,7 @@ export default function RecipePicker({ open, onOpenChange, recipes, onSelect }: 
   const filtered = useMemo(() => {
     if (!search.trim()) return recipes.slice(0, 20);
     const q = search.toLowerCase();
-    return recipes.filter((r: any) => r.title?.toLowerCase().includes(q)).slice(0, 20);
+    return recipes.filter((r) => r.title?.toLowerCase().includes(q)).slice(0, 20);
   }, [recipes, search]);
 
   return (
@@ -44,20 +45,20 @@ export default function RecipePicker({ open, onOpenChange, recipes, onSelect }: 
           {filtered.length === 0 ? (
             <p className="text-center text-caption text-on-surface-variant py-8">{t.createPost.noRecipesFound}</p>
           ) : (
-            filtered.map((recipe: any) => (
+            filtered.map((recipe) => (
               <button
                 type="button"
                 key={recipe.id}
                 onClick={() => onSelect({
                   id: String(recipe.id),
                   title: recipe.title,
-                  cal: recipe.macros?.calories || recipe.cal || 0,
-                  pro: recipe.macros?.protein || recipe.pro || 0,
-                  carbs: recipe.macros?.carbs || recipe.carbs || 0,
-                  fats: recipe.macros?.fats || recipe.fats || 0,
-                  time: recipe.prepTime ? `${recipe.prepTime + (recipe.cookTime || 0)}M` : '—',
-                  img: recipe.img || recipe.image || '',
-                  tag: recipe.tags?.[0] || recipe.category || '',
+                  cal: recipe.macros?.calories ?? 0,
+                  pro: recipe.macros?.protein ?? 0,
+                  carbs: recipe.macros?.carbs ?? 0,
+                  fats: recipe.macros?.fats ?? 0,
+                  time: recipe.prepTime || '—',
+                  img: recipe.image ?? recipe.img ?? '',
+                  tag: recipe.tags?.[0] ?? '',
                 })}
                 className="w-full min-h-11 flex items-center gap-3 p-3 bg-background border border-outline-variant/20 rounded-sm hover:border-primary/50 transition-colors text-left"
               >
@@ -67,8 +68,8 @@ export default function RecipePicker({ open, onOpenChange, recipes, onSelect }: 
                 <div className="flex-1 min-w-0">
                   <Heading level="h4" className="text-caption truncate">{recipe.title}</Heading>
                   <div className="flex gap-2 mt-1">
-                    <span className="font-label text-micro tracking-widest text-primary">{recipe.macros?.calories || recipe.cal || 0} kcal</span>
-                    <span className="font-label text-micro tracking-widest text-on-surface-variant">{recipe.macros?.protein || recipe.pro || 0}g P</span>
+                    <span className="font-label text-micro tracking-widest text-primary">{recipe.macros?.calories ?? 0} kcal</span>
+                    <span className="font-label text-micro tracking-widest text-on-surface-variant">{recipe.macros?.protein ?? 0}g P</span>
                   </div>
                 </div>
               </button>

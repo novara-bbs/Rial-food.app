@@ -10,6 +10,7 @@ import PostCard from '../components/PostCard';
 import PageHeader from '../../../components/patterns/PageHeader';
 import { Heading } from '@/components/ui/Typography';
 import type { PostComment } from '../../../types/social';
+import type { Recipe } from '../../../types';
 
 export default function PostDetail({ onBack }: { onBack: () => void }) {
   const { t } = useI18n();
@@ -72,7 +73,7 @@ export default function PostDetail({ onBack }: { onBack: () => void }) {
         }}
         onNavigateToRecipe={(recipe) => {
           const full = savedRecipes.find((r) => String(r.id) === String(recipe.id));
-          navigateToRecipe(full || { ...recipe, macros: { calories: recipe.cal, protein: recipe.pro, carbs: recipe.carbs, fats: recipe.fats } });
+          navigateToRecipe(full || { ...recipe, macros: { calories: recipe.cal, protein: recipe.pro, carbs: recipe.carbs, fats: recipe.fats } } as unknown as Recipe);
         }}
       />
 

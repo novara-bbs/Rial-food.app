@@ -1,4 +1,5 @@
 import { Send, Globe } from 'lucide-react';
+import type { Recipe } from '../../../types';
 import { useState } from 'react';
 import { toast } from 'sonner';
 import { useI18n } from '../../../i18n';
@@ -7,7 +8,7 @@ import BottomSheet from '../../../components/ui/bottom-sheet';
 import { Heading } from '@/components/ui/Typography';
 
 interface PublishRecipeSheetProps {
-  recipe: any;
+  recipe: Recipe;
   onClose: () => void;
 }
 
@@ -20,13 +21,13 @@ export default function PublishRecipeSheet({ recipe, onClose }: PublishRecipeShe
     const recipePayload = {
       id: String(recipe.id),
       title: recipe.title,
-      cal: recipe.macros?.calories || recipe.cal || 0,
-      pro: recipe.macros?.protein || recipe.pro || 0,
-      carbs: recipe.macros?.carbs || recipe.carbs || 0,
-      fats: recipe.macros?.fats || recipe.fats || 0,
-      time: recipe.prepTime ? `${recipe.prepTime + (recipe.cookTime || 0)}M` : '—',
-      img: recipe.img || recipe.image || '',
-      tag: recipe.tags?.[0] || recipe.category || '',
+      cal: recipe.macros?.calories ?? 0,
+      pro: recipe.macros?.protein ?? 0,
+      carbs: recipe.macros?.carbs ?? 0,
+      fats: recipe.macros?.fats ?? 0,
+      time: recipe.prepTime || '—',
+      img: recipe.image ?? recipe.img ?? '',
+      tag: recipe.tags?.[0] ?? '',
     };
     handleCreatePost(
       caption || `${recipe.title}`,
@@ -67,10 +68,10 @@ export default function PublishRecipeSheet({ recipe, onClose }: PublishRecipeShe
             <Heading level="h4" className="text-caption">{recipe.title}</Heading>
             <div className="flex gap-2 mt-1">
               <span className="font-label text-micro tracking-widest text-primary">
-                {recipe.macros?.calories || recipe.cal || 0} kcal
+                {recipe.macros?.calories ?? 0} kcal
               </span>
               <span className="font-label text-micro tracking-widest text-on-surface-variant">
-                {recipe.macros?.protein || recipe.pro || 0}g P
+                {recipe.macros?.protein ?? 0}g P
               </span>
             </div>
           </div>
