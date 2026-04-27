@@ -1,5 +1,11 @@
 import { useEffect, useRef } from 'react';
 import { todayLocal, dateToLocal } from '../lib/dates';
+import type { DailyLogEntry } from '../features/food/handlers/meal-handlers';
+import type { DailyMacros } from '../contexts/state/useVitalsState';
+
+type Setter<T> = (fn: T | ((prev: T) => T)) => void;
+type HydrationState = { consumed: number; target: number };
+type MovementState = { steps: number; target: number; activeMinutes: number; activeTarget: number };
 
 /**
  * Archives the previous day's data to nutritionHistory, then resets
@@ -22,7 +28,8 @@ export interface DailyArchive {
   /** Pre-Q15: plain number (activeMinutes). Q15+: { activeMinutes, steps }. */
   movement: number | MovementSnapshot;
   mealCount: number;
-  dailyLog: any[];
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  dailyLog: any[]; // legacy archive format — entries may predate DailyLogEntry interface
   /** True when the user actively tracked something that day. */
   tracked?: boolean;
 }
@@ -56,10 +63,10 @@ export function archiveActiveMinutes(h: DailyArchive): number {
 }
 
 interface DailyResetDeps {
-  setDailyLog: (fn: any) => void;
-  setDailyMacros: (fn: any) => void;
-  setHydration: (fn: any) => void;
-  setMovement: (fn: any) => void;
+  setDailyLog: (items: DailyLogEntry[]) => void;
+  setDailyMacros: Setter<DailyMacros>;
+  setHydration: Setter<HydrationState>;
+  setMovement: Setter<MovementState>;
 }
 
 function archivePreviousDay(previousDate: string) {
@@ -127,12 +134,12 @@ export function useDailyReset({ setDailyLog, setDailyMacros, setHydration, setMo
       archivePreviousDay(last);
 
       setDailyLog([]);
-      setDailyMacros((prev: any) => ({
+      setDailyMacros((prev) => ({
         ...prev,
         consumed: { cal: 0, pro: 0, carbs: 0, fats: 0 },
       }));
-      setHydration((prev: any) => ({ ...prev, consumed: 0 }));
-      setMovement((prev: any) => ({ ...prev, steps: 0, activeMinutes: 0 }));
+      setHydration((prev) => ({ ...prev, consumed: 0 }));
+      setMovement((prev) => ({ ...prev, steps: 0, activeMinutes: 0 }));
 
       hasReset.current = true;
     }

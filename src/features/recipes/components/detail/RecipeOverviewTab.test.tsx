@@ -10,6 +10,7 @@ import { screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { renderWithProviders } from '@/test/helpers/renderWithProviders';
 import RecipeOverviewTab from './RecipeOverviewTab';
+import type { UserProfile } from '@/types/user';
 
 function RefHarness({ children }: { children: (ref: React.RefObject<HTMLDivElement | null>) => React.ReactNode }) {
   const ref = useRef<HTMLDivElement | null>(null);
@@ -24,7 +25,7 @@ function makeProps(overrides: Partial<React.ComponentProps<typeof RecipeOverview
     matchScore: 85,
     swapSuggestions: [],
     applySwap: vi.fn(),
-    userProfile: { goal: 'maintain', foodPreferences: {}, intolerances: [] },
+    userProfile: { goal: 'maintain', foodPreferences: {}, intolerances: [] } as unknown as UserProfile,
     isPro: false,
     cookedCount: 0,
     servings: 4,

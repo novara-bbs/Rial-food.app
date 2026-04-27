@@ -7,6 +7,15 @@ import { useLocalStorageState } from '../../../hooks/useLocalStorageState';
 import PageHeader from '../../../components/patterns/PageHeader';
 import { Heading } from '@/components/ui/Typography';
 
+interface FastingEntry {
+  id: number;
+  protocol: string;
+  start: string;
+  end: string;
+  durationMs: number;
+  completed: boolean;
+}
+
 const PROTOCOLS = [
   { id: '16:8', label: '16:8', fastHours: 16, eatHours: 8 },
   { id: '18:6', label: '18:6', fastHours: 18, eatHours: 6 },
@@ -18,7 +27,7 @@ export default function FastingTimer({ onBack }: { onBack: () => void }) {
   const { t } = useI18n();
   const [protocol, setProtocol] = useLocalStorageState('fasting-protocol', PROTOCOLS[0]);
   const [fastingStart, setFastingStart] = useLocalStorageState<number | null>('fasting-start', null);
-  const [fastingHistory, setFastingHistory] = useLocalStorageState<any[]>('fasting-history', []);
+  const [fastingHistory, setFastingHistory] = useLocalStorageState<FastingEntry[]>('fasting-history', []);
   const [now, setNow] = useState(Date.now());
 
   useEffect(() => {
@@ -160,7 +169,7 @@ export default function FastingTimer({ onBack }: { onBack: () => void }) {
           </div>
         ) : (
           <div className="space-y-2">
-            {fastingHistory.slice(0, 10).map((h: any) => (
+            {fastingHistory.slice(0, 10).map((h) => (
               <SectionCard key={h.id} padding="none" spacing="none" className="flex items-center gap-4 p-3">
                 {h.completed ? <CheckCircle2 className="w-5 h-5 text-primary shrink-0" /> : <StopCircle className="w-5 h-5 text-on-surface-variant/50 shrink-0" />}
                 <div className="flex-1">

@@ -20,7 +20,7 @@ export default function CreateStory({ onBack }: { onBack: () => void }) {
   const [textContent, setTextContent] = useState('');
   const [bgColor, setBgColor] = useState(COLORS[0]);
   const [image, setImage] = useState<string | null>(null);
-  const [selectedRecipe, setSelectedRecipe] = useState<any>(null);
+  const [selectedRecipe, setSelectedRecipe] = useState<{ id: string; title: string; cal: number; pro: number; img: string } | null>(null);
   const [showRecipePicker, setShowRecipePicker] = useState(false);
 
   const userPerformance = { recovery: 82, strain: 14.5 };
@@ -44,7 +44,7 @@ export default function CreateStory({ onBack }: { onBack: () => void }) {
         slide = { id: `slide-${Date.now()}`, type: 'performance', performance: userPerformance };
         break;
       case 'recipe':
-        slide = { id: `slide-${Date.now()}`, type: 'recipe', recipe: selectedRecipe };
+        slide = { id: `slide-${Date.now()}`, type: 'recipe', recipe: selectedRecipe ?? undefined };
         break;
       case 'image':
         slide = { id: `slide-${Date.now()}`, type: 'image', image: image! };

@@ -9,8 +9,11 @@ import ConfirmDialog from '../../../components/ConfirmDialog';
 import ChipRow from '../../../components/patterns/ChipRow';
 import { useLocalStorageState } from '../../../hooks/useLocalStorageState';
 import { aggregateShoppingItems, groupShoppingItems, formatShoppingListForShare, detectCategory, AISLE_CATEGORIES, markPantryItems, PantryItem } from '../utils/grocery';
+import type { ShoppingItem } from '../../../types/planner';
 
-export default function ShoppingList({ onBack, shoppingList = [], setShoppingList, onNavigateToPlan }: { onBack?: () => void, shoppingList?: any[], setShoppingList?: any, onNavigateToPlan?: () => void }) {
+type Setter<T> = (fn: T | ((prev: T) => T)) => void;
+
+export default function ShoppingList({ onBack, shoppingList = [], setShoppingList, onNavigateToPlan }: { onBack?: () => void, shoppingList?: ShoppingItem[], setShoppingList?: Setter<ShoppingItem[]>, onNavigateToPlan?: () => void }) {
   const { t } = useI18n();
   const [isAdding, setIsAdding] = useState(false);
   const [newItemName, setNewItemName] = useState('');
@@ -19,12 +22,12 @@ export default function ShoppingList({ onBack, shoppingList = [], setShoppingLis
 
   const toggleItem = (id: number) => {
     if (!setShoppingList) return;
-    setShoppingList(shoppingList.map((item: any) => item.id === id ? { ...item, checked: !item.checked } : item));
+    setShoppingList(shoppingList.map((item) => item.id === id ? { ...item, checked: !item.checked } : item));
   };
 
   const clearCompleted = () => {
     if (!setShoppingList) return;
-    setShoppingList(shoppingList.filter((item: any) => !item.checked));
+    setShoppingList(shoppingList.filter((item) => !item.checked));
     toast.success(t.shopping.completedCleared);
   };
 
@@ -193,8 +196,8 @@ export default function ShoppingList({ onBack, shoppingList = [], setShoppingLis
                 <span className="text-micro font-black opacity-40">{unchecked.length}/{items.length}</span>
               </h3>
               <div className="space-y-2">
-                {[...unchecked, ...checked].map((item: any) => {
-                  const inPantry: boolean = item.inPantry ?? false;
+                {[...unchecked, ...checked].map((item) => {
+                  const inPantry: boolean = (item as ShoppingItem & { inPantry?: boolean }).inPantry ?? false;
                   return (
                   <button type="button"
                     key={item.id}

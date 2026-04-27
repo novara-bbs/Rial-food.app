@@ -7,6 +7,7 @@
  * Sunday-start week, matching `calcWeekMacros` semantics.
  */
 import type { DailyArchive } from '../../../hooks/useDailyReset';
+import type { DailyLogEntry } from '../../food/handlers/meal-handlers';
 
 export interface TopMeal {
   name: string;
@@ -34,7 +35,7 @@ function weekStartISO(now: Date): string {
  */
 export function calcTopMeals(
   history: DailyArchive[],
-  dailyLog: any[],
+  dailyLog: DailyLogEntry[],
   now: Date = new Date(),
   windowDays: number = 0,
   limit: number = 3,
@@ -60,8 +61,7 @@ export function calcTopMeals(
     }
   }
   for (const entry of (dailyLog || [])) {
-    const name = (entry as any).title || (entry as any).name;
-    bump(name, (entry as any).macros?.cal || 0);
+    bump(entry.title, entry.macros.cal);
   }
 
   return Object.values(counts)

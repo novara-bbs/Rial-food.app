@@ -1,17 +1,12 @@
 import type { BodySnapshot, BodyMeasurements } from '../../../types/wellness';
+import type { UserProfile } from '../../../types/user';
 import { todayLocal } from '../../../lib/dates';
 
 // ─── Types ───────────────────────────────────────────────────────────────────
 
-interface UserProfile {
-  weight?: number;
-  [key: string]: any;
-}
-
 interface WeightHandlerDeps {
   setWeightHistory: (fn: (prev: BodySnapshot[]) => BodySnapshot[]) => void;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  setUserProfile: (fn: (prev: any) => any) => void;
+  setUserProfile: (fn: (prev: UserProfile) => UserProfile) => void;
 }
 
 export interface LogWeightArgs {
@@ -52,7 +47,7 @@ export function createHandleLogWeight({ setWeightHistory, setUserProfile }: Weig
       return [...filtered, entry];
     });
     // Keep profile.weight as a fast-read cache of latest weight
-    setUserProfile((prev: UserProfile) => ({ ...prev, weight: kg }));
+    setUserProfile((prev) => ({ ...prev, weight: kg }));
     return { replaced };
   };
 }
@@ -73,7 +68,7 @@ export function createHandleDeleteSnapshot({ setWeightHistory, setUserProfile }:
       const sorted = [...prev].sort((a, b) => b.date.localeCompare(a.date));
       const latest = sorted[0];
       if (latest && latest.kg > 0) {
-        setUserProfile((u: UserProfile) => ({ ...u, weight: latest.kg }));
+        setUserProfile((u) => ({ ...u, weight: latest.kg }));
       }
       return prev; // no change to history this pass
     });

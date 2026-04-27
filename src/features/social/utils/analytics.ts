@@ -1,3 +1,5 @@
+import type { Recipe } from '../../../types';
+
 /**
  * Track recipe view count.
  */
@@ -25,7 +27,7 @@ export function trackRecipeSave(recipeId: string) {
 /**
  * Get aggregate analytics for a creator's recipes.
  */
-export function getCreatorAnalytics(recipes: any[]): { totalViews: number; totalSaves: number; topRecipes: { id: string; title: string; views: number }[] } {
+export function getCreatorAnalytics(recipes: Recipe[]): { totalViews: number; totalSaves: number; topRecipes: { id: string; title: string; views: number }[] } {
   const raw = localStorage.getItem('recipeAnalytics');
   const analytics: Record<string, { views: number; saves: number; likes: number }> = raw ? JSON.parse(raw) : {};
 

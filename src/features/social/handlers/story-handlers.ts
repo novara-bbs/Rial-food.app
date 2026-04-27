@@ -37,7 +37,7 @@ export function createHandlePublishStory(deps: {
   };
 }
 
-export function createHandleMarkStoryViewed(deps: { setCommunityStories: (fn: any) => void }) {
+export function createHandleMarkStoryViewed(deps: { setCommunityStories: (fn: Story[] | ((prev: Story[]) => Story[])) => void }) {
   return (storyId: string) => {
     deps.setCommunityStories((prev: Story[]) =>
       prev.map(s => s.id === storyId && !s.viewedBy.includes('self')

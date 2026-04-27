@@ -5,6 +5,7 @@ import { useI18n } from '../../../i18n';
 import PageHeader from '../../../components/patterns/PageHeader';
 import { Heading } from '@/components/ui/Typography';
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export default function AddTolerance({ onBack, onAddLog }: { onBack: () => void, onAddLog?: (log: any) => void }) {
   const { t } = useI18n();
   const [selectedIngredient, setSelectedIngredient] = useState<string | null>(null);

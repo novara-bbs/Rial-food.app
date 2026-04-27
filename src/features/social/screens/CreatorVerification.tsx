@@ -30,7 +30,7 @@ export default function CreatorVerification({ onBack }: { onBack: () => void }) 
   const [submitted, setSubmitted] = useState(false);
 
   const recipesCount = savedRecipes.length;
-  const postsCount = communityPosts.filter((p: any) => p.author?.name !== undefined).length;
+  const postsCount = communityPosts.filter((p) => p.author?.name !== undefined).length;
 
   // Compute real metrics from available data.
   // `followedCreators` now comes from AppStateContext (Wave 3) instead of a raw

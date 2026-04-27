@@ -6,14 +6,17 @@ import { useAppState } from '../../../contexts/AppStateContext';
 import ImagePicker from '../components/ImagePicker';
 import RecipePicker from '../components/RecipePicker';
 import PageHeader from '../../../components/patterns/PageHeader';
+/** Compact recipe summary passed from RecipePicker to the post composer. */
+type PickedRecipe = { id: string; title: string; cal: number; pro: number; carbs: number; fats: number; time: string; img: string; tag: string };
+type PostPerformance = { recovery: number; strain: number };
 
-export default function CreatePost({ onBack, onCreatePost }: { onBack: () => void, onCreatePost?: (content: string, performance?: any, options?: { images?: string[]; recipe?: any; hashtags?: string[] }) => void }) {
+export default function CreatePost({ onBack, onCreatePost }: { onBack: () => void, onCreatePost?: (content: string, performance?: PostPerformance, options?: { images?: string[]; recipe?: PickedRecipe; hashtags?: string[] }) => void }) {
   const { t } = useI18n();
   const { savedRecipes } = useAppState();
   const [content, setContent] = useState('');
   const [attachPerformance, setAttachPerformance] = useState(false);
   const [image, setImage] = useState<string | null>(null);
-  const [attachedRecipe, setAttachedRecipe] = useState<any>(null);
+  const [attachedRecipe, setAttachedRecipe] = useState<PickedRecipe | null>(null);
   const [showRecipePicker, setShowRecipePicker] = useState(false);
   const userPerformance = { recovery: 82, strain: 14.5 };
 
@@ -23,7 +26,7 @@ export default function CreatePost({ onBack, onCreatePost }: { onBack: () => voi
       attachPerformance ? userPerformance : undefined,
       {
         images: image ? [image] : [],
-        recipe: attachedRecipe,
+        recipe: attachedRecipe ?? undefined,
       }
     );
   };

@@ -14,6 +14,7 @@ export default function DailyCheckIn({
 }: {
   initialStatus: string | null;
   onBack: () => void;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   onComplete?: (data: any) => void;
   presentation?: 'sheet' | 'route';
 }) {

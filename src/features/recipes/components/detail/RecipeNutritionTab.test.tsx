@@ -8,6 +8,7 @@ import { screen } from '@testing-library/react';
 import { renderWithProviders } from '@/test/helpers/renderWithProviders';
 import RecipeNutritionTab from './RecipeNutritionTab';
 import type { Micronutrients } from '@/types';
+import type { UserProfile } from '@/types/user';
 
 const emptyMicros: Micronutrients = { vitamins: {}, minerals: {}, others: {} };
 
@@ -24,7 +25,7 @@ const baseProps = {
   calculatedTotals: baseTotals,
   s: 1,
   goalSuggestions: [],
-  userProfile: { goal: 'maintain' },
+  userProfile: { goal: 'maintain' } as unknown as UserProfile,
   setExtraIngredients: vi.fn(),
   applySwap: vi.fn(),
 };
@@ -103,7 +104,7 @@ describe('RecipeNutritionTab — goal optimization section gating', () => {
       { type: 'add', ingredient: { id: 'whey', name: 'Whey', baseUnit: 'g', servingSizes: [{ grams: 30 }] }, rationale: 'Boost protein', macroImpact: { cal: 120 } },
     ];
     renderWithProviders(
-      <RecipeNutritionTab {...baseProps} goalSuggestions={goalSuggestions} userProfile={{ goal: 'muscle' }} />,
+      <RecipeNutritionTab {...baseProps} goalSuggestions={goalSuggestions} userProfile={{ goal: 'muscle' } as unknown as UserProfile} />,
       { inTabs: { defaultValue: 'nutrition' } },
     );
     expect(screen.getByText(/optimize|optimizar/i)).toBeTruthy();
