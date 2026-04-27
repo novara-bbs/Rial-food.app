@@ -6,33 +6,35 @@ import { TrendingUp, TrendingDown, Minus, Zap, Leaf, Brain, UtensilsCrossed, Tra
 import ConfirmDialog from '../../../components/ConfirmDialog';
 import EmptyState from '../../../components/EmptyState';
 import { useI18n } from '../../../i18n';
+import type { Translations } from '../../../i18n';
 import { useAppState } from '../../../contexts/AppStateContext';
+import type { StoredRealFeelEntry } from '../../../types/wellness';
 import { getCorrelations, getFoodInsights } from '../utils/correlations';
 import { AreaChart, Area, XAxis, YAxis, ResponsiveContainer, Tooltip } from 'recharts';
 import PageHeader from '../../../components/patterns/PageHeader';
 
 const EMOJI_MAP = ['😴', '😕', '😐', '😊', '💪'];
 
-function getEnergyLabels(t: any): Record<string, string> {
+function getEnergyLabels(t: Translations): Record<string, string> {
   return { high: `⚡ ${t.realFeel.signals.energyHigh}`, stable: `〰 ${t.realFeel.signals.energyStable}`, low: `🔋 ${t.realFeel.signals.energyLow}` };
 }
-function getDigestionLabels(t: any): Record<string, string> {
+function getDigestionLabels(t: Translations): Record<string, string> {
   return { clean: `✅ ${t.realFeel.signals.digestionClean}`, sensitive: `⚠ ${t.realFeel.signals.digestionSensitive}`, bloated: `❌ ${t.realFeel.signals.digestionBloated}` };
 }
-function getMindsetLabels(t: any): Record<string, string> {
+function getMindsetLabels(t: Translations): Record<string, string> {
   return { calm: `🧘 ${t.realFeel.signals.mindsetCalm}`, balanced: `⚖ ${t.realFeel.signals.mindsetBalanced}`, stressed: `😤 ${t.realFeel.signals.mindsetStressed}` };
 }
 
-function calculateRealScore(logs: any[]): number {
+function calculateRealScore(logs: StoredRealFeelEntry[]): number {
   if (!logs.length) return 0;
-  const valid = logs.slice(0, 14).filter((l: any) => l.level != null && l.level >= 1);
+  const valid = logs.slice(0, 14).filter((l) => l.level != null && l.level >= 1);
   if (valid.length === 0) return 0;
-  const avg = valid.reduce((sum: number, l: any) => sum + l.level, 0) / valid.length;
+  const avg = valid.reduce((sum, l) => sum + l.level, 0) / valid.length;
   return Math.round((avg / 5) * 100);
 }
 
 // Derive "Daily Realities" insight cards from log history
-function getDailyRealities(logs: any[], t: any) {
+function getDailyRealities(logs: StoredRealFeelEntry[], t: Translations) {
   if (logs.length < 3) return [];
   const realities = [];
   const recent = logs.slice(0, 7);
@@ -71,7 +73,7 @@ function getDailyRealities(logs: any[], t: any) {
 }
 
 // Derive weekly signal patterns
-function getWeeklyPatterns(logs: any[]) {
+function getWeeklyPatterns(logs: StoredRealFeelEntry[]) {
   if (logs.length < 5) return null;
   const recent = logs.slice(0, 7);
 
@@ -92,10 +94,10 @@ function getWeeklyPatterns(logs: any[]) {
   };
 }
 
-export default function RealFeelDiary({ realFeelLogs = [], onBack }: { realFeelLogs: any[]; onBack: () => void }) {
+export default function RealFeelDiary({ realFeelLogs = [], onBack }: { realFeelLogs: StoredRealFeelEntry[]; onBack: () => void }) {
   const { t } = useI18n();
   const { dictionary, setRealFeelLogs } = useAppState();
-  const [pendingDeleteLog, setPendingDeleteLog] = useState<any>(null);
+  const [pendingDeleteLog, setPendingDeleteLog] = useState<StoredRealFeelEntry | null>(null);
   const ENERGY_LABELS = getEnergyLabels(t);
   const DIGESTION_LABELS = getDigestionLabels(t);
   const MINDSET_LABELS = getMindsetLabels(t);
@@ -126,7 +128,7 @@ export default function RealFeelDiary({ realFeelLogs = [], onBack }: { realFeelL
           <div className="mt-4 h-32">
             <ResponsiveContainer width="100%" height="100%">
               <AreaChart data={
-                [...realFeelLogs].reverse().slice(-14).map((l: any) => ({
+                [...realFeelLogs].reverse().slice(-14).map((l) => ({
                   name: new Date(l.date).toLocaleDateString(undefined, { weekday: 'short' }),
                   score: ((l.level ?? 3) / 5) * 100,
                 }))
@@ -266,7 +268,7 @@ export default function RealFeelDiary({ realFeelLogs = [], onBack }: { realFeelL
       <div>
         <Heading level="h2" variant="overline" className="mb-4">{t.realFeel.timeline}</Heading>
         <div className="space-y-2">
-          {realFeelLogs.slice(0, 20).map((log: any, i: number) => (
+          {realFeelLogs.slice(0, 20).map((log, i) => (
             <SectionCard key={log.id || i} padding="none" spacing="none" className="flex items-start gap-4 p-3">
               <span className="text-2xl shrink-0">{EMOJI_MAP[(log.level ?? 3) - 1]}</span>
               <div className="flex-1 min-w-0">
@@ -326,7 +328,7 @@ export default function RealFeelDiary({ realFeelLogs = [], onBack }: { realFeelL
         variant="destructive"
         onConfirm={() => {
           if (pendingDeleteLog) {
-            setRealFeelLogs((prev: any[]) => prev.filter((l: any) => (l.id || l.date) !== (pendingDeleteLog.id || pendingDeleteLog.date)));
+            setRealFeelLogs((prev) => prev.filter((l) => (l.id || l.date) !== (pendingDeleteLog.id || pendingDeleteLog.date)));
             setPendingDeleteLog(null);
           }
         }}

@@ -4,19 +4,33 @@ import SectionCard from '../../../components/SectionCard';
 import { useI18n } from '../../../i18n';
 import type { DailyLogEntry } from '../../food/handlers/meal-handlers';
 import type { FoodVariant } from '../../../types/food-family';
+import type { Recipe, LoggableMeal } from '../../../types';
+import type { DailyMacros } from '../../../contexts/state/useVitalsState';
+
+type Setter<T> = (fn: T | ((prev: T) => T)) => void;
+
+/** Runtime meal-plan entry passed from mealPlan[today]; carries planner fields beyond Recipe. */
+type PlannedMeal = Recipe & {
+  executionStatus?: string;
+  /** @deprecated Legacy; prefer macros.calories */ cal?: number;
+  /** @deprecated Legacy; prefer macros.protein */  pro?: number;
+  /** @deprecated Legacy; prefer Recipe.image */    img?: string;
+  time?: string;
+  type?: string;
+};
 import ContextualScoreChip from '../../food/components/ContextualScoreChip';
 import { normalizeGoal } from '../../food/utils/contextual-score';
 import { variantFromLogEntry } from '../../food/utils/variant-from-log';
 
 interface TodaysMealsProps {
   dailyLog: DailyLogEntry[];
-  todaysMeals: any[];
-  onLogMealNow?: (recipe: any, servings: number) => void;
+  todaysMeals: PlannedMeal[];
+  onLogMealNow?: (meal: LoggableMeal, servings: number) => void;
   onNavigateToPlan?: () => void;
   onAddMeal: () => void;
-  setDailyLog?: (fn: any) => void;
-  setDailyMacros?: (fn: any) => void;
-  onNavigateToRecipe?: (recipe: any) => void;
+  setDailyLog?: Setter<DailyLogEntry[]>;
+  setDailyMacros?: Setter<DailyMacros>;
+  onNavigateToRecipe?: (recipe: Recipe) => void;
   /** P13 [1.5.71] — pool of known variants for contextual score resolution. */
   mergedVariants?: readonly FoodVariant[];
   /** P13 [1.5.71] — raw user goal string; normalised for grade selection. */
@@ -61,7 +75,7 @@ export default function TodaysMeals({
       } : e),
     );
 
-    setDailyMacros((prev: any) => ({
+    setDailyMacros((prev) => ({
       ...prev,
       consumed: {
         cal: Math.max(0, prev.consumed.cal + (newMacros.cal - original.macros.cal)),
@@ -78,13 +92,13 @@ export default function TodaysMeals({
     if (!setDailyLog) return;
     setDailyLog((prev: DailyLogEntry[]) => prev.filter(e => e.id !== entry.id));
     if (setDailyMacros) {
-      setDailyMacros((prev: any) => ({
+      setDailyMacros((prev) => ({
         ...prev,
         consumed: {
-          cal: Math.max(0, (prev.consumed?.cal || 0) - (entry.macros?.cal || 0)),
-          pro: Math.max(0, (prev.consumed?.pro || 0) - (entry.macros?.pro || 0)),
-          carbs: Math.max(0, (prev.consumed?.carbs || 0) - (entry.macros?.carbs || 0)),
-          fats: Math.max(0, (prev.consumed?.fats || 0) - (entry.macros?.fats || 0)),
+          cal: Math.max(0, prev.consumed.cal - (entry.macros?.cal || 0)),
+          pro: Math.max(0, prev.consumed.pro - (entry.macros?.pro || 0)),
+          carbs: Math.max(0, prev.consumed.carbs - (entry.macros?.carbs || 0)),
+          fats: Math.max(0, prev.consumed.fats - (entry.macros?.fats || 0)),
         },
       }));
     }
@@ -250,7 +264,7 @@ export default function TodaysMeals({
               <button type="button" onClick={onNavigateToPlan} className="text-xs font-bold text-primary uppercase tracking-widest hover:underline">{t.plan.title}</button>
             </div>
           )}
-          {todaysMeals.map((meal: any, idx: number) => (
+          {todaysMeals.map((meal, idx) => (
             <SectionCard key={meal.id || idx} padding="none" spacing="none" className="p-4 flex items-center gap-4 group">
               <div className="w-12 h-12 rounded-sm bg-surface-container-highest overflow-hidden shrink-0">
                 <img src={meal.img || "https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&w=100&q=80"} alt={meal.title} className="w-full h-full object-cover" referrerPolicy="no-referrer" />
