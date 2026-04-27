@@ -1,5 +1,86 @@
 # RIAL App - Changelog
 
+## [1.5.137] - 2026-04-27
+
+### refactor(recipes): Sprint 3 PR C — CreateRecipe wizard split into section components
+
+**Phase 3.2** — extracted `CreateRecipe.tsx` (1053 lines) into 4 focused wizard-step
+components + a shared utilities file. Follows the same container-presenter pattern as
+Phase 3.1 (RecipeDetail → 7 detail components, ADR-015).
+
+- **`CreateRecipe.tsx`**: 1053 → 316 lines (−70%). Pure orchestrator: owns persistent
+  form state, computes derived values (totals, perServing, autoTags, quality), handles
+  save submission.
+- **`create/BasicInfoSection.tsx`** (214 lines): Photos, title, description, prep/cook
+  times, difficulty, servings, meal slots, video URL, source URL with badge.
+- **`create/IngredientsSection.tsx`** (442 lines): Running macro total bar, ingredient
+  list with reorder/remove, family-first search, flat dictionary search + PortionSelector,
+  paste-bulk sheet, VariantPickerSheet. Owns all local search/picker UI state.
+- **`create/StepsSection.tsx`** (171 lines): Step editor, timer auto-detection badges,
+  step photo upload (hidden `<input type="file">` + cropTo16x9 pipeline). Owns step photo
+  refs locally.
+- **`create/ReviewSection.tsx`** (214 lines): Read-only wizard summary — preview card,
+  video section, source link, per-serving macros, auto-suggested tags, ingredients +
+  steps summary, verified-creator publish checkbox.
+- **`utils/create-recipe-helpers.ts`** (73 lines): Pure shared utilities — `swapped`,
+  `detectTimers`, `cropTo16x9`. No React imports; safe in test contexts.
+
+Quality: 0 TS errors · 1349/1349 tests · 0 lint warnings on new files · preflight PASS.
+
+---
+
+## [1.5.136] - 2026-04-27
+
+### refactor(recipes): Sprint 3 PR B — difficulty enum EN migration
+
+- **`Recipe.difficulty`** migrated from ES literals (`'Fácil'|'Medio'|'Difícil'`) to
+  canonical EN enum (`'easy'|'medium'|'hard'`) from `src/types/taxonomy.ts`.
+- **46 seed recipes** codemoded (Node.js string-replace script).
+- **Backwards-compatible hydration**: `RecipeSchema` in `src/lib/schemas.ts` uses
+  `z.preprocess()` to coerce legacy ES values on localStorage hydration. Old users get
+  transparent migration without data loss.
+- **`CreateRecipe.tsx`**: `useState<Difficulty>('medium')`, select options updated,
+  difficulty display uses `t.recipes.easy/medium/hard`.
+- **`RecipeHero.tsx`**: difficulty display via `t.recipes[difficulty]`.
+- Test files updated with `as any` casts to document backwards-compat coverage.
+
+---
+
+## [1.5.135] - 2026-04-27
+
+### feat(recipes): Sprint 3 PR A — RecipeFormSchema + recipeToFormValues
+
+- **`src/features/recipes/schemas/recipe-form.schema.ts`** (new): Zod schema as single
+  source of truth for CreateRecipe form validation. Exports:
+  - `RecipeFormSchema` — full form validation with ingredient min(1) + steps refinement
+  - `RecipeIngredientFormSchema` — dual-shape (familyId | ingredientId)
+  - `RecipeFormValues` — `z.infer<>` type for the form
+  - `RECIPE_FORM_INITIAL_VALUES` — empty/default form state constant
+  - `recipeToFormValues(recipe)` — adapter mapping `Recipe` → `RecipeFormValues`
+    with ES literal difficulty coercion, string time parsing, steps/instructions fallback.
+- **`recipe-form.schema.test.ts`** (new, 33 tests): Covers all validation paths, edge
+  cases, adapter coercions, and round-trip schema validation.
+
+---
+
+## [1.5.134] - 2026-04-27
+
+### refactor(food): Sprint 2 — BarcodeScanner promoted to food/barcode sub-feature
+
+- `src/features/food/barcode/` sub-feature (ADR-015 container-presenter pattern):
+  - `utils/create-variant-from-scan.ts` — pure factory function
+  - `hooks/useBarcodeCamera.ts` — Html5Qrcode lifecycle hook
+  - `hooks/useProductLookup.ts` — OFF API + family match + useSeedMacros
+  - `components/BarcodeMatchResult.tsx` — 4 match-type presenters
+  - `components/BarcodeUnknownProduct.tsx` — not-found + custom food form
+  - `components/BarcodeScanResult.tsx` — found-state panel
+  - `screens/BarcodeScannerScreen.tsx` — composer; props interface identical to old BarcodeScanner
+- `src/features/food/components/BarcodeScanner.tsx` → thin re-export shim (zero call-site changes)
+- `BarcodeScanner.tsx` removed from typography migration allowlist in `eslint.config.mjs`
+- `PAGESHELL_EXCEPTIONS` updated in pageshell convention test
+
+---
+
 ## [1.5.109] - 2026-04-26
 
 ### fix(ds): chip/badge weight refinement + .badge-card global utility
