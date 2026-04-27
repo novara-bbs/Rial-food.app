@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useMemo, useCallback, useEffect, useRef } from 'react';
-import { Recipe, DailyCheckIn as DailyCheckInType, Ingredient } from '../types';
+import { Recipe, DailyCheckIn as DailyCheckInType, Ingredient, LoggableMeal } from '../types';
 import type { FoodVariant } from '../types/food-family';
 import { useDailyReset, DailyArchive } from '../hooks/useDailyReset';
 import { useNavigation } from './NavigationContext';
@@ -41,33 +41,7 @@ type HydrationState = { consumed: number; target: number };
 /** Movement state shape. */
 type MovementState = { steps: number; target: number; activeMinutes: number; activeTarget: number };
 
-/**
- * Duck-typed loggable meal — accepts both Recipe objects and flat Ingredient/
- * custom-macro objects. Left as unknown-field union to avoid false negatives
- * when callers pass partial shapes (e.g. scanned food, custom log entry).
- */
-interface LoggableMeal {
-  id?: string | number;
-  title?: string;
-  name?: string;
-  cal?: number;
-  pro?: number;
-  carbs?: number;
-  fats?: number;
-  grams?: number;
-  portionDescription?: string;
-  mealSlot?: string;
-  time?: string;
-  macros?: { calories?: number; protein?: number; carbs?: number; fats?: number };
-  recipeIngredients?: Array<{
-    ingredientId?: string;
-    id?: string;
-    amount?: number;
-    unit?: string;
-    ingredient?: { name?: string; baseUnit?: string; category?: string };
-    name?: string;
-  }>;
-}
+// LoggableMeal is now canonical in src/types/food.ts — imported above.
 
 interface AppStateContextType {
   // Profile & session

@@ -123,3 +123,39 @@ export interface RecipeIngredient {
   unit: string;
   ingredient?: Ingredient; // Populated at runtime
 }
+
+/**
+ * Duck-typed union accepted by `handleLogMeal` and `handleLogMealNow`.
+ * Covers three concrete callers:
+ * - Dictionary `Ingredient` (flat fields: cal, pro, carbs, fats, grams)
+ * - `Recipe` (macros sub-object + recipeIngredients)
+ * - Custom log objects from HomeQuickLog / BarcodeScanner (mixed shape)
+ */
+export interface LoggableMeal {
+  id?: string | number;
+  title?: string;
+  name?: string;
+  /** Flat macro fields (Ingredient / BarcodeScanner shape) */
+  cal?: number;
+  pro?: number;
+  carbs?: number;
+  fats?: number;
+  grams?: number;
+  portionDescription?: string;
+  mealSlot?: string;
+  time?: string;
+  servingUsed?: string;
+  servings?: number;
+  steps?: unknown;
+  isApiResult?: boolean;
+  /** Recipe-style macro sub-object */
+  macros?: { calories?: number; protein?: number; carbs?: number; fats?: number };
+  recipeIngredients?: Array<{
+    ingredientId?: string;
+    id?: string;
+    amount?: number;
+    unit?: string;
+    ingredient?: { name?: string; baseUnit?: string; category?: string };
+    name?: string;
+  }>;
+}

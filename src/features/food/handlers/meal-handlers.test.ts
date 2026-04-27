@@ -4,6 +4,8 @@
  */
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { createHandleLogMeal, createHandleRepeatYesterday } from './meal-handlers';
+import type { Translations } from '../../../i18n';
+import type { DailyArchive } from '../../../hooks/useDailyReset';
 
 // Mock sonner toast
 vi.mock('sonner', () => ({
@@ -24,13 +26,16 @@ const makeMeal = (overrides: Record<string, unknown> = {}) => ({
   ...overrides,
 });
 
-const t = {
+/** Cast an incomplete translation object to Translations for test stubs. */
+const t = (partial: Record<string, unknown> = {}) => partial as unknown as Translations;
+
+const partialT = t({
   mealToasts: {
     mealLogged: '¡Comida registrada!',
     addedToPlan: 'Añadido al plan',
     defaultMealName: 'Comida',
   },
-};
+});
 
 const makeBaseDeps = (overrides: Record<string, unknown> = {}) => ({
   targetPlanDay: null as number | null,
@@ -42,7 +47,18 @@ const makeBaseDeps = (overrides: Record<string, unknown> = {}) => ({
   setFoodHistory: vi.fn(),
   navigateTo: vi.fn(),
   previousScreen: 'home',
-  t,
+  t: partialT,
+  ...overrides,
+});
+
+/** Make a minimal DailyArchive for tests (required fields filled). */
+const makeDailyArchive = (overrides: Partial<DailyArchive> = {}): DailyArchive => ({
+  date: '2026-04-14',
+  macros: { consumed: { cal: 0, pro: 0, carbs: 0, fats: 0 }, target: { cal: 2000, pro: 150, carbs: 220, fats: 60 } },
+  hydration: 0,
+  movement: 0,
+  mealCount: 0,
+  dailyLog: [],
   ...overrides,
 });
 
@@ -167,25 +183,24 @@ describe('createHandleRepeatYesterday', () => {
   it('does nothing when nutritionHistory is empty', () => {
     const setDailyLog = vi.fn();
     const setDailyMacros = vi.fn();
-    const handler = createHandleRepeatYesterday({ setDailyLog, setDailyMacros, nutritionHistory: [], t });
+    const handler = createHandleRepeatYesterday({ setDailyLog, setDailyMacros, nutritionHistory: [], t: partialT });
     handler();
     expect(setDailyLog).not.toHaveBeenCalled();
     expect(setDailyMacros).not.toHaveBeenCalled();
   });
 
   it('repeats most recent day entries into daily log', () => {
-    const yesterday = {
-      date: '2026-04-14',
+    const yesterday = makeDailyArchive({
       macros: { consumed: { cal: 1800, pro: 120, carbs: 200, fats: 55 }, target: { cal: 2000, pro: 150, carbs: 220, fats: 60 } },
       dailyLog: [
         { id: 1, title: 'Avena', macros: { cal: 350, pro: 12, carbs: 60, fats: 6 }, mealSlot: 'breakfast', portionDescription: '100g', time: '08:00', ingredientIds: [] },
         { id: 2, title: 'Pollo', macros: { cal: 320, pro: 40, carbs: 0, fats: 8 }, mealSlot: 'lunch', portionDescription: '200g', time: '13:00', ingredientIds: [] },
       ],
-    };
+    });
 
     const setDailyLog = vi.fn();
     const setDailyMacros = vi.fn();
-    const handler = createHandleRepeatYesterday({ setDailyLog, setDailyMacros, nutritionHistory: [yesterday], t });
+    const handler = createHandleRepeatYesterday({ setDailyLog, setDailyMacros, nutritionHistory: [yesterday], t: partialT });
 
     handler();
     expect(setDailyLog).toHaveBeenCalledOnce();
@@ -197,17 +212,16 @@ describe('createHandleRepeatYesterday', () => {
   });
 
   it('recalculates total macros from repeated entries', () => {
-    const yesterday = {
-      date: '2026-04-14',
+    const yesterday = makeDailyArchive({
       macros: { consumed: { cal: 670, pro: 52, carbs: 60, fats: 14 }, target: { cal: 2000, pro: 150, carbs: 220, fats: 60 } },
       dailyLog: [
         { id: 1, title: 'Avena', macros: { cal: 350, pro: 12, carbs: 60, fats: 6 }, mealSlot: 'breakfast', portionDescription: '100g', time: '08:00', ingredientIds: [] },
         { id: 2, title: 'Pollo', macros: { cal: 320, pro: 40, carbs: 0, fats: 8 }, mealSlot: 'lunch', portionDescription: '200g', time: '13:00', ingredientIds: [] },
       ],
-    };
+    });
 
     const setDailyMacros = vi.fn();
-    const handler = createHandleRepeatYesterday({ setDailyLog: vi.fn(), setDailyMacros, nutritionHistory: [yesterday], t });
+    const handler = createHandleRepeatYesterday({ setDailyLog: vi.fn(), setDailyMacros, nutritionHistory: [yesterday], t: partialT });
     handler();
 
     expect(setDailyMacros).toHaveBeenCalledOnce();
