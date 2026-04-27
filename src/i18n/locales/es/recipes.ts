@@ -72,6 +72,7 @@ const recipes = {
     emptyFilterTitle: 'Sin resultados',
     emptyFilterHint: 'Prueba otro filtro o busca por nombre',
     emptySearchHint: 'No hay coincidencias para "{query}"',
+    clearSearch: 'Limpiar búsqueda',
   },
   collections: {
     verified: 'Verificadas',

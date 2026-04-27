@@ -72,6 +72,7 @@ const recipes: Pick<Translations, 'cocina' | 'recipes' | 'collections' | 'import
     emptyFilterTitle: 'No results',
     emptyFilterHint: 'Try another filter or search by name',
     emptySearchHint: 'No matches for "{query}"',
+    clearSearch: 'Clear search',
   },
   collections: {
     verified: 'Verified',

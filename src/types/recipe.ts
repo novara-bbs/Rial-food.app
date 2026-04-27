@@ -117,4 +117,6 @@ export interface Recipe {
    * `undefined` = "derive from tags heuristic" (legacy recipes).
    */
   dietaryTags?: DietaryTag[];
+  /** ISO timestamp set when the user saves this recipe (used for "recent" sort in Cocina). */
+  savedAt?: string;
 }

@@ -2,7 +2,7 @@ import type { Ingredient, Allergen } from '../../../types';
 
 interface RecipeData {
   macros?: { calories?: number; protein?: number; carbs?: number; fats?: number };
-  recipeIngredients?: { ingredientId: string; ingredient?: Ingredient }[];
+  recipeIngredients?: { ingredientId?: string; ingredient?: Ingredient }[];
 }
 
 interface UserProfileSlice {

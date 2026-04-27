@@ -8,7 +8,9 @@ import { useI18n } from '../../../i18n';
 import { useAppState } from '../../../contexts/AppStateContext';
 import { calculateMatchScore } from '../utils/matchScore';
 import { recipeFitsSlot } from '../utils/meal-slot';
-import type { MealSlot } from '../../../types';
+import type { MealSlot, Recipe } from '../../../types';
+import type { RecipeIngredient } from '../../../types/food';
+import type { ShoppingItem } from '../../../types/planner';
 import EmptyState from '../../../components/EmptyState';
 import PageShell from '../../../components/PageShell';
 import RecipeCard from '../../../components/patterns/RecipeCard';
@@ -26,23 +28,26 @@ import {
   DIFFICULTIES,
   type FilterValues,
 } from '../utils/facets';
-import { aggregateShoppingItems, detectCategory, AISLE_CATEGORIES } from '../../planner/utils/grocery';
+import { aggregateShoppingItems, detectCategory, AISLE_CATEGORIES, type GroceryItem } from '../../planner/utils/grocery';
 import Planner from '../../planner/screens/Planner';
 import ShoppingList from '../../planner/screens/ShoppingList';
 import BatchCookingSuggestions from '../../planner/components/BatchCookingSuggestions';
 import { toast } from 'sonner';
 
+/** React functional-updater-compatible setter (mirrors AppStateContext's Setter<T>). */
+type Setter<T> = (fn: T | ((prev: T) => T)) => void;
+
 export default function Cocina({ onAddMeal, onCreateRecipe, onNavigateToRecipe, savedRecipes = [], setSavedRecipes, mealPlan, setMealPlan, shoppingList, setShoppingList, onLogMeal, isPro, onImportUrl }: {
   onAddMeal: (dayIndex: number) => void;
   onCreateRecipe: () => void;
-  onNavigateToRecipe?: (recipe: any) => void;
-  savedRecipes?: any[];
-  setSavedRecipes?: any;
-  mealPlan: any;
-  setMealPlan?: any;
-  shoppingList: any[];
-  setShoppingList: any;
-  onLogMeal?: (meal: any) => void;
+  onNavigateToRecipe?: (recipe: Recipe) => void;
+  savedRecipes?: Recipe[];
+  setSavedRecipes?: Setter<Recipe[]>;
+  mealPlan: Record<number, Recipe[]>;
+  setMealPlan?: Setter<Record<number, Recipe[]>>;
+  shoppingList: ShoppingItem[];
+  setShoppingList: Setter<ShoppingItem[]>;
+  onLogMeal?: (meal: Recipe) => void;
   isPro?: boolean;
   onImportUrl?: () => void;
 }) {
@@ -256,21 +261,21 @@ export default function Cocina({ onAddMeal, onCreateRecipe, onNavigateToRecipe, 
 
   const handleDeleteRecipe = (e: React.MouseEvent, id: number | string) => {
     e.stopPropagation();
-    if (setSavedRecipes) setSavedRecipes((prev: any[]) => prev.filter(r => r.id !== id));
+    if (setSavedRecipes) setSavedRecipes((prev) => prev.filter(r => r.id !== id));
   };
 
   const handleGenerateList = () => {
-    const dayMeals = Object.values(mealPlan as Record<number, any[]>).flat();
+    const dayMeals = Object.values(mealPlan).flat();
     if (!dayMeals.length) {
       toast.info(t.cocina.addRecipesFirst);
       return;
     }
     let idCounter = Date.now();
-    const rawItems: any[] = [];
+    const rawItems: GroceryItem[] = [];
     dayMeals.forEach(meal => {
       if (meal.recipeIngredients?.length) {
-        meal.recipeIngredients.forEach((ri: any) => {
-          const name = ri.ingredient?.name || ri.name || meal.title;
+        meal.recipeIngredients.forEach((ri: RecipeIngredient) => {
+          const name = ri.ingredient?.name || meal.title;
           rawItems.push({
             id: idCounter++,
             name,
@@ -328,16 +333,16 @@ export default function Cocina({ onAddMeal, onCreateRecipe, onNavigateToRecipe, 
               />
               <SortControl
                 options={[
-                  { id: 'recommended', label: (t.recipes as any).sortRecommended ?? 'Recomendadas' },
-                  { id: 'recent', label: (t.recipes as any).sortRecent ?? 'Recientes' },
-                  { id: 'quick', label: (t.recipes as any).sortQuick ?? 'Rápidas' },
-                  { id: 'highProtein', label: (t.recipes as any).sortHighProtein ?? 'Alta proteína' },
-                  { id: 'mostCooked', label: (t.recipes as any).sortMostCooked ?? 'Más cocinadas' },
-                  { id: 'caloriesAsc', label: (t.recipes as any).sortCaloriesAsc ?? 'Menos calorías' },
+                  { id: 'recommended', label: t.recipes.sortRecommended },
+                  { id: 'recent', label: t.recipes.sortRecent },
+                  { id: 'quick', label: t.recipes.sortQuick },
+                  { id: 'highProtein', label: t.recipes.sortHighProtein },
+                  { id: 'mostCooked', label: t.recipes.sortMostCooked },
+                  { id: 'caloriesAsc', label: t.recipes.sortCaloriesAsc },
                 ]}
                 active={sortMode}
                 onChange={(id) => setSortMode(id as typeof sortMode)}
-                ariaLabel={(t.recipes as any).sortRecommended ?? 'Ordenar'}
+                ariaLabel={t.recipes.sortRecommended}
               />
               <button type="button" onClick={onCreateRecipe} className="p-3 bg-primary text-on-primary rounded-sm hover:opacity-90 transition-opacity" title={t.recipes.create}>
                 <Plus className="w-5 h-5" />
@@ -396,13 +401,13 @@ export default function Cocina({ onAddMeal, onCreateRecipe, onNavigateToRecipe, 
             {/* Recipe grid — portrait cards */}
             {filteredRecipes.length === 0 ? (
               searchQuery.trim() ? (
-                <EmptyState icon="🔍" description={(t.recipes as any).emptySearchHint?.replace('{query}', searchQuery) ?? `No hay coincidencias para "${searchQuery}"`}>
+                <EmptyState icon="🔍" description={t.recipes.emptySearchHint.replace('{query}', searchQuery)}>
                   <button type="button" onClick={() => setSearchQuery('')} className="px-6 py-3 bg-surface-container-highest border border-outline-variant/20 text-primary rounded-sm font-headline text-xs font-bold uppercase tracking-widest">
-                    {(t.common as any).clear ?? 'Limpiar búsqueda'}
+                    {t.recipes.clearSearch}
                   </button>
                 </EmptyState>
               ) : activeCollection !== 'all' || activeFilterCount > 0 ? (
-                <EmptyState icon="📂" description={(t.recipes as any).emptyFilterHint ?? 'Prueba otro filtro o busca por nombre'}>
+                <EmptyState icon="📂" description={t.recipes.emptyFilterHint}>
                   <button type="button" onClick={() => { setActiveCollection('all'); setFilterValues({}); }} className="px-6 py-3 bg-surface-container-highest border border-outline-variant/20 text-primary rounded-sm font-headline text-xs font-bold uppercase tracking-widest">
                     {t.recipes.all}
                   </button>
@@ -423,7 +428,7 @@ export default function Cocina({ onAddMeal, onCreateRecipe, onNavigateToRecipe, 
               )
             ) : (
               <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3">
-                {filteredRecipes.map((recipe: any) => (
+                {filteredRecipes.map((recipe) => (
                   <RecipeCard
                     key={recipe.id}
                     recipe={recipe}
