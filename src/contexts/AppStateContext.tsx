@@ -169,7 +169,7 @@ interface AppStateContextType {
   handleLogMealNow: (meal: LoggableMeal, servings: number) => void;
   handleSaveRecipe: (recipe: Recipe) => void;
   /** `recipe` is a post-summary object (not a full Recipe) attached to community posts. */
-  handleCreatePost: (content: string, performance?: Record<string, unknown>, options?: { images?: string[]; recipe?: Record<string, unknown>; hashtags?: string[] }) => void;
+  handleCreatePost: (content: string, performance?: CommunityPost['performance'], options?: { images?: string[]; recipe?: CommunityPost['recipe']; hashtags?: string[] }) => void;
   handleAddComment: (postId: number, commentText: string) => void;
   handleAddToleranceLog: (log: Omit<ToleranceLog, 'id'>) => void;
   handleCreateRecipeSubmit: (recipe: Recipe) => void;
