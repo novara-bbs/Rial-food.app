@@ -4,7 +4,7 @@ import SectionCard from '../../../components/SectionCard';
 import ReactMarkdown from 'react-markdown';
 import { useI18n } from '../../../i18n';
 import { Heading } from '@/components/ui/Typography';
-import { generateAIResponse, buildSystemPrompt } from '@/lib/gemini';
+import { generateAIResponse, buildSystemPrompt, type MemoryContext } from '@/lib/gemini';
 import { logger } from '../../../lib/logger';
 import { useLocalStorageState } from '../../../hooks/useLocalStorageState';
 import { useAIMessageGate } from '../../../hooks/useProGate';
@@ -18,7 +18,7 @@ export default function AICoach({
 }: {
   onBack: () => void,
   isPro: boolean,
-  memoryContext: any
+  memoryContext: MemoryContext
 }) {
   const { t, locale } = useI18n();
   const [messages, setMessages] = useLocalStorageState<{role: 'user' | 'model', text: string}[]>(
@@ -49,12 +49,12 @@ export default function AICoach({
     if (!textToSend) return;
 
     if (!canSendMessage()) {
-      setMessages((prev: any[]) => [...prev, { role: 'model', text: t.aiCoach.dailyLimitReached }]);
+      setMessages((prev) =>[...prev, { role: 'model', text: t.aiCoach.dailyLimitReached }]);
       return;
     }
 
     recordMessage();
-    setMessages((prev: any[]) => [...prev, { role: 'user', text: textToSend }]);
+    setMessages((prev) =>[...prev, { role: 'user', text: textToSend }]);
     setInput('');
     setIsLoading(true);
 
@@ -62,13 +62,13 @@ export default function AICoach({
       const systemInstruction = buildSystemPrompt(memoryContext, locale);
       const text = await generateAIResponse(textToSend, systemInstruction);
 
-      setMessages((prev: any[]) => {
+      setMessages((prev) =>{
         const updated = [...prev, { role: 'model', text: text || t.aiCoach.errorMessage }];
         return updated.length > MAX_STORED_MESSAGES ? updated.slice(-MAX_STORED_MESSAGES) : updated;
       });
     } catch (error) {
       logger.error('Error calling AI', { error: error instanceof Error ? error.message : String(error) });
-      setMessages((prev: any[]) => [...prev, { role: 'model', text: t.aiCoach.errorMessage }]);
+      setMessages((prev) =>[...prev, { role: 'model', text: t.aiCoach.errorMessage }]);
     } finally {
       setIsLoading(false);
     }
