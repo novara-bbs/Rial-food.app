@@ -5,6 +5,9 @@
  */
 
 import type { Ingredient } from '../../../types';
+import type { StoredRealFeelEntry } from '../../../types/wellness';
+import type { Recipe } from '../../../types/recipe';
+import type { DailyMacros } from '../../../contexts/state/useVitalsState';
 
 export type CorrelationTone = 'positive' | 'warning' | 'neutral';
 
@@ -29,17 +32,8 @@ export interface InsightRecommendation {
   category: 'timing' | 'composition' | 'adherence' | 'wellbeing';
 }
 
-// Real Feel log entry from our app
-interface RFEntry {
-  id: number;
-  date: string;
-  level: number; // 1-5
-  tags: string[];
-  note?: string;
-  energy?: 'high' | 'stable' | 'low';
-  digestion?: 'clean' | 'sensitive' | 'bloated';
-  mindset?: 'calm' | 'balanced' | 'stressed';
-}
+// Alias to canonical type — correlations only needs level/date/tags/energy/digestion/mindset
+type RFEntry = StoredRealFeelEntry;
 
 // ──────────────────────────────────────────
 // CORRELATION DETECTORS (from Real Feel logs)
@@ -165,11 +159,11 @@ function detectConsistencyTrend(logs: RFEntry[]): CorrelationInsight | null {
 // INSIGHT RULES (heuristic, no ML)
 // ──────────────────────────────────────────
 
-function insightLowVariety(_savedRecipes: any[], mealPlan: any): InsightRecommendation | null {
+function insightLowVariety(_savedRecipes: Recipe[], mealPlan: Record<number, Recipe[]>): InsightRecommendation | null {
   // Count unique recipes used in plan this week
   const uniqueRecipes = new Set<string>();
   for (const dayMeals of Object.values(mealPlan || {})) {
-    for (const meal of (dayMeals || []) as any[]) {
+    for (const meal of (dayMeals || [])) {
       if (meal.title) uniqueRecipes.add(meal.title);
     }
   }
@@ -186,7 +180,7 @@ function insightLowVariety(_savedRecipes: any[], mealPlan: any): InsightRecommen
   };
 }
 
-function insightProteinTarget(dailyMacros: any): InsightRecommendation | null {
+function insightProteinTarget(dailyMacros: DailyMacros): InsightRecommendation | null {
   if (!dailyMacros?.consumed || !dailyMacros?.target) return null;
   const ratio = dailyMacros.consumed.pro / dailyMacros.target.pro;
 
@@ -204,7 +198,7 @@ function insightProteinTarget(dailyMacros: any): InsightRecommendation | null {
   };
 }
 
-function insightHydration(hydration: any): InsightRecommendation | null {
+function insightHydration(hydration: { consumed: number; target: number }): InsightRecommendation | null {
   if (!hydration) return null;
   const ratio = hydration.consumed / hydration.target;
   if (ratio >= 0.6) return null;
@@ -314,10 +308,10 @@ export function getCorrelations(realFeelLogs: RFEntry[]): CorrelationInsight[] {
 
 export function getInsights(ctx: {
   realFeelLogs: RFEntry[];
-  savedRecipes: any[];
-  mealPlan: any;
-  dailyMacros: any;
-  hydration: any;
+  savedRecipes: Recipe[];
+  mealPlan: Record<number, Recipe[]>;
+  dailyMacros: DailyMacros;
+  hydration: { consumed: number; target: number };
   streakDays: number;
 }): InsightRecommendation[] {
   const results: InsightRecommendation[] = [];
@@ -353,17 +347,13 @@ export interface FoodInsight {
   dominantTag: string | null;
 }
 
-/** RealFeel log entry with optional food linkage (from W1 handler) */
-interface RFEntryWithFood extends RFEntry {
-  ingredientIds?: string[];
-}
-
 /**
  * Groups RealFeel logs by linked ingredientIds, computes avg wellbeing per ingredient.
  * Requires 3+ appearances per ingredient and 7+ total linked logs.
+ * StoredRealFeelEntry already has ingredientIds: string[].
  */
-export function getFoodInsights(realFeelLogs: any[], dictionary: Ingredient[]): FoodInsight[] {
-  const linked = (realFeelLogs as RFEntryWithFood[]).filter(l => l.ingredientIds && l.ingredientIds.length > 0);
+export function getFoodInsights(realFeelLogs: StoredRealFeelEntry[], dictionary: Ingredient[]): FoodInsight[] {
+  const linked = realFeelLogs.filter(l => l.ingredientIds && l.ingredientIds.length > 0);
   if (linked.length < 7) return [];
 
   const stats: Record<string, { levels: number[]; tags: string[] }> = {};
