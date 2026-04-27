@@ -7,6 +7,10 @@ import { useI18n } from '../../../i18n';
 import { BADGES, LEVELS, calculatePoints, getUserLevel, getEarnedBadges, type UserStats } from '../utils/gamification';
 import { calcStreaks } from '../../wellness/utils/streaks';
 import type { DailyArchive } from '../../../hooks/useDailyReset';
+import type { UserProfile } from '../../../types/user';
+import type { StoredRealFeelEntry } from '../../../types/wellness';
+import type { Recipe } from '../../../types';
+import type { CommunityPost } from '../../../types/social';
 import PageHeader from '../../../components/patterns/PageHeader';
 import { bodyWeightFromKg, getBodyWeightUnit, heightFromCm, getHeightUnit } from '../../food/utils/units';
 import { useNavigation } from '../../../contexts/NavigationContext';
@@ -23,11 +27,11 @@ import {
 } from '@/components/ui/dialog';
 
 export default function Profile({ userProfile, onBack, realFeelLogs = [], savedRecipes = [], communityPosts = [], nutritionHistory = [], dailyLogHasEntries = false }: {
-  userProfile: any;
+  userProfile: UserProfile;
   onBack: () => void;
-  realFeelLogs?: any[];
-  savedRecipes?: any[];
-  communityPosts?: any[];
+  realFeelLogs?: StoredRealFeelEntry[];
+  savedRecipes?: Recipe[];
+  communityPosts?: CommunityPost[];
   nutritionHistory?: DailyArchive[];
   dailyLogHasEntries?: boolean;
 }) {
@@ -36,7 +40,7 @@ export default function Profile({ userProfile, onBack, realFeelLogs = [], savedR
 
   // Canonical streak — aligned with Home + Progress (Q14)
   const streaks = calcStreaks({
-    history: nutritionHistory as DailyArchive[],
+    history: nutritionHistory,
     realFeelLogs: realFeelLogs ?? [],
     todayHasMeals: dailyLogHasEntries,
   });
@@ -44,13 +48,13 @@ export default function Profile({ userProfile, onBack, realFeelLogs = [], savedR
 
   // Build user stats for gamification
   const stats: UserStats = {
-    recipesCreated: savedRecipes.filter((r: any) => r.tag === 'MI RECETA').length,
-    recipesImported: savedRecipes.filter((r: any) => r.tag === 'IMPORTADA').length,
+    recipesCreated: savedRecipes.filter((r) => r.tag === 'MI RECETA').length,
+    recipesImported: savedRecipes.filter((r) => r.tag === 'IMPORTADA').length,
     mealsLogged: 0, // would track from dailyMacros history
     realFeelCount: realFeelLogs.length,
     // Id-based ownership check. Name-based compare broke in EN locale and on
     // profile rename (see PostDetail.tsx for the same fix).
-    postsPublished: communityPosts.filter((p: any) => p.author?.id === 'self').length,
+    postsPublished: communityPosts.filter((p) => p.author?.id === 'self').length,
     plansCreated: 0,
     shoppingListUsed: false,
     fastingsCompleted: 0,

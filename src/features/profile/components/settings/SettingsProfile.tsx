@@ -8,13 +8,17 @@ import { calculateDailyTargets, type Goal, type ActivityLevel, type Sex } from '
 import { compressImage } from '../../../social/utils/image-utils';
 import { INPUT_SURFACE_CLASSES } from '@/components/ui/surface';
 import SectionCard from '../../../../components/SectionCard';
+import type { UserProfile, FamilyMember } from '../../../../types/user';
+import type { DailyMacros } from '../../../../contexts/state/useVitalsState';
+
+type Setter<T> = (fn: T | ((prev: T) => T)) => void;
 
 interface Props {
-  userProfile: any;
-  setUserProfile: any;
-  setDailyMacros?: any;
+  userProfile: UserProfile;
+  setUserProfile: Setter<UserProfile>;
+  setDailyMacros?: Setter<DailyMacros>;
   isPro: boolean;
-  setIsPro?: any;
+  setIsPro?: (v: boolean) => void;
 }
 
 export default function SettingsProfile({ userProfile, setUserProfile, setDailyMacros, isPro, setIsPro }: Props) {
@@ -24,9 +28,9 @@ export default function SettingsProfile({ userProfile, setUserProfile, setDailyM
   const [isAddingMember, setIsAddingMember] = useState(false);
   const [newMember, setNewMember] = useState({ name: '', age: 30, goal: 'maintain', activityLevel: 'active' });
 
-  const updateBiometric = (key: string, value: any) => {
+  const updateBiometric = (key: keyof UserProfile, value: UserProfile[keyof UserProfile]) => {
     if (!setUserProfile) return;
-    setUserProfile((prev: any) => {
+    setUserProfile((prev: UserProfile) => {
       const updated = { ...prev, [key]: value };
       if (['weight', 'height', 'age', 'gender', 'goal', 'activity'].includes(key) && setDailyMacros) {
         const targets = calculateDailyTargets(
@@ -35,7 +39,7 @@ export default function SettingsProfile({ userProfile, setUserProfile, setDailyM
           (updated.activity || 'active') as ActivityLevel,
           (updated.goal || 'maintain') as Goal,
         );
-        setDailyMacros((prev: any) => ({ ...prev, target: targets }));
+        setDailyMacros((prev: DailyMacros) => ({ ...prev, target: targets }));
       }
       return updated;
     });
@@ -48,18 +52,19 @@ export default function SettingsProfile({ userProfile, setUserProfile, setDailyM
 
   const addFamilyMember = () => {
     if (!newMember.name) return;
-    setUserProfile((prev: any) => ({
+    const member: FamilyMember = { ...newMember, id: Date.now().toString() };
+    setUserProfile((prev: UserProfile) => ({
       ...prev,
-      family: [...(prev.family || []), { ...newMember, id: Date.now().toString() }]
+      family: [...(prev.family || []), member],
     }));
     setNewMember({ name: '', age: 30, goal: 'maintain', activityLevel: 'active' });
     setIsAddingMember(false);
   };
 
   const removeFamilyMember = (id: string) => {
-    setUserProfile((prev: any) => ({
+    setUserProfile((prev: UserProfile) => ({
       ...prev,
-      family: (prev.family || []).filter((m: any) => m.id !== id)
+      family: (prev.family || []).filter((m: FamilyMember) => m.id !== id),
     }));
   };
 
@@ -97,7 +102,7 @@ export default function SettingsProfile({ userProfile, setUserProfile, setDailyM
               const file = e.target.files?.[0];
               if (!file) return;
               const compressed = await compressImage(file, 400, 0.7);
-              setUserProfile?.((prev: any) => ({ ...prev, avatar: compressed }));
+              setUserProfile?.((prev: UserProfile) => ({ ...prev, avatar: compressed }));
             }}
           />
         </label>
@@ -226,7 +231,7 @@ export default function SettingsProfile({ userProfile, setUserProfile, setDailyM
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-          {(userProfile?.family || []).map((member: any) => (
+          {(userProfile?.family || []).map((member: FamilyMember) => (
             <div key={member.id} className="bg-surface-container-highest p-4 rounded-sm border border-outline-variant/10 flex items-center justify-between">
               <div className="flex items-center gap-3">
                 <div className="size-10 rounded-full bg-primary/20 flex items-center justify-center text-primary" aria-hidden="true">
@@ -343,7 +348,7 @@ export default function SettingsProfile({ userProfile, setUserProfile, setDailyM
               <span className="text-xs text-on-surface-variant">{prefix}</span>
               <input type="text"
                 value={userProfile?.socialLinks?.[key] || ''}
-                onChange={(e) => setUserProfile((prev: any) => ({ ...prev, socialLinks: { ...prev.socialLinks, [key]: e.target.value || undefined } }))}
+                onChange={(e) => setUserProfile((prev: UserProfile) => ({ ...prev, socialLinks: { ...prev.socialLinks, [key]: e.target.value || undefined } }))}
                 placeholder={placeholder}
                 className="bg-transparent text-sm text-on-surface flex-1 outline-none" />
             </div>
@@ -357,7 +362,7 @@ export default function SettingsProfile({ userProfile, setUserProfile, setDailyM
             <label className="block font-label text-micro tracking-widest uppercase text-on-surface-variant mb-1">{label}</label>
             <input type="url"
               value={userProfile?.socialLinks?.[key] || ''}
-              onChange={(e) => setUserProfile((prev: any) => ({ ...prev, socialLinks: { ...prev.socialLinks, [key]: e.target.value || undefined } }))}
+              onChange={(e) => setUserProfile((prev: UserProfile) => ({ ...prev, socialLinks: { ...prev.socialLinks, [key]: e.target.value || undefined } }))}
               placeholder={placeholder}
               className={`${INPUT_SURFACE_CLASSES} w-full px-3 py-2 text-sm text-on-surface outline-none focus:border-primary`} />
           </div>
