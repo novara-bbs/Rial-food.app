@@ -20,8 +20,10 @@ import type { Recipe } from '../../../types/recipe';
 // ─── Sub-schemas ────────────────────────────────────────────────────────────
 
 /**
- * Ingredient row inside the form. Mirrors `RecipeIngredient` but without the
- * runtime `ingredient` field (populated outside the form by resolvers).
+ * Ingredient row inside the form. Mirrors `RecipeIngredient`.
+ * The `ingredient` field carries the runtime-resolved `Ingredient` object for
+ * display (macro tooltips, name lookup). It is accepted but not validated by Zod
+ * — `z.unknown()` passthrough so the form state round-trips without data loss.
  */
 export const RecipeIngredientFormSchema = z
   .object({
@@ -36,6 +38,12 @@ export const RecipeIngredientFormSchema = z
     name: z.string().optional(),
     nameEn: z.string().optional(),
     brandName: z.string().optional(),
+    /**
+     * Runtime-resolved Ingredient object — present in form state for macro
+     * display, stripped when persisting. Typed `unknown` so Zod doesn't validate
+     * the internal Ingredient shape.
+     */
+    ingredient: z.unknown().optional(),
   })
   .refine(v => Boolean(v.familyId || v.ingredientId), {
     message: 'RecipeIngredient requires familyId or legacy ingredientId',
@@ -179,6 +187,9 @@ export function recipeToFormValues(recipe: Recipe): RecipeFormValues {
       ingredientId: ri.ingredientId,
       amount: ri.amount,
       unit: ri.unit,
+      // Preserve runtime ingredient object so the form can display macro info
+      // without an additional resolver pass. Stripped on final submit.
+      ...(ri.ingredient != null ? { ingredient: ri.ingredient } : {}),
     }));
 
   return {
