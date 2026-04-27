@@ -8,12 +8,19 @@ import { useNavigation } from '../../../contexts/NavigationContext';
 import { useAuth } from '../../../contexts/AuthContext';
 import { logger } from '../../../lib/logger';
 import type { Ingredient } from '../../../types';
+import { IS_DEV } from '../../../config/env';
+import type { UserProfile } from '../../../types/user';
+import type { DailyMacros } from '../../../contexts/state/useVitalsState';
 import SettingsProfile from '../components/settings/SettingsProfile';
 import SettingsNutrition from '../components/settings/SettingsNutrition';
 import SettingsAppearance from '../components/settings/SettingsAppearance';
 import SettingsSystem from '../components/settings/SettingsSystem';
 import DemoSeedCard from '../../dev/components/DemoSeedCard';
 import SectionCard from '../../../components/SectionCard';
+
+type Setter<T> = (fn: T | ((prev: T) => T)) => void;
+interface HydrationState { consumed: number; target: number }
+interface MovementState { steps: number; target: number; activeMinutes: number; activeTarget: number }
 
 type SettingsTab = 'profile' | 'nutrition' | 'appearance' | 'system';
 
@@ -39,19 +46,19 @@ export default function Settings({
   setMovement,
   onNavigateToLogin,
 }: {
-  dailyMacros?: any;
-  setDailyMacros?: any;
+  dailyMacros?: DailyMacros;
+  setDailyMacros?: Setter<DailyMacros>;
   isPro?: boolean;
-  setIsPro?: any;
+  setIsPro?: (v: boolean) => void;
   showAIBot?: boolean;
-  setShowAIBot?: any;
-  userProfile?: any;
-  setUserProfile?: any;
+  setShowAIBot?: (v: boolean) => void;
+  userProfile?: UserProfile;
+  setUserProfile?: Setter<UserProfile>;
   dictionary?: Ingredient[];
-  hydration?: { consumed: number; target: number };
-  setHydration?: (fn: any) => void;
-  movement?: { steps: number; target: number; activeMinutes: number; activeTarget: number };
-  setMovement?: (fn: any) => void;
+  hydration?: HydrationState;
+  setHydration?: Setter<HydrationState>;
+  movement?: MovementState;
+  setMovement?: Setter<MovementState>;
   /** Q6: callback to open the login overlay from App.tsx */
   onNavigateToLogin?: () => void;
 }) {
@@ -61,7 +68,7 @@ export default function Settings({
   const [loadingPersona, setLoadingPersona] = useState<string | null>(null);
   const [activeTab, setActiveTab] = useState<SettingsTab>('profile');
 
-  const isDev = (import.meta as any).env?.DEV === true;
+  const isDev = IS_DEV;
 
   const tabs = [
     { id: 'profile' as const, label: t.settings.tabProfile },
@@ -108,8 +115,8 @@ export default function Settings({
 
         {activeTab === 'profile' && (
           <SettingsProfile
-            userProfile={userProfile}
-            setUserProfile={setUserProfile}
+            userProfile={userProfile!}
+            setUserProfile={setUserProfile!}
             setDailyMacros={setDailyMacros}
             isPro={!!isPro}
             setIsPro={setIsPro}
@@ -118,10 +125,10 @@ export default function Settings({
 
         {activeTab === 'nutrition' && (
           <SettingsNutrition
-            dailyMacros={dailyMacros}
-            setDailyMacros={setDailyMacros}
-            userProfile={userProfile}
-            setUserProfile={setUserProfile}
+            dailyMacros={dailyMacros!}
+            setDailyMacros={setDailyMacros!}
+            userProfile={userProfile!}
+            setUserProfile={setUserProfile!}
             dictionary={dictionary}
             hydration={hydration}
             setHydration={setHydration}

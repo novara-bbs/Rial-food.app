@@ -55,7 +55,7 @@ interface AppStateContextType {
   miseEnPlaceEnabled: boolean;
   setMiseEnPlaceEnabled: (v: boolean) => void;
   userProfile: UserProfile;
-  setUserProfile: (v: UserProfile) => void;
+  setUserProfile: Setter<UserProfile>;
 
   // Macros & vitals
   dailyMacros: DailyMacros;

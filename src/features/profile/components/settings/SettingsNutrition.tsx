@@ -2,18 +2,25 @@ import { useState, useMemo } from 'react';
 import { Target, Leaf, ShieldAlert, Search, X, Droplets, Footprints, Heart, Ban } from 'lucide-react';
 import { useI18n } from '../../../../i18n';
 import type { Ingredient, Allergen } from '../../../../types';
+import type { UserProfile } from '../../../../types/user';
+import type { DailyMacros } from '../../../../contexts/state/useVitalsState';
 import { INPUT_SURFACE_CLASSES } from '@/components/ui/surface';
 
+type Setter<T> = (fn: T | ((prev: T) => T)) => void;
+
+interface HydrationState { consumed: number; target: number }
+interface MovementState { steps: number; target: number; activeMinutes: number; activeTarget: number }
+
 interface Props {
-  dailyMacros: any;
-  setDailyMacros: any;
-  userProfile: any;
-  setUserProfile: any;
+  dailyMacros: DailyMacros;
+  setDailyMacros: Setter<DailyMacros>;
+  userProfile: UserProfile;
+  setUserProfile: Setter<UserProfile>;
   dictionary: Ingredient[];
-  hydration?: { consumed: number; target: number };
-  setHydration?: (fn: any) => void;
-  movement?: { steps: number; target: number; activeMinutes: number; activeTarget: number };
-  setMovement?: (fn: any) => void;
+  hydration?: HydrationState;
+  setHydration?: Setter<HydrationState>;
+  movement?: MovementState;
+  setMovement?: Setter<MovementState>;
 }
 
 export default function SettingsNutrition({ dailyMacros, setDailyMacros, userProfile, setUserProfile, dictionary, hydration, setHydration, movement, setMovement }: Props) {
@@ -32,7 +39,7 @@ export default function SettingsNutrition({ dailyMacros, setDailyMacros, userPro
 
   const toggleDietaryPreference = (pref: string) => {
     if (!setUserProfile) return;
-    setUserProfile((prev: any) => {
+    setUserProfile((prev: UserProfile) => {
       const current = prev.dietaryPreferences || [];
       if (current.includes(pref)) return { ...prev, dietaryPreferences: current.filter((p: string) => p !== pref) };
       return { ...prev, dietaryPreferences: [...current, pref] };
@@ -41,7 +48,7 @@ export default function SettingsNutrition({ dailyMacros, setDailyMacros, userPro
 
   /** Set or toggle a food preference. Passing `null` removes the entry (neutral). */
   const setFoodPref = (id: string, pref: 'like' | 'dislike' | null) => {
-    setUserProfile((prev: any) => {
+    setUserProfile((prev: UserProfile) => {
       const current: Record<string, 'like' | 'dislike'> = { ...(prev.foodPreferences ?? {}) };
       if (pref === null || current[id] === pref) {
         delete current[id]; // toggle off → neutral
@@ -54,7 +61,7 @@ export default function SettingsNutrition({ dailyMacros, setDailyMacros, userPro
   };
 
   const toggleIntolerance = (allergen: Allergen) => {
-    setUserProfile((prev: any) => {
+    setUserProfile((prev: UserProfile) => {
       const current: Allergen[] = prev.intolerances || [];
       if (current.includes(allergen)) return { ...prev, intolerances: current.filter((a) => a !== allergen) };
       return { ...prev, intolerances: [...current, allergen] };
@@ -105,7 +112,7 @@ export default function SettingsNutrition({ dailyMacros, setDailyMacros, userPro
               </div>
               <input type="range" min={min} max={max} step={step}
                 value={dailyMacros?.target?.[key] ?? defaultVal}
-                onChange={(e) => setDailyMacros && setDailyMacros((prev: any) => ({ ...prev, target: { ...prev.target, [key]: parseInt(e.target.value) } }))}
+                onChange={(e) => setDailyMacros && setDailyMacros((prev: DailyMacros) => ({ ...prev, target: { ...prev.target, [key]: parseInt(e.target.value) } }))}
                 className={`w-full h-2 bg-surface-container-highest rounded-full appearance-none cursor-pointer ${accent}`} />
             </div>
           ))}
@@ -254,7 +261,7 @@ export default function SettingsNutrition({ dailyMacros, setDailyMacros, userPro
                 step={1}
                 value={hydration.target}
                 onChange={(e) =>
-                  setHydration((prev: any) => ({ ...prev, target: parseInt(e.target.value) }))
+                  setHydration((prev: HydrationState) => ({ ...prev, target: parseInt(e.target.value) }))
                 }
                 className="w-full h-2 bg-surface-container-highest rounded-full appearance-none cursor-pointer accent-secondary"
                 aria-label={t.settings.hydrationTarget}
@@ -280,7 +287,7 @@ export default function SettingsNutrition({ dailyMacros, setDailyMacros, userPro
                   step={500}
                   value={movement.target}
                   onChange={(e) =>
-                    setMovement((prev: any) => ({ ...prev, target: parseInt(e.target.value) }))
+                    setMovement((prev: MovementState) => ({ ...prev, target: parseInt(e.target.value) }))
                   }
                   className="w-full h-2 bg-surface-container-highest rounded-full appearance-none cursor-pointer accent-primary"
                   aria-label={t.settings.stepsTarget}
@@ -298,7 +305,7 @@ export default function SettingsNutrition({ dailyMacros, setDailyMacros, userPro
                   step={5}
                   value={movement.activeTarget}
                   onChange={(e) =>
-                    setMovement((prev: any) => ({ ...prev, activeTarget: parseInt(e.target.value) }))
+                    setMovement((prev: MovementState) => ({ ...prev, activeTarget: parseInt(e.target.value) }))
                   }
                   className="w-full h-2 bg-surface-container-highest rounded-full appearance-none cursor-pointer accent-primary"
                   aria-label={t.settings.activeMinTarget}

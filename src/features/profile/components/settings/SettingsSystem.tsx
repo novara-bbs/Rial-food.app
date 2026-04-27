@@ -15,7 +15,7 @@ import { SUPABASE_URL, SUPABASE_ANON_KEY } from '../../../../config/env';
 
 interface Props {
   showAIBot: boolean;
-  setShowAIBot: any;
+  setShowAIBot?: (v: boolean) => void;
 }
 
 export default function SettingsSystem({ showAIBot, setShowAIBot }: Props) {
