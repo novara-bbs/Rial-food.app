@@ -37,6 +37,8 @@ const PAGESHELL_EXCEPTIONS = new Set<string>([
   'src/features/ai/screens/AICoach.tsx',
   'src/features/recipes/screens/RecipeDetail.tsx',
   'src/features/social/screens/StoryViewer.tsx',
+  // Modal overlays (fixed inset-0) — PageShell would clash with the full-bleed layout.
+  'src/features/food/barcode/screens/BarcodeScannerScreen.tsx',
   // Legacy screens pending audit — remove when migrated.
   'src/features/home/screens/Explore.tsx',
   'src/features/planner/screens/Planner.tsx',

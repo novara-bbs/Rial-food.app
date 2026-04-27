@@ -209,7 +209,7 @@ const typographyMigrationAllowlist = [
   // Login.tsx migrated [1.5.101]: <h1> → <Heading>, text-3xl → text-headline, text-xs → text-label
   // Signup.tsx migrated [1.5.101]: same as Login + password hint/legal note font-label → font-headline
   // DemoSeedCard.tsx migrated [1.5.101]: <h2> → <Heading level="h4">
-  'src/features/food/components/BarcodeScanner.tsx',
+  // BarcodeScanner.tsx migrated [1.5.134]: promoted to food/barcode/ sub-feature + <Heading> primitives
   'src/features/food/components/FamilyCard.tsx',
   'src/features/food/components/PortionSelector.tsx',
   'src/features/food/components/PortionSheet.tsx',
