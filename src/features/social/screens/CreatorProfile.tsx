@@ -13,6 +13,7 @@ import { CREATORS_MAP } from '../data/seed-creators';
 import SectionCard from '../../../components/SectionCard';
 import { Heading } from '@/components/ui/Typography';
 import { FollowButton } from '@/components/patterns/FollowButton';
+import type { Recipe } from '../../../types';
 
 export default function CreatorProfile({ onBack }: { onBack: () => void }) {
   const { t } = useI18n();
@@ -58,14 +59,14 @@ export default function CreatorProfile({ onBack }: { onBack: () => void }) {
   const creatorPosts = useMemo(() => {
     if (isSelf) {
       // Id-based ownership. Name match breaks in EN locale and on profile rename.
-      return communityPosts.filter((p: any) => p.author?.id === 'self');
+      return communityPosts.filter((p) => p.author?.id === 'self');
     }
-    return communityPosts.filter((p: any) => p.author?.id === creator.id);
+    return communityPosts.filter((p) => p.author?.id === creator.id);
   }, [communityPosts, isSelf, creator]);
 
   const creatorRecipes = useMemo(() => {
     if (isSelf) return savedRecipes;
-    return savedRecipes.filter((r: any) => r.publishedBy === creator.id);
+    return savedRecipes.filter((r) => r.publishedBy === creator.id);
   }, [isSelf, savedRecipes, creator.id]);
 
   return (
@@ -140,7 +141,7 @@ export default function CreatorProfile({ onBack }: { onBack: () => void }) {
           {creatorPosts.length === 0 ? (
             <EmptyState icon="📝" title={cp.noPosts} description={isSelf ? cp.noPostsSelf : cp.noPosts} />
           ) : (
-            creatorPosts.map((post: any) => (
+            creatorPosts.map((post) => (
               <SectionCard key={post.id} padding="none" spacing="none" className="relative p-4 hover:border-primary/50 transition-colors focus-within:border-primary/50">
                 {/* Stretched-link button gives the whole card a keyboard-focusable target without nesting buttons in buttons. Recipe CTA below uses stopPropagation + higher z-index to override. */}
                 <button
@@ -155,8 +156,10 @@ export default function CreatorProfile({ onBack }: { onBack: () => void }) {
                     type="button"
                     onClick={(e) => {
                       e.stopPropagation();
-                      const full = savedRecipes.find((r: any) => String(r.id) === String(post.recipe.id));
-                      navigateToRecipe(full || { ...post.recipe, macros: { calories: post.recipe.cal, protein: post.recipe.pro, carbs: post.recipe.carbs, fats: post.recipe.fats } });
+                      const rec = post.recipe;
+                      if (!rec) return;
+                      const full = savedRecipes.find((r) => String(r.id) === String(rec.id));
+                      navigateToRecipe(full || { ...rec, macros: { calories: rec.cal, protein: rec.pro, carbs: rec.carbs, fats: rec.fats } } as unknown as Recipe);
                     }}
                     className="relative z-10 mt-3 w-full text-left bg-background border border-outline-variant/20 rounded-sm p-3 flex items-center gap-3 hover:border-primary/30 transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
                   >
@@ -187,10 +190,10 @@ export default function CreatorProfile({ onBack }: { onBack: () => void }) {
             <EmptyState icon="🍳" title={cp.noRecipes} description={cp.noRecipes} />
           ) : (
             <div className="grid grid-cols-2 gap-3">
-              {creatorRecipes.slice(0, 8).map((recipe: any, i: number) => (
+              {creatorRecipes.slice(0, 8).map((recipe, i) => (
                 <RecipeCard
                   key={recipe.id || i}
-                  recipe={{ ...recipe, cal: recipe.macros?.calories || recipe.cal || 0, pro: recipe.macros?.protein || recipe.pro || 0 }}
+                  recipe={{ ...recipe, cal: recipe.macros?.calories ?? 0, pro: recipe.macros?.protein ?? 0 }}
                   variant="grid"
                   onPress={() => navigateToRecipe(recipe)}
                 />
