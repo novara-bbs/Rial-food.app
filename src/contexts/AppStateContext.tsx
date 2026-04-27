@@ -194,8 +194,8 @@ interface AppStateContextType {
   handleLoadDemoSeed?: () => Promise<void>;
   handleClearDemoSeed?: () => void;
   navigateToRecipe: (recipe: Recipe) => void;
-  recipeToEdit: Recipe | null;
-  setRecipeToEdit: (recipe: Recipe | null) => void;
+  recipeToEdit: Partial<Recipe> | null;
+  setRecipeToEdit: (recipe: Partial<Recipe> | null) => void;
 }
 
 // UserProfile + FamilyMember moved to src/types/user.ts in Phase 2.5 [1.5.116].

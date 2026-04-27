@@ -5,7 +5,7 @@ import { useI18n } from '../../../i18n';
 
 interface ActivityRowProps {
   movement: { steps: number; target: number; activeMinutes: number; activeTarget: number };
-  setMovement?: (m: any) => void;
+  setMovement?: (m: { steps: number; target: number; activeMinutes: number; activeTarget: number } | ((prev: { steps: number; target: number; activeMinutes: number; activeTarget: number }) => { steps: number; target: number; activeMinutes: number; activeTarget: number })) => void;
   isTrainingDay: boolean;
   setIsTrainingDay: (v: boolean) => void;
 }

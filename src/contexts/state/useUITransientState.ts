@@ -26,10 +26,7 @@ export function useUITransientState() {
   const [selectedChallengeId, setSelectedChallengeId] = useState<string | null>(null);
   const [targetPlanDay, setTargetPlanDay] = useState<number | null>(null);
   const [openScannerOnAddMeal, setOpenScannerOnAddMeal] = useState<boolean>(false);
-  // Untyped on purpose: recipeToEdit shape mirrors any in-flight edit (partial Recipe).
-  // Tightening requires a dedicated EditableRecipe type — V2.
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const [recipeToEdit, setRecipeToEdit] = useState<any>(null);
+  const [recipeToEdit, setRecipeToEdit] = useState<Partial<Recipe> | null>(null);
 
   return {
     selectedRecipe, setSelectedRecipe,

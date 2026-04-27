@@ -17,21 +17,21 @@ import { useI18n } from '@/i18n';
 import RecipeSubstitutionPicker from '../RecipeSubstitutionPicker';
 import RecipeDaySelectorSheet from '../RecipeDaySelectorSheet';
 import { defaultSlotFor } from '../../utils/meal-slot';
+import type { CommunityPost } from '../../../../types/social';
+import type { UserProfile } from '../../../../types/user';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 type RecipeData = any;
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 type SwapSuggestion = any;
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-type CommunityPostRow = any;
+type CommunityPostRow = CommunityPost;
 
 interface RecipeOverviewTabProps {
   data: RecipeData;
   matchScore: number;
   swapSuggestions: SwapSuggestion[];
   applySwap: (fromId: string, toIngredient: { id: string }) => void;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  userProfile: any;
+  userProfile: UserProfile | undefined;
   isPro: boolean;
   cookedCount: number;
   servings: number;
@@ -177,7 +177,7 @@ export default function RecipeOverviewTab({
             <MessageSquare className="w-4 h-4 text-primary" /> {t.recipeDetail.notes} ({recipeComments.length})
           </Heading>
           {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
-          {recipeComments.map((comment: any) => (
+          {recipeComments.map((comment) => (
             <div key={comment.id} className="bg-surface-container-low p-3 rounded-sm border border-outline-variant/10 mb-2">
               <div className="flex items-center gap-2 mb-1">
                 {comment.authorImg ? (

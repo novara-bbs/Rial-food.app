@@ -67,7 +67,7 @@ export default function Cocina({ onAddMeal, onCreateRecipe, onNavigateToRecipe, 
   );
   const [filterOpen, setFilterOpen] = useState(false);
 
-  const parseMin = (v: any) => typeof v === 'number' ? v : parseInt(String(v)) || 0;
+  const parseMin = (v: string | number | null | undefined) => typeof v === 'number' ? v : parseInt(String(v ?? '')) || 0;
 
   // Profile slice for match scoring
   // Derive foodDislikes from foodPreferences (R8.3 migration)

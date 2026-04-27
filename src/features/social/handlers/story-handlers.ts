@@ -10,7 +10,7 @@ interface StoryT {
 }
 
 export function createHandlePublishStory(deps: {
-  setCommunityStories: (fn: any) => void;
+  setCommunityStories: (fn: Story[] | ((prev: Story[]) => Story[])) => void;
   navigateTo: (screen: string) => void;
   getUserProfile: () => UserProfileLike;
   getT: () => StoryT;

@@ -13,6 +13,7 @@ import { Heading } from '@/components/ui/Typography';
 import { useI18n } from '@/i18n';
 import { toast } from 'sonner';
 import type { Micronutrients } from '../../../../types';
+import type { UserProfile } from '../../../../types/user';
 
 interface CalculatedTotals {
   cal: number;
@@ -41,8 +42,7 @@ interface RecipeNutritionTabProps {
   /** Goal-optimisation suggestions for the current user profile. */
   goalSuggestions: GoalSuggestion[];
   /** Active user profile (used to label the goal badge). */
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  userProfile: any;
+  userProfile: UserProfile | undefined;
   /** Append a new ingredient to the parent's "extras" list. */
   setExtraIngredients: React.Dispatch<React.SetStateAction<ExtraIngredient[]>>;
   /** Replace ingredient `fromId` with `toIngredient` in the parent's swap map. */

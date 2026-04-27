@@ -1,10 +1,13 @@
 import { Palette, Moon, Sun, Check, Globe, Scale, Monitor } from 'lucide-react';
 import { useTheme, type Palette as PaletteId, type ColorMode } from '../../../../contexts/ThemeContext';
 import { useI18n, type Locale } from '../../../../i18n';
+import type { UserProfile } from '../../../../types/user';
+
+type Setter<T> = (fn: T | ((prev: T) => T)) => void;
 
 interface Props {
-  userProfile: any;
-  setUserProfile: any;
+  userProfile: UserProfile | undefined;
+  setUserProfile: Setter<UserProfile> | undefined;
 }
 
 interface PaletteSwatch {
@@ -210,7 +213,7 @@ export default function SettingsAppearance({ userProfile, setUserProfile }: Prop
             { id: 'imperial' as const, label: t.settings.imperial, desc: t.settings.imperialDesc },
           ]).map((sys) => (
             <button type="button" key={sys.id}
-              onClick={() => setUserProfile && setUserProfile((prev: any) => ({ ...prev, unitSystem: sys.id }))}
+              onClick={() => setUserProfile && setUserProfile((prev) => ({ ...prev, unitSystem: sys.id }))}
               className={`flex flex-col items-start p-4 rounded-sm border-2 transition-all ${
                 (userProfile?.unitSystem ?? 'metric') === sys.id ? 'border-primary bg-primary/10' : 'border-outline-variant/30 hover:border-outline-variant'
               }`}>

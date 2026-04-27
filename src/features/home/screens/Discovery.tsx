@@ -168,7 +168,7 @@ export default function Discovery({ onNavigateToRecipe, savedRecipes = [], onSav
 
   // Score and normalize all recipes
   const scoredRecipes = useMemo(() => {
-    const parseMin = (v: any) => typeof v === 'number' ? v : parseInt(String(v)) || 0;
+    const parseMin = (v: string | number | null | undefined) => typeof v === 'number' ? v : parseInt(String(v ?? '')) || 0;
     return savedRecipes.map(r => {
       const prep = parseMin(r.prepTime);
       const cook = parseMin(r.cookTime);
