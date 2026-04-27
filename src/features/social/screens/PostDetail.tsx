@@ -9,6 +9,7 @@ import { useNavigation } from '../../../contexts/NavigationContext';
 import PostCard from '../components/PostCard';
 import PageHeader from '../../../components/patterns/PageHeader';
 import { Heading } from '@/components/ui/Typography';
+import type { PostComment } from '../../../types/social';
 
 export default function PostDetail({ onBack }: { onBack: () => void }) {
   const { t } = useI18n();
@@ -16,7 +17,7 @@ export default function PostDetail({ onBack }: { onBack: () => void }) {
   const { navigateTo } = useNavigation();
   const [commentText, setCommentText] = useState('');
 
-  const post = useMemo(() => communityPosts.find((p: any) => p.id === selectedPostId), [communityPosts, selectedPostId]);
+  const post = useMemo(() => communityPosts.find((p) => p.id === selectedPostId), [communityPosts, selectedPostId]);
 
   // Id-based ownership check. Name-based compare broke in EN locale (`'Tú'`
   // literal never matches) and whenever the user changed their display name.
@@ -32,7 +33,7 @@ export default function PostDetail({ onBack }: { onBack: () => void }) {
   const morePosts = useMemo(() => {
     if (!post) return [];
     return communityPosts
-      .filter((p: any) => p.id !== post.id && p.author?.id === post.author?.id)
+      .filter((p) => p.id !== post.id && p.author?.id === post.author?.id)
       .slice(0, 3);
   }, [communityPosts, post]);
 
@@ -70,7 +71,7 @@ export default function PostDetail({ onBack }: { onBack: () => void }) {
           navigateTo('creator-profile');
         }}
         onNavigateToRecipe={(recipe) => {
-          const full = savedRecipes.find((r: any) => String(r.id) === String(recipe.id));
+          const full = savedRecipes.find((r) => String(r.id) === String(recipe.id));
           navigateToRecipe(full || { ...recipe, macros: { calories: recipe.cal, protein: recipe.pro, carbs: recipe.carbs, fats: recipe.fats } });
         }}
       />
@@ -79,7 +80,7 @@ export default function PostDetail({ onBack }: { onBack: () => void }) {
       {post.commentsList && post.commentsList.length > 0 && (
         <div className="space-y-3">
           <Heading level="h3" variant="overline" className="text-caption">{t.postDetail.allComments} ({post.commentsList.length})</Heading>
-          {post.commentsList.map((comment: any) => (
+          {post.commentsList.map((comment: PostComment) => (
             <SectionCard key={comment.id} padding="none" spacing="none" className="flex gap-3 p-3">
               <div className="w-8 h-8 rounded-full bg-surface-container-highest flex items-center justify-center text-caption font-bold text-tertiary shrink-0">
                 {comment.authorImg ? (
@@ -125,7 +126,7 @@ export default function PostDetail({ onBack }: { onBack: () => void }) {
       {morePosts.length > 0 && (
         <div className="space-y-3">
           <Heading level="h3" variant="overline" className="text-caption">{t.postDetail.moreFromCreator}</Heading>
-          {morePosts.map((p: any) => (
+          {morePosts.map((p) => (
             <button type="button"
               key={p.id}
               onClick={() => {

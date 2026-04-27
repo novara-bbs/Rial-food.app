@@ -11,10 +11,11 @@ import TabNav from '../../../components/patterns/TabNav';
 import PostCard from '../components/PostCard';
 import StoryRingsRow from '../components/StoryRingsRow';
 import { rankFeed, getFollowingFeed, getTrendingFeed } from '../utils/feed-algorithm';
+import type { CommunityPost } from '../../../types/social';
 
 type FeedMode = 'forYou' | 'following' | 'trending';
 
-export default function Community({ communityPosts = [], onAddComment }: { communityPosts?: any[], onAddComment?: (postId: number, comment: string) => void }) {
+export default function Community({ communityPosts = [], onAddComment }: { communityPosts?: CommunityPost[], onAddComment?: (postId: number, comment: string) => void }) {
   const { t } = useI18n();
   const { navigateTo } = useNavigation();
   const {
@@ -38,7 +39,7 @@ export default function Community({ communityPosts = [], onAddComment }: { commu
   };
   const confirmDeletePost = () => {
     if (pendingDeletePostId !== null) {
-      setCommunityPosts((prev: any[]) => prev.filter(p => p.id !== pendingDeletePostId));
+      setCommunityPosts((prev) => prev.filter(p => p.id !== pendingDeletePostId));
       setPendingDeletePostId(null);
     }
   };
@@ -46,7 +47,7 @@ export default function Community({ communityPosts = [], onAddComment }: { commu
   // Ownership must be id-based. The old name compare (`'Tu'`, `'Tú'`, or
   // `userProfile.name`) broke in EN locale and whenever the user changed their
   // display name. `createHandleCreatePost` always tags `author.id === 'self'`.
-  const isOwnPost = (post: any) => post.author?.id === 'self';
+  const isOwnPost = (post: CommunityPost) => post.author?.id === 'self';
 
   // `followedCreators` now comes from AppStateContext (Wave 3 factory handler)
   // so toggling follow from Discover/CreatorProfile updates here live — no
@@ -68,7 +69,7 @@ export default function Community({ communityPosts = [], onAddComment }: { commu
 
   const unitSystem = userProfile?.unitSystem ?? 'metric';
 
-  const renderPost = (post: any) => (
+  const renderPost = (post: CommunityPost) => (
     <PostCard
       key={post.id}
       post={post}
@@ -87,7 +88,7 @@ export default function Community({ communityPosts = [], onAddComment }: { commu
       onNavigateToProfile={(authorId) => { setSelectedCreatorId(authorId); navigateTo('creator-profile'); }}
       onNavigateToPost={() => { setSelectedPostId(post.id); navigateTo('post-detail'); }}
       onNavigateToRecipe={(recipe) => {
-        const full = savedRecipes.find((r: any) => String(r.id) === String(recipe.id));
+        const full = savedRecipes.find((r) => String(r.id) === String(recipe.id));
         navigateToRecipe(full || { ...recipe, macros: { calories: recipe.cal, protein: recipe.pro, carbs: recipe.carbs, fats: recipe.fats } });
       }}
     />

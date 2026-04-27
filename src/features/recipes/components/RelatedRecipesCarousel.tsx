@@ -15,10 +15,11 @@
  */
 import { useI18n } from '../../../i18n';
 import RecipeCard from '../../../components/patterns/RecipeCard';
+import type { Recipe } from '../../../types';
 
 // ─── helpers ─────────────────────────────────────────────────────────────────
 
-function scoreMatch(current: any, candidate: any): number {
+function scoreMatch(current: Recipe, candidate: Recipe): number {
   if (candidate.id === current.id) return -99;
   let score = 0;
 
@@ -42,8 +43,8 @@ function scoreMatch(current: any, candidate: any): number {
   score += Math.min(overlap, 3) * 2;
 
   // Calorie proximity (±20%)
-  const curKcal: number = current.macros?.calories ?? current.cal ?? 0;
-  const candKcal: number = candidate.macros?.calories ?? candidate.cal ?? 0;
+  const curKcal: number = current.macros?.calories ?? 0;
+  const candKcal: number = candidate.macros?.calories ?? 0;
   if (curKcal > 0 && candKcal > 0) {
     const ratio = Math.abs(curKcal - candKcal) / curKcal;
     if (ratio <= 0.2) score += Math.round((1 - ratio / 0.2) * 1);
@@ -52,7 +53,7 @@ function scoreMatch(current: any, candidate: any): number {
   return score;
 }
 
-function formatTime(recipe: any): string {
+function formatTime(recipe: Recipe): string {
   const prep = parseInt(String(recipe.prepTime)) || 0;
   const cook = parseInt(String(recipe.cookTime)) || 0;
   const total = prep + cook;
@@ -66,9 +67,9 @@ function formatTime(recipe: any): string {
 // ─── types ───────────────────────────────────────────────────────────────────
 
 export interface RelatedRecipesCarouselProps {
-  currentRecipe: any;
-  allRecipes: any[];
-  onNavigate: (recipe: any) => void;
+  currentRecipe: Recipe;
+  allRecipes: Recipe[];
+  onNavigate: (recipe: Recipe) => void;
   className?: string;
 }
 
@@ -91,7 +92,7 @@ export default function RelatedRecipesCarousel({
 
   if (related.length === 0) return null;
 
-  const heading = (t as any).recipes?.relatedRecipes ?? (t as any).collections?.relatedRecipes ?? 'También te puede gustar';
+  const heading = t.recipes.relatedRecipes;
 
   return (
     <div className={`mt-6 ${className}`}>
@@ -99,7 +100,7 @@ export default function RelatedRecipesCarousel({
         {heading}
       </h3>
       <div className="flex gap-3 overflow-x-auto scrollbar-none px-6 pb-2">
-        {related.map((recipe: any) => (
+        {related.map((recipe) => (
           <RecipeCard
             key={recipe.id}
             recipe={{
