@@ -1,5 +1,7 @@
 import { useI18n } from '../../../i18n';
 import { useLocalStorageState } from '../../../hooks/useLocalStorageState';
+import type { Recipe } from '../../../types';
+import type { CommunityPost } from '../../../types';
 import TabNav from '../../../components/patterns/TabNav';
 import Discovery from './Discovery';
 import Community from '../../social/screens/Community';
@@ -21,10 +23,10 @@ export default function Explore({
   communityPosts,
   onAddComment,
 }: {
-  onNavigateToRecipe: (r: any) => void;
-  savedRecipes?: any[];
-  onSaveRecipe?: (r: any) => void;
-  communityPosts?: any[];
+  onNavigateToRecipe: (r: Recipe) => void;
+  savedRecipes?: Recipe[];
+  onSaveRecipe?: (r: Recipe) => void;
+  communityPosts?: CommunityPost[];
   onAddComment?: (postId: number, comment: string) => void;
 }) {
   const { t } = useI18n();
