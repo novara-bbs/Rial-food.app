@@ -44,7 +44,7 @@ import {
   createHandleToggleChallenge,
   type ChallengeProgress,
 } from '../../features/social/handlers/challenge-handlers';
-import type { Story, StorySlide, Notification as NotificationType } from '../../types/social';
+import type { Story, StorySlide, Notification as NotificationType, CommunityPost } from '../../types/social';
 import type { UserProfile } from '../../types/user';
 import type { Translations } from '../../i18n';
 
@@ -54,12 +54,9 @@ interface UseSocialStateDeps {
   navigateTo: (screen: string, data?: Record<string, unknown>) => void;
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-type CommunityPostRow = any;
-
 export function useSocialState({ userProfile, t, navigateTo }: UseSocialStateDeps) {
   // ── Community posts (lazy seed: replace, since demo content) ─────────────
-  const [communityPosts, setCommunityPosts] = useLocalStorageState<CommunityPostRow[]>('communityPosts', []);
+  const [communityPosts, setCommunityPosts] = useLocalStorageState<CommunityPost[]>('communityPosts', []);
   useEffect(() => {
     if (!shouldReseed('communityPosts', 'communityPosts')) return;
     import('../../features/social/data/seed-posts')
@@ -81,7 +78,7 @@ export function useSocialState({ userProfile, t, navigateTo }: UseSocialStateDep
   const toggleLikePost = useCallback((postId: number) => {
     setLikedPosts((prev: number[]) => {
       const willLike = !prev.includes(postId);
-      setCommunityPosts((posts: CommunityPostRow[]) =>
+      setCommunityPosts((posts: CommunityPost[]) =>
         posts.map(p => p.id === postId
           ? { ...p, likes: Math.max(0, (p.likes || 0) + (willLike ? 1 : -1)) }
           : p,
@@ -94,7 +91,7 @@ export function useSocialState({ userProfile, t, navigateTo }: UseSocialStateDep
   const toggleSavePost = useCallback((postId: number) => {
     setSavedPosts((prev: number[]) => {
       const willSave = !prev.includes(postId);
-      setCommunityPosts((posts: CommunityPostRow[]) =>
+      setCommunityPosts((posts: CommunityPost[]) =>
         posts.map(p => p.id === postId
           ? { ...p, saves: Math.max(0, (p.saves || 0) + (willSave ? 1 : -1)) }
           : p,

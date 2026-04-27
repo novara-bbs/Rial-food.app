@@ -6,6 +6,6 @@ export { MEAL_SLOTS } from './recipe';
 export type { Cuisine, DietaryTag, TimeBucket, Difficulty } from './taxonomy';
 export { CUISINES, DIETARY_TAGS, TIME_BUCKETS, DIFFICULTIES } from './taxonomy';
 export type { User, AppState } from './user';
-export type { DailyCheckIn, ToleranceLog } from './wellness';
+export type { DailyCheckIn, ToleranceLog, RealFeelEntry, StoredRealFeelEntry, EnergySignal, DigestionSignal, MindsetSignal } from './wellness';
 export type { CommunityPost, PostComment, Story, StorySlide, Notification } from './social';
 export type { MealPlanDay } from './planner';

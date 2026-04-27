@@ -1,5 +1,57 @@
 # RIAL App - Changelog
 
+## [1.5.139] - 2026-04-27
+
+### refactor(types): Sprint 4 — AppStateContext type-safety sweep
+
+Zero `any` types in the `AppStateContextType` interface. 44 lint warnings eliminated.
+
+**New types in `src/types/wellness.ts`**:
+- `EnergySignal`, `DigestionSignal`, `MindsetSignal` — signal enums for RealFeel tracking.
+- `RealFeelEntry` — moved from `RealFeelInline.tsx` component; re-exported there for backward
+  compatibility.
+- `StoredRealFeelEntry extends RealFeelEntry` — persisted shape with `id`, `date`, `mealIds`,
+  `ingredientIds` added by the wellness handler on storage. Distinguishes input type from stored type.
+- All new types exported via `src/types/index.ts`.
+
+**`AppStateContextType` interface overhaul (`src/contexts/AppStateContext.tsx`)**:
+- `type Setter<T>` helper for updater-compatible setters (`T | ((prev: T) => T)`).
+- `HydrationState` + `MovementState` local aliases to avoid inline shape repetition.
+- `LoggableMeal` interface replacing `meal: any` in `handleLogMeal`/`handleLogMealNow` — captures
+  the duck-typed fields accepted from Recipe, Ingredient, and custom log objects.
+- All setter types (`setHydration`, `setMovement`, `setSavedRecipes`, `setMealPlan`,
+  `setShoppingList`, `setDailyLog`, `setFoodHistory`, `setWeightHistory`, `setNutritionHistory`,
+  `setCommunityStories`, `setCommunityPosts`, `setToleranceLogs`, `setRealFeelLogs`,
+  `setCheckInStatus`) fully typed — no `any`.
+- `communityPosts: CommunityPost[]`, `toleranceLogs: ToleranceLog[]`,
+  `realFeelLogs: StoredRealFeelEntry[]` — arrays properly typed.
+- Handler signatures: `handleSaveRecipe`, `handleCreateRecipeSubmit`, `handleImportRecipe`,
+  `handleDuplicateRecipe`, `handleMarkAsCooked`, `handleAddToPlan`, `handleDeleteRecipe`,
+  `navigateToRecipe`, `handleAddToleranceLog`, `handleRealFeelLog`, `handleCompleteCheckIn`
+  — all `any` replaced with domain types.
+- `recipeToEdit: Recipe | null`, `setRecipeToEdit: (recipe: Recipe | null) => void`.
+
+**Wellness handlers typed (`src/features/wellness/handlers/wellness-handlers.ts`)**:
+- `createHandleAddToleranceLog`: param `Omit<ToleranceLog, 'id'>`, setter `ToleranceLog[]`.
+- `createHandleRealFeelLog`: param `RealFeelEntry`, setter `StoredRealFeelEntry[]`.
+- `createHandleCheckIn/CompleteCheckIn`: setter and param use `DailyCheckIn`.
+
+**State hooks cleaned**:
+- `useWellnessState`: `toleranceLogs: ToleranceLog[]`, `realFeelLogs: StoredRealFeelEntry[]`,
+  `setCommunityPosts: React.Dispatch<React.SetStateAction<CommunityPost[]>>`.
+- `useSocialState`: `CommunityPostRow = any` alias removed; `CommunityPost[]` used directly.
+
+**Seed data fixed**:
+- `seed-tolerance.ts`: shape updated from legacy `{id, ingredient, level, notes}` to canonical
+  `ToleranceLog` shape `{id, userId, date, food, reaction, symptoms}`.
+
+**Bug fixes (surfaced by stricter types)**:
+- `CreatorVerification.tsx:40` — `.date` → `.createdAt` (CommunityPost has `createdAt`, not `date`).
+- `RecipeDetailModals.tsx:34` — `handleDeleteRecipe: (recipeId: string | number)` → `string`
+  (Recipe.id is always `string`).
+
+---
+
 ## [1.5.109] - 2026-04-26
 
 ### fix(ds): chip/badge weight refinement + .badge-card global utility

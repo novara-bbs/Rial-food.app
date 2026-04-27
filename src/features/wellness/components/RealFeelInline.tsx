@@ -2,6 +2,10 @@ import { useState, useEffect } from 'react';
 import { X, Zap, Leaf, Brain } from 'lucide-react';
 import { useI18n } from '../../../i18n';
 import { Heading } from '@/components/ui/Typography';
+import type { RealFeelEntry, EnergySignal, DigestionSignal, MindsetSignal } from '../../../types/wellness';
+
+// Re-export so existing callers that imported from this file keep working.
+export type { RealFeelEntry } from '../../../types/wellness';
 
 const EMOJIS = [
   { level: 1, emoji: '😴', key: 'terrible' },
@@ -12,19 +16,6 @@ const EMOJIS = [
 ];
 
 const TAG_KEYS = ['bloating', 'energy', 'heaviness', 'lightness', 'clarity', 'drowsiness', 'cramps', 'headache'] as const;
-
-type EnergySignal = 'high' | 'stable' | 'low';
-type DigestionSignal = 'clean' | 'sensitive' | 'bloated';
-type MindsetSignal = 'calm' | 'balanced' | 'stressed';
-
-export interface RealFeelEntry {
-  level: number;
-  tags: string[];
-  note?: string;
-  energy?: EnergySignal;
-  digestion?: DigestionSignal;
-  mindset?: MindsetSignal;
-}
 
 export default function RealFeelInline({ onSubmit, onDismiss }: {
   onSubmit: (entry: RealFeelEntry) => void;

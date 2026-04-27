@@ -37,7 +37,7 @@ export default function CreatorVerification({ onBack }: { onBack: () => void }) 
   // `JSON.parse(localStorage.getItem)` read — same source of truth as every
   // other screen, so it reflects live toggles.
   const followersCount = followedCreators.length; // simplified: counts how many creators user follows as proxy
-  const firstPostDate = communityPosts.length > 0 ? new Date(communityPosts[communityPosts.length - 1]?.date || Date.now()) : new Date();
+  const firstPostDate = communityPosts.length > 0 ? new Date(communityPosts[communityPosts.length - 1]?.createdAt || Date.now()) : new Date();
   const daysActive = Math.max(1, Math.floor((Date.now() - firstPostDate.getTime()) / 86_400_000));
 
   const requirements: Requirement[] = [

@@ -37,16 +37,16 @@ import {
 } from '../../features/wellness/handlers/weight-handlers';
 import { createHandleShareProgress } from '../../features/wellness/handlers/progress-share-handlers';
 import type { DailyArchive } from '../../hooks/useDailyReset';
-import type { BodySnapshot } from '../../types/wellness';
+import type { BodySnapshot, ToleranceLog, StoredRealFeelEntry } from '../../types/wellness';
 import type { DailyCheckIn as DailyCheckInType } from '../../types';
+import type { CommunityPost } from '../../types/social';
 import type { UserProfile } from '../../types/user';
 import type { DailyLogEntry } from '../../features/food/handlers/meal-handlers';
 
 interface UseWellnessStateDeps {
   setUserProfile: React.Dispatch<React.SetStateAction<UserProfile>>;
   setCheckInStatus: React.Dispatch<React.SetStateAction<DailyCheckInType | null>>;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  setCommunityPosts: React.Dispatch<React.SetStateAction<any[]>>;
+  setCommunityPosts: React.Dispatch<React.SetStateAction<CommunityPost[]>>;
   dailyLog: DailyLogEntry[];
   navigateTo: (screen: string, data?: Record<string, unknown>) => void;
 }
@@ -55,15 +55,13 @@ export function useWellnessState({
   setUserProfile, setCheckInStatus, setCommunityPosts, dailyLog, navigateTo,
 }: UseWellnessStateDeps) {
   // ── Tolerance journal ────────────────────────────────────────────────────
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const [toleranceLogs, setToleranceLogs] = useLocalStorageState<any[]>('toleranceLogs', []);
+  const [toleranceLogs, setToleranceLogs] = useLocalStorageState<ToleranceLog[]>('toleranceLogs', []);
   useEffect(() => {
     if (!shouldReseed('toleranceLogs', 'toleranceLogs')) return;
     import('../../features/wellness/data/seed-tolerance')
       .then((m) => {
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        setToleranceLogs((prev: any[]) =>
-          prev.length === 0 ? m.SEED_TOLERANCE_LOGS : prev,
+        setToleranceLogs((prev) =>
+          prev.length === 0 ? (m.SEED_TOLERANCE_LOGS as ToleranceLog[]) : prev,
         );
         setStoredSeedVersion('toleranceLogs');
       })
@@ -71,15 +69,13 @@ export function useWellnessState({
   }, [setToleranceLogs]);
 
   // ── RealFeel journal ─────────────────────────────────────────────────────
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const [realFeelLogs, setRealFeelLogs] = useLocalStorageState<any[]>('realFeelLogs', []);
+  const [realFeelLogs, setRealFeelLogs] = useLocalStorageState<StoredRealFeelEntry[]>('realFeelLogs', []);
   useEffect(() => {
     if (!shouldReseed('realFeelLogs', 'realFeelLogs')) return;
     import('../../features/wellness/data/seed-real-feel-logs')
       .then((m) => {
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        setRealFeelLogs((prev: any[]) =>
-          prev.length === 0 ? m.SEED_REAL_FEEL_LOGS : prev,
+        setRealFeelLogs((prev) =>
+          prev.length === 0 ? (m.SEED_REAL_FEEL_LOGS as StoredRealFeelEntry[]) : prev,
         );
         setStoredSeedVersion('realFeelLogs');
       })
