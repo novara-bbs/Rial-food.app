@@ -7,7 +7,7 @@ import { useNavigation } from '../../../contexts/NavigationContext';
 import { type DailyArchive } from '../../../hooks/useDailyReset';
 import { useLocalStorageState } from '../../../hooks/useLocalStorageState';
 import { calcVitality } from '../../home/utils/homeWidgets';
-import { getCorrelations } from '../utils/correlations';
+import { getCorrelations, type CorrelationInsight } from '../utils/correlations';
 import PageHeader from '../../../components/patterns/PageHeader';
 import { toast } from 'sonner';
 import WeeklyScoreCard from '../components/WeeklyScoreCard';
@@ -76,7 +76,7 @@ export default function Progress({ onBack }: { onBack: () => void }) {
 
   // ─── Canonical streaks (Q13 coherence) ──────────────────────────────────────
   const todayHasRealFeel = (realFeelLogs || []).some(
-    (l: any) => l.date && l.date.slice(0, 10) === todayDate,
+    (l) => l.date && l.date.slice(0, 10) === todayDate,
   );
   const streaks = useMemo(
     () => calcStreaks({
@@ -126,7 +126,7 @@ export default function Progress({ onBack }: { onBack: () => void }) {
 
   // ─── Top Meals This Week (canonical util — shared with WeeklyInsightsCard) ──
   const topMeals = useMemo(
-    () => calcTopMeals(history, dailyLog as any[], now, 0, 3),
+    () => calcTopMeals(history, dailyLog, now, 0, 3),
     [history, dailyLog, now],
   );
 
@@ -146,7 +146,7 @@ export default function Progress({ onBack }: { onBack: () => void }) {
       mealStreak: streaks.mealLog,
       topMeal: topMeals[0] ?? null,
       userName: userProfile?.name,
-      goalType: (userProfile as any)?.goalType,
+      goalType: userProfile?.goal as 'loss' | 'gain' | 'maintain' | undefined,
       copy: {
         positive: p2?.weekInsightPositive,
         neutral: p2?.weekInsightNeutral,
@@ -164,14 +164,14 @@ export default function Progress({ onBack }: { onBack: () => void }) {
   const selectedDayData = useMemo(() => {
     if (!selectedDay) return null;
     if (selectedDay === todayDate) {
-      const todayCal = dailyLog.reduce((s: number, e: any) => s + (e.macros?.cal || 0), 0);
-      const todayPro = dailyLog.reduce((s: number, e: any) => s + (e.macros?.pro || 0), 0);
-      const rf = (realFeelLogs || []).find((l: any) => l.date && l.date.slice(0, 10) === todayDate);
+      const todayCal = dailyLog.reduce((s, e) => s + (e.macros?.cal || 0), 0);
+      const todayPro = dailyLog.reduce((s, e) => s + (e.macros?.pro || 0), 0);
+      const rf = (realFeelLogs || []).find((l) => l.date && l.date.slice(0, 10) === todayDate);
       return { date: todayDate, cal: todayCal, pro: todayPro, mealCount: dailyLog.length, rfLevel: rf?.level };
     }
     const archive = history.find(h => h.date === selectedDay);
     if (!archive) return null;
-    const rf = (realFeelLogs || []).find((l: any) => l.date && l.date.slice(0, 10) === selectedDay);
+    const rf = (realFeelLogs || []).find((l) => l.date && l.date.slice(0, 10) === selectedDay);
     return { date: archive.date, cal: archive.macros.consumed.cal, pro: archive.macros.consumed.pro, mealCount: archive.mealCount, rfLevel: rf?.level };
   }, [selectedDay, history, dailyLog, realFeelLogs, todayDate]);
 
@@ -181,9 +181,9 @@ export default function Progress({ onBack }: { onBack: () => void }) {
     if (logs.length < 3) return null;
     const { trend } = calcVitality(logs);
     const recent14 = logs.slice(0, 14);
-    const rawAvg = recent14.reduce((s: number, l: any) => s + (l.level || 3), 0) / recent14.length;
+    const rawAvg = recent14.reduce((s, l) => s + (l.level || 3), 0) / recent14.length;
     const correlations = getCorrelations(logs).slice(0, 2);
-    const sparkData = [...recent14].reverse().map((l: any) => l.level || 3);
+    const sparkData = [...recent14].reverse().map((l) => l.level || 3);
     return { rawAvg, trend, correlations, sparkData };
   }, [realFeelLogs]);
 
@@ -194,7 +194,7 @@ export default function Progress({ onBack }: { onBack: () => void }) {
     return set;
   }, [history, dailyLog, todayDate]);
   const rfDates = useMemo(
-    () => new Set((realFeelLogs || []).map((l: any) => l.date ? l.date.slice(0, 10) : null).filter(Boolean)),
+    () => new Set((realFeelLogs || []).map((l) => l.date ? l.date.slice(0, 10) : null).filter((d): d is string => d !== null)),
     [realFeelLogs],
   );
 
@@ -217,9 +217,9 @@ export default function Progress({ onBack }: { onBack: () => void }) {
     const thisWeekArchives = history.filter(h => h.date >= thisWeekStart);
     const mealsLogged = thisWeekArchives.reduce((s, h) => s + h.mealCount, 0) + dailyLog.length;
 
-    const thisWeekRF = (realFeelLogs || []).filter((l: any) => l.date && l.date.slice(0, 10) >= thisWeekStart);
+    const thisWeekRF = (realFeelLogs || []).filter((l) => l.date && l.date.slice(0, 10) >= thisWeekStart);
     const avgVitality = thisWeekRF.length > 0
-      ? Math.round((thisWeekRF.reduce((s: number, l: any) => s + (l.level || 3), 0) / thisWeekRF.length) * 20)
+      ? Math.round((thisWeekRF.reduce((s, l) => s + (l.level || 3), 0) / thisWeekRF.length) * 20)
       : 0;
     const consistencyDays = new Set(thisWeekArchives.map(h => h.date)).size + (dailyLog.length > 0 ? 1 : 0);
 
@@ -279,7 +279,7 @@ export default function Progress({ onBack }: { onBack: () => void }) {
   };
 
   const barLabels: Record<string, string> = { cal: 'kcal', pro: 'Prot', carbs: 'Carbs', fats: p?.fats || 'Grasas' };
-  const dayHeaders: string[] = (p as any)?.dayHeaders || (locale === 'en' ? ['S', 'M', 'T', 'W', 'T', 'F', 'S'] : ['D', 'L', 'M', 'X', 'J', 'V', 'S']);
+  const dayHeaders: string[] = p?.dayHeaders || (locale === 'en' ? ['S', 'M', 'T', 'W', 'T', 'F', 'S'] : ['D', 'L', 'M', 'X', 'J', 'V', 'S']);
 
   const bodySubTabs = [
     { id: 'summary' as const, label: p?.bodySummary || 'Resumen' },
@@ -431,7 +431,7 @@ export default function Progress({ onBack }: { onBack: () => void }) {
                   <span className="font-label text-micro uppercase tracking-widest text-on-surface-variant">
                     {p?.topCorrelations || 'Top correlaciones'}
                   </span>
-                  {bienestar.correlations.map((cor: any) => (
+                  {bienestar.correlations.map((cor: CorrelationInsight) => (
                     <div key={cor.id} className="flex items-center gap-3 p-2 bg-surface-container rounded-sm">
                       <span className="text-lg shrink-0">{cor.emoji}</span>
                       <div className="flex-1 min-w-0">
@@ -545,7 +545,7 @@ export default function Progress({ onBack }: { onBack: () => void }) {
               onShare={shareSnapshot}
               onShareCompare={shareComparePair}
               shareLabel={p?.shareSnapshot}
-              goalType={(userProfile as any)?.goalType}
+              goalType={userProfile?.goal as 'loss' | 'gain' | 'maintain' | undefined}
               onLogSnapshot={() => openWithDate()}
             />
           )}
