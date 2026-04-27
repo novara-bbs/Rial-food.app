@@ -48,7 +48,7 @@ const IMAGE_ZONE: Record<string, string> = {
 const INFO_BLOCK: Record<string, string> = {
   carousel: 'flex flex-col p-3 h-[100px]',
   grid:     'flex flex-col p-3 h-[100px]',
-  hero:     'flex flex-col p-4 h-28',
+  hero:     'flex flex-col p-4 h-36',
   compact:  'flex flex-col p-2.5 h-16',
 };
 
