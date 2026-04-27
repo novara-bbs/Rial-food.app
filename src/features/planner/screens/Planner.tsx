@@ -8,6 +8,9 @@ import ConfirmDialog from '../../../components/ConfirmDialog';
 import DashedAddButton from '../../../components/patterns/DashedAddButton';
 import { analyzeBatchCooking } from '../utils/batch-cooking';
 import { detectLeftovers } from '../utils/meal-reuse';
+import type { Recipe } from '../../../types';
+import type { ShoppingItem } from '../../../types/planner';
+import type { Translations } from '../../../i18n';
 
 // ─── Execution state ──────────────────────────────────────────────────────────
 
@@ -15,7 +18,23 @@ export type MealExecutionStatus = 'planned' | 'prepped' | 'cooked' | 'logged';
 
 const STATUS_CYCLE: MealExecutionStatus[] = ['planned', 'prepped', 'cooked', 'logged'];
 
-function getStatusConfig(t: any): Record<MealExecutionStatus, { label: string; color: string; icon: React.ReactNode }> {
+type Setter<T> = (fn: T | ((prev: T) => T)) => void;
+
+/**
+ * Runtime meal-plan entry: Recipe augmented with planner-specific fields
+ * set when the recipe is added to the plan (executionStatus, time, type)
+ * and legacy shorthand macro fields that pre-date the canonical Macros type.
+ */
+type PlannedMeal = Recipe & {
+  executionStatus?: MealExecutionStatus;
+  /** @deprecated Legacy shorthand; prefer macros.calories */ cal?: number;
+  /** @deprecated Legacy shorthand; prefer macros.protein */  pro?: number;
+  /** @deprecated Legacy; prefer Recipe.image */              img?: string;
+  time?: string;
+  type?: string;
+};
+
+function getStatusConfig(t: Translations): Record<MealExecutionStatus, { label: string; color: string; icon: React.ReactNode }> {
   return {
     planned: {
       label: t.planner?.planned || 'PLANEADO',
@@ -50,10 +69,10 @@ function nextStatus(current: MealExecutionStatus): MealExecutionStatus {
 interface PlannerProps {
   onOpenShoppingList?: () => void;
   onAddMeal?: (dayIndex: number) => void;
-  onLogMeal?: (meal: any) => void;
-  mealPlan?: Record<number, any[]>;
-  setMealPlan?: (fn: any) => void;
-  setShoppingList?: (fn: any) => void;
+  onLogMeal?: (meal: PlannedMeal) => void;
+  mealPlan?: Record<number, Recipe[]>;
+  setMealPlan?: Setter<Record<number, Recipe[]>>;
+  setShoppingList?: Setter<ShoppingItem[]>;
 }
 
 export default function Planner({
@@ -70,7 +89,7 @@ export default function Planner({
   const adjustedDayIndex = currentDayIndex === 0 ? 6 : currentDayIndex - 1;
   const [activeDay, setActiveDay] = useState(adjustedDayIndex);
   const [showBatchInsights, setShowBatchInsights] = useState(false);
-  const [mealToDelete, setMealToDelete] = useState<any>(null);
+  const [mealToDelete, setMealToDelete] = useState<PlannedMeal | null>(null);
 
   const dayLetters = [
     t.plan.days.mon, t.plan.days.tue, t.plan.days.wed, t.plan.days.thu,
@@ -81,20 +100,20 @@ export default function Planner({
     t.plan.daysLong.fri, t.plan.daysLong.sat, t.plan.daysLong.sun,
   ];
 
-  const currentMeals = mealPlan ? mealPlan[activeDay] || [] : [];
-  const totalCals = currentMeals.reduce((sum: number, meal: any) => sum + (meal.cal || 0), 0);
-  const totalPro  = currentMeals.reduce((sum: number, meal: any) => sum + (meal.pro || 0), 0);
+  const currentMeals = (mealPlan ? mealPlan[activeDay] || [] : []) as PlannedMeal[];
+  const totalCals = currentMeals.reduce((sum, meal) => sum + (meal.cal || 0), 0);
+  const totalPro  = currentMeals.reduce((sum, meal) => sum + (meal.pro || 0), 0);
 
   // ─── Batch + leftover insights ──────────────────────────────────────────────
   const batchAnalysis = mealPlan ? analyzeBatchCooking(mealPlan) : null;
   const leftoverSuggestions = mealPlan ? detectLeftovers(mealPlan) : [];
 
   // ─── Update execution status ────────────────────────────────────────────────
-  function cycleStatus(mealId: any) {
+  function cycleStatus(mealId: string) {
     if (!setMealPlan) return;
-    setMealPlan((prev: Record<number, any[]>) => ({
+    setMealPlan((prev) => ({
       ...prev,
-      [activeDay]: (prev[activeDay] || []).map((m: any) => {
+      [activeDay]: ((prev[activeDay] || []) as PlannedMeal[]).map((m) => {
         if (m.id !== mealId) return m;
         const current: MealExecutionStatus = m.executionStatus ?? 'planned';
         return { ...m, executionStatus: nextStatus(current) };
@@ -102,12 +121,12 @@ export default function Planner({
     }));
   }
 
-  function handleLog(meal: any) {
+  function handleLog(meal: PlannedMeal) {
     // Cycle to logged + call parent
     if (setMealPlan) {
-      setMealPlan((prev: Record<number, any[]>) => ({
+      setMealPlan((prev) => ({
         ...prev,
-        [activeDay]: (prev[activeDay] || []).map((m: any) =>
+        [activeDay]: ((prev[activeDay] || []) as PlannedMeal[]).map((m) =>
           m.id !== meal.id ? m : { ...m, executionStatus: 'logged' as MealExecutionStatus },
         ),
       }));
@@ -118,41 +137,41 @@ export default function Planner({
   // ─── Add suggested leftover ─────────────────────────────────────────────────
   function addLeftover(suggestion: ReturnType<typeof detectLeftovers>[number]) {
     if (!setMealPlan || !mealPlan) return;
-    const sourceMeals = mealPlan[suggestion.sourceDayIndex] || [];
-    const sourceMeal  = sourceMeals.find((m: any) =>
+    const sourceMeals = (mealPlan[suggestion.sourceDayIndex] || []) as PlannedMeal[];
+    const sourceMeal  = sourceMeals.find((m) =>
       (m.title ?? '') === suggestion.mealTitle,
     );
     if (!sourceMeal) return;
-    const newMeal = {
+    const newMeal: PlannedMeal = {
       ...sourceMeal,
-      id: Date.now(),
+      id: String(Date.now()),
       tag: 'SOBRAS',
       title: `${sourceMeal.title} (sobras)`,
-      executionStatus: 'planned' as MealExecutionStatus,
+      executionStatus: 'planned',
     };
-    setMealPlan((prev: Record<number, any[]>) => ({
+    setMealPlan((prev) => ({
       ...prev,
       [suggestion.suggestedDayIndex]: [...(prev[suggestion.suggestedDayIndex] || []), newMeal],
     }));
   }
 
   // ─── Delete meal from plan ───────────────────────────────────────────────
-  function deleteMeal(mealId: any) {
+  function deleteMeal(mealId: string) {
     if (!setMealPlan) return;
-    const mealToDelete = currentMeals.find((m: any) => m.id === mealId);
-    setMealPlan((prev: Record<number, any[]>) => ({
+    const mealToRemove = currentMeals.find((m) => m.id === mealId);
+    setMealPlan((prev) => ({
       ...prev,
-      [activeDay]: (prev[activeDay] || []).filter((m: any) => m.id !== mealId),
+      [activeDay]: (prev[activeDay] || []).filter((m) => m.id !== mealId),
     }));
     // Remove associated shopping items (by matching ingredient names from the recipe)
-    if (setShoppingList && mealToDelete?.recipeIngredients?.length > 0) {
+    if (setShoppingList && mealToRemove?.recipeIngredients && mealToRemove.recipeIngredients.length > 0) {
       const ingredientNames = new Set(
-        mealToDelete.recipeIngredients.map((ri: any) =>
-          (ri.ingredient?.name || ri.name || '').toLowerCase(),
+        mealToRemove.recipeIngredients.map((ri) =>
+          (ri.ingredient?.name || '').toLowerCase(),
         ).filter(Boolean),
       );
-      setShoppingList((prev: any[]) =>
-        prev.filter((item: any) => {
+      setShoppingList((prev) =>
+        prev.filter((item) => {
           const itemBase = (item.name || '').toLowerCase().split(' (')[0];
           return !ingredientNames.has(itemBase);
         }),
@@ -231,8 +250,8 @@ export default function Planner({
       >
         <div className="flex justify-between items-center">
           {dayLetters.map((letter, index) => {
-            const dayMeals = mealPlan?.[index] || [];
-            const loggedCount = dayMeals.filter((m: any) => m.executionStatus === 'logged').length;
+            const dayMeals = (mealPlan?.[index] || []) as PlannedMeal[];
+            const loggedCount = dayMeals.filter((m) => m.executionStatus === 'logged').length;
             const hasMeals = dayMeals.length > 0;
             return (
               <div key={index} className="flex flex-col items-center gap-1.5">
@@ -332,7 +351,7 @@ export default function Planner({
               onCta={() => onAddMeal?.(activeDay)}
             />
           ) : (
-            currentMeals.map((meal: any, idx: number) => {
+            currentMeals.map((meal, idx) => {
               const execStatus: MealExecutionStatus = meal.executionStatus ?? 'planned';
               const statusCfg = STATUS_CONFIG[execStatus];
               return (
