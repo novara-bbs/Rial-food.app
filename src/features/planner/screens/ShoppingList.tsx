@@ -8,6 +8,7 @@ import EmptyState from '../../../components/EmptyState';
 import ConfirmDialog from '../../../components/ConfirmDialog';
 import ChipRow from '../../../components/patterns/ChipRow';
 import { Button } from '@/components/ui/button';
+import { Heading, Text } from '@/components/ui/Typography';
 import { useLocalStorageState } from '../../../hooks/useLocalStorageState';
 import { aggregateShoppingItems, groupShoppingItems, formatShoppingListForShare, detectCategory, AISLE_CATEGORIES, markPantryItems, PantryItem } from '../utils/grocery';
 import type { ShoppingItem } from '../../../types/planner';
@@ -107,7 +108,7 @@ export default function ShoppingList({ onBack, shoppingList = [], setShoppingLis
           )}
           <div>
             <span className="font-label text-xs tracking-[0.2em] text-primary uppercase block">{t.shoppingList.title}</span>
-            <h2 className="font-headline text-headline font-bold tracking-tighter uppercase text-tertiary">{t.shoppingList.title}</h2>
+            <Heading level="h2">{t.shoppingList.title}</Heading>
           </div>
         </div>
         <div className="flex items-center gap-2">
@@ -130,7 +131,7 @@ export default function ShoppingList({ onBack, shoppingList = [], setShoppingLis
       {hasItems && (
         <SectionCard padding="none" spacing="none" className="p-4 space-y-3">
           <div className="flex justify-between items-center">
-            <span className="font-label text-xs uppercase tracking-widest text-on-surface-variant">{t.shoppingList.title}</span>
+            <Text as="span" variant="label">{t.shoppingList.title}</Text>
             <span className="font-headline text-sm font-bold text-primary">{completedCount}/{aggregated.length}</span>
           </div>
           <div className="w-full bg-surface-container-highest rounded-full h-2">
@@ -153,7 +154,7 @@ export default function ShoppingList({ onBack, shoppingList = [], setShoppingLis
       {isAdding && (
         <div className="bg-surface-container-high p-6 rounded-sm border border-primary/30 animate-in fade-in slide-in-from-top-4 duration-300">
           <div className="flex justify-between items-center mb-4">
-            <h3 className="font-headline text-sm font-bold uppercase tracking-widest text-primary">{t.shoppingList.addItem}</h3>
+            <Heading level="h3" variant="overline" className="text-primary">{t.shoppingList.addItem}</Heading>
             <button type="button" onClick={() => setIsAdding(false)} aria-label={t.common.cancel} className="text-on-surface-variant hover:text-tertiary">
               <X className="w-4 h-4" />
             </button>
@@ -192,10 +193,10 @@ export default function ShoppingList({ onBack, shoppingList = [], setShoppingLis
 
           return (
             <section key={category}>
-              <h3 className="font-headline text-base font-bold tracking-tight uppercase text-on-surface-variant mb-3 border-b border-outline-variant/20 pb-2 flex justify-between items-center">
+              <Heading level="h3" className="text-base text-on-surface-variant mb-3 border-b border-outline-variant/20 pb-2 flex justify-between items-center">
                 <span>{category}</span>
                 <span className="text-micro font-black opacity-40">{unchecked.length}/{items.length}</span>
-              </h3>
+              </Heading>
               <div className="space-y-2">
                 {[...unchecked, ...checked].map((item) => {
                   const inPantry: boolean = (item as ShoppingItem & { inPantry?: boolean }).inPantry ?? false;

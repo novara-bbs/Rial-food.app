@@ -20,6 +20,7 @@ import type { IngredientCategory, Allergen, Ingredient } from '../../../types';
 import type { FoodFamily, FoodVariant } from '../../../types/food-family';
 import { useAppState } from '../../../contexts/AppStateContext';
 import EmptyState from '../../../components/EmptyState';
+import { Heading, Text } from '@/components/ui/Typography';
 import {
   groupFamiliesBySubcategory,
   sortSubcategoriesByOrder,
@@ -144,9 +145,9 @@ export default function FoodDictionary({ navigateTo }: Props) {
       />
 
       <div className="space-y-1.5">
-        <span id="allergen-filter-label" className="text-micro font-label uppercase tracking-widest text-on-surface-variant">
+        <Text as="span" variant="micro" id="allergen-filter-label">
           {t.foodDictionary.allergenFilter}
-        </span>
+        </Text>
         <ChipRow
           mode="multi"
           variant="pill"
@@ -162,9 +163,9 @@ export default function FoodDictionary({ navigateTo }: Props) {
         />
       </div>
 
-      <p className="text-label text-on-surface-variant font-label tracking-widest uppercase">
+      <Text variant="label">
         {(filteredFamilies.length === 1 ? t.foodDictionary.foodCountOne : t.foodDictionary.foodCount).replace('{count}', String(filteredFamilies.length))}
-      </p>
+      </Text>
 
       {grouped.length === 0 ? (
         <EmptyState icon="🔍" title={t.foodDictionary.noResults} description={t.foodDictionary.tryAnother} />
@@ -194,9 +195,9 @@ export default function FoodDictionary({ navigateTo }: Props) {
                 portionSlot={
                   activeIngredient && (
                     <div className="space-y-2">
-                      <h4 className="text-micro font-label uppercase tracking-widest text-on-surface-variant">
+                      <Heading level="h4" variant="overline" className="text-on-surface-variant">
                         {t.foodDictionary.servings}
-                      </h4>
+                      </Heading>
                       <PortionSelector ingredient={activeIngredient} unitSystem={unitSystem} />
                     </div>
                   )
@@ -230,11 +231,11 @@ export default function FoodDictionary({ navigateTo }: Props) {
 
           return (
             <section key={group.category} className="space-y-2">
-              <h3 className="font-headline font-bold text-body-sm uppercase tracking-widest text-on-surface-variant flex items-center gap-2 pt-2">
+              <Heading level="h3" variant="overline" className="text-on-surface-variant flex items-center gap-2 pt-2">
                 <span aria-hidden="true">{meta.icon}</span>
                 <span>{locale === 'es' ? meta.name : meta.nameEn}</span>
                 <span className="text-micro font-label text-on-surface-variant/60">{group.families.length}</span>
-              </h3>
+              </Heading>
 
               {group.subGroups.map(sub => {
                 const speciesLabels = t.foodDictionary.speciesLabels as Record<string, string>;
@@ -242,9 +243,11 @@ export default function FoodDictionary({ navigateTo }: Props) {
                 return (
                   <div key={sub.subcategoryKey ?? '__flat__'} className="space-y-1">
                     {sub.subcategoryKey !== null && (
-                      <h4
+                      <Heading
+                        level="h4"
+                        variant="overline"
                         data-subcategory={sub.subcategoryKey}
-                        className="text-label font-label uppercase tracking-widest text-on-surface-variant flex items-center gap-2 pt-1"
+                        className="text-on-surface-variant flex items-center gap-2 pt-1"
                       >
                         <span>{subcategoryLabels[sub.subcategoryKey] ?? sub.subcategoryKey}</span>
                         <GlossaryButton
@@ -252,7 +255,7 @@ export default function FoodDictionary({ navigateTo }: Props) {
                           label={subcategoryLabels[sub.subcategoryKey] ?? sub.subcategoryKey}
                         />
                         <span className="text-micro font-label text-on-surface-variant/60">{sub.families.length}</span>
-                      </h4>
+                      </Heading>
                     )}
                     {/* Flat families first (no species OR single-family species). */}
                     {speciesBuckets.flat.map(renderFamily)}
@@ -304,14 +307,14 @@ function MicroHighlights({ item }: { item: Ingredient }) {
 
   return (
     <div className="space-y-1">
-      <h4 className="text-micro font-label uppercase tracking-widest text-on-surface-variant">
+      <Heading level="h4" variant="overline" className="text-on-surface-variant">
         {t.foodDictionary.highlightedMicros}
-      </h4>
+      </Heading>
       <div className="grid grid-cols-3 sm:grid-cols-4 gap-1">
         {highlights.slice(0, 8).map(h => (
           <div key={h.label} className="bg-surface-container-highest rounded-sm px-2 py-1 text-center">
             <span className="block text-label font-bold text-on-surface">{h.value}</span>
-            <span className="text-micro font-label uppercase tracking-wider text-on-surface-variant">{h.label}</span>
+            <Text as="span" variant="micro">{h.label}</Text>
           </div>
         ))}
       </div>

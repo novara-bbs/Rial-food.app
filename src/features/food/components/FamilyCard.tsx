@@ -29,6 +29,7 @@ import VariantRow from './VariantRow';
 import ContextualScoreChip from './ContextualScoreChip';
 import { normalizeGoal } from '../utils/contextual-score';
 import { useAppState } from '../../../contexts/AppStateContext';
+import { Heading, Text } from '@/components/ui/Typography';
 
 interface Props {
   family: FoodFamily;
@@ -154,13 +155,15 @@ export default function FamilyCard({
           </span>
         )}
         {variantCount > 0 && (
-          <span
-            className="mr-2 inline-flex items-center gap-1 text-micro font-label uppercase tracking-widest text-on-surface-variant shrink-0"
+          <Text
+            as="span"
+            variant="micro"
+            className="mr-2 inline-flex items-center gap-1 shrink-0"
             aria-label={t.foodDictionary.variantsIndicatorAria}
           >
             <span className="w-1.5 h-1.5 rounded-full bg-primary" aria-hidden="true" />
             {t.foodDictionary.variantsIndicatorLabel}
-          </span>
+          </Text>
         )}
         {expanded ? (
           <ChevronUp className="w-4 h-4 text-on-surface-variant shrink-0" aria-hidden="true" />
@@ -183,9 +186,9 @@ export default function FamilyCard({
               <Badge variant="secondary" className="text-micro">
                 {t.foodDictionary.primaryLabel}
               </Badge>
-              <span className="text-micro font-label uppercase tracking-widest text-on-surface-variant">
+              <Text as="span" variant="micro">
                 {locale === 'es' ? canonicalVariant.name : canonicalVariant.nameEn}
-              </span>
+              </Text>
             </div>
             <p className="text-body-sm text-on-surface-variant">{description}</p>
           </div>
@@ -213,9 +216,9 @@ export default function FamilyCard({
 
           {canonicalVariant.allergens.length > 0 && (
             <div className="flex items-center gap-2 flex-wrap">
-              <span className="text-micro font-label uppercase tracking-widest text-on-surface-variant">
+              <Text as="span" variant="micro">
                 {t.foodDictionary.allergens}:
-              </span>
+              </Text>
               {canonicalVariant.allergens.map(a => (
                 <Badge key={a} variant="destructive" className="text-micro">
                   {t.foodDictionary.allergenLabels[a]}
@@ -242,9 +245,9 @@ export default function FamilyCard({
 
                 return (
                   <div key={type} className="space-y-1.5" data-variant-group={type}>
-                    <h4 className="text-micro font-label uppercase tracking-widest text-on-surface-variant">
+                    <Heading level="h4" variant="overline" className="text-on-surface-variant">
                       {t.foodDictionary.variantTypes[type]}
-                    </h4>
+                    </Heading>
                     <div className="space-y-1.5">
                       {displayed.map(v => (
                         <VariantRow

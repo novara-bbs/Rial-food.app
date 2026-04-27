@@ -171,10 +171,13 @@ describe('FoodDictionary.tsx — subcategory grouping (P2.5 / P7)', () => {
   });
 
   it('uses token classes on the sub-header (no text-[Npx], no dark:)', () => {
-    // Scope the token-purity check to the sub-header <h4> block so we don't
-    // trip on unrelated markup elsewhere in the screen.
-    const subHeaderMatch = foodDictionarySrc.match(/<h4[^>]*data-subcategory[\s\S]*?<\/h4>/);
-    expect(subHeaderMatch, 'expected <h4 data-subcategory> block').not.toBeNull();
+    // Scope the token-purity check to the sub-header element with data-subcategory.
+    // After Sprint 31 typography migration the raw <h4> was replaced by the
+    // <Heading level="h4"> primitive — match either form for resilience.
+    const subHeaderMatch =
+      foodDictionarySrc.match(/<Heading[^>]*data-subcategory[\s\S]*?\/>/) ??
+      foodDictionarySrc.match(/<h4[^>]*data-subcategory[\s\S]*?<\/h4>/);
+    expect(subHeaderMatch, 'expected <Heading data-subcategory> or <h4 data-subcategory> block').not.toBeNull();
     expect(subHeaderMatch![0]).not.toMatch(/text-\[\d+px\]/);
     expect(subHeaderMatch![0]).not.toMatch(/\bdark:/);
   });

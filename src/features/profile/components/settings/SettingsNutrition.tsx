@@ -5,6 +5,7 @@ import type { Ingredient, Allergen } from '../../../../types';
 import type { UserProfile } from '../../../../types/user';
 import type { DailyMacros } from '../../../../contexts/state/useVitalsState';
 import { INPUT_SURFACE_CLASSES } from '@/components/ui/surface';
+import { Heading } from '@/components/ui/Typography';
 
 type Setter<T> = (fn: T | ((prev: T) => T)) => void;
 
@@ -101,7 +102,7 @@ export default function SettingsNutrition({ dailyMacros, setDailyMacros, userPro
       <div className="bg-surface-container-low p-6 rounded-sm border border-outline-variant/20">
         <div className="flex items-center gap-3 mb-6">
           <Target className="w-6 h-6 text-primary" aria-hidden="true" />
-          <h3 className="font-headline text-xl font-bold text-tertiary uppercase">{t.settings.dailyGoals}</h3>
+          <Heading level="h3">{t.settings.dailyGoals}</Heading>
         </div>
         <div className="space-y-6">
           {macroSliders.map(({ key, label, unit, min, max, step, accent, defaultVal }) => (
@@ -123,7 +124,7 @@ export default function SettingsNutrition({ dailyMacros, setDailyMacros, userPro
       <div className="bg-surface-container-low p-6 rounded-sm border border-outline-variant/20">
         <div className="flex items-center gap-3 mb-6">
           <Leaf className="w-6 h-6 text-primary" aria-hidden="true" />
-          <h3 className="font-headline text-xl font-bold text-tertiary uppercase">{t.settings.dietaryPreferences}</h3>
+          <Heading level="h3">{t.settings.dietaryPreferences}</Heading>
         </div>
         <div className="flex flex-wrap gap-3">
           {dietaryOptions.map((option) => (
@@ -144,7 +145,7 @@ export default function SettingsNutrition({ dailyMacros, setDailyMacros, userPro
       <div className="bg-surface-container-low p-6 rounded-sm border border-outline-variant/20">
         <div className="flex items-center gap-3 mb-6">
           <ShieldAlert className="w-6 h-6 text-primary" aria-hidden="true" />
-          <h3 className="font-headline text-xl font-bold text-tertiary uppercase">{t.settings.foodPreferences}</h3>
+          <Heading level="h3">{t.settings.foodPreferences}</Heading>
         </div>
 
         {/* Trinario food preferences — R8.3 INDYA pattern */}
@@ -244,7 +245,7 @@ export default function SettingsNutrition({ dailyMacros, setDailyMacros, userPro
         <div className="bg-surface-container-low p-6 rounded-sm border border-outline-variant/20 space-y-6">
           <div className="flex items-center gap-3">
             <Droplets className="w-6 h-6 text-primary" aria-hidden="true" />
-            <h3 className="font-headline text-xl font-bold text-tertiary uppercase">{t.settings.activityGoals}</h3>
+            <Heading level="h3">{t.settings.activityGoals}</Heading>
           </div>
 
           {/* Hydration target */}

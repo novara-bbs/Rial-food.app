@@ -8,6 +8,7 @@
 import { ArrowLeft } from 'lucide-react';
 import PageShell from '../../../components/PageShell';
 import { useI18n } from '../../../i18n';
+import { Heading, Text } from '@/components/ui/Typography';
 
 interface Props {
   onBack: () => void;
@@ -27,15 +28,15 @@ export default function PrivacyPolicy({ onBack }: Props) {
         >
           <ArrowLeft className="w-5 h-5 text-on-surface" aria-hidden="true" />
         </button>
-        <h1 className="font-headline text-xl font-black uppercase tracking-widest text-tertiary">
+        <Heading level="h1" className="font-black tracking-widest">
           {t.legal.privacyTitle}
-        </h1>
+        </Heading>
       </div>
 
       <div className="prose prose-sm max-w-none space-y-6 font-body text-on-surface-variant text-sm leading-relaxed">
-        <p className="font-label text-micro uppercase tracking-widest text-on-surface-variant/60">
+        <Text variant="micro" className="text-on-surface-variant/60">
           {t.legal.lastUpdated}: 12 Abril 2026
-        </p>
+        </Text>
 
         <Section title={t.legal.privacy.whoWeAre}>
           <p>RIAL es una aplicación de nutrición desarrollada por Novarabbs. Puedes contactarnos en <strong className="text-on-surface">privacidad@novarabbs.com</strong>.</p>
@@ -105,7 +106,7 @@ export default function PrivacyPolicy({ onBack }: Props) {
 function Section({ title, children }: { title: string; children: React.ReactNode }) {
   return (
     <div>
-      <h2 className="font-headline text-sm font-bold uppercase tracking-widest text-tertiary mb-2">{title}</h2>
+      <Heading level="h2" variant="overline" className="mb-2">{title}</Heading>
       {children}
     </div>
   );

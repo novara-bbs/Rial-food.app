@@ -24,6 +24,7 @@ import type { FoodFamily, FoodVariant } from '../../../types/food-family';
 import { computeMacroDelta, groupVariantsByType } from '../utils/food-family-resolver';
 import { GROUP_ORDER } from './FamilyCard';
 import VariantRow from './VariantRow';
+import { Heading } from '@/components/ui/Typography';
 
 interface Props {
   family: FoodFamily;
@@ -113,9 +114,9 @@ export default function VariantPickerSheet({
 
           return (
             <div key={type} className="space-y-1.5" data-variant-group={type}>
-              <h4 className="text-micro font-label uppercase tracking-widest text-on-surface-variant">
+              <Heading level="h4" variant="overline" className="text-on-surface-variant">
                 {sectionLabel}
-              </h4>
+              </Heading>
               <div className="space-y-1.5">
                 {groupVariants.map(v => (
                   <VariantRow
@@ -134,9 +135,9 @@ export default function VariantPickerSheet({
         {/* User-scanned brands for this family */}
         {userVariantsForFamily.length > 0 && (
           <div className="space-y-1.5" data-variant-group="user-scanned">
-            <h4 className="text-micro font-label uppercase tracking-widest text-on-surface-variant">
+            <Heading level="h4" variant="overline" className="text-on-surface-variant">
               {t.addMealScreen.myScannedBrands}
-            </h4>
+            </Heading>
             <div className="space-y-1.5">
               {userVariantsForFamily.map(v => (
                 <VariantRow

@@ -209,14 +209,24 @@ const typographyMigrationAllowlist = [
   // Login.tsx migrated [1.5.101]: <h1> → <Heading>, text-3xl → text-headline, text-xs → text-label
   // Signup.tsx migrated [1.5.101]: same as Login + password hint/legal note font-label → font-headline
   // DemoSeedCard.tsx migrated [1.5.101]: <h2> → <Heading level="h4">
+  // Sprint 31 migrations (S31) [1.5.145]: headings → <Heading>, overlines → <Text>
+  // FamilyCard.tsx, VariantPickerSheet.tsx, FoodDetail.tsx, FoodDictionary.tsx — fully migrated
+  // PrivacyPolicy.tsx, TermsOfService.tsx — headings done; retain for residual inline labels
+  // SettingsAppearance.tsx, SettingsNutrition.tsx, SettingsSystem.tsx — headings done; retain for button label text-sm+bold
+  // SettingsProfile.tsx — headings done; retain for button label text-xs+bold + avatar initials span
+  // ShoppingList.tsx — headings done; retain for inline counter text-sm+bold
+  // More.tsx — fully clean (removed from allowlist)
+  'src/features/legal/screens/PrivacyPolicy.tsx',
+  'src/features/legal/screens/TermsOfService.tsx',
+  'src/features/planner/screens/ShoppingList.tsx',
+  'src/features/profile/components/settings/SettingsAppearance.tsx',
+  'src/features/profile/components/settings/SettingsNutrition.tsx',
+  'src/features/profile/components/settings/SettingsProfile.tsx',
+  'src/features/profile/components/settings/SettingsSystem.tsx',
   'src/features/food/components/BarcodeScanner.tsx',
-  'src/features/food/components/FamilyCard.tsx',
   'src/features/food/components/PortionSelector.tsx',
   'src/features/food/components/PortionSheet.tsx',
-  'src/features/food/components/VariantPickerSheet.tsx',
   'src/features/food/screens/AddMeal.tsx',
-  'src/features/food/screens/FoodDetail.tsx',
-  'src/features/food/screens/FoodDictionary.tsx',
   'src/features/home/components/ActivityRow.tsx',
   'src/features/home/components/InsightRow.tsx',
   'src/features/home/components/MealGapSuggestion.tsx',
@@ -227,19 +237,11 @@ const typographyMigrationAllowlist = [
   'src/features/home/components/WeeklyMiniDash.tsx',
   'src/features/home/screens/Discovery.tsx',
   'src/features/home/screens/Home.tsx',
-  'src/features/home/screens/More.tsx',
-  'src/features/legal/screens/PrivacyPolicy.tsx',
-  'src/features/legal/screens/TermsOfService.tsx',
   'src/features/planner/components/BatchCookingSuggestions.tsx',
   'src/features/planner/screens/Pantry.tsx',
   'src/features/planner/screens/Planner.tsx',
-  'src/features/planner/screens/ShoppingList.tsx',
   'src/features/profile/components/KcalBreakdownCard.tsx',
   'src/features/profile/components/Onboarding.tsx',
-  'src/features/profile/components/settings/SettingsAppearance.tsx',
-  'src/features/profile/components/settings/SettingsNutrition.tsx',
-  'src/features/profile/components/settings/SettingsProfile.tsx',
-  'src/features/profile/components/settings/SettingsSystem.tsx',
   'src/features/profile/screens/Profile.tsx',
   'src/features/profile/screens/RialPlus.tsx',
   'src/features/profile/screens/Settings.tsx',

@@ -35,6 +35,7 @@ import {
   resolveVariant,
 } from '../utils/food-family-resolver';
 import VariantRow from '../components/VariantRow';
+import { Heading, Text } from '@/components/ui/Typography';
 import TierBadge from '../components/TierBadge';
 import { deriveTier } from '../utils/trust-tier';
 import ContextualScorePanel from '../components/ContextualScorePanel';
@@ -101,16 +102,16 @@ export default function FoodDetail() {
             {family.image ?? '🍽️'}
           </span>
           <div className="min-w-0 flex-1">
-            <h3 className="font-headline font-bold text-title-sm text-on-surface truncate">
+            <Heading level="h3" className="normal-case text-on-surface tracking-normal truncate">
               {displayName}
-            </h3>
+            </Heading>
             {canonical && (
               <>
-                <p className="mt-1 text-micro font-label uppercase tracking-widest text-on-surface-variant">
+                <Text variant="micro" className="mt-1">
                   {canonical.macros.calories} {t.common.kcal} ·{' '}
                   {canonical.macros.protein}g P · {canonical.macros.carbs}g C ·{' '}
                   {canonical.macros.fats}g G
-                </p>
+                </Text>
                 <span className="mt-1.5 inline-flex items-center gap-1.5">
                   <TierBadge tier={deriveTier(canonical)} />
                 </span>
@@ -176,9 +177,9 @@ export default function FoodDetail() {
                         <span className="block font-headline font-bold text-body-sm text-on-surface truncate">
                           {targetName}
                         </span>
-                        <span className="block text-micro font-label uppercase tracking-widest text-on-surface-variant">
+                        <Text as="span" variant="micro" className="block">
                           {substituteReasons[ref.reason] ?? ref.reason}
-                        </span>
+                        </Text>
                       </span>
                     </span>
                     <ChevronRight

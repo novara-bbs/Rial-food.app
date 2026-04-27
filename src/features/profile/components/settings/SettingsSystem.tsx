@@ -9,6 +9,7 @@ import { useI18n } from '../../../../i18n';
 import { useLocalStorageState } from '../../../../hooks/useLocalStorageState';
 import { getNutritionHistory, archiveHydrationConsumed } from '../../../../hooks/useDailyReset';
 import { useAuth } from '../../../../contexts/AuthContext';
+import { Heading, Text } from '@/components/ui/Typography';
 import { signOut, getSupabaseClient } from '../../../../lib/supabase';
 import { exportUserData } from '../../../../lib/sync';
 import { SUPABASE_URL, SUPABASE_ANON_KEY } from '../../../../config/env';
@@ -102,14 +103,14 @@ export default function SettingsSystem({ showAIBot, setShowAIBot }: Props) {
       <div className="bg-surface-container-low p-6 rounded-sm border border-outline-variant/20">
         <div className="flex items-center gap-3 mb-6">
           <Sparkles className="w-6 h-6 text-primary" aria-hidden="true" />
-          <h3 className="font-headline text-xl font-bold text-tertiary uppercase">{t.settings.aiAssistant}</h3>
+          <Heading level="h3">{t.settings.aiAssistant}</Heading>
         </div>
         <div className="flex items-center justify-between p-4 bg-surface-container-highest rounded-sm border border-outline-variant/10">
           <div className="flex flex-col">
-            <h4 className="font-headline font-bold text-sm uppercase text-tertiary">{t.settings.aiFloatingBtn}</h4>
-            <p className="font-label text-micro tracking-widest uppercase text-on-surface-variant mt-1">
+            <Heading level="h4">{t.settings.aiFloatingBtn}</Heading>
+            <Text variant="micro" className="mt-1">
               {showAIBot ? t.settings.aiVisibleAll : t.settings.aiHidden}
-            </p>
+            </Text>
           </div>
           <Switch checked={!!showAIBot} onCheckedChange={(v) => setShowAIBot && setShowAIBot(v)} />
         </div>
@@ -119,7 +120,7 @@ export default function SettingsSystem({ showAIBot, setShowAIBot }: Props) {
       <div className="bg-surface-container-low p-6 rounded-sm border border-outline-variant/20">
         <div className="flex items-center gap-3 mb-6">
           <Smartphone className="w-6 h-6 text-primary" aria-hidden="true" />
-          <h3 className="font-headline text-xl font-bold text-tertiary uppercase">{t.settings.connectedDevices}</h3>
+          <Heading level="h3">{t.settings.connectedDevices}</Heading>
         </div>
         <div className="space-y-4">
           {wearables.map(({ key, label, badge }) => (
@@ -127,10 +128,10 @@ export default function SettingsSystem({ showAIBot, setShowAIBot }: Props) {
               <div className="flex items-center gap-3">
                 <div className={`w-8 h-8 rounded-full ${badge.bg} flex items-center justify-center ${badge.text} font-bold text-xs`} aria-hidden="true">{badge.char}</div>
                 <div>
-                  <h4 className="font-headline font-bold text-sm uppercase text-tertiary">{label}</h4>
-                  <p className={`font-label text-micro tracking-widest uppercase ${connectedDevices[key] ? 'text-primary' : 'text-on-surface-variant'}`}>
+                  <Heading level="h4">{label}</Heading>
+                  <Text variant="micro" className={connectedDevices[key] ? 'text-primary' : ''}>
                     {connectedDevices[key] ? t.settings.connected : t.settings.notConnected}
-                  </p>
+                  </Text>
                 </div>
               </div>
               <Switch checked={connectedDevices[key]} onCheckedChange={() => toggleDevice(key)} />
@@ -141,7 +142,7 @@ export default function SettingsSystem({ showAIBot, setShowAIBot }: Props) {
 
       {/* Notifications & Privacy */}
       <div className="bg-surface-container-low rounded-sm border border-outline-variant/20 p-5 space-y-4">
-        <h3 className="font-headline text-sm font-bold uppercase tracking-widest text-tertiary">{t.settings.notificationsPrivacy}</h3>
+        <Heading level="h3" variant="overline">{t.settings.notificationsPrivacy}</Heading>
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-3">
             <Bell className="w-4 h-4 text-on-surface-variant" aria-hidden="true" />
@@ -160,7 +161,7 @@ export default function SettingsSystem({ showAIBot, setShowAIBot }: Props) {
 
       {/* Data Export */}
       <div className="bg-surface-container-low rounded-sm border border-outline-variant/20 p-5 space-y-4">
-        <h3 className="font-headline text-sm font-bold uppercase tracking-widest text-tertiary">{t.settings.dataSection}</h3>
+        <Heading level="h3" variant="overline">{t.settings.dataSection}</Heading>
         <button type="button" onClick={exportCSV}
           className="w-full py-3 bg-surface-container-highest rounded-sm font-headline text-xs font-bold uppercase tracking-widest text-tertiary hover:bg-primary/10 hover:text-primary transition-colors flex items-center justify-center gap-2">
           <Download className="w-4 h-4" aria-hidden="true" /> {t.settings.exportCSV}
@@ -193,7 +194,7 @@ export default function SettingsSystem({ showAIBot, setShowAIBot }: Props) {
       {/* Account */}
       {isSupabaseEnabled && (
         <div className="bg-surface-container-low rounded-sm border border-outline-variant/20 p-5 space-y-3">
-          <h3 className="font-headline text-sm font-bold uppercase tracking-widest text-tertiary">{t.settings.account}</h3>
+          <Heading level="h3" variant="overline">{t.settings.account}</Heading>
           {user ? (
             <>
               <p className="font-body text-xs text-on-surface-variant">{user.email}</p>

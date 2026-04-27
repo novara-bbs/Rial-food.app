@@ -2,6 +2,7 @@ import { Settings, Sparkles, ChevronRight, Timer, Trophy, Gem, Heart, Package, C
 import PageShell from '../../../components/PageShell';
 import { Button } from '@/components/ui/button';
 import { BUTTON_CARD_SURFACE_CLASSES } from '../../../components/ui/surface';
+import { Heading } from '@/components/ui/Typography';
 import { useI18n } from '../../../i18n';
 import { calcStreaks } from '../../wellness/utils/streaks';
 import { calculatePoints, getUserLevel, type UserStats } from '../../profile/utils/gamification';
@@ -108,9 +109,9 @@ export default function More({ navigateTo, userProfile, realFeelLogs = [], nutri
   return (
     <PageShell maxWidth="default" spacing="lg">
       <header className="flex items-center justify-between">
-        <h2 className="font-headline text-3xl md:text-4xl font-bold tracking-tighter uppercase text-tertiary">
+        <Heading level="h2" className="text-3xl md:text-4xl">
           {t.more.title}
-        </h2>
+        </Heading>
         <Button
           variant="ghost"
           size="icon-sm"
@@ -138,9 +139,9 @@ export default function More({ navigateTo, userProfile, realFeelLogs = [], nutri
           )}
         </div>
         <div className="flex-1 min-w-0">
-          <h3 className="font-headline text-title-sm font-black text-tertiary uppercase tracking-tight truncate">
+          <Heading level="h3" className="font-black truncate">
             {userProfile?.name || 'User'}
-          </h3>
+          </Heading>
           <div className="flex items-center gap-2 mt-1">
             <span className="bg-primary/10 text-primary text-micro px-2 py-0.5 rounded font-bold uppercase tracking-widest">
               {levelLabel}
@@ -160,12 +161,14 @@ export default function More({ navigateTo, userProfile, realFeelLogs = [], nutri
       <div className="space-y-6">
         {groups.filter(g => g.visible).map((group, idx) => (
           <section key={group.key} aria-labelledby={`more-group-${group.key}`}>
-            <h3
+            <Heading
+              level="h3"
+              variant="overline"
               id={`more-group-${group.key}`}
-              className={`font-label text-micro uppercase tracking-widest text-on-surface-variant px-1 mb-3 ${idx === 0 ? '' : 'mt-2'}`}
+              className={`text-on-surface-variant px-1 mb-3 ${idx === 0 ? '' : 'mt-2'}`}
             >
               {group.header}
-            </h3>
+            </Heading>
             <div className="space-y-2">
               {group.items.map(item => (
                 <button

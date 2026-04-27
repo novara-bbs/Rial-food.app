@@ -2,6 +2,7 @@ import { Palette, Moon, Sun, Check, Globe, Scale, Monitor } from 'lucide-react';
 import { useTheme, type Palette as PaletteId, type ColorMode } from '../../../../contexts/ThemeContext';
 import { useI18n, type Locale } from '../../../../i18n';
 import type { UserProfile } from '../../../../types/user';
+import { Heading, Text } from '@/components/ui/Typography';
 
 type Setter<T> = (fn: T | ((prev: T) => T)) => void;
 
@@ -65,7 +66,7 @@ export default function SettingsAppearance({ userProfile, setUserProfile }: Prop
       <div className="bg-surface-container-low p-6 rounded-sm border border-outline-variant/20">
         <div className="flex items-center gap-3 mb-6">
           <Palette className="w-6 h-6 text-primary" />
-          <h3 className="font-headline text-xl font-bold text-tertiary uppercase">{t.settings.appearance}</h3>
+          <Heading level="h3">{t.settings.appearance}</Heading>
         </div>
 
         {/* Palette */}
@@ -178,7 +179,7 @@ export default function SettingsAppearance({ userProfile, setUserProfile }: Prop
       <div className="bg-surface-container-low p-6 rounded-sm border border-outline-variant/20">
         <div className="flex items-center gap-3 mb-6">
           <Globe className="w-6 h-6 text-primary" />
-          <h3 className="font-headline text-xl font-bold text-tertiary uppercase">{t.settings.language}</h3>
+          <Heading level="h3">{t.settings.language}</Heading>
         </div>
         <div className="grid grid-cols-2 gap-4">
           {([
@@ -203,7 +204,7 @@ export default function SettingsAppearance({ userProfile, setUserProfile }: Prop
         <div className="flex items-center gap-3 mb-2">
           <Scale className="w-6 h-6 text-primary" />
           <div>
-            <h3 className="font-headline text-xl font-bold text-tertiary uppercase">{t.settings.unitSystem}</h3>
+            <Heading level="h3">{t.settings.unitSystem}</Heading>
             <p className="text-xs text-on-surface-variant mt-0.5">{t.settings.unitSystemDesc}</p>
           </div>
         </div>
@@ -221,7 +222,7 @@ export default function SettingsAppearance({ userProfile, setUserProfile }: Prop
                 <span className="font-headline font-bold text-sm text-tertiary uppercase">{sys.label}</span>
                 {(userProfile?.unitSystem ?? 'metric') === sys.id && <Check className="w-5 h-5 text-primary" />}
               </div>
-              <span className="text-micro font-label tracking-widest uppercase text-on-surface-variant mt-1">{sys.desc}</span>
+              <Text as="span" variant="micro" className="mt-1">{sys.desc}</Text>
             </button>
           ))}
         </div>
