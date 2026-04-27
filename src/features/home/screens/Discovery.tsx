@@ -25,8 +25,9 @@ import {
   type FilterValues,
 } from '../../recipes/utils/facets';
 import { MEAL_SLOTS, type MealSlot } from '../../../types/recipe';
+import type { Recipe } from '../../../types';
 
-export default function Discovery({ onNavigateToRecipe, savedRecipes = [], onSaveRecipe }: { onNavigateToRecipe?: (recipe: any) => void, savedRecipes?: any[], onSaveRecipe?: (recipe: any) => void }) {
+export default function Discovery({ onNavigateToRecipe, savedRecipes = [], onSaveRecipe }: { onNavigateToRecipe?: (recipe: Recipe) => void, savedRecipes?: Recipe[], onSaveRecipe?: (recipe: Recipe) => void }) {
   const { t } = useI18n();
   const { userProfile, dictionary, dailyMacros } = useAppState();
   const [searchQuery, setSearchQuery] = useState('');
@@ -42,12 +43,12 @@ export default function Discovery({ onNavigateToRecipe, savedRecipes = [], onSav
     'discoverySort', 'recommended',
   );
 
-  const toggleSave = (e: React.MouseEvent, recipe: any) => {
+  const toggleSave = (e: React.MouseEvent, recipe: Recipe) => {
     e.stopPropagation();
     if (onSaveRecipe) onSaveRecipe(recipe);
   };
 
-  const shareRecipe = (e: React.MouseEvent, _recipe: any) => {
+  const shareRecipe = (e: React.MouseEvent, _recipe: Recipe) => {
     e.stopPropagation();
     toast.success(t.discovery.sharedSuccess || 'Shared to community!');
   };
@@ -174,9 +175,9 @@ export default function Discovery({ onNavigateToRecipe, savedRecipes = [], onSav
       return {
         ...r,
         matchScore: calculateMatchScore(r, profileSlice, dictionary),
-        cal: r.macros?.calories || r.cal || 0,
-        pro: r.macros?.protein || r.pro || 0,
-        time: prep + cook > 0 ? `${prep + cook}M` : r.time || '—',
+        cal: r.macros?.calories || 0,
+        pro: r.macros?.protein || 0,
+        time: prep + cook > 0 ? `${prep + cook}M` : '—',
         totalTime: prep + cook,
         tag: r.tag || r.tags?.[0]?.toUpperCase() || '',
       };
@@ -318,13 +319,13 @@ export default function Discovery({ onNavigateToRecipe, savedRecipes = [], onSav
           />
           <SortControl
             options={[
-              { id: 'recommended', label: (t.recipes as any).sortRecommended ?? 'Recomendadas' },
-              { id: 'quick', label: (t.recipes as any).sortQuick ?? 'Rápidas' },
-              { id: 'highProtein', label: (t.recipes as any).sortHighProtein ?? 'Alta proteína' },
+              { id: 'recommended', label: t.recipes.sortRecommended },
+              { id: 'quick', label: t.recipes.sortQuick },
+              { id: 'highProtein', label: t.recipes.sortHighProtein },
             ]}
             active={sortMode}
             onChange={(id) => setSortMode(id as typeof sortMode)}
-            ariaLabel={(t.recipes as any).sortRecommended ?? 'Sort'}
+            ariaLabel={t.recipes.sortRecommended}
           />
         </div>
       </section>
@@ -360,7 +361,7 @@ export default function Discovery({ onNavigateToRecipe, savedRecipes = [], onSav
                   onPress={() => onNavigateToRecipe && onNavigateToRecipe(r)}
                   onSave={(e) => toggleSave(e, r)}
                   onShare={(e) => shareRecipe(e, r)}
-                  isSaved={savedRecipes.some((s: any) => s.id === r.id)}
+                  isSaved={savedRecipes.some((s) => s.id === r.id)}
                 />
               ))}
             </div>
@@ -396,7 +397,7 @@ export default function Discovery({ onNavigateToRecipe, savedRecipes = [], onSav
                 onPress={() => onNavigateToRecipe && onNavigateToRecipe(r)}
                 onShare={(e) => shareRecipe(e, r)}
                 onSave={(e) => toggleSave(e, r)}
-                isSaved={savedRecipes.some((s: any) => s.id === r.id)}
+                isSaved={savedRecipes.some((s) => s.id === r.id)}
               />
             ))}
           </Swimlane>
@@ -414,7 +415,7 @@ export default function Discovery({ onNavigateToRecipe, savedRecipes = [], onSav
                 onPress={() => onNavigateToRecipe && onNavigateToRecipe(r)}
                 onShare={(e) => shareRecipe(e, r)}
                 onSave={(e) => toggleSave(e, r)}
-                isSaved={savedRecipes.some((s: any) => s.id === r.id)}
+                isSaved={savedRecipes.some((s) => s.id === r.id)}
               />
             ))}
           </Swimlane>
@@ -429,7 +430,7 @@ export default function Discovery({ onNavigateToRecipe, savedRecipes = [], onSav
                 onPress={() => onNavigateToRecipe && onNavigateToRecipe(r)}
                 onShare={(e) => shareRecipe(e, r)}
                 onSave={(e) => toggleSave(e, r)}
-                isSaved={savedRecipes.some((s: any) => s.id === r.id)}
+                isSaved={savedRecipes.some((s) => s.id === r.id)}
               />
             ))}
           </Swimlane>
@@ -447,7 +448,7 @@ export default function Discovery({ onNavigateToRecipe, savedRecipes = [], onSav
                 onPress={() => onNavigateToRecipe && onNavigateToRecipe(r)}
                 onShare={(e) => shareRecipe(e, r)}
                 onSave={(e) => toggleSave(e, r)}
-                isSaved={savedRecipes.some((s: any) => s.id === r.id)}
+                isSaved={savedRecipes.some((s) => s.id === r.id)}
               />
             ))}
           </Swimlane>
@@ -462,7 +463,7 @@ export default function Discovery({ onNavigateToRecipe, savedRecipes = [], onSav
                 onPress={() => onNavigateToRecipe && onNavigateToRecipe(r)}
                 onShare={(e) => shareRecipe(e, r)}
                 onSave={(e) => toggleSave(e, r)}
-                isSaved={savedRecipes.some((s: any) => s.id === r.id)}
+                isSaved={savedRecipes.some((s) => s.id === r.id)}
               />
             ))}
           </Swimlane>

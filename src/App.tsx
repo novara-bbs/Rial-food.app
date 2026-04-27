@@ -131,7 +131,7 @@ export default function App() {
       // R8.3: derive dislike ids from foodPreferences, then resolve names
       foodDislikes: Object.entries(userProfile.foodPreferences ?? {})
         .filter(([, v]) => v === 'dislike')
-        .map(([id]) => dictionary.find((d: any) => d.id === id)?.name || id),
+        .map(([id]) => dictionary.find((d) => d.id === id)?.name || id),
       recentFoodInsights: getFoodInsights(realFeelLogs, dictionary).slice(0, 5).map(i => ({ name: i.ingredientName, tone: i.tone, avgLevel: i.avgLevel })),
       weeklyNutritionAvg,
       weightTrend,
@@ -232,7 +232,7 @@ export default function App() {
     <>
       <Onboarding isOpen={isFirstTime} onClose={() => setIsFirstTime(false)} onComplete={(result) => {
         setUserProfile(result.userProfile);
-        setDailyMacros((prev: any) => ({ ...prev, target: result.targets }));
+        setDailyMacros((prev) => ({ ...prev, target: result.targets }));
         // Seed initial weight history entry so Progress chart has data from day 1
         if (result.initialWeightKg && result.initialWeightKg > 0) {
           handleLogWeight({ kg: result.initialWeightKg });
