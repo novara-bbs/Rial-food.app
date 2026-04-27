@@ -1,4 +1,4 @@
-export type { Micronutrients, Macros, IngredientCategory, FoodTag, Allergen, ServingSize, Ingredient, RecipeIngredient } from './food';
+export type { Micronutrients, Macros, IngredientCategory, FoodTag, Allergen, ServingSize, Ingredient, RecipeIngredient, LoggableMeal } from './food';
 export type { FoodFamily, FoodVariant, VariantType, FoodSource, VariantBrand, MacroDelta } from './food-family';
 export { VARIANT_TYPES, FOOD_SOURCES } from './food-family';
 export type { RecipeStep, Recipe, MealSlot } from './recipe';

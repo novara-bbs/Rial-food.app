@@ -1,4 +1,10 @@
 import { toast } from 'sonner';
+import type { LoggableMeal } from '../../../types/food';
+import type { DailyArchive } from '../../../hooks/useDailyReset';
+import type { Translations } from '../../../i18n';
+import type { Recipe } from '../../../types/recipe';
+
+// ─── State shapes ─────────────────────────────────────────────────────────────
 
 interface DailyMacros {
   consumed: { cal: number; pro: number; carbs: number; fats: number };
@@ -38,20 +44,28 @@ export interface FoodHistoryEntry {
   source: 'dictionary' | 'api' | 'recipe';
 }
 
+// ─── Setter helper ─────────────────────────────────────────────────────────────
+
+type Setter<T> = (fn: T | ((prev: T) => T)) => void;
+
+// ─── Deps ──────────────────────────────────────────────────────────────────────
+
 interface MealHandlerDeps {
   targetPlanDay: number | null;
-  setMealPlan: (fn: any) => void;
-  setShoppingList: (fn: any) => void;
+  setMealPlan: Setter<Record<number, Recipe[]>>;
+  setShoppingList: Setter<ShoppingItem[]>;
   setTargetPlanDay: (v: number | null) => void;
-  setDailyMacros: (fn: any) => void;
-  setDailyLog: (fn: any) => void;
-  setFoodHistory: (fn: any) => void;
+  setDailyMacros: Setter<DailyMacros>;
+  setDailyLog: Setter<DailyLogEntry[]>;
+  setFoodHistory: Setter<FoodHistoryEntry[]>;
   navigateTo: (screen: string) => void;
   previousScreen: string;
-  t: any;
+  t?: Translations;
 }
 
-function updateFoodHistory(setFoodHistory: (fn: any) => void, meal: any) {
+// ─── Internal helpers ─────────────────────────────────────────────────────────
+
+function updateFoodHistory(setFoodHistory: Setter<FoodHistoryEntry[]>, meal: LoggableMeal) {
   const foodId = String(meal.id || meal.title || Date.now());
   const isRecipe = !!(meal.servings || meal.steps);
   setFoodHistory((prev: FoodHistoryEntry[]) => {
@@ -76,19 +90,25 @@ function updateFoodHistory(setFoodHistory: (fn: any) => void, meal: any) {
   });
 }
 
+// ─── createHandleLogMeal ──────────────────────────────────────────────────────
+
 export function createHandleLogMeal(deps: MealHandlerDeps) {
-  return (meal: any) => {
+  return (meal: LoggableMeal) => {
     const { targetPlanDay, setMealPlan, setShoppingList, setTargetPlanDay, setDailyMacros, setDailyLog, setFoodHistory, navigateTo, previousScreen, t } = deps;
 
     if (targetPlanDay !== null) {
-      setMealPlan((prev: Record<number, any[]>) => ({
+      setMealPlan((prev: Record<number, Recipe[]>) => ({
         ...prev,
-        [targetPlanDay]: [...(prev[targetPlanDay] || []), { ...meal, time: 'Planeado', type: 'Comida' }],
+        [targetPlanDay]: [
+          ...(prev[targetPlanDay] || []),
+          // LoggableMeal ⊄ Recipe but at runtime planner only reads title/macros/type/time
+          { ...meal, time: 'Planeado', type: 'Comida' } as unknown as Recipe,
+        ],
       }));
-      if (meal.recipeIngredients?.length > 0) {
+      if (meal.recipeIngredients && meal.recipeIngredients.length > 0) {
         setShoppingList((prev: ShoppingItem[]) => [
           ...prev,
-          ...meal.recipeIngredients.map((ri: any, idx: number) => ({
+          ...meal.recipeIngredients!.map((ri, idx: number) => ({
             id: Date.now() + idx,
             name: `${ri.ingredient?.name || ri.name || 'Ingrediente'} (${ri.amount}${ri.ingredient?.baseUnit || ri.unit || ''})`,
             category: ri.ingredient?.category || 'Otros',
@@ -102,7 +122,7 @@ export function createHandleLogMeal(deps: MealHandlerDeps) {
         ]);
       }
       setTargetPlanDay(null);
-      toast.success(t.mealToasts.addedToPlan);
+      toast.success(t?.mealToasts?.addedToPlan || 'Meal added to planner!');
       navigateTo('cocina');
     } else {
       setDailyMacros((prev: DailyMacros) => ({
@@ -116,12 +136,12 @@ export function createHandleLogMeal(deps: MealHandlerDeps) {
       }));
 
       const ingredientIds: string[] = meal.recipeIngredients?.length
-        ? meal.recipeIngredients.map((ri: any) => String(ri.ingredientId || ri.id))
+        ? meal.recipeIngredients.map(ri => String(ri.ingredientId || ri.id))
         : [String(meal.id || meal.title || Date.now())];
 
       const entry: DailyLogEntry = {
         id: Date.now(),
-        title: meal.title || meal.name || t.mealToasts.defaultMealName,
+        title: meal.title || meal.name || t?.mealToasts?.defaultMealName || 'Meal',
         portionDescription: meal.portionDescription || `${meal.grams || 100}g`,
         mealSlot: meal.mealSlot || 'other',
         time: meal.time || new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
@@ -138,24 +158,26 @@ export function createHandleLogMeal(deps: MealHandlerDeps) {
       setDailyLog((prev: DailyLogEntry[]) => [...prev, entry]);
       updateFoodHistory(setFoodHistory, meal);
 
-      toast.success(t.mealToasts.mealLogged);
+      toast.success(t?.mealToasts?.mealLogged || 'Meal logged!');
       navigateTo(previousScreen);
     }
   };
 }
 
+// ─── createHandleRepeatYesterday ──────────────────────────────────────────────
+
 export function createHandleRepeatYesterday(deps: {
-  setDailyLog: (fn: any) => void;
-  setDailyMacros: (fn: any) => void;
-  nutritionHistory: any[];
-  t: any;
+  setDailyLog: Setter<DailyLogEntry[]>;
+  setDailyMacros: Setter<DailyMacros>;
+  nutritionHistory: DailyArchive[];
+  t?: Translations;
 }) {
   return () => {
     const sorted = [...deps.nutritionHistory].sort((a, b) => b.date.localeCompare(a.date));
     const yesterday = sorted[0];
     if (!yesterday?.dailyLog?.length) return;
 
-    const newEntries: DailyLogEntry[] = yesterday.dailyLog.map((e: any) => ({
+    const newEntries: DailyLogEntry[] = (yesterday.dailyLog as DailyLogEntry[]).map(e => ({
       ...e,
       id: Date.now() + Math.random(),
     }));
@@ -172,12 +194,14 @@ export function createHandleRepeatYesterday(deps: {
     );
 
     deps.setDailyMacros((prev: DailyMacros) => ({ ...prev, consumed: totalMacros }));
-    toast.success(deps.t.mealToasts?.mealLogged || 'Meals repeated');
+    toast.success(deps.t?.mealToasts?.mealLogged || 'Meals repeated');
   };
 }
 
+// ─── createHandleLogMealNow ───────────────────────────────────────────────────
+
 export function createHandleLogMealNow(deps: Pick<MealHandlerDeps, 'setDailyMacros' | 'setDailyLog' | 'setFoodHistory' | 'navigateTo' | 't'>) {
-  return (meal: any, servings: number) => {
+  return (meal: LoggableMeal, servings: number) => {
     deps.setDailyMacros((prev: DailyMacros) => ({
       ...prev,
       consumed: {
@@ -189,13 +213,13 @@ export function createHandleLogMealNow(deps: Pick<MealHandlerDeps, 'setDailyMacr
     }));
 
     const ingredientIds: string[] = meal.recipeIngredients?.length
-      ? meal.recipeIngredients.map((ri: any) => String(ri.ingredientId || ri.id))
+      ? meal.recipeIngredients.map(ri => String(ri.ingredientId || ri.id))
       : [String(meal.id || meal.title || Date.now())];
 
-    const defaultPortion = deps.t.mealToasts.defaultPortion;
+    const defaultPortion = deps.t?.mealToasts?.defaultPortion || '1 serving';
     const entry: DailyLogEntry = {
       id: Date.now(),
-      title: meal.title || meal.name || deps.t.mealToasts.defaultMealName,
+      title: meal.title || meal.name || deps.t?.mealToasts?.defaultMealName || 'Meal',
       portionDescription: servings === 1
         ? (meal.portionDescription || defaultPortion)
         : `${servings} × ${meal.portionDescription || defaultPortion}`,
@@ -212,7 +236,10 @@ export function createHandleLogMealNow(deps: Pick<MealHandlerDeps, 'setDailyMacr
     deps.setDailyLog((prev: DailyLogEntry[]) => [...prev, entry]);
     updateFoodHistory(deps.setFoodHistory, meal);
 
-    toast.success(deps.t.mealToasts.portionsLogged.replace('{servings}', String(servings)).replace('{title}', meal.title || ''));
+    const portionsMsg = deps.t?.mealToasts?.portionsLogged
+      ?.replace('{servings}', String(servings))
+      .replace('{title}', meal.title || '') || `Logged ${servings}x`;
+    toast.success(portionsMsg);
     deps.navigateTo('home');
   };
 }
