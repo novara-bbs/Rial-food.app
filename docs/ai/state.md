@@ -5,34 +5,32 @@
 > prunes this file back down. Everything below should answer: *what's the release line,
 > what's the quality baseline, what's the next move, what's broken?*
 
-Last updated: **2026-04-26** — `[1.5.133]` Sprint 1 safety nets COMPLETE: 79 hook tests + 55 component tests + TESTING-PATTERNS.md cookbook.
+Last updated: **2026-04-27** — `[1.5.139]` Sprint 4: AppStateContext type-safety sweep — zero `any` in public interface, +5 new wellness types, 2 bug fixes surfaced.
 
 ## Release snapshot
-- **Branch**: `main`, **synced** with `rial-food/main` at `d871d95`.
-- **Last shipped (5 PRs merged in one session 2026-04-26)**:
-    - **PR #10** `[1.5.112-130]` — Structural cleanup: Phase 2.4 (i18n
-      split via codemod) + Phase 2.5 (8 domain hooks, AppStateContext
-      1075 → 584) + Phase 3.1 (7 RecipeDetail components, 1066 → 678).
-    - **PR #11** `[1.5.115]` — ROADMAP-2026.md strategic plan.
-    - **PR #12** `[1.5.131-132]` — Sprint 1 hook tests: 79 unit tests
-      across 8 files. Locks the contracts of every state hook.
-    - **PR #13** `[1.5.133]` — Sprint 1 component tests: 55 unit tests
-      across 7 files + new `renderWithProviders` helper.
-    - **PR #14** `[1.5.133b]` — TESTING-PATTERNS.md cookbook (200+ lines)
-      capturing the patterns for future contributors.
-- **Previous**: `[1.5.109]` chip/badge refinement · `[1.5.108]` Satoshi font.
-- **Previous**: `[1.5.103]` hooks sweep · `[1.5.102]` RecipeCard KS · `[1.5.101]` dead-code.
+- **Branch**: `sprint4/type-safety-context`. PRs #23-26 (Sprint 2+3) merged. Sprint 4 in progress.
+- **In progress (this session, 2026-04-27)**:
+    - **Sprint 4** `[1.5.139]` — AppStateContext type-safety: zero `any` in public interface,
+      `StoredRealFeelEntry` + `RealFeelEntry` + signal types added to `src/types/wellness.ts`,
+      2 latent bugs fixed (`.date` → `.createdAt`, `handleDeleteRecipe` param narrowed to `string`).
+- **Previous session (2026-04-26, 5 PRs)**:
+    - **PR #10** `[1.5.112-130]` — Structural cleanup: Phase 2.4 + 2.5 + 3.1.
+    - **PR #11** `[1.5.115]` — ROADMAP-2026.md.
+    - **PR #12** `[1.5.131-132]` — Sprint 1 hook tests: 79 tests.
+    - **PR #13** `[1.5.133]` — Sprint 1 component tests: 55 tests.
+    - **PR #14** `[1.5.133b]` — TESTING-PATTERNS.md cookbook.
 - **Active plan**: sprints sellados. **Próximos**: Phase 2 Home, Q6-B recipe photos,
   owner-actions Supabase prod env.
 - **Release target**: `rial-food/main` (`novara-bbs/Rial-food.app`). Origin `rial-food`.
 - **Vercel project**: `rial.app.v1.5` (id `prj_t11VHYQjptazjUx7Y2hWLz0IDAjg`).
 - **Governance**: work directly on `main`. "continua" = push approval post green preflight.
 
-## Quality baseline (post-Sprint 1, 2026-04-26)
+## Quality baseline (post-Sprint 4, 2026-04-27)
 - TypeScript: **0 errors** (`npx tsc --noEmit`)
-- Tests: **1316/1316** passing (86 files; +145 tests this session)
+- Tests: **1316/1316** passing (86 files)
 - i18n symmetry: **1917** keys aligned ES ↔ EN
-- Design-system lint: **0 errors**, ~876 warnings (0 react-hooks errors)
+- Design-system lint: **0 errors**, ~832 warnings (-44 vs post-Sprint 1; 0 react-hooks errors)
+- `AppStateContextType` interface: **0 `any` types** (Sprint 4 ✓)
 - Build main: size:check PASS — all budgets within limits.
 - **AppStateContext**: 1075 → 584 lines (-46%), composer of 8 domain hooks.
 - **RecipeDetail**: 1066 → 678 lines (-36%), composer of 7 detail components.

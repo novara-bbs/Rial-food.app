@@ -59,3 +59,34 @@ export interface ToleranceLog {
   reaction: 'Severe' | 'Moderate' | 'Mild';
   symptoms: string;
 }
+
+// ─── RealFeel ─────────────────────────────────────────────────────────────────
+
+export type EnergySignal = 'high' | 'stable' | 'low';
+export type DigestionSignal = 'clean' | 'sensitive' | 'bloated';
+export type MindsetSignal = 'calm' | 'balanced' | 'stressed';
+
+/**
+ * A single RealFeel entry submitted after a meal or at any time.
+ * Tracks subjective energy, digestion, mindset, and free-form tags.
+ */
+export interface RealFeelEntry {
+  level: number;
+  tags: string[];
+  note?: string;
+  energy?: EnergySignal;
+  digestion?: DigestionSignal;
+  mindset?: MindsetSignal;
+}
+
+/**
+ * A persisted RealFeel entry (after storage by the wellness handler).
+ * Extends RealFeelEntry with runtime-generated fields: id, date, and
+ * correlated meal/ingredient references.
+ */
+export interface StoredRealFeelEntry extends RealFeelEntry {
+  id: number;
+  date: string;           // ISO timestamp
+  mealIds: number[];      // DailyLogEntry IDs logged in the past 90 min
+  ingredientIds: string[];// ingredient IDs from those meals
+}

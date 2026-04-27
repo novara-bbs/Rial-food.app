@@ -15,7 +15,7 @@ import { createHandleLoadDemoSeed, createHandleClearDemoSeed } from '../features
 import { IS_DEV } from '../config/env';
 // getRecipeSlots + ingredientIdToFamilyVariant moved to useRecipeState (Phase 2.5).
 import { logger } from '../lib/logger';
-import type { BodySnapshot } from '../types/wellness';
+import type { BodySnapshot, ToleranceLog, RealFeelEntry, StoredRealFeelEntry } from '../types/wellness';
 import type { CommunityPost } from '../types/social';
 import { useAuth } from './AuthContext';
 import { syncOnSignIn } from '../lib/sync';
@@ -31,6 +31,43 @@ import type { UserProfile } from '../types/user';
 import type { ShoppingItem } from '../types/planner';
 
 // ─── Types ───────────────────────────────────────────────────────────────────
+
+/** Updater-compatible setter — accepts a value or a functional update. */
+type Setter<T> = (v: T | ((prev: T) => T)) => void;
+
+/** Hydration state shape. */
+type HydrationState = { consumed: number; target: number };
+
+/** Movement state shape. */
+type MovementState = { steps: number; target: number; activeMinutes: number; activeTarget: number };
+
+/**
+ * Duck-typed loggable meal — accepts both Recipe objects and flat Ingredient/
+ * custom-macro objects. Left as unknown-field union to avoid false negatives
+ * when callers pass partial shapes (e.g. scanned food, custom log entry).
+ */
+interface LoggableMeal {
+  id?: string | number;
+  title?: string;
+  name?: string;
+  cal?: number;
+  pro?: number;
+  carbs?: number;
+  fats?: number;
+  grams?: number;
+  portionDescription?: string;
+  mealSlot?: string;
+  time?: string;
+  macros?: { calories?: number; protein?: number; carbs?: number; fats?: number };
+  recipeIngredients?: Array<{
+    ingredientId?: string;
+    id?: string;
+    amount?: number;
+    unit?: string;
+    ingredient?: { name?: string; baseUnit?: string; category?: string };
+    name?: string;
+  }>;
+}
 
 interface AppStateContextType {
   // Profile & session
@@ -49,30 +86,31 @@ interface AppStateContextType {
   // Macros & vitals
   dailyMacros: DailyMacros;
   setDailyMacros: (v: DailyMacros | ((prev: DailyMacros) => DailyMacros)) => void;
-  hydration: { consumed: number; target: number };
-  setHydration: (v: any) => void;
-  movement: { steps: number; target: number; activeMinutes: number; activeTarget: number };
-  setMovement: (v: any) => void;
+  hydration: HydrationState;
+  setHydration: Setter<HydrationState>;
+  movement: MovementState;
+  setMovement: Setter<MovementState>;
   dailyGoal: string;
   setDailyGoal: (v: string) => void;
 
   // Content
   savedRecipes: Recipe[];
-  setSavedRecipes: (v: any) => void;
-  mealPlan: Record<number, any[]>;
-  setMealPlan: (v: any) => void;
+  setSavedRecipes: Setter<Recipe[]>;
+  /** MealPlan entries are Recipe objects augmented with extra runtime fields (time, type). */
+  mealPlan: Record<number, Recipe[]>;
+  setMealPlan: Setter<Record<number, Recipe[]>>;
   shoppingList: ShoppingItem[];
-  setShoppingList: (v: any) => void;
-  communityPosts: any[];
-  setCommunityPosts: (v: any) => void;
-  toleranceLogs: any[];
-  setToleranceLogs: (v: any) => void;
-  realFeelLogs: any[];
-  setRealFeelLogs: (v: any) => void;
+  setShoppingList: Setter<ShoppingItem[]>;
+  communityPosts: CommunityPost[];
+  setCommunityPosts: Setter<CommunityPost[]>;
+  toleranceLogs: ToleranceLog[];
+  setToleranceLogs: Setter<ToleranceLog[]>;
+  realFeelLogs: StoredRealFeelEntry[];
+  setRealFeelLogs: Setter<StoredRealFeelEntry[]>;
 
   // Check-in
   checkInStatus: DailyCheckInType | null;
-  setCheckInStatus: (v: any) => void;
+  setCheckInStatus: (v: DailyCheckInType | null) => void;
 
   // User foods (scanned / custom) — legacy flat list kept for backward-compat
   userFoods: Ingredient[];
@@ -92,19 +130,19 @@ interface AppStateContextType {
 
   // Daily food diary log
   dailyLog: DailyLogEntry[];
-  setDailyLog: (v: any) => void;
+  setDailyLog: Setter<DailyLogEntry[]>;
 
   // Food history & favorites (persistent across days)
   foodHistory: FoodHistoryEntry[];
-  setFoodHistory: (v: any) => void;
+  setFoodHistory: Setter<FoodHistoryEntry[]>;
   favoriteIds: string[];
   toggleFavorite: (foodId: string) => void;
 
   // Weight & history
   weightHistory: BodySnapshot[];
-  setWeightHistory: (v: any) => void;
+  setWeightHistory: Setter<BodySnapshot[]>;
   nutritionHistory: DailyArchive[];
-  setNutritionHistory: (v: any) => void;
+  setNutritionHistory: Setter<DailyArchive[]>;
 
   // Misc
   selectedRecipe: Recipe | null;
@@ -129,7 +167,7 @@ interface AppStateContextType {
   savedPosts: number[];
   toggleSavePost: (postId: number) => void;
   communityStories: Story[];
-  setCommunityStories: (fn: any) => void;
+  setCommunityStories: Setter<Story[]>;
   handlePublishStory: (slides: StorySlide[]) => void;
   handleMarkStoryViewed: (storyId: string) => void;
   notifications: import('../types/social').Notification[];
@@ -152,21 +190,23 @@ interface AppStateContextType {
   handleToggleChallenge: (challengeId: string) => void;
 
   // Handlers
-  handleLogMeal: (meal: any) => void;
-  handleLogMealNow: (meal: any, servings: number) => void;
-  handleSaveRecipe: (recipe: any) => void;
-  handleCreatePost: (content: string, performance?: any, options?: { images?: string[]; recipe?: any; hashtags?: string[] }) => void;
+  /** Accepts a Recipe, Ingredient, or custom macro object — duck-typed for flexibility. */
+  handleLogMeal: (meal: LoggableMeal) => void;
+  handleLogMealNow: (meal: LoggableMeal, servings: number) => void;
+  handleSaveRecipe: (recipe: Recipe) => void;
+  /** `recipe` is a post-summary object (not a full Recipe) attached to community posts. */
+  handleCreatePost: (content: string, performance?: Record<string, unknown>, options?: { images?: string[]; recipe?: Record<string, unknown>; hashtags?: string[] }) => void;
   handleAddComment: (postId: number, commentText: string) => void;
-  handleAddToleranceLog: (log: any) => void;
-  handleCreateRecipeSubmit: (recipe: any) => void;
-  handleRealFeelLog: (entry: any) => void;
-  handleImportRecipe: (recipe: any) => void;
-  handleAddToPlan: (recipe: any, dayIndex: number) => void;
+  handleAddToleranceLog: (log: Omit<ToleranceLog, 'id'>) => void;
+  handleCreateRecipeSubmit: (recipe: Recipe) => void;
+  handleRealFeelLog: (entry: RealFeelEntry) => void;
+  handleImportRecipe: (recipe: Recipe) => void;
+  handleAddToPlan: (recipe: Recipe, dayIndex: number) => void;
   handleCheckIn: (status?: string) => void;
-  handleCompleteCheckIn: (data: any) => void;
-  handleDeleteRecipe: (recipeId: any) => void;
-  handleDuplicateRecipe: (recipe: any) => void;
-  handleMarkAsCooked: (recipe: any) => void;
+  handleCompleteCheckIn: (data: DailyCheckInType) => void;
+  handleDeleteRecipe: (recipeId: string) => void;
+  handleDuplicateRecipe: (recipe: Recipe) => void;
+  handleMarkAsCooked: (recipe: Recipe) => void;
   handleLogWeight: (args: LogWeightArgs) => { replaced: boolean };
   handleUpdateSnapshot: (args: { date: string; photoUrl?: string; measurements?: import('../types/wellness').BodyMeasurements }) => void;
   handleDeleteSnapshot: (date: string) => void;
@@ -179,9 +219,9 @@ interface AppStateContextType {
   }) => CommunityPost;
   handleLoadDemoSeed?: () => Promise<void>;
   handleClearDemoSeed?: () => void;
-  navigateToRecipe: (recipe: any) => void;
-  recipeToEdit: any;
-  setRecipeToEdit: (recipe: any) => void;
+  navigateToRecipe: (recipe: Recipe) => void;
+  recipeToEdit: Recipe | null;
+  setRecipeToEdit: (recipe: Recipe | null) => void;
 }
 
 // UserProfile + FamilyMember moved to src/types/user.ts in Phase 2.5 [1.5.116].

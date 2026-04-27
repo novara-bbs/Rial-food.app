@@ -31,7 +31,7 @@ interface RecipeDetailModalsProps {
   // ── Delete confirm
   showDeleteConfirm: boolean;
   setShowDeleteConfirm: (open: boolean) => void;
-  handleDeleteRecipe: (recipeId: string | number) => void;
+  handleDeleteRecipe: (recipeId: string) => void;
   // ── Duplicate confirm
   showDuplicateConfirm: boolean;
   setShowDuplicateConfirm: (open: boolean) => void;
