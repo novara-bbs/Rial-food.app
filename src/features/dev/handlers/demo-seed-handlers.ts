@@ -1,5 +1,13 @@
 import { buildDemoSeed } from '../data/demo-seed';
 import { ALL_SEED_KEYS, clearSeed } from '../../../lib/seedVersion';
+import type { Recipe } from '../../../types/recipe';
+import type { UserProfile } from '../../../types/user';
+import type { CommunityPost, Story } from '../../../types/social';
+import type { ToleranceLog, StoredRealFeelEntry, BodySnapshot } from '../../../types/wellness';
+import type { ShoppingItem } from '../../../types/planner';
+import type { DailyLogEntry, FoodHistoryEntry } from '../../food/handlers/meal-handlers';
+import type { DailyMacros } from '../../../contexts/state/useVitalsState';
+import type { DailyArchive } from '../../../hooks/useDailyReset';
 
 /**
  * Dev handlers for loading and clearing the Demo Rial seed.
@@ -17,24 +25,33 @@ import { ALL_SEED_KEYS, clearSeed } from '../../../lib/seedVersion';
  *    write the plain `weeklyCheckIns` key.
  */
 
+// ─── Hydration / Movement shapes (matches useVitalsState defaults) ─────────────
+
+interface HydrationState { consumed: number; target: number }
+interface MovementState { steps: number; target: number; activeMinutes: number; activeTarget: number }
+
+// ─── DemoSeedSetters ──────────────────────────────────────────────────────────
+
 export interface DemoSeedSetters {
-  setUserProfile: (v: any) => void;
-  setDailyMacros: (v: any) => void;
-  setHydration: (v: any) => void;
-  setMovement: (v: any) => void;
-  setDailyGoal: (v: any) => void;
-  setDailyLog: (v: any) => void;
-  setFoodHistory: (v: any) => void;
-  setWeightHistory: (v: any) => void;
-  setNutritionHistory: (v: any) => void;
-  setRealFeelLogs: (v: any) => void;
-  setSavedRecipes: (v: any) => void;
-  setMealPlan: (v: any) => void;
-  setShoppingList: (v: any) => void;
-  setCommunityPosts: (v: any) => void;
-  setCommunityStories: (v: any) => void;
-  setToleranceLogs: (v: any) => void;
+  setUserProfile: (v: UserProfile) => void;
+  setDailyMacros: (v: DailyMacros) => void;
+  setHydration: (v: HydrationState) => void;
+  setMovement: (v: MovementState) => void;
+  setDailyGoal: (v: string) => void;
+  setDailyLog: (v: DailyLogEntry[]) => void;
+  setFoodHistory: (v: FoodHistoryEntry[]) => void;
+  setWeightHistory: (v: BodySnapshot[]) => void;
+  setNutritionHistory: (v: DailyArchive[]) => void;
+  setRealFeelLogs: (v: StoredRealFeelEntry[]) => void;
+  setSavedRecipes: (v: Recipe[]) => void;
+  setMealPlan: (v: Record<number, Recipe[]>) => void;
+  setShoppingList: (v: ShoppingItem[]) => void;
+  setCommunityPosts: (v: CommunityPost[]) => void;
+  setCommunityStories: (v: Story[]) => void;
+  setToleranceLogs: (v: ToleranceLog[]) => void;
 }
+
+// ─── createHandleLoadDemoSeed ─────────────────────────────────────────────────
 
 export function createHandleLoadDemoSeed(setters: DemoSeedSetters) {
   return async (): Promise<void> => {
@@ -66,6 +83,8 @@ export function createHandleLoadDemoSeed(setters: DemoSeedSetters) {
   };
 }
 
+// ─── createHandleClearDemoSeed ────────────────────────────────────────────────
+
 export function createHandleClearDemoSeed(setters: DemoSeedSetters) {
   return (): void => {
     // Reset React state in-memory to defaults that won't persist garbage.
@@ -79,7 +98,7 @@ export function createHandleClearDemoSeed(setters: DemoSeedSetters) {
       activity: 'active',
       trains: false,
       dietaryPreferences: [],
-    });
+    } as UserProfile);
     setters.setDailyMacros({
       consumed: { cal: 0, pro: 0, carbs: 0, fats: 0 },
       target: { cal: 2400, pro: 180, carbs: 250, fats: 65 },
