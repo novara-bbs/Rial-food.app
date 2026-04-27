@@ -15,6 +15,7 @@ export interface PostComment {
   text: string;
   time: string;
   likes?: number;
+  createdAt?: string;
 }
 
 export interface ProgressPostPayload {
