@@ -27,6 +27,13 @@ const config: CapacitorConfig = {
     StatusBar: {
       style: 'dark',                 // Light icons on dark background
       backgroundColor: '#09090b',
+      // Explicit: webview does NOT extend under the status bar. The CSS
+      // `env(safe-area-inset-top)` therefore reports 0 and we rely on
+      // the native StatusBar height. To switch to edge-to-edge rendering
+      // (status bar overlays content), set this `true` AND ensure every
+      // top-level scaffold uses `pt-safe` (PageShell + GlobalHeader do).
+      // See docs/adr/ADR-016-safe-area.md.
+      overlaysWebView: false,
     },
     Keyboard: {
       resize: 'body',

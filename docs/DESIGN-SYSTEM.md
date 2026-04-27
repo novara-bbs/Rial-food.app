@@ -170,6 +170,26 @@ State is persisted under `rial-theme-v2` as `{palette, mode}`. Legacy `rial-them
 | `<Button size="default">` (44×44) | `<Button size="sm">` for primary CTAs |
 | `w-11 h-11` for custom clickables | `w-8 h-8` click targets |
 
+### Safe area & notch (ADR-016)
+
+Mobile chrome (iPhone notch / Dynamic Island, Android display cutouts, iOS home indicator) is owned by **three** primitives — never read `env(safe-area-inset-*)` directly in a screen.
+
+| Surface type | Use this | Notes |
+|---|---|---|
+| Screen with `<GlobalHeader>` + `<BottomNav>` | nothing — chrome owns it | 33 of 41 screens. Default. |
+| Fullscreen route (auth, AICoach, StoryViewer) | `<PageShell safeArea="top">` | Or wrap root in `<div className="pt-safe">` |
+| Edge-to-edge content (no BottomNav) | `<PageShell safeArea="bottom">` | Modals usually own their scaffold instead |
+| Custom topbar inside a route | `pt-safe` on the sticky element | Same pattern as `<GlobalHeader>` |
+| Bottom action bar | `pb-safe-nav` | Reserves home indicator + 0.5rem breathing |
+
+| ✅ Do | ❌ Don't |
+|---|---|
+| `<PageShell safeArea="top">` | `style={{ paddingTop: 'env(safe-area-inset-top)' }}` |
+| `pt-safe` Tailwind utility | `pt-[env(safe-area-inset-top)]` arbitrary value |
+| `pb-safe-nav` for BottomNav | `pb-2` (cuts under home indicator on iPhone) |
+
+Utilities live in `src/index.css:704+` — the only file that touches `env()`. To change the global inset rule (e.g. add a `max(env(...), 1rem)` fallback), edit one place.
+
 ### i18n (ADR-004)
 | ✅ Do | ❌ Don't |
 |---|---|

@@ -701,9 +701,38 @@
   }
 }
 
-/* Safe area utilities for mobile browser chrome + notch */
+/* ─── Safe area utilities (notch / Dynamic Island / home indicator) ─────────
+ *
+ * These utilities wrap `env(safe-area-inset-*)` so screens never read the env
+ * variable directly. Always prefer the semantic utility over a raw inline
+ * style — that way changing the inset rule globally is one edit here.
+ *
+ * Usage map:
+ *   - `pt-safe`      → top inset, for sticky headers + fullscreen overlays
+ *                      that own their topbar (auth, StoryViewer).
+ *   - `pb-safe`      → bottom inset, for screens that scroll to the very edge
+ *                      (no BottomNav, e.g. modals, RecipeDetail actions).
+ *   - `pb-safe-nav`  → bottom inset + 0.5rem breathing room, for the
+ *                      `BottomNav` itself.
+ *   - `pl-safe` / `pr-safe` → landscape iOS notch on the side. Rare.
+ *
+ * `index.html` MUST declare `viewport-fit=cover` (already does) for these to
+ * resolve to non-zero on iOS. Capacitor honours the same env vars natively.
+ *
+ * The canonical `<PageShell safeArea>` prop and `<GlobalHeader>` consume
+ * these utilities — most screens never apply them by hand.
+ */
+@utility pt-safe {
+  padding-top: env(safe-area-inset-top, 0px);
+}
 @utility pb-safe {
   padding-bottom: env(safe-area-inset-bottom, 0px);
+}
+@utility pl-safe {
+  padding-left: env(safe-area-inset-left, 0px);
+}
+@utility pr-safe {
+  padding-right: env(safe-area-inset-right, 0px);
 }
 @utility pb-safe-nav {
   padding-bottom: calc(env(safe-area-inset-bottom, 0px) + 0.5rem);

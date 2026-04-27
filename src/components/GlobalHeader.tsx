@@ -79,7 +79,7 @@ export default function GlobalHeader({ onOpenSettings, onOpenProfile, onOpenNoti
 
   return (
     <>
-      <header className="h-16 border-b border-outline-variant/10 bg-background/80 backdrop-blur-md sticky top-0 z-50 px-6 flex items-center justify-between">
+      <header className="pt-safe border-b border-outline-variant/10 bg-background/80 backdrop-blur-md sticky top-0 z-50 px-6 flex items-center justify-between h-[calc(env(safe-area-inset-top,0px)+4rem)]">
         <div className="flex items-center gap-4 flex-1">
           <div className="relative max-w-xs w-full hidden md:block">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-on-surface-variant/50" />
