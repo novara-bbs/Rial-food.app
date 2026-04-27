@@ -18,6 +18,7 @@
  * predicate matches zero recipes (skip-empty behaviour identical to pre-1.5.97).
  */
 import ChipRow from '../../../components/patterns/ChipRow';
+import type { Recipe } from '../../../types';
 import type { ChipOption } from '../../../components/patterns/ChipRow';
 import { COLLECTIONS } from '../data/collections';
 import { useI18n } from '../../../i18n';
@@ -26,7 +27,7 @@ import { useI18n } from '../../../i18n';
 
 export interface CollectionsCarouselProps {
   /** All scored recipes — used to compute live counts. */
-  recipes: any[];
+  recipes: Recipe[];
   /** Currently active collection id (`'all'` = no selection). */
   activeCollection: string;
   onSelect: (id: string) => void;

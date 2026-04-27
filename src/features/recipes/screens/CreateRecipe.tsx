@@ -1,7 +1,7 @@
 import { Camera, Plus, Search, Trash2, ArrowUp, ArrowDown, Clock, ChevronRight, Check, Link2, Video, ImagePlus, ThumbsUp, Minus, AlertTriangle, UtensilsCrossed, Layers, X, ClipboardList, CheckCircle2, AlertCircle, BadgeCheck } from 'lucide-react';
 import PageShell from '../../../components/PageShell';
 import { useState, useMemo, useRef } from 'react';
-import type { Ingredient, RecipeIngredient, RecipeStep, Micronutrients, FoodTag, MealSlot } from '../../../types';
+import type { Recipe, Ingredient, RecipeIngredient, RecipeStep, Micronutrients, FoodTag, MealSlot } from '../../../types';
 import BottomSheet from '../../../components/ui/bottom-sheet';
 import { parseBulkIngredients, toApproxGrams } from '../utils/ingredient-parser';
 import type { ParsedIngredient } from '../utils/ingredient-parser';
@@ -127,9 +127,9 @@ export default function CreateRecipe({
   initialRecipe,
 }: {
   onBack: () => void;
-  onCreateRecipe?: (recipe: any) => void;
+  onCreateRecipe?: (recipe: Recipe) => void;
   dictionary?: Ingredient[];
-  initialRecipe?: any;
+  initialRecipe?: Partial<Recipe> | null;
 }) {
   const { t, locale } = useI18n();
   const { userProfile, mergedVariants, userVariants } = useAppState();
@@ -144,7 +144,7 @@ export default function CreateRecipe({
   // Numeric minutes. Free-form strings like "1h 30min" used to slip through
   // and break `Cocina.parseMin()` (→ 1 minute instead of 90). Store as number,
   // persist as "{n} min" for display continuity with seed data.
-  const parseTimeToMinutes = (v: any): number => {
+  const parseTimeToMinutes = (v: string | number | null | undefined): number => {
     if (typeof v === 'number') return v;
     const n = parseInt(String(v || ''), 10);
     return Number.isNaN(n) ? 0 : n;
@@ -390,7 +390,8 @@ export default function CreateRecipe({
       micros: totals.micros,
       tags: autoTags,
       suitableFor: suitableFor.length > 0 ? suitableFor : undefined,
-      img: photos[0] ?? initialRecipe?.img ?? 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&w=800&q=80',
+      id: initialRecipe?.id ?? '',
+      image: photos[0] ?? initialRecipe?.image ?? initialRecipe?.img ?? 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&w=800&q=80',
       photos: photos.length > 0 ? photos : undefined,
       sourceUrl: sourceUrl || undefined,
       videoUrl: videoUrl || undefined,

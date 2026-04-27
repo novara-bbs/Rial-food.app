@@ -6,6 +6,8 @@ import { useI18n } from '../../../i18n';
 import { calcStreaks } from '../../wellness/utils/streaks';
 import { calculatePoints, getUserLevel, type UserStats } from '../../profile/utils/gamification';
 import type { DailyArchive } from '../../../hooks/useDailyReset';
+import type { UserProfile } from '../../../types/user';
+import type { StoredRealFeelEntry } from '../../../types/wellness';
 
 interface MenuItem {
   id: string;
@@ -23,8 +25,8 @@ interface MenuGroup {
 
 interface MoreProps {
   navigateTo: (screen: string) => void;
-  userProfile?: any;
-  realFeelLogs?: any[];
+  userProfile?: UserProfile;
+  realFeelLogs?: StoredRealFeelEntry[];
   nutritionHistory?: DailyArchive[];
   dailyLogHasEntries?: boolean;
 }

@@ -10,7 +10,7 @@ import { generateGeminiText } from '@/lib/gemini';
 import { GEMINI_API_KEY, SUPABASE_URL } from '../../../config/env';
 import { enhanceIngredients, EnhancedIngredient, RecipeIntelligenceResult } from '../utils/recipe-intelligence';
 import MealSlotMultiSelect from '../../food/components/MealSlotMultiSelect';
-import type { MealSlot } from '../../../types';
+import type { Recipe, MealSlot } from '../../../types';
 
 /**
  * Heuristic slot inference from recipe title (the most signal-dense field the
@@ -71,7 +71,7 @@ export default function ImportRecipeURL({
   presentation = 'route',
 }: {
   onBack: () => void;
-  onImport: (recipe: any) => void;
+  onImport: (recipe: Recipe) => void;
   presentation?: 'sheet' | 'route';
 }) {
   const { t } = useI18n();
@@ -125,7 +125,7 @@ export default function ImportRecipeURL({
       const data = JSON.parse(jsonMatch[0]);
 
       // Run intelligence pipeline: fuzzy match + unit conversion + macro calculation
-      const rawIngredients = (data.ingredients || []).map((ing: any) => ({
+      const rawIngredients = (data.ingredients || []).map((ing: { name?: string; amount?: number; unit?: string }) => ({
         name: ing.name,
         amount: ing.amount ?? 0,
         unit: ing.unit ?? 'g',
