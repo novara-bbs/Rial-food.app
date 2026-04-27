@@ -53,10 +53,10 @@ const INFO_BLOCK: Record<string, string> = {
 };
 
 const TITLE: Record<string, string> = {
-  carousel: 'font-headline font-black text-sm text-tertiary leading-tight tracking-tight uppercase line-clamp-2',
-  grid:     'font-headline font-black text-sm text-tertiary leading-tight tracking-tight uppercase line-clamp-2',
-  hero:     'font-headline font-black text-tertiary text-2xl md:text-3xl leading-tight tracking-tighter uppercase line-clamp-2',
-  compact:  'font-headline font-black text-xs text-tertiary leading-tight tracking-tight uppercase line-clamp-2',
+  carousel: 'font-headline font-bold text-sm text-tertiary leading-tight tracking-tight uppercase line-clamp-1',
+  grid:     'font-headline font-bold text-sm text-tertiary leading-tight tracking-tight uppercase line-clamp-1',
+  hero:     'font-headline font-bold text-tertiary text-2xl md:text-3xl leading-tight tracking-tighter uppercase line-clamp-1',
+  compact:  'font-headline font-bold text-xs text-tertiary leading-tight tracking-tight uppercase line-clamp-1',
 };
 
 export default function RecipeCard({
