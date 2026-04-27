@@ -63,12 +63,12 @@ export default function AICoach({
       const text = await generateAIResponse(textToSend, systemInstruction);
 
       setMessages((prev) =>{
-        const updated = [...prev, { role: 'model' as const, text: text || t.aiCoach.errorMessage }];
+        const updated: { role: 'user' | 'model'; text: string }[] = [...prev, { role: 'model' as const, text: text || t.aiCoach.errorMessage }];
         return updated.length > MAX_STORED_MESSAGES ? updated.slice(-MAX_STORED_MESSAGES) : updated;
       });
     } catch (error) {
       logger.error('Error calling AI', { error: error instanceof Error ? error.message : String(error) });
-      setMessages((prev) =>[...prev, { role: 'model', text: t.aiCoach.errorMessage }]);
+      setMessages((prev) =>[...prev, { role: 'model' as const, text: t.aiCoach.errorMessage }]);
     } finally {
       setIsLoading(false);
     }
