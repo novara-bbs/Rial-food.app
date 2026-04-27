@@ -26,8 +26,15 @@ import { calcWeightTrend } from '../../wellness/utils/weight-trend';
 import { createHandleRepeatYesterday } from '../../food/handlers/meal-handlers';
 import type { DailyLogEntry } from '../../food/handlers/meal-handlers';
 import type { DailyArchive } from '../../../hooks/useDailyReset';
-import type { BodySnapshot } from '../../../types/wellness';
+import type { BodySnapshot, StoredRealFeelEntry, RealFeelEntry } from '../../../types/wellness';
+import type { UserProfile } from '../../../types/user';
+import type { Recipe, LoggableMeal } from '../../../types';
+import type { DailyMacros } from '../../../contexts/state/useVitalsState';
 import InsightRow from '../components/InsightRow';
+
+type Setter<T> = (fn: T | ((prev: T) => T)) => void;
+interface HydrationState { consumed: number; target: number }
+interface MovementState { steps: number; target: number; activeMinutes: number; activeTarget: number }
 
 export default function Home({
   onAddMeal,
@@ -52,21 +59,21 @@ export default function Home({
   onAddMeal: () => void,
   onNavigateToPlan: () => void,
   onNavigateToProgress?: () => void,
-  dailyMacros: any,
-  setDailyMacros?: (fn: any) => void,
-  userProfile: any,
-  mealPlan?: any,
-  onNavigateToRecipe?: (recipe: any) => void,
-  onLogMealNow?: (recipe: any, servings: number) => void,
-  hydration: { consumed: number, target: number },
-  setHydration: (h: any) => void,
-  movement: { steps: number, target: number, activeMinutes: number, activeTarget: number },
-  setMovement?: (m: any) => void,
-  realFeelLogs?: any[],
-  onRealFeelLog?: (entry: any) => void,
+  dailyMacros: DailyMacros,
+  setDailyMacros?: Setter<DailyMacros>,
+  userProfile: UserProfile,
+  mealPlan?: Record<number, Recipe[]>,
+  onNavigateToRecipe?: (recipe: Recipe) => void,
+  onLogMealNow?: (meal: LoggableMeal, servings: number) => void,
+  hydration: HydrationState,
+  setHydration: Setter<HydrationState>,
+  movement: MovementState,
+  setMovement?: Setter<MovementState>,
+  realFeelLogs?: StoredRealFeelEntry[],
+  onRealFeelLog?: (entry: RealFeelEntry) => void,
   dailyLog?: DailyLogEntry[],
-  setDailyLog?: (fn: any) => void,
-  nutritionHistory?: any[],
+  setDailyLog?: Setter<DailyLogEntry[]>,
+  nutritionHistory?: DailyArchive[],
 }) {
   const { t } = useI18n();
   const [isEditingHydration, setIsEditingHydration] = useState(false);
@@ -96,7 +103,7 @@ export default function Home({
   const { weightHistory, shoppingList, savedRecipes, mergedVariants, foodHistory } = useAppState();
   const weekMacros = useMemo(
     () => calcWeekMacros(
-      (nutritionHistory ?? []) as DailyArchive[],
+      nutritionHistory ?? [],
       dailyMacros.target,
       0,
     ),
@@ -111,8 +118,8 @@ export default function Home({
   // Q15: also expose bestStreakDays to show personal record in the badge.
   const { streakDays, bestStreakDays } = useMemo(() => {
     const streaks = calcStreaks({
-      history: (nutritionHistory ?? []) as DailyArchive[],
-      realFeelLogs: (realFeelLogs ?? []) as Array<{ date?: string }>,
+      history: nutritionHistory ?? [],
+      realFeelLogs: realFeelLogs ?? [],
       todayHasMeals: dailyLog.length > 0,
     });
     return { streakDays: streaks.mealLog.current, bestStreakDays: streaks.mealLog.best };
@@ -120,16 +127,16 @@ export default function Home({
 
   // Shopping pending count
   const shoppingPendingCount = useMemo(
-    () => (shoppingList as any[])?.filter((item: any) => !item.checked).length || 0,
+    () => shoppingList.filter((item) => !item.checked).length || 0,
     [shoppingList]
   );
 
   // Yesterday's data for "Repeat yesterday" quick action
   const yesterdayData = useMemo(() => {
-    const sorted = [...nutritionHistory].sort((a: any, b: any) => b.date.localeCompare(a.date));
-    const yesterday = sorted[0] as any;
+    const sorted = [...nutritionHistory].sort((a, b) => b.date.localeCompare(a.date));
+    const yesterday = sorted[0];
     if (!yesterday?.dailyLog?.length) return null;
-    const kcal = yesterday.dailyLog.reduce((s: number, e: any) => s + (e.macros?.cal || 0), 0);
+    const kcal = yesterday.dailyLog.reduce((s: number, e) => s + (e.macros?.cal || 0), 0);
     return { kcal, count: yesterday.dailyLog.length };
   }, [nutritionHistory]);
 
@@ -146,8 +153,8 @@ export default function Home({
   // Reads `rial_recipeViewed` eagerly at render time (flag flips when user
   // visits RecipeDetail for the first time; see createHandleNavigateToRecipe).
   const guidedSteps = useMemo(() => {
-    const hasLoggedMeal = dailyLog.length > 0 || (nutritionHistory ?? []).some((h: any) => h.mealCount > 0);
-    const hasPlannedDay = Object.values(mealPlan || {}).some((d: any) => Array.isArray(d) && d.length > 0);
+    const hasLoggedMeal = dailyLog.length > 0 || (nutritionHistory ?? []).some((h) => h.mealCount > 0);
+    const hasPlannedDay = Object.values(mealPlan || {}).some((d) => d.length > 0);
     const hasViewedRecipe =
       typeof window !== 'undefined' && !!localStorage.getItem('rial_recipeViewed');
     return [
@@ -182,14 +189,14 @@ export default function Home({
     // Check planned meals first
     const today = new Date().getDay();
     const dayIdx = today === 0 ? 6 : today - 1;
-    const planned = (mealPlan?.[dayIdx] || []) as any[];
+    const planned = mealPlan?.[dayIdx] ?? [];
     const loggedTitles = new Set(dailyLog.map(e => e.title.toLowerCase()));
-    const unloggedPlanned = planned.find((m: any) => !loggedTitles.has((m.title || m.name || '').toLowerCase()));
+    const unloggedPlanned = planned.find((m) => !loggedTitles.has(m.title.toLowerCase()));
     if (unloggedPlanned) {
       return {
-        title: unloggedPlanned.title || unloggedPlanned.name,
-        cal: unloggedPlanned.cal || unloggedPlanned.macros?.calories || 0,
-        pro: unloggedPlanned.pro || unloggedPlanned.macros?.protein || 0,
+        title: unloggedPlanned.title,
+        cal: unloggedPlanned.macros.calories,
+        pro: unloggedPlanned.macros.protein,
         source: 'plan' as const,
         recipe: unloggedPlanned,
       };
@@ -197,18 +204,18 @@ export default function Home({
 
     // Fallback: best macro-filling recipe from saved
     const remainingPro = dailyMacros.target.pro - dailyMacros.consumed.pro;
-    if (remainingPro > 10 && (savedRecipes as any[])?.length > 0) {
-      const sorted = [...(savedRecipes as any[])].sort((a: any, b: any) => {
-        const aPro = a.pro || a.macros?.protein || 0;
-        const bPro = b.pro || b.macros?.protein || 0;
+    if (remainingPro > 10 && savedRecipes.length > 0) {
+      const sorted = [...savedRecipes].sort((a, b) => {
+        const aPro = a.macros.protein;
+        const bPro = b.macros.protein;
         return Math.abs(remainingPro - aPro) - Math.abs(remainingPro - bPro);
       });
       const best = sorted[0];
       if (best) {
         return {
-          title: best.title || best.name,
-          cal: best.cal || best.macros?.calories || 0,
-          pro: best.pro || best.macros?.protein || 0,
+          title: best.title,
+          cal: best.macros.calories,
+          pro: best.macros.protein,
           source: 'recipe' as const,
           recipe: best,
         };
@@ -233,7 +240,7 @@ export default function Home({
   const todaysMeals = mealPlan?.[adjustedDayIndex] || [];
 
   const handleAddWater = () => {
-    setHydration((prev: any) => ({ ...prev, consumed: Math.min(prev.consumed + 1, prev.target + 5) }));
+    setHydration((prev) => ({ ...prev, consumed: Math.min(prev.consumed + 1, prev.target + 5) }));
   };
 
   // Phase 1 — quick-stats chip-row navigation. Resolves each chip target to
@@ -442,7 +449,7 @@ export default function Home({
           mergedVariants={mergedVariants}
           foodHistory={foodHistory}
           userGoal={userProfile?.goal}
-          excludeAllergens={userProfile?.intolerances ?? userProfile?.allergens ?? []}
+          excludeAllergens={userProfile.intolerances ?? []}
           onLogFood={(variant) => {
             const meal = {
               id: variant.id,
