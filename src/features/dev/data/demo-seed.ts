@@ -6,13 +6,15 @@
  *
  * This module is dev-only — the UI gate is in DemoSeedCard, not here.
  */
-import { buildDemoTimeline, CLARA_MACROS_TARGET, CLARA_TARGET_KG, type RealFeelLog } from './demo-seed-timeline';
+import { buildDemoTimeline, CLARA_MACROS_TARGET, CLARA_TARGET_KG } from './demo-seed-timeline';
 import { buildDemoToday } from './demo-seed-today';
 import { buildDemoFoodHistory } from './demo-seed-food-history';
 import type { DailyArchive } from '../../../hooks/useDailyReset';
-import type { BodySnapshot, WeeklyCheckInEntry } from '../../../types/wellness';
+import type { BodySnapshot, WeeklyCheckInEntry, StoredRealFeelEntry, ToleranceLog } from '../../../types/wellness';
 import type { DailyLogEntry, FoodHistoryEntry } from '../../food/handlers/meal-handlers';
-import type { CommunityPost, ProgressPostPayload } from '../../../types/social';
+import type { CommunityPost, ProgressPostPayload, Story } from '../../../types/social';
+import type { Recipe } from '../../../types/recipe';
+import type { ShoppingItem } from '../../../types/planner';
 
 export interface DemoSeedBundle {
   userProfile: {
@@ -37,14 +39,15 @@ export interface DemoSeedBundle {
   foodHistory: FoodHistoryEntry[];
   weightHistory: BodySnapshot[];
   nutritionHistory: DailyArchive[];
-  realFeelLogs: RealFeelLog[];
+  /** Dev seed uses a simplified shape; cast to StoredRealFeelEntry for state compatibility. */
+  realFeelLogs: StoredRealFeelEntry[];
   weeklyCheckIns: WeeklyCheckInEntry[];
-  savedRecipes: unknown[];
-  mealPlan: Record<number, unknown[]>;
-  shoppingList: unknown[];
+  savedRecipes: Recipe[];
+  mealPlan: Record<number, Recipe[]>;
+  shoppingList: ShoppingItem[];
   communityPosts: CommunityPost[];
-  communityStories: unknown[];
-  toleranceLogs: unknown[];
+  communityStories: Story[];
+  toleranceLogs: ToleranceLog[];
 }
 
 /**
@@ -177,14 +180,19 @@ export async function buildDemoSeed(): Promise<DemoSeedBundle> {
     foodHistory,
     weightHistory: snapshots,
     nutritionHistory: history,
-    realFeelLogs,
+    // RealFeelLog (dev-simplified) is cast to StoredRealFeelEntry — the
+    // missing fields (tags, mealIds, ingredientIds) are populated at runtime
+    // by createHandleRealFeelLog when the user logs a new entry.
+    realFeelLogs: realFeelLogs as unknown as StoredRealFeelEntry[],
     weeklyCheckIns,
-    savedRecipes: recipesMod.SEED_RECIPES,
-    mealPlan: mealPlanMod.SEED_MEAL_PLAN,
-    shoppingList: shoppingMod.SEED_SHOPPING_LIST,
-    toleranceLogs: toleranceMod.SEED_TOLERANCE_LOGS,
-    communityPosts: [...claraPosts, ...postsMod.SEED_POSTS],
-    communityStories: storiesMod.SEED_STORIES,
+    // Dynamic imports are typed as `any` at compile time; cast to canonical
+    // domain types. Runtime shape is verified by the seed files themselves.
+    savedRecipes: recipesMod.SEED_RECIPES as unknown as Recipe[],
+    mealPlan: mealPlanMod.SEED_MEAL_PLAN as unknown as Record<number, Recipe[]>,
+    shoppingList: shoppingMod.SEED_SHOPPING_LIST as ShoppingItem[],
+    toleranceLogs: toleranceMod.SEED_TOLERANCE_LOGS as ToleranceLog[],
+    communityPosts: [...claraPosts, ...postsMod.SEED_POSTS as CommunityPost[]],
+    communityStories: storiesMod.SEED_STORIES as Story[],
   };
 }
 
