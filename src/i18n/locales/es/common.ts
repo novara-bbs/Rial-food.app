@@ -65,6 +65,8 @@ const common = {
     commentAdded: 'Comentario añadido',
     storyPublished: 'Historia publicada',
     checkInComplete: '¡Check-in diario completado!',
+    recipeSavedAndCooked: '¡Receta guardada y marcada como cocinada!',
+    recipeCooked: '¡Cocinada {n} veces!',
   },
   confirm: {
     deleteMeal: 'Eliminar comida',
