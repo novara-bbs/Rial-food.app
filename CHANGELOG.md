@@ -1,5 +1,21 @@
 # RIAL App - Changelog
 
+## [1.5.138] - 2026-04-27
+
+### feat(recipes): Sprint 3 PR D — React Hook Form + zodResolver wiring
+
+- `useForm<RecipeFormValues>` with `zodResolver(RecipeFormSchema)` in CreateRecipe
+- Replaces manual `canSave` boolean with `handleSubmit(onValidSubmit)` — schema
+  validates before persist, hard-rejects invalid data instead of silently no-op
+- Edit mode: `recipeToFormValues(recipe)` as `defaultValues` (clean, tested adapter)
+- `watch()` reads all current values for section props; `setValue()` in each onChange
+- `mode: 'onSubmit'` — no premature inline errors in the 4-step wizard UX
+- `onValidSubmit` strips runtime `ingredient` object before DB persist
+- Schema: `RecipeIngredientFormSchema` adds `ingredient: z.unknown().optional()` so
+  the runtime Ingredient object round-trips through RHF state without data loss
+
+---
+
 ## [1.5.137] - 2026-04-27
 
 ### refactor(recipes): Sprint 3 PR C — CreateRecipe wizard split into section components
