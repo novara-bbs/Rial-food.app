@@ -26,11 +26,42 @@ import PageHeader from '../../../components/patterns/PageHeader';
 import ChipRow from '../../../components/patterns/ChipRow';
 import { useAppState } from '../../../contexts/AppStateContext';
 import { toast } from 'sonner';
+import type { DailyMacros } from '../../../contexts/state/useVitalsState';
+import type { LoggableMeal } from '../../../types';
+
+/**
+ * All-optional duck type for items shown in AddMeal's display list.
+ * Covers Ingredient, Recipe, OFFResult, and the recentFoods fallback shape.
+ * Kept local because it reflects AddMeal's peculiar multi-source display needs.
+ */
+type DisplayFood = {
+  id?: string | number;
+  title?: string;
+  name?: string;
+  nameEn?: string;
+  cal?: number;
+  pro?: number;
+  carbs?: number;
+  fats?: number;
+  macros?: { calories?: number; protein?: number; carbs?: number; fats?: number };
+  micros?: { others?: { fiber?: number } };
+  servingSizes?: unknown[];
+  isApiResult?: boolean;
+  _historyEntry?: unknown;
+  mealSlot?: string;
+  time?: string;
+  grams?: number;
+  portionDescription?: string;
+  servingUsed?: string;
+  servings?: number;
+  steps?: unknown;
+  recipeIngredients?: unknown;
+};
 
 interface AddMealProps {
   onBack: () => void;
-  onLogMeal?: (meal: any) => void;
-  dailyMacros?: any;
+  onLogMeal?: (meal: LoggableMeal) => void;
+  dailyMacros?: DailyMacros;
   savedRecipes?: Recipe[];
   dictionary?: Ingredient[];
 }
@@ -167,7 +198,7 @@ export default function AddMeal({
   // Memoized so rerenders driven by unrelated state (e.g. multi-queue totals,
   // favorite toggles) don't re-allocate the whole list array + hand new
   // reference identities down to child nodes.
-  const displayFoods: any[] = useMemo(() => {
+  const displayFoods: DisplayFood[] = useMemo(() => {
     if (isSearching) {
       // Unified: local fuzzy results + API results appended after
       return [...unifiedLocalResults, ...apiResults];
@@ -180,23 +211,23 @@ export default function AddMeal({
 
   // ─── Helpers ────────────────────────────────────────────────
 
-  function logFood(food: any) {
-    onLogMeal?.({ ...food, mealSlot, time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) });
+  function logFood(food: DisplayFood) {
+    onLogMeal?.({ ...(food as LoggableMeal), mealSlot, time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) });
   }
 
-  function handleTapPlus(food: any) {
+  function handleTapPlus(food: DisplayFood) {
     // All food items go through PortionSheet — dictionary, API, and scanned
     if (food.isApiResult) {
       // API results: convert to temp Ingredient with real OFF servings
       setPortionTarget(offResultToIngredient(food as OFFResult));
-    } else if (food.servingSizes?.length > 0) {
+    } else if ((food.servingSizes?.length ?? 0) > 0) {
       // Dictionary ingredients with serving sizes
       setPortionTarget(food as Ingredient);
     } else {
       // Recipes and other items — log directly or queue
       const item = {
-        id: food.id,
-        title: food.title || food.name,
+        id: food.id ?? 0,
+        title: food.title ?? food.name ?? '',
         cal: food.cal ?? food.macros?.calories ?? 0,
         pro: food.pro ?? food.macros?.protein ?? 0,
         carbs: food.carbs ?? food.macros?.carbs ?? 0,
@@ -517,7 +548,7 @@ export default function AddMeal({
           {displayFoods.map(food => {
             const foodId = String(food.id);
             const isFav = favoriteIds.includes(foodId);
-            const historyEntry = food._historyEntry;
+            const historyEntry = food._historyEntry as { useCount?: number; lastDate?: string } | null | undefined;
             // Prefix the React key by source so a locally-stored ingredient and
             // an OFF API product that happen to collide on the numeric id
             // don't swap DOM nodes when the search set changes.
@@ -531,7 +562,7 @@ export default function AddMeal({
                 ? variantFromIngredientLike(
                     {
                       id: foodId,
-                      name: food.title ?? food.name,
+                      name: food.title ?? food.name ?? '',
                       nameEn: food.nameEn,
                       macros: {
                         calories: food.cal ?? food.macros?.calories ?? 0,
@@ -559,7 +590,7 @@ export default function AddMeal({
                         <Globe className="w-2 h-2" /> OFF
                       </span>
                     )}
-                    {food.servingSizes?.length > 0 && (
+                    {(food.servingSizes?.length ?? 0) > 0 && (
                       <span className="text-micro font-bold uppercase tracking-wider bg-primary/10 text-primary px-1.5 py-0.5 rounded shrink-0">DB</span>
                     )}
                   </div>
@@ -569,8 +600,8 @@ export default function AddMeal({
                     <span>{food.pro ?? food.macros?.protein ?? 0}g P</span>
                     <span>·</span>
                     <span>{food.carbs ?? food.macros?.carbs ?? 0}g C</span>
-                    {food.macros && <span className="ml-1">{FOOD_QUALITY_EMOJI[getFoodQuality(food.macros, food.micros?.others?.fiber)]}</span>}
-                    {food.servingSizes?.length > 0 && (
+                    {food.macros && <span className="ml-1">{FOOD_QUALITY_EMOJI[getFoodQuality({ calories: food.macros.calories ?? 0, protein: food.macros.protein ?? 0, carbs: food.macros.carbs ?? 0, fats: food.macros.fats ?? 0 }, food.micros?.others?.fiber)]}</span>}
+                    {(food.servingSizes?.length ?? 0) > 0 && (
                       <span className="text-on-surface-variant/70 italic normal-case text-micro">{t.addMealScreen.adjustablePortion}</span>
                     )}
                     {historyEntry && (
