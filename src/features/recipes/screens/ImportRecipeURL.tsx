@@ -12,6 +12,22 @@ import { enhanceIngredients, EnhancedIngredient, RecipeIntelligenceResult } from
 import MealSlotMultiSelect from '../../food/components/MealSlotMultiSelect';
 import type { Recipe, MealSlot } from '../../../types';
 
+/** Shape of the AI-extracted recipe before it is converted to a full Recipe. */
+interface ExtractedRecipeData {
+  title?: string;
+  prepTime?: string;
+  cookTime?: string;
+  servings?: number;
+  difficulty?: string;
+  ingredients: EnhancedIngredient[];
+  steps?: string[];
+  macros?: { calories?: number; protein?: number; carbs?: number; fats?: number };
+  macroSource?: 'dictionary' | 'ai';
+  source?: string;
+  sourceUrl?: string;
+  [key: string]: unknown; // allow extra fields from raw Gemini JSON parse
+}
+
 /**
  * Heuristic slot inference from recipe title (the most signal-dense field the
  * extractor returns). Falls back to `[]` (versatile) when no keyword hits —
@@ -77,7 +93,7 @@ export default function ImportRecipeURL({
   const { t } = useI18n();
   const [url, setUrl] = useState('');
   const [loading, setLoading] = useState(false);
-  const [extracted, setExtracted] = useState<any>(null);
+  const [extracted, setExtracted] = useState<ExtractedRecipeData | null>(null);
   const [intelligence, setIntelligence] = useState<RecipeIntelligenceResult | null>(null);
   const [error, setError] = useState('');
   const [inputMode, setInputMode] = useState<'url' | 'text'>('url');
@@ -168,11 +184,15 @@ export default function ImportRecipeURL({
     });
     onImport({
       ...extracted,
-      ingredients: legacyIngredients,
+      id: '',
+      description: '',
+      image: 'https://images.unsplash.com/photo-1604908176997-125f25cc6f3d?auto=format&fit=crop&w=600&q=80',
       img: 'https://images.unsplash.com/photo-1604908176997-125f25cc6f3d?auto=format&fit=crop&w=600&q=80',
+      tags: [],
+      ingredients: legacyIngredients,
       tag: 'IMPORTADA',
       suitableFor: suitableFor.length > 0 ? suitableFor : undefined,
-    });
+    } as unknown as Recipe);
   };
 
   const body = (
@@ -364,7 +384,7 @@ export default function ImportRecipeURL({
           </SectionCard>
 
           {/* Steps */}
-          {extracted.steps?.length > 0 && (
+          {extracted.steps && extracted.steps.length > 0 && (
             <div>
               <h3 className="font-headline text-sm font-bold uppercase tracking-widest text-tertiary mb-3">{t.recipes.steps}</h3>
               <div className="space-y-2">

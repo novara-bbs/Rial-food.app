@@ -12,7 +12,7 @@ interface SwapSuggestion {
 
 interface Props {
   swapSuggestions: SwapSuggestion[];
-  onApplySwap: (fromId: string, toIngredient: any) => void;
+  onApplySwap: (fromId: string, toIngredient: { id: string; name: string }) => void;
   /** True when the user has dislikes or intolerances configured — used to
    *  pick the empty-state message (no swaps vs. configure prefs). */
   hasPreferences: boolean;

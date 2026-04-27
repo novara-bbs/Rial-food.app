@@ -30,7 +30,11 @@ const DEFAULT_DATA: OnboardingData = {
 export default function Onboarding({ isOpen, onClose, onComplete }: {
   isOpen: boolean;
   onClose: () => void;
-  onComplete?: (data: { userProfile: any; targets: any; initialWeightKg?: number }) => void;
+  onComplete?: (data: {
+    userProfile: { name: string; age: number; height: number; weight: number; gender: string; goal: string; activity: string; trains: boolean; dietaryPreferences: string[] };
+    targets: { cal: number; pro: number; carbs: number; fats: number };
+    initialWeightKg?: number;
+  }) => void;
 }) {
   const { t } = useI18n();
   const { palette, resolvedMode, setPalette } = useTheme();

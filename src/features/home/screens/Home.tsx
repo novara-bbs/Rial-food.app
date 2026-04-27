@@ -499,7 +499,7 @@ export default function Home({
       {/* 12. Progress Preview Card — advanced only (hidden when homeRingGrid flag on). */}
       {!isSimpleMode && !featureFlags.homeRingGrid && (
         <ProgressPreviewCard
-          weightHistory={weightHistory as any[]}
+          weightHistory={weightHistory}
           unitSystem={userProfile?.unitSystem ?? 'metric'}
           targetWeight={userProfile?.targetWeight}
           onNavigateToProgress={onNavigateToProgress}

@@ -249,7 +249,7 @@ describe('Home.tsx — flag-gated ProgressPreviewCard', () => {
   });
 
   it('still passes weightHistory + unitSystem + targetWeight props (no signature drift)', () => {
-    expect(HOME_SRC).toContain('weightHistory={weightHistory as any[]}');
+    expect(HOME_SRC).toContain('weightHistory={weightHistory}');
     expect(HOME_SRC).toContain("unitSystem={userProfile?.unitSystem ?? 'metric'}");
     expect(HOME_SRC).toContain('targetWeight={userProfile?.targetWeight}');
   });
