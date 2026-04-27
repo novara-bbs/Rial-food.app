@@ -241,7 +241,8 @@ const mockRecipe: Recipe = {
   image: '',
   prepTime: '15',
   cookTime: '20',
-  difficulty: 'Fácil',
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  difficulty: 'Fácil' as any, // legacy ES literal — tests backward-compat coercion
   macros: { calories: 600, protein: 30, carbs: 70, fats: 20 },
   tags: ['ITALIANO'],
   recipeIngredients: [
@@ -271,12 +272,14 @@ describe('recipeToFormValues', () => {
   });
 
   it('coerces "Medio" → medium', () => {
-    const values = recipeToFormValues({ ...mockRecipe, difficulty: 'Medio' });
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const values = recipeToFormValues({ ...mockRecipe, difficulty: 'Medio' as any });
     expect(values.difficulty).toBe('medium');
   });
 
   it('coerces "Difícil" → hard', () => {
-    const values = recipeToFormValues({ ...mockRecipe, difficulty: 'Difícil' });
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const values = recipeToFormValues({ ...mockRecipe, difficulty: 'Difícil' as any });
     expect(values.difficulty).toBe('hard');
   });
 

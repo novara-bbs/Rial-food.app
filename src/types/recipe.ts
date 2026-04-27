@@ -1,5 +1,5 @@
 import type { Macros, Micronutrients, RecipeIngredient } from './food';
-import type { Cuisine, DietaryTag } from './taxonomy';
+import type { Cuisine, DietaryTag, Difficulty } from './taxonomy';
 
 /**
  * Canonical meal slot vocabulary used across the app (recipes, planner,
@@ -53,7 +53,12 @@ export interface Recipe {
   servings?: number;
   prepTime: string;
   cookTime: string;
-  difficulty: 'Fácil' | 'Medio' | 'Difícil';
+  /**
+   * Canonical EN difficulty enum (Sprint 3 PR B). Stored as 'easy'|'medium'|'hard'.
+   * Legacy data with ES literals ('Fácil'|'Medio'|'Difícil') is coerced on hydration
+   * via `RecipeSchema` in `src/lib/schemas.ts` and `recipeToFormValues()`.
+   */
+  difficulty: Difficulty;
   macros: Macros;
   micros?: Micronutrients;
   supplements?: string[];

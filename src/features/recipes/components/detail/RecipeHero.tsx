@@ -116,7 +116,8 @@ export default function RecipeHero({
               <Clock className="w-3.5 h-3.5" /> {data.prepTime} + {data.cookTime}
             </span>
             <span>•</span>
-            <span>{data.difficulty}</span>
+            {/* Sprint 3 PR B: difficulty is now 'easy'|'medium'|'hard' — display via i18n */}
+            <span>{t.recipes[data.difficulty as 'easy' | 'medium' | 'hard'] ?? data.difficulty}</span>
           </div>
         )}
       </div>

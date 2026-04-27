@@ -61,7 +61,18 @@ export const RecipeSchema = z.object({
   tags: z.array(z.string()).default([]),
   prepTime: z.union([z.string(), z.number()]).default('0'),
   cookTime: z.union([z.string(), z.number()]).default('0'),
-  difficulty: z.string().default('Fácil'),
+  // Sprint 3 PR B: canonical EN enum. Coerces legacy ES literals so old
+  // localStorage data hydrates correctly without requiring a migration.
+  difficulty: z.preprocess(v => {
+    if (typeof v !== 'string') return 'medium';
+    const map: Record<string, string> = {
+      fácil: 'easy', facil: 'easy',
+      medio: 'medium',
+      difícil: 'hard', dificil: 'hard',
+    };
+    const lower = v.toLowerCase().trim();
+    return map[lower] ?? v;
+  }, z.enum(['easy', 'medium', 'hard']).catch('medium')),
   servings: z.number().optional(),
   publishedBy: z.string().optional(),
   // Canonical slot vocabulary (multi-valued, post-Q19 meal-taxonomy).

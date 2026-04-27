@@ -2,6 +2,7 @@ import { Camera, Plus, Search, Trash2, ArrowUp, ArrowDown, Clock, ChevronRight, 
 import PageShell from '../../../components/PageShell';
 import { useState, useMemo, useRef } from 'react';
 import type { Ingredient, RecipeIngredient, RecipeStep, Micronutrients, FoodTag, MealSlot } from '../../../types';
+import type { Difficulty } from '../../../types/taxonomy';
 import BottomSheet from '../../../components/ui/bottom-sheet';
 import { parseBulkIngredients, toApproxGrams } from '../utils/ingredient-parser';
 import type { ParsedIngredient } from '../utils/ingredient-parser';
@@ -151,7 +152,7 @@ export default function CreateRecipe({
   };
   const [prepTime, setPrepTime] = useState<number>(parseTimeToMinutes(initialRecipe?.prepTime));
   const [cookTime, setCookTime] = useState<number>(parseTimeToMinutes(initialRecipe?.cookTime));
-  const [difficulty, setDifficulty] = useState<'Fácil' | 'Medio' | 'Difícil'>(initialRecipe?.difficulty || 'Fácil');
+  const [difficulty, setDifficulty] = useState<Difficulty>(initialRecipe?.difficulty ?? 'medium');
   const [servings, setServings] = useState(initialRecipe?.servings || 4);
   const [sourceUrl, setSourceUrl] = useState(initialRecipe?.sourceUrl || '');
   const [videoUrl, setVideoUrl] = useState(initialRecipe?.videoUrl || '');
@@ -465,9 +466,9 @@ export default function CreateRecipe({
               <label className="font-label text-caption font-bold tracking-widest uppercase text-on-surface-variant mb-2 block">{t.recipes.difficulty}</label>
               <select value={difficulty} onChange={e => setDifficulty(e.target.value as typeof difficulty)}
                 className="w-full bg-surface-container-low border border-outline-variant/30 p-3 font-body text-sm text-tertiary rounded-sm focus:outline-none focus:border-primary transition-all">
-                <option value="Fácil">{t.recipes.easy}</option>
-                <option value="Medio">{t.recipes.medium}</option>
-                <option value="Difícil">{t.recipes.hard}</option>
+                <option value="easy">{t.recipes.easy}</option>
+                <option value="medium">{t.recipes.medium}</option>
+                <option value="hard">{t.recipes.hard}</option>
               </select>
             </div>
             <div>
@@ -771,7 +772,7 @@ export default function CreateRecipe({
               {description && <p className="text-sm text-on-surface-variant line-clamp-2">{description}</p>}
               <div className="flex items-center gap-3 text-micro font-label uppercase tracking-widest text-on-surface-variant flex-wrap">
                 <span className="flex items-center gap-1"><Clock className="w-3 h-3" /> {prepTime ? `${prepTime} min` : '—'} + {cookTime ? `${cookTime} min` : '—'}</span>
-                <span className="flex items-center gap-1"><UtensilsCrossed className="w-3 h-3" /> {difficulty}</span>
+                <span className="flex items-center gap-1"><UtensilsCrossed className="w-3 h-3" /> {t.recipes[difficulty]}</span>
                 <span>{servings} {t.recipes.servings}</span>
                 {/* Icon-based food quality instead of emoji */}
                 <Badge variant="outline" className={`gap-0.5 ${

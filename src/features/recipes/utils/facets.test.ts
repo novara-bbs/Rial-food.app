@@ -22,7 +22,8 @@ function makeRecipe(overrides: Partial<Recipe> & { tag?: string } = {}): Recipe 
     image: '',
     prepTime: '10M',
     cookTime: '20M',
-    difficulty: 'Fácil',
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    difficulty: 'Fácil' as any, // legacy ES literal — tests deriveDifficulty backward-compat
     macros: { calories: 0, protein: 0, carbs: 0, fats: 0, saturatedFat: 0, transFat: 0, sugar: 0 },
     tags: [],
     ...rest,
@@ -93,9 +94,12 @@ describe('deriveTimeBucket', () => {
 
 describe('deriveDifficulty', () => {
   it('maps ES literals (with diacritics) to canonical', () => {
-    expect(deriveDifficulty(makeRecipe({ difficulty: 'Fácil' }))).toBe('easy');
-    expect(deriveDifficulty(makeRecipe({ difficulty: 'Medio' }))).toBe('medium');
-    expect(deriveDifficulty(makeRecipe({ difficulty: 'Difícil' }))).toBe('hard');
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    expect(deriveDifficulty(makeRecipe({ difficulty: 'Fácil' as any }))).toBe('easy');
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    expect(deriveDifficulty(makeRecipe({ difficulty: 'Medio' as any }))).toBe('medium');
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    expect(deriveDifficulty(makeRecipe({ difficulty: 'Difícil' as any }))).toBe('hard');
   });
   it('falls back to medium for unknown values', () => {
     expect(deriveDifficulty(makeRecipe({ difficulty: 'random' as Recipe['difficulty'] }))).toBe('medium');
@@ -160,9 +164,12 @@ describe('countActive', () => {
 // ─── matchesFilters ──────────────────────────────────────────────────────
 
 describe('matchesFilters', () => {
-  const veganRecipe = makeRecipe({ tags: ['VEGANO'], prepTime: '5M', cookTime: '10M', difficulty: 'Fácil' });
-  const medRecipe = makeRecipe({ tags: ['MEDITERRÁNEO'], prepTime: '15M', cookTime: '25M', difficulty: 'Medio' });
-  const longRecipe = makeRecipe({ tags: ['BATCH'], prepTime: '30M', cookTime: '60M', difficulty: 'Difícil' });
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const veganRecipe = makeRecipe({ tags: ['VEGANO'], prepTime: '5M', cookTime: '10M', difficulty: 'Fácil' as any });
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const medRecipe = makeRecipe({ tags: ['MEDITERRÁNEO'], prepTime: '15M', cookTime: '25M', difficulty: 'Medio' as any });
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const longRecipe = makeRecipe({ tags: ['BATCH'], prepTime: '30M', cookTime: '60M', difficulty: 'Difícil' as any });
 
   it('returns true for empty values (no filters)', () => {
     expect(matchesFilters(veganRecipe, {})).toBe(true);
