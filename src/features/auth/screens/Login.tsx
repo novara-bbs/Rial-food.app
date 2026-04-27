@@ -8,6 +8,7 @@ import { toast } from 'sonner';
 import { signInWithEmail, signInWithGoogle, signInWithApple } from '../../../lib/supabase';
 import { useI18n } from '../../../i18n';
 import { Heading } from '@/components/ui/Typography';
+import { Button } from '@/components/ui/button';
 
 interface LoginProps {
   onBack?: () => void;
@@ -115,10 +116,11 @@ export default function Login({ onNavigateToSignup, onForgotPassword }: LoginPro
           </div>
 
           {/* Submit */}
-          <button
+          <Button
             type="submit"
+            size="lg"
             disabled={loading || !email || !password}
-            className="w-full py-3.5 bg-primary text-on-primary rounded-xl font-headline text-label font-bold uppercase tracking-widest flex items-center justify-center gap-2 hover:bg-primary/90 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+            className="w-full rounded-xl"
           >
             {loading ? (
               <div className="w-4 h-4 border-2 border-on-primary/40 border-t-on-primary rounded-full animate-spin" />
@@ -126,7 +128,7 @@ export default function Login({ onNavigateToSignup, onForgotPassword }: LoginPro
               <LogIn className="w-4 h-4" />
             )}
             {t.auth.signIn}
-          </button>
+          </Button>
         </form>
 
         {/* Divider */}

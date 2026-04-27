@@ -7,6 +7,7 @@ import { useI18n } from '../../../i18n';
 import EmptyState from '../../../components/EmptyState';
 import ConfirmDialog from '../../../components/ConfirmDialog';
 import ChipRow from '../../../components/patterns/ChipRow';
+import { Button } from '@/components/ui/button';
 import { useLocalStorageState } from '../../../hooks/useLocalStorageState';
 import { aggregateShoppingItems, groupShoppingItems, formatShoppingListForShare, detectCategory, AISLE_CATEGORIES, markPantryItems, PantryItem } from '../utils/grocery';
 import type { ShoppingItem } from '../../../types/planner';
@@ -175,9 +176,9 @@ export default function ShoppingList({ onBack, shoppingList = [], setShoppingLis
               onChange={(id) => setNewItemCategory(id ?? AISLE_CATEGORIES.other)}
               ariaLabel={t.shoppingList.addItem}
             />
-            <button type="submit" disabled={!newItemName.trim()} className="w-full bg-primary text-on-primary py-3 rounded-sm font-headline font-bold text-xs uppercase tracking-widest hover:bg-primary-container transition-colors disabled:opacity-50">
+            <Button type="submit" disabled={!newItemName.trim()} className="w-full">
               {t.shopping.add}
-            </button>
+            </Button>
           </form>
         </div>
       )}

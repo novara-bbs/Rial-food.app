@@ -7,6 +7,7 @@ import { toast } from 'sonner';
 import { resetPassword } from '../../../lib/supabase';
 import { useI18n } from '../../../i18n';
 import { Heading } from '@/components/ui/Typography';
+import { Button } from '@/components/ui/button';
 
 interface ForgotPasswordProps {
   onBack: () => void;
@@ -80,10 +81,11 @@ export default function ForgotPassword({ onBack }: ForgotPasswordProps) {
                   className="w-full pl-11 pr-4 py-3.5 bg-surface-container-low border border-outline-variant/30 rounded-xl font-body text-sm text-on-surface placeholder:text-on-surface-variant/50 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-colors"
                 />
               </div>
-              <button
+              <Button
                 type="submit"
+                size="lg"
                 disabled={loading || !email}
-                className="w-full py-3.5 bg-primary text-on-primary rounded-xl font-headline text-label font-bold uppercase tracking-widest flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+                className="w-full rounded-xl"
               >
                 {loading ? (
                   <div className="w-4 h-4 border-2 border-on-primary/40 border-t-on-primary rounded-full animate-spin" />
@@ -91,7 +93,7 @@ export default function ForgotPassword({ onBack }: ForgotPasswordProps) {
                   <Send className="w-4 h-4" />
                 )}
                 {t.auth.sendResetLink}
-              </button>
+              </Button>
             </form>
           </>
         )}

@@ -18,6 +18,7 @@ import ChipRow from '../../../components/patterns/ChipRow';
 import SortControl from '../../../components/patterns/SortControl';
 import TabNav from '../../../components/patterns/TabNav';
 import FilterButton from '../../../components/patterns/FilterButton';
+import { Button } from '@/components/ui/button';
 import FilterSheet, { type FilterSection } from '../../../components/patterns/FilterSheet';
 import ActiveFilterStrip, { type ActiveFilterChip } from '../../../components/patterns/ActiveFilterStrip';
 import {
@@ -344,13 +345,13 @@ export default function Cocina({ onAddMeal, onCreateRecipe, onNavigateToRecipe, 
                 onChange={(id) => setSortMode(id as typeof sortMode)}
                 ariaLabel={t.recipes.sortRecommended}
               />
-              <button type="button" onClick={onCreateRecipe} className="p-3 bg-primary text-on-primary rounded-sm hover:opacity-90 transition-opacity" title={t.recipes.create}>
+              <Button type="button" onClick={onCreateRecipe} size="icon" title={t.recipes.create} aria-label={t.recipes.create}>
                 <Plus className="w-5 h-5" />
-              </button>
+              </Button>
               {onImportUrl && (
-                <button type="button" onClick={onImportUrl} className="p-3 bg-surface-container-highest text-primary border border-outline-variant/20 rounded-sm hover:bg-primary/10 transition-colors" title={t.recipes.import}>
+                <Button type="button" onClick={onImportUrl} variant="outline" size="icon" title={t.recipes.import} aria-label={t.recipes.import}>
                   <Link className="w-5 h-5" />
-                </button>
+                </Button>
               )}
             </div>
 
@@ -408,20 +409,20 @@ export default function Cocina({ onAddMeal, onCreateRecipe, onNavigateToRecipe, 
                 </EmptyState>
               ) : activeCollection !== 'all' || activeFilterCount > 0 ? (
                 <EmptyState icon="📂" description={t.recipes.emptyFilterHint}>
-                  <button type="button" onClick={() => { setActiveCollection('all'); setFilterValues({}); }} className="px-6 py-3 bg-surface-container-highest border border-outline-variant/20 text-primary rounded-sm font-headline text-xs font-bold uppercase tracking-widest">
+                  <Button type="button" onClick={() => { setActiveCollection('all'); setFilterValues({}); }} variant="outline" size="lg">
                     {t.recipes.all}
-                  </button>
+                  </Button>
                 </EmptyState>
               ) : (
                 <EmptyState icon="📖" description={t.empty.recipesEmpty}>
                   <div className="flex gap-3">
-                    <button type="button" onClick={onCreateRecipe} className="px-6 py-3 bg-primary text-on-primary rounded-sm font-headline text-xs font-bold uppercase tracking-widest">
+                    <Button type="button" onClick={onCreateRecipe} size="lg">
                       {t.recipes.create}
-                    </button>
+                    </Button>
                     {onImportUrl && (
-                      <button type="button" onClick={onImportUrl} className="px-6 py-3 bg-surface-container-highest border border-outline-variant/20 text-primary rounded-sm font-headline text-xs font-bold uppercase tracking-widest">
+                      <Button type="button" onClick={onImportUrl} variant="outline" size="lg">
                         {t.recipes.import}
-                      </button>
+                      </Button>
                     )}
                   </div>
                 </EmptyState>
