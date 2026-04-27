@@ -15,6 +15,8 @@ function makeLog(overrides: Partial<{
   energy?: 'high' | 'stable' | 'low';
   digestion?: 'clean' | 'sensitive' | 'bloated';
   mindset?: 'calm' | 'balanced' | 'stressed';
+  mealIds?: number[];
+  ingredientIds?: string[];
 }> = {}) {
   return {
     id: overrides.id ?? Date.now(),
@@ -24,6 +26,8 @@ function makeLog(overrides: Partial<{
     energy: overrides.energy,
     digestion: overrides.digestion,
     mindset: overrides.mindset,
+    mealIds: overrides.mealIds ?? [],
+    ingredientIds: overrides.ingredientIds ?? [],
   };
 }
 
@@ -126,7 +130,7 @@ describe('getInsights', () => {
     savedRecipes: [],
     mealPlan: { 0: [], 1: [], 2: [], 3: [], 4: [], 5: [], 6: [] },
     dailyMacros: { target: { cal: 2000, pro: 150, carbs: 220, fats: 60 }, consumed: { cal: 0, pro: 0, carbs: 0, fats: 0 } },
-    hydration: { glasses: 2, target: 8 },
+    hydration: { consumed: 2, target: 8 },
     streakDays: 3,
   };
 
