@@ -119,4 +119,12 @@ export interface Recipe {
   dietaryTags?: DietaryTag[];
   /** ISO timestamp set when the user saves this recipe (used for "recent" sort in Cocina). */
   savedAt?: string;
+  /**
+   * @deprecated Legacy shorthand for `image`. Retained for hydration of pre-migration
+   * localStorage data where recipes may have been stored with `img` instead of `image`.
+   * New recipes always use `image`.
+   */
+  img?: string;
+  /** Whether the recipe has been published to the community feed. */
+  publishedToFeed?: boolean;
 }

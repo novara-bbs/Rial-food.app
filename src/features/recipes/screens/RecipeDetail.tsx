@@ -17,7 +17,11 @@ import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { FollowButton } from '@/components/patterns/FollowButton';
-import { Micronutrients } from '../../../types';
+import type { Micronutrients, Ingredient, LoggableMeal } from '../../../types';
+import type { Recipe } from '../../../types';
+import type { RecipeIngredient } from '../../../types/food';
+import type { UserProfile } from '../../../types/user';
+import type { ShoppingItem } from '../../../types/planner';
 import { toast } from 'sonner';
 import { getRecipeSwaps } from '../utils/substitutions';
 import { calculateMatchScore } from '../utils/matchScore';
@@ -43,7 +47,17 @@ import RecipeHero from '../components/detail/RecipeHero';
 import RecipeDetailModals from '../components/detail/RecipeDetailModals';
 import { Heading } from '@/components/ui/Typography';
 
-export default function RecipeDetail({ recipe, onBack, onSaveRecipe, isSaved, onAddToPlan, onLogMealNow, onAddToShoppingList, dictionary = [], userProfile }: { recipe: any, onBack: () => void, onSaveRecipe?: (r: any) => void, isSaved?: boolean, onAddToPlan?: (recipe: any, dayIndex: number, slot?: 'breakfast' | 'lunch' | 'dinner' | 'snack') => void, onLogMealNow?: (recipe: any, servings: number) => void, onAddToShoppingList?: (items: any[]) => void, dictionary?: any[], userProfile?: any }) {
+export default function RecipeDetail({ recipe, onBack, onSaveRecipe, isSaved, onAddToPlan, onLogMealNow, onAddToShoppingList, dictionary = [], userProfile }: {
+  recipe: Recipe | null;
+  onBack: () => void;
+  onSaveRecipe?: (r: Recipe) => void;
+  isSaved?: boolean;
+  onAddToPlan?: (recipe: Recipe, dayIndex: number, slot?: 'breakfast' | 'lunch' | 'dinner' | 'snack') => void;
+  onLogMealNow?: (recipe: LoggableMeal, servings: number) => void;
+  onAddToShoppingList?: (items: ShoppingItem[]) => void;
+  dictionary?: Ingredient[];
+  userProfile?: UserProfile;
+}) {
   const { t } = useI18n();
   const { navigateTo } = useNavigation();
   const { setSelectedCreatorId, communityPosts, savedRecipes, savedPosts, navigateToRecipe: navToRecipe, handleDeleteRecipe, handleDuplicateRecipe, handleMarkAsCooked, setRecipeToEdit, isPro, mergedVariants, userVariants, miseEnPlaceEnabled, setMiseEnPlaceEnabled } = useAppState();
@@ -57,7 +71,7 @@ export default function RecipeDetail({ recipe, onBack, onSaveRecipe, isSaved, on
   const [miseEnPlaceActive, setMiseEnPlaceActive] = useState(false);
   const [selectedFamily, setSelectedFamily] = useState<string[]>([]);
   const [showDaySelector, setShowDaySelector] = useState(false);
-  const [extraIngredients, setExtraIngredients] = useState<any[]>([]);
+  const [extraIngredients, setExtraIngredients] = useState<RecipeIngredient[]>([]);
   const [isAddingIngredient, setIsAddingIngredient] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [showPublishSheet, setShowPublishSheet] = useState(false);
@@ -163,7 +177,7 @@ export default function RecipeDetail({ recipe, onBack, onSaveRecipe, isSaved, on
       goal: userProfile?.goal,
       foodDislikes,
       intolerances: userProfile?.intolerances,
-      dailyTarget: userProfile?.dailyTarget,
+      dailyTarget: undefined,
     }, dictionary);
   }, [recipe, userProfile, dictionary]);
 
@@ -191,13 +205,13 @@ export default function RecipeDetail({ recipe, onBack, onSaveRecipe, isSaved, on
 
   const instructions = recipe?.instructions || [];
 
-  const applySwap = (fromId: string, toIngredient: any) => {
+  const applySwap = (fromId: string, toIngredient: { id: string; name?: string }) => {
     // Replace in extraIngredients or recipe ingredients state
-    const fromRI = data.recipeIngredients?.find((ri: any) => (ri.ingredient?.id || ri.ingredientId) === fromId);
+    const fromRI = data.recipeIngredients?.find((ri) => (ri.ingredient?.id || ri.ingredientId) === fromId);
     if (!fromRI) return;
     setExtraIngredients(prev => [
       ...prev.filter(ri => ri.ingredientId !== fromId),
-      { id: `swap-${Date.now()}`, ingredientId: toIngredient.id, ingredient: toIngredient, amount: fromRI.amount, unit: fromRI.unit },
+      { id: `swap-${Date.now()}`, ingredientId: toIngredient.id, ingredient: toIngredient as Ingredient, amount: fromRI.amount, unit: fromRI.unit },
     ]);
     toast.success(`${toIngredient.name} ${t.recipeDetail.substitute?.toLowerCase() || 'applied'}`);
   };
@@ -206,7 +220,7 @@ export default function RecipeDetail({ recipe, onBack, onSaveRecipe, isSaved, on
   // `brandName` is populated when a recipe ingredient pins a specific brand variant
   // (new P4 dual-schema shape: `ri.variantId` set → `ri.ingredient.description` = brand name).
   const allIngredientsToDisplay = [
-    ...(data.recipeIngredients ? data.recipeIngredients.map((ri: any) => {
+    ...(data.recipeIngredients ? data.recipeIngredients.map((ri) => {
       const swap = variantSwaps[ri.id];
       const displayName = swap?.name ?? ri.ingredient?.name ?? 'Unknown';
       const displayBrand = swap?.brand?.name
@@ -261,7 +275,7 @@ export default function RecipeDetail({ recipe, onBack, onSaveRecipe, isSaved, on
 
   const filteredDictionary = dictionary.filter(ing => ing.name.toLowerCase().includes(searchQuery.toLowerCase()));
 
-  const addExtraIngredient = (ing: any) => {
+  const addExtraIngredient = (ing: Ingredient) => {
     setExtraIngredients(prev => [...prev, {
       id: `extra-${Date.now()}`, ingredientId: ing.id, amount: ing.baseAmount, unit: ing.baseUnit, ingredient: ing,
     }]);
@@ -351,7 +365,7 @@ export default function RecipeDetail({ recipe, onBack, onSaveRecipe, isSaved, on
     {/* StickyCookCTA — only on verified recipes (flag-gated), hides when quick-actions visible */}
     {isVerified && (
       <StickyCookCTA
-        label={(t.recipes as any).cookNow ?? 'Cocinar ahora'}
+        label={t.recipes.cookNow}
         onClick={openCookMode}
         targetRef={quickActionsRef}
       />
@@ -388,8 +402,8 @@ export default function RecipeDetail({ recipe, onBack, onSaveRecipe, isSaved, on
           <div className="px-6 mt-3 max-w-4xl mx-auto">
             <AuthorAttributionCard
               variant={data.verified === 'creator' ? 'creator' : 'card'}
-              name={data.publishedByName ?? (t.recipes as any).verifiedRial}
-              role={(t.recipes as any).verifiedRial ?? 'Equipo RIAL'}
+              name={data.publishedByName ?? t.recipes.verifiedRial}
+              role={t.recipes.verifiedRial}
             />
           </div>
         </>
@@ -461,7 +475,7 @@ export default function RecipeDetail({ recipe, onBack, onSaveRecipe, isSaved, on
           <button
             type="button"
             onClick={() => {
-              const original = savedRecipes.find((r: any) => String(r.id) === String(data.forkedFrom.recipeId));
+              const original = savedRecipes.find((r) => String(r.id) === String(data.forkedFrom?.recipeId));
               if (original) navToRecipe(original);
             }}
             className="flex items-center gap-2 w-full min-h-11 bg-surface-container-low rounded-sm border border-outline-variant/20 px-4 py-2.5 hover:border-primary/30 transition-colors text-left"
@@ -586,9 +600,9 @@ export default function RecipeDetail({ recipe, onBack, onSaveRecipe, isSaved, on
 
         {/* ══ Community stats ══ */}
         {(() => {
-          const relatedPosts = communityPosts.filter((p: any) => p.recipe && String(p.recipe.id) === String(data.id));
-          const totalSaves = savedPosts?.filter?.((id: number) => relatedPosts.some((p: any) => p.id === id)).length || 0;
-          const totalLikes = relatedPosts.reduce((sum: number, p: any) => sum + (p.likes || 0), 0);
+          const relatedPosts = communityPosts.filter((p) => p.recipe && String(p.recipe.id) === String(data.id));
+          const totalSaves = savedPosts?.filter?.((id: number) => relatedPosts.some((p) => p.id === id)).length || 0;
+          const totalLikes = relatedPosts.reduce((sum, p) => sum + (p.likes || 0), 0);
           if (relatedPosts.length === 0 && !data.publishedToFeed) return null;
           return (
             <div className="mt-6 flex items-center gap-4 p-3 bg-surface-container-highest/30 rounded-sm border border-outline-variant/10">
@@ -598,11 +612,11 @@ export default function RecipeDetail({ recipe, onBack, onSaveRecipe, isSaved, on
               </div>
               <div className="flex items-center gap-1.5 text-on-surface-variant">
                 <MessageSquare className="w-4 h-4" />
-                <span className="font-label text-micro font-bold">{relatedPosts.reduce((sum: number, p: any) => sum + (p.comments || 0), 0)}</span>
+                <span className="font-label text-micro font-bold">{relatedPosts.reduce((sum, p) => sum + (p.comments || 0), 0)}</span>
               </div>
               <div className="flex items-center gap-1.5 text-on-surface-variant">
                 <Bookmark className="w-4 h-4" />
-                <span className="font-label text-micro font-bold">{relatedPosts.reduce((sum: number, p: any) => sum + (p.saves || 0), 0) + totalSaves}</span>
+                <span className="font-label text-micro font-bold">{relatedPosts.reduce((sum, p) => sum + (p.saves || 0), 0) + totalSaves}</span>
               </div>
               <span className="font-label text-micro tracking-widest text-on-surface-variant uppercase ml-auto">{t.community?.title || 'Community'}</span>
             </div>
@@ -611,7 +625,7 @@ export default function RecipeDetail({ recipe, onBack, onSaveRecipe, isSaved, on
 
         {/* ══ More from this creator ══ */}
         {data.publishedBy && data.publishedBy !== 'self' && (() => {
-          const creatorRecipes = savedRecipes.filter((r: any) => r.publishedBy === data.publishedBy && r.id !== data.id).slice(0, 3);
+          const creatorRecipes = savedRecipes.filter((r) => r.publishedBy === data.publishedBy && r.id !== data.id).slice(0, 3);
           if (creatorRecipes.length === 0) return null;
           return (
             <div className="mt-6">
@@ -619,7 +633,7 @@ export default function RecipeDetail({ recipe, onBack, onSaveRecipe, isSaved, on
                 {t.postDetail?.moreFromCreator || 'More from this creator'}
               </Heading>
               <div className="space-y-2">
-                {creatorRecipes.map((r: any) => (
+                {creatorRecipes.map((r) => (
                   <button type="button"
                     key={r.id}
                     onClick={() => navToRecipe(r)}
@@ -631,7 +645,7 @@ export default function RecipeDetail({ recipe, onBack, onSaveRecipe, isSaved, on
                     <div className="flex-1 min-w-0">
                       <p className="font-headline font-semibold text-micro text-tertiary uppercase truncate">{r.title}</p>
                       <span className="font-label text-micro text-on-surface-variant tracking-widest uppercase">
-                        {r.macros?.calories || r.cal || 0} kcal · {r.macros?.protein || r.pro || 0}g pro
+                        {r.macros?.calories || 0} kcal · {r.macros?.protein || 0}g pro
                       </span>
                     </div>
                   </button>
