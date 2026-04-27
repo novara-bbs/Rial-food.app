@@ -63,7 +63,7 @@ export default function AICoach({
       const text = await generateAIResponse(textToSend, systemInstruction);
 
       setMessages((prev) =>{
-        const updated = [...prev, { role: 'model', text: text || t.aiCoach.errorMessage }];
+        const updated = [...prev, { role: 'model' as const, text: text || t.aiCoach.errorMessage }];
         return updated.length > MAX_STORED_MESSAGES ? updated.slice(-MAX_STORED_MESSAGES) : updated;
       });
     } catch (error) {
