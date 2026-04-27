@@ -58,6 +58,12 @@ export interface Recipe {
   micros?: Micronutrients;
   supplements?: string[];
   tags: string[];
+  /**
+   * @deprecated Legacy single-string tag used for display badges (e.g. 'MI RECETA',
+   * 'GUARDADO', 'PLANEADO'). Coexists with `tags[]` for now. Will be replaced by
+   * a typed `FoodTag` enum + `tags[]` migration (deferred sprint).
+   */
+  tag?: string;
   ingredients?: string[];
   recipeIngredients?: RecipeIngredient[];
   instructions?: string[];

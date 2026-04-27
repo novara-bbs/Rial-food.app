@@ -65,6 +65,8 @@ const common: Pick<Translations, 'empty' | 'common' | 'toast' | 'confirm' | 'off
     commentAdded: 'Comment added',
     storyPublished: 'Story published',
     checkInComplete: 'Daily check-in complete!',
+    recipeSavedAndCooked: 'Recipe saved and marked as cooked!',
+    recipeCooked: 'Cooked {n} times!',
   },
   confirm: {
     deleteMeal: 'Delete meal',

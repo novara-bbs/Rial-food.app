@@ -11,6 +11,8 @@ import {
   createHandleDuplicateRecipe,
   createHandleCreateRecipeSubmit,
 } from './recipe-handlers';
+import type { Recipe } from '../../../types/recipe';
+import type { Translations } from '../../../i18n';
 
 // Mock sonner toast
 vi.mock('sonner', () => ({
@@ -19,18 +21,27 @@ vi.mock('sonner', () => ({
 
 // ─── Fixtures ────────────────────────────────────────────────────────────────
 
-const makeRecipe = (id: string | number = 'r1', extra: Record<string, unknown> = {}) => ({
+/** Minimal but type-complete Recipe test factory. */
+const makeRecipe = (id: string = 'r1', extra: Record<string, unknown> = {}): Recipe => ({
   id,
   title: `Recipe ${id}`,
-  cal: 400, pro: 30, carbs: 45, fats: 10,
-  macros: { calories: 400, protein: 30, carbs: 45, fats: 10 },
+  description: '',
+  image: '',
+  prepTime: '10M',
+  cookTime: '20M',
+  difficulty: 'Fácil',
+  macros: { calories: 400, protein: 30, carbs: 45, fats: 10, saturatedFat: 2, transFat: 0, sugar: 5 },
   recipeIngredients: [
-    { ingredient: { name: 'Pollo', category: 'Proteína', baseUnit: 'g' }, amount: 200, unit: 'g' },
+    { id: 'ri-1', ingredient: { name: 'Pollo', category: 'Proteína', baseUnit: 'g' } as any, amount: 200, unit: 'g' },
   ],
+  tags: [],
   tag: 'RECETA',
   publishedBy: 'user-abc',
   ...extra,
-});
+} as Recipe);
+
+/** Cast an incomplete translation object to Translations for test stubs. */
+const t = (partial: Record<string, unknown> = {}) => partial as unknown as Translations;
 
 // ─── createHandleSaveRecipe ───────────────────────────────────────────────────
 
@@ -39,8 +50,8 @@ describe('createHandleSaveRecipe', () => {
   let handler: ReturnType<typeof createHandleSaveRecipe>;
 
   beforeEach(() => {
-    setSavedRecipes = vi.fn() as any;
-    handler = createHandleSaveRecipe({ setSavedRecipes: setSavedRecipes as any, t: {} });
+    setSavedRecipes = vi.fn();
+    handler = createHandleSaveRecipe({ setSavedRecipes: setSavedRecipes as any, t: t() });
   });
 
   it('adds recipe when not already saved', () => {
@@ -83,7 +94,11 @@ describe('createHandleAddToPlan', () => {
   });
 
   const makeHandler = () => createHandleAddToPlan({
-    setSavedRecipes: vi.fn() as any, setMealPlan: setMealPlan as any, setShoppingList: setShoppingList as any, navigateTo: vi.fn(), t: {},
+    setSavedRecipes: vi.fn() as any,
+    setMealPlan: setMealPlan as any,
+    setShoppingList: setShoppingList as any,
+    navigateTo: vi.fn(),
+    t: t(),
   });
 
   it('adds recipe entry to the correct day index', () => {
@@ -94,7 +109,7 @@ describe('createHandleAddToPlan', () => {
     expect(result[3]).toHaveLength(1);
     expect(result[3][0].title).toBe('Recipe r1');
     expect(result[3][0].tag).toBe('PLANEADO');
-    expect(result[3][0].cal).toBe(400);
+    expect(result[3][0].macros?.calories).toBe(400);
   });
 
   it('does not modify other days', () => {
@@ -163,7 +178,7 @@ describe('createHandleAddToPlan', () => {
       setMealPlan: setMealPlan as any,
       setShoppingList: setShoppingList as any,
       navigateTo: vi.fn(),
-      t: { plan: { mealTypeBreakfast: 'BREAKFAST', mealTypeLunch: 'LUNCH', mealTypeDinner: 'DINNER', mealTypeSnack: 'SNACK' } },
+      t: t({ plan: { mealTypeBreakfast: 'BREAKFAST', mealTypeLunch: 'LUNCH', mealTypeDinner: 'DINNER', mealTypeSnack: 'SNACK' } }),
     });
     handler(makeRecipe('r1', { mealType: 'dinner' }), 0);
     const updater = setMealPlan.mock.calls[0][0];
@@ -208,7 +223,7 @@ describe('createHandleDeleteRecipe', () => {
   it('removes recipe by id from saved list', () => {
     const setSavedRecipes = vi.fn();
     const navigateTo = vi.fn();
-    const handler = createHandleDeleteRecipe({ setSavedRecipes, navigateTo, t: {} });
+    const handler = createHandleDeleteRecipe({ setSavedRecipes, navigateTo, t: t() });
 
     handler('r1');
     const updater = setSavedRecipes.mock.calls[0][0];
@@ -220,14 +235,14 @@ describe('createHandleDeleteRecipe', () => {
 
   it('navigates to cocina after deletion', () => {
     const navigateTo = vi.fn();
-    const handler = createHandleDeleteRecipe({ setSavedRecipes: vi.fn(), navigateTo, t: {} });
+    const handler = createHandleDeleteRecipe({ setSavedRecipes: vi.fn(), navigateTo, t: t() });
     handler('r1');
     expect(navigateTo).toHaveBeenCalledWith('cocina');
   });
 
   it('handles deleting a non-existent id gracefully', () => {
     const setSavedRecipes = vi.fn();
-    const handler = createHandleDeleteRecipe({ setSavedRecipes, navigateTo: vi.fn(), t: {} });
+    const handler = createHandleDeleteRecipe({ setSavedRecipes, navigateTo: vi.fn(), t: t() });
     handler('non-existent');
     const updater = setSavedRecipes.mock.calls[0][0];
     const existing = [makeRecipe('r1')];
@@ -241,7 +256,7 @@ describe('createHandleDeleteRecipe', () => {
 describe('createHandleDuplicateRecipe', () => {
   it('creates a new recipe with a different id', () => {
     const setSavedRecipes = vi.fn();
-    const handler = createHandleDuplicateRecipe({ setSavedRecipes, navigateTo: vi.fn(), t: {} });
+    const handler = createHandleDuplicateRecipe({ setSavedRecipes, navigateTo: vi.fn(), t: t() });
 
     handler(makeRecipe('r1'));
     const updater = setSavedRecipes.mock.calls[0][0];
@@ -254,7 +269,7 @@ describe('createHandleDuplicateRecipe', () => {
 
   it('sets forkedFrom to point to the original recipe', () => {
     const setSavedRecipes = vi.fn();
-    const handler = createHandleDuplicateRecipe({ setSavedRecipes, navigateTo: vi.fn(), t: {} });
+    const handler = createHandleDuplicateRecipe({ setSavedRecipes, navigateTo: vi.fn(), t: t() });
     const original = makeRecipe('r1');
     handler(original);
     const updater = setSavedRecipes.mock.calls[0][0];
@@ -265,7 +280,7 @@ describe('createHandleDuplicateRecipe', () => {
 
   it('uses forkedFrom.recipeId from original when recipe is already a fork', () => {
     const setSavedRecipes = vi.fn();
-    const handler = createHandleDuplicateRecipe({ setSavedRecipes, navigateTo: vi.fn(), t: {} });
+    const handler = createHandleDuplicateRecipe({ setSavedRecipes, navigateTo: vi.fn(), t: t() });
     const originalId = 'original-123';
     const forkedRecipe = makeRecipe('r2', {
       forkedFrom: { recipeId: originalId, creatorId: 'other', creatorName: 'Other', title: 'Orig' },
@@ -280,7 +295,7 @@ describe('createHandleDuplicateRecipe', () => {
 
   it('increments forkCount on the original recipe', () => {
     const setSavedRecipes = vi.fn();
-    const handler = createHandleDuplicateRecipe({ setSavedRecipes, navigateTo: vi.fn(), t: {} });
+    const handler = createHandleDuplicateRecipe({ setSavedRecipes, navigateTo: vi.fn(), t: t() });
     const original = { ...makeRecipe('r1'), forkCount: 2 };
     handler(original);
     const updater = setSavedRecipes.mock.calls[0][0];
@@ -296,14 +311,14 @@ describe('createHandleCreateRecipeSubmit', () => {
   it('creates new recipe with id=Date.now() when no id provided', () => {
     const setSavedRecipes = vi.fn();
     const navigateTo = vi.fn();
-    const handler = createHandleCreateRecipeSubmit({ setSavedRecipes, navigateTo, t: {} });
+    const handler = createHandleCreateRecipeSubmit({ setSavedRecipes, navigateTo, t: t() });
 
-    const newRecipe = { ...makeRecipe(), id: undefined };
-    handler(newRecipe);
+    const newRecipe = { ...makeRecipe(), id: '' }; // empty id → treated as new
+    handler(newRecipe as Recipe);
     const updater = setSavedRecipes.mock.calls[0][0];
     const result = updater([]);
     expect(result).toHaveLength(1);
-    expect(typeof result[0].id).toBe('number');
+    expect(typeof result[0].id).toBe('string'); // id is now String(Date.now())
     expect(result[0].publishedBy).toBe('self');
     expect(result[0].tag).toBe('MI RECETA');
   });
@@ -311,7 +326,7 @@ describe('createHandleCreateRecipeSubmit', () => {
   it('updates existing recipe when id is present', () => {
     const setSavedRecipes = vi.fn();
     const navigateTo = vi.fn();
-    const handler = createHandleCreateRecipeSubmit({ setSavedRecipes, navigateTo, t: {} });
+    const handler = createHandleCreateRecipeSubmit({ setSavedRecipes, navigateTo, t: t() });
 
     const updated = { ...makeRecipe('r1'), title: 'Updated Title' };
     handler(updated);
@@ -325,7 +340,7 @@ describe('createHandleCreateRecipeSubmit', () => {
 
   it('navigates to cocina after submitting', () => {
     const navigateTo = vi.fn();
-    const handler = createHandleCreateRecipeSubmit({ setSavedRecipes: vi.fn(), navigateTo, t: {} });
+    const handler = createHandleCreateRecipeSubmit({ setSavedRecipes: vi.fn(), navigateTo, t: t() });
     handler(makeRecipe());
     expect(navigateTo).toHaveBeenCalledWith('cocina');
   });
