@@ -5,32 +5,32 @@
 > prunes this file back down. Everything below should answer: *what's the release line,
 > what's the quality baseline, what's the next move, what's broken?*
 
-Last updated: **2026-04-27** — `[1.5.139]` Sprint 4: AppStateContext type-safety sweep — zero `any` in public interface, +5 new wellness types, 2 bug fixes surfaced.
+Last updated: **2026-04-27** — `[1.5.140-144]` Sprints 5-9: Handler + utility type-safety sweep — 78 `any` → 0 across 7 files, 3 real bugs fixed.
 
 ## Release snapshot
-- **Branch**: `sprint4/type-safety-context`. PRs #23-26 (Sprint 2+3) merged. Sprint 4 in progress.
-- **In progress (this session, 2026-04-27)**:
-    - **Sprint 4** `[1.5.139]` — AppStateContext type-safety: zero `any` in public interface,
-      `StoredRealFeelEntry` + `RealFeelEntry` + signal types added to `src/types/wellness.ts`,
-      2 latent bugs fixed (`.date` → `.createdAt`, `handleDeleteRecipe` param narrowed to `string`).
-- **Previous session (2026-04-26, 5 PRs)**:
-    - **PR #10** `[1.5.112-130]` — Structural cleanup: Phase 2.4 + 2.5 + 3.1.
-    - **PR #11** `[1.5.115]` — ROADMAP-2026.md.
-    - **PR #12** `[1.5.131-132]` — Sprint 1 hook tests: 79 tests.
-    - **PR #13** `[1.5.133]` — Sprint 1 component tests: 55 tests.
-    - **PR #14** `[1.5.133b]` — TESTING-PATTERNS.md cookbook.
-- **Active plan**: sprints sellados. **Próximos**: Phase 2 Home, Q6-B recipe photos,
-  owner-actions Supabase prod env.
+- **Branch**: `main`, **synced** with `rial-food/main` at `[1.5.144]`.
+- **This session (2026-04-27, PRs #28-32)**:
+    - **PR #28** `[1.5.140]` — Sprint 5: recipe-handlers.ts (24 any → 0); fixed `forkedFrom` bug where duplicated recipes had no fork origin.
+    - **PR #29** `[1.5.141]` — Sprint 6: meal-handlers.ts (17 any → 0); `LoggableMeal` promoted to canonical `src/types/food.ts`.
+    - **PR #30** `[1.5.142]` — Sprint 7: social-handlers.ts (6 any → 0); `PostComment.createdAt` added to type.
+    - **PR #31** `[1.5.143]` — Sprint 8: demo-seed-handlers.ts (16 any → 0); `DemoSeedBundle` properly typed.
+    - **PR #32** `[1.5.144]` — Sprint 9: homeWidgets.ts + correlations.ts (15 any → 0); fixed latent `hydration.glasses` test bug.
+- **Previous session (2026-04-27)**:
+    - **PR #27** `[1.5.139]` — Sprint 4: AppStateContext type-safety (zero `any` in public interface).
+- **Active plan**: type-safety sweep ongoing. Screens next (Home.tsx 20, Planner.tsx 19, Settings 14+13).
 - **Release target**: `rial-food/main` (`novara-bbs/Rial-food.app`). Origin `rial-food`.
 - **Vercel project**: `rial.app.v1.5` (id `prj_t11VHYQjptazjUx7Y2hWLz0IDAjg`).
 - **Governance**: work directly on `main`. "continua" = push approval post green preflight.
 
-## Quality baseline (post-Sprint 4, 2026-04-27)
+## Quality baseline (post-Sprint 9, 2026-04-27)
 - TypeScript: **0 errors** (`npx tsc --noEmit`)
 - Tests: **1316/1316** passing (86 files)
 - i18n symmetry: **1917** keys aligned ES ↔ EN
 - Design-system lint: **0 errors**, ~832 warnings (-44 vs post-Sprint 1; 0 react-hooks errors)
 - `AppStateContextType` interface: **0 `any` types** (Sprint 4 ✓)
+- **Handler + util files**: 78 `any` → 0 (Sprints 5-9: recipe-handlers, meal-handlers, social-handlers, demo-seed-handlers, homeWidgets, correlations)
+- `LoggableMeal`: promoted to canonical `src/types/food.ts` (was duplicate in AppStateContext)
+- `PostComment.createdAt`: added to type (was runtime-only, missing from interface)
 - Build main: size:check PASS — all budgets within limits.
 - **AppStateContext**: 1075 → 584 lines (-46%), composer of 8 domain hooks.
 - **RecipeDetail**: 1066 → 678 lines (-36%), composer of 7 detail components.

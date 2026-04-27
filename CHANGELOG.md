@@ -1,5 +1,26 @@
 # RIAL App - Changelog
 
+## [1.5.140-144] - 2026-04-27
+
+### refactor(types): Sprints 5-9 — Handler + utility type-safety sweep (78 any → 0)
+
+**Real bugs fixed**:
+- `createHandleDuplicateRecipe` [1.5.140]: `forkedFrom` was computed but never assigned to the new recipe — duplicated recipes always had `forkedFrom: undefined`.
+- `PostComment.createdAt` [1.5.142]: field was set at runtime by `createHandleAddComment` but missing from the `PostComment` interface.
+- `correlations.test.ts` hydration fixture [1.5.144]: used `{ glasses }` instead of `{ consumed }` — test wasn't exercising the actual field the insight function reads.
+
+**Sprint 5 [1.5.140] — `recipe-handlers.ts`**: 24 `any` → 0. `RecipeSetter`/`MealPlanSetter`/`ShoppingListSetter` helper types. `resolveMealSlot` typed with `MealSlotKey`. `RecipeWithForkMeta`/`RecipeWithCookedAt` local aliases. Added `tag?: string` @deprecated to `Recipe`. New i18n toast keys: `recipeSavedAndCooked`, `recipeCooked` (+2 keys, 1919 total).
+
+**Sprint 6 [1.5.141] — `meal-handlers.ts`**: 17 `any` → 0. `LoggableMeal` promoted from local `AppStateContext` definition to canonical `src/types/food.ts` + exported via `types/index.ts`. `DailyArchive` + `Translations` properly imported. `Setter<T>` pattern adopted.
+
+**Sprint 7 [1.5.142] — `social-handlers.ts`**: 6 `any` → 0. `CommunityPost['performance']`/`CommunityPost['recipe']` used as param types instead of `Record<string, unknown>`. `PostSetter` type alias. `PostComment.createdAt?: string` added to `src/types/social.ts`. `AppStateContextType.handleCreatePost` updated to precise types.
+
+**Sprint 8 [1.5.143] — `demo-seed-handlers.ts`**: 16 `any` → 0. `DemoSeedBundle` in `demo-seed.ts` fully typed: `unknown[]` → `Recipe[]`, `ShoppingItem[]`, `Story[]`, `ToleranceLog[]`, `StoredRealFeelEntry[]`. Explanatory comments on all `as unknown as T` casts (dynamic imports).
+
+**Sprint 9 [1.5.144] — utility files**: 15 `any` → 0. `homeWidgets.ts`: `calcVitality` param `StoredRealFeelEntry[]`. `correlations.ts`: replaced local `RFEntry` with `StoredRealFeelEntry` alias; removed `RFEntryWithFood` (redundant); `getInsights` context and all inner functions properly typed with `Recipe[]`, `DailyMacros`, `{ consumed, target }`.
+
+---
+
 ## [1.5.139] - 2026-04-27
 
 ### refactor(types): Sprint 4 — AppStateContext type-safety sweep
