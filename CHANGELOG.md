@@ -1,5 +1,35 @@
 # RIAL App - Changelog
 
+## [1.5.149] - 2026-04-28
+
+### refactor(food): Sprint 35 — AddMeal split 714→422 lines into 5 sub-components
+
+- **AddMeal.tsx split** (714 → 422 lines, −41%): extracted 5 pure-display sub-components to `src/features/food/components/add-meal/`. Composer keeps all state, effects, memos, and handlers; sub-components receive props only.
+  - `AddMealMacroBar.tsx` — daily progress summary (remaining cal + P/C bars)
+  - `AddMealQuickCapture.tsx` — barcode + photo AI quick-action grid
+  - `AddMealPhotoResults.tsx` — AI photo recognition review panel
+  - `AddMealMultiBanner.tsx` — fixed multi-add status banner (live region)
+  - `AddMealFoodList.tsx` — family-first results header + flat food rows (exports `DisplayFood` duck type)
+- **Zero new debt**: new files use `<Button variant="default">` and semantic tokens (`text-micro`, `text-body-sm`, `text-display`) from day one. Removed `AddMeal.tsx` from both `typographyMigrationAllowlist` and `RAW_BUTTON_ALLOWLIST` (counts now 0).
+- **Convention tests**: `screen-size.test.ts` adds AddMeal regression guard (matches CreateRecipe pattern); `button-adoption.test.ts` allowlist entry removed.
+- Tests: 1334/1334 (1 net new — AddMeal regression guard).
+
+---
+
+## [1.5.148] - 2026-04-28
+
+### refactor(food): Sprint 34 — BarcodeScanner split 823→378 lines into 4 sub-components
+
+- **BarcodeScanner.tsx split** (823 → 378 lines, −54%): extracted 4 sub-components to `src/features/food/components/barcode/`. Camera lifecycle (`html5QrRef`, `startScanner`, mount-only `useEffect`) stays in parent — sub-components are stateless or own local form state only.
+  - `BarcodeViewport.tsx` — camera container (`#barcode-reader` div), scanning/lookup states, manual code fallback input
+  - `BarcodeFoundPanel.tsx` — found-product detail (with internal `MatchBanner` for known-barcode/seed-match/fuzzy/ambiguous cases), portion selector, save-brand action
+  - `BarcodeNotFoundPanel.tsx` — three escape hatches (create custom, retry scan, search manually)
+  - `BarcodeCustomFoodForm.tsx` — local-state custom food form (resets naturally on unmount via `showCustomForm` toggle)
+- Removed `food/components/BarcodeScanner.tsx` from `screen-size.test.ts` allowlist (now 378 lines, well under 600).
+- Quality baseline preserved: TS 0 errors, 1333 tests, design-system lint 0 errors.
+
+---
+
 ## [1.5.147] - 2026-04-28
 
 ### chore(tooling): Sprint 33 — Husky + lint-staged + demo-seed dynamic import
