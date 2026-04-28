@@ -146,7 +146,7 @@ export default function Planner({
     const newMeal: PlannedMeal = {
       ...sourceMeal,
       id: String(Date.now()),
-      tag: 'SOBRAS',
+      tag: 'leftovers',
       title: `${sourceMeal.title} (sobras)`,
       executionStatus: 'planned',
     };
@@ -381,9 +381,9 @@ export default function Planner({
                         <p className="font-label text-micro tracking-widest text-primary uppercase font-bold">
                           {meal.time} · {meal.type}
                         </p>
-                        {meal.tag && meal.tag !== 'PLANEADO' && (
+                        {meal.tag && meal.tag !== 'planned' && (
                           <span className="text-micro font-bold uppercase tracking-wider bg-surface-container-highest text-on-surface-variant px-1.5 py-0.5 rounded">
-                            {meal.tag}
+                            {t.recipeTags[meal.tag] ?? meal.tag}
                           </span>
                         )}
                       </div>

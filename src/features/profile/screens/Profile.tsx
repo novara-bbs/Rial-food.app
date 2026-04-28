@@ -48,8 +48,8 @@ export default function Profile({ userProfile, onBack, realFeelLogs = [], savedR
 
   // Build user stats for gamification
   const stats: UserStats = {
-    recipesCreated: savedRecipes.filter((r) => r.tag === 'MI RECETA').length,
-    recipesImported: savedRecipes.filter((r) => r.tag === 'IMPORTADA').length,
+    recipesCreated: savedRecipes.filter((r) => r.tag === 'myRecipe').length,
+    recipesImported: savedRecipes.filter((r) => r.tag === 'imported').length,
     mealsLogged: 0, // would track from dailyMacros history
     realFeelCount: realFeelLogs.length,
     // Id-based ownership check. Name-based compare broke in EN locale and on

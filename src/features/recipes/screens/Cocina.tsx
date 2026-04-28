@@ -242,8 +242,8 @@ export default function Cocina({ onAddMeal, onCreateRecipe, onNavigateToRecipe, 
       list = list.filter(r =>
         matchesFilters(r, filterValues, {
           sourceContext: {
-            isMine: r.publishedBy === 'self' && r.tag !== 'IMPORTADA',
-            isImported: r.tag === 'IMPORTADA',
+            isMine: r.publishedBy === 'self' && r.tag !== 'imported',
+            isImported: r.tag === 'imported',
             isCooked: (r.cookedAt?.length ?? 0) > 0,
           },
         }),

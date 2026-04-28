@@ -35,7 +35,7 @@ const makeRecipe = (id: string = 'r1', extra: Record<string, unknown> = {}): Rec
     { id: 'ri-1', ingredient: { name: 'Pollo', category: 'Proteína', baseUnit: 'g' } as any, amount: 200, unit: 'g' },
   ],
   tags: [],
-  tag: 'RECETA',
+  tag: 'myRecipe',
   publishedBy: 'user-abc',
   ...extra,
 } as Recipe);
@@ -60,13 +60,13 @@ describe('createHandleSaveRecipe', () => {
     const result = updater([]);
     expect(result).toHaveLength(1);
     expect(result[0].id).toBe('r1');
-    expect(result[0].tag).toBe('GUARDADO');
+    expect(result[0].tag).toBe('saved');
   });
 
   it('removes recipe when already saved (toggle)', () => {
     handler(makeRecipe('r1'));
     const updater = setSavedRecipes.mock.calls[0][0];
-    const existing = [{ ...makeRecipe('r1'), tag: 'GUARDADO' }];
+    const existing = [{ ...makeRecipe('r1'), tag: 'saved' }];
     const result = updater(existing);
     expect(result).toHaveLength(0);
   });
@@ -74,7 +74,7 @@ describe('createHandleSaveRecipe', () => {
   it('preserves unrelated saved recipes', () => {
     handler(makeRecipe('r2'));
     const updater = setSavedRecipes.mock.calls[0][0];
-    const existing = [{ ...makeRecipe('r1'), tag: 'GUARDADO' }];
+    const existing = [{ ...makeRecipe('r1'), tag: 'saved' }];
     const result = updater(existing);
     expect(result).toHaveLength(2);
     expect(result.some((r: any) => r.id === 'r1')).toBe(true);
@@ -108,7 +108,7 @@ describe('createHandleAddToPlan', () => {
     const result = updater(prev);
     expect(result[3]).toHaveLength(1);
     expect(result[3][0].title).toBe('Recipe r1');
-    expect(result[3][0].tag).toBe('PLANEADO');
+    expect(result[3][0].tag).toBe('planned');
     expect(result[3][0].macros?.calories).toBe(400);
   });
 
@@ -264,7 +264,7 @@ describe('createHandleDuplicateRecipe', () => {
     const newRecipe = result[0]; // prepended
     expect(newRecipe.id).not.toBe('r1');
     expect(newRecipe.publishedBy).toBe('self');
-    expect(newRecipe.tag).toBe('MI RECETA');
+    expect(newRecipe.tag).toBe('myRecipe');
   });
 
   it('sets forkedFrom to point to the original recipe', () => {
@@ -320,7 +320,7 @@ describe('createHandleCreateRecipeSubmit', () => {
     expect(result).toHaveLength(1);
     expect(typeof result[0].id).toBe('string'); // id is now String(Date.now())
     expect(result[0].publishedBy).toBe('self');
-    expect(result[0].tag).toBe('MI RECETA');
+    expect(result[0].tag).toBe('myRecipe');
   });
 
   it('updates existing recipe when id is present', () => {

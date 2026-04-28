@@ -69,3 +69,48 @@ export const TIME_BUCKETS: readonly TimeBucket[] = [
 export type Difficulty = 'easy' | 'medium' | 'hard';
 
 export const DIFFICULTIES: readonly Difficulty[] = ['easy', 'medium', 'hard'] as const;
+
+// ─── Food / recipe display tags (Sprint 37) ──────────────────────────────────
+
+/**
+ * Single-tag taxonomy used as a display badge on `RecipeCard` and a filter
+ * key in Cocina. Replaces the legacy ad-hoc Spanish string literals
+ * ('MI RECETA', 'GUARDADO', 'VEGANO', ...) that broke EN filters.
+ *
+ * Two semantic groups:
+ * - **Status** (handler-assigned, mutually exclusive at the row level):
+ *   `saved`, `planned`, `myRecipe`, `imported`. These are written by
+ *   handlers when the user saves, plans, creates, or imports a recipe.
+ * - **Content** (seed/editorial descriptors):
+ *   `vegan`, `dessert`, `batch`, `breakfast`, `express`, `snack`.
+ *
+ * Display labels live in `t.recipeTags.<key>` (i18n ES + EN).
+ */
+export type FoodTag =
+  // Status
+  | 'saved'
+  | 'planned'
+  | 'myRecipe'
+  | 'imported'
+  | 'leftovers'
+  // Content
+  | 'vegan'
+  | 'dessert'
+  | 'batch'
+  | 'breakfast'
+  | 'express'
+  | 'snack';
+
+export const FOOD_TAGS: readonly FoodTag[] = [
+  'saved',
+  'planned',
+  'myRecipe',
+  'imported',
+  'leftovers',
+  'vegan',
+  'dessert',
+  'batch',
+  'breakfast',
+  'express',
+  'snack',
+] as const;

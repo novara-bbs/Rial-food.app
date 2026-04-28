@@ -3,6 +3,7 @@ import { Clock, Flame, ChefHat, Share2, Bookmark, Trash2, GitFork } from 'lucide
 import { useI18n } from '../../i18n';
 import { CREATORS_MAP } from '../../features/social/data/seed-creators';
 import { cn } from '../../lib/utils';
+import type { FoodTag } from '../../types/taxonomy';
 
 export interface RecipeCardRecipe {
   id: string | number;
@@ -10,7 +11,7 @@ export interface RecipeCardRecipe {
   img?: string;
   image?: string;
   photos?: string[];
-  tag?: string;
+  tag?: FoodTag;
   matchScore?: number;
   time?: string;
   cal?: number;
@@ -139,7 +140,7 @@ export default function RecipeCard({
           )}
           {recipe.tag && variant !== 'compact' && (
             <span className="badge-card bg-surface/95 backdrop-blur-md text-primary uppercase tracking-wide">
-              {recipe.tag}
+              {t.recipeTags[recipe.tag] ?? recipe.tag}
             </span>
           )}
           {recipe.matchScore !== undefined && variant !== 'compact' && (

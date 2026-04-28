@@ -34,7 +34,7 @@ export function createHandleSaveRecipe(deps: Pick<RecipeHandlerDeps, 'setSavedRe
         return prev.filter((r) => r.id !== recipe.id);
       }
       toast.success(deps.t?.toast?.recipeSaved || '¡Receta guardada en la Bóveda!');
-      return [...prev, { ...recipe, tag: 'GUARDADO' }];
+      return [...prev, { ...recipe, tag: 'saved' }];
     });
   };
 }
@@ -88,7 +88,7 @@ export function createHandleAddToPlan(deps: RecipeHandlerDeps) {
           id: String(Date.now()),
           time: slot.time,
           type: slot.type,
-          tag: 'PLANEADO',
+          tag: 'planned',
         } as Recipe,
       ],
     }));
@@ -149,7 +149,7 @@ export function createHandleCreateRecipeSubmit(deps: Pick<RecipeHandlerDeps, 'se
       toast.success(deps.t?.toast?.recipeUpdated || 'Receta actualizada');
     } else {
       // Create new
-      deps.setSavedRecipes((prev) => [{ ...recipe, id: String(Date.now()), tag: 'MI RECETA', publishedBy: 'self' }, ...prev]);
+      deps.setSavedRecipes((prev) => [{ ...recipe, id: String(Date.now()), tag: 'myRecipe', publishedBy: 'self' }, ...prev]);
     }
     deps.navigateTo('cocina');
   };
@@ -191,7 +191,7 @@ export function createHandleDuplicateRecipe(deps: Pick<RecipeHandlerDeps, 'setSa
       id: String(Date.now()),
       title: `${prefix} ${origin.title}`,
       publishedBy: 'self',
-      tag: 'MI RECETA',
+      tag: 'myRecipe',
       forkedFrom: origin,
       forkCount: 0,
     };
@@ -214,7 +214,7 @@ export function createHandleDuplicateRecipe(deps: Pick<RecipeHandlerDeps, 'setSa
 
 export function createHandleImportRecipe(deps: Pick<RecipeHandlerDeps, 'setSavedRecipes' | 'navigateTo' | 't'>) {
   return (recipe: Recipe) => {
-    deps.setSavedRecipes((prev) => [{ ...recipe, id: String(Date.now()), tag: 'IMPORTADA', publishedBy: 'self' }, ...prev]);
+    deps.setSavedRecipes((prev) => [{ ...recipe, id: String(Date.now()), tag: 'imported', publishedBy: 'self' }, ...prev]);
     toast.success(deps.t?.toast?.recipeImported || '¡Receta importada!');
     deps.navigateTo('cocina');
   };
@@ -241,7 +241,7 @@ export function createHandleMarkAsCooked(deps: Pick<RecipeHandlerDeps, 'setSaved
       const idx = prev.findIndex((r) => r.id === recipe.id);
       if (idx === -1) {
         // Recipe not yet saved — save it first, then mark as cooked.
-        const saved: RecipeWithCookedAt = { ...recipe, tag: recipe.tag ?? 'GUARDADO', cookedAt: [ts] };
+        const saved: RecipeWithCookedAt = { ...recipe, tag: recipe.tag ?? 'saved', cookedAt: [ts] };
         toast.success(deps.t?.toast?.recipeSavedAndCooked || '¡Receta guardada y marcada como cocinada!');
         return [...prev, saved];
       }

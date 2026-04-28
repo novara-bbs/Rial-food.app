@@ -109,7 +109,8 @@ describe('deriveCuisine', () => {
     expect(deriveCuisine(makeRecipe({ tags: ['MEDITERRÁNEO'] }))).toBe('mediterranean');
   });
   it('detects mediterranean from legacy tag (singular)', () => {
-    expect(deriveCuisine(makeRecipe({ tag: 'MEDITERRÁNEO' }))).toBe('mediterranean');
+    // Cast: legacy localStorage hydration may carry untyped ES literals.
+    expect(deriveCuisine(makeRecipe({ tag: 'MEDITERRÁNEO' as unknown as undefined }))).toBe('mediterranean');
   });
   it('returns "other" when no cuisine keyword present', () => {
     expect(deriveCuisine(makeRecipe({ tags: ['EXPRESS', 'DESAYUNO'] }))).toBe('other');
@@ -231,13 +232,13 @@ describe('Q16 typed fields — typed field wins over heuristic', () => {
   });
 
   it('deriveDietaryTags returns empty array when typed field is empty []', () => {
-    const r = makeRecipe({ dietaryTags: [], tag: 'VEGANO' });
+    const r = makeRecipe({ dietaryTags: [], tag: 'vegan' });
     // Typed empty array = explicitly no tags; heuristic skipped.
     expect(deriveDietaryTags(r)).toEqual([]);
   });
 
   it('deriveDietaryTags falls back to heuristic when dietaryTags is undefined', () => {
-    const r = makeRecipe({ tag: 'VEGANO' });
+    const r = makeRecipe({ tag: 'vegan' });
     const tags = deriveDietaryTags(r);
     expect(tags).toContain('vegan');
     expect(tags).toContain('vegetarian');

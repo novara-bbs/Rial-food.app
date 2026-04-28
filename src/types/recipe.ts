@@ -1,5 +1,5 @@
 import type { Macros, Micronutrients, RecipeIngredient } from './food';
-import type { Cuisine, DietaryTag } from './taxonomy';
+import type { Cuisine, DietaryTag, FoodTag } from './taxonomy';
 
 /**
  * Canonical meal slot vocabulary used across the app (recipes, planner,
@@ -59,11 +59,13 @@ export interface Recipe {
   supplements?: string[];
   tags: string[];
   /**
-   * @deprecated Legacy single-string tag used for display badges (e.g. 'MI RECETA',
-   * 'GUARDADO', 'PLANEADO'). Coexists with `tags[]` for now. Will be replaced by
-   * a typed `FoodTag` enum + `tags[]` migration (deferred sprint).
+   * Single-tag display badge (status or content). Sprint 37 migrated this from
+   * free-form ES literals to the typed `FoodTag` union. Display labels resolve
+   * via `t.recipeTags.<key>` so they render in the user's locale.
+   *
+   * Coexists with `tags[]` (free-form, untyped, used by suggestion heuristics).
    */
-  tag?: string;
+  tag?: FoodTag;
   ingredients?: string[];
   recipeIngredients?: RecipeIngredient[];
   instructions?: string[];

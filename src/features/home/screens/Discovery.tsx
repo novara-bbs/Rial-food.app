@@ -179,7 +179,7 @@ export default function Discovery({ onNavigateToRecipe, savedRecipes = [], onSav
         pro: r.macros?.protein || 0,
         time: prep + cook > 0 ? `${prep + cook}M` : '—',
         totalTime: prep + cook,
-        tag: r.tag || r.tags?.[0]?.toUpperCase() || '',
+        tag: r.tag,
       };
     });
   }, [savedRecipes, profileSlice, dictionary]);
@@ -232,7 +232,7 @@ export default function Discovery({ onNavigateToRecipe, savedRecipes = [], onSav
   );
 
   const batchCooking = useMemo(() =>
-    filteredBase.filter(r => r.tag === 'BATCH')
+    filteredBase.filter(r => r.tag === 'batch')
       .sort((a, b) => b.matchScore - a.matchScore).slice(0, 6),
     [filteredBase],
   );
@@ -252,8 +252,8 @@ export default function Discovery({ onNavigateToRecipe, savedRecipes = [], onSav
   const editorialPick = forYou[0] || null;
 
   // Collection counts
-  const batchCount = scoredRecipes.filter(r => r.tag === 'BATCH').length;
-  const veganCount = scoredRecipes.filter(r => r.tag === 'VEGANO').length;
+  const batchCount = scoredRecipes.filter(r => r.tag === 'batch').length;
+  const veganCount = scoredRecipes.filter(r => r.tag === 'vegan').length;
 
   const CollectionBanner = ({ title, count, bg }: { title: string; count: number; bg: string }) => {
     if (count === 0) return null;

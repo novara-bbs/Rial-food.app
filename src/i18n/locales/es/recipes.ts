@@ -84,6 +84,23 @@ const recipes = {
     cooked: 'Ya cocinadas',
     recipes: 'recetas',
   },
+  /**
+   * Display labels for `Recipe.tag` (Sprint 37 — FoodTag enum). Keep keys in
+   * sync with `FoodTag` union in `src/types/taxonomy.ts`.
+   */
+  recipeTags: {
+    saved: 'Guardado',
+    planned: 'Planeado',
+    myRecipe: 'Mi receta',
+    imported: 'Importada',
+    leftovers: 'Sobras',
+    vegan: 'Vegano',
+    dessert: 'Postre',
+    batch: 'Batch',
+    breakfast: 'Desayuno',
+    express: 'Express',
+    snack: 'Snack',
+  },
   importUrl: {
     title: 'Importar receta',
     paste: 'Pega el enlace de la receta:',
