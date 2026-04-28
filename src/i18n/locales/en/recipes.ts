@@ -162,6 +162,12 @@ const recipes: Pick<Translations, 'cocina' | 'recipes' | 'collections' | 'import
     lowConfidence: 'Manual review',
     publishAsVerified: 'Publish as verified recipe',
     verifiedCreatorHint: 'Will appear with your verified creator badge',
+    moveIngredientUp: 'Move ingredient up',
+    moveIngredientDown: 'Move ingredient down',
+    moveStepUp: 'Move step up',
+    moveStepDown: 'Move step down',
+    deleteStep: 'Delete step',
+    stepPhotoAlt: 'Step {n}',
   },
   recipeDetail: {
     yourRecipe: 'Your Recipe',

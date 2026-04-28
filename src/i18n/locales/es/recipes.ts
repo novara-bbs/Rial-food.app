@@ -162,6 +162,12 @@ const recipes = {
     lowConfidence: 'Revisión manual',
     publishAsVerified: 'Publicar como receta verificada',
     verifiedCreatorHint: 'Aparecerá con el badge de creador verificado',
+    moveIngredientUp: 'Subir ingrediente',
+    moveIngredientDown: 'Bajar ingrediente',
+    moveStepUp: 'Subir paso',
+    moveStepDown: 'Bajar paso',
+    deleteStep: 'Eliminar paso',
+    stepPhotoAlt: 'Paso {n}',
   },
   recipeDetail: {
     yourRecipe: 'Tu Receta',
