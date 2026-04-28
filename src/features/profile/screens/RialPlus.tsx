@@ -2,6 +2,7 @@ import { ArrowLeft, Check, Crown, Sparkles, Brain, ShoppingCart, Lock, Star, Bar
 import PageShell from '../../../components/PageShell';
 import SectionCard from '../../../components/SectionCard';
 import { Heading } from '@/components/ui/Typography';
+import { Button } from '@/components/ui/button';
 import { useState, useEffect } from 'react';
 import { toast } from 'sonner';
 import { useAppState } from '../../../contexts/AppStateContext';
@@ -243,17 +244,19 @@ export default function RialPlus({ onBack }: { onBack: () => void }) {
         {/* CTA */}
         <div className="fixed left-0 right-0 px-6 z-50" style={{ bottom: 'calc(env(safe-area-inset-bottom, 0px) + 2rem)' }}>
           <div className="max-w-2xl mx-auto space-y-2">
-            <button type="button"
+            <Button
+              variant="default"
+              size="lg"
               onClick={handleUpgrade}
               disabled={isUpgrading || isRestoring}
-              className="w-full py-5 bg-primary text-on-primary rounded-sm font-headline font-black text-lg uppercase tracking-widest hover:opacity-90 transition-opacity disabled:opacity-50 flex items-center justify-center gap-3 shadow-elev-3 shadow-primary/30"
+              className="w-full py-5 text-title-sm font-black gap-3 shadow-elev-3 shadow-primary/30"
             >
               {isUpgrading ? (
                 <><Sparkles className="w-6 h-6 animate-pulse" aria-hidden="true" /> {t.rialPlus.processing}</>
               ) : (
                 <><Crown className="w-6 h-6" aria-hidden="true" /> {t.rialPlus.startRialPlus} — {selectedPlan === 'yearly' ? `${getPrice('yearly')}${p.yearlyPeriod}` : `${getPrice('monthly')}${p.monthlyPeriod}`}</>
               )}
-            </button>
+            </Button>
             <div className="flex items-center justify-between">
               <p className="text-micro text-on-surface-variant uppercase tracking-widest">
                 {t.rialPlus.cancelAnytime}

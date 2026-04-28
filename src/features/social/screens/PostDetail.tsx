@@ -9,6 +9,7 @@ import { useNavigation } from '../../../contexts/NavigationContext';
 import PostCard from '../components/PostCard';
 import PageHeader from '../../../components/patterns/PageHeader';
 import { Heading } from '@/components/ui/Typography';
+import { Button } from '@/components/ui/button';
 import type { PostComment } from '../../../types/social';
 import type { Recipe } from '../../../types';
 
@@ -112,14 +113,15 @@ export default function PostDetail({ onBack }: { onBack: () => void }) {
           className="flex-1 bg-surface-container-highest border border-outline-variant/30 min-h-11 px-3 text-caption font-label tracking-widest focus:outline-none focus:border-primary uppercase rounded-sm text-tertiary placeholder:text-on-surface-variant/50"
           onKeyDown={(e) => e.key === 'Enter' && handleSubmitComment()}
         />
-        <button type="button"
+        <Button
+          variant="default"
+          size="icon"
           onClick={handleSubmitComment}
           disabled={!commentText.trim()}
           aria-label={t.common.send}
-          className="w-11 h-11 rounded-sm bg-primary text-on-primary flex items-center justify-center disabled:opacity-50 disabled:cursor-not-allowed"
         >
           <Send className="w-4 h-4" />
-        </button>
+        </Button>
       </div>
 
       {/* More from creator — card converted to <button> to fix nested-button

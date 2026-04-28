@@ -121,9 +121,9 @@ export default function ShoppingList({ onBack, shoppingList = [], setShoppingLis
           <button type="button" onClick={() => setPendingClearAction('all')} disabled={!hasItems} aria-label={t.shoppingList.clearAll} className="w-10 h-10 bg-surface-container-low rounded-full flex items-center justify-center text-on-surface-variant hover:text-error transition-colors border border-outline-variant/20 disabled:opacity-30">
             <Trash2 className="w-4 h-4" />
           </button>
-          <button type="button" onClick={() => setIsAdding(true)} aria-label={t.shoppingList.addItem} className="w-10 h-10 bg-primary text-on-primary rounded-full flex items-center justify-center hover:bg-primary-container transition-colors shadow-elev-3">
+          <Button variant="default" size="icon-sm" onClick={() => setIsAdding(true)} aria-label={t.shoppingList.addItem} className="w-10 h-10 rounded-full shadow-elev-3 hover:bg-primary-container">
             <Plus className="w-5 h-5" />
-          </button>
+          </Button>
         </div>
       </header>
 
@@ -261,12 +261,13 @@ export default function ShoppingList({ onBack, shoppingList = [], setShoppingLis
           <EmptyState icon="📦" title={t.shoppingList.title} description={t.shoppingList.emptyStatePlan}>
             <div className="flex flex-col gap-3">
               {onNavigateToPlan && (
-                <button type="button"
+                <Button
+                  variant="default"
                   onClick={onNavigateToPlan}
-                  className="px-8 py-3 bg-primary text-on-primary rounded-sm font-headline text-xs font-bold uppercase tracking-widest hover:opacity-90 transition-opacity"
+                  className="px-8"
                 >
                   {t.shoppingList.goToPlan}
-                </button>
+                </Button>
               )}
               <button type="button" onClick={() => setIsAdding(true)} className="px-8 py-3 bg-surface-container-highest border border-outline-variant/20 text-on-surface-variant rounded-sm font-headline text-xs font-bold uppercase tracking-widest hover:border-primary/50 transition-colors">
                 {t.shoppingList.addItem}

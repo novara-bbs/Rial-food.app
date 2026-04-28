@@ -6,6 +6,7 @@ import { calculateDailyTargets, calculateDailyTargetsWithBreakdown, type Goal } 
 import KcalBreakdownCard from './KcalBreakdownCard';
 import { getBodyWeightUnit, getHeightUnit } from '../../food/utils/units';
 import { INPUT_SURFACE_CLASSES } from '@/components/ui/surface';
+import { Button } from '@/components/ui/button';
 import SectionCard from '../../../components/SectionCard';
 import OnboardingScaffold from './OnboardingScaffold';
 import RadioCardGroup, { type RadioCardOption } from '@/components/ui/RadioCardGroup';
@@ -411,24 +412,28 @@ export default function Onboarding({ isOpen, onClose, onComplete }: {
         <div className="p-5 border-t border-outline-variant/10 shrink-0 space-y-2">
           {step < 6 ? (
             <>
-              <button type="button"
+              <Button
+                variant="default"
+                size="lg"
                 onClick={() => setStep(s => s + 1)}
                 disabled={!canNext()}
-                className="w-full py-4 bg-primary text-on-primary rounded-sm font-headline text-sm font-bold uppercase tracking-widest hover:opacity-90 transition-opacity duration-200 disabled:opacity-40 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+                className="w-full"
               >
                 {t.onboarding.next} <ChevronRight className="w-4 h-4" />
-              </button>
+              </Button>
               {!canNext() && (
                 <p className="text-xs text-on-surface-variant text-center">{t.onboarding.selectHint}</p>
               )}
             </>
           ) : (
-            <button type="button"
+            <Button
+              variant="default"
+              size="lg"
               onClick={handleFinish}
-              className="w-full py-4 bg-primary text-on-primary rounded-sm font-headline text-sm font-bold uppercase tracking-widest hover:opacity-90 transition-opacity duration-200"
+              className="w-full"
             >
               {t.onboarding.start}
-            </button>
+            </Button>
           )}
         </div>
       </div>

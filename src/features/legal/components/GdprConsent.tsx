@@ -5,6 +5,7 @@
  */
 import { Shield } from 'lucide-react';
 import BottomSheet from '@/components/ui/bottom-sheet';
+import { Button } from '@/components/ui/button';
 import { useI18n } from '@/i18n';
 
 const CONSENT_KEY = 'rial_gdpr_consent_v1';
@@ -41,13 +42,13 @@ export default function GdprConsent({ onAccept, onNavigatePrivacy, onNavigateTer
       hideCloseButton
       hideHandle
       footer={
-        <button
-          type="button"
+        <Button
+          variant="default"
           onClick={handleAccept}
-          className="w-full min-h-11 py-3.5 bg-primary text-on-primary rounded-xl font-headline text-xs font-bold uppercase tracking-widest hover:bg-primary/90 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/60 focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+          className="w-full rounded-xl"
         >
           {t.legal.consentAccept}
-        </button>
+        </Button>
       }
     >
       <div className="space-y-5">

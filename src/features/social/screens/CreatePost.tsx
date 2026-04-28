@@ -6,6 +6,7 @@ import { useAppState } from '../../../contexts/AppStateContext';
 import ImagePicker from '../components/ImagePicker';
 import RecipePicker from '../components/RecipePicker';
 import PageHeader from '../../../components/patterns/PageHeader';
+import { Button } from '@/components/ui/button';
 /** Compact recipe summary passed from RecipePicker to the post composer. */
 type PickedRecipe = { id: string; title: string; cal: number; pro: number; carbs: number; fats: number; time: string; img: string; tag: string };
 type PostPerformance = { recovery: number; strain: number };
@@ -38,13 +39,14 @@ export default function CreatePost({ onBack, onCreatePost }: { onBack: () => voi
         label={t.createPost.community}
         title={t.createPost.title}
         rightAction={
-          <button type="button"
+          <Button
+            variant="default"
             onClick={handlePublish}
             disabled={!content.trim()}
-            className="bg-primary text-on-primary px-4 min-h-11 rounded-sm font-label text-caption font-bold tracking-widest uppercase flex items-center gap-2 hover:bg-primary-container transition-colors disabled:opacity-50"
+            className="hover:bg-primary-container"
           >
             <Send className="w-4 h-4" /> {t.common.publish}
-          </button>
+          </Button>
         }
       />
 

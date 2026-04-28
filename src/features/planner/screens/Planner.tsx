@@ -6,6 +6,7 @@ import { useI18n } from '../../../i18n';
 import EmptyState from '../../../components/EmptyState';
 import ConfirmDialog from '../../../components/ConfirmDialog';
 import DashedAddButton from '../../../components/patterns/DashedAddButton';
+import { Button } from '@/components/ui/button';
 import { analyzeBatchCooking } from '../utils/batch-cooking';
 import { detectLeftovers } from '../utils/meal-reuse';
 import type { Recipe } from '../../../types';
@@ -189,14 +190,15 @@ export default function Planner({
           <span className="font-label text-xs tracking-[0.2em] text-primary uppercase mb-1 block">{t.planner.weeklyPlan}</span>
           <h2 className="font-headline text-3xl md:text-4xl font-bold tracking-tighter uppercase text-tertiary">{t.planner.currentWeek}</h2>
         </div>
-        <button type="button"
+        <Button
+          variant="default"
           onClick={onOpenShoppingList}
           aria-label={t.planner.shoppingListBtn}
-          className="bg-primary text-on-primary px-5 py-3 font-label text-xs font-bold tracking-widest uppercase flex items-center justify-center gap-2 rounded-full hover:bg-primary/90 transition-all shadow-elev-3 shadow-primary/20"
+          className="rounded-full shadow-elev-3 shadow-primary/20"
         >
           <ShoppingCart className="w-4 h-4" aria-hidden="true" />
           {t.planner.shoppingListBtn}
-        </button>
+        </Button>
       </section>
 
       {/* ── Batch cooking insights banner ──────────────────────────────────── */}

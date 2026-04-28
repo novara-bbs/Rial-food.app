@@ -8,6 +8,7 @@ import PageHeader from '../../../components/patterns/PageHeader';
 import RecipePicker from '../components/RecipePicker';
 import type { StorySlide } from '../../../types/social';
 import { Heading } from '@/components/ui/Typography';
+import { Button } from '@/components/ui/button';
 
 const COLORS = ['#1a1a2e', '#0d3b66', '#2d6a4f', '#6b2737', '#4a1942', '#1b1b2f'];
 
@@ -65,13 +66,14 @@ export default function CreateStory({ onBack }: { onBack: () => void }) {
         onBack={onBack}
         title={t.stories.create}
         rightAction={
-          <button type="button"
+          <Button
+            variant="default"
             onClick={handlePublish}
             disabled={!canPublish()}
-            className="bg-primary text-on-primary px-4 min-h-11 rounded-sm font-label text-caption font-bold tracking-widest uppercase flex items-center gap-2 hover:bg-primary-container transition-colors disabled:opacity-50"
+            className="hover:bg-primary-container"
           >
             <Send className="w-4 h-4" /> {t.stories.publish}
-          </button>
+          </Button>
         }
       />
 

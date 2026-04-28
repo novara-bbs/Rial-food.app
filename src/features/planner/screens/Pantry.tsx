@@ -1,6 +1,7 @@
 import { Plus, Trash2, X, Package } from 'lucide-react';
 import PageShell from '../../../components/PageShell';
 import SectionCard from '../../../components/SectionCard';
+import { Button } from '@/components/ui/button';
 import React, { useState } from 'react';
 import { toast } from 'sonner';
 import { useI18n } from '../../../i18n';
@@ -62,14 +63,15 @@ export default function Pantry({ onBack }: { onBack: () => void }) {
         onBack={onBack}
         title={t.pantry.title}
         rightAction={
-          <button
-            type="button"
+          <Button
+            variant="default"
+            size="icon"
             onClick={() => setIsAdding(true)}
-            className="w-11 h-11 bg-primary text-on-primary rounded-full flex items-center justify-center hover:bg-primary-container focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/60 focus-visible:ring-offset-2 focus-visible:ring-offset-background transition-colors shadow-elev-3"
+            className="rounded-full shadow-elev-3 hover:bg-primary-container"
             aria-label={t.pantry.addToPantry}
           >
             <Plus className="w-5 h-5" aria-hidden="true" />
-          </button>
+          </Button>
         }
       />
 
@@ -109,13 +111,14 @@ export default function Pantry({ onBack }: { onBack: () => void }) {
               onChange={e => setNewQuantity(e.target.value)}
               className="w-full bg-surface-container-low border border-outline-variant/30 p-3 rounded-sm text-tertiary placeholder:text-outline focus:outline-none focus:border-primary transition-colors"
             />
-            <button
+            <Button
               type="submit"
+              variant="default"
               disabled={!newName.trim()}
-              className="w-full min-h-11 bg-primary text-on-primary py-3 rounded-sm font-headline font-bold text-label uppercase tracking-widest hover:bg-primary-container focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/60 focus-visible:ring-offset-2 focus-visible:ring-offset-background transition-colors disabled:opacity-50"
+              className="w-full hover:bg-primary-container"
             >
               {t.pantry.add}
-            </button>
+            </Button>
           </form>
         </div>
       )}
