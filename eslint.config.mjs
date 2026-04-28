@@ -226,7 +226,6 @@ const typographyMigrationAllowlist = [
   'src/features/food/components/BarcodeScanner.tsx',
   'src/features/food/components/PortionSelector.tsx',
   'src/features/food/components/PortionSheet.tsx',
-  'src/features/food/screens/AddMeal.tsx',
   'src/features/home/components/ActivityRow.tsx',
   'src/features/home/components/InsightRow.tsx',
   'src/features/home/components/MealGapSuggestion.tsx',

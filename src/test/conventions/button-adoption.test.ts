@@ -41,7 +41,6 @@ const RAW_BUTTON_ALLOWLIST: Record<string, { count: number; reason: string }> = 
   'home/screens/Home.tsx': { count: 3, reason: 'Q1 2026 baseline — migrate in subsequent sprint' },
   'recipes/components/CookMode.tsx': { count: 3, reason: 'Q1 2026 baseline — migrate in subsequent sprint' },
   'recipes/components/detail/RecipeHero.tsx': { count: 3, reason: 'Q1 2026 baseline — migrate in subsequent sprint' },
-  'food/screens/AddMeal.tsx': { count: 2, reason: 'Q1 2026 baseline — migrate in subsequent sprint' },
   'recipes/components/detail/RecipeServingsControls.tsx': { count: 2, reason: 'Q1 2026 baseline — migrate in subsequent sprint' },
   'recipes/screens/ImportRecipeURL.tsx': { count: 2, reason: 'Q1 2026 baseline — migrate in subsequent sprint' },
   // Single-button hotspots.

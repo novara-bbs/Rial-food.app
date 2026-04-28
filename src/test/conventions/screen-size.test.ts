@@ -20,8 +20,6 @@ const LINE_LIMIT = 600;
  * Each entry must cite why it is deferred and its current size.
  */
 const ALLOWLIST: Record<string, { reason: string; approxLines: number }> = {
-  // AddMeal — tightly coupled to navigation; requires dedicated planning sprint
-  'food/screens/AddMeal.tsx': { reason: 'deferred split — navigation coupling', approxLines: 714 },
   // RecipeDetail — composer of 7 tab components; 692 lines is acceptable
   'recipes/screens/RecipeDetail.tsx': { reason: 'composer only; 7 extracted components', approxLines: 692 },
 };
@@ -75,5 +73,11 @@ describe('screen-size convention', () => {
     const file = join(ROOT, 'recipes/screens/CreateRecipe.tsx');
     const lines = readFileSync(file, 'utf8').split('\n').length;
     expect(lines, `CreateRecipe.tsx grew back to ${lines} lines — split subcomponents further`).toBeLessThanOrEqual(LINE_LIMIT);
+  });
+
+  it('AddMeal.tsx is under 600 lines (regression guard)', () => {
+    const file = join(ROOT, 'food/screens/AddMeal.tsx');
+    const lines = readFileSync(file, 'utf8').split('\n').length;
+    expect(lines, `AddMeal.tsx grew back to ${lines} lines — split subcomponents further`).toBeLessThanOrEqual(LINE_LIMIT);
   });
 });
