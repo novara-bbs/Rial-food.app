@@ -5,37 +5,37 @@
 > prunes this file back down. Everything below should answer: *what's the release line,
 > what's the quality baseline, what's the next move, what's broken?*
 
-Last updated: **2026-04-27** — `[1.5.145-148]` Sprints 26-28: Screen + component + utility any sweep complete — production code ~38 residual any (all intentional/documented).
+Last updated: **2026-04-28** — `[1.5.145-147]` Sprints 29-33: scalability + visual consistency + safe-area + tooling plan complete.
 
 ## Release snapshot
-- **Branch**: `main`, **ahead of** `rial-food/main` by 3 commits (S26-S28, pending push).
-- **This session (2026-04-27, local commits S26-28)**:
-    - **Sprint 26** — RecipeOverviewTab, RecipeNutritionTab, SettingsAppearance, ActivityRow, Discovery, Cocina, story-handlers, useUITransientState, AppStateContext recipeToEdit.
-    - **Sprint 27** — story-handlers (markViewed), ShoppingList, useDailyReset, FastingTimer, CreatePost, CreateStory, CreatorVerification, analytics.ts, top-meals, weight-handlers, test fixtures.
-    - **Sprint 28** — Home.tsx (weightHistory cast), RecipeSubstitutionPicker, ImportRecipeURL (ExtractedRecipeData), Onboarding.tsx, convention test update.
-- **Previous session (2026-04-27, PRs #28-32)**: Sprints 5-9 (78 `any` → 0 in handlers/utils).
-- **Active plan**: any sweep substantially complete. Residual intentional any documented below.
-- **Release target**: `rial-food/main` (`novara-bbs/Rial-food.app`). Origin `rial-food`.
-- **Vercel project**: `rial.app.v1.5` (id `prj_t11VHYQjptazjUx7Y2hWLz0IDAjg`).
-- **Governance**: work directly on `main`. "continua" = push approval post green preflight.
+- **Branch**: `main`, **ahead of** `rial-food/main` by 8 commits (S26-S33, pending push).
+- **This session (2026-04-28, local commits S29-S33)**:
+    - **Sprint 29** `[1.5.143]` — safe-area foundation (PageShell safeArea prop, GlobalHeader pt-safe, capacitor.config, ADR-016, convention test).
+    - **Sprint 30** `[1.5.144]` — Button primitive adoption (auth CTAs, ShoppingList, Cocina; 41-button allowlist baseline).
+    - **Sprint 31** `[1.5.145]` — Typography sweep: legal/, food/, settings/, home/ (12 files, 6 removed from allowlist).
+    - **Sprint 32** `[1.5.146]` — CreateRecipe split 1052→460 lines (5 step components + utils); 6 i18n aria-label keys; screen-size convention test.
+    - **Sprint 33** `[1.5.147]` — Husky+lint-staged (pre-commit hook live); demo-seed dynamic import (main entry −4.2 KB gzip); CHANGELOG backfilled.
+- **Active plan**: scalability + base sólida plan (Sprints 29-33) **COMPLETE**. All targets met.
 - **Release target**: `rial-food/main` (`novara-bbs/Rial-food.app`). Origin `rial-food`.
 - **Vercel project**: `rial.app.v1.5` (id `prj_t11VHYQjptazjUx7Y2hWLz0IDAjg`).
 - **Governance**: work directly on `main`. "continua" = push approval post green preflight.
 
-## Quality baseline (post-Sprint 28, 2026-04-27)
+## Quality baseline (post-Sprint 33, 2026-04-28)
 - TypeScript: **0 errors** (`npx tsc --noEmit`)
-- Tests: **1316/1316** passing (86 files)
-- i18n symmetry: **1917** keys aligned ES ↔ EN
-- Design-system lint: **0 errors**, ~832 warnings (0 react-hooks errors)
+- Tests: **1333/1333** passing (89 files)
+- i18n symmetry: **1926** keys aligned ES ↔ EN
+- Design-system lint: **0 errors**, 381 warnings (pre-existing, allowlisted)
 - **`any` sweep** substantially complete: ~38 residual intentional any in production code — all documented. Categories: browser API workarounds (wakeLock, AudioContext, import.meta), i18n missing-key casts `(t as any)`, legacy archive format, `MealPlan = Record<number, any[]>`, pre-existing contract mismatches (eslint-disabled), migration code, untyped library (html5-qrcode).
 - `AppStateContextType` interface: **0 `any` types** (Sprint 4 ✓); `recipeToEdit: Partial<Recipe>|null` (Sprint 26 ✓)
 - **Handler + util files**: 78 `any` → 0 (Sprints 5-9); screens/components Sprints 19-28.
 - `LoggableMeal`: canonical `src/types/food.ts`. `PostComment.createdAt`: added to type. `FastingEntry`, `ExtractedRecipeData`, `PickedRecipe`: new local interfaces. `DailyLogEntry`: typed in useDailyReset/top-meals. `UserProfile`: imported in weight-handlers (no more `[key:string]:any`). Test fixtures: `as unknown as UserProfile` casts for partial mocks.
-- Build main: size:check PASS — all budgets within limits.
+- Build main: size:check PASS — main entry 875.4 KB raw / 274.6 KB gzip.
 - **AppStateContext**: 1075 → 584 lines (-46%), composer of 8 domain hooks.
 - **RecipeDetail**: 1066 → 678 lines (-36%), composer of 7 detail components.
-- **i18n locales**: 4506 → 22 domain files via codemod.
-- **Test coverage** (new artifacts): 8/8 hooks + 7/7 detail components.
+- **CreateRecipe**: 1052 → 460 lines (-56%), 5 step components in `components/create/`.
+- **i18n locales**: 4506 → 22 domain files via codemod. 1926 keys total.
+- **Test coverage** (new artifacts): 8/8 hooks + 7/7 detail components + 3 new convention tests (safe-area, button-adoption, screen-size).
+- **Pre-commit hook**: Husky + lint-staged (ESLint on staged TS/TSX, check:i18n on locale changes).
 - **CI status**: ✅ verde.
 - `calculateStreak` @deprecated: ✓ eliminado ([1.5.101]). FilterRow shim: ✓ deleted ([1.5.101]).
 - Security headers: HSTS + X-Frame-Options + nosniff + Permissions-Policy + Referrer-Policy + **CSP** ✓
@@ -91,26 +91,11 @@ Last updated: **2026-04-27** — `[1.5.145-148]` Sprints 26-28: Screen + compone
   Remaining: `Recipe.tag: string` free-form ES literals (FoodTag enum — defer).
 - ~~`calculateStreak` @deprecated~~ ✓ — `getLoggingStreak` removed [1.5.101].
 
-**Shipped sprints** (full detail in CHANGELOG.md): Q1-Q14, Q15.5 (design-system),
-Q16-B1, Q16-B2, Tab audit 2026-04-18, S3 tranche, Bevel PR 1-9, Q19 meal-taxonomy,
-Fase 1+2 multi-media recipes, Food Families P0-P16, R1 docs, R2 recipes editorial,
-**R3 Cocina collections**, **R5 CookMode deeper**, **R8 INDYA adoption**, **R7 CreateRecipe authoring**,
-**Q15 ICP-adaptive NutritionHero + calcStreaks sweep**, **Q17 CSP header + contrast audit**,
-**Q6 Supabase offline-first sync wiring** (pull-on-sign-in + push-on-change + Mi Cuenta),
-**ADR-012 typography primitives (`<Heading>`, `<Text>`) closing call-site layer**,
-**Phase 1 Home rework (chip-row + reorder + simple/advanced density)**,
-**[1.5.85] brand font normalization** (Bricolage Grotesque headline + `--font-mono` alias → JetBrains Mono; CMS-style proof),
-**[1.5.86] filter system normalization per ADR-013** (`ChipRow` + `SortControl` primitives; Cocina dedup; Community pill→TabNav; FoodDictionary inline chips → ChipRow; convention test invariants A + B),
-**[1.5.87] Fase C lote 1 — RecipeDetail typography migration** (4 `<hN>` raw → `<Heading>`; 22 spans/divs swap a tokens semánticos; 1 excepción documentada para hero verified Fraunces; allowlist 85→84),
-**[1.5.88] Fase C lote 2 — CreateRecipe typography + 2 nuevos primitives reutilizables** (`<MacroTile>` + `<DashedAddButton>` extraídos a `src/components/patterns/`; 18 hits resueltos vía primitives + `<Heading>` overline + token swaps; allowlist -1),
-**[1.5.89] Polish DRY pass** — adopción de `MacroTile` en `RecipeNutritionBar` + `PortionSelector` y `DashedAddButton` en `Planner`; CreateStory/PhotoUploader/BarcodeScanner descartados por patrones distintos; -3 warnings sin allowlist removals.
-**[1.5.90] Fase C lote 3 — PostDetail/CreatePost/CreatorProfile** (15 hits, -16 warnings, 3 allowlist removals).
-**[1.5.91] Fase C lote 3.5 — dominio social completo** (14 archivos, ~55 hits, -74 warnings, 0 archivos sociales restantes en allowlist).
-**[1.5.92] Fase C lote 4 — dominio wellness completo + Fase C completada** (16 archivos, ~60 hits, -83 warnings; excepción font-mono documentada en FastingTimer).
-**[1.5.93] Filter UX rework (ADR-014)** — `FilterSheet` + `FilterButton` primitives + `facets.ts` heurística; Cocina mueve Source axis al sheet; Discovery esconde toda facetería + branch grid-vs-swimlanes; +40 i18n keys; ADR-014 + invariantes E + F.
-**[1.5.104–107] Scroll UX** — Fase 1: reset to top on every nav. Fase 2: goBack restores saved scrollY (captured synchronously in `navigateTo` via `scrollCaptureRef`; `useLayoutEffect` in App.tsx applies before paint). `navigateToRecipe` passes `{ recipeId }` so same-screen recipe drill-down pushes history correctly.
-**[1.5.108] Satoshi body font** — Inter (Google Fonts, CSP-blocked in prod) replaced by Satoshi variable self-hosted in `public/fonts/satoshi/`. `font-src 'self'` CSP satisfied. Whoop competitor screenshots added to `docs/market/`.
-**[1.5.109] Chip/badge refinement** — `.badge-card` + `.label-caps` in `@layer components` (reusable). RecipeCard badges: `font-black` → `font-semibold`, `tracking-widest` → `tracking-wide`. ChipRow + ActiveFilterStrip: `px-4 py-2` → `px-3 py-1.5` (3:1 → 2:1 height/font ratio). `badge.tsx`: explicit `font-headline`.
+**Shipped sprints** (full detail in CHANGELOG.md): Q1-Q14, Q15.5, Q16-B1/B2, Q17, Q6,
+ADR-012 typography, ADR-013 filter, ADR-014 filter panel, Phase 1 Home, Fase C (4 lotes),
+Scroll UX [1.5.104-107], Satoshi font [1.5.108], Food Families P0-P16,
+Sprints 5-28 (type-safety any→0 sweep across all features),
+**Sprints 29-33 [1.5.143-147]** — safe-area, Button adoption, typography sweep, CreateRecipe split, Husky+lint-staged.
 
 ## Repository compliance
 - `LICENSE`: Proprietary © 2026 RIAL FOOD WORLD S.L. Contact legal@rialfoodworld.com.
