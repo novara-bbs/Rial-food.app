@@ -5,28 +5,28 @@
 > prunes this file back down. Everything below should answer: *what's the release line,
 > what's the quality baseline, what's the next move, what's broken?*
 
-Last updated: **2026-04-28** — `[1.5.148-149]` Sprints 34-35: BarcodeScanner + AddMeal split.
+Last updated: **2026-04-28** — `[1.5.150-151]` Sprints 36-37: Button adoption sweep + FoodTag enum codemod.
 
 ## Release snapshot
-- **Branch**: `main`, **ahead of** `rial-food/main` by 10 commits (S26-S35, pending push).
-- **This session (2026-04-28, local commits S29-S35)**:
-    - **Sprint 29** `[1.5.143]` — safe-area foundation (PageShell safeArea prop, GlobalHeader pt-safe, capacitor.config, ADR-016, convention test).
-    - **Sprint 30** `[1.5.144]` — Button primitive adoption (auth CTAs, ShoppingList, Cocina; 41-button allowlist baseline).
-    - **Sprint 31** `[1.5.145]` — Typography sweep: legal/, food/, settings/, home/ (12 files, 6 removed from allowlist).
-    - **Sprint 32** `[1.5.146]` — CreateRecipe split 1052→460 lines (5 step components + utils); 6 i18n aria-label keys; screen-size convention test.
-    - **Sprint 33** `[1.5.147]` — Husky+lint-staged (pre-commit hook live); demo-seed dynamic import (main entry −4.2 KB gzip); CHANGELOG backfilled.
-    - **Sprint 34** `[1.5.148]` — BarcodeScanner split 823→378 lines; 4 sub-components in `food/components/barcode/` (BarcodeViewport, BarcodeFoundPanel, BarcodeNotFoundPanel, BarcodeCustomFoodForm).
-    - **Sprint 35** `[1.5.149]` — AddMeal split 714→422 lines; 5 sub-components in `food/components/add-meal/` (MacroBar, QuickCapture, PhotoResults, MultiBanner, FoodList). New files use `<Button>` and semantic tokens from the start — zero new allowlist debt.
-- **Active plan**: scalability + base sólida plan (Sprints 29-33) **COMPLETE**. Sprints 34-35 extended the plan into deferred splits.
+- **Branch**: `main`, ahead of `rial-food/main` by 3 commits (S36, S37, CHANGELOG-S36-37). Previous batch S29-S35 + CHANGELOG-S34-35 already pushed (CI green).
+- **This session (2026-04-28, local commits S29-S37)**:
+    - **Sprints 29-33** `[1.5.143-147]` — safe-area foundation, Button adoption baseline, typography sweep, CreateRecipe split, Husky+lint-staged + demo-seed code-split.
+    - **Sprint 34** `[1.5.148]` — BarcodeScanner split 823→378 lines (4 sub-components).
+    - **Sprint 35** `[1.5.149]` — AddMeal split 714→422 lines (5 sub-components, zero new allowlist debt).
+    - **Sprint 36** `[1.5.150]` — Button adoption sweep: 11 raw branded buttons across 9 files migrated (legal, planner, profile, social). Allowlist 39→28.
+    - **Sprint 37** `[1.5.151]` — FoodTag enum codemod: replaces ad-hoc ES literals with typed union; **fixes EN filter regression**. 11 enum values + 22 i18n labels + 46 seed recipes + 6 handler sites + 5 filter sites.
+- **Active plan**: "Base sólida fase II" (Sprints 36-37 of post-29-33 continuation). Next candidate: typography sweep recipes/+home/ (paused per owner mandate) or further button adoption.
 - **Release target**: `rial-food/main` (`novara-bbs/Rial-food.app`). Origin `rial-food`.
 - **Vercel project**: `rial.app.v1.5` (id `prj_t11VHYQjptazjUx7Y2hWLz0IDAjg`).
 - **Governance**: work directly on `main`. "continua" = push approval post green preflight.
 
-## Quality baseline (post-Sprint 35, 2026-04-28)
+## Quality baseline (post-Sprint 37, 2026-04-28)
 - TypeScript: **0 errors** (`npx tsc --noEmit`)
 - Tests: **1334/1334** passing (89 files)
-- i18n symmetry: **1926** keys aligned ES ↔ EN
-- Design-system lint: **0 errors**, 367 warnings (pre-existing, allowlisted)
+- i18n symmetry: **1937** keys aligned ES ↔ EN (+11 recipeTags from S37)
+- Design-system lint: **0 errors**, 361 warnings (pre-existing, allowlisted)
+- Raw branded `<button>` count: **39 → 28** (S36, allowlist shrunk by 11)
+- `Recipe.tag` typed: **`string` → `FoodTag`** (S37, fixes EN filter regression)
 - **`any` sweep** substantially complete: ~38 residual intentional any in production code — all documented. Categories: browser API workarounds (wakeLock, AudioContext, import.meta), i18n missing-key casts `(t as any)`, legacy archive format, `MealPlan = Record<number, any[]>`, pre-existing contract mismatches (eslint-disabled), migration code, untyped library (html5-qrcode).
 - `AppStateContextType` interface: **0 `any` types** (Sprint 4 ✓); `recipeToEdit: Partial<Recipe>|null` (Sprint 26 ✓)
 - **Handler + util files**: 78 `any` → 0 (Sprints 5-9); screens/components Sprints 19-28.
@@ -72,10 +72,10 @@ Last updated: **2026-04-28** — `[1.5.148-149]` Sprints 34-35: BarcodeScanner +
 - ~~**SyncKey wiring missing**~~ ✓ — Q6 wired 13 core SyncKeys in AppStateContext.
 - ~~**`useSupabasePersistence` flag not wired**~~ ✓ — Q6 wired via `useAuth()` edge trigger.
 - ~~**CSP header**~~ ✓ — shipped Q17 `[1.5.81]`. All 6 security headers active in `vercel.json`.
-- **Tag taxonomy regression** — `Recipe.tag: string` ad-hoc ES-literal (`'MI RECETA'`,
-  `'VEGANO'`) fails in EN filters. `cuisine`/`dietaryTags` are now typed (Q16 ✓);
-  remaining drift is `tag`/`tags` free-form strings. Requires `FoodTag` enum + 40+ site
-  migration for full resolution. Defer.
+- ~~**Tag taxonomy regression**~~ ✓ — Sprint 37 [1.5.151]: `Recipe.tag` migrated
+  from `string` to typed `FoodTag` union. EN filters fixed. Display badges now
+  resolve via `t.recipeTags[tag]` for both locales. `tags[]` array remains free-form
+  for suggestion heuristics (acceptable).
 - **vendor-recharts chunk 102 KB gzip** — acceptable but monitor; ≤ 400 KB raw / 115 KB gzip.
 
 ## Next sprint candidates (ordered, only pending)
@@ -102,6 +102,8 @@ Sprints 5-28 (type-safety any→0 sweep across all features),
 **Sprints 29-33 [1.5.143-147]** — safe-area, Button adoption, typography sweep, CreateRecipe split, Husky+lint-staged.
 **Sprint 34 [1.5.148]** — BarcodeScanner split 823→378 lines (4 barcode sub-components).
 **Sprint 35 [1.5.149]** — AddMeal split 714→422 lines (5 add-meal sub-components); Button+token clean from day one.
+**Sprint 36 [1.5.150]** — Button adoption sweep: 11 raw branded buttons migrated; allowlist 39→28.
+**Sprint 37 [1.5.151]** — FoodTag enum codemod: `Recipe.tag: string` → typed `FoodTag` union; fixes EN filter regression.
 
 ## Repository compliance
 - `LICENSE`: Proprietary © 2026 RIAL FOOD WORLD S.L. Contact legal@rialfoodworld.com.

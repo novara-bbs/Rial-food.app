@@ -1,5 +1,37 @@
 # RIAL App - Changelog
 
+## [1.5.151] - 2026-04-28
+
+### feat(taxonomy): Sprint 37 — FoodTag enum codemod fixes EN filter regression
+
+- **FoodTag union added** to `src/types/taxonomy.ts` — 11 values across 5 status (`saved`, `planned`, `myRecipe`, `imported`, `leftovers`) and 6 content (`vegan`, `dessert`, `batch`, `breakfast`, `express`, `snack`) keys. Recipe.tag re-typed from `string` to `FoodTag`.
+- **i18n recipeTags block** added to ES + EN locales (11 keys × 2 = 22 new entries; symmetry 1926 → 1937 keys aligned).
+- **6 handler call sites** migrated (`recipe-handlers.ts`): save/plan/duplicate/import/log assignments now use enum keys.
+- **Filter logic fixed**: Cocina (`'IMPORTADA'`), Discovery (`'BATCH'`, `'VEGANO'`), Profile (`'MI RECETA'`, `'IMPORTADA'`), Planner (`'PLANEADO'`) — all now use enum keys; **EN filters that previously broke now match**.
+- **46 seed recipes** auto-migrated via 8 distinct ES→enum replacements.
+- **Display badges** in `RecipeCard` and `Planner` resolve `t.recipeTags[tag]` for localized text.
+- Test fixtures + facets tests updated to enum literals.
+
+---
+
+## [1.5.150] - 2026-04-28
+
+### feat(button): Sprint 36 — Button primitive adoption sweep
+
+Migrate 11 raw branded `<button>` elements across 9 files to `<Button>` primitive:
+- `legal/GdprConsent` (full-width primary CTA)
+- `planner/Pantry` (FAB icon + form submit)
+- `planner/Planner` (rounded-full pill with icon)
+- `planner/ShoppingList` (FAB icon + empty state CTA)
+- `profile/Onboarding` (Next + Start CTAs with icons)
+- `profile/RialPlus` (large primary CTA, `text-title-sm` semantic token)
+- `social/CreatePost` + `social/CreateStory` (publish actions)
+- `social/PostDetail` (icon-only send button)
+
+Allowlist count: 39 → 28 raw branded buttons (8 files cleared; Discover re-counted to 1; Pantry/ShoppingList/Onboarding had hidden second buttons surfaced and migrated).
+
+---
+
 ## [1.5.149] - 2026-04-28
 
 ### refactor(food): Sprint 35 — AddMeal split 714→422 lines into 5 sub-components
