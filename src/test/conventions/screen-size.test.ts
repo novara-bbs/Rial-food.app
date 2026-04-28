@@ -20,8 +20,6 @@ const LINE_LIMIT = 600;
  * Each entry must cite why it is deferred and its current size.
  */
 const ALLOWLIST: Record<string, { reason: string; approxLines: number }> = {
-  // BarcodeScanner — fullscreen camera + ML flow; requires camera lifecycle split
-  'food/components/BarcodeScanner.tsx': { reason: 'deferred split — camera lifecycle', approxLines: 823 },
   // AddMeal — tightly coupled to navigation; requires dedicated planning sprint
   'food/screens/AddMeal.tsx': { reason: 'deferred split — navigation coupling', approxLines: 714 },
   // RecipeDetail — composer of 7 tab components; 692 lines is acceptable
