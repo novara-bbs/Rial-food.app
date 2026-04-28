@@ -5,26 +5,28 @@
 > prunes this file back down. Everything below should answer: *what's the release line,
 > what's the quality baseline, what's the next move, what's broken?*
 
-Last updated: **2026-04-28** — `[1.5.145-147]` Sprints 29-33: scalability + visual consistency + safe-area + tooling plan complete.
+Last updated: **2026-04-28** — `[1.5.148-149]` Sprints 34-35: BarcodeScanner + AddMeal split.
 
 ## Release snapshot
-- **Branch**: `main`, **ahead of** `rial-food/main` by 8 commits (S26-S33, pending push).
-- **This session (2026-04-28, local commits S29-S33)**:
+- **Branch**: `main`, **ahead of** `rial-food/main` by 10 commits (S26-S35, pending push).
+- **This session (2026-04-28, local commits S29-S35)**:
     - **Sprint 29** `[1.5.143]` — safe-area foundation (PageShell safeArea prop, GlobalHeader pt-safe, capacitor.config, ADR-016, convention test).
     - **Sprint 30** `[1.5.144]` — Button primitive adoption (auth CTAs, ShoppingList, Cocina; 41-button allowlist baseline).
     - **Sprint 31** `[1.5.145]` — Typography sweep: legal/, food/, settings/, home/ (12 files, 6 removed from allowlist).
     - **Sprint 32** `[1.5.146]` — CreateRecipe split 1052→460 lines (5 step components + utils); 6 i18n aria-label keys; screen-size convention test.
     - **Sprint 33** `[1.5.147]` — Husky+lint-staged (pre-commit hook live); demo-seed dynamic import (main entry −4.2 KB gzip); CHANGELOG backfilled.
-- **Active plan**: scalability + base sólida plan (Sprints 29-33) **COMPLETE**. All targets met.
+    - **Sprint 34** `[1.5.148]` — BarcodeScanner split 823→378 lines; 4 sub-components in `food/components/barcode/` (BarcodeViewport, BarcodeFoundPanel, BarcodeNotFoundPanel, BarcodeCustomFoodForm).
+    - **Sprint 35** `[1.5.149]` — AddMeal split 714→422 lines; 5 sub-components in `food/components/add-meal/` (MacroBar, QuickCapture, PhotoResults, MultiBanner, FoodList). New files use `<Button>` and semantic tokens from the start — zero new allowlist debt.
+- **Active plan**: scalability + base sólida plan (Sprints 29-33) **COMPLETE**. Sprints 34-35 extended the plan into deferred splits.
 - **Release target**: `rial-food/main` (`novara-bbs/Rial-food.app`). Origin `rial-food`.
 - **Vercel project**: `rial.app.v1.5` (id `prj_t11VHYQjptazjUx7Y2hWLz0IDAjg`).
 - **Governance**: work directly on `main`. "continua" = push approval post green preflight.
 
-## Quality baseline (post-Sprint 33, 2026-04-28)
+## Quality baseline (post-Sprint 35, 2026-04-28)
 - TypeScript: **0 errors** (`npx tsc --noEmit`)
-- Tests: **1333/1333** passing (89 files)
+- Tests: **1334/1334** passing (89 files)
 - i18n symmetry: **1926** keys aligned ES ↔ EN
-- Design-system lint: **0 errors**, 381 warnings (pre-existing, allowlisted)
+- Design-system lint: **0 errors**, 367 warnings (pre-existing, allowlisted)
 - **`any` sweep** substantially complete: ~38 residual intentional any in production code — all documented. Categories: browser API workarounds (wakeLock, AudioContext, import.meta), i18n missing-key casts `(t as any)`, legacy archive format, `MealPlan = Record<number, any[]>`, pre-existing contract mismatches (eslint-disabled), migration code, untyped library (html5-qrcode).
 - `AppStateContextType` interface: **0 `any` types** (Sprint 4 ✓); `recipeToEdit: Partial<Recipe>|null` (Sprint 26 ✓)
 - **Handler + util files**: 78 `any` → 0 (Sprints 5-9); screens/components Sprints 19-28.
@@ -33,6 +35,8 @@ Last updated: **2026-04-28** — `[1.5.145-147]` Sprints 29-33: scalability + vi
 - **AppStateContext**: 1075 → 584 lines (-46%), composer of 8 domain hooks.
 - **RecipeDetail**: 1066 → 678 lines (-36%), composer of 7 detail components.
 - **CreateRecipe**: 1052 → 460 lines (-56%), 5 step components in `components/create/`.
+- **BarcodeScanner**: 823 → 378 lines (-54%), 4 sub-components in `components/barcode/`.
+- **AddMeal**: 714 → 422 lines (-41%), 5 sub-components in `components/add-meal/`.
 - **i18n locales**: 4506 → 22 domain files via codemod. 1926 keys total.
 - **Test coverage** (new artifacts): 8/8 hooks + 7/7 detail components + 3 new convention tests (safe-area, button-adoption, screen-size).
 - **Pre-commit hook**: Husky + lint-staged (ESLint on staged TS/TSX, check:i18n on locale changes).
@@ -96,6 +100,8 @@ ADR-012 typography, ADR-013 filter, ADR-014 filter panel, Phase 1 Home, Fase C (
 Scroll UX [1.5.104-107], Satoshi font [1.5.108], Food Families P0-P16,
 Sprints 5-28 (type-safety any→0 sweep across all features),
 **Sprints 29-33 [1.5.143-147]** — safe-area, Button adoption, typography sweep, CreateRecipe split, Husky+lint-staged.
+**Sprint 34 [1.5.148]** — BarcodeScanner split 823→378 lines (4 barcode sub-components).
+**Sprint 35 [1.5.149]** — AddMeal split 714→422 lines (5 add-meal sub-components); Button+token clean from day one.
 
 ## Repository compliance
 - `LICENSE`: Proprietary © 2026 RIAL FOOD WORLD S.L. Contact legal@rialfoodworld.com.
