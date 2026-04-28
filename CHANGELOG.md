@@ -1,5 +1,70 @@
 # RIAL App - Changelog
 
+## [1.5.147] - 2026-04-28
+
+### chore(tooling): Sprint 33 — Husky + lint-staged + demo-seed dynamic import
+
+- **Husky + lint-staged**: pre-commit hook runs `lint-staged` on every commit. Config in `lint-staged.config.mjs` — ESLint on staged `.ts/.tsx` files, `check:i18n` on locale changes. `prepare: husky` wired in `package.json`.
+- **demo-seed dynamic import**: `demo-seed-handlers.ts` converts static `import { buildDemoSeed }` to `await import('../data/demo-seed')` inside the async handler. Vite now code-splits demo seed into two async chunks (5.1 KB + 7.3 KB raw) excluded from the main entry. Main entry: **886.9 → 875.4 KB raw / 278.8 → 274.6 KB gzip** (−4.2 KB gzip).
+- CHANGELOG backfilled for Sprints 29–33.
+
+---
+
+## [1.5.146] - 2026-04-28
+
+### refactor(recipes): Sprint 32 — CreateRecipe split 1052→460 lines + i18n hardcodes
+
+- **CreateRecipe.tsx split** (1052 → 460 lines, −56%): extracted 4 step panels + paste-bulk sheet to `src/features/recipes/components/create/` and utility functions to `src/features/recipes/utils/create-recipe-utils.ts`. Composer retains all state and handlers.
+  - `CreateRecipeStep1Basics.tsx` — photos, name, times, difficulty, slots, source
+  - `CreateRecipeStep2Ingredients.tsx` — family-first P4 search + flat dictionary + reorder
+  - `CreateRecipeStep3Instructions.tsx` — per-step textarea + optional 16:9 photo + reorder
+  - `CreateRecipeStep4Review.tsx` — preview card, macros, tags, ingredient/step summaries
+  - `CreateRecipePasteBulkSheet.tsx` — R7.1 bulk paste sheet
+  - `create-recipe-utils.ts` — `detectTimers`, `swapped`, `cropTo16x9`, `suggestTags`
+- **i18n hardcodes fixed**: 6 new `createRecipe` keys added to ES + EN (`moveIngredientUp/Down`, `moveStepUp/Down`, `deleteStep`, `stepPhotoAlt`). Replace `locale === 'es' ? '...' : '...'` ternaries in aria-labels. i18n keys: 1917 → 1926.
+- **Convention test**: `src/test/conventions/screen-size.test.ts` — locks 600-line limit for all feature screens, allowlists 3 deferred splits (BarcodeScanner 823, AddMeal 714, RecipeDetail 692).
+
+---
+
+## [1.5.145] - 2026-04-28
+
+### refactor(typography): Sprint 31 — Typography sweep across legal/settings/food/home domains
+
+Migrates ADR-012 violations in 12 feature files to `<Heading>`/`<Text>` primitives.
+
+- **Fully clean** (removed from allowlist): `FamilyCard.tsx`, `VariantPickerSheet.tsx`, `FoodDetail.tsx`, `FoodDictionary.tsx`, `SettingsProfile.tsx`, `More.tsx`.
+- **Partially migrated** (headings done, button-label combos retained as warn): `PrivacyPolicy.tsx`, `TermsOfService.tsx`, `ShoppingList.tsx`, `SettingsAppearance.tsx`, `SettingsNutrition.tsx`, `SettingsSystem.tsx`.
+- **Domains covered**: `legal/` (h1/h2 → Heading, p micro → Text), `food/` (FoodDictionary subcategory/microhighlight h3/h4, FoodDetail h3, FamilyCard span variants/allergens, VariantPickerSheet h4), `settings/` (all Settings* h3/h4/p), `home/` (ShoppingList h2/h3, More.tsx h2/h3).
+- Convention test `food-family-card.test.ts` updated to match `<Heading data-subcategory>` pattern (Sprint 31 migration).
+
+---
+
+## [1.5.144] - 2026-04-27 (Sprint 30 — Button primitive adoption)
+
+### feat(button): Sprint 30 — Button primitive adoption baseline
+
+- **Auth CTAs**: `Login.tsx`, `Signup.tsx`, `ForgotPassword.tsx` submit buttons → `<Button type="submit" size="lg" className="w-full rounded-xl">`. Eliminates literal `py-3.5 bg-primary rounded-xl uppercase tracking-widest` triple duplication.
+- **ShoppingList.tsx**: add-item submit → `<Button>`.
+- **Cocina.tsx**: toolbar + EmptyState CTAs → `<Button size="icon">`, `<Button variant="outline" size="icon">`, `<Button variant="outline" size="lg">`, `<Button size="lg">`.
+- **Convention test** `src/test/conventions/button-adoption.test.ts`: baseline of 41 branded raw buttons across 32 files (allowlist per file). Auth screens use `<Button>`. Helper script `scripts/count-raw-buttons.mjs` for allowlist regeneration.
+
+---
+
+## [1.5.143] - 2026-04-27 (Sprint 29 — Safe-area foundation)
+
+### feat(safe-area): Sprint 29 — foundation insets via PageShell + GlobalHeader (ADR-016)
+
+Resolves notch / Dynamic Island content clipping across 33+ screens in a single change.
+
+- **`src/index.css`**: Added `@utility pt-safe`, `@utility pl-safe`, `@utility pr-safe`, `@utility pt-safe-header` utilities mapping to `env(safe-area-inset-*)`. Documents semantic vs raw usage.
+- **`PageShell.tsx`**: Added `safeArea?: 'top' | 'bottom' | 'both' | 'none'` prop (default `'bottom'`). All 33+ screens using `<PageShell>` now get bottom safe-area by default; fullscreen screens pass `safeArea="none"`.
+- **`GlobalHeader.tsx`**: Wraps sticky header content with `pt-safe` so avatar/streak clears notch on iPhone 12+. Container height is semantic (`h-16` for visible content, `pt-safe` adds inset).
+- **`capacitor.config.ts`**: `overlaysWebView: false` explicit on `StatusBar` plugin — eliminates ambiguity across iOS/Android.
+- **Convention tests** (`safe-area.test.ts`): locks `PageShell` exports `safeArea` prop, `GlobalHeader` contains `pt-safe`, `index.css` contains `@utility pt-safe`.
+- **ADR-016**: documents safe-area decision, notch handling table, and `pt-safe-header` usage.
+
+---
+
 ## [1.5.140-144] - 2026-04-27
 
 ### refactor(types): Sprints 5-9 — Handler + utility type-safety sweep (78 any → 0)

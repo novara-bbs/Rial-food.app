@@ -27,7 +27,8 @@
     "size:check": "node scripts/check-bundle-size.mjs",
     "release:preflight": "npm run lint && npm run lint:code && npm run check:i18n && npm run test && npm run build && npm run size:check",
     "release:push": "npm run release:preflight && git push rial-food main",
-    "release:push:dry": "npm run release:preflight && git push --dry-run rial-food main"
+    "release:push:dry": "npm run release:preflight && git push --dry-run rial-food main",
+    "prepare": "husky"
   },
   "dependencies": {
     "@capacitor/android": "^8.3.0",
@@ -89,7 +90,9 @@
     "eslint-plugin-react-hooks": "^5.2.0",
     "eslint-plugin-react-refresh": "^0.4.12",
     "express": "^4.21.2",
+    "husky": "^9.1.7",
     "jsdom": "^29.0.2",
+    "lint-staged": "^16.4.0",
     "rollup-plugin-visualizer": "^5.12.0",
     "sharp": "^0.34.5",
     "tailwindcss": "^4.1.14",

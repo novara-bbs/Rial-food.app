@@ -1,4 +1,6 @@
-import { buildDemoSeed } from '../data/demo-seed';
+// NOTE: demo-seed data is dynamically imported inside createHandleLoadDemoSeed
+// so Vite code-splits it out of the main bundle. The data chunk is only fetched
+// when the "Load Demo" button is actually pressed (dev-only path). [Sprint 33]
 import { ALL_SEED_KEYS, clearSeed } from '../../../lib/seedVersion';
 import type { Recipe } from '../../../types/recipe';
 import type { UserProfile } from '../../../types/user';
@@ -55,6 +57,7 @@ export interface DemoSeedSetters {
 
 export function createHandleLoadDemoSeed(setters: DemoSeedSetters) {
   return async (): Promise<void> => {
+    const { buildDemoSeed } = await import('../data/demo-seed');
     const seed = await buildDemoSeed();
     setters.setUserProfile(seed.userProfile);
     setters.setDailyMacros(seed.dailyMacros);
