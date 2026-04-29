@@ -40,8 +40,6 @@ const RAW_BUTTON_ALLOWLIST: Record<string, { count: number; reason: string }> = 
   // Inline edit-confirm circle — w-8 h-8, smaller than HIG-44 by design (sits
   // beside a tiny inline number input). Permanent allowlist entry.
   'home/components/TodaysMeals.tsx': { count: 1, reason: 'inline edit-confirm circle (w-8 h-8) — too small for HIG-44 Button (permanent)' },
-  // Discover has 1 raw `bg-primary` toggle (challenge join state) — complex variant migration deferred.
-  'social/screens/Discover.tsx': { count: 1, reason: 'conditional toggle button (joined state) — needs Button variant API extension' },
 };
 
 const RAW_BUTTON_REGEX = /<button[^>]*\bbg-(primary|brand-secondary|secondary)\b/g;

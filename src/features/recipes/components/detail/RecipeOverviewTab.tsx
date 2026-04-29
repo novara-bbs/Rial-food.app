@@ -176,7 +176,6 @@ export default function RecipeOverviewTab({
           <Heading level="h4" className="mb-3 flex items-center gap-2">
             <MessageSquare className="w-4 h-4 text-primary" /> {t.recipeDetail.notes} ({recipeComments.length})
           </Heading>
-          {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
           {recipeComments.map((comment) => (
             <div key={comment.id} className="bg-surface-container-low p-3 rounded-sm border border-outline-variant/10 mb-2">
               <div className="flex items-center gap-2 mb-1">

@@ -1,5 +1,16 @@
 # RIAL App - Changelog
 
+## [1.5.153] - 2026-04-29
+
+### refactor(lint): Sprint 39 — stale eslint-disable cleanup + Discover hashtag button
+
+- **2 stale `eslint-disable-next-line` removed**: `RecipeIngredientsTab.tsx` (above the type declaration; the real disable for `[k: string]: any` is the next line) and `RecipeOverviewTab.tsx` (above `recipeComments.map` whose type is now inferred).
+- **Discover.tsx hashtag chips**: 8 `<button>` elements (Popular Hashtags section) migrated to `<Button variant="ghost">` with the same visual styling — focus-visible now handled by the primitive's ring styles.
+- **Button adoption allowlist: 2 → 1** — only the permanent `TodaysMeals` inline edit-confirm circle (w-8 h-8, too small for HIG-44) remains. The Discover entry is gone.
+- Quality: TS 0 errors · 1334/1334 tests · lint 0 errors / 349 warnings (-12 vs S38).
+
+---
+
 ## [1.5.152] - 2026-04-28
 
 ### refactor(ui): Sprint 38 — Button adoption sweep (26 buttons, 20 files)

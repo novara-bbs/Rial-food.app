@@ -12,7 +12,6 @@ import SearchInput from '@/components/patterns/SearchInput';
 import { useI18n } from '@/i18n';
 import type { Ingredient } from '../../../../types';
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
 type DisplayedIngredient = {
   id: string;
   name: string;

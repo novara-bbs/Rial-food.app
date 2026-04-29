@@ -9,6 +9,7 @@ import { useAppState } from '../../../contexts/AppStateContext';
 import { MOCK_CREATORS } from '../data/seed-creators';
 import { getTrendingFeed } from '../utils/feed-algorithm';
 import { Heading } from '@/components/ui/Typography';
+import { Button } from '@/components/ui/button';
 
 /**
  * Discover — recommends creators, challenges, trending posts and hashtags.
@@ -265,13 +266,13 @@ export default function Discover() {
         </div>
         <div className="flex flex-wrap gap-2">
           {['mealprep', 'altaproteina', 'realfood', 'fitness', 'recetassanas', 'bulking', 'vegan', 'singluten'].map(tag => (
-            <button
+            <Button
               key={tag}
-              type="button"
-              className="bg-surface-container-highest px-3 min-h-11 rounded-sm text-micro font-bold text-on-surface-variant tracking-widest uppercase hover:bg-primary/10 hover:text-primary transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
+              variant="ghost"
+              className="bg-surface-container-highest px-3 min-h-11 rounded-sm text-micro font-bold text-on-surface-variant tracking-widest uppercase hover:bg-primary/10 hover:text-primary transition-colors"
             >
               #{tag}
-            </button>
+            </Button>
           ))}
         </div>
       </section>
