@@ -1,6 +1,7 @@
 import { CheckCircle2, XCircle, Target, ChevronDown, ChevronUp } from 'lucide-react';
 import SectionCard from '../../../components/SectionCard';
 import { Heading } from '@/components/ui/Typography';
+import { Button } from '@/components/ui/button';
 
 interface WeeklyEntry {
   workedWell: string;
@@ -111,11 +112,9 @@ export default function InlineReflection({
             />
           </div>
           <div className="flex items-center gap-3">
-            <button type="button" onClick={onSave}
-              className="flex-1 py-3 bg-primary text-on-primary rounded-sm font-headline font-semibold text-micro uppercase tracking-widest hover:opacity-90 transition-opacity"
-            >
+            <Button onClick={onSave} className="flex-1 py-3">
               {tWeekly.saveReflection || 'Guardar'}
-            </button>
+            </Button>
             <button type="button"
               onClick={onNavigateHistory}
               className="text-micro font-bold text-primary uppercase tracking-widest hover:underline"

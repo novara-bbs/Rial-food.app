@@ -1,5 +1,17 @@
 # RIAL App - Changelog
 
+## [1.5.152] - 2026-04-28
+
+### refactor(ui): Sprint 38 — Button adoption sweep (26 buttons, 20 files)
+
+- **Allowlist shrinks 28 → 2**: 26 raw `<button className="bg-primary|bg-brand-secondary">` migrated to `<Button>` primitive across 20 files. Only 2 permanent/deferred entries remain (TodaysMeals inline circle + Discover conditional toggle).
+- **Multi-button files cleared**: `Home.tsx` (Log Meal → default, Add Water → brand, Progress banner → ghost), `CookMode.tsx` (close/voice/next), `RecipeHero.tsx` (back/share/bookmark overlay icons with backdrop-blur preserved), `RecipeServingsControls.tsx` (family chip toggles), `ImportRecipeURL.tsx` (import + save CTAs).
+- **Single-button files cleared**: AICoach, DemoSeedCard, RealScoreBadge, SettingsProfile, SettingsSystem, MiseEnPlaceScreen, StickyCookCTA, Cocina, PostCard, PublishRecipeSheet, CreatorVerification (×2 buttons), BeforeAfterCompare, InlineReflection, RealFeelInline (×2 buttons), FastingTimer.
+- **Button primitive** gains Button imports in 18 additional files. Focus ring, disabled state, font tokens now enforced consistently project-wide.
+- Quality: TS 0 errors · 1334/1334 tests · size:check PASS (main 875 KB / 274.7 KB gzip).
+
+---
+
 ## [1.5.151] - 2026-04-28
 
 ### feat(taxonomy): Sprint 37 — FoodTag enum codemod fixes EN filter regression

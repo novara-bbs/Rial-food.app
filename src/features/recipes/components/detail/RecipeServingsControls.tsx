@@ -8,6 +8,7 @@
 import { Minus, Plus, Users } from 'lucide-react';
 import { useI18n } from '@/i18n';
 import type { FamilyMember } from '../../../../types/user';
+import { Button } from '@/components/ui/button';
 
 interface RecipeServingsControlsProps {
   servings: number;
@@ -70,30 +71,30 @@ export default function RecipeServingsControls({
             </span>
           </div>
           <div className="flex flex-wrap gap-2">
-            <button
-              type="button"
-              className={`min-h-11 px-2.5 py-1 rounded-sm font-label text-micro font-semibold tracking-widest uppercase border transition-all ${
+            <Button
+              variant="ghost"
+              onClick={() => setSelectedFamily([])}
+              className={`min-h-11 px-2.5 py-1 h-auto rounded-sm font-label text-micro font-semibold tracking-widest uppercase border transition-all ${
                 selectedFamily.length === 0
-                  ? 'bg-primary text-on-primary border-primary'
+                  ? 'bg-primary text-on-primary border-primary hover:bg-primary/90'
                   : 'bg-surface-container-highest text-on-surface-variant border-outline-variant/20'
               }`}
-              onClick={() => setSelectedFamily([])}
             >
               {t.recipeDetail.onlyMe}
-            </button>
+            </Button>
             {familyMembers.map((member) => (
-              <button
-                type="button"
+              <Button
                 key={member.id}
-                className={`min-h-11 px-2.5 py-1 rounded-sm font-label text-micro font-semibold tracking-widest uppercase border transition-all ${
+                variant="ghost"
+                onClick={() => toggleFamilyMember(member.id)}
+                className={`min-h-11 px-2.5 py-1 h-auto rounded-sm font-label text-micro font-semibold tracking-widest uppercase border transition-all ${
                   selectedFamily.includes(member.id)
-                    ? 'bg-primary text-on-primary border-primary'
+                    ? 'bg-primary text-on-primary border-primary hover:bg-primary/90'
                     : 'bg-surface-container-highest text-on-surface-variant border-outline-variant/20'
                 }`}
-                onClick={() => toggleFamilyMember(member.id)}
               >
                 + {member.name}
-              </button>
+              </Button>
             ))}
           </div>
           <p className="mt-2 font-label text-micro text-on-surface-variant uppercase tracking-wider">

@@ -1,4 +1,5 @@
 import { Check, Clock, ChevronRight, BadgeCheck, Utensils, Heart, Trophy, Home } from 'lucide-react';
+import { Button } from '@/components/ui/button';
 import PageShell from '../../../components/PageShell';
 import SectionCard from '../../../components/SectionCard';
 import { useState } from 'react';
@@ -144,12 +145,13 @@ export default function CreatorVerification({ onBack }: { onBack: () => void }) 
         <Heading level="h3" variant="overline" className="text-body-sm">{t.creator.selectBadge}</Heading>
         <div className="grid grid-cols-2 gap-3">
           {BADGES.map(badge => (
-            <button type="button"
+            <Button
               key={badge.id}
+              variant="ghost"
               onClick={() => setSelectedBadge(badge.id)}
-              className={`p-4 rounded-sm border-2 text-left transition-all ${
+              className={`relative p-4 rounded-sm border-2 text-left h-auto flex-col items-start transition-all ${
                 selectedBadge === badge.id
-                  ? 'border-primary bg-primary/5'
+                  ? 'border-primary bg-primary/5 hover:bg-primary/10'
                   : 'border-outline-variant/20 bg-surface-container-low hover:border-primary/40'
               }`}
             >
@@ -165,7 +167,7 @@ export default function CreatorVerification({ onBack }: { onBack: () => void }) 
                   <Check className="w-2.5 h-2.5 text-on-primary" />
                 </div>
               )}
-            </button>
+            </Button>
           ))}
         </div>
       </div>
@@ -186,14 +188,14 @@ export default function CreatorVerification({ onBack }: { onBack: () => void }) 
 
       {/* CTA */}
       <div className="space-y-3">
-        <button type="button"
+        <Button
           onClick={handleApply}
           disabled={!allMet && metCount < 2}
-          className="w-full py-4 bg-primary text-on-primary rounded-sm font-headline font-bold text-body-sm uppercase tracking-widest hover:opacity-90 transition-opacity disabled:opacity-40 flex items-center justify-center gap-2"
+          className="w-full py-4 text-body-sm gap-2"
         >
           <BadgeCheck className="w-5 h-5" />
           {allMet ? t.creator.applyVerification : `${t.creator.apply} (${metCount}/4 ${t.creator.requirementsCount})`}
-        </button>
+        </Button>
         {!allMet && (
           <p className="text-center text-micro text-on-surface-variant font-label uppercase tracking-widest">
             {t.creator.applyMinimum}

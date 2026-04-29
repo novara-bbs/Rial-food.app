@@ -13,6 +13,7 @@
 import { ArrowLeft, Share2, Bookmark, Clock } from 'lucide-react';
 import { useI18n } from '@/i18n';
 import HeroGallery from '../HeroGallery';
+import { Button } from '@/components/ui/button';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 type RecipeData = any;
@@ -57,34 +58,34 @@ export default function RecipeHero({
       />
       <div className="absolute inset-0 bg-gradient-to-t from-background via-background/40 to-transparent pointer-events-none" />
 
-      <button
-        type="button"
+      <Button
+        variant="ghost"
         onClick={onBack}
         aria-label={t.common.back}
-        className="absolute top-4 left-4 w-10 h-10 bg-surface/80 backdrop-blur-md rounded-full flex items-center justify-center text-tertiary hover:bg-primary hover:text-on-primary transition-colors z-10"
+        className="absolute top-4 left-4 w-10 h-10 bg-surface/80 backdrop-blur-md rounded-full text-tertiary hover:bg-primary hover:text-on-primary transition-colors z-10"
       >
         <ArrowLeft className="w-5 h-5" />
-      </button>
+      </Button>
 
       <div className="absolute top-4 right-4 flex gap-2 z-10">
-        <button
-          type="button"
+        <Button
+          variant="ghost"
           onClick={onSharePress}
           aria-label={t.recipeDetail.shareToFeed}
-          className="w-10 h-10 bg-surface/80 backdrop-blur-md rounded-full flex items-center justify-center text-tertiary hover:bg-primary hover:text-on-primary transition-colors"
+          className="w-10 h-10 bg-surface/80 backdrop-blur-md rounded-full text-tertiary hover:bg-primary hover:text-on-primary transition-colors"
         >
           <Share2 className="w-5 h-5" />
-        </button>
+        </Button>
         {Boolean(onSaveRecipe) && (
-          <button
-            type="button"
+          <Button
+            variant="ghost"
             onClick={onBookmarkPress}
             aria-label={t.common.save}
             aria-pressed={!!isSaved}
-            className="w-10 h-10 bg-surface/80 backdrop-blur-md rounded-full flex items-center justify-center text-tertiary hover:bg-primary hover:text-on-primary transition-colors"
+            className="w-10 h-10 bg-surface/80 backdrop-blur-md rounded-full text-tertiary hover:bg-primary hover:text-on-primary transition-colors"
           >
             <Bookmark className={`w-5 h-5 ${isSaved ? 'fill-primary text-primary' : ''}`} />
-          </button>
+          </Button>
         )}
       </div>
 

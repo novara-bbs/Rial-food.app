@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { ChefHat, X } from 'lucide-react';
+import { Button } from '@/components/ui/button';
 import { useI18n } from '../../../i18n';
 import { Z_TW } from '../../../lib/z-index';
 import IngredientCheckoff, { type CheckoffIngredient } from './IngredientCheckoff';
@@ -83,17 +84,16 @@ export default function MiseEnPlaceScreen({
       {/* Footer CTAs */}
       <div className="px-6 pb-8 pt-4 border-t border-overlay-border space-y-3 shrink-0">
         {/* Primary: Start cooking */}
-        <button
-          type="button"
+        <Button
           onClick={onStart}
-          className={`w-full min-h-12 rounded-sm font-headline text-sm font-bold uppercase tracking-widest transition-colors ${
+          className={`w-full min-h-12 text-body-sm transition-colors ${
             allChecked || ingredients.length === 0
-              ? 'bg-primary text-on-primary hover:opacity-90'
-              : 'bg-primary/60 text-on-primary/80 hover:bg-primary/70'
+              ? ''
+              : 'opacity-60 hover:opacity-70'
           }`}
         >
           {tt.startCooking}
-        </button>
+        </Button>
 
         {/* Secondary row: skip without prep + disable */}
         <div className="flex items-center justify-between">

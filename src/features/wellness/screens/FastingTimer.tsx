@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import PageShell from '../../../components/PageShell';
 import SectionCard from '../../../components/SectionCard';
 import { Play, Square, Clock, Trophy, Timer, CheckCircle2, StopCircle } from 'lucide-react';
+import { Button } from '@/components/ui/button';
 import { useI18n } from '../../../i18n';
 import { useLocalStorageState } from '../../../hooks/useLocalStorageState';
 import PageHeader from '../../../components/patterns/PageHeader';
@@ -133,16 +134,15 @@ export default function FastingTimer({ onBack }: { onBack: () => void }) {
         </div>
 
         {/* Start / Stop button */}
-        <button type="button"
+        <Button
+          variant={isFasting ? 'ghost' : 'default'}
           onClick={isFasting ? handleStop : handleStart}
-          className={`mt-6 px-10 py-4 rounded-sm font-headline text-body-sm font-bold uppercase tracking-widest flex items-center gap-3 transition-all ${
-            isFasting
-              ? 'bg-error/10 text-error border border-error/30 hover:bg-error/20'
-              : 'bg-primary text-on-primary hover:opacity-90'
+          className={`mt-6 px-10 py-4 text-body-sm gap-3 transition-all ${
+            isFasting ? 'bg-error/10 text-error border border-error/30 hover:bg-error/20' : ''
           }`}
         >
           {isFasting ? <><Square className="w-5 h-5" /> {t.fasting.stop}</> : <><Play className="w-5 h-5" /> {t.fasting.start}</>}
-        </button>
+        </Button>
       </div>
 
       {/* Stats */}

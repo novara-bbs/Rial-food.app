@@ -19,6 +19,7 @@
 import { useEffect, useRef, useState } from 'react';
 import type { RefObject } from 'react';
 import { ChefHat } from 'lucide-react';
+import { Button } from '@/components/ui/button';
 
 export interface StickyCookCTAProps {
   label: string;
@@ -55,18 +56,16 @@ export default function StickyCookCTA({
   if (hidden) return null;
 
   return (
-    <button
-      type="button"
+    <Button
       onClick={onClick}
       aria-label={label}
       className={[
         // Positioning — sits above the 56px bottom nav, 16px from right edge.
         'fixed bottom-[72px] right-4 z-50',
-        // Shape + colour
-        'flex items-center gap-2 px-5 py-3 rounded-full',
-        'bg-primary text-on-primary shadow-elev-2',
+        // Shape
+        'gap-2 px-5 py-3 rounded-full shadow-elev-2',
         // Interaction
-        'hover:opacity-90 active:scale-95 transition-all duration-150',
+        'active:scale-95 transition-all duration-150',
         // Safe-area support for iOS home-indicator
         'pb-[calc(0.75rem+env(safe-area-inset-bottom,0px))]',
         className,
@@ -75,9 +74,7 @@ export default function StickyCookCTA({
         .join(' ')}
     >
       <ChefHat className="w-4 h-4" />
-      <span className="font-headline font-bold text-sm uppercase tracking-widest">
-        {label}
-      </span>
-    </button>
+      {label}
+    </Button>
   );
 }

@@ -457,13 +457,13 @@ export default function Cocina({ onAddMeal, onCreateRecipe, onNavigateToRecipe, 
         {activeTab === 'plan' && (
           <>
             <div className="px-6 pb-3">
-              <button type="button"
+              <Button
                 onClick={handleGenerateList}
-                className="w-full flex items-center justify-center gap-2 px-4 py-3 bg-primary text-on-primary rounded-sm font-headline text-xs font-bold uppercase tracking-widest hover:opacity-90 transition-opacity"
+                className="w-full gap-2 px-4"
               >
                 <ShoppingCart className="w-4 h-4" />
                 {t.cocina.generateList}
-              </button>
+              </Button>
             </div>
             {/* Batch cooking suggestions — only shown when meal plan has ≥2 meals sharing a base ingredient */}
             <BatchCookingSuggestions mealPlan={mealPlan ?? {}} />

@@ -1,5 +1,6 @@
 import { Send, Globe } from 'lucide-react';
 import type { Recipe } from '../../../types';
+import { Button } from '@/components/ui/button';
 import { useState } from 'react';
 import { toast } from 'sonner';
 import { useI18n } from '../../../i18n';
@@ -45,13 +46,9 @@ export default function PublishRecipeSheet({ recipe, onClose }: PublishRecipeShe
       title={t.recipeDetail.shareToFeed}
       actionSlot={<Globe className="w-5 h-5 text-primary" aria-hidden="true" />}
       footer={
-        <button
-          type="button"
-          onClick={handlePublish}
-          className="w-full min-h-11 bg-primary text-on-primary rounded-sm font-headline text-caption font-bold uppercase tracking-widest flex items-center justify-center gap-2 hover:opacity-90 transition-opacity"
-        >
+        <Button onClick={handlePublish} className="w-full gap-2">
           <Send className="w-4 h-4" /> {t.recipeDetail.shareToFeed}
-        </button>
+        </Button>
       }
     >
       <div className="space-y-4 pt-2">

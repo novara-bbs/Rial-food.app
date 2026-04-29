@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { User, Users, Target, Sparkles, Plus, Trash2, Crown, Camera, Globe, FileText } from 'lucide-react';
+import { Button } from '@/components/ui/button';
 import { Switch } from '@/components/ui/switch';
 import { useI18n } from '../../../../i18n';
 import { useAppState } from '../../../../contexts/AppStateContext';
@@ -282,10 +283,9 @@ export default function SettingsProfile({ userProfile, setUserProfile, setDailyM
                 </div>
               </div>
               <div className="flex gap-2">
-                <button type="button" onClick={addFamilyMember}
-                  className="flex-1 bg-primary text-on-primary py-2 rounded-sm font-label text-xs font-bold tracking-widest uppercase">
+                <Button size="sm" onClick={addFamilyMember} className="flex-1">
                   {t.settings.saveMember}
-                </button>
+                </Button>
                 <button type="button" onClick={() => setIsAddingMember(false)}
                   className="flex-1 bg-surface-container-low text-on-surface-variant py-2 rounded-sm font-label text-xs font-bold tracking-widest uppercase border border-outline-variant/20">
                   {t.common.cancel}

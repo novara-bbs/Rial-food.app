@@ -1,5 +1,6 @@
 import { useState, useRef, useEffect } from 'react';
 import { ArrowLeft, Send, Bot, User, Sparkles, Lock, Crown, Zap, Activity, Utensils, Trash2 } from 'lucide-react';
+import { Button } from '@/components/ui/button';
 import SectionCard from '../../../components/SectionCard';
 import ReactMarkdown from 'react-markdown';
 import { useI18n } from '../../../i18n';
@@ -104,12 +105,12 @@ export default function AICoach({
           </div>
           <Heading level="h3">{t.aiCoach.proRequired}</Heading>
           <p className="text-on-surface-variant max-w-md">{t.aiCoach.proMessage}</p>
-          <button type="button"
+          <Button
             onClick={onBack}
-            className="px-8 py-4 bg-primary text-on-primary rounded-sm font-headline text-body-lg font-bold uppercase tracking-widest hover:bg-primary/90 transition-colors flex items-center gap-2"
+            className="px-8 py-4 gap-2 text-title-sm"
           >
             <Crown className="w-5 h-5" /> {t.aiCoach.upgradePrompt}
-          </button>
+          </Button>
         </div>
       </div>
     );

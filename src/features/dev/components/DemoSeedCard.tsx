@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { Sparkles, Trash2, Loader2 } from 'lucide-react';
+import { Button } from '@/components/ui/button';
 import { toast } from 'sonner';
 import { useAppState } from '../../../contexts/AppStateContext';
 import { Heading } from '@/components/ui/Typography';
@@ -66,15 +67,16 @@ export default function DemoSeedCard({ forceVisible = false }: DemoSeedCardProps
       </div>
 
       <div className="grid grid-cols-2 gap-2 pt-1">
-        <button
-          type="button"
+        <Button
+          variant="brand"
+          size="sm"
           onClick={onLoad}
           disabled={busy !== null}
-          className="flex items-center justify-center gap-2 bg-brand-secondary text-on-primary px-3 py-2 rounded-sm text-micro font-bold uppercase tracking-widest hover:opacity-90 transition-opacity disabled:opacity-40"
+          className="w-full gap-2"
         >
           {busy === 'load' ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Sparkles className="w-3.5 h-3.5" />}
           Cargar demo
-        </button>
+        </Button>
         <button
           type="button"
           onClick={onClear}

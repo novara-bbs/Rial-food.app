@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
 import { X, ChevronLeft, ChevronRight, UtensilsCrossed, Clock, Volume2, VolumeX } from 'lucide-react';
+import { Button } from '@/components/ui/button';
 import { useI18n } from '../../../i18n';
 import { Z_TW } from '../../../lib/z-index';
 import CookTimer from './CookTimer';
@@ -158,15 +159,14 @@ export default function CookMode({
       >
         <UtensilsCrossed className="w-10 h-10 text-on-overlay/40 mb-4" aria-hidden="true" />
         <p className="font-body text-base max-w-sm leading-relaxed">{t.recipeDetail.cookModeNoSteps}</p>
-        <button
+        <Button
           ref={closeButtonRef}
-          type="button"
           onClick={onClose}
           autoFocus
-          className="mt-6 min-h-11 px-6 bg-primary text-on-primary rounded-sm font-headline text-xs font-bold uppercase tracking-widest hover:opacity-90 transition-opacity focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/50"
+          className="mt-6 px-6"
         >
           {t.recipeDetail.cookModeClose}
-        </button>
+        </Button>
       </div>
     );
   }
@@ -201,9 +201,11 @@ export default function CookMode({
         <div className="flex items-center gap-2">
           {/* Voice read-aloud button */}
           {voiceSupported && (
-            <button type="button"
+            <Button
+              variant="ghost"
+              size="icon-sm"
               onClick={handleVoiceToggle}
-              className={`p-2 rounded-full transition-colors ${
+              className={`rounded-full transition-colors ${
                 isSpeaking
                   ? 'bg-primary/30 text-primary hover:bg-primary/40'
                   : 'bg-on-overlay/10 hover:bg-on-overlay/20'
@@ -213,7 +215,7 @@ export default function CookMode({
               {isSpeaking
                 ? <VolumeX className="w-4 h-4 text-primary" />
                 : <Volume2 className="w-4 h-4" />}
-            </button>
+            </Button>
           )}
 
           {/* Global ingredients overlay button */}
@@ -323,13 +325,13 @@ export default function CookMode({
         <span className="text-on-overlay/50 font-mono text-sm">{current + 1}/{total}</span>
 
         {current < total - 1 ? (
-          <button type="button"
+          <Button
             onClick={goNext}
-            className="flex items-center gap-1 px-5 py-3 bg-primary text-on-primary rounded-sm font-headline text-xs font-bold uppercase tracking-widest hover:opacity-90 transition-colors"
+            className="gap-1 px-5"
           >
             {t.common.next}
             <ChevronRight className="w-4 h-4" />
-          </button>
+          </Button>
         ) : (
           <button type="button"
             onClick={onClose}

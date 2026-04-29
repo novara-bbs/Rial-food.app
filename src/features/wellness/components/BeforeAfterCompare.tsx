@@ -18,6 +18,7 @@
  */
 import { useEffect, useMemo, useState } from 'react';
 import { ArrowLeft, ArrowLeftRight, Camera, Share2, X } from 'lucide-react';
+import { Button } from '@/components/ui/button';
 import SectionCard from '../../../components/SectionCard';
 import { bodyWeightFromKg, getBodyWeightUnit, type UnitSystem } from '../../food/utils/units';
 import type { BodySnapshot } from '../../../types/wellness';
@@ -147,14 +148,13 @@ export default function BeforeAfterCompare({
           {copy.notEnough ?? 'Necesitas al menos 2 fotos para comparar.'}
         </p>
         {onLogSnapshot && (
-          <button
-            type="button"
+          <Button
             onClick={onLogSnapshot}
-            className="mx-auto inline-flex items-center gap-2 px-4 py-2.5 rounded-full bg-primary text-on-primary text-micro font-semibold uppercase tracking-widest min-h-11 hover:bg-primary/90"
+            className="mx-auto gap-2 px-4 rounded-full"
           >
             <Camera className="w-4 h-4" aria-hidden="true" />
             {copy.notEnoughCta ?? 'Registrar foto'}
-          </button>
+          </Button>
         )}
       </SectionCard>
     );

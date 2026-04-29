@@ -162,10 +162,13 @@ export default function SettingsSystem({ showAIBot, setShowAIBot }: Props) {
       {/* Data Export */}
       <div className="bg-surface-container-low rounded-sm border border-outline-variant/20 p-5 space-y-4">
         <Heading level="h3" variant="overline">{t.settings.dataSection}</Heading>
-        <button type="button" onClick={exportCSV}
-          className="w-full py-3 bg-surface-container-highest rounded-sm font-headline text-xs font-bold uppercase tracking-widest text-tertiary hover:bg-primary/10 hover:text-primary transition-colors flex items-center justify-center gap-2">
+        <Button
+          variant="ghost"
+          onClick={exportCSV}
+          className="w-full py-3 bg-surface-container-highest rounded-sm text-tertiary hover:bg-primary/10 hover:text-primary gap-2"
+        >
           <Download className="w-4 h-4" aria-hidden="true" /> {t.settings.exportCSV}
-        </button>
+        </Button>
         <button type="button"
           onClick={async () => {
             try {

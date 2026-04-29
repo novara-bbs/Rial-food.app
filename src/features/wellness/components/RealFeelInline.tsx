@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { X, Zap, Leaf, Brain } from 'lucide-react';
+import { Button } from '@/components/ui/button';
 import { useI18n } from '../../../i18n';
 import { Heading } from '@/components/ui/Typography';
 import type { RealFeelEntry, EnergySignal, DigestionSignal, MindsetSignal } from '../../../types/wellness';
@@ -97,12 +98,13 @@ export default function RealFeelInline({ onSubmit, onDismiss }: {
       {/* Emoji selector */}
       <div className="flex justify-between gap-2 mb-4">
         {EMOJIS.map(e => (
-          <button type="button"
+          <Button
             key={e.level}
+            variant="ghost"
             onClick={() => setSelectedLevel(e.level)}
-            className={`flex-1 flex flex-col items-center gap-1.5 py-3 rounded-sm border transition-all ${
+            className={`flex-1 flex-col gap-1.5 py-3 h-auto rounded-sm border transition-all ${
               selectedLevel === e.level
-                ? 'border-primary bg-primary/10 scale-110'
+                ? 'border-primary bg-primary/10 scale-110 hover:bg-primary/15'
                 : 'border-outline-variant/20 bg-surface-container hover:border-primary/50'
             }`}
           >
@@ -110,7 +112,7 @@ export default function RealFeelInline({ onSubmit, onDismiss }: {
             <span className="text-micro font-label uppercase tracking-wider text-on-surface-variant">
               {(t.realFeel.levels as Record<string, string>)[e.key]}
             </span>
-          </button>
+          </Button>
         ))}
       </div>
 
@@ -176,12 +178,9 @@ export default function RealFeelInline({ onSubmit, onDismiss }: {
             })}
           </div>
 
-          <button type="button"
-            onClick={handleSubmit}
-            className="w-full py-3 bg-primary text-on-primary rounded-sm font-headline text-micro font-semibold uppercase tracking-widest hover:opacity-90 transition-opacity"
-          >
+          <Button onClick={handleSubmit} className="w-full py-3">
             ✓ {t.common.done}
-          </button>
+          </Button>
         </div>
       )}
     </div>

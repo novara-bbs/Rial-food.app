@@ -5,17 +5,18 @@
 > prunes this file back down. Everything below should answer: *what's the release line,
 > what's the quality baseline, what's the next move, what's broken?*
 
-Last updated: **2026-04-28** — `[1.5.150-151]` Sprints 36-37: Button adoption sweep + FoodTag enum codemod.
+Last updated: **2026-04-28** — `[1.5.152]` Sprint 38: Button adoption sweep — allowlist 28 → 2.
 
 ## Release snapshot
-- **Branch**: `main`, ahead of `rial-food/main` by 3 commits (S36, S37, CHANGELOG-S36-37). Previous batch S29-S35 + CHANGELOG-S34-35 already pushed (CI green).
-- **This session (2026-04-28, local commits S29-S37)**:
+- **Branch**: `main`, ahead of `rial-food/main` by 4 commits (S36-38 + CHANGELOG-S36-37). Previous batch S29-S35 already pushed (CI green).
+- **This session (2026-04-28, local commits S29-S38)**:
     - **Sprints 29-33** `[1.5.143-147]` — safe-area foundation, Button adoption baseline, typography sweep, CreateRecipe split, Husky+lint-staged + demo-seed code-split.
     - **Sprint 34** `[1.5.148]` — BarcodeScanner split 823→378 lines (4 sub-components).
     - **Sprint 35** `[1.5.149]` — AddMeal split 714→422 lines (5 sub-components, zero new allowlist debt).
     - **Sprint 36** `[1.5.150]` — Button adoption sweep: 11 raw branded buttons across 9 files migrated (legal, planner, profile, social). Allowlist 39→28.
     - **Sprint 37** `[1.5.151]` — FoodTag enum codemod: replaces ad-hoc ES literals with typed union; **fixes EN filter regression**. 11 enum values + 22 i18n labels + 46 seed recipes + 6 handler sites + 5 filter sites.
-- **Active plan**: "Base sólida fase II" (Sprints 36-37 of post-29-33 continuation). Next candidate: typography sweep recipes/+home/ (paused per owner mandate) or further button adoption.
+    - **Sprint 38** `[1.5.152]` — Button adoption sweep: 26 raw branded buttons across 20 files migrated. **Allowlist 28 → 2** (TodaysMeals permanent + Discover deferred).
+- **Active plan**: "Base sólida fase II" complete. Next candidate: typography sweep recipes/+home/ (paused per owner mandate).
 - **Release target**: `rial-food/main` (`novara-bbs/Rial-food.app`). Origin `rial-food`.
 - **Vercel project**: `rial.app.v1.5` (id `prj_t11VHYQjptazjUx7Y2hWLz0IDAjg`).
 - **Governance**: work directly on `main`. "continua" = push approval post green preflight.
@@ -25,7 +26,7 @@ Last updated: **2026-04-28** — `[1.5.150-151]` Sprints 36-37: Button adoption 
 - Tests: **1334/1334** passing (89 files)
 - i18n symmetry: **1937** keys aligned ES ↔ EN (+11 recipeTags from S37)
 - Design-system lint: **0 errors**, 361 warnings (pre-existing, allowlisted)
-- Raw branded `<button>` count: **39 → 28** (S36, allowlist shrunk by 11)
+- Raw branded `<button>` count: **39 → 28 → 2** (S36+S38; only TodaysMeals permanent + Discover deferred)
 - `Recipe.tag` typed: **`string` → `FoodTag`** (S37, fixes EN filter regression)
 - **`any` sweep** substantially complete: ~38 residual intentional any in production code — all documented. Categories: browser API workarounds (wakeLock, AudioContext, import.meta), i18n missing-key casts `(t as any)`, legacy archive format, `MealPlan = Record<number, any[]>`, pre-existing contract mismatches (eslint-disabled), migration code, untyped library (html5-qrcode).
 - `AppStateContextType` interface: **0 `any` types** (Sprint 4 ✓); `recipeToEdit: Partial<Recipe>|null` (Sprint 26 ✓)
@@ -104,6 +105,7 @@ Sprints 5-28 (type-safety any→0 sweep across all features),
 **Sprint 35 [1.5.149]** — AddMeal split 714→422 lines (5 add-meal sub-components); Button+token clean from day one.
 **Sprint 36 [1.5.150]** — Button adoption sweep: 11 raw branded buttons migrated; allowlist 39→28.
 **Sprint 37 [1.5.151]** — FoodTag enum codemod: `Recipe.tag: string` → typed `FoodTag` union; fixes EN filter regression.
+**Sprint 38 [1.5.152]** — Button adoption sweep: 26 raw branded buttons migrated; allowlist 28→2 (effectively complete).
 
 ## Repository compliance
 - `LICENSE`: Proprietary © 2026 RIAL FOOD WORLD S.L. Contact legal@rialfoodworld.com.

@@ -2,6 +2,7 @@ import { Plus, CheckCircle2, Droplets, Sparkles, ShoppingCart, ChevronRight, Bar
 import PageShell from '../../../components/PageShell';
 import SectionCard from '../../../components/SectionCard';
 import { Heading } from '@/components/ui/Typography';
+import { Button } from '@/components/ui/button';
 import { useState, useEffect, useRef, useMemo, useCallback } from 'react';
 import RealFeelInline from '../../wellness/components/RealFeelInline';
 import NutritionHero from '../components/NutritionHero';
@@ -362,14 +363,13 @@ export default function Home({
       />
 
       {/* 6. Primary Action — single Log Meal button (Check-in collapsed into FAB). */}
-      <button
-        type="button"
+      <Button
         onClick={onAddMeal}
-        className="w-full bg-primary text-on-primary p-4 rounded-sm flex items-center justify-center gap-3 hover:bg-primary/90 transition-all shadow-elev-3 shadow-primary/10 group min-h-11"
+        className="w-full p-4 gap-3 shadow-elev-3 shadow-primary/10 group"
       >
         <Plus className="w-5 h-5 group-hover:scale-110 transition-transform" />
-        <span className="font-headline font-bold text-xs uppercase tracking-widest">{t.fab.logMeal}</span>
-      </button>
+        {t.fab.logMeal}
+      </Button>
 
       {/* 6b. Quick Actions — repeat yesterday (only when no meals logged today) */}
       {dailyLog.length === 0 && yesterdayData && (
@@ -403,14 +403,15 @@ export default function Home({
             >
               {isEditingHydration ? t.home.close : t.home.edit}
             </button>
-            <button
-              type="button"
+            <Button
+              variant="brand"
+              size="icon"
               onClick={handleAddWater}
-              className="w-11 h-11 bg-brand-secondary text-on-secondary rounded-full flex items-center justify-center hover:opacity-90 transition-all active:scale-95 shadow-elev-3 shadow-secondary/20 shrink-0"
+              className="rounded-full shadow-elev-3 shadow-secondary/20 active:scale-95 shrink-0"
               aria-label={t.home.addWater ?? 'Add water'}
             >
               <Plus className="w-4 h-4" />
-            </button>
+            </Button>
           </div>
         </div>
         {isEditingHydration && (
@@ -508,10 +509,10 @@ export default function Home({
 
       {/* 13. Progress deep-link banner — advanced only, visible when history exists */}
       {!isSimpleMode && onNavigateToProgress && nutritionHistory.length > 0 && (
-        <button
-          type="button"
+        <Button
+          variant="ghost"
           onClick={onNavigateToProgress}
-          className="w-full bg-primary/5 border border-primary/20 p-4 rounded-sm flex items-center gap-4 hover:bg-primary/10 transition-colors text-left min-h-11"
+          className="w-full p-4 gap-4 text-left h-auto bg-primary/5 border border-primary/20 hover:bg-primary/10"
         >
           <div className="w-10 h-10 bg-primary/10 rounded-full flex items-center justify-center shrink-0">
             <BarChart3 className="w-5 h-5 text-primary" />
@@ -521,7 +522,7 @@ export default function Home({
             <p className="text-caption text-on-surface-variant mt-0.5 leading-relaxed">{t.progress.desc}</p>
           </div>
           <ChevronRight className="w-4 h-4 text-primary shrink-0" />
-        </button>
+        </Button>
       )}
 
       {/* 14. Activity — advanced only */}

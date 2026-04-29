@@ -11,6 +11,7 @@ import { GEMINI_API_KEY, SUPABASE_URL } from '../../../config/env';
 import { enhanceIngredients, EnhancedIngredient, RecipeIntelligenceResult } from '../utils/recipe-intelligence';
 import MealSlotMultiSelect from '../../food/components/MealSlotMultiSelect';
 import type { Recipe, MealSlot } from '../../../types';
+import { Button } from '@/components/ui/button';
 
 /** Shape of the AI-extracted recipe before it is converted to a full Recipe. */
 interface ExtractedRecipeData {
@@ -252,17 +253,17 @@ export default function ImportRecipeURL({
             </div>
           )}
 
-          <button type="button"
+          <Button
             onClick={handleImport}
             disabled={!url.trim() || loading}
-            className="w-full py-4 bg-primary text-on-primary rounded-sm font-headline text-sm font-bold uppercase tracking-widest hover:opacity-90 transition-opacity disabled:opacity-50 flex items-center justify-center gap-3"
+            className="w-full py-4 gap-3"
           >
             {loading ? (
               <><Loader2 className="w-5 h-5 animate-spin" /> {t.importUrl.importing}</>
             ) : (
               t.importUrl.importButton
             )}
-          </button>
+          </Button>
         </div>
       ) : (
         <div className="space-y-6">
@@ -405,12 +406,12 @@ export default function ImportRecipeURL({
             <button type="button" onClick={() => setExtracted(null)} className="flex-1 py-4 border border-outline-variant/30 text-on-surface-variant rounded-sm font-headline text-sm font-bold uppercase tracking-widest hover:border-primary/50 transition-colors">
               {t.common.edit}
             </button>
-            <button type="button"
+            <Button
               onClick={handleSave}
-              className="flex-1 py-4 bg-primary text-on-primary rounded-sm font-headline text-sm font-bold uppercase tracking-widest hover:opacity-90 transition-opacity"
+              className="flex-1 py-4"
             >
               {t.importUrl.saveToRecipes}
-            </button>
+            </Button>
           </div>
         </div>
       )}

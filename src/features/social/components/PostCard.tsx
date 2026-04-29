@@ -1,5 +1,6 @@
 import { Flame, MessageSquare, Share2, Bookmark, Activity, TrendingUp, Send, Trash2 } from 'lucide-react';
 import { useState } from 'react';
+import { Button } from '@/components/ui/button';
 import { useI18n } from '../../../i18n';
 import type { CommunityPost } from '../../../types/social';
 import type { UnitSystem } from '../../food/utils/units';
@@ -232,14 +233,14 @@ export default function PostCard({
               className="flex-1 bg-surface-container-highest border border-outline-variant/30 min-h-11 px-3 text-caption font-label tracking-widest focus:outline-none focus:border-primary uppercase rounded-sm text-tertiary placeholder:text-on-surface-variant/50"
               onKeyDown={(e) => e.key === 'Enter' && submitComment()}
             />
-            <button type="button"
+            <Button
+              size="icon"
               onClick={submitComment}
               disabled={!commentText.trim()}
               aria-label={t.common.send || t.common.publish}
-              className="w-11 h-11 rounded-sm bg-primary text-on-primary flex items-center justify-center disabled:opacity-50 disabled:cursor-not-allowed"
             >
               <Send className="w-4 h-4" />
-            </button>
+            </Button>
           </div>
         </div>
       )}
