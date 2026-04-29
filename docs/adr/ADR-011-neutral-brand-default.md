@@ -51,3 +51,64 @@ Owner decision (captured in the session `[1.5.53]` plan, confirmed via AskUserQu
 The "Recomendada" / "Recommended" badge is rendered as a pill using `--primary` as background + `--on-primary` (or palette swatch `bg`) as foreground — meaning it re-paints correctly across all 4 × 2 modes, including the 3 non-brand palettes where the badge appears on the NEUTRAL *tile* inside a picker whose container uses that palette's tokens. The pill is deliberately small (`text-micro tracking-widest uppercase`) so it reads as informative, not promotional.
 
 This ADR does **not** re-open the question of whether the 4 palettes should consolidate into 1. Owner directive 2026-04-17 (captured in `docs/ai/state.md`): 4 paletas completas, no consolidamos. ADR-011 formalizes the *narrative hierarchy* within those 4, not the *count*.
+
+## Addendum — `[1.5.154]` Sprint 40 (2026-04-29): tone refresh, Bevel × Whoop
+
+The original `[1.5.53]` decision kept NEUTRAL light at `--background #fafaf9` (Stone 50, near-white) + `--surface-container-low #f1f0ec` as `--card`. In practice this read as **white background + gray cards** — the inverse of the Bevel pattern the brand aspires to. NEUTRAL dark used warm Zinc-derived tones (`--background #0a0a0b` + `--surface #18181b` Zinc 900), less differentiated from EMBER dark and softer than Whoop-style cool desaturated darks.
+
+Owner direct feedback 2026-04-29: "el actual no me gusta — el light usa ahora blanco de fondo y gris en secciones y me gusta más al revés y otros tonos como Bevel; el dark me gustan más los tonos de Whoop (NO full black)".
+
+**Decision** — refine the NEUTRAL palette tones in place (no new palette, no new ADR; this is the same brand decision tuned to match the original Bevel-inspiration aim more faithfully):
+
+### NEUTRAL LIGHT (Bevel-style inversion)
+
+| Token | Pre-S40 | S40 | Why |
+|---|---|---|---|
+| `--background` | `#fafaf9` | **`#eae7e0`** | Warm gray ~91% L. The page becomes a "lienzo gris" instead of an off-white sheet. |
+| `--surface` | `#ffffff` | `#ffffff` | Cards stay white — Bevel-style lift on warm gray. |
+| `--surface-container-lowest` | (not set) | **`#ffffff`** | Explicit, parity with dark. |
+| `--surface-container-low` *(= `--card`)* | `#f1f0ec` | **`#f7f4ed`** | Off-white near surface. Shadcn cards stop reading as gray. |
+| `--surface-container` *(= `--muted`)* | `#e5e4df` | **`#ece9e1`** | Matches the new bg. |
+| `--surface-container-high` | `#d5d4cd` | **`#ddd9cf`** | |
+| `--surface-container-highest` | `#a8a59d` | **`#b8b3a7`** | |
+| `--outline` | `#d6d3cb` | **`#d5d1c5`** | |
+| `--outline-variant` | `#e7e5dc` | **`#e2ded4`** | |
+| `--chart-grid` | `#e7e5dc` | **`#e2ded4`** | Match outline-variant. |
+| `--on-surface-variant` | `#44403c` | `#44403c` | Unchanged. **AAA contrast 7.66:1** over new `#eae7e0`. |
+
+`--primary`, `--brand-secondary`, `--macro-*`, `--error` unchanged.
+
+### NEUTRAL DARK (Whoop-style cool desaturated, NOT full black)
+
+| Token | Pre-S40 | S40 | Why |
+|---|---|---|---|
+| `--background` | `#0a0a0b` (warm) | **`#0e1014`** | Cool dark with leve undertone azul (~225° hue, ~10% sat). NOT black. |
+| `--surface` | `#18181b` (Zinc 900) | **`#1a1c20`** | Lifted card matching cool tone. |
+| `--surface-container-lowest` | `#0f0f11` | **`#0a0c10`** | Sunken inputs, deeper than bg. |
+| `--surface-container-low` *(= `--card`)* | `#1c1c1f` | **`#16181c`** | Shadcn cards (+4 pts vs surface). |
+| `--surface-container` *(= `--muted`)* | `#27272a` | **`#212328`** | |
+| `--surface-container-high` *(= `--accent`)* | `#3f3f46` | **`#2d2f34`** | Ladder comprimida — coherente con Whoop. |
+| `--surface-container-highest` *(= `--secondary`)* | `#52525b` | **`#3a3d43`** | |
+| `--outline` | `#3f3f46` | **`#2d2f34`** | |
+| `--outline-variant` *(= `--border`)* | `#27272a` | **`#232529`** | |
+| `--on-surface-variant` | `#a1a1aa` (warm) | **`#a8aaae`** (cool) | **AAA contrast 8.27:1** over new `#0e1014`. |
+| `--chart-grid` | `#27272a` | **`#212328`** | |
+| `--chart-text` | `#71717a` | **`#787a80`** | |
+| `--primary-container` | `#27272a` | **`#212328`** | Match container scale. |
+
+`--primary`, `--brand-secondary`, `--macro-*`, `--error` unchanged.
+
+### Guardrail update
+
+`src/test/conventions/theme-palettes.test.ts` locks were refreshed:
+- DARK: `--background #0e1014`, `--surface-container-low #16181c`, `--surface-container-lowest #0a0c10`.
+- LIGHT: `--background #eae7e0`, `--surface #ffffff` (added).
+- Untouched: 4 palettes × 2 modes class set, `:root` aliases volt-dark, primary `#09090b`, brand-secondary `#059669`, chart-text `#78716c`.
+
+### PWA chrome
+
+`index.html` `<meta name="theme-color">` split into `prefers-color-scheme: light` (`#eae7e0`) + `dark` (`#0e1014`) media variants. Previous single hardcoded `#09090b` is replaced.
+
+### Out of scope (deliberate, owner directive)
+
+VOLT / OCEAN / EMBER palettes — untouched. Tokens de marca / acento / macro / error — untouched. The `docs/DESIGN-SYSTEM.md` § 7 legacy `theme-light` notes (pre-multi-palette) remain as-is, separate cleanup.

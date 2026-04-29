@@ -5,12 +5,14 @@
 > prunes this file back down. Everything below should answer: *what's the release line,
 > what's the quality baseline, what's the next move, what's broken?*
 
-Last updated: **2026-04-29** — `[1.5.153]` Sprint 39: stale eslint-disable cleanup + Discover button → allowlist 2 → 1.
+Last updated: **2026-04-29** — `[1.5.155]` Sprint 41: subtle BG gradient (Bevel×Whoop half-intensity) + palette maintenance DX (test slim + DESIGN-SYSTEM.md de-dup).
 
 ## Release snapshot
-- **Branch**: `main`, synced with `rial-food/main` (CI green S38; S39 queued).
-- **This session (2026-04-29, S39)**:
-    - **Sprint 39** `[1.5.153]` — lint hygiene: removed 2 stale `eslint-disable-next-line` (RecipeIngredientsTab + RecipeOverviewTab); migrated Discover.tsx hashtag `<button>` to `<Button variant="ghost">`. **Allowlist 2 → 1** (TodaysMeals only, permanent).
+- **Branch**: `main`, synced with `rial-food/main` (CI green S39; S40+S41 queued).
+- **This session (2026-04-29, S40–S41)**:
+    - **Sprint 41** `[1.5.155]` — BG gradient sutil: `body { background-image: linear-gradient(--surface-container-low → --background) }`. Funciona en 8 temas sin código por-tema. DX: test slim a 3 locks (brand+a11y); DESIGN-SYSTEM.md §2 hex table → pointer a index.css.
+    - **Sprint 40** `[1.5.154]` — paleta neutral repintada: light Bevel-style (`#eae7e0` bg + `#ffffff` surface), dark Whoop-style (`#0e1014` cool, ladder comprimida). AAA. meta theme-color split.
+- **Sprint 39 (previo, 2026-04-29)**: `[1.5.153]` lint hygiene: 2 stale `eslint-disable-next-line` removidos + Discover hashtag `<button>` → `<Button variant="ghost">`. Allowlist 2 → 1.
 - **Active plan**: "Base sólida fase II" complete. Next candidate: typography sweep recipes/+home/ (paused per owner mandate).
 - **Release target**: `rial-food/main` (`novara-bbs/Rial-food.app`). Origin `rial-food`.
 - **Vercel project**: `rial.app.v1.5` (id `prj_t11VHYQjptazjUx7Y2hWLz0IDAjg`).
@@ -18,7 +20,7 @@ Last updated: **2026-04-29** — `[1.5.153]` Sprint 39: stale eslint-disable cle
 
 ## Quality baseline (post-Sprint 37, 2026-04-28)
 - TypeScript: **0 errors** (`npx tsc --noEmit`)
-- Tests: **1334/1334** passing (89 files)
+- Tests: **1332/1332** passing (89 files)
 - i18n symmetry: **1937** keys aligned ES ↔ EN (+11 recipeTags from S37)
 - Design-system lint: **0 errors**, 361 warnings (pre-existing, allowlisted)
 - Raw branded `<button>` count: **39 → 28 → 2 → 1** (S36+S38+S39; only TodaysMeals permanent — Discover migrated)
@@ -102,6 +104,8 @@ Sprints 5-28 (type-safety any→0 sweep across all features),
 **Sprint 37 [1.5.151]** — FoodTag enum codemod: `Recipe.tag: string` → typed `FoodTag` union; fixes EN filter regression.
 **Sprint 38 [1.5.152]** — Button adoption sweep: 26 raw branded buttons migrated; allowlist 28→2 (effectively complete).
 **Sprint 39 [1.5.153]** — Lint hygiene: 2 stale eslint-disable removed; Discover hashtag `<button>` → `<Button variant="ghost">`; allowlist 2→1 (TodaysMeals only).
+**Sprint 40 [1.5.154]** — Paleta neutral refresh: light invertido a Bevel-style (warm gray bg `#eae7e0` + white cards, sunken `#f7f4ed`); dark a Whoop-style cool desaturado (`#0e1014`, NOT full black; cards `#1a1c20` / `#16181c`; ladder comprimida). AAA preservado.
+**Sprint 41 [1.5.155]** — BG gradient sutil (Bevel×Whoop half-intensity, 1 CSS rule, 8 temas automático). DX: test slim 8→3 locks; DESIGN-SYSTEM.md §2 hex table eliminada; tests: 1334→1332 (−2 net).
 
 ## Repository compliance
 - `LICENSE`: Proprietary © 2026 RIAL FOOD WORLD S.L. Contact legal@rialfoodworld.com.

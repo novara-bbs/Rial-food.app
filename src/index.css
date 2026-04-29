@@ -553,33 +553,33 @@
     --sidebar-border: var(--outline-variant);
   }
 
-  /* --- NEUTRAL (Dark — Bevel-inspired warm neutral) --- */
+  /* --- NEUTRAL (Dark — Whoop-inspired cool desaturated neutral, NOT full black) --- */
   .theme-neutral-dark {
-    --background: #0a0a0b; /* Warm near-black, between zinc-950 and stone-950 */
+    --background: #0e1014; /* Cool dark gris frío, leve undertone azul (~225° hue, ~10% sat) — NO black (ADR-011) */
     --on-background: #fafafa;
-    --surface: #18181b; /* Zinc 900 — lifts cards off the background */
+    --surface: #1a1c20; /* Lifted cards con misma temperatura — match Whoop card lift */
     --on-surface: #fafafa;
-    --surface-container-lowest: #0f0f11; /* Depth-below-background for hundido inputs (ADR-011) */
-    --surface-container-low: #1c1c1f; /* +4pts luminosity vs surface for real lift (ADR-011) */
-    --surface-container: #27272a; /* Zinc 800 */
-    --surface-container-high: #3f3f46; /* Zinc 700 */
-    --surface-container-highest: #52525b; /* Zinc 600 */
-    --on-surface-variant: #a1a1aa; /* Zinc 400 */
+    --surface-container-lowest: #0a0c10; /* Sunken inputs, más oscuro que bg (ADR-011) */
+    --surface-container-low: #16181c; /* +4pts luminosity vs surface — cards shadcn (ADR-011) */
+    --surface-container: #212328; /* Muted fills */
+    --surface-container-high: #2d2f34; /* Step profundo — ladder comprimida coherente con Whoop */
+    --surface-container-highest: #3a3d43; /* Highest tonal step */
+    --on-surface-variant: #a8aaae; /* Cool muted gray — AAA 8.27:1 sobre #0e1014 */
     --primary: #fafafa; /* Warm off-white — CTAs, rings */
     --on-primary: #09090b;
-    --primary-container: #27272a;
+    --primary-container: #212328;
     --on-primary-container: #fafafa;
-    --brand-secondary: #10b981; /* Emerald — Bevel "activo" signal */
+    --brand-secondary: #10b981; /* Emerald — "activo" signal */
     --on-brand-secondary: #09090b;
     --tertiary: #fafafa;
     --on-tertiary: #09090b;
     --error: #ef4444;
     --on-error: #ffffff;
-    --outline: #3f3f46;
-    --outline-variant: #27272a;
+    --outline: #2d2f34;
+    --outline-variant: #232529;
 
-    --chart-grid: #27272a;
-    --chart-text: #71717a;
+    --chart-grid: #212328;
+    --chart-text: #787a80;
     --chart-recovery: #10b981;
     --chart-strain: #ef4444;
 
@@ -616,32 +616,33 @@
     --sidebar-border: var(--outline-variant);
   }
 
-  /* --- NEUTRAL (Light — Bevel-inspired warm neutral) --- */
+  /* --- NEUTRAL (Light — Bevel-inspired: warm gray BG + white cards, ADR-011 refresh) --- */
   .theme-neutral-light {
-    --background: #fafaf9; /* Stone 50 warm — not pure white */
+    --background: #eae7e0; /* Warm light gray (~91% L) — el "lienzo gris" estilo Bevel, NO casi-blanco */
     --on-background: #09090b;
-    --surface: #ffffff; /* Cards lift above warm background via shadow */
+    --surface: #ffffff; /* Cards lift sobre fondo gris — Bevel pattern */
     --on-surface: #09090b;
-    --surface-container-low: #f1f0ec; /* warm Stone 100 — ~5% delta vs bg */
-    --surface-container: #e5e4df; /* warm Stone 200 */
-    --surface-container-high: #d5d4cd; /* warm Stone 300 */
-    --surface-container-highest: #a8a59d; /* warm Stone 400 */
-    --on-surface-variant: #44403c; /* Stone 700 warm — 8.9:1 AAA on #fafaf9, temp-match (ADR-011) */
+    --surface-container-lowest: #ffffff; /* Inputs/sunken pure white — explícito por consistencia con dark */
+    --surface-container-low: #f7f4ed; /* Off-white cálido — cards shadcn dejan de verse grises */
+    --surface-container: #ece9e1; /* Match con bg, fills sutiles dentro de cards */
+    --surface-container-high: #ddd9cf; /* Step de elevación profunda */
+    --surface-container-highest: #b8b3a7; /* Highest tonal step */
+    --on-surface-variant: #44403c; /* Stone 700 warm — AAA 7.66:1 sobre #eae7e0 (ADR-011) */
     --primary: #09090b; /* Near-black */
     --on-primary: #ffffff;
     --primary-container: #292524; /* Stone 800 warm — temp-match (ADR-011) */
     --on-primary-container: #fafaf9; /* Stone 50 warm — temp-match (ADR-011) */
-    --brand-secondary: #059669; /* Emerald 600 — AAA on warm white */
+    --brand-secondary: #059669; /* Emerald 600 — AAA on warm gray */
     --on-brand-secondary: #ffffff;
     --tertiary: #18181b;
     --on-tertiary: #ffffff;
     --error: #dc2626;
     --on-error: #ffffff;
-    --outline: #d6d3cb; /* warm Stone 300 hairline — readable at 20% opacity */
-    --outline-variant: #e7e5dc; /* warm Stone 200 — visible borderless feel */
+    --outline: #d5d1c5; /* warm Stone hairline — readable at 20% opacity */
+    --outline-variant: #e2ded4; /* warm Stone borders — visible sobre el nuevo bg */
 
-    --chart-grid: #e7e5dc;
-    --chart-text: #78716c; /* Stone 500 warm — temp-match with chart-grid (ADR-011) */
+    --chart-grid: #e2ded4;
+    --chart-text: #78716c; /* Stone 500 warm — temp-match (ADR-011) */
     --chart-recovery: #059669;
     --chart-strain: #dc2626;
 
@@ -679,7 +680,11 @@
   }
 
   body {
-    @apply bg-background text-on-surface font-body transition-colors duration-300;
+    @apply text-on-surface font-body transition-colors duration-300;
+    /* Subtle top→bottom gradient (Bevel-light / Whoop-dark inspired, half-intensity).
+       Uses existing surface ladder tokens — works across all 8 themes automatically. */
+    background-color: var(--background);
+    background-image: linear-gradient(180deg, var(--surface-container-low) 0%, var(--background) 100%);
   }
 }
 

@@ -119,17 +119,15 @@ RIAL ships **4 palettes × 2 modes = 8 theme classes**, resolved at runtime from
 | `ocean` | `.theme-ocean-dark` | `.theme-ocean-light` | Slate 950 / Sky blue — analytical, disciplined |
 | `ember` | `.theme-ember-dark` | `.theme-ember-light` | Stone 950 / Ember orange — warm creative |
 
-**NEUTRAL token key values (locked via `theme-palettes.test.ts`):**
+**NEUTRAL critical brand tokens (ADR-011) — CI-locked via `theme-palettes.test.ts`:**
 
-| Token | LIGHT | DARK |
-|---|---|---|
-| `--background` | `#fafaf9` Stone 50 warm | `#0a0a0b` warm near-black |
-| `--primary` | `#09090b` near-black | `#fafafa` warm off-white |
-| `--brand-secondary` | `#059669` Emerald 600 | `#10b981` Emerald 500 |
-| `--surface-container-low` | `#f1f0ec` warm Stone 100 | `#1c1c1f` (+4 pts vs surface) |
-| `--surface-container-lowest` | — | `#0f0f11` (new, ADR-011) |
-| `--on-surface-variant` | `#44403c` Stone 700 (AAA 8.9:1) | `#a1a1aa` Zinc 400 |
-| `--chart-text` | `#78716c` Stone 500 warm | `#71717a` Zinc 500 |
+| Token | LIGHT | DARK | Why locked |
+|---|---|---|---|
+| `--primary` | `#09090b` near-black | `#fafafa` | Brand monochrome identity |
+| `--brand-secondary` | `#059669` Emerald 600 | `#10b981` Emerald 500 | Accent identity |
+| `--chart-text` | `#78716c` Stone 500 warm | `#787a80` | AAA contrast anchor |
+
+**Surface ladder tokens** (`--background`, `--surface`, `--surface-container-*`, `--outline*`) are cosmetic tone choices — free to tune. **Single source of truth: `src/index.css` `.theme-neutral-light` / `.theme-neutral-dark` blocks.** No hex table is maintained here to avoid dual-maintenance drift.
 
 Plus a separate **mode axis** with 3 values exposed in the UI: `auto` (follows `prefers-color-scheme`), `light` (force day), `dark` (force night). `auto` is the default for new users.
 

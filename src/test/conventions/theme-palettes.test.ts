@@ -74,24 +74,24 @@ describe('Theme palettes — themeClassName', () => {
   });
 });
 
-describe('Theme palettes — NEUTRAL refinement (ADR-011)', () => {
-  it('NEUTRAL DARK fixes depth bug with surface-container-low #1c1c1f (+4pts lift)', () => {
-    expect(/\.theme-neutral-dark\s*\{[^}]*--surface-container-low:\s*#1c1c1f/.test(css)).toBe(true);
-  });
-
-  it('NEUTRAL DARK declares surface-container-lowest for hundido inputs', () => {
-    expect(/\.theme-neutral-dark\s*\{[^}]*--surface-container-lowest:\s*#0f0f11/.test(css)).toBe(true);
-  });
-
-  it('NEUTRAL LIGHT temperature-matches chart-text to warm Stone 500 #78716c', () => {
-    expect(/\.theme-neutral-light\s*\{[^}]*--chart-text:\s*#78716c/.test(css)).toBe(true);
+/**
+ * NEUTRAL brand + accessibility locks (ADR-011).
+ *
+ * Only brand identity and AAA-contrast anchors are locked here.
+ * Surface-ladder tokens (--background, --surface, --surface-container-*)
+ * are intentionally NOT locked — they are cosmetic tone choices that can be
+ * tuned in src/index.css without touching this file.
+ */
+describe('Theme palettes — NEUTRAL brand tokens (ADR-011)', () => {
+  it('NEUTRAL LIGHT keeps primary near-black #09090b (monochrome brand identity)', () => {
+    expect(/\.theme-neutral-light\s*\{[^}]*--primary:\s*#09090b/.test(css)).toBe(true);
   });
 
   it('NEUTRAL LIGHT keeps Emerald 600 #059669 as brand-secondary (not primary)', () => {
     expect(/\.theme-neutral-light\s*\{[^}]*--brand-secondary:\s*#059669/.test(css)).toBe(true);
   });
 
-  it('NEUTRAL LIGHT keeps primary near-black #09090b (monochrome identity)', () => {
-    expect(/\.theme-neutral-light\s*\{[^}]*--primary:\s*#09090b/.test(css)).toBe(true);
+  it('NEUTRAL LIGHT chart-text is warm Stone 500 #78716c (temperature-match, AAA)', () => {
+    expect(/\.theme-neutral-light\s*\{[^}]*--chart-text:\s*#78716c/.test(css)).toBe(true);
   });
 });

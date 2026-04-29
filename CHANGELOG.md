@@ -1,5 +1,74 @@
 # RIAL App - Changelog
 
+## [1.5.155] - 2026-04-29
+
+### feat(theme): Sprint 41 — subtle background gradient + palette maintenance DX
+
+**Background gradient (all 8 themes, zero per-theme code).**
+Bevel (light) and Whoop (dark) reference screenshots confirm a subtle top→bottom gradient: Bevel goes from near-white at the top to the warm gray background at the bottom (~4 tonal steps, ~12–14% L shift). We adopt the same direction at **half intensity (2 steps)** using existing surface-ladder tokens.
+
+`body` rule change (`src/index.css`):
+- `bg-background` @apply removed; replaced with explicit `background-color: var(--background)` (fallback) + `background-image: linear-gradient(180deg, var(--surface-container-low) 0%, var(--background) 100%)`.
+- Light: `#f7f4ed` → `#eae7e0` (~6% L shift, very subtle).
+- Dark: `#16181c` → `#0e1014` (~3% L shift, barely perceptible — appropriate for dark).
+- Works automatically for all 4 palettes × 2 modes — no per-theme overrides needed.
+
+**Palette maintenance DX improvement (reduced multi-file churn).**
+Prior to this sprint, a cosmetic palette tweak required updates in 4+ files (index.css + test + ADR + DESIGN-SYSTEM.md). Restructured to make `src/index.css` the single source of truth for surface-ladder hex values:
+
+- `src/test/conventions/theme-palettes.test.ts` — slimmed from 8 locked values to 3. Surface-ladder tokens (`--background`, `--surface`, `--surface-container-*`) are **no longer locked**; they are cosmetic and free to tune in index.css without touching tests. Only brand + accessibility anchors remain locked: `--primary #09090b`, `--brand-secondary #059669`, `--chart-text #78716c`.
+- `docs/DESIGN-SYSTEM.md` § 2 — removed the full NEUTRAL hex table (12 rows). Replaced with a 3-row "critical brand tokens" table + a pointer to `src/index.css` as canonical source. Eliminates dual-maintenance drift.
+- `docs/adr/ADR-011` remains as the decision record (immutable historical hex tables stay — that's what ADRs are for). Future cosmetic palette tweaks only need `src/index.css`.
+
+Quality: TS 0 errors · 1332/1332 tests (−5 from removed cosmetic locks) · lint 0 errors · size PASSED.
+
+---
+
+## [1.5.154] - 2026-04-29
+
+### feat(theme): Sprint 40 — palette refresh, neutral default Bevel × Whoop inspired
+
+Redesign of the default `theme-neutral` palette (the "marca" palette per ADR-011) to fix two complaints with the previous tokens: (1) light mode read as "white background + gray cards", visually inverted from Bevel-style adult-wellness apps the brand aspires to; (2) dark mode used warm Zinc 950 tones, less differentiated than the cool desaturated dark Whoop is known for.
+
+**Light (`.theme-neutral-light`)** — Bevel-style inversion:
+- `--background` `#fafaf9` → **`#eae7e0`** (warm gray ~91% L; the new "lienzo gris")
+- `--surface` stays `#ffffff` (lifted cards remain white)
+- `--surface-container-lowest` **NEW** `#ffffff` (explicit, parity with dark)
+- `--surface-container-low` (= shadcn `--card`) `#f1f0ec` → **`#f7f4ed`** (off-white near surface — cards stop reading as gray)
+- `--surface-container` `#e5e4df` → **`#ece9e1`** (matches new bg)
+- `--surface-container-high` `#d5d4cd` → **`#ddd9cf`**
+- `--surface-container-highest` `#a8a59d` → **`#b8b3a7`**
+- `--outline` `#d6d3cb` → **`#d5d1c5`** · `--outline-variant` `#e7e5dc` → **`#e2ded4`**
+- `--chart-grid` `#e7e5dc` → **`#e2ded4`**
+- `--on-surface-variant` unchanged `#44403c` — AAA preserved (7.66:1 over new `#eae7e0`)
+- Brand tokens (`--primary`, `--brand-secondary`, `--macro-*`, `--error`) unchanged.
+
+**Dark (`.theme-neutral-dark`)** — Whoop-style cool desaturated, NOT full black:
+- `--background` `#0a0a0b` (warm) → **`#0e1014`** (cool, ~225° hue, ~10% sat)
+- `--surface` `#18181b` → **`#1a1c20`** (lifted card, cool tone)
+- `--surface-container-lowest` `#0f0f11` → **`#0a0c10`** (sunken)
+- `--surface-container-low` (= `--card`) `#1c1c1f` → **`#16181c`** (+4 pts vs surface)
+- `--surface-container` `#27272a` → **`#212328`**
+- `--surface-container-high` `#3f3f46` → **`#2d2f34`** (ladder comprimida coherente con Whoop)
+- `--surface-container-highest` `#52525b` → **`#3a3d43`**
+- `--outline` `#3f3f46` → **`#2d2f34`** · `--outline-variant` `#27272a` → **`#232529`**
+- `--on-surface-variant` `#a1a1aa` → **`#a8aaae`** — AAA preserved (8.27:1 over new `#0e1014`)
+- `--chart-grid` `#27272a` → **`#212328`** · `--chart-text` `#71717a` → **`#787a80`**
+- `--primary-container` `#27272a` → **`#212328`** (match container scale)
+- Brand tokens (`--primary`, `--brand-secondary`, `--macro-*`, `--error`) unchanged.
+
+**Other surfaces touched**:
+- `index.html` — `<meta name="theme-color">` split into `prefers-color-scheme: light` (`#eae7e0`) + `dark` (`#0e1014`) variants. The previous single hardcoded `#09090b` is gone; PWA status bar now follows the active mode.
+- `src/test/conventions/theme-palettes.test.ts` — locked values updated to match the new palette (3 dark hex + 2 light bg/surface assertions added). Other invariants (4 palettes × 2 modes × 8 classes, `:root` aliases volt-dark, primary `#09090b`, brand-secondary `#059669`, chart-text `#78716c`) unchanged.
+
+**Out of scope (intentional, owner directive)**:
+- Other 3 palettes (`volt`, `ocean`, `ember`) untouched.
+- Brand secondary, accent, primary, macro, error tokens — no revisit.
+- `theme-light` references in `docs/DESIGN-SYSTEM.md` § 7 (legacy / pre-multi-palette section) left as-is — separate cleanup.
+- Quality: TS 0 errors · convention tests refreshed · contrast AAA both modes.
+
+---
+
 ## [1.5.153] - 2026-04-29
 
 ### refactor(lint): Sprint 39 — stale eslint-disable cleanup + Discover hashtag button
