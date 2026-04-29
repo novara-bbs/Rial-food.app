@@ -1,8 +1,9 @@
 import { ArrowLeft } from 'lucide-react';
 
 import { Heading } from '@/components/ui/Typography';
+import { APP_NAME } from '@/config/brand';
 
-export default function PageHeader({ onBack, label = 'RIAL', title, rightAction }: {
+export default function PageHeader({ onBack, label = APP_NAME, title, rightAction }: {
   onBack: () => void;
   label?: string;
   title: string;

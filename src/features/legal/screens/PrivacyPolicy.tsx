@@ -9,6 +9,7 @@ import { ArrowLeft } from 'lucide-react';
 import PageShell from '../../../components/PageShell';
 import { useI18n } from '../../../i18n';
 import { Heading, Text } from '@/components/ui/Typography';
+import { COMPANY_NAME, PRIVACY_EMAIL } from '../../../config/brand';
 
 interface Props {
   onBack: () => void;
@@ -39,7 +40,7 @@ export default function PrivacyPolicy({ onBack }: Props) {
         </Text>
 
         <Section title={t.legal.privacy.whoWeAre}>
-          <p>RIAL es una aplicación de nutrición desarrollada por Novarabbs. Puedes contactarnos en <strong className="text-on-surface">privacidad@novarabbs.com</strong>.</p>
+          <p>RIAL es una aplicación de nutrición desarrollada por {COMPANY_NAME}. Puedes contactarnos en <strong className="text-on-surface">{PRIVACY_EMAIL}</strong>.</p>
         </Section>
 
         <Section title={t.legal.privacy.dataWeCollect}>
@@ -74,7 +75,7 @@ export default function PrivacyPolicy({ onBack }: Props) {
             <li><strong className="text-on-surface">Rectificar</strong> tus datos — edita tu perfil en cualquier momento.</li>
             <li><strong className="text-on-surface">Eliminar</strong> tus datos — usa "Borrar todos los datos" en Ajustes o "Eliminar cuenta".</li>
             <li><strong className="text-on-surface">Portabilidad</strong> — descarga tus datos en formato JSON desde Ajustes.</li>
-            <li><strong className="text-on-surface">Oponerte</strong> al tratamiento — contáctanos en privacidad@novarabbs.com.</li>
+            <li><strong className="text-on-surface">Oponerte</strong> al tratamiento — contáctanos en {PRIVACY_EMAIL}.</li>
           </ul>
         </Section>
 
@@ -96,7 +97,7 @@ export default function PrivacyPolicy({ onBack }: Props) {
         </Section>
 
         <Section title={t.legal.privacy.contact}>
-          <p>Para cualquier consulta sobre privacidad: <strong className="text-on-surface">privacidad@novarabbs.com</strong></p>
+          <p>Para cualquier consulta sobre privacidad: <strong className="text-on-surface">{PRIVACY_EMAIL}</strong></p>
         </Section>
       </div>
     </PageShell>

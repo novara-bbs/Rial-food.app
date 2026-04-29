@@ -1,7 +1,8 @@
 import { useState } from 'react';
 import { ArrowLeft, Dumbbell, Flame, Scale, Heart, Users, ChevronRight, Check, PartyPopper, Target, Salad, Palette } from 'lucide-react';
 import { useI18n } from '../../../i18n';
-import { useTheme, type Palette as PaletteId } from '../../../contexts/ThemeContext';
+import { useTheme, PALETTES, type Palette as PaletteId } from '../../../contexts/ThemeContext';
+import { PALETTE_SWATCH_COLORS } from '@/config/theme-previews';
 import { calculateDailyTargets, calculateDailyTargetsWithBreakdown, type Goal } from '../../food/utils/nutrition';
 import KcalBreakdownCard from './KcalBreakdownCard';
 import { getBodyWeightUnit, getHeightUnit } from '../../food/utils/units';
@@ -42,42 +43,18 @@ export default function Onboarding({ isOpen, onClose, onComplete }: {
   const [step, setStep] = useState(1);
   const [data, setData] = useState<OnboardingData>(DEFAULT_DATA);
 
-  const palettes: Array<{
-    id: PaletteId;
-    label: string;
-    desc: string;
-    dark: { primary: string; bg: string; surface: string; text: string; textMuted: string };
-    light: { primary: string; bg: string; surface: string; text: string; textMuted: string };
-  }> = [
-    {
-      id: 'neutral',
-      label: t.settings.paletteNeutral,
-      desc: t.settings.paletteNeutralDesc,
-      dark: { primary: '#fafafa', bg: '#0a0a0b', surface: '#18181b', text: '#fafafa', textMuted: '#a1a1aa' },
-      light: { primary: '#09090b', bg: '#fafaf9', surface: '#ffffff', text: '#09090b', textMuted: '#44403c' },
-    },
-    {
-      id: 'volt',
-      label: t.settings.paletteVolt,
-      desc: t.settings.paletteVoltDesc,
-      dark: { primary: '#dcfd05', bg: '#09090b', surface: '#18181b', text: '#fafafa', textMuted: '#a1a1aa' },
-      light: { primary: '#65a30d', bg: '#faf9f6', surface: '#ffffff', text: '#09090b', textMuted: '#4a4945' },
-    },
-    {
-      id: 'ocean',
-      label: t.settings.paletteOcean,
-      desc: t.settings.paletteOceanDesc,
-      dark: { primary: '#38bdf8', bg: '#020617', surface: '#0f172a', text: '#f8fafc', textMuted: '#94a3b8' },
-      light: { primary: '#0284c7', bg: '#f8fafc', surface: '#ffffff', text: '#0f172a', textMuted: '#1e293b' },
-    },
-    {
-      id: 'ember',
-      label: t.settings.paletteEmber,
-      desc: t.settings.paletteEmberDesc,
-      dark: { primary: '#fdac6c', bg: '#0c0a09', surface: '#1c1917', text: '#fafaf9', textMuted: '#a8a29e' },
-      light: { primary: '#ea580c', bg: '#fafaf9', surface: '#ffffff', text: '#1c1917', textMuted: '#292524' },
-    },
-  ];
+  const paletteLabels: Record<PaletteId, { label: string; desc: string }> = {
+    neutral: { label: t.settings.paletteNeutral, desc: t.settings.paletteNeutralDesc },
+    volt:    { label: t.settings.paletteVolt,    desc: t.settings.paletteVoltDesc    },
+    ocean:   { label: t.settings.paletteOcean,   desc: t.settings.paletteOceanDesc   },
+    ember:   { label: t.settings.paletteEmber,   desc: t.settings.paletteEmberDesc   },
+  };
+
+  const palettes = PALETTES.map(id => ({
+    id,
+    ...paletteLabels[id],
+    ...PALETTE_SWATCH_COLORS[id],
+  }));
 
   if (!isOpen) return null;
 

@@ -25,6 +25,7 @@ import { calcWeekMacros } from '../../wellness/utils/week-stats';
 import { calcStreaks } from '../../wellness/utils/streaks';
 import { calcWeightTrend } from '../../wellness/utils/weight-trend';
 import { createHandleRepeatYesterday } from '../../food/handlers/meal-handlers';
+import { STORAGE_KEYS } from '../../../lib/storage-keys';
 import type { DailyLogEntry } from '../../food/handlers/meal-handlers';
 import type { DailyArchive } from '../../../hooks/useDailyReset';
 import type { BodySnapshot, StoredRealFeelEntry, RealFeelEntry } from '../../../types/wellness';
@@ -151,13 +152,13 @@ export default function Home({
   );
 
   // Guided Setup steps — memoized so toggling unrelated state doesn't rebuild.
-  // Reads `rial_recipeViewed` eagerly at render time (flag flips when user
+  // Reads STORAGE_KEYS.RECIPE_VIEWED eagerly at render time (flag flips when user
   // visits RecipeDetail for the first time; see createHandleNavigateToRecipe).
   const guidedSteps = useMemo(() => {
     const hasLoggedMeal = dailyLog.length > 0 || (nutritionHistory ?? []).some((h) => h.mealCount > 0);
     const hasPlannedDay = Object.values(mealPlan || {}).some((d) => d.length > 0);
     const hasViewedRecipe =
-      typeof window !== 'undefined' && !!localStorage.getItem('rial_recipeViewed');
+      typeof window !== 'undefined' && !!localStorage.getItem(STORAGE_KEYS.RECIPE_VIEWED);
     return [
       { id: 'profile', label: t.guidedSetup.configProfile, done: true },
       { id: 'meal', label: t.guidedSetup.logFirstMeal, done: hasLoggedMeal },

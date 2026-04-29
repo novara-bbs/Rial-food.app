@@ -8,6 +8,7 @@ import { ArrowLeft } from 'lucide-react';
 import PageShell from '../../../components/PageShell';
 import { useI18n } from '../../../i18n';
 import { Heading, Text } from '@/components/ui/Typography';
+import { LEGAL_EMAIL } from '../../../config/brand';
 
 interface Props {
   onBack: () => void;
@@ -87,7 +88,7 @@ export default function TermsOfService({ onBack }: Props) {
         </Section>
 
         <Section title={t.legal.terms.contact}>
-          <p>Para consultas legales: <strong className="text-on-surface">legal@novarabbs.com</strong></p>
+          <p>Para consultas legales: <strong className="text-on-surface">{LEGAL_EMAIL}</strong></p>
         </Section>
       </div>
     </PageShell>

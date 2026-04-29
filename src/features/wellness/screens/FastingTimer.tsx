@@ -5,6 +5,7 @@ import { Play, Square, Clock, Trophy, Timer, CheckCircle2, StopCircle } from 'lu
 import { Button } from '@/components/ui/button';
 import { useI18n } from '../../../i18n';
 import { useLocalStorageState } from '../../../hooks/useLocalStorageState';
+import { STORAGE_KEYS } from '../../../lib/storage-keys';
 import PageHeader from '../../../components/patterns/PageHeader';
 import { Heading } from '@/components/ui/Typography';
 
@@ -26,7 +27,7 @@ const PROTOCOLS = [
 
 export default function FastingTimer({ onBack }: { onBack: () => void }) {
   const { t } = useI18n();
-  const [protocol, setProtocol] = useLocalStorageState('fasting-protocol', PROTOCOLS[0]);
+  const [protocol, setProtocol] = useLocalStorageState(STORAGE_KEYS.FASTING_PROTOCOL, PROTOCOLS[0]);
   const [fastingStart, setFastingStart] = useLocalStorageState<number | null>('fasting-start', null);
   const [fastingHistory, setFastingHistory] = useLocalStorageState<FastingEntry[]>('fasting-history', []);
   const [now, setNow] = useState(Date.now());

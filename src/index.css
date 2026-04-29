@@ -161,6 +161,17 @@
   .label-caps {
     @apply font-label text-micro uppercase tracking-widest text-on-surface-variant;
   }
+  /* ── Standard form input ──────────────────────────────────────────────────
+     .rial-input — base style for text inputs, selects, textareas.
+                   Add padding and layout classes per-use (e.g. p-3, p-4 resize-none).
+                   Specialized inputs (icon-padded, ring focus) keep their own className.
+  ──────────────────────────────────────────────────────────────────────── */
+  .rial-input {
+    @apply w-full bg-surface-container-low border border-outline-variant/30
+           rounded-sm font-body text-sm text-tertiary
+           placeholder:text-outline-variant
+           focus:outline-none focus:border-primary transition-all;
+  }
 
   .prose-custom {
     --tw-prose-body: var(--on-surface-variant);

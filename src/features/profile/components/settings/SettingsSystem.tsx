@@ -7,6 +7,7 @@ import ConfirmDialog from '../../../../components/ConfirmDialog';
 import { logger } from '../../../../lib/logger';
 import { useI18n } from '../../../../i18n';
 import { useLocalStorageState } from '../../../../hooks/useLocalStorageState';
+import { STORAGE_KEYS } from '../../../../lib/storage-keys';
 import { getNutritionHistory, archiveHydrationConsumed } from '../../../../hooks/useDailyReset';
 import { useAuth } from '../../../../contexts/AuthContext';
 import { Heading, Text } from '@/components/ui/Typography';
@@ -23,8 +24,8 @@ export default function SettingsSystem({ showAIBot, setShowAIBot }: Props) {
   const { t } = useI18n();
   const { user, isSupabaseEnabled } = useAuth();
 
-  const [notificationsEnabled, setNotificationsEnabled] = useLocalStorageState('notificationsEnabled', true);
-  const [profilePublic, setProfilePublic] = useLocalStorageState('profilePublic', false);
+  const [notificationsEnabled, setNotificationsEnabled] = useLocalStorageState(STORAGE_KEYS.NOTIFICATIONS_ENABLED, true);
+  const [profilePublic, setProfilePublic] = useLocalStorageState(STORAGE_KEYS.PROFILE_PUBLIC, false);
   const [connectedDevices, setConnectedDevices] = useState({ whoop: true, oura: false, garmin: false });
   const [showDeleteAllConfirm, setShowDeleteAllConfirm] = useState(false);
   const [showDeleteAccountConfirm, setShowDeleteAccountConfirm] = useState(false);

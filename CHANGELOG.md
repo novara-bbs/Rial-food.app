@@ -1,5 +1,31 @@
 # RIAL App - Changelog
 
+## [1.5.158] - 2026-04-29
+
+### refactor(dx): Sprint 44 — maintainability quick wins (rebrand safety)
+
+Four low-risk refactors that eliminate scattered hardcoded values. No logic changes, no i18n changes, no new warnings. Zero-risk to existing users.
+
+**Action 1 — Brand constants (`src/config/brand.ts`):**
+- `APP_NAME`, `COMPANY_NAME`, `PRIVACY_EMAIL`, `LEGAL_EMAIL` exported from a single file.
+- `Login.tsx`, `Signup.tsx`, `PageHeader.tsx` (default prop), `PrivacyPolicy.tsx` (3 email refs + company name), `TermsOfService.tsx` now import from `brand.ts`. A rebrand or email change is 1 file.
+
+**Action 2 — Palette preview dedup (`src/config/theme-previews.ts`):**
+- `PALETTE_SWATCH_COLORS: Record<Palette, PaletteSwatchData>` — the 4×2 hex grids for the theme picker UI.
+- `Onboarding.tsx` and `SettingsAppearance.tsx` previously duplicated identical inline arrays. Both now derive `palettes` by mapping `PALETTES` against the shared config + i18n labels. A palette preview tweak is 1 file.
+
+**Action 3 — `.rial-input` utility in `@layer components`:**
+- Added to `src/index.css` alongside `.badge-card` / `.label-caps`. Captures the standard input base: `w-full bg-surface-container-low border border-outline-variant/30 rounded-sm font-body text-sm text-tertiary placeholder:text-outline-variant focus:outline-none focus:border-primary transition-all`.
+- Applied to 10 instances across `CreateRecipeStep1Basics.tsx`, `CreateRecipePasteBulkSheet.tsx`, `CreateRecipeStep3Instructions.tsx`. Per-input overrides (`p-3`, `p-4`, `pr-12`, `resize-none`, etc.) remain as additional classes.
+
+**Action 4 — Storage keys registry (`src/lib/storage-keys.ts`):**
+- `STORAGE_KEYS` `as const` object documents all 38 localStorage keys with domain groupings. `StorageKey` union type derived from it.
+- Applied to: `ThemeContext.tsx` (replaces local `STORAGE_KEY` / `LEGACY_STORAGE_KEY` constants), `useRecipeState.ts` (`savedRecipes` + `rial_recipeViewed`), `useWellnessState.ts` (`weeklyCheckIns` direct access), `FastingTimer.tsx` (`fasting-protocol`), `SettingsSystem.tsx` (`notificationsEnabled` + `profilePublic`), `Home.tsx` (`rial_recipeViewed` read).
+
+Quality: TS 0 errors · 1332/1332 tests · lint 0 errors, 349 warnings (no new) · size PASSED.
+
+---
+
 ## [1.5.157] - 2026-04-29
 
 ### feat(theme): Sprint 43 — radius +1 step across all components

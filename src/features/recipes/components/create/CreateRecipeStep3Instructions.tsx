@@ -75,7 +75,7 @@ export default function CreateRecipeStep3Instructions({
                 value={s.text}
                 onChange={e => onUpdateStepText(idx, e.target.value)}
                 placeholder={`${t.createRecipe.stepPlaceholder} ${idx + 1}...`}
-                className="w-full bg-surface-container-low border border-outline-variant/30 p-3 font-body text-sm text-tertiary rounded-sm focus:outline-none focus:border-primary transition-colors placeholder:text-outline-variant min-h-[80px] resize-none"
+                className="rial-input p-3 min-h-[80px] resize-none"
               />
               <div className="flex items-center gap-2 flex-wrap">
                 {timers.length > 0 && timers.map((m, i) => (

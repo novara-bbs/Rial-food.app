@@ -21,6 +21,7 @@
  */
 import { useEffect, useMemo } from 'react';
 import { useLocalStorageState } from '../../hooks/useLocalStorageState';
+import { STORAGE_KEYS } from '../../lib/storage-keys';
 import { pushToCloud } from '../../lib/sync';
 import { shouldReseed, setStoredSeedVersion } from '../../lib/seedVersion';
 import { logger } from '../../lib/logger';
@@ -118,13 +119,13 @@ export function useWellnessState({
     import('../../features/wellness/data/seed-weekly-checkins')
       .then((m) => {
         try {
-          const raw = window.localStorage.getItem('weeklyCheckIns');
+          const raw = window.localStorage.getItem(STORAGE_KEYS.WEEKLY_CHECK_INS);
           const existing = raw ? JSON.parse(raw) : [];
           if (!Array.isArray(existing) || existing.length === 0) {
-            window.localStorage.setItem('weeklyCheckIns', JSON.stringify(m.SEED_WEEKLY_CHECKINS));
+            window.localStorage.setItem(STORAGE_KEYS.WEEKLY_CHECK_INS, JSON.stringify(m.SEED_WEEKLY_CHECKINS));
           }
         } catch {
-          window.localStorage.setItem('weeklyCheckIns', JSON.stringify(m.SEED_WEEKLY_CHECKINS));
+          window.localStorage.setItem(STORAGE_KEYS.WEEKLY_CHECK_INS, JSON.stringify(m.SEED_WEEKLY_CHECKINS));
         }
         setStoredSeedVersion('weeklyCheckIns');
       })

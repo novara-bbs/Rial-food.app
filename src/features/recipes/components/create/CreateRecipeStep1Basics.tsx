@@ -53,13 +53,13 @@ export default function CreateRecipeStep1Basics({
       <div>
         <label className="font-label text-caption font-bold tracking-widest uppercase text-on-surface-variant mb-2 block">{t.createRecipe.recipeName}</label>
         <input type="text" value={title} onChange={e => setTitle(e.target.value)} placeholder={t.createRecipe.namePlaceholder}
-          className="w-full bg-surface-container-low border border-outline-variant/30 p-4 font-body text-sm text-tertiary rounded-sm focus:outline-none focus:border-primary transition-all placeholder:text-outline-variant" />
+          className="rial-input p-4" />
       </div>
 
       <div>
         <label className="font-label text-caption font-bold tracking-widest uppercase text-on-surface-variant mb-2 block">{t.createRecipe.description}</label>
         <textarea value={description} onChange={e => setDescription(e.target.value)} placeholder={t.createRecipe.descPlaceholder} rows={3}
-          className="w-full bg-surface-container-low border border-outline-variant/30 p-4 font-body text-sm text-tertiary rounded-sm focus:outline-none focus:border-primary transition-all placeholder:text-outline-variant resize-none" />
+          className="rial-input p-4 resize-none" />
       </div>
 
       <div className="grid grid-cols-2 gap-3">
@@ -69,7 +69,7 @@ export default function CreateRecipeStep1Basics({
             <input type="number" inputMode="numeric" min={0} step={5}
               value={prepTime || ''} onChange={e => setPrepTime(Math.max(0, parseInt(e.target.value, 10) || 0))}
               placeholder="15"
-              className="w-full bg-surface-container-low border border-outline-variant/30 p-3 pr-12 font-body text-sm text-tertiary rounded-sm focus:outline-none focus:border-primary transition-all placeholder:text-outline-variant" />
+              className="rial-input p-3 pr-12" />
             <span aria-hidden="true" className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 font-label text-micro tracking-widest uppercase text-on-surface-variant">min</span>
           </div>
         </div>
@@ -79,14 +79,14 @@ export default function CreateRecipeStep1Basics({
             <input type="number" inputMode="numeric" min={0} step={5}
               value={cookTime || ''} onChange={e => setCookTime(Math.max(0, parseInt(e.target.value, 10) || 0))}
               placeholder="20"
-              className="w-full bg-surface-container-low border border-outline-variant/30 p-3 pr-12 font-body text-sm text-tertiary rounded-sm focus:outline-none focus:border-primary transition-all placeholder:text-outline-variant" />
+              className="rial-input p-3 pr-12" />
             <span aria-hidden="true" className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 font-label text-micro tracking-widest uppercase text-on-surface-variant">min</span>
           </div>
         </div>
         <div>
           <label className="font-label text-caption font-bold tracking-widest uppercase text-on-surface-variant mb-2 block">{t.recipes.difficulty}</label>
           <select value={difficulty} onChange={e => setDifficulty(e.target.value as typeof difficulty)}
-            className="w-full bg-surface-container-low border border-outline-variant/30 p-3 font-body text-sm text-tertiary rounded-sm focus:outline-none focus:border-primary transition-all">
+            className="rial-input p-3">
             <option value="Fácil">{t.recipes.easy}</option>
             <option value="Medio">{t.recipes.medium}</option>
             <option value="Difícil">{t.recipes.hard}</option>
@@ -95,7 +95,7 @@ export default function CreateRecipeStep1Basics({
         <div>
           <label className="font-label text-caption font-bold tracking-widest uppercase text-on-surface-variant mb-2 block">{t.recipes.servings}</label>
           <input type="number" value={servings} onChange={e => setServings(Math.max(1, parseInt(e.target.value) || 1))} min={1}
-            className="w-full bg-surface-container-low border border-outline-variant/30 p-3 font-body text-sm text-tertiary rounded-sm focus:outline-none focus:border-primary transition-all" />
+            className="rial-input p-3" />
         </div>
       </div>
 
@@ -119,7 +119,7 @@ export default function CreateRecipeStep1Basics({
           </label>
           <input type="url" value={videoUrl} onChange={e => setVideoUrl(e.target.value)}
             placeholder="https://youtube.com/watch?v=..."
-            className="w-full bg-surface-container-low border border-outline-variant/30 p-3 font-body text-sm text-tertiary rounded-sm focus:outline-none focus:border-primary transition-all placeholder:text-outline-variant" />
+            className="rial-input p-3 placeholder:text-outline-variant" />
           {videoUrl && <VideoSection videoUrl={videoUrl} />}
         </div>
         <div>
@@ -129,7 +129,7 @@ export default function CreateRecipeStep1Basics({
           </label>
           <input type="url" value={sourceUrl} onChange={e => setSourceUrl(e.target.value)}
             placeholder="https://..."
-            className="w-full bg-surface-container-low border border-outline-variant/30 p-3 font-body text-sm text-tertiary rounded-sm focus:outline-none focus:border-primary transition-all placeholder:text-outline-variant" />
+            className="rial-input p-3 placeholder:text-outline-variant" />
           {sourceUrl && (
             <Badge variant="outline" className="mt-2 text-on-surface-variant border-outline-variant/30">
               {detectedSourceType}

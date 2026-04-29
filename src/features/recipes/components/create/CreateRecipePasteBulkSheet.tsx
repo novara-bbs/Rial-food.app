@@ -60,7 +60,7 @@ export default function CreateRecipePasteBulkSheet({
           onChange={e => onPreview(e.target.value)}
           placeholder={t.createRecipe.pasteListPlaceholder}
           rows={5}
-          className="w-full bg-surface-container-low border border-outline-variant/30 p-3 font-body text-sm text-tertiary rounded-sm focus:outline-none focus:border-primary transition-colors placeholder:text-outline-variant resize-none"
+          className="rial-input p-3 resize-none"
         />
 
         {parsedLines.length > 0 && (

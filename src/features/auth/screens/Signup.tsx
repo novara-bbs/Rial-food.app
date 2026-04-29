@@ -8,6 +8,7 @@ import { signUpWithEmail } from '../../../lib/supabase';
 import { useI18n } from '../../../i18n';
 import { Heading } from '@/components/ui/Typography';
 import { Button } from '@/components/ui/button';
+import { APP_NAME } from '../../../config/brand';
 
 interface SignupProps {
   onNavigateToLogin: () => void;
@@ -76,7 +77,7 @@ export default function Signup({ onNavigateToLogin }: SignupProps) {
             <span className="font-headline text-headline font-black text-on-primary">R</span>
           </div>
           <div className="text-center">
-            <Heading level="h1" className="font-black tracking-widest">RIAL</Heading>
+            <Heading level="h1" className="font-black tracking-widest">{APP_NAME}</Heading>
             <p className="font-body text-sm text-on-surface-variant mt-1">{t.auth.createAccountTagline}</p>
           </div>
         </div>

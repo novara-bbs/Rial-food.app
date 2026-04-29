@@ -19,6 +19,7 @@
  */
 import { useCallback, useEffect, useMemo } from 'react';
 import { useLocalStorageState } from '../../hooks/useLocalStorageState';
+import { STORAGE_KEYS } from '../../lib/storage-keys';
 import { pushToCloud } from '../../lib/sync';
 import { shouldReseed, setStoredSeedVersion } from '../../lib/seedVersion';
 import { logger } from '../../lib/logger';
@@ -52,7 +53,7 @@ type RecipeRow = any;
 export function useRecipeState({
   setMealPlan, setShoppingList, setSelectedRecipe, navigateTo, t,
 }: UseRecipeStateDeps) {
-  const [savedRecipes, setSavedRecipes] = useLocalStorageState<RecipeRow[]>('savedRecipes', []);
+  const [savedRecipes, setSavedRecipes] = useLocalStorageState<RecipeRow[]>(STORAGE_KEYS.SAVED_RECIPES, []);
 
   // ── Lazy seed (preserve-user: keep user-created + imported, replace rest) ─
   useEffect(() => {
@@ -134,8 +135,8 @@ export function useRecipeState({
   const navigateToRecipe = useCallback((recipe: RecipeRow) => {
     setSelectedRecipe(recipe);
     // Mark the Guided Setup "Explora una receta" step complete (Home.tsx reads this key).
-    // useLocalStorageState prefixes with `rial_`; Home.tsx:250 checks `rial_recipeViewed`.
-    try { window.localStorage.setItem('rial_recipeViewed', '1'); } catch { /* private mode */ }
+    // Home.tsx checks STORAGE_KEYS.RECIPE_VIEWED to show the first-use prompt.
+    try { window.localStorage.setItem(STORAGE_KEYS.RECIPE_VIEWED, '1'); } catch { /* private mode */ }
     navigateTo('recipe-detail', { recipeId: recipe.id });
   }, [setSelectedRecipe, navigateTo]);
 

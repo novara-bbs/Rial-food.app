@@ -1,4 +1,5 @@
 import React, { createContext, useContext, useEffect, useMemo, useState } from 'react';
+import { STORAGE_KEYS } from '../lib/storage-keys';
 
 export type Palette = 'volt' | 'ocean' | 'ember' | 'neutral';
 export type ColorMode = 'auto' | 'light' | 'dark';
@@ -7,8 +8,8 @@ export type ResolvedMode = 'light' | 'dark';
 export const PALETTES: Palette[] = ['volt', 'ocean', 'ember', 'neutral'];
 export const COLOR_MODES: ColorMode[] = ['auto', 'light', 'dark'];
 
-const STORAGE_KEY = 'rial-theme-v2';
-const LEGACY_STORAGE_KEY = 'rial-theme';
+const STORAGE_KEY = STORAGE_KEYS.THEME;
+const LEGACY_STORAGE_KEY = STORAGE_KEYS.THEME_LEGACY;
 
 const ALL_THEME_CLASSES = [
   'theme-volt-dark',

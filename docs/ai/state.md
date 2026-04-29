@@ -5,11 +5,12 @@
 > prunes this file back down. Everything below should answer: *what's the release line,
 > what's the quality baseline, what's the next move, what's broken?*
 
-Last updated: **2026-04-29** — `[1.5.157]` Sprint 43: radius +1 step (0.25rem→0.375rem, all components); Sprint 42: neutral palette contrast + light tone refinement.
+Last updated: **2026-04-29** — `[1.5.158]` Sprint 44: DX quick wins — brand constants, palette preview dedup, `.rial-input` class, storage-keys registry.
 
 ## Release snapshot
-- **Branch**: `main`, synced with `rial-food/main` (CI green S39; S40+S41 queued).
-- **This session (2026-04-29, S40–S43)**:
+- **Branch**: `main`, synced with `rial-food/main` (CI green S39; S40–S44 queued).
+- **This session (2026-04-29, S40–S44)**:
+    - **Sprint 44** `[1.5.158]` — DX quick wins: brand constants (`src/config/brand.ts`), palette preview dedup (`src/config/theme-previews.ts`), `.rial-input` utility class, `STORAGE_KEYS` registry (`src/lib/storage-keys.ts`).
     - **Sprint 43** `[1.5.157]` — radius base `0.25rem` → `0.375rem` (+1 step, todos los componentes).
     - **Sprint 42** `[1.5.156]` — light bg `#eae7e0` → `#eeecea` (L93%, menos beige); dark contrast expandido (cards `#1e2129` vs bg `#0e1014`, gap ampliado).
     - **Sprint 41** `[1.5.155]` — BG gradient sutil: `body { background-image: linear-gradient(--surface-container-low → --background) }`. Funciona en 8 temas sin código por-tema. DX: test slim a 3 locks (brand+a11y); DESIGN-SYSTEM.md §2 hex table → pointer a index.css.
@@ -24,7 +25,7 @@ Last updated: **2026-04-29** — `[1.5.157]` Sprint 43: radius +1 step (0.25rem�
 - TypeScript: **0 errors** (`npx tsc --noEmit`)
 - Tests: **1332/1332** passing (89 files)
 - i18n symmetry: **1937** keys aligned ES ↔ EN (+11 recipeTags from S37)
-- Design-system lint: **0 errors**, 361 warnings (pre-existing, allowlisted)
+- Design-system lint: **0 errors**, 349 warnings (pre-existing, allowlisted)
 - Raw branded `<button>` count: **39 → 28 → 2 → 1** (S36+S38+S39; only TodaysMeals permanent — Discover migrated)
 - `Recipe.tag` typed: **`string` → `FoodTag`** (S37, fixes EN filter regression)
 - **`any` sweep** substantially complete: ~38 residual intentional any in production code — all documented. Categories: browser API workarounds (wakeLock, AudioContext, import.meta), i18n missing-key casts `(t as any)`, legacy archive format, `MealPlan = Record<number, any[]>`, pre-existing contract mismatches (eslint-disabled), migration code, untyped library (html5-qrcode).
@@ -110,6 +111,7 @@ Sprints 5-28 (type-safety any→0 sweep across all features),
 **Sprint 41 [1.5.155]** — BG gradient sutil (Bevel×Whoop half-intensity, 1 CSS rule, 8 temas automático). DX: test slim 8→3 locks; DESIGN-SYSTEM.md §2 hex table eliminada; tests: 1334→1332 (−2 net).
 **Sprint 42 [1.5.156]** — Neutral light tone refinement: `#eae7e0` → `#eeecea` (L+2.7%, menos beige). Dark contrast expandido: cards `#16181c` → `#1e2129`, surface `#1a1c20` → `#22252d`.
 **Sprint 43 [1.5.157]** — Radius base `0.25rem` → `0.375rem`: sm 4→6px, lg 8→12px, xl 12→18px, 2xl 16→24px. Todos los componentes más redondeados en 1 step.
+**Sprint 44 [1.5.158]** — DX quick wins (rebrand safety): `src/config/brand.ts` (APP_NAME, emails), `src/config/theme-previews.ts` (palette swatch colors dedup), `.rial-input` `@layer components` class (10 inputs migrated), `src/lib/storage-keys.ts` (38 keys, STORAGE_KEYS const).
 
 ## Repository compliance
 - `LICENSE`: Proprietary © 2026 RIAL FOOD WORLD S.L. Contact legal@rialfoodworld.com.
