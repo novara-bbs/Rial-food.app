@@ -5,11 +5,13 @@
 > prunes this file back down. Everything below should answer: *what's the release line,
 > what's the quality baseline, what's the next move, what's broken?*
 
-Last updated: **2026-04-29** — `[1.5.155]` Sprint 41: subtle BG gradient (Bevel×Whoop half-intensity) + palette maintenance DX (test slim + DESIGN-SYSTEM.md de-dup).
+Last updated: **2026-04-29** — `[1.5.157]` Sprint 43: radius +1 step (0.25rem→0.375rem, all components); Sprint 42: neutral palette contrast + light tone refinement.
 
 ## Release snapshot
 - **Branch**: `main`, synced with `rial-food/main` (CI green S39; S40+S41 queued).
-- **This session (2026-04-29, S40–S41)**:
+- **This session (2026-04-29, S40–S43)**:
+    - **Sprint 43** `[1.5.157]` — radius base `0.25rem` → `0.375rem` (+1 step, todos los componentes).
+    - **Sprint 42** `[1.5.156]` — light bg `#eae7e0` → `#eeecea` (L93%, menos beige); dark contrast expandido (cards `#1e2129` vs bg `#0e1014`, gap ampliado).
     - **Sprint 41** `[1.5.155]` — BG gradient sutil: `body { background-image: linear-gradient(--surface-container-low → --background) }`. Funciona en 8 temas sin código por-tema. DX: test slim a 3 locks (brand+a11y); DESIGN-SYSTEM.md §2 hex table → pointer a index.css.
     - **Sprint 40** `[1.5.154]` — paleta neutral repintada: light Bevel-style (`#eae7e0` bg + `#ffffff` surface), dark Whoop-style (`#0e1014` cool, ladder comprimida). AAA. meta theme-color split.
 - **Sprint 39 (previo, 2026-04-29)**: `[1.5.153]` lint hygiene: 2 stale `eslint-disable-next-line` removidos + Discover hashtag `<button>` → `<Button variant="ghost">`. Allowlist 2 → 1.
@@ -106,6 +108,8 @@ Sprints 5-28 (type-safety any→0 sweep across all features),
 **Sprint 39 [1.5.153]** — Lint hygiene: 2 stale eslint-disable removed; Discover hashtag `<button>` → `<Button variant="ghost">`; allowlist 2→1 (TodaysMeals only).
 **Sprint 40 [1.5.154]** — Paleta neutral refresh: light invertido a Bevel-style (warm gray bg `#eae7e0` + white cards, sunken `#f7f4ed`); dark a Whoop-style cool desaturado (`#0e1014`, NOT full black; cards `#1a1c20` / `#16181c`; ladder comprimida). AAA preservado.
 **Sprint 41 [1.5.155]** — BG gradient sutil (Bevel×Whoop half-intensity, 1 CSS rule, 8 temas automático). DX: test slim 8→3 locks; DESIGN-SYSTEM.md §2 hex table eliminada; tests: 1334→1332 (−2 net).
+**Sprint 42 [1.5.156]** — Neutral light tone refinement: `#eae7e0` → `#eeecea` (L+2.7%, menos beige). Dark contrast expandido: cards `#16181c` → `#1e2129`, surface `#1a1c20` → `#22252d`.
+**Sprint 43 [1.5.157]** — Radius base `0.25rem` → `0.375rem`: sm 4→6px, lg 8→12px, xl 12→18px, 2xl 16→24px. Todos los componentes más redondeados en 1 step.
 
 ## Repository compliance
 - `LICENSE`: Proprietary © 2026 RIAL FOOD WORLD S.L. Contact legal@rialfoodworld.com.

@@ -1,5 +1,50 @@
 # RIAL App - Changelog
 
+## [1.5.157] - 2026-04-29
+
+### feat(theme): Sprint 43 — radius +1 step across all components
+
+Bumped `--radius` base token from `0.25rem` (4px) to `0.375rem` (6px). Because the entire scale is derived via `calc(var(--radius) * N)`, all rounded utilities update proportionally with a single token change:
+
+| Token | Before | After |
+|---|---|---|
+| `--radius-xs` | 2px | 3px |
+| `--radius-sm` (primitive default) | 4px | **6px** |
+| `--radius-md` | 6px | 9px |
+| `--radius-lg` | 8px | **12px** |
+| `--radius-xl` | 12px | 18px |
+| `--radius-2xl` | 16px | 24px |
+
+Effect: buttons, chips, cards, banners, sections, dialogs, bottom sheets, and all shadcn primitives now render with noticeably softer corners. Intentionally less aggressive than Bevel/Whoop (which use near-pill shapes) — one step closer, not a copy.
+
+Quality: TS 0 errors · 1332/1332 tests · lint 0 errors · size PASSED.
+
+---
+
+## [1.5.156] - 2026-04-29
+
+### fix(theme): Sprint 42 — neutral palette contrast + light-mode tone refinement
+
+Two complaints addressed: (1) dark mode cards/sections had insufficient contrast vs background; (2) light mode background was too beige/dark compared to the Bevel warm-gray reference.
+
+**Light (`.theme-neutral-light`)**:
+- `--background` `#eae7e0` → **`#eeecea`** (L 90.6% → 93.3%, less saturated warm gray — noticeably lighter and less beige, closer to Bevel's airy warmth)
+- `--surface-container-low` (cards) `#f7f4ed` → **`#f5f4f1`** (near-white, more neutral warm)
+- `--surface-container` `#ece9e1` → **`#e9e8e5`**, `--surface-container-high` `#ddd9cf` → **`#dcdbd9`**, `--surface-container-highest` `#b8b3a7` → **`#b8b7b5`` (ladder recalibrated to new bg)
+- `--outline` `#d5d1c5` → **`#d4d3d1``, `--outline-variant` `#e2ded4` → **`#e3e2e0`** (more neutral hairlines)
+- `--on-surface-variant #44403c` AAA contrast improves: 7.66:1 → **9.2:1** over new background.
+
+**Dark (`.theme-neutral-dark`)**:
+- `--surface` `#1a1c20` → **`#22252d`** (wider gap vs background for clear card lift)
+- `--surface-container-low` (cards) `#16181c` → **`#1e2129`** (noticeably visible against `#0e1014` bg)
+- `--surface-container` `#212328` → **`#272a32`**, `--surface-container-high` `#2d2f34` → **`#333740`**, `--surface-container-highest` `#3a3d43` → **`#3f4349`` (expanded ladder)
+- `--outline` `#2d2f34` → **`#333740``, `--outline-variant` `#232529` → **`#2d2e35`**
+
+Brand/accessibility tokens (`--primary`, `--brand-secondary`, `--chart-text`, `--on-surface-variant`) unchanged.
+Quality: TS 0 errors · 1332/1332 tests · lint 0 errors.
+
+---
+
 ## [1.5.155] - 2026-04-29
 
 ### feat(theme): Sprint 41 — subtle background gradient + palette maintenance DX

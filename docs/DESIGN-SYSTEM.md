@@ -50,12 +50,14 @@ Base token + multiplicative scale. Resolved values preserve Tailwind v4 defaults
 
 | Token | Resolved | Class |
 |---|---|---|
-| `--radius-xs` | 2px | `rounded-xs` |
-| `--radius-sm` | 4px | `rounded-sm` ← **primitive default** |
-| `--radius-md` | 6px | `rounded-md` |
-| `--radius-lg` | 8px | `rounded-lg` |
-| `--radius-xl` | 12px | `rounded-xl` |
-| `--radius-2xl` | 16px | `rounded-2xl` |
+| `--radius-xs` | 3px | `rounded-xs` |
+| `--radius-sm` | 6px | `rounded-sm` ← **primitive default** |
+| `--radius-md` | 9px | `rounded-md` |
+| `--radius-lg` | 12px | `rounded-lg` |
+| `--radius-xl` | 18px | `rounded-xl` |
+| `--radius-2xl` | 24px | `rounded-2xl` |
+
+All derived via `--radius: 0.375rem` (6px base). Bumped +1 step in Sprint 43 from the original 4px base for a Bevel/Whoop-closer rounding without copying them.
 
 **Rule:** primitives default to `rounded-sm`. Larger radii are reserved for specific surfaces (dialogs, hero cards) documented per component.
 
