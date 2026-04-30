@@ -5,11 +5,13 @@
 > prunes this file back down. Everything below should answer: *what's the release line,
 > what's the quality baseline, what's the next move, what's broken?*
 
-Last updated: **2026-04-29** — `[1.5.158]` Sprint 44: DX quick wins — brand constants, palette preview dedup, `.rial-input` class, storage-keys registry.
+Last updated: **2026-04-30** — `[1.5.159]` Sprint 45: RecipeCard composición NYT-style (sin contenedor, mixed-case).
 
 ## Release snapshot
-- **Branch**: `main`, synced with `rial-food/main` (CI green S39; S40–S44 queued).
-- **This session (2026-04-29, S40–S44)**:
+- **Branch**: `main`, synced con `rial-food/main` (CI green S39; S40–S45 queued).
+- **This session (2026-04-30, S45)**:
+    - **Sprint 45** `[1.5.159]` — RecipeCard sin contenedor: drop `bg-surface rounded-sm overflow-hidden` del wrapper, `rounded-sm` se mueve a `IMAGE_ZONE`, `INFO_BLOCK` `p-3/p-4` → `pt-2/pt-3` sin padding lateral. Title `uppercase` → mixed-case Bricolage. Author/forkedFrom labels mixed-case. Badges overlay y action buttons intactos. 1 primitivo → 5 surfaces (Cocina, Discovery hero+swimlanes, RecipeDetail related, CreatorProfile).
+- **Previous session (2026-04-29, S40–S44)**:
     - **Sprint 44** `[1.5.158]` — DX quick wins: brand constants (`src/config/brand.ts`), palette preview dedup (`src/config/theme-previews.ts`), `.rial-input` utility class, `STORAGE_KEYS` registry (`src/lib/storage-keys.ts`).
     - **Sprint 43** `[1.5.157]` — radius base `0.25rem` → `0.375rem` (+1 step, todos los componentes).
     - **Sprint 42** `[1.5.156]` — light bg `#eae7e0` → `#eeecea` (L93%, menos beige); dark contrast expandido (cards `#1e2129` vs bg `#0e1014`, gap ampliado).
@@ -112,6 +114,7 @@ Sprints 5-28 (type-safety any→0 sweep across all features),
 **Sprint 42 [1.5.156]** — Neutral light tone refinement: `#eae7e0` → `#eeecea` (L+2.7%, menos beige). Dark contrast expandido: cards `#16181c` → `#1e2129`, surface `#1a1c20` → `#22252d`.
 **Sprint 43 [1.5.157]** — Radius base `0.25rem` → `0.375rem`: sm 4→6px, lg 8→12px, xl 12→18px, 2xl 16→24px. Todos los componentes más redondeados en 1 step.
 **Sprint 44 [1.5.158]** — DX quick wins (rebrand safety): `src/config/brand.ts` (APP_NAME, emails), `src/config/theme-previews.ts` (palette swatch colors dedup), `.rial-input` `@layer components` class (10 inputs migrated), `src/lib/storage-keys.ts` (38 keys, STORAGE_KEYS const).
+**Sprint 45 [1.5.159]** — RecipeCard composición NYT-style: drop wrapper bg/radius/overflow, `rounded-sm` se mueve a `IMAGE_ZONE`, `INFO_BLOCK` `p-3/p-4/p-2.5` → `pt-2/pt-3/pt-2` (sin padding lateral, texto alineado al borde imagen). Title `uppercase` → mixed-case (Bricolage Grotesque). Author/forkedFrom labels mixed-case. Badges overlay (Time/Tag/Match) y action buttons (Share/Save/Delete) intactos. Alturas fijas preservadas. 1 primitivo → 5 surfaces.
 
 ## Repository compliance
 - `LICENSE`: Proprietary © 2026 RIAL FOOD WORLD S.L. Contact legal@rialfoodworld.com.

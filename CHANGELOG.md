@@ -1,5 +1,36 @@
 # RIAL App - Changelog
 
+## [1.5.159] - 2026-04-30
+
+### feat(ui): Sprint 45 — RecipeCard composición sin contenedor (NYT-style)
+
+Recipe cards adoptan el patrón de composición de NYT Cooking: imagen con bordes redondeados arriba, texto (título + autor + meta) directamente debajo sin caja contenedora, sin fondo, sin padding lateral. El texto queda alineado al borde izquierdo de la imagen, ganando ancho efectivo frente al patrón previo (wrapper `bg-surface rounded-sm overflow-hidden` + `p-3/p-4` interno).
+
+**Cambios en `src/components/patterns/RecipeCard.tsx` (4 variantes: carousel/grid/hero/compact):**
+- `CONTAINER`: drop `bg-surface rounded-sm overflow-hidden` — el wrapper deja de ser una "caja".
+- `IMAGE_ZONE`: `+ rounded-sm` — el radius se mueve del wrapper a la imagen (la imagen sigue siendo el bloque visual rounded; el texto fluye debajo).
+- `INFO_BLOCK`: `p-3 / p-4 / p-2.5` → `pt-2 / pt-3 / pt-2` — sin padding lateral, texto alineado al borde de la imagen.
+- `TITLE`: drop `uppercase` en las 4 variantes — mixed-case Bricolage Grotesque (font-headline). Más cercano al feel editorial NYT, mantiene la familia tipográfica RIAL.
+- Author + forkedFrom labels: drop `uppercase tracking-widest`, `mt-1` → `mt-0.5` — coherencia mixed-case con el título.
+
+**No se tocan:**
+- Badges overlay (Time / Tag / Match) sobre la imagen — siguen con `bg-surface/95 backdrop-blur-md` propios; señal RIAL diferencial (matchScore).
+- Action buttons top-right (Share / Save / Delete).
+- Macros row (Flame + cal + pro badge); pro badge mantiene `uppercase tracking-tight` (es chip).
+- Alturas fijas por variante (h-64 / h-56) — preservan alineación horizontal en swimlanes y grids.
+
+**Superficies impactadas (1 primitivo → 5 surfaces):**
+- Cocina (variant `grid`)
+- Discovery: hero + 5 swimlanes (variants `hero`, `carousel`, `grid`)
+- RecipeDetail "más como esto" (variant `compact`)
+- CreatorProfile pestaña recipes (variant `grid`)
+
+API pública del componente sin cambios; consumers no requieren edición. No i18n, no SyncKey, no AppStateContext, no handler-factory.
+
+Quality: TS 0 errors · 1332/1332 tests · lint 0 errors · size PASSED (main 876.4 KB raw / 275.3 KB gzip; +1 KB vs S44, dentro de presupuesto).
+
+---
+
 ## [1.5.158] - 2026-04-29
 
 ### refactor(dx): Sprint 44 — maintainability quick wins (rebrand safety)

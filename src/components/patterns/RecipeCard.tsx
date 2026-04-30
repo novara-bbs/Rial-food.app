@@ -33,31 +33,31 @@ export interface RecipeCardProps {
 }
 
 const CONTAINER: Record<string, string> = {
-  carousel: 'relative shrink-0 w-52 h-64 rounded-sm overflow-hidden group cursor-pointer bg-surface',
-  grid:     'relative h-64 w-full rounded-sm overflow-hidden group cursor-pointer bg-surface',
-  hero:     'relative w-full rounded-sm overflow-hidden group cursor-pointer bg-surface',
-  compact:  'relative shrink-0 w-40 h-56 rounded-sm overflow-hidden group cursor-pointer bg-surface',
+  carousel: 'relative shrink-0 w-52 h-64 group cursor-pointer',
+  grid:     'relative h-64 w-full group cursor-pointer',
+  hero:     'relative w-full group cursor-pointer',
+  compact:  'relative shrink-0 w-40 h-56 group cursor-pointer',
 };
 
 const IMAGE_ZONE: Record<string, string> = {
-  carousel: 'relative aspect-[4/3] w-full overflow-hidden',
-  grid:     'relative aspect-[4/3] w-full overflow-hidden',
-  hero:     'relative aspect-video w-full overflow-hidden',
-  compact:  'relative aspect-square w-full overflow-hidden',
+  carousel: 'relative aspect-[4/3] w-full overflow-hidden rounded-sm',
+  grid:     'relative aspect-[4/3] w-full overflow-hidden rounded-sm',
+  hero:     'relative aspect-video w-full overflow-hidden rounded-sm',
+  compact:  'relative aspect-square w-full overflow-hidden rounded-sm',
 };
 
 const INFO_BLOCK: Record<string, string> = {
-  carousel: 'flex flex-col p-3 h-[100px]',
-  grid:     'flex flex-col p-3 h-[100px]',
-  hero:     'flex flex-col p-4 h-36',
-  compact:  'flex flex-col p-2.5 h-16',
+  carousel: 'flex flex-col pt-2 h-[100px]',
+  grid:     'flex flex-col pt-2 h-[100px]',
+  hero:     'flex flex-col pt-3 h-36',
+  compact:  'flex flex-col pt-2 h-16',
 };
 
 const TITLE: Record<string, string> = {
-  carousel: 'font-headline font-bold text-sm text-tertiary leading-tight tracking-tight uppercase line-clamp-2',
-  grid:     'font-headline font-bold text-sm text-tertiary leading-tight tracking-tight uppercase line-clamp-2',
-  hero:     'font-headline font-bold text-tertiary text-2xl md:text-3xl leading-tight tracking-tighter uppercase line-clamp-2',
-  compact:  'font-headline font-bold text-xs text-tertiary leading-tight tracking-tight uppercase line-clamp-2',
+  carousel: 'font-headline font-bold text-sm text-tertiary leading-tight tracking-tight line-clamp-2',
+  grid:     'font-headline font-bold text-sm text-tertiary leading-tight tracking-tight line-clamp-2',
+  hero:     'font-headline font-bold text-tertiary text-2xl md:text-3xl leading-tight tracking-tighter line-clamp-2',
+  compact:  'font-headline font-bold text-xs text-tertiary leading-tight tracking-tight line-clamp-2',
 };
 
 export default function RecipeCard({
@@ -192,13 +192,13 @@ export default function RecipeCard({
         <h4 className={TITLE[variant]}>{recipe.title}</h4>
 
         {showAuthor && creator && (
-          <span className="font-label text-micro text-on-surface-variant tracking-widest uppercase mt-1 truncate">
+          <span className="font-label text-micro text-on-surface-variant mt-0.5 truncate">
             @{creator.name}
           </span>
         )}
 
         {showAuthor && recipe.forkedFrom && (
-          <span className="font-label text-micro text-on-surface-variant tracking-widest uppercase mt-1 flex items-center gap-1 min-w-0">
+          <span className="font-label text-micro text-on-surface-variant mt-0.5 flex items-center gap-1 min-w-0">
             <GitFork className="w-3 h-3 text-primary/60 shrink-0" />
             <span className="truncate">{recipe.forkedFrom.creatorName} · {recipe.forkedFrom.title}</span>
           </span>
