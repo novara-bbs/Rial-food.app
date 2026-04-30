@@ -11,6 +11,7 @@ import social from './social';
 import wellness from './wellness';
 import profile from './profile';
 import settings from './settings';
+import onboarding from './onboarding';
 
 const en: Translations = {
   ...common,
@@ -23,6 +24,7 @@ const en: Translations = {
   ...wellness,
   ...profile,
   ...settings,
+  ...onboarding,
 };
 
 export default en;

@@ -27,7 +27,7 @@ import FilterSheet from '@/components/patterns/FilterSheet';
 import FilterButton from '@/components/patterns/FilterButton';
 import Sparkline from '@/components/Sparkline';
 import DayGridCalendar from '@/components/patterns/DayGridCalendar';
-import OnboardingScaffold from '@/features/profile/components/OnboardingScaffold';
+import OnboardingScaffold from '@/features/onboarding/components/OnboardingScaffold';
 import RadioCardGroup from '@/components/ui/RadioCardGroup';
 import SelectList from '@/components/SelectList';
 import FamilyCard from '@/features/food/components/FamilyCard';

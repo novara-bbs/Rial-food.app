@@ -182,9 +182,9 @@ export default function Profile({ userProfile, onBack, realFeelLogs = [], savedR
       {/* Body data */}
       <SectionCard title={t.profile.bodyData}>
         <div className="grid grid-cols-2 gap-4 text-sm">
-          {userProfile?.age && <div className="flex justify-between"><span className="text-on-surface-variant">{t.onboarding.age}</span><span className="font-bold text-tertiary">{userProfile.age}</span></div>}
-          {userProfile?.height && <div className="flex justify-between"><span className="text-on-surface-variant">{t.onboarding.height}</span><span className="font-bold text-tertiary">{heightFromCm(userProfile.height, userProfile?.unitSystem ?? 'metric')} {getHeightUnit(userProfile?.unitSystem ?? 'metric')}</span></div>}
-          {userProfile?.weight && <div className="flex justify-between"><span className="text-on-surface-variant">{t.onboarding.weight}</span><span className="font-bold text-tertiary">{bodyWeightFromKg(userProfile.weight, userProfile?.unitSystem ?? 'metric')} {getBodyWeightUnit(userProfile?.unitSystem ?? 'metric')}</span></div>}
+          {userProfile?.age && <div className="flex justify-between"><span className="text-on-surface-variant">{t.onboarding.body.age}</span><span className="font-bold text-tertiary">{userProfile.age}</span></div>}
+          {userProfile?.height && <div className="flex justify-between"><span className="text-on-surface-variant">{t.onboarding.body.height}</span><span className="font-bold text-tertiary">{heightFromCm(userProfile.height, userProfile?.unitSystem ?? 'metric')} {getHeightUnit(userProfile?.unitSystem ?? 'metric')}</span></div>}
+          {userProfile?.weight && <div className="flex justify-between"><span className="text-on-surface-variant">{t.onboarding.body.weight}</span><span className="font-bold text-tertiary">{bodyWeightFromKg(userProfile.weight, userProfile?.unitSystem ?? 'metric')} {getBodyWeightUnit(userProfile?.unitSystem ?? 'metric')}</span></div>}
           {userProfile?.goal && <div className="flex justify-between"><span className="text-on-surface-variant">{t.profile.goal}</span><span className="font-bold text-primary uppercase text-xs">{userProfile.goal}</span></div>}
         </div>
         {userProfile?.dietaryPreferences?.length > 0 && (

@@ -1,5 +1,5 @@
 import { useLayoutEffect, useMemo, useRef, useState, Suspense } from 'react';
-import Onboarding from './features/profile/components/Onboarding';
+import { Onboarding } from './features/onboarding';
 import Sidebar from './components/Sidebar';
 import BottomNav from './components/BottomNav';
 import CreateModal from './components/CreateModal';

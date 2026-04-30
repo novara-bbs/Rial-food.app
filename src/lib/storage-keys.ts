@@ -31,6 +31,9 @@ export const STORAGE_KEYS = {
   IS_FIRST_TIME:     'isFirstTime',
   MISE_EN_PLACE:     'miseEnPlacePreCook',
 
+  // ── Onboarding (resumable draft, cleared on complete) ──────────────────
+  ONBOARDING_DRAFT:  'onboardingDraft',
+
   // ── Vitals (useVitalsState) ─────────────────────────────────────────────
   DAILY_MACROS:      'dailyMacros',
   HYDRATION:         'hydration',

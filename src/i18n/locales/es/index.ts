@@ -10,6 +10,7 @@ import social from './social';
 import wellness from './wellness';
 import profile from './profile';
 import settings from './settings';
+import onboarding from './onboarding';
 
 const es = {
   ...common,
@@ -22,6 +23,7 @@ const es = {
   ...wellness,
   ...profile,
   ...settings,
+  ...onboarding,
 };
 
 // Deep-string type so EN can use looser literal types per key.

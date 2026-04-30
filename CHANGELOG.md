@@ -1,5 +1,94 @@
 # RIAL App - Changelog
 
+## [1.5.166] - 2026-04-30
+
+### fix(onboarding): Sprint 51 polish — UX, correctness + code-quality improvements
+
+7 targeted improvements over the initial redesign:
+
+- **`sex` default 'male'** — `INITIAL_DRAFT.sex` ahora es `'male'` en lugar de `''`. Eliminado el check `sexRequired` del validator (sex siempre tiene valor). Resultado: `SegmentedTabs` siempre tiene un tab visualmente seleccionado; el CTA de identity nunca se bloquea solo por sex; el usuario que es mujer toca el tab para cambiar (patrón estándar de apps de salud).
+- **`IdentityStep` cleanup** — eliminada la doble lógica `draft.sex === '' ? 'male' : draft.sex` (innecesaria con el default) y el hint redundante `copy.sexLabel` que aparecía bajo los tabs como texto duplicado.
+- **`WelcomeStep` cleanup** — eliminado `<span className="sr-only">{copy.cta}</span>` innecesario (el CTA ya vive en el footer; los screen-readers lo anuncian allí).
+- **`KcalBreakdownCard` correctness** — reemplazado el check frágil `row.value === breakdown.basal` (que podría dar un falso positivo si otro valor coincide con el BMR) por un campo explícito `signed: boolean` en la definición de cada fila.
+- **`NumberStepper` ref-based focus check** — el guard de re-sincronización `document.activeElement?.id !== labelId` comparaba con el id del `<label>` (que labels no reciben focus, siempre era `true`). Ahora usa `useRef<HTMLInputElement>` con comparación directa `document.activeElement !== inputRef.current`.
+- **Resume banner** — cuando el modal abre con un draft rehidratado muestra un banner `bg-primary/10` "Continuamos donde lo dejamos." que se auto-descarta tras 2.5 s. Usa `loadDraft()` desde `state/persist` en el initializer de `useState`.
+- **Validator tests** — actualizados 3 casos en `validators.test.ts`: eliminadas pruebas de `sexRequired`, añadida prueba positiva para ambos sexos, actualizado `isDraftComplete` para verificar `activity: ''` bloquea (en lugar del ya-no-existente `sex: ''` bloqueante).
+
+Quality post-polish: TypeScript 0 errors · ESLint 0 errors · 1422/1422 tests · i18n 1980 keys · size:check PASS.
+
+## [1.5.165] - 2026-04-30
+
+### feat(onboarding): Sprint 51 — rediseño completo del onboarding (lógica + UI)
+
+El onboarding (`src/features/profile/components/Onboarding.tsx`, 419 líneas) acumulaba deuda visible: 6 pasos planos con raw `<button>` ad-hoc en sex/trains/restrictions/palette, `style={{}}` inline, lucide colors hardcoded (`text-blue-400`), casts `(t as any)`, sin focus-trap ni focus-restore, validación débil, modal y derivación todo en un único archivo dentro de `profile/`. Tras analizar **INDYA** (33 imágenes + `docs/market/indya-design-playbook.md`), se rehízo desde cero manteniendo el contrato de salida (`{ userProfile, targets, initialWeightKg }`) consumido por `App.tsx:233`.
+
+**Backend (lógica) — nuevo feature module `src/features/onboarding/`:**
+- `state/types.ts` — `OnboardingDraft`, `OnboardingState`, `OnboardingAction` (discriminated union), `STEP_ORDER` readonly array, `setField<K>()` typed helper, `INITIAL_STATE` con `version: 1` para migration safety.
+- `state/onboardingReducer.ts` — pure reducer con 7 actions: `SET_FIELD`, `TOGGLE_RESTRICTION`, `NEXT` (validator-gated), `BACK` (clamp en welcome), `GOTO`, `HYDRATE`, `RESET`.
+- `state/validators.ts` — `validateStep(stepId, draft) → { ok, errors }` puro per-step. Clamps: weight 30–300 kg, height 100–230 cm, age 13–100, name ≤ 40. Errors devuelven keys i18n (`'goalRequired'`, `'weightOutOfRange'`, etc.) — el shell localiza al render.
+- `state/persist.ts` — `loadDraft / saveDraft / clearDraft` con try/catch para SSR/private-mode/quota. Schema-version-gated; mismatch → `clearDraft()` y fresh start. Resumable mid-flow: write debounced 250ms tras cada dirty mutation; cleanup atómico antes de `onComplete`.
+- `derive/derive-targets.ts` — wrapper único `OnboardingDraft → contrato`. Reusa `calculateDailyTargets` y `calculateDailyTargetsWithBreakdown` de `nutrition.ts` SIN modificarlos. Blast radius = 1 archivo si nutrition cambia firma.
+- `STORAGE_KEYS.ONBOARDING_DRAFT = 'onboardingDraft'` añadido a `src/lib/storage-keys.ts`.
+
+**Frontend (UI/UX) — 9 pasos one-question-per-screen:**
+- `WelcomeStep` — micro-promesa "Tu plan personalizado en 3 minutos" + hero `<Sparkles>` + 1 CTA full-width.
+- `GoalStep` — `RadioCardGroup` 5 opciones (muscle/cut/maintain/health/family) con iconos token-pure.
+- `IdentityStep` — text input nombre (opcional, max 40) + `SegmentedTabs` male/female.
+- `BodyStep` — 3× `NumberStepper` (peso 0.5kg step, altura/edad enteros) con clamps + errores inline. Subtitle dinámico `Vamos con tus datos, {name}` cuando hay nombre (mid-flow confirmation pattern).
+- `ActivityStep` — `RadioCardGroup` 4 niveles con descripción ("1–2 entrenos / semana").
+- `TrainingStep` — `SegmentedTabs` Sí/No.
+- `PlanRevealStep` — **counter-up animado** del kcal target (1.2s ease-out cubic, respeta `prefers-reduced-motion`) + macros grid (PRO/CARBS/FATS) + `KcalBreakdownCard` con breakdown explícito (Basal + Actividad + Objetivo = Total).
+- `DietStep` — `TogglePillGroup` multi-select 7 opciones (skip explícito en footer ghost).
+- `DoneStep` — `OnboardingScaffold variant="centered"` + `<PartyPopper>` + summary card (kcal/proteína/restricciones).
+
+**Primitivas nuevas en `src/features/onboarding/components/`:**
+- `NumberStepper` — input numérico con +/− touch ≥44px (Button size="icon"), inputMode decimal/numeric para keypad nativo, clamps + round on blur, `aria-invalid`/`aria-describedby` para errores inline.
+- `TogglePillGroup` — multi-select chips con `role="group"` + `aria-pressed` per pill, `min-h-11` (ADR-003), token-pure.
+- `KcalBreakdownCard` — re-implementación token-pure de la INDYA pattern (sin `(t as any)` casts), Heading `overline` variant, mono+tabular-nums.
+- `OnboardingHeader` — back ghost (spacer en welcome) + step counter centrado mono `aria-live="polite"` + chunked progress bar (8 segmentos) con `role="progressbar"` + `aria-valuenow`.
+- `OnboardingFooter` — sticky `pb-[calc(0.75rem+env(safe-area-inset-bottom))]`, CTA primary full-width size lg con label dinámico (Empezar/Continuar/Crear mi plan/Vamos), skip ghost solo en diet, hint inline error.
+- `OnboardingScaffold` — re-homed desde `profile/`, ahora usa `<Heading>` primitive (eliminado raw `<h3>`), `tabIndex={-1}` para focus management.
+
+**Hooks nuevos en `src/features/onboarding/hooks/`:**
+- `useCountUp(target, durationMs)` — `requestAnimationFrame` + ease-out cubic, 0 deps externas, fallback a valor final con `prefers-reduced-motion`.
+- `useFocusTrap<T>(ref, active)` — guarda `document.activeElement` previo, traps Tab/Shift+Tab dentro del container, restaura on unmount.
+
+**Shell `src/features/onboarding/Onboarding.tsx`:**
+- `useReducer` con `loadInitialState` (resume si draft válido en localStorage).
+- Effect persistencia debounced 250ms si `dirty=true`.
+- Effect Escape → `onClose()` (draft auto-saved, salida segura).
+- `handleFinish` valida `isDraftComplete(draft)`, llama `deriveOutput`, `clearDraft()` ANTES de `onComplete?.()` para que un fallo del callback no deje draft corrupto.
+- `aria-modal="true"`, `aria-labelledby`, `role="dialog"`. Animaciones: `animate-in slide-in-from-bottom-2 fade-in duration-300` por step (key={stepId}) + `motion-reduce` automático.
+- Selección NO auto-avanza — tap card = SET_FIELD; CTA = NEXT (más confianza, permite reconsiderar).
+
+**i18n — namespace dedicado:**
+- Nuevo `src/i18n/locales/{es,en}/onboarding.ts` (~120 líneas cada uno) con jerarquía `welcome.* / goal.* / identity.* / body.* / activity.* / training.* / plan.* / diet.* / done.* / errors.* / shell.*`.
+- Bloque `onboarding` eliminado de `profile.ts` ES + EN (~60 líneas cada uno).
+- Wired en `src/i18n/locales/{es,en}/index.ts` composer.
+- Sidebar.tsx + Profile.tsx actualizados a las nuevas keys (`t.onboarding.welcome.subtitle`, `t.onboarding.body.{age,height,weight}`).
+- `npm run check:i18n` verde — **1980 keys** ES↔EN simétricos.
+
+**Tests nuevos (co-located con source, no `src/test/features/`):**
+- `state/onboardingReducer.test.ts` — 19 casos (SET_FIELD, TOGGLE_RESTRICTION, NEXT validator-gated, BACK clamp, GOTO, HYDRATE, RESET, STEP_ORDER invariants).
+- `state/validators.test.ts` — 21 casos (each step's validator + isDraftComplete edge cases).
+- `derive/derive-targets.test.ts` — 16 casos (golden cases muscle-male/cut-female, userProfile shape, initialWeightKg, breakdown signs, error path on incomplete draft, previewBreakdown gating).
+- `src/test/conventions/onboarding-primitives.test.ts` — refresh: paths, exports check (4 primitivas), anatomy + a11y locks (NumberStepper inputMode/aria, TogglePillGroup role="group"/aria-pressed/min-h-11, OnboardingScaffold no raw `<h>`), consumer sanity (9 steps montados, aria-modal/labelledby, persist wiring).
+
+**Decisiones explícitas:**
+- **Palette OUT del onboarding** — se relega a Settings para reducir time-to-plan (métrica clave). Si owner quiere recuperarlo, va como Step 7.5 reescrito con `RadioCardGroup` + tokens.
+- **Modal full-screen mantenido** (consistencia con resto de la app, no requiere deep-linking en first-time onboarding).
+- **No-auto-advance on selection** — el tap selecciona, el CTA avanza. Reduce errores de tap accidental.
+- **Reducer manual vs lib externa** — 7 actions self-contained, 0 deps nuevas justifican mantener pattern del repo.
+- **Counter-up implementación manual** (40 LoC con `requestAnimationFrame`) en vez de `react-countup` (3KB) — cero dep nueva.
+
+**Ficheros eliminados:**
+- `src/features/profile/components/Onboarding.tsx` (419 líneas)
+- `src/features/profile/components/OnboardingScaffold.tsx` (88 líneas)
+- `src/features/profile/components/KcalBreakdownCard.tsx` (109 líneas)
+- Total: −616 líneas, +~1900 líneas distribuidas en 21 ficheros nuevos del feature module.
+
+**Pipeline:** TypeScript ✓ · ESLint 0 errores · `check:i18n` 1980 keys ✓ · Vitest 1422/1422 ✓ (+57 tests onboarding) · build ✓ · `size:check` PASSED (main 884.2 KB raw / 278.4 KB gzip — sin regresión).
+
 ## [1.5.164] - 2026-04-30
 
 ### feat(home): Sprint 50 — MealGapSuggestion ahora recomienda recetas (no solo ingredientes)

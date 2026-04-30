@@ -15,7 +15,7 @@ export default function Sidebar({ currentScreen, setCurrentScreen, onOpenCreate 
     <aside className="hidden md:flex flex-col h-full py-8 space-y-6 bg-background w-64 border-r border-outline-variant/20 shrink-0 z-50">
       <div className="px-6 mb-8">
         <h1 className="text-2xl font-black text-primary tracking-tighter font-headline">RIAL</h1>
-        <p className="text-xs tracking-[0.2em] text-on-surface-variant uppercase font-bold mt-1">{t.onboarding.subtitle}</p>
+        <p className="text-xs tracking-[0.2em] text-on-surface-variant uppercase font-bold mt-1">{t.onboarding.welcome.subtitle}</p>
       </div>
 
       <div className="px-4 mb-4">

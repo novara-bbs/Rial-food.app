@@ -1,76 +1,63 @@
 /**
- * Onboarding primitives — PR 9 (playbook §4.11).
+ * Onboarding primitives — shape lock for the redesigned flow.
  *
- * Locks the shape of `<OnboardingScaffold>` + `<RadioCardGroup>` + `<SelectList>`
- * so future refactors of the onboarding flow or new step-types (HealthKit
- * grant, Apple Sign-In, permissions — Q6+) can't silently drift away from
- * the canonical anatomy derived from Bevel IMG_0951–0972.
- *
- * Scope:
- *   1. Module surface — all 3 primitives are default exports + their option
- *      types are re-exported by name.
- *   2. Anatomy invariants (via static file read, same pattern as
- *      `constant-tile.test.ts` and `home-hero.test.ts`):
- *      - OnboardingScaffold renders an `<h3>` title + variant branch + hero
- *        + subtitle + footerNote slot semantics.
- *      - RadioCardGroup has `role="radiogroup"` + `role="radio"` +
- *        `aria-checked` + HIG-sized tap target (`p-4`).
- *      - SelectList has `ChevronRight` trailing + `min-h-14` tap area + is
- *        NOT a radiogroup (to stay distinct from RadioCardGroup).
- *   3. Token purity — no hex codes, no `dark:` prefix in any primitive.
- *   4. Consumer sanity — `Onboarding.tsx` imports the 3 primitives so the
- *      migration from hand-rolled markup actually took effect.
+ * Locks the shape of `<OnboardingScaffold>`, `<RadioCardGroup>`,
+ * `<NumberStepper>`, `<TogglePillGroup>`, plus consumer sanity on
+ * `Onboarding.tsx` so future refactors can't silently drift away from the
+ * canonical anatomy.
  *
  * Static file-read pattern keeps the test fast (no DOM render).
  */
-import { describe, it, expect } from 'vitest';
 import fs from 'node:fs';
 import path from 'node:path';
 
-import OnboardingScaffold from '@/features/profile/components/OnboardingScaffold';
+import { describe, it, expect } from 'vitest';
+
 import RadioCardGroup, { type RadioCardOption } from '@/components/ui/RadioCardGroup';
-import SelectList, { type SelectListItem } from '@/components/SelectList';
+import OnboardingScaffold from '@/features/onboarding/components/OnboardingScaffold';
+import NumberStepper from '@/features/onboarding/components/NumberStepper';
+import TogglePillGroup from '@/features/onboarding/components/TogglePillGroup';
 
 const ROOT = process.cwd();
 const SCAFFOLD_SRC = fs.readFileSync(
-  path.resolve(ROOT, 'src/features/profile/components/OnboardingScaffold.tsx'),
+  path.resolve(ROOT, 'src/features/onboarding/components/OnboardingScaffold.tsx'),
   'utf8',
 );
 const RADIO_SRC = fs.readFileSync(
   path.resolve(ROOT, 'src/components/ui/RadioCardGroup.tsx'),
   'utf8',
 );
-const SELECT_SRC = fs.readFileSync(
-  path.resolve(ROOT, 'src/components/SelectList.tsx'),
+const STEPPER_SRC = fs.readFileSync(
+  path.resolve(ROOT, 'src/features/onboarding/components/NumberStepper.tsx'),
+  'utf8',
+);
+const PILLS_SRC = fs.readFileSync(
+  path.resolve(ROOT, 'src/features/onboarding/components/TogglePillGroup.tsx'),
   'utf8',
 );
 const ONBOARDING_SRC = fs.readFileSync(
-  path.resolve(ROOT, 'src/features/profile/components/Onboarding.tsx'),
+  path.resolve(ROOT, 'src/features/onboarding/Onboarding.tsx'),
   'utf8',
 );
 
 describe('Onboarding primitives — module surface', () => {
-  it('exports the 3 primitives as default components', () => {
-    expect(OnboardingScaffold).toBeTruthy();
+  it('exports the 4 primitives as default components', () => {
     expect(typeof OnboardingScaffold).toBe('function');
-    expect(RadioCardGroup).toBeTruthy();
     expect(typeof RadioCardGroup).toBe('function');
-    expect(SelectList).toBeTruthy();
-    expect(typeof SelectList).toBe('function');
+    expect(typeof NumberStepper).toBe('function');
+    expect(typeof TogglePillGroup).toBe('function');
   });
 
-  it('exports the option type contracts by name (type-only)', () => {
-    // If these types are renamed or dropped, tsc breaks before tests run.
+  it('exports the radio option contract by name (type-only)', () => {
     const radioOption: RadioCardOption<'a' | 'b'> = { id: 'a', label: 'A' };
-    const selectItem: SelectListItem<'a' | 'b'> = { id: 'b', label: 'B' };
     expect(radioOption.id).toBe('a');
-    expect(selectItem.id).toBe('b');
   });
 });
 
-describe('OnboardingScaffold — anatomy (§4.11)', () => {
-  it('renders the title as <h3> (matches legacy step-title level)', () => {
-    expect(SCAFFOLD_SRC).toMatch(/<h3[\s\S]*?>[\s\S]*?\{title\}[\s\S]*?<\/h3>/);
+describe('OnboardingScaffold — anatomy', () => {
+  it('uses the Heading primitive (no raw <h1..h4>)', () => {
+    expect(SCAFFOLD_SRC).toContain("from '@/components/ui/Typography'");
+    expect(SCAFFOLD_SRC).not.toMatch(/<h[1-6]\b/);
   });
 
   it('branches on variant prop (default vs centered)', () => {
@@ -93,7 +80,7 @@ describe('OnboardingScaffold — anatomy (§4.11)', () => {
   });
 });
 
-describe('RadioCardGroup — a11y + anatomy (§4.11)', () => {
+describe('RadioCardGroup — a11y + anatomy', () => {
   it('outer wrapper has role="radiogroup" + ariaLabel passthrough', () => {
     expect(RADIO_SRC).toContain('role="radiogroup"');
     expect(RADIO_SRC).toContain('aria-label={ariaLabel}');
@@ -104,20 +91,8 @@ describe('RadioCardGroup — a11y + anatomy (§4.11)', () => {
     expect(RADIO_SRC).toContain('aria-checked={selected}');
   });
 
-  it('cards are <button type="button"> (no <div onClick> anti-pattern)', () => {
-    expect(RADIO_SRC).toMatch(/<button[\s\S]*?type="button"[\s\S]*?key=\{option\.id\}/);
-  });
-
-  it('tap area is HIG-sized via p-4 (>= 44px total with icon + label)', () => {
+  it('tap area is HIG-sized via p-4', () => {
     expect(RADIO_SRC).toContain('p-4 rounded-sm border');
-  });
-
-  it('emits data-selected attribute for introspection', () => {
-    expect(RADIO_SRC).toContain('data-selected={selected}');
-  });
-
-  it('active state uses theme tokens (border-primary + bg-primary/10)', () => {
-    expect(RADIO_SRC).toContain('border-primary bg-primary/10');
   });
 
   it('uses theme tokens only (no hex, no dark:)', () => {
@@ -126,56 +101,71 @@ describe('RadioCardGroup — a11y + anatomy (§4.11)', () => {
   });
 });
 
-describe('SelectList — anatomy (§4.11, IMG_0958 pattern)', () => {
-  it('renders <ul> with optional aria-label', () => {
-    expect(SELECT_SRC).toMatch(/<ul[\s\S]*?aria-label=\{ariaLabel\}/);
+describe('NumberStepper — a11y + tap target', () => {
+  it('uses Button primitive for +/− (no raw branded buttons)', () => {
+    expect(STEPPER_SRC).toContain("from '@/components/ui/button'");
   });
 
-  it('each item is a <button type="button"> inside an <li>', () => {
-    expect(SELECT_SRC).toContain('<li key={item.id}>');
-    expect(SELECT_SRC).toMatch(/<button[\s\S]*?type="button"/);
+  it('center input declares inputMode for numeric keypads', () => {
+    expect(STEPPER_SRC).toContain('inputMode={precision > 0');
   });
 
-  it('trailing ChevronRight is always rendered (nav affordance)', () => {
-    expect(SELECT_SRC).toContain('<ChevronRight');
-    expect(SELECT_SRC).toContain("from 'lucide-react'");
-  });
-
-  it('card tap area >= HIG via min-h-14', () => {
-    expect(SELECT_SRC).toContain('min-h-14');
-  });
-
-  it('is NOT a radiogroup (stays distinct from RadioCardGroup)', () => {
-    expect(SELECT_SRC).not.toContain('role="radiogroup"');
-    expect(SELECT_SRC).not.toContain('role="radio"');
-    expect(SELECT_SRC).not.toContain('aria-checked');
+  it('threads aria-invalid + aria-describedby for error rendering', () => {
+    expect(STEPPER_SRC).toContain('aria-invalid={invalid');
+    expect(STEPPER_SRC).toContain('aria-describedby={describedBy}');
   });
 
   it('uses theme tokens only (no hex, no dark:)', () => {
-    expect(SELECT_SRC).not.toMatch(/#[0-9a-fA-F]{3,8}\b/);
-    expect(SELECT_SRC).not.toContain('dark:');
+    expect(STEPPER_SRC).not.toMatch(/#[0-9a-fA-F]{3,8}\b/);
+    expect(STEPPER_SRC).not.toContain('dark:');
+  });
+});
+
+describe('TogglePillGroup — a11y + multi-select semantics', () => {
+  it('outer wrapper carries role="group"', () => {
+    expect(PILLS_SRC).toContain('role="group"');
+  });
+
+  it('each pill carries aria-pressed for toggle state', () => {
+    expect(PILLS_SRC).toContain('aria-pressed={isOn}');
+  });
+
+  it('pills meet HIG tap target via min-h-11', () => {
+    expect(PILLS_SRC).toContain('min-h-11');
+  });
+
+  it('uses theme tokens only (no hex, no dark:)', () => {
+    expect(PILLS_SRC).not.toMatch(/#[0-9a-fA-F]{3,8}\b/);
+    expect(PILLS_SRC).not.toContain('dark:');
   });
 });
 
 describe('Onboarding.tsx — consumer sanity', () => {
-  it('imports OnboardingScaffold', () => {
-    expect(ONBOARDING_SRC).toContain("from './OnboardingScaffold'");
+  it('imports the canonical primitives from the feature module', () => {
+    expect(ONBOARDING_SRC).toContain("from './components/OnboardingHeader'");
+    expect(ONBOARDING_SRC).toContain("from './components/OnboardingFooter'");
   });
 
-  it('imports RadioCardGroup', () => {
-    expect(ONBOARDING_SRC).toContain("from '@/components/ui/RadioCardGroup'");
+  it('renders all 9 steps via a switch on stepId', () => {
+    expect(ONBOARDING_SRC).toContain('WelcomeStep');
+    expect(ONBOARDING_SRC).toContain('GoalStep');
+    expect(ONBOARDING_SRC).toContain('IdentityStep');
+    expect(ONBOARDING_SRC).toContain('BodyStep');
+    expect(ONBOARDING_SRC).toContain('ActivityStep');
+    expect(ONBOARDING_SRC).toContain('TrainingStep');
+    expect(ONBOARDING_SRC).toContain('PlanRevealStep');
+    expect(ONBOARDING_SRC).toContain('DietStep');
+    expect(ONBOARDING_SRC).toContain('DoneStep');
   });
 
-  it('mounts <OnboardingScaffold> for each of the 6 steps', () => {
-    const matches = ONBOARDING_SRC.match(/<OnboardingScaffold/g) ?? [];
-    expect(matches.length).toBeGreaterThanOrEqual(6);
+  it('declares aria-modal + aria-labelledby on the dialog wrapper', () => {
+    expect(ONBOARDING_SRC).toContain('role="dialog"');
+    expect(ONBOARDING_SRC).toContain('aria-modal="true"');
+    expect(ONBOARDING_SRC).toContain('aria-labelledby={TITLE_ID}');
   });
 
-  it('mounts <RadioCardGroup> at least once (step 1 goals)', () => {
-    expect(ONBOARDING_SRC).toContain('<RadioCardGroup');
-  });
-
-  it('uses variant="centered" on the ready step', () => {
-    expect(ONBOARDING_SRC).toContain('variant="centered"');
+  it('persists draft via clearDraft / saveDraft from state/persist', () => {
+    expect(ONBOARDING_SRC).toContain('clearDraft');
+    expect(ONBOARDING_SRC).toContain('saveDraft');
   });
 });

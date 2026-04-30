@@ -5,11 +5,14 @@
 > prunes this file back down. Everything below should answer: *what's the release line,
 > what's the quality baseline, what's the next move, what's broken?*
 
-Last updated: **2026-04-30** — `[1.5.164]` Sprint 50: MealGapSuggestion ahora recomienda recetas + ingredientes.
+Last updated: **2026-04-30** — `[1.5.166]` Sprint 51 polish: 7 UX+correctness fixes sobre el rediseño del onboarding.
 
 ## Release snapshot
-- **Branch**: `main`, synced con `rial-food/main` (CI green S39; S40–S50 queued).
-- **This session (2026-04-30, S49–S50 — home polish)**:
+- **Branch**: `main`, synced con `rial-food/main` (CI green S39; S40–S51 queued).
+- **This session (2026-04-30, S51 polish — onboarding QA)**:
+    - **Sprint 51 polish** `[1.5.166]` — 7 mejoras sobre el rediseño: (1) `INITIAL_DRAFT.sex = 'male'` + eliminación check `sexRequired` del validator → SegmentedTabs siempre tiene tab seleccionado, CTA nunca bloqueado por sex. (2) `IdentityStep` cleanup: eliminado fallback `? 'male' : draft.sex` + hint duplicado. (3) `WelcomeStep`: eliminado `<span className="sr-only">` innecesario. (4) `KcalBreakdownCard`: reemplazado check frágil `row.value === breakdown.basal` por campo explícito `signed: boolean`. (5) `NumberStepper`: corregida comparación de foco a `useRef<HTMLInputElement>` (el `id` del `<label>` nunca coincidía). (6) Resume banner en `Onboarding.tsx`: `bg-primary/10` "Continuamos donde lo dejaste" auto-dismiss 2.5s cuando abre con draft rehidratado. (7) Validators test: 3 casos actualizados para eliminar `sexRequired` y añadir caso `activity: ''` bloquea `isDraftComplete`. Tests 1422/1422 · TS 0 · ESLint 0 errores · i18n 1980 keys · size PASS.
+    - **Sprint 51** `[1.5.165]` — **Rediseño completo del onboarding** basado en INDYA + best-practices. Nuevo feature module `src/features/onboarding/`. Backend: `onboardingReducer` puro + 7 actions, `validateStep` puro per-step, `derive-targets.ts` wrapper único sobre `nutrition.ts`, `persist.ts` con schema-version-gated localStorage (resumable mid-flow + cleanup atómico). Frontend: 9 pasos one-question-per-screen (Welcome → Goal → Identity → Body → Activity → Training → PlanReveal → Diet → Done), `<NumberStepper>` y `<TogglePillGroup>` primitivas nuevas (≥44px tap, token-pure, aria-pressed/role=group), `useCountUp` hook (counter-up del kcal target con `prefers-reduced-motion`), `useFocusTrap` hook (sin dep externa). Shell con `aria-modal/labelledby`, sticky CTA con label dinámico, chunked progress bar 8 segmentos, mid-flow confirmation con `{name}`. Palette saca del onboarding (queda en Settings). i18n nuevo namespace `onboarding.*` ES+EN simétrico (1980 keys), `profile.onboarding.*` eliminado. Tests 1368 → 1422 (+54: 19 reducer + 21 validators + 16 derive). Eliminados 3 ficheros viejos en `profile/components/` (−616 LoC). Pipeline verde, build sin regresión (884.2 KB raw).
+- **Previous session (2026-04-30, S49–S50 — home polish)**:
     - **Sprint 50** `[1.5.164]` — `MealGapSuggestion` extendido: ahora rankea **recetas del vault** (con `rankRecipesForGap` en `src/features/home/utils/suggest-recipes.ts`) priorizando planeadas hoy (`+25 %`), no comidas (`+15 %`) y penalizando repeticiones (`× 0.7`); allergen filter heurístico ES/EN sobre ingredientes + tags; slot filter respetando `recipe.suitableFor`. Render: carrusel `RecipeCard variant="compact"` (recetas) → lista de ingredientes (fallback). Tap en receta → `onNavigateToRecipe` (no auto-log). Migración deuda: raw `<button>` ingredientes → `<Button variant="ghost">`. 4 i18n keys nuevas (recipesTitle, foodsTitle, reason.planned-today, reason.not-eaten). Tests 1353 → 1368 (+15).
     - **Sprint 49** `[1.5.163]` — Fix bug navegación en `TodaysMeals` (sección «Planificado hoy»): la prop `onNavigateToRecipe` estaba tipada pero no destructurada. Bloque imagen+badge+título+kcal envuelto en `<button type="button">` transparente (respeta ADR-001/SectionCard) con `aria-label={t.postCard.viewRecipe + ': ' + meal.title}` y focus-visible ring. Botón «Log it» queda hermano fuera. Tests 1350 → 1353 (+3).
 - **Previous session (2026-04-30, S46–S48 — recipes polish)**:
@@ -30,24 +33,24 @@ Last updated: **2026-04-30** — `[1.5.164]` Sprint 50: MealGapSuggestion ahora 
 - **Vercel project**: `rial.app.v1.5` (id `prj_t11VHYQjptazjUx7Y2hWLz0IDAjg`).
 - **Governance**: work directly on `main`. "continua" = push approval post green preflight.
 
-## Quality baseline (post-Sprint 50, 2026-04-30)
+## Quality baseline (post-Sprint 51 polish [1.5.166], 2026-04-30)
 - TypeScript: **0 errors** (`npx tsc --noEmit`)
-- Tests: **1368/1368** passing (93 files) — +18 from S49 (3 TodaysMeals click) + S50 (10 suggest-recipes + 5 MealGapSuggestion)
-- i18n symmetry: **1941** keys aligned ES ↔ EN (+4 from S50: mealGap.recipesTitle/foodsTitle/reason.planned-today/reason.not-eaten)
-- Design-system lint: **0 errors**, 349 warnings (pre-existing, allowlisted)
+- Tests: **1422/1422** passing (96 files) — +54 from S51 (19 reducer + 21 validators + 16 derive-targets + 4 test updates polish)
+- i18n symmetry: **1980** keys aligned ES ↔ EN (+39 from S51: new `onboarding.*` namespace, `profile.onboarding.*` removed)
+- Design-system lint: **0 errors**, 334 warnings (pre-existing, allowlisted)
 - Raw branded `<button>` count: **39 → 28 → 2 → 1** (S36+S38+S39; only TodaysMeals permanent — Discover migrated)
 - `Recipe.tag` typed: **`string` → `FoodTag`** (S37, fixes EN filter regression)
 - **`any` sweep** substantially complete: ~38 residual intentional any in production code — all documented. Categories: browser API workarounds (wakeLock, AudioContext, import.meta), i18n missing-key casts `(t as any)`, legacy archive format, `MealPlan = Record<number, any[]>`, pre-existing contract mismatches (eslint-disabled), migration code, untyped library (html5-qrcode).
 - `AppStateContextType` interface: **0 `any` types** (Sprint 4 ✓); `recipeToEdit: Partial<Recipe>|null` (Sprint 26 ✓)
 - **Handler + util files**: 78 `any` → 0 (Sprints 5-9); screens/components Sprints 19-28.
 - `LoggableMeal`: canonical `src/types/food.ts`. `PostComment.createdAt`: added to type. `FastingEntry`, `ExtractedRecipeData`, `PickedRecipe`: new local interfaces. `DailyLogEntry`: typed in useDailyReset/top-meals. `UserProfile`: imported in weight-handlers (no more `[key:string]:any`). Test fixtures: `as unknown as UserProfile` casts for partial mocks.
-- Build main: size:check PASS — main entry 875.4 KB raw / 274.6 KB gzip.
+- Build main: size:check PASS — main entry 884.3 KB raw / 278.2 KB gzip.
 - **AppStateContext**: 1075 → 584 lines (-46%), composer of 8 domain hooks.
 - **RecipeDetail**: 1066 → 678 lines (-36%), composer of 7 detail components.
 - **CreateRecipe**: 1052 → 460 lines (-56%), 5 step components in `components/create/`.
 - **BarcodeScanner**: 823 → 378 lines (-54%), 4 sub-components in `components/barcode/`.
 - **AddMeal**: 714 → 422 lines (-41%), 5 sub-components in `components/add-meal/`.
-- **i18n locales**: 4506 → 22 domain files via codemod. 1926 keys total.
+- **i18n locales**: 4506 → 23 domain files via codemod (onboarding.ts namespace added S51). 1980 keys total.
 - **Test coverage** (new artifacts): 8/8 hooks + 7/7 detail components + 3 new convention tests (safe-area, button-adoption, screen-size).
 - **Pre-commit hook**: Husky + lint-staged (ESLint on staged TS/TSX, check:i18n on locale changes).
 - **CI status**: ✅ verde.
