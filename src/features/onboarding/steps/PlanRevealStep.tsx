@@ -20,6 +20,8 @@ export default function PlanRevealStep({
 
   const breakdown = previewBreakdown(draft);
   const targetKcal = breakdown?.total ?? 0;
+  const kcalMin = breakdown ? Math.round(targetKcal * 0.95) : 0;
+  const kcalMax = breakdown ? Math.round(targetKcal * 1.05) : 0;
   const animated = useCountUp(targetKcal, 1200);
 
   const title = draft.name
@@ -49,6 +51,14 @@ export default function PlanRevealStep({
               kcal
             </span>
           </p>
+          {/* kcal range (±5%) — shows after the count-up settles */}
+          {breakdown && (
+            <p className="text-caption text-on-surface-variant mt-1 font-mono tabular-nums">
+              {kcalMin}
+              {copy.kcalRangeSep}
+              {kcalMax} kcal
+            </p>
+          )}
         </SectionCard>
 
         {/* Macro grid */}

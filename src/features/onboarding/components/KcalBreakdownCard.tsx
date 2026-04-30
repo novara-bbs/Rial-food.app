@@ -43,22 +43,26 @@ export default function KcalBreakdownCard({
    * Hide the exercise row when value is 0 (model doesn't parameterise
    * per-session yet — showing "+0 kcal" is just noise).
    */
+  const attr = labels.breakdownAttribution;
+
   const rows: {
     label: string;
+    attribution: string;
     value: number;
     signed: boolean;
     positive?: boolean;
   }[] = [
-    { label: labels.breakdownBasal,    value: breakdown.basal,     signed: false },
-    { label: labels.breakdownActivity, value: breakdown.activity,  signed: true  },
+    { label: labels.breakdownBasal,    attribution: attr.basal,    value: breakdown.basal,     signed: false },
+    { label: labels.breakdownActivity, attribution: attr.activity,  value: breakdown.activity,  signed: true  },
     ...(breakdown.exercise !== 0
-      ? [{ label: labels.breakdownExercise, value: breakdown.exercise, signed: true }]
+      ? [{ label: labels.breakdownExercise, attribution: attr.exercise, value: breakdown.exercise, signed: true }]
       : []),
     {
-      label:    labels.breakdownObjective,
-      value:    breakdown.objective,
-      signed:   true,
-      positive: breakdown.objective >= 0,
+      label:       labels.breakdownObjective,
+      attribution: attr.objective,
+      value:       breakdown.objective,
+      signed:      true,
+      positive:    breakdown.objective >= 0,
     },
   ];
 
@@ -68,17 +72,22 @@ export default function KcalBreakdownCard({
         {labels.breakdownTitle}
       </Heading>
 
-      <ul className="space-y-2">
+      <ul className="space-y-3">
         {rows.map(row => (
-          <li key={row.label} className="flex items-center justify-between">
-            <Text variant="body-sm" as="span">
-              {row.label}
-            </Text>
+          <li key={row.label} className="flex items-start justify-between gap-3">
+            <div className="flex flex-col min-w-0">
+              <Text variant="body-sm" as="span">
+                {row.label}
+              </Text>
+              <Text variant="micro" as="span" className="text-on-surface-variant/60 leading-tight">
+                {row.attribution}
+              </Text>
+            </div>
             <Text
               as="span"
               variant="body-sm"
               className={[
-                'font-mono font-bold tabular-nums',
+                'font-mono font-bold tabular-nums shrink-0',
                 row.positive === false
                   ? 'text-error'
                   : row.positive === true

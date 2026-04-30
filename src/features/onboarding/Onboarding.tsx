@@ -24,6 +24,7 @@ import { useI18n } from '@/i18n';
 
 import OnboardingFooter from './components/OnboardingFooter';
 import OnboardingHeader from './components/OnboardingHeader';
+import { type ProgressSummaryData } from './components/OnboardingProgressSummary';
 import { deriveOutput } from './derive/derive-targets';
 import { useFocusTrap } from './hooks/useFocusTrap';
 import { onboardingReducer } from './state/onboardingReducer';
@@ -165,6 +166,25 @@ export default function Onboarding({ isOpen, onClose, onComplete, onNavigateToLo
     dispatch({ type: 'NEXT' });
   }, []);
 
+  // ── Progress summary chips ────────────────────────────────────────────────
+  // Must be before the early return to satisfy Rules of Hooks.
+  // Show chips for completed steps: goal from identity (idx 2), sex from body
+  // (idx 3), body data from activity (idx 4), activity from training (idx 5).
+  const summary = useMemo<ProgressSummaryData | undefined>(() => {
+    const idx = stepIndex;
+    if (idx < 2) return undefined; // welcome + goal: no previous choices to show
+    const d = state.draft;
+    const opts = t.onboarding;
+    return {
+      goal:     idx >= 2 && d.goal     ? opts.goal.options[d.goal as keyof typeof opts.goal.options] : undefined,
+      sex:      idx >= 3 && d.sex      ? (d.sex === 'male' ? opts.identity.male : opts.identity.female) : undefined,
+      body:     idx >= 4 && d.weight != null && d.height != null
+                  ? `${d.weight} kg · ${d.height} cm`
+                  : undefined,
+      activity: idx >= 5 && d.activity ? opts.activity.options[d.activity as keyof typeof opts.activity.options]?.label : undefined,
+    };
+  }, [stepIndex, state.draft, t]);
+
   if (!isOpen) return null;
 
   // ── Per-step body ─────────────────────────────────────────────────────────
@@ -199,6 +219,7 @@ export default function Onboarding({ isOpen, onClose, onComplete, onNavigateToLo
         progressTotal={PROGRESS_TOTAL}
         canGoBack={state.stepId !== 'welcome'}
         onBack={handleBack}
+        summary={summary}
       />
 
       <main

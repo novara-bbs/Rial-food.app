@@ -1,20 +1,26 @@
 /**
- * OnboardingHeader — back, step counter, chunked progress bar.
+ * OnboardingHeader — back, step counter, chunked progress bar, summary chips.
  *
- * Layout (left to right):
- *   [back ghost] [step counter centered] [progress chunks across the bottom]
+ * Layout (top to bottom):
+ *   [back ghost] [step counter centered] [right spacer]
+ *   [8-chunk progress bar]
+ *   [summary chips — optional, hidden on welcome/goal]
  *
  * On welcome (`stepIndex === 0`) the back slot becomes an invisible spacer
  * so the layout doesn't shift on the first transition.
  *
  * `aria-live="polite"` on the step counter announces each step change to
- * screen readers without interrupting.
+ * screen readers without interrupting. The summary chips are `aria-hidden`
+ * since they are decorative (screen readers already track step progress via
+ * the step counter).
  */
 import { ArrowLeft } from 'lucide-react';
 
 import { Button } from '@/components/ui/button';
 import { Text } from '@/components/ui/Typography';
 import { useI18n } from '@/i18n';
+
+import OnboardingProgressSummary, { type ProgressSummaryData } from './OnboardingProgressSummary';
 
 interface OnboardingHeaderProps {
   /** Zero-based index in `STEP_ORDER`. 0 = welcome (no progress chunks fill yet). */
@@ -24,6 +30,8 @@ interface OnboardingHeaderProps {
   /** True when there is a previous step to go back to. */
   canGoBack: boolean;
   onBack: () => void;
+  /** Optional summary chips shown below the progress bar. */
+  summary?: ProgressSummaryData;
 }
 
 export default function OnboardingHeader({
@@ -31,6 +39,7 @@ export default function OnboardingHeader({
   progressTotal,
   canGoBack,
   onBack,
+  summary,
 }: OnboardingHeaderProps) {
   const { t } = useI18n();
   // Welcome doesn't count as a question; the progress bar starts at goal.
@@ -93,6 +102,9 @@ export default function OnboardingHeader({
           );
         })}
       </div>
+
+      {/* Summary chips — shown when the user has made at least one choice */}
+      {summary && <OnboardingProgressSummary data={summary} />}
     </header>
   );
 }
