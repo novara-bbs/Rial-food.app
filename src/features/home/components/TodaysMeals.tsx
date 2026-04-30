@@ -40,6 +40,7 @@ interface TodaysMealsProps {
 export default function TodaysMeals({
   dailyLog, todaysMeals, onLogMealNow, onNavigateToPlan, onAddMeal,
   setDailyLog, setDailyMacros,
+  onNavigateToRecipe,
   mergedVariants,
   userGoal,
 }: TodaysMealsProps) {
@@ -266,16 +267,24 @@ export default function TodaysMeals({
           )}
           {todaysMeals.map((meal, idx) => (
             <SectionCard key={meal.id || idx} padding="none" spacing="none" className="p-4 flex items-center gap-4 group">
-              <div className="w-12 h-12 rounded-sm bg-surface-container-highest overflow-hidden shrink-0">
-                <img src={meal.img || "https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&w=100&q=80"} alt={meal.title} className="w-full h-full object-cover" referrerPolicy="no-referrer" />
-              </div>
-              <div className="flex-1 min-w-0">
-                <div className="flex items-center gap-2">
-                  <span className="text-micro font-semibold uppercase tracking-wider bg-primary/10 text-primary px-1.5 py-0.5 rounded">{meal.type || meal.time}</span>
+              <button
+                type="button"
+                onClick={() => onNavigateToRecipe?.(meal)}
+                disabled={!onNavigateToRecipe}
+                aria-label={`${t.postCard.viewRecipe}: ${meal.title}`}
+                className="flex items-center gap-4 flex-1 min-w-0 text-left rounded-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/50 disabled:cursor-default"
+              >
+                <div className="w-12 h-12 rounded-sm bg-surface-container-highest overflow-hidden shrink-0">
+                  <img src={meal.img || "https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&w=100&q=80"} alt={meal.title} className="w-full h-full object-cover" referrerPolicy="no-referrer" />
                 </div>
-                <h3 className="font-headline text-sm font-bold text-tertiary uppercase truncate mt-0.5">{meal.title}</h3>
-                <span className="text-micro text-on-surface-variant font-mono">{meal.cal} {t.common.kcal}</span>
-              </div>
+                <div className="flex-1 min-w-0">
+                  <div className="flex items-center gap-2">
+                    <span className="text-micro font-semibold uppercase tracking-wider bg-primary/10 text-primary px-1.5 py-0.5 rounded">{meal.type || meal.time}</span>
+                  </div>
+                  <h3 className="font-headline text-sm font-bold text-tertiary uppercase truncate mt-0.5">{meal.title}</h3>
+                  <span className="text-micro text-on-surface-variant font-mono">{meal.cal} {t.common.kcal}</span>
+                </div>
+              </button>
               <button type="button"
                 onClick={(e) => { e.stopPropagation(); onLogMealNow?.(meal, 1); }}
                 className="shrink-0 px-4 min-h-11 bg-primary text-on-primary rounded-sm text-micro font-semibold uppercase tracking-widest hover:opacity-90 transition-opacity"
