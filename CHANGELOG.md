@@ -1,5 +1,42 @@
 # RIAL App - Changelog
 
+## [1.5.173] - 2026-04-30
+
+### refactor(onboarding): typography normalization + step merge + DoneStep declutter
+
+Pasada de consistencia visual sobre los 9 steps después del feedback del owner. El módulo era funcional pero acumulaba 3 patrones tipográficos para "label inline" (`font-label text-micro uppercase tracking-widest` raw, `Text variant="micro"`, `Heading variant="overline"`), todos ellos mayúsculas + Bricolage Grotesque + tracking ancho — visualmente "otra letra" frente al body Satoshi. Unificado a un único patrón body-sm/caption + font-medium/semibold lowercase.
+
+**Tipografía — single source of truth para "label inline":**
+
+- **NumberStepper** (`components/NumberStepper.tsx`) — label `font-label text-micro uppercase tracking-widest` → `text-body-sm font-medium text-on-surface-variant`. Container del input cambia `flex items-baseline` → `items-center` (antes el input `font-mono text-title-sm` y el unit `caption` tenían baselines distintos → desalineación vertical reportada). Input pasa de `text-title-sm font-bold` → `text-body-lg font-semibold tabular-nums` con `min-w-0 max-w-full size={4}` (no se desborda). Unit pasa a `body-sm` para mejor balance visual.
+- **IdentityStep** (`steps/IdentityStep.tsx`) — `nameLabel` y `sexLabel` migrados al patrón body-sm font-medium lowercase. "SEXO BIOLÓGICO" deja de salir en Bricolage uppercase.
+- **OnboardingProgressSummary** (`components/OnboardingProgressSummary.tsx`) — chip text `Text variant="micro"` (uppercase Bricolage) → `Text variant="caption" font-medium leading-none`. Chip altura `h-5 px-2` → `h-6 px-2.5` para mejor proporción con el texto lowercase.
+- **PlanRevealStep** (`steps/PlanRevealStep.tsx`) — `dailyKcal` heading `Heading h4 overline` → `Text body-sm font-medium`. El número grande (`text-headline font-black tabular-nums`) intacto.
+- **KcalBreakdownCard** (`components/KcalBreakdownCard.tsx`) — `breakdownTitle` y `breakdownTotal` bajan de `Heading h4 overline` a `Text body-sm font-semibold text-on-surface`. Attribution rows `Text variant="micro"` → `Text variant="caption"`. Esto resuelve el comentario del owner: "tu peso, altura, edad, sexo... salía en mayúsculas y otra letra".
+
+**ActivitySlider — sizing fix:**
+
+- Eliminado `min-h-[5rem]` del label dinámico — los `example` largos dejaban de caber en viewport estrecho (notch + 320 px). Ahora altura natural con `space-y` consistente.
+- Tick labels `Text variant="micro"` → `Text variant="caption"` lowercase.
+- `text-balance` añadido al example para evitar viudas/huérfanas.
+
+**Step 4 + 5 fusión:**
+
+- `TrainingStep.tsx` eliminado (era una sola SegmentedTabs Yes/No de ~46 LoC). Su pregunta se movió debajo del `<ActivitySlider>` en `ActivityStep.tsx` con un divisor `border-t border-outline-variant/20` que la separa visualmente como sub-pregunta. Las preguntas son binarias y back-to-back en pantallas separadas se sentía redundante.
+- **state changes**: `STEP_ORDER` 9 → 8 entries (welcome → goal → identity → body → activity → plan → diet → done). `PROGRESS_TOTAL` 8 → 7. `FIELD_TO_STEP.trains` apuntaba a `'training'`, ahora a `'activity'`. `validators.ts` quita el case `'training'` (era no-op pero sobrante en la unión `StepId`).
+- i18n: `t.onboarding.training.{title,subtitle,yes,no}` se mantienen — los consume `ActivityStep` directamente. Cero cambios de keys.
+- Tests actualizados: `validators.test.ts` `it.each(['welcome','training','plan','diet','done'])` → quita training (5 → 4 cases). `onboardingReducer.test.ts` `expect(STEP_ORDER.length).toBe(9)` → 8. `onboarding-primitives.test.ts` quita el `expect(toContain('TrainingStep'))` y baja "all 9 steps" → "all 8 steps".
+
+**DoneStep — declutter (era muy parecido a PlanReveal):**
+
+- El owner notó redundancia entre PlanReveal (paso 6) y Done (paso 8): ambos mostraban el SectionCard con kcal target + protein. Done pierde el SectionCard de números (PlanReveal ya lo dio) y se queda con: hero `<PartyPopper>`, título personalizado, subtitle, restrictions snapshot (única pieza nueva). Más ligero, distinto visualmente, y celebra el momento sin repetir números.
+- `Heading h4 overline` eliminado en favor de un par `<Text variant="caption">` + `<Text variant="body">` centrado.
+- Removed unused imports (`SectionCard`, `Heading`, `previewBreakdown`).
+
+**Verificación:** TypeScript 0 · Lint 0 · Tests 1435/1435 · size:check PASSED (893.9 KB raw / 281.6 KB gzip · −0.5 KB main vs [1.5.172] por la eliminación de TrainingStep + DoneStep cleanup).
+
+---
+
 ## [1.5.172] - 2026-04-30
 
 ### fix(onboarding): GDPR consent inline (Instagram pattern) + persist hardening + a11y nit
