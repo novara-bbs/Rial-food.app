@@ -21,6 +21,7 @@ import { useCallback, useEffect, useMemo, useReducer, useRef, useState } from 'r
 
 import { Text } from '@/components/ui/Typography';
 import { useI18n } from '@/i18n';
+import { recordConsent } from '@/features/legal/components/GdprConsent';
 
 import OnboardingFooter from './components/OnboardingFooter';
 import OnboardingHeader from './components/OnboardingHeader';
@@ -150,6 +151,8 @@ export default function Onboarding({ isOpen, onClose, onComplete, onNavigateToLo
   const handleFinish = useCallback(() => {
     if (!isDraftComplete(state.draft)) return;
     const output = deriveOutput(state.draft);
+    // Defensive: ensure consent is recorded if a persisted draft skipped welcome.
+    recordConsent();
     clearDraft();
     onComplete?.({
       userProfile: output.userProfile,

@@ -1,7 +1,16 @@
 /**
- * GDPR / first-launch consent dialog.
- * Shown once on first app open. Stores consent in localStorage.
- * Required by EU law and Apple App Store privacy nutrition label.
+ * GDPR / consent helpers + (currently-unused) modal dialog.
+ *
+ * Active flow ([1.5.172]+): consent is recorded implicitly via
+ * `recordConsent()` when the user takes their first action in
+ * WelcomeStep (Apple/Google/Email/Guest), following the
+ * Instagram/TikTok inline-disclosure pattern. The microcopy in
+ * WelcomeStep states "by continuing you accept Privacy + Terms".
+ *
+ * The `<GdprConsent>` component below is kept in the repo for
+ * potential reuse in a future settings/legal flow but is no longer
+ * mounted in the mainline app tree. Removing it entirely would lose
+ * the canonical privacy-policy-anchored modal layout.
  */
 import { Shield } from 'lucide-react';
 import BottomSheet from '@/components/ui/bottom-sheet';
@@ -14,7 +23,7 @@ export function hasGivenConsent(): boolean {
   return localStorage.getItem(CONSENT_KEY) === 'true';
 }
 
-function recordConsent(): void {
+export function recordConsent(): void {
   localStorage.setItem(CONSENT_KEY, 'true');
 }
 

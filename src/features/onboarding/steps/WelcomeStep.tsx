@@ -25,6 +25,7 @@ import { useAuth } from '@/contexts/AuthContext';
 import { useI18n } from '@/i18n';
 import { signInWithApple, signInWithGoogle } from '@/lib/supabase';
 import { APP_NAME } from '@/config/brand';
+import { recordConsent } from '@/features/legal/components/GdprConsent';
 
 import { type OnboardingAction } from '../state/types';
 
@@ -56,6 +57,7 @@ export default function WelcomeStep({
   const [loadingOAuth, setLoadingOAuth] = useState<'apple' | 'google' | null>(null);
 
   async function handleApple() {
+    recordConsent();
     setLoadingOAuth('apple');
     try {
       const { error } = await signInWithApple();
@@ -70,6 +72,7 @@ export default function WelcomeStep({
   }
 
   async function handleGoogle() {
+    recordConsent();
     setLoadingOAuth('google');
     try {
       const { error } = await signInWithGoogle();
@@ -82,6 +85,7 @@ export default function WelcomeStep({
   }
 
   function handleEmail() {
+    recordConsent();
     if (onNavigateToLogin) {
       onNavigateToLogin();
     } else {
@@ -91,6 +95,7 @@ export default function WelcomeStep({
   }
 
   function handleGuest() {
+    recordConsent();
     dispatch({ type: 'NEXT' });
   }
 

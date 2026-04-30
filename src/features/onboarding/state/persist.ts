@@ -14,8 +14,10 @@ import { STORAGE_KEYS } from '../../../lib/storage-keys';
 import {
   INITIAL_STATE,
   ONBOARDING_DRAFT_VERSION,
+  STEP_ORDER,
   type OnboardingState,
   type PersistedDraft,
+  type StepId,
 } from './types';
 
 const KEY = STORAGE_KEYS.ONBOARDING_DRAFT;
@@ -119,6 +121,8 @@ function isPersistedDraft(value: unknown): value is PersistedDraft {
   const v = value as Record<string, unknown>;
   return (
     typeof v.stepId === 'string' &&
+    // Reject corrupted localStorage values that pretend to be a step.
+    STEP_ORDER.includes(v.stepId as StepId) &&
     typeof v.version === 'number' &&
     !!v.draft &&
     typeof v.draft === 'object'

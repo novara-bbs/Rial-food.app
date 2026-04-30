@@ -1,4 +1,4 @@
-import { useLayoutEffect, useMemo, useRef, useState, Suspense } from 'react';
+import { useEffect, useLayoutEffect, useMemo, useRef, useState, Suspense } from 'react';
 import { Onboarding } from './features/onboarding';
 import Sidebar from './components/Sidebar';
 import BottomNav from './components/BottomNav';
@@ -11,7 +11,7 @@ import { useNavigation } from './contexts/NavigationContext';
 import { useAppState } from './contexts/AppStateContext';
 import { useOnlineStatus } from './hooks/useOnlineStatus';
 import { useAuth } from './contexts/AuthContext';
-import GdprConsent, { hasGivenConsent } from './features/legal/components/GdprConsent';
+import { hasGivenConsent, recordConsent } from './features/legal/components/GdprConsent';
 import GlobalLogSnapshotModal from './features/wellness/components/GlobalLogSnapshotModal';
 import { Toaster } from 'sonner';
 import { screens } from './config/routes';
@@ -85,7 +85,14 @@ export default function App() {
   const hasUnreadNotifications = notifications.some(n => !n.read);
 
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
-  const [showConsent, setShowConsent] = useState(() => !hasGivenConsent());
+
+  // Backfill: users who completed onboarding under the previous flow (when
+  // GDPR was a separate modal) won't pass through WelcomeStep again. Mark
+  // them as consented retroactively so the flag stays consistent.
+  useEffect(() => {
+    if (!isFirstTime && !hasGivenConsent()) recordConsent();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   // Native scroll management: forward nav → top, goBack → restore saved position.
   // scrollCaptureRef is registered into NavigationContext so navigateTo() can
@@ -293,14 +300,10 @@ export default function App() {
         </div>
         <CreateModal isOpen={isCreateModalOpen} onClose={() => setIsCreateModalOpen(false)} onSelect={handleCreateAction} />
       </div>
-      {/* GDPR consent — shown once on first launch */}
-      {showConsent && (
-        <GdprConsent
-          onAccept={() => setShowConsent(false)}
-          onNavigatePrivacy={() => { setShowConsent(false); navigateTo('privacy-policy'); }}
-          onNavigateTerms={() => { setShowConsent(false); navigateTo('terms-of-service'); }}
-        />
-      )}
+      {/* GDPR consent: now recorded implicitly on first action in
+          WelcomeStep (Apple/Google/Email/Guest), with inline microcopy
+          disclosure. The blocking modal has been removed — see
+          [1.5.172] in CHANGELOG. */}
       {/* Q13 — single app-wide modal for weight/snapshot logging */}
       <GlobalLogSnapshotModal />
     </>

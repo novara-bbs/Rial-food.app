@@ -11,7 +11,7 @@
  * privacy explanation.
  */
 import { Info } from 'lucide-react';
-import { useState } from 'react';
+import { useId, useState } from 'react';
 import { Capacitor } from '@capacitor/core';
 
 import SectionCard from '@/components/SectionCard';
@@ -50,6 +50,7 @@ export default function HealthSyncCard({
   const hint = enabled
     ? copy.onConfirmation.replace('{service}', service)
     : copy.offHint;
+  const hintId = useId();
 
   function handleToggle() {
     if (enabled) {
@@ -68,7 +69,7 @@ export default function HealthSyncCard({
             <Text variant="body-sm" className="font-medium text-on-surface truncate">
               {service}
             </Text>
-            <Text variant="caption" className="text-on-surface-variant line-clamp-1">
+            <Text id={hintId} variant="caption" className="text-on-surface-variant line-clamp-1">
               {hint}
             </Text>
           </div>
@@ -92,6 +93,7 @@ export default function HealthSyncCard({
             role="switch"
             aria-checked={enabled}
             aria-label={service}
+            aria-describedby={hintId}
             disabled={loading}
             onClick={handleToggle}
             className={[
