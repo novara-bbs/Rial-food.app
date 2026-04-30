@@ -41,6 +41,16 @@ const onboarding = {
       height: 'Height',
       age: 'Age',
       units: { kg: 'kg', cm: 'cm', years: 'years' },
+      healthSync: {
+        appleLabel: 'Apple Health',
+        androidLabel: 'Health Connect',
+        offHint: 'Connect to autofill your data',
+        onConfirmation: 'Data updated from {service}',
+        privacyTitle: 'What we read',
+        privacyBody: 'We only read:\n• Weight\n• Height\n• Date of birth\n• Biological sex\n\nNothing is stored in the cloud. We only use this data to calculate your calories.',
+        privacyAction: 'Got it',
+        error: "Couldn't connect to {service}. Try again.",
+      },
     },
     activity: {
       title: 'How active are you day-to-day?',

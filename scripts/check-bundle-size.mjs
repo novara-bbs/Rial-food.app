@@ -45,8 +45,8 @@ const CHUNK_BUDGETS = [
   {
     name: 'main entry (from index.html)',
     match: MAIN_ENTRY ? (name) => name === MAIN_ENTRY : () => false,
-    rawKB: 900,
-    gzipKB: 280,
+    rawKB: 920,
+    gzipKB: 290,
   },
   {
     name: 'vendor-recharts',

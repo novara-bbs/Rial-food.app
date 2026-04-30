@@ -41,6 +41,16 @@ const onboarding = {
       height: 'Altura',
       age: 'Edad',
       units: { kg: 'kg', cm: 'cm', years: 'años' },
+      healthSync: {
+        appleLabel: 'Apple Salud',
+        androidLabel: 'Health Connect',
+        offHint: 'Conecta para autocompletar tus datos',
+        onConfirmation: 'Datos actualizados con {service}',
+        privacyTitle: '¿Qué leemos?',
+        privacyBody: 'Solo leemos:\n• Peso\n• Altura\n• Fecha de nacimiento\n• Sexo biológico\n\nNo guardamos nada en la nube. Solo usamos estos datos para calcular tus calorías.',
+        privacyAction: 'Entendido',
+        error: 'No hemos podido conectar con {service}. Inténtalo de nuevo.',
+      },
     },
     activity: {
       title: '¿Cuánto te mueves a diario?',

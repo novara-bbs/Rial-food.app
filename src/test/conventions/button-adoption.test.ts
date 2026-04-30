@@ -40,6 +40,10 @@ const RAW_BUTTON_ALLOWLIST: Record<string, { count: number; reason: string }> = 
   // Inline edit-confirm circle — w-8 h-8, smaller than HIG-44 by design (sits
   // beside a tiny inline number input). Permanent allowlist entry.
   'home/components/TodaysMeals.tsx': { count: 1, reason: 'inline edit-confirm circle (w-8 h-8) — too small for HIG-44 Button (permanent)' },
+  // Toggle switch track (role="switch") — uses bg-primary/bg-outline-variant for
+  // the track fill. Not a CTA button; <Button> variant system doesn't support
+  // switch semantics. Permanent allowlist entry.
+  'onboarding/components/HealthSyncCard.tsx': { count: 1, reason: 'role="switch" toggle track — bg-primary is the track fill, not a branded CTA (permanent)' },
 };
 
 const RAW_BUTTON_REGEX = /<button[^>]*\bbg-(primary|brand-secondary|secondary)\b/g;

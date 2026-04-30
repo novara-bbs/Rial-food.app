@@ -1,9 +1,12 @@
-import { type Dispatch } from 'react';
+import { useEffect, type Dispatch } from 'react';
+import { toast } from 'sonner';
 
 import { useI18n } from '@/i18n';
 
+import HealthSyncCard from '../components/HealthSyncCard';
 import NumberStepper from '../components/NumberStepper';
 import OnboardingScaffold from '../components/OnboardingScaffold';
+import { useHealthData } from '../hooks/useHealthData';
 import { setField, type OnboardingAction, type OnboardingDraft } from '../state/types';
 import {
   AGE_MAX,
@@ -35,8 +38,41 @@ export default function BodyStep({
     ? copy.subtitleNamed.replace('{name}', draft.name)
     : copy.subtitle;
 
+  // ── Health sync ─────────────────────────────────────────────────────────
+  const health = useHealthData();
+
+  // When health data arrives, pre-fill the relevant draft fields.
+  useEffect(() => {
+    if (!health.data) return;
+    const { weightKg, heightCm, birthDate, biologicalSex } = health.data;
+    if (weightKg !== null) dispatch(setField('weight', weightKg));
+    if (heightCm !== null) dispatch(setField('height', heightCm));
+    if (birthDate !== null) {
+      const age = new Date().getFullYear() - birthDate.getFullYear();
+      dispatch(setField('age', Math.max(AGE_MIN, Math.min(age, AGE_MAX))));
+    }
+    if (biologicalSex !== null) dispatch(setField('sex', biologicalSex));
+  }, [health.data, dispatch]);
+
+  // Surface health errors as a toast (non-blocking).
+  useEffect(() => {
+    if (!health.error) return;
+    const service = t.onboarding.body.healthSync.appleLabel;
+    toast.error(t.onboarding.body.healthSync.error.replace('{service}', service));
+  }, [health.error, t]);
+
   return (
     <OnboardingScaffold titleId={titleId} title={copy.title} subtitle={subtitle}>
+      {/* Health sync card — only rendered when the platform supports it. */}
+      {health.available && (
+        <HealthSyncCard
+          enabled={health.enabled}
+          loading={health.loading}
+          onEnable={health.enable}
+          onDisable={health.disable}
+        />
+      )}
+
       <div className="space-y-4">
         <NumberStepper
           label={copy.weight}
