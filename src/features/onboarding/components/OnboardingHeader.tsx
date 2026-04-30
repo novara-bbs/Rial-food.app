@@ -43,7 +43,7 @@ export default function OnboardingHeader({
     : '';
 
   return (
-    <header className="border-b border-outline-variant/15 bg-surface">
+    <header className="pt-safe border-b border-outline-variant/15 bg-surface">
       <div className="flex items-center justify-between px-4 py-3 gap-2">
         {canGoBack ? (
           <Button

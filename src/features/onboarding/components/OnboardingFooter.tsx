@@ -8,6 +8,8 @@
  *  - optional inline hint shown when the validator returns the first error
  *    (so the user knows why the CTA is disabled).
  */
+import { useId } from 'react';
+
 import { Button } from '@/components/ui/button';
 import { Text } from '@/components/ui/Typography';
 
@@ -30,10 +32,12 @@ export default function OnboardingFooter({
   onSkip,
   hint,
 }: OnboardingFooterProps) {
+  const hintId = useId();
+
   return (
-    <footer className="sticky bottom-0 border-t border-outline-variant/15 bg-surface px-4 pt-3 pb-[calc(0.75rem+env(safe-area-inset-bottom))] space-y-2">
+    <footer className="sticky bottom-0 border-t border-outline-variant/15 bg-surface px-4 pt-3 pb-safe-nav space-y-2">
       {hint && (
-        <Text variant="caption" className="text-error text-center">
+        <Text variant="caption" id={hintId} className="text-error text-center">
           {hint}
         </Text>
       )}
@@ -43,6 +47,8 @@ export default function OnboardingFooter({
         className="w-full"
         onClick={onPrimary}
         disabled={primaryDisabled}
+        aria-disabled={primaryDisabled || undefined}
+        aria-describedby={hint ? hintId : undefined}
       >
         {primaryLabel}
       </Button>

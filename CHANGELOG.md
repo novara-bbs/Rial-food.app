@@ -1,5 +1,21 @@
 # RIAL App - Changelog
 
+## [1.5.167] - 2026-04-30
+
+### polish(onboarding): PR 1 — UX correctness + safe-area + progressive error disclosure
+
+7 fixes across the onboarding shell and steps:
+
+- **Safe-area / notch (ADR-016)** — `OnboardingHeader` añade `pt-safe` para respetar el Dynamic Island / notch de iPhone. `OnboardingFooter` migra de cálculo ad-hoc `pb-[calc(0.75rem+env(safe-area-inset-bottom))]` a la utility canónica `pb-safe-nav` (consistente con GlobalHeader).
+- **Errores silenciosos hasta el primer intento** — Nuevo `submitAttemptedFor: Partial<Record<StepId, boolean>>` en el estado del reducer. `NEXT` en step inválido → marca el step como "attempted". `SET_FIELD` / `TOGGLE_RESTRICTION` → limpia el flag del step dueño. `BACK` → limpia el flag del step abandonado. El shell calcula `showErrors = !!state.submitAttemptedFor[state.stepId]` y solo muestra borde rojo + hint del footer cuando `showErrors=true`. Precomputed `STEP_INDEX_MAP` para O(1) lookup del índice de step (antes `STEP_ORDER.indexOf` por render).
+- **`BodyStep` + `IdentityStep`** — reciben `showErrors: boolean` y solo activan `invalid` / `errorMessage` cuando está en `true`. `NumberStepper` recibe `defaultValue={75/170/30}` para que el primer `+/–` dé un valor sensato en lugar de `(min+max)/2 = 165 kg`.
+- **`NumberStepper`** — re-sync de valor externo movido de render body a `useEffect([value])` (React 19 strict-mode clean). `defaultValue?: number` prop; `adjust()` usa `value ?? defaultValue ?? min`. `OnboardingFooter` usa `useId` para vincular `aria-describedby` del CTA al hint de error.
+- **Copy normalización** — `identity.subtitle`: eliminada la frase "Y tu sexo biológico (lo usamos solo para el cálculo metabólico)." → "Lo usamos solo para calcular tu metabolismo basal." `body.subtitle`: "Las usamos para tu BMR (Mifflin-St Jeor)." → "Las usamos para calcular tus calorías diarias." Simétrico EN.
+- **Orphan keys eliminadas** — `errors.sexRequired` (ya no tiene validador), `shell.closeConfirmTitle/Body/Action/Cancel` (confirm-on-close no implementado en este sprint). −5 keys ES+EN. Total: 1975 keys.
+- **PlanReveal + auto-focus** — `font-mono font-black text-display text-primary` → `font-mono font-black text-headline text-primary` (size 32px vs 40px; evita overflow en iPhone SE). Suffix "kcal": `text-tertiary font-bold` → `text-on-surface-variant font-medium`. Auto-focus del heading en cada cambio de step via `mainRef.current.querySelector('[tabindex="-1"]').focus({ preventScroll: true })` para screen-readers (heading ya tenía `tabIndex={-1}` en `OnboardingScaffold`). Hardcoded `{errs.nameTooLong}` → `{errs[errors.name] ?? errs.nameTooLong}` en `IdentityStep`.
+
+Quality: TypeScript 0 errors · 1427/1427 tests (+5 submitAttemptedFor lifecycle) · i18n 1975 keys ES↔EN · ESLint 0 errors · size:check PASS (884.9 KB raw).
+
 ## [1.5.166] - 2026-04-30
 
 ### fix(onboarding): Sprint 51 polish — UX, correctness + code-quality improvements

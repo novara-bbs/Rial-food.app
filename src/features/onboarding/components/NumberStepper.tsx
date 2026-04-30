@@ -14,6 +14,7 @@
 import { Minus, Plus } from 'lucide-react';
 import {
   useCallback,
+  useEffect,
   useId,
   useRef,
   useState,
@@ -39,6 +40,12 @@ interface NumberStepperProps {
   errorMessage?: string;
   /** Decimal places allowed (0 = integers). Default 0. */
   precision?: number;
+  /**
+   * Seed value used when the user presses +/– on a null field.
+   * Falls back to `min` so the first interaction always produces a sane number
+   * (avoids the `(min+max)/2` heuristic that gave 165 kg for weight).
+   */
+  defaultValue?: number;
   ariaDescribedBy?: string;
   className?: string;
 }
@@ -63,6 +70,7 @@ export default function NumberStepper({
   invalid = false,
   errorMessage,
   precision = 0,
+  defaultValue,
   ariaDescribedBy,
   className = '',
 }: NumberStepperProps) {
@@ -80,11 +88,13 @@ export default function NumberStepper({
   );
 
   // Re-sync if parent updates the value externally while the input is not
-  // focused (e.g. reducer resets the field). Checking inputRef avoids
-  // overriding in-progress typing.
-  if (value !== null && draft === '' && document.activeElement !== inputRef.current) {
-    setDraft(String(value));
-  }
+  // focused (e.g. reducer resets the field). useEffect avoids a state-setting
+  // side-effect during render (flagged by React 19 strict-mode profiling).
+  useEffect(() => {
+    if (value !== null && document.activeElement !== inputRef.current) {
+      setDraft(String(value));
+    }
+  }, [value]);
 
   const handleChange = useCallback(
     (e: ChangeEvent<HTMLInputElement>) => {
@@ -118,12 +128,14 @@ export default function NumberStepper({
 
   const adjust = useCallback(
     (delta: number) => {
-      const base = value ?? Math.round((min + max) / 2);
+      // When value is null (not yet set), seed from defaultValue or min.
+      // Avoids the (min+max)/2 heuristic that yields absurd values like 165 kg.
+      const base = value ?? defaultValue ?? min;
       const next = round(clamp(base + delta, min, max), precision);
       onChange(next);
       setDraft(String(next));
     },
-    [value, onChange, min, max, precision],
+    [value, defaultValue, onChange, min, max, precision],
   );
 
   return (

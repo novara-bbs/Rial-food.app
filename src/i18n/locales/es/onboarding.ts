@@ -20,7 +20,7 @@ const onboarding = {
     },
     identity: {
       title: '¿Cómo te llamamos?',
-      subtitle: 'Y tu sexo biológico (lo usamos solo para el cálculo metabólico).',
+      subtitle: 'Lo usamos solo para calcular tu metabolismo basal.',
       nameLabel: 'Nombre',
       namePlaceholder: 'Tu nombre',
       sexLabel: 'Sexo biológico',
@@ -29,7 +29,7 @@ const onboarding = {
     },
     body: {
       title: 'Tus medidas',
-      subtitle: 'Las usamos para tu BMR (Mifflin-St Jeor).',
+      subtitle: 'Las usamos para calcular tus calorías diarias.',
       subtitleNamed: 'Vamos con tus datos, {name}.',
       weight: 'Peso',
       height: 'Altura',
@@ -94,7 +94,6 @@ const onboarding = {
     errors: {
       goalRequired: 'Toca una opción para continuar.',
       nameTooLong: 'Máximo 40 caracteres.',
-      sexRequired: 'Selecciona una opción.',
       weightOutOfRange: 'Peso entre 30 y 300 kg.',
       heightOutOfRange: 'Altura entre 100 y 230 cm.',
       ageOutOfRange: 'Edad entre 13 y 100.',
@@ -106,10 +105,6 @@ const onboarding = {
       skip: 'Omitir',
       createPlan: 'Crear mi plan',
       stepCounter: 'Paso {current} de {total}',
-      closeConfirmTitle: '¿Salir?',
-      closeConfirmBody: 'Tu progreso se guarda. Puedes seguir cuando quieras.',
-      closeConfirmAction: 'Salir',
-      closeConfirmCancel: 'Seguir',
       resumeBanner: 'Continuamos donde lo dejamos.',
     },
   },

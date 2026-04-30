@@ -20,7 +20,7 @@ const onboarding = {
     },
     identity: {
       title: 'What should we call you?',
-      subtitle: 'And your biological sex (we only use it for the metabolic calculation).',
+      subtitle: 'We only use it to calculate your basal metabolism.',
       nameLabel: 'Name',
       namePlaceholder: 'Your name',
       sexLabel: 'Biological sex',
@@ -29,7 +29,7 @@ const onboarding = {
     },
     body: {
       title: 'Your measurements',
-      subtitle: 'We use them for your BMR (Mifflin-St Jeor).',
+      subtitle: 'We use them to calculate your daily calories.',
       subtitleNamed: "Let's get your data, {name}.",
       weight: 'Weight',
       height: 'Height',
@@ -94,7 +94,6 @@ const onboarding = {
     errors: {
       goalRequired: 'Tap an option to continue.',
       nameTooLong: 'Max 40 characters.',
-      sexRequired: 'Pick an option.',
       weightOutOfRange: 'Weight between 30 and 300 kg.',
       heightOutOfRange: 'Height between 100 and 230 cm.',
       ageOutOfRange: 'Age between 13 and 100.',
@@ -106,10 +105,6 @@ const onboarding = {
       skip: 'Skip',
       createPlan: 'Create my plan',
       stepCounter: 'Step {current} of {total}',
-      closeConfirmTitle: 'Leave?',
-      closeConfirmBody: "Your progress is saved. You can continue when you want.",
-      closeConfirmAction: 'Leave',
-      closeConfirmCancel: 'Stay',
       resumeBanner: "Picking up where you left off.",
     },
   },

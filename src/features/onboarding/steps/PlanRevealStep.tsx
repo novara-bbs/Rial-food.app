@@ -42,10 +42,10 @@ export default function PlanRevealStep({
           <p
             role="status"
             aria-live="polite"
-            className="font-mono font-black text-display text-primary tabular-nums"
+            className="font-mono font-black text-headline text-primary tabular-nums"
           >
             {animated}
-            <span className="text-body-lg align-baseline ml-2 text-tertiary font-bold">
+            <span className="text-body-lg align-baseline ml-2 text-on-surface-variant font-medium">
               kcal
             </span>
           </p>

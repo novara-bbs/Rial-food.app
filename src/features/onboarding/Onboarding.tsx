@@ -35,7 +35,7 @@ import {
 } from './state/persist';
 import {
   PROGRESS_TOTAL,
-  STEP_ORDER,
+  STEP_INDEX_MAP,
   type StepId,
 } from './state/types';
 import { isDraftComplete, validateStep } from './state/validators';
@@ -76,6 +76,7 @@ export default function Onboarding({ isOpen, onClose, onComplete }: OnboardingPr
   const { t } = useI18n();
   const [state, dispatch] = useReducer(onboardingReducer, undefined, loadInitialState);
   const containerRef = useRef<HTMLDivElement>(null);
+  const mainRef = useRef<HTMLElement>(null);
 
   // Show a brief "continue where you left off" banner when a saved draft is
   // resumed. The flag is computed once at mount — `loadDraft()` returns null
@@ -111,7 +112,19 @@ export default function Onboarding({ isOpen, onClose, onComplete }: OnboardingPr
     return () => document.removeEventListener('keydown', handleKey);
   }, [isOpen, onClose]);
 
-  const stepIndex = STEP_ORDER.indexOf(state.stepId);
+  // Auto-focus the step heading on step change. OnboardingScaffold renders
+  // the heading with tabIndex={-1}, so focus is silent for mouse/touch users
+  // but correctly relocates the reading cursor for screen-reader users.
+  useEffect(() => {
+    const heading = mainRef.current?.querySelector<HTMLElement>('[tabindex="-1"]');
+    heading?.focus({ preventScroll: true });
+  }, [state.stepId]);
+
+  const stepIndex = STEP_INDEX_MAP[state.stepId];
+  // Only show inline errors (red borders, footer hint) after the user has
+  // explicitly tapped the primary CTA on a step that failed validation.
+  // "Silent-by-default" per the INDYA / progressive-disclosure pattern.
+  const showErrors = !!state.submitAttemptedFor[state.stepId];
   const errors = useMemo(
     () => validateStep(state.stepId, state.draft).errors,
     [state.stepId, state.draft],
@@ -149,16 +162,16 @@ export default function Onboarding({ isOpen, onClose, onComplete }: OnboardingPr
   if (!isOpen) return null;
 
   // ── Per-step body ─────────────────────────────────────────────────────────
-  const stepBody = renderStep(state.stepId, {
-    draft: state.draft,
-    dispatch,
-    errors,
-    titleId: TITLE_ID,
-  });
+  const stepBody = renderStep(
+    state.stepId,
+    { draft: state.draft, dispatch, errors, titleId: TITLE_ID },
+    showErrors,
+  );
 
   // ── Footer label + skip ───────────────────────────────────────────────────
   const primaryLabel = pickPrimaryLabel(state.stepId, t);
-  const firstError = stepValid ? undefined : Object.values(errors)[0];
+  // Show the footer hint only after the user has explicitly tapped the CTA.
+  const firstError = showErrors && !stepValid ? Object.values(errors)[0] : undefined;
   const localizedHint = firstError
     ? mapErrorKeyToCopy(firstError, t.onboarding.errors)
     : undefined;
@@ -180,6 +193,7 @@ export default function Onboarding({ isOpen, onClose, onComplete }: OnboardingPr
       />
 
       <main
+        ref={mainRef}
         key={state.stepId}
         className="flex-1 overflow-y-auto px-4 py-6 animate-in fade-in slide-in-from-bottom-2 duration-300"
       >
@@ -219,12 +233,12 @@ interface RenderProps {
   titleId: string;
 }
 
-function renderStep(stepId: StepId, props: RenderProps) {
+function renderStep(stepId: StepId, props: RenderProps, showErrors: boolean) {
   switch (stepId) {
     case 'welcome':  return <WelcomeStep titleId={props.titleId} />;
     case 'goal':     return <GoalStep {...props} />;
-    case 'identity': return <IdentityStep {...props} />;
-    case 'body':     return <BodyStep {...props} />;
+    case 'identity': return <IdentityStep {...props} showErrors={showErrors} />;
+    case 'body':     return <BodyStep {...props} showErrors={showErrors} />;
     case 'activity': return <ActivityStep {...props} />;
     case 'training': return <TrainingStep {...props} />;
     case 'plan':     return <PlanRevealStep draft={props.draft} titleId={props.titleId} />;

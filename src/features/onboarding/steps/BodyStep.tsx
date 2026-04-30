@@ -18,11 +18,14 @@ export default function BodyStep({
   draft,
   dispatch,
   errors,
+  showErrors,
   titleId,
 }: {
   draft: OnboardingDraft;
   dispatch: Dispatch<OnboardingAction>;
   errors: Record<string, string>;
+  /** When false, invalid borders + hints stay hidden (user hasn't tapped CTA yet). */
+  showErrors: boolean;
   titleId: string;
 }) {
   const { t } = useI18n();
@@ -44,8 +47,9 @@ export default function BodyStep({
           step={0.5}
           precision={1}
           unit={copy.units.kg}
-          invalid={!!errors.weight}
-          errorMessage={errors.weight ? errs.weightOutOfRange : undefined}
+          defaultValue={75}
+          invalid={showErrors && !!errors.weight}
+          errorMessage={showErrors && errors.weight ? errs.weightOutOfRange : undefined}
         />
         <NumberStepper
           label={copy.height}
@@ -55,8 +59,9 @@ export default function BodyStep({
           max={HEIGHT_MAX}
           step={1}
           unit={copy.units.cm}
-          invalid={!!errors.height}
-          errorMessage={errors.height ? errs.heightOutOfRange : undefined}
+          defaultValue={170}
+          invalid={showErrors && !!errors.height}
+          errorMessage={showErrors && errors.height ? errs.heightOutOfRange : undefined}
         />
         <NumberStepper
           label={copy.age}
@@ -66,8 +71,9 @@ export default function BodyStep({
           max={AGE_MAX}
           step={1}
           unit={copy.units.years}
-          invalid={!!errors.age}
-          errorMessage={errors.age ? errs.ageOutOfRange : undefined}
+          defaultValue={30}
+          invalid={showErrors && !!errors.age}
+          errorMessage={showErrors && errors.age ? errs.ageOutOfRange : undefined}
         />
       </div>
     </OnboardingScaffold>

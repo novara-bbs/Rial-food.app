@@ -27,6 +27,7 @@ function stateAt(stepId: OnboardingState['stepId'], draft = FILLED_DRAFT): Onboa
     stepId,
     draft,
     dirty: false,
+    submitAttemptedFor: {},
     version: ONBOARDING_DRAFT_VERSION,
   };
 }
@@ -168,6 +169,57 @@ describe('onboardingReducer — RESET', () => {
     expect(next.stepId).toBe('welcome');
     expect(next.draft).toEqual(INITIAL_DRAFT);
     expect(next.dirty).toBe(false);
+  });
+});
+
+describe('onboardingReducer — submitAttemptedFor lifecycle', () => {
+  it('NEXT on invalid step marks submitAttemptedFor for that step', () => {
+    // goal step with empty draft — validator will fail
+    const blocked = onboardingReducer(stateAt('goal', INITIAL_DRAFT), { type: 'NEXT' });
+    expect(blocked.stepId).toBe('goal');
+    expect(blocked.submitAttemptedFor.goal).toBe(true);
+  });
+
+  it('SET_FIELD clears submitAttemptedFor for the field owner step', () => {
+    const withAttempt: OnboardingState = {
+      ...stateAt('goal', INITIAL_DRAFT),
+      submitAttemptedFor: { goal: true },
+    };
+    const next = onboardingReducer(withAttempt, setField('goal', 'cut'));
+    expect(next.submitAttemptedFor.goal).toBeUndefined();
+  });
+
+  it('TOGGLE_RESTRICTION clears submitAttemptedFor for diet step', () => {
+    const withAttempt: OnboardingState = {
+      ...stateAt('diet'),
+      submitAttemptedFor: { diet: true },
+    };
+    const next = onboardingReducer(withAttempt, { type: 'TOGGLE_RESTRICTION', id: 'vegan' });
+    expect(next.submitAttemptedFor.diet).toBeUndefined();
+  });
+
+  it('BACK clears submitAttemptedFor for the step being left', () => {
+    const withAttempt: OnboardingState = {
+      ...stateAt('body', INITIAL_DRAFT),
+      submitAttemptedFor: { body: true },
+    };
+    const next = onboardingReducer(withAttempt, { type: 'BACK' });
+    expect(next.stepId).toBe('identity');
+    expect(next.submitAttemptedFor.body).toBeUndefined();
+  });
+
+  it('NEXT success does not carry over submitAttemptedFor from other steps', () => {
+    // body with full draft — validator passes — advances to activity
+    const withOtherAttempt: OnboardingState = {
+      ...stateAt('body'),
+      submitAttemptedFor: { goal: true },
+    };
+    const next = onboardingReducer(withOtherAttempt, { type: 'NEXT' });
+    expect(next.stepId).toBe('activity');
+    // goal flag preserved (NEXT doesn't clear other flags)
+    expect(next.submitAttemptedFor.goal).toBe(true);
+    // body flag was never set, so still absent
+    expect(next.submitAttemptedFor.body).toBeUndefined();
   });
 });
 

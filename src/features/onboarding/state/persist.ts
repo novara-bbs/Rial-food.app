@@ -68,6 +68,9 @@ export function loadDraft(): OnboardingState | null {
     draft: parsed.draft,
     version: parsed.version,
     dirty: false,
+    // Resumed sessions start with a clean error state — the user is back at
+    // a step they had previously navigated past, no need to re-show errors.
+    submitAttemptedFor: {},
   };
 }
 

@@ -13,20 +13,34 @@
  */
 
 import {
+  FIELD_TO_STEP,
   INITIAL_DRAFT,
   INITIAL_STATE,
+  STEP_INDEX_MAP,
   STEP_ORDER,
   type OnboardingAction,
   type OnboardingDraft,
   type OnboardingState,
   type StepId,
+  type SubmitAttemptedMap,
 } from './types';
 import { validateStep } from './validators';
 
 function indexOf(stepId: StepId): number {
-  const i = STEP_ORDER.indexOf(stepId);
+  const i = STEP_INDEX_MAP[stepId];
   // Guard against a corrupted draft: fall back to welcome.
-  return i < 0 ? 0 : i;
+  return typeof i === 'number' ? i : 0;
+}
+
+/** Returns a new map with `step` removed (immutable clear). */
+function clearAttempt(
+  map: SubmitAttemptedMap,
+  step: StepId,
+): SubmitAttemptedMap {
+  if (!map[step]) return map;
+  const next = { ...map };
+  delete next[step];
+  return next;
 }
 
 function applyField(
@@ -74,12 +88,17 @@ export function onboardingReducer(
   action: OnboardingAction,
 ): OnboardingState {
   switch (action.type) {
-    case 'SET_FIELD':
+    case 'SET_FIELD': {
+      // Editing a field of a step auto-clears its "submit attempted" flag —
+      // the rojo signal disappears as soon as the user acts on it.
+      const ownerStep = FIELD_TO_STEP[action.field];
       return {
         ...state,
         draft: applyField(state.draft, action.field, action.value),
         dirty: true,
+        submitAttemptedFor: clearAttempt(state.submitAttemptedFor, ownerStep),
       };
+    }
 
     case 'TOGGLE_RESTRICTION':
       return {
@@ -89,10 +108,20 @@ export function onboardingReducer(
           restrictions: toggleRestriction(state.draft.restrictions, action.id),
         },
         dirty: true,
+        submitAttemptedFor: clearAttempt(state.submitAttemptedFor, 'diet'),
       };
 
     case 'NEXT': {
-      if (!validateStep(state.stepId, state.draft).ok) return state;
+      if (!validateStep(state.stepId, state.draft).ok) {
+        // Failed gate → mark this step as "user attempted, please show errors".
+        return {
+          ...state,
+          submitAttemptedFor: {
+            ...state.submitAttemptedFor,
+            [state.stepId]: true,
+          },
+        };
+      }
       const idx = indexOf(state.stepId);
       const nextIdx = Math.min(idx + 1, STEP_ORDER.length - 1);
       if (nextIdx === idx) return state;
@@ -102,7 +131,14 @@ export function onboardingReducer(
     case 'BACK': {
       const idx = indexOf(state.stepId);
       if (idx === 0) return state;
-      return { ...state, stepId: STEP_ORDER[idx - 1] };
+      const prevStep = STEP_ORDER[idx - 1];
+      // Leaving a step also clears its own "attempted" flag — coming back to
+      // it should feel like a fresh visit, not a punished one.
+      return {
+        ...state,
+        stepId: prevStep,
+        submitAttemptedFor: clearAttempt(state.submitAttemptedFor, state.stepId),
+      };
     }
 
     case 'GOTO':

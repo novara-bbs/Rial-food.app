@@ -5,12 +5,13 @@
 > prunes this file back down. Everything below should answer: *what's the release line,
 > what's the quality baseline, what's the next move, what's broken?*
 
-Last updated: **2026-04-30** — `[1.5.166]` Sprint 51 polish: 7 UX+correctness fixes sobre el rediseño del onboarding.
+Last updated: **2026-04-30** — `[1.5.167]` Onboarding PR 1: safe-area + progressive error disclosure + copy normalization + NumberStepper fixes.
 
 ## Release snapshot
 - **Branch**: `main`, synced con `rial-food/main` (CI green S39; S40–S51 queued).
-- **This session (2026-04-30, S51 polish — onboarding QA)**:
-    - **Sprint 51 polish** `[1.5.166]` — 7 mejoras sobre el rediseño: (1) `INITIAL_DRAFT.sex = 'male'` + eliminación check `sexRequired` del validator → SegmentedTabs siempre tiene tab seleccionado, CTA nunca bloqueado por sex. (2) `IdentityStep` cleanup: eliminado fallback `? 'male' : draft.sex` + hint duplicado. (3) `WelcomeStep`: eliminado `<span className="sr-only">` innecesario. (4) `KcalBreakdownCard`: reemplazado check frágil `row.value === breakdown.basal` por campo explícito `signed: boolean`. (5) `NumberStepper`: corregida comparación de foco a `useRef<HTMLInputElement>` (el `id` del `<label>` nunca coincidía). (6) Resume banner en `Onboarding.tsx`: `bg-primary/10` "Continuamos donde lo dejaste" auto-dismiss 2.5s cuando abre con draft rehidratado. (7) Validators test: 3 casos actualizados para eliminar `sexRequired` y añadir caso `activity: ''` bloquea `isDraftComplete`. Tests 1422/1422 · TS 0 · ESLint 0 errores · i18n 1980 keys · size PASS.
+- **This session (2026-04-30, onboarding polish PRs)**:
+    - **PR 1** `[1.5.167]` — 7 fixes: (1) `pt-safe` en header, `pb-safe-nav` en footer (iPhone notch/Dynamic Island). (2) `submitAttemptedFor` per-step en reducer → errores silenciosos hasta primer CTA tap (`showErrors` gate en shell + BodyStep + IdentityStep). `STEP_INDEX_MAP` O(1) precomputed. (3) `NumberStepper` `defaultValue` prop + `useEffect` re-sync (React 19 clean). (4) Copy: `identity.subtitle` + `body.subtitle` normalizados (sin jerga técnica). (5) Orphan keys borradas: `errors.sexRequired` + 4 `shell.closeConfirm*` (−5 keys → 1975). (6) PlanReveal: `text-display` → `text-headline` (32px) + suffix `text-on-surface-variant`. (7) Auto-focus heading en step change + `IdentityStep` hardcoded error fix. Tests 1427/1427 (+5) · TS 0 · i18n 1975 keys · size PASS.
+    - **Sprint 51 polish** `[1.5.166]` — 7 mejoras: `INITIAL_DRAFT.sex = 'male'`, `IdentityStep` cleanup, `WelcomeStep` sr-only, `KcalBreakdownCard` signed field, `NumberStepper` ref fix, resume banner, validator tests actualizados. Tests 1422/1422.
     - **Sprint 51** `[1.5.165]` — **Rediseño completo del onboarding** basado en INDYA + best-practices. Nuevo feature module `src/features/onboarding/`. Backend: `onboardingReducer` puro + 7 actions, `validateStep` puro per-step, `derive-targets.ts` wrapper único sobre `nutrition.ts`, `persist.ts` con schema-version-gated localStorage (resumable mid-flow + cleanup atómico). Frontend: 9 pasos one-question-per-screen (Welcome → Goal → Identity → Body → Activity → Training → PlanReveal → Diet → Done), `<NumberStepper>` y `<TogglePillGroup>` primitivas nuevas (≥44px tap, token-pure, aria-pressed/role=group), `useCountUp` hook (counter-up del kcal target con `prefers-reduced-motion`), `useFocusTrap` hook (sin dep externa). Shell con `aria-modal/labelledby`, sticky CTA con label dinámico, chunked progress bar 8 segmentos, mid-flow confirmation con `{name}`. Palette saca del onboarding (queda en Settings). i18n nuevo namespace `onboarding.*` ES+EN simétrico (1980 keys), `profile.onboarding.*` eliminado. Tests 1368 → 1422 (+54: 19 reducer + 21 validators + 16 derive). Eliminados 3 ficheros viejos en `profile/components/` (−616 LoC). Pipeline verde, build sin regresión (884.2 KB raw).
 - **Previous session (2026-04-30, S49–S50 — home polish)**:
     - **Sprint 50** `[1.5.164]` — `MealGapSuggestion` extendido: ahora rankea **recetas del vault** (con `rankRecipesForGap` en `src/features/home/utils/suggest-recipes.ts`) priorizando planeadas hoy (`+25 %`), no comidas (`+15 %`) y penalizando repeticiones (`× 0.7`); allergen filter heurístico ES/EN sobre ingredientes + tags; slot filter respetando `recipe.suitableFor`. Render: carrusel `RecipeCard variant="compact"` (recetas) → lista de ingredientes (fallback). Tap en receta → `onNavigateToRecipe` (no auto-log). Migración deuda: raw `<button>` ingredientes → `<Button variant="ghost">`. 4 i18n keys nuevas (recipesTitle, foodsTitle, reason.planned-today, reason.not-eaten). Tests 1353 → 1368 (+15).
@@ -28,15 +29,15 @@ Last updated: **2026-04-30** — `[1.5.166]` Sprint 51 polish: 7 UX+correctness 
     - **Sprint 41** `[1.5.155]` — BG gradient sutil: `body { background-image: linear-gradient(--surface-container-low → --background) }`. Funciona en 8 temas sin código por-tema. DX: test slim a 3 locks (brand+a11y); DESIGN-SYSTEM.md §2 hex table → pointer a index.css.
     - **Sprint 40** `[1.5.154]` — paleta neutral repintada: light Bevel-style (`#eae7e0` bg + `#ffffff` surface), dark Whoop-style (`#0e1014` cool, ladder comprimida). AAA. meta theme-color split.
 - **Sprint 39 (previo, 2026-04-29)**: `[1.5.153]` lint hygiene: 2 stale `eslint-disable-next-line` removidos + Discover hashtag `<button>` → `<Button variant="ghost">`. Allowlist 2 → 1.
-- **Active plan**: "Base sólida fase II" complete. Next candidate: typography sweep recipes/+home/ (paused per owner mandate).
+- **Active plan**: Onboarding polish multi-PR. PR 1 `[1.5.167]` ✓. Next: PR 2 (WelcomeStep auth landing in-shell), PR 3 (Apple Health stub), PR 4 (INDYA polish), Doc 1 (indya-design-playbook deep-dive).
 - **Release target**: `rial-food/main` (`novara-bbs/Rial-food.app`). Origin `rial-food`.
 - **Vercel project**: `rial.app.v1.5` (id `prj_t11VHYQjptazjUx7Y2hWLz0IDAjg`).
 - **Governance**: work directly on `main`. "continua" = push approval post green preflight.
 
-## Quality baseline (post-Sprint 51 polish [1.5.166], 2026-04-30)
+## Quality baseline (post-PR1 onboarding polish [1.5.167], 2026-04-30)
 - TypeScript: **0 errors** (`npx tsc --noEmit`)
-- Tests: **1422/1422** passing (96 files) — +54 from S51 (19 reducer + 21 validators + 16 derive-targets + 4 test updates polish)
-- i18n symmetry: **1980** keys aligned ES ↔ EN (+39 from S51: new `onboarding.*` namespace, `profile.onboarding.*` removed)
+- Tests: **1427/1427** passing (96 files) — +5 from PR1 (submitAttemptedFor lifecycle cases)
+- i18n symmetry: **1975** keys aligned ES ↔ EN (−5: deleted `errors.sexRequired` + 4 `shell.closeConfirm*` orphans)
 - Design-system lint: **0 errors**, 334 warnings (pre-existing, allowlisted)
 - Raw branded `<button>` count: **39 → 28 → 2 → 1** (S36+S38+S39; only TodaysMeals permanent — Discover migrated)
 - `Recipe.tag` typed: **`string` → `FoodTag`** (S37, fixes EN filter regression)

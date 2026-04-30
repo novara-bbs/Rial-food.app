@@ -36,6 +36,16 @@ export const STEP_ORDER: readonly StepId[] = [
   'done',
 ] as const;
 
+/**
+ * Precomputed `stepId → index` map. Lookup beats `STEP_ORDER.indexOf` on every
+ * render of the shell (which reads the index for the progress bar + a11y).
+ */
+export const STEP_INDEX_MAP: Readonly<Record<StepId, number>> =
+  STEP_ORDER.reduce<Record<StepId, number>>((acc, id, idx) => {
+    acc[id] = idx;
+    return acc;
+  }, {} as Record<StepId, number>);
+
 /** Number of "question" steps shown in the progress bar (welcome excluded). */
 export const PROGRESS_TOTAL = STEP_ORDER.length - 1; // 8
 
@@ -70,11 +80,24 @@ export const INITIAL_DRAFT: OnboardingDraft = {
   restrictions: [],
 };
 
+/**
+ * Per-step "submit attempted" flags. Set when the user taps the disabled
+ * primary CTA on a step that fails validation; cleared when they edit any
+ * field of that step (auto-rehabilitation) or navigate back to it.
+ *
+ * The shell reads `submitAttemptedFor[stepId]` to decide whether to show
+ * red invalid borders + the inline error hint. Errors stay silent until
+ * the user actively asks for the gate to open.
+ */
+export type SubmitAttemptedMap = Partial<Record<StepId, boolean>>;
+
 export interface OnboardingState {
   stepId: StepId;
   draft: OnboardingDraft;
   /** True once the user has interacted with any field — gates the persist write. */
   dirty: boolean;
+  /** Per-step "user tapped CTA on invalid step" flags. */
+  submitAttemptedFor: SubmitAttemptedMap;
   /** Schema version stored alongside the draft for migration safety. */
   version: OnboardingDraftVersion;
 }
@@ -83,6 +106,7 @@ export const INITIAL_STATE: OnboardingState = {
   stepId: 'welcome',
   draft: INITIAL_DRAFT,
   dirty: false,
+  submitAttemptedFor: {},
   version: ONBOARDING_DRAFT_VERSION,
 };
 
@@ -117,3 +141,21 @@ export interface PersistedDraft {
   draft: OnboardingDraft;
   version: OnboardingDraftVersion;
 }
+
+/**
+ * Maps each draft field to the step that captures it. Used by the reducer to
+ * clear `submitAttemptedFor[step]` when the user starts editing a field of
+ * that step — keeps the rojo signal honest (it goes away as soon as the user
+ * acts on the feedback).
+ */
+export const FIELD_TO_STEP: Readonly<Record<keyof OnboardingDraft, StepId>> = {
+  goal: 'goal',
+  name: 'identity',
+  sex: 'identity',
+  weight: 'body',
+  height: 'body',
+  age: 'body',
+  activity: 'activity',
+  trains: 'training',
+  restrictions: 'diet',
+};
