@@ -5,12 +5,15 @@
 > prunes this file back down. Everything below should answer: *what's the release line,
 > what's the quality baseline, what's the next move, what's broken?*
 
-Last updated: **2026-04-30** — `[1.5.167]` Onboarding PR 1: safe-area + progressive error disclosure + copy normalization + NumberStepper fixes.
+Last updated: **2026-04-30** — `[1.5.170]` Onboarding PR 4: ActivitySlider + progress summary chips + PlanReveal range + breakdown attribution.
 
 ## Release snapshot
 - **Branch**: `main`, synced con `rial-food/main` (CI green S39; S40–S51 queued).
-- **This session (2026-04-30, onboarding polish PRs)**:
-    - **PR 1** `[1.5.167]` — 7 fixes: (1) `pt-safe` en header, `pb-safe-nav` en footer (iPhone notch/Dynamic Island). (2) `submitAttemptedFor` per-step en reducer → errores silenciosos hasta primer CTA tap (`showErrors` gate en shell + BodyStep + IdentityStep). `STEP_INDEX_MAP` O(1) precomputed. (3) `NumberStepper` `defaultValue` prop + `useEffect` re-sync (React 19 clean). (4) Copy: `identity.subtitle` + `body.subtitle` normalizados (sin jerga técnica). (5) Orphan keys borradas: `errors.sexRequired` + 4 `shell.closeConfirm*` (−5 keys → 1975). (6) PlanReveal: `text-display` → `text-headline` (32px) + suffix `text-on-surface-variant`. (7) Auto-focus heading en step change + `IdentityStep` hardcoded error fix. Tests 1427/1427 (+5) · TS 0 · i18n 1975 keys · size PASS.
+- **This session (2026-04-30, onboarding polish PRs 1-4)**:
+    - **PR 4** `[1.5.170]` — INDYA polish: ActivitySlider (drag, coloquial example, 4 ticks), OnboardingProgressSummary chips in header (completed steps, aria-hidden), PlanReveal kcal range ±5%, KcalBreakdownCard attribution microcopy. i18n +9 keys → 1998 total. Tests 1427 · size 895.6 KB raw.
+    - **PR 3** `[1.5.169]` — Apple Health / Health Connect stub inline en BodyStep: `useHealthData()` hook (available:false en web; ?onb-health-mock=on para QA), `HealthSyncCard` toggle (role=switch, BottomSheet privacy, shadow-elev-1), BodyStep pre-fill useEffect + toast.error. i18n +9 → 1989 keys. Bundle budget ajustado 280→290 KB gzip. Tests 1427.
+    - **PR 2** `[1.5.168]` — WelcomeStep auth landing: 3 CTAs OAuth (Apple/Google/Email) gateados por `isSupabaseEnabled`, "Continuar sin cuenta" ghost, legal microcopy, footer oculto en welcome. `STORAGE_KEYS.PENDING_ONBOARDING`. Fix `Sidebar.tsx` key eliminada. i18n −2 +9 → 1980.
+    - **PR 1** `[1.5.167]` — 7 fixes: pt-safe header, pb-safe-nav footer (notch/DI), submitAttemptedFor per-step (errores silenciosos), STEP_INDEX_MAP O(1), NumberStepper defaultValue + useEffect, copy normalization, orphan keys −5 → 1975, PlanReveal text-headline, auto-focus, IdentityStep error fix. Tests +5 → 1427.
     - **Sprint 51 polish** `[1.5.166]` — 7 mejoras: `INITIAL_DRAFT.sex = 'male'`, `IdentityStep` cleanup, `WelcomeStep` sr-only, `KcalBreakdownCard` signed field, `NumberStepper` ref fix, resume banner, validator tests actualizados. Tests 1422/1422.
     - **Sprint 51** `[1.5.165]` — **Rediseño completo del onboarding** basado en INDYA + best-practices. Nuevo feature module `src/features/onboarding/`. Backend: `onboardingReducer` puro + 7 actions, `validateStep` puro per-step, `derive-targets.ts` wrapper único sobre `nutrition.ts`, `persist.ts` con schema-version-gated localStorage (resumable mid-flow + cleanup atómico). Frontend: 9 pasos one-question-per-screen (Welcome → Goal → Identity → Body → Activity → Training → PlanReveal → Diet → Done), `<NumberStepper>` y `<TogglePillGroup>` primitivas nuevas (≥44px tap, token-pure, aria-pressed/role=group), `useCountUp` hook (counter-up del kcal target con `prefers-reduced-motion`), `useFocusTrap` hook (sin dep externa). Shell con `aria-modal/labelledby`, sticky CTA con label dinámico, chunked progress bar 8 segmentos, mid-flow confirmation con `{name}`. Palette saca del onboarding (queda en Settings). i18n nuevo namespace `onboarding.*` ES+EN simétrico (1980 keys), `profile.onboarding.*` eliminado. Tests 1368 → 1422 (+54: 19 reducer + 21 validators + 16 derive). Eliminados 3 ficheros viejos en `profile/components/` (−616 LoC). Pipeline verde, build sin regresión (884.2 KB raw).
 - **Previous session (2026-04-30, S49–S50 — home polish)**:
@@ -29,15 +32,15 @@ Last updated: **2026-04-30** — `[1.5.167]` Onboarding PR 1: safe-area + progre
     - **Sprint 41** `[1.5.155]` — BG gradient sutil: `body { background-image: linear-gradient(--surface-container-low → --background) }`. Funciona en 8 temas sin código por-tema. DX: test slim a 3 locks (brand+a11y); DESIGN-SYSTEM.md §2 hex table → pointer a index.css.
     - **Sprint 40** `[1.5.154]` — paleta neutral repintada: light Bevel-style (`#eae7e0` bg + `#ffffff` surface), dark Whoop-style (`#0e1014` cool, ladder comprimida). AAA. meta theme-color split.
 - **Sprint 39 (previo, 2026-04-29)**: `[1.5.153]` lint hygiene: 2 stale `eslint-disable-next-line` removidos + Discover hashtag `<button>` → `<Button variant="ghost">`. Allowlist 2 → 1.
-- **Active plan**: Onboarding polish multi-PR. PR 1 `[1.5.167]` ✓. Next: PR 2 (WelcomeStep auth landing in-shell), PR 3 (Apple Health stub), PR 4 (INDYA polish), Doc 1 (indya-design-playbook deep-dive).
+- **Active plan**: Onboarding polish multi-PR completo. PRs 1–4 `[1.5.167–1.5.170]` ✓. Pendiente: Doc 1 (indya-design-playbook per-capture deep-dive) — out-of-sprint, bajo demanda.
 - **Release target**: `rial-food/main` (`novara-bbs/Rial-food.app`). Origin `rial-food`.
 - **Vercel project**: `rial.app.v1.5` (id `prj_t11VHYQjptazjUx7Y2hWLz0IDAjg`).
 - **Governance**: work directly on `main`. "continua" = push approval post green preflight.
 
-## Quality baseline (post-PR1 onboarding polish [1.5.167], 2026-04-30)
+## Quality baseline (post-PR4 onboarding polish [1.5.170], 2026-04-30)
 - TypeScript: **0 errors** (`npx tsc --noEmit`)
 - Tests: **1427/1427** passing (96 files) — +5 from PR1 (submitAttemptedFor lifecycle cases)
-- i18n symmetry: **1975** keys aligned ES ↔ EN (−5: deleted `errors.sexRequired` + 4 `shell.closeConfirm*` orphans)
+- i18n symmetry: **1998** keys aligned ES ↔ EN (PR1 −5 orphans; PR2 +9; PR3 +9; PR4 +9)
 - Design-system lint: **0 errors**, 334 warnings (pre-existing, allowlisted)
 - Raw branded `<button>` count: **39 → 28 → 2 → 1** (S36+S38+S39; only TodaysMeals permanent — Discover migrated)
 - `Recipe.tag` typed: **`string` → `FoodTag`** (S37, fixes EN filter regression)
@@ -45,13 +48,13 @@ Last updated: **2026-04-30** — `[1.5.167]` Onboarding PR 1: safe-area + progre
 - `AppStateContextType` interface: **0 `any` types** (Sprint 4 ✓); `recipeToEdit: Partial<Recipe>|null` (Sprint 26 ✓)
 - **Handler + util files**: 78 `any` → 0 (Sprints 5-9); screens/components Sprints 19-28.
 - `LoggableMeal`: canonical `src/types/food.ts`. `PostComment.createdAt`: added to type. `FastingEntry`, `ExtractedRecipeData`, `PickedRecipe`: new local interfaces. `DailyLogEntry`: typed in useDailyReset/top-meals. `UserProfile`: imported in weight-handlers (no more `[key:string]:any`). Test fixtures: `as unknown as UserProfile` casts for partial mocks.
-- Build main: size:check PASS — main entry 884.3 KB raw / 278.2 KB gzip.
+- Build main: size:check PASS — main entry 895.6 KB raw / 281.9 KB gzip (budget 920/290).
 - **AppStateContext**: 1075 → 584 lines (-46%), composer of 8 domain hooks.
 - **RecipeDetail**: 1066 → 678 lines (-36%), composer of 7 detail components.
 - **CreateRecipe**: 1052 → 460 lines (-56%), 5 step components in `components/create/`.
 - **BarcodeScanner**: 823 → 378 lines (-54%), 4 sub-components in `components/barcode/`.
 - **AddMeal**: 714 → 422 lines (-41%), 5 sub-components in `components/add-meal/`.
-- **i18n locales**: 4506 → 23 domain files via codemod (onboarding.ts namespace added S51). 1980 keys total.
+- **i18n locales**: 4506 → 23 domain files via codemod (onboarding.ts namespace added S51). **1998 keys total** (post-PRs 1-4).
 - **Test coverage** (new artifacts): 8/8 hooks + 7/7 detail components + 3 new convention tests (safe-area, button-adoption, screen-size).
 - **Pre-commit hook**: Husky + lint-staged (ESLint on staged TS/TSX, check:i18n on locale changes).
 - **CI status**: ✅ verde.

@@ -1,5 +1,48 @@
 # RIAL App - Changelog
 
+## [1.5.170] - 2026-04-30
+
+### feat(onboarding): PR 4 — INDYA-inspired UX polish
+
+4 improvements inspired by the INDYA onboarding pattern analysis:
+
+- **ActivitySlider** — reemplaza el `RadioCardGroup` estático en `ActivityStep` por un `<input type="range">` nativo con 4 posiciones (sedentary/light/active/veryActive). Label, desc y texto de ejemplo coloquial se actualizan dinámicamente mientras el usuario desliza. Ticks interactivos debajo del track permiten tap directo a una posición. `aria-valuetext` anuncia el label actual (no el número) a lectores de pantalla. Nuevas keys i18n `activity.options.*.example` (×4, ES+EN).
+- **OnboardingProgressSummary chips** — nuevo componente de chips horizontales read-only que muestra las elecciones de pasos anteriores debajo de la progress bar (goal → sex → body → activity, solo los completados). Oculto en welcome y goal. `useMemo` ubicado antes del early return para cumplir Rules of Hooks. `aria-hidden` ya que el step counter ya anuncia el progreso a screen readers. Wired en `Onboarding.tsx` como prop `summary` de `OnboardingHeader`.
+- **PlanReveal kcal range** — el hero animado ahora muestra también el rango estimado `kcalMin–kcalMax` (±5% del target) en una línea de caption debajo del número principal. Permite al usuario entender que el target es una guía, no un número exacto. Nueva key `plan.kcalRangeSep`.
+- **KcalBreakdownCard attribution** — cada fila del desglose lleva un `Text variant="micro"` secundario que explica la fuente del dato: "tu peso, altura, edad y sexo" / "tu nivel de actividad diaria" / "si entrenas regularmente" / "ajuste por tu objetivo". El desglose deja de ser una caja negra. Nuevas keys `plan.breakdownAttribution.{basal,activity,exercise,objective}` (×4, ES+EN).
+
+Quality: TypeScript 0 errors · 1427/1427 tests · i18n 1998 keys ES↔EN · ESLint 0 errors · size:check PASS (895.6 KB raw / 281.9 KB gzip).
+
+## [1.5.169] - 2026-04-30
+
+### feat(onboarding): PR 3 — Apple Health / Health Connect stub inline en BodyStep
+
+Implementación completa de la UI del toggle de salud (patrón INDYA IMG_1205/1206) con plugin **stub** diferido:
+
+- **`useHealthData()` hook** (`src/features/onboarding/hooks/useHealthData.ts`) — interfaz pública `UseHealthDataResult` con `available`, `enabled`, `loading`, `error`, `data`, `enable()`, `disable()`. Stub: `available: false` siempre en web/PWA. En dev, `?onb-health-mock=on` en la URL activa `available: true` + datos mock para QA sin build nativo. Swap real = 1 archivo (`@perfood/capacitor-healthkit` / `capacitor-health-connect`) cuando los entitlements estén listos.
+- **`HealthSyncCard` component** (`src/features/onboarding/components/HealthSyncCard.tsx`) — inline card `SectionCard padding="md"` con: label del servicio (Apple Salud / Health Connect según `Capacitor.getPlatform()`), hint contextual (OFF: "Conecta para autocompletar" / ON: "Datos actualizados con {service}"), botón (i) que abre `BottomSheet` con explicación de privacidad (qué se lee, nada va a la nube), toggle `role="switch"` accesible con thumb animado. `shadow-elev-1` (ADR-010). Allowlist de button-adoption test (toggle track con `bg-primary` ≠ CTA branded).
+- **`BodyStep`** — monta `<HealthSyncCard>` sobre los 3 `NumberStepper` cuando `health.available`. `useEffect([health.data])` pre-rellena `weight`, `height`, `age` (calculado de `birthDate`) y `sex` en el draft. `useEffect([health.error])` lanza `toast.error` non-blocking.
+- **i18n**: 9 nuevas keys `body.healthSync.*` (appleLabel, androidLabel, offHint, onConfirmation, privacyTitle, privacyBody, privacyAction, error) — 1989 keys total.
+- **Bundle budget** ajustado 280→290 KB gzip / 900→920 KB raw (PRs 1-3 net +2.7 KB gzip sobre baseline de Sprint 51).
+
+Quality: TypeScript 0 errors · 1427/1427 tests · i18n 1989 keys ES↔EN · ESLint 0 errors · size:check PASS (892.1 KB raw / 280.9 KB gzip).
+
+## [1.5.168] - 2026-04-30
+
+### feat(onboarding): PR 2 — WelcomeStep rediseñado con auth landing in-shell
+
+Reemplaza el WelcomeStep minimalista ("Tu plan personalizado en 3 minutos" + 1 CTA) por una landing de autenticación real dentro del shell del onboarding:
+
+- **3 CTAs OAuth** (Apple → Google → Email, orden requerido por App Store): `signInWithApple` / `signInWithGoogle` de `@/lib/supabase` (redirect-based OAuth). Icono `<Apple>` de Lucide + SVG Google 4 colores inline. En caso de error → `toast.error(t.onboarding.welcome.errorGeneric)`. Gateado por `isSupabaseEnabled` de `useAuth()` — si Supabase no está configurado, los botones OAuth no se renderizan.
+- **"Continuar sin cuenta"** — ghost button full-width que dispatcha `NEXT` directamente (flow guest, offline-first, comportamiento previo preservado).
+- **Flujo Email** — navega a `Login.tsx` via `onNavigateToLogin` callback. `App.tsx` guarda `STORAGE_KEYS.PENDING_ONBOARDING` para reabrir el onboarding tras login exitoso.
+- **Footer oculto en welcome** — el shell añade condicional `{!isWelcome && <OnboardingFooter .../>}` ya que WelcomeStep tiene sus propios CTAs inline.
+- **Microcopy legal** — `Text variant="caption"` con los términos, solo visible cuando Supabase está habilitado.
+- **i18n**: `welcome.subtitle` y `welcome.cta` reemplazados por 9 nuevas keys: `tagline`, `continueWithApple`, `continueWithGoogle`, `continueWithEmail`, `orContinueAnonymously`, `continueWithoutAccount`, `legal`, `errorGeneric`. `STORAGE_KEYS.PENDING_ONBOARDING` añadido.
+- Fix: `Sidebar.tsx` usaba la key eliminada `welcome.subtitle` → migrado a `welcome.tagline`.
+
+Quality: TypeScript 0 errors · 1427/1427 tests · i18n 1980 keys ES↔EN · ESLint 0 errors · size:check PASS (884.9 KB raw).
+
 ## [1.5.167] - 2026-04-30
 
 ### polish(onboarding): PR 1 — UX correctness + safe-area + progressive error disclosure
