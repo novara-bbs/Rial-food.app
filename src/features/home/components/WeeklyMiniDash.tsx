@@ -16,7 +16,7 @@ export default function WeeklyMiniDash({ calAvg, proteinHitDays, totalDays, week
     <button
       type="button"
       onClick={onNavigateToProgress}
-      className="bg-surface-container border border-outline-variant/30 p-4 rounded-sm w-full text-left hover:border-primary/30 hover:bg-surface-container-high transition-colors group"
+      className="bg-surface-container-low border border-outline-variant/20 p-4 rounded-sm w-full text-left hover:border-primary/30 hover:bg-surface-container transition-colors group"
     >
       <div className="grid grid-cols-3 gap-3">
         <div className="flex flex-col items-center gap-1">

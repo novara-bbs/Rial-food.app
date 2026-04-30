@@ -38,6 +38,7 @@ import AuthorAttributionCard from '@/features/recipes/components/AuthorAttributi
 import StickyCookCTA from '@/features/recipes/components/StickyCookCTA';
 
 import { Button } from '@/components/ui/button';
+import StatusChip from '@/components/ui/StatusChip';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Sheet, SheetContent } from '@/components/ui/sheet';
 import BottomSheet from '@/components/ui/bottom-sheet';
@@ -91,6 +92,10 @@ describe('Primitives — canonical exports (ADR-001)', () => {
 
   it('exports the Button primitive (shadcn, skinned)', () => {
     expect(Button).toBeTruthy();
+  });
+
+  it('exports StatusChip (status indicator, non-filter)', () => {
+    expect(StatusChip).toBeTruthy();
   });
 
   it('exports the onboarding primitives (PR 9, §4.11)', () => {

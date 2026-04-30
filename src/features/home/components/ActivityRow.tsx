@@ -41,34 +41,37 @@ export default function ActivityRow({ movement, setMovement, isTrainingDay, setI
         </button>
       )}
 
-      {/* Steps + Active minutes */}
-      <div className="flex items-center justify-between">
-        <div className="flex items-center gap-3">
-          <Footprints className="w-5 h-5 text-primary" />
-          <div>
-            <span className="font-headline font-bold text-sm uppercase text-tertiary tracking-widest">{movement.steps} / {movement.target}</span>
-            <span className="font-label text-micro uppercase tracking-widest text-on-surface-variant block">{t.home.stepsLabel}</span>
+      {/* Steps + Active minutes — hidden when disconnected (0/0 is meaningless) */}
+      {!isDisconnected && (
+        <>
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-3">
+              <Footprints className="w-5 h-5 text-primary" />
+              <div>
+                <span className="font-headline font-bold text-sm uppercase text-tertiary tracking-widest">{movement.steps} / {movement.target}</span>
+                <span className="font-label text-micro uppercase tracking-widest text-on-surface-variant block">{t.home.stepsLabel}</span>
+              </div>
+            </div>
+            <div className="flex items-center gap-4">
+              <div className="flex items-center gap-1.5">
+                <Activity className="w-4 h-4 text-brand-secondary" />
+                <span className="text-xs font-bold text-tertiary">{movement.activeMinutes}{t.home.activeMinLabel}</span>
+              </div>
+              <button
+                type="button"
+                onClick={() => setIsEditing(!isEditing)}
+                className="min-h-11 px-3 text-micro text-primary hover:underline font-bold uppercase tracking-widest"
+              >
+                {isEditing ? t.home.close : t.home.edit}
+              </button>
+            </div>
           </div>
-        </div>
-        <div className="flex items-center gap-4">
-          <div className="flex items-center gap-1.5">
-            <Activity className="w-4 h-4 text-brand-secondary" />
-            <span className="text-xs font-bold text-tertiary">{movement.activeMinutes}{t.home.activeMinLabel}</span>
+          {/* Steps progress bar */}
+          <div className="h-2 bg-surface-container-highest rounded-full overflow-hidden">
+            <div className="h-full bg-primary rounded-full transition-all duration-1000" style={{ width: `${Math.min((movement.steps / movement.target) * 100, 100)}%` }} />
           </div>
-          <button
-            type="button"
-            onClick={() => setIsEditing(!isEditing)}
-            className="min-h-11 px-3 text-micro text-primary hover:underline font-bold uppercase tracking-widest"
-          >
-            {isEditing ? t.home.close : t.home.edit}
-          </button>
-        </div>
-      </div>
-
-      {/* Steps progress bar */}
-      <div className="h-2 bg-surface-container-highest rounded-full overflow-hidden">
-        <div className="h-full bg-primary rounded-full transition-all duration-1000" style={{ width: `${Math.min((movement.steps / movement.target) * 100, 100)}%` }} />
-      </div>
+        </>
+      )}
 
       {/* Training day toggle */}
       <div className="flex items-center justify-between pt-3 border-t border-outline-variant/10">

@@ -1,6 +1,7 @@
 import { Calendar, UtensilsCrossed, Trash2, Pencil, Check, X, Minus, Plus } from 'lucide-react';
 import { useState, useMemo } from 'react';
 import SectionCard from '../../../components/SectionCard';
+import { Heading } from '@/components/ui/Typography';
 import { useI18n } from '../../../i18n';
 import type { DailyLogEntry } from '../../food/handlers/meal-handlers';
 import type { FoodVariant } from '../../../types/food-family';
@@ -112,9 +113,9 @@ export default function TodaysMeals({
   return (
     <section className="space-y-3">
       <div className="flex items-center justify-between px-1">
-        <h2 className="font-headline text-xl font-bold tracking-tight uppercase text-tertiary flex items-center gap-2">
+        <Heading level="h2" className="flex items-center gap-2">
           <UtensilsCrossed className="w-5 h-5 text-primary" /> {t.home.todaysLog}
-        </h2>
+        </Heading>
         {dailyLog.length > 0 && (
           <span className="text-micro font-label font-bold uppercase tracking-widest text-on-surface-variant">
             {dailyLog.length} {dailyLog.length === 1 ? t.home.foodSingular : t.home.foods}
@@ -259,40 +260,44 @@ export default function TodaysMeals({
           )}
           {!dailyLog.length && (
             <div className="flex items-center justify-between px-1">
-              <span className="font-headline text-sm font-bold tracking-tight uppercase text-tertiary flex items-center gap-2">
+              <Heading level="h3" className="flex items-center gap-2">
                 <Calendar className="w-4 h-4 text-primary" /> {t.home.plannedToday}
-              </span>
-              <button type="button" onClick={onNavigateToPlan} className="text-xs font-bold text-primary uppercase tracking-widest hover:underline">{t.plan.title}</button>
+              </Heading>
+              <button type="button" onClick={onNavigateToPlan} className="text-micro font-bold text-primary uppercase tracking-widest hover:underline min-h-11 px-3">{t.plan.title}</button>
             </div>
           )}
-          {todaysMeals.map((meal, idx) => (
-            <SectionCard key={meal.id || idx} padding="none" spacing="none" className="p-4 flex items-center gap-4 group">
-              <button
-                type="button"
-                onClick={() => onNavigateToRecipe?.(meal)}
-                disabled={!onNavigateToRecipe}
-                aria-label={`${t.postCard.viewRecipe}: ${meal.title}`}
-                className="flex items-center gap-4 flex-1 min-w-0 text-left rounded-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/50 disabled:cursor-default"
-              >
-                <div className="w-12 h-12 rounded-sm bg-surface-container-highest overflow-hidden shrink-0">
-                  <img src={meal.img || "https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&w=100&q=80"} alt={meal.title} className="w-full h-full object-cover" referrerPolicy="no-referrer" />
-                </div>
-                <div className="flex-1 min-w-0">
-                  <div className="flex items-center gap-2">
-                    <span className="text-micro font-semibold uppercase tracking-wider bg-primary/10 text-primary px-1.5 py-0.5 rounded">{meal.type || meal.time}</span>
+          {todaysMeals.map((meal, idx) => {
+            const imgSrc = meal.image || meal.img || null;
+            return (
+              <SectionCard key={meal.id || idx} padding="none" spacing="none" className="p-3 flex items-center gap-3 group">
+                <button
+                  type="button"
+                  onClick={() => onNavigateToRecipe?.(meal)}
+                  disabled={!onNavigateToRecipe}
+                  aria-label={`${t.postCard.viewRecipe}: ${meal.title}`}
+                  className="flex items-center gap-3 flex-1 min-w-0 text-left rounded-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/50 disabled:cursor-default"
+                >
+                  <div className="w-11 h-11 rounded-sm bg-surface-container-highest overflow-hidden shrink-0 flex items-center justify-center">
+                    {imgSrc
+                      ? <img src={imgSrc} alt={meal.title} className="w-full h-full object-cover" referrerPolicy="no-referrer" />
+                      : <span className="text-xl" aria-hidden="true">🍽️</span>
+                    }
                   </div>
-                  <h3 className="font-headline text-sm font-bold text-tertiary uppercase truncate mt-0.5">{meal.title}</h3>
-                  <span className="text-micro text-on-surface-variant font-mono">{meal.cal} {t.common.kcal}</span>
-                </div>
-              </button>
-              <button type="button"
-                onClick={(e) => { e.stopPropagation(); onLogMealNow?.(meal, 1); }}
-                className="shrink-0 px-4 min-h-11 bg-primary text-on-primary rounded-sm text-micro font-semibold uppercase tracking-widest hover:opacity-90 transition-opacity"
-              >
-                {t.home.logIt}
-              </button>
-            </SectionCard>
-          ))}
+                  <div className="flex-1 min-w-0">
+                    <span className="text-micro font-semibold uppercase tracking-wider bg-primary/10 text-primary px-1.5 py-0.5 rounded inline-block mb-0.5">{meal.type || meal.time}</span>
+                    <Heading level="h3" className="truncate text-sm">{meal.title}</Heading>
+                    <span className="text-caption text-on-surface-variant">{meal.cal ?? meal.macros?.calories} {t.common.kcal}</span>
+                  </div>
+                </button>
+                <button type="button"
+                  onClick={(e) => { e.stopPropagation(); onLogMealNow?.(meal, 1); }}
+                  className="shrink-0 px-3 min-h-11 bg-primary text-on-primary rounded-sm text-micro font-semibold uppercase tracking-widest hover:opacity-90 transition-opacity"
+                >
+                  {t.home.logIt}
+                </button>
+              </SectionCard>
+            );
+          })}
         </div>
       )}
 

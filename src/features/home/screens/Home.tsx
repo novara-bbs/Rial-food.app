@@ -251,16 +251,9 @@ export default function Home({
   // Hydration SectionCard and Smart Insights block); `progress` + `activity`
   // delegate to their tab routes. No new bottom sheets (§Phase 1 conservative).
   const handleQuickStatNav = useCallback(
-    (target: 'hydration' | 'progress' | 'activity' | 'insights') => {
+    (target: 'progress' | 'activity' | 'insights') => {
       if (target === 'progress' || target === 'activity') {
         onNavigateToProgress?.();
-        return;
-      }
-      if (target === 'hydration') {
-        setIsEditingHydration(true);
-        if (typeof document !== 'undefined') {
-          document.querySelector('[data-testid="home-hydration-card"]')?.scrollIntoView({ behavior: 'smooth', block: 'center' });
-        }
         return;
       }
       if (target === 'insights' && typeof document !== 'undefined') {
@@ -342,7 +335,6 @@ export default function Home({
       {/* 4. HomeQuickStats — chip-row (advanced only; simple returns null) */}
       <HomeQuickStats
         mode={isSimpleMode ? 'simple' : 'advanced'}
-        hydration={hydration}
         weightDelta={weightDeltaForChip}
         activityToday={{ minutes: movement.activeMinutes || 0, isTrainingDay }}
         insightCount={insights.length}

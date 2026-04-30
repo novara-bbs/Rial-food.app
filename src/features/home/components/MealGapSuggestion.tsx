@@ -20,7 +20,7 @@
  * cuando no hay suggestions.
  */
 import { useMemo } from 'react';
-import { Sparkles } from 'lucide-react';
+import { Sparkles, ChevronRight } from 'lucide-react';
 import SectionCard from '../../../components/SectionCard';
 import RecipeCard from '../../../components/patterns/RecipeCard';
 import { Button } from '@/components/ui/button';
@@ -139,9 +139,9 @@ export default function MealGapSuggestion({
             <span className="block text-micro font-label uppercase tracking-widest text-on-surface-variant">
               {mealGap.recipesTitle}
             </span>
-            <div className="flex gap-3 overflow-x-auto hide-scrollbar -mx-1 px-1">
+            <div className="flex gap-3 overflow-x-auto hide-scrollbar -mx-6 px-6 snap-x">
               {recipeSuggestions.map(({ recipe, reason }) => (
-                <div key={recipe.id} className="shrink-0" data-suggestion-reason={reason}>
+                <div key={recipe.id} className="basis-[42%] shrink-0 snap-start" data-suggestion-reason={reason}>
                   <RecipeCard
                     variant="compact"
                     recipe={{
@@ -152,6 +152,7 @@ export default function MealGapSuggestion({
                       pro: recipe.macros.protein,
                       tag: recipe.tag,
                     }}
+                    className="w-full"
                     onPress={() => onNavigateToRecipe(recipe)}
                   />
                 </div>
@@ -178,17 +179,18 @@ export default function MealGapSuggestion({
                     key={variant.id}
                     variant="ghost"
                     onClick={() => onLogFood(variant)}
+                    aria-label={`${mealGap.logCta}: ${name}`}
                     className="w-full h-auto justify-start gap-3 p-3 bg-surface-container-low rounded-sm border border-outline-variant/20 hover:border-primary/30 hover:bg-surface-container-high font-normal normal-case tracking-normal text-left"
                   >
-                    <span aria-hidden="true" className="text-3xl leading-none shrink-0 select-none">
+                    <span aria-hidden="true" className="w-10 h-10 text-2xl leading-none shrink-0 select-none flex items-center justify-center">
                       {emoji}
                     </span>
                     <div className="min-w-0 flex-1">
                       <span className="block font-headline font-bold text-body-sm text-on-surface truncate">
                         {name}
                       </span>
-                      <span className="block text-micro font-label uppercase tracking-widest text-on-surface-variant">
-                        {macros.calories} {t.common.kcal} · {macros.protein}g P · {macros.carbs}g C · {macros.fats}g G
+                      <span className="block text-caption text-on-surface-variant">
+                        {macros.calories} {t.common.kcal} · P {macros.protein} · C {macros.carbs} · G {macros.fats}
                       </span>
                       <span
                         data-suggestion-reason={reason}
@@ -197,9 +199,7 @@ export default function MealGapSuggestion({
                         {reasonLabels[reason] ?? reason}
                       </span>
                     </div>
-                    <span className="shrink-0 text-micro font-label uppercase tracking-widest text-primary">
-                      {mealGap.logCta}
-                    </span>
+                    <ChevronRight className="w-4 h-4 text-primary shrink-0" aria-hidden="true" />
                   </Button>
                 );
               })}

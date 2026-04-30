@@ -1,6 +1,7 @@
 import { Flame } from 'lucide-react';
 import { useI18n } from '../../../i18n';
 import { Heading } from '@/components/ui/Typography';
+import StatusChip from '@/components/ui/StatusChip';
 import RealScoreBadge from './RealScoreBadge';
 import DayStatusChip from './DayStatusChip';
 import type { DayStatus } from '../utils/dayStatus';
@@ -57,22 +58,19 @@ export default function HomeHeader({
             onTap={() => onNavigateToProgress?.()}
           />
         )}
-        <button
-          type="button"
+        <StatusChip
+          tone="secondary"
+          icon={Flame}
           onClick={() => onNavigateToProgress?.()}
-          aria-label={`${t.home.streak}: ${streakDays} ${t.home.days}`}
-          className="flex items-center gap-1.5 bg-brand-secondary/10 text-brand-secondary min-h-11 px-4 rounded-full border border-brand-secondary/20 shadow-elev-1 hover:bg-brand-secondary/15 hover:border-brand-secondary/40 transition-colors"
+          ariaLabel={`${t.home.streak}: ${streakDays} ${t.home.days}`}
         >
-          <Flame className="w-4 h-4" aria-hidden="true" />
-          <span className="font-semibold text-micro uppercase tracking-widest">
-            {t.home.streak}: {streakDays} {t.home.days}
-            {showBest && (
-              <span className="opacity-60 ml-1">
-                · {t.home.bestStreak.replace('{n}', String(bestStreakDays))}
-              </span>
-            )}
-          </span>
-        </button>
+          {t.home.streak}: {streakDays} {t.home.days}
+          {showBest && (
+            <span className="opacity-60 ml-1">
+              · {t.home.bestStreak.replace('{n}', String(bestStreakDays))}
+            </span>
+          )}
+        </StatusChip>
       </div>
     </section>
   );
