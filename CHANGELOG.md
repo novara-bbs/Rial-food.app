@@ -1,5 +1,62 @@
 # RIAL App - Changelog
 
+## [1.5.164] - 2026-04-30
+
+### feat(home): Sprint 50 — MealGapSuggestion ahora recomienda recetas (no solo ingredientes)
+
+La sección «Qué te falta hoy» (P11) sólo recomendaba `FoodVariant` ordenados por densidad del macro deficitario, lo que producía sugerencias poco accionables (ej: déficit de proteína → proteína de suero pura). Owner directive 2026-04-30 — la sección debe sugerir **recetas** del vault con alto contenido del macro deficitario, priorizando las planeadas hoy o no comidas todavía. Los ingredientes siguen como fallback rápido.
+
+**Nuevo util `src/features/home/utils/suggest-recipes.ts`:**
+- `rankRecipesForGap(macroKey, recipes, options): RankedRecipe[]` — espejo conceptual de `rankFoodsForGap` pero para `Recipe[]`.
+- **Filtros duros**: heurística allergen sobre `recipe.ingredients[]` + `recipe.tags` (substring match en ES/EN — gluten/dairy/eggs/nuts/peanuts/soy/fish/shellfish/sesame/celery/mustard/sulfites). `recipe.suitableFor` debe intersectar el slot horario.
+- **Score**: gramos del macro por porción × multiplicadores:
+  - `+25 %` si `recipe.id ∈ mealPlanToday` → reason `'planned-today'`.
+  - `+15 %` si `recipe.title.toLowerCase() ∉ dailyLog[].title` → reason `'not-eaten'`.
+  - `× 0.7` si la receta ya se comió hoy (penalización suave para no sugerir repeticiones).
+  - **Tier bonus**: user-saved (`+0.10`) > seed RIAL (`+0.05`) > forks anónimos (`-0.05`).
+  - **Anti-mono-macro** para `cal` (mismo patrón que `suggest-foods`).
+- 10 unit tests en `suggest-recipes.test.ts` (protein deficit, planned-today, already-logged, allergen filter ×2, slot filter ×2, empty cases, limit).
+
+**`src/features/home/components/MealGapSuggestion.tsx`:**
+- Nuevas props: `savedRecipes`, `mealPlanToday`, `dailyLog`, `onNavigateToRecipe`.
+- Render reordenado: **Recetas que ayudan** (carrusel horizontal `RecipeCard variant="compact"`, max 3) → **Ingredientes rápidos** (lista vertical, max 3). Si no hay recetas que califiquen, oculta el sub-bloque de recetas (graceful fallback).
+- Tap en RecipeCard → `onNavigateToRecipe(recipe)` (abre detalle, **no** auto-log — el usuario decide porciones).
+- Tap en ingrediente → `onLogFood(variant)` directo (comportamiento existente preservado).
+- **Migración deuda**: el raw `<button>` de los ingredientes se migró a `<Button variant="ghost">` (archivo no estaba en allowlist S38/S39).
+- 5 component tests en `MealGapSuggestion.test.tsx` cubriendo render condicional, navegación vs log y fallback graceful.
+
+**`src/features/home/screens/Home.tsx`:**
+- Pasa `savedRecipes`, `mealPlanToday` (= `todaysMeals`), `dailyLog`, `onNavigateToRecipe` al `MealGapSuggestion`.
+
+**i18n** (4 keys nuevas, ES↔EN simétrico — 1937 → 1941):
+- `home.mealGap.recipesTitle` → "Recetas que ayudan" / "Recipes that help"
+- `home.mealGap.foodsTitle` → "Ingredientes rápidos" / "Quick ingredients"
+- `home.mealGap.reason.planned-today` → "Lo planeaste hoy" / "Planned for today"
+- `home.mealGap.reason.not-eaten` → "Aún sin comer" / "Not eaten yet"
+
+**Archivos:** 5 modificados (MealGapSuggestion.tsx, Home.tsx, es/home.ts, en/home.ts, AGENTS.md no), 3 nuevos (suggest-recipes.ts, suggest-recipes.test.ts, MealGapSuggestion.test.tsx).
+**TypeScript:** 0 errores. **Tests:** 1350 → 1368 (+18). **i18n:** simétrico ✓.
+
+## [1.5.163] - 2026-04-30
+
+### fix(home): Sprint 49 — TodaysMeals planned-meal click navigation
+
+La sección «Planificado hoy» (TodaysMeals) cableaba la prop `onNavigateToRecipe?: (recipe: Recipe) => void` en su interface pero **no la consumía** — el destructuring de props la descartaba, y el card del meal planeado no tenía wrapper clickable. El usuario podía pulsar «Log it» pero no abrir el detalle de la receta para recordarla o cocinarla. Bug puro de wiring.
+
+**`src/features/home/components/TodaysMeals.tsx`:**
+- Se añade `onNavigateToRecipe` al destructuring del componente.
+- El bloque `imagen + tipo/badge + título + kcal` del card planeado se envuelve en un `<button type="button">` con `onClick={() => onNavigateToRecipe?.(meal)}`. El `<button>` queda transparente (sin fondo/borde) y hereda el contenedor visual del `SectionCard` exterior (respeta ADR-001).
+- A11y: `aria-label={t.postCard.viewRecipe + ': ' + meal.title}` + `focus-visible:ring-2 focus-visible:ring-primary/50`. `disabled` cuando la prop no está cableada.
+- El botón **«Log it»** queda como hermano fuera del wrapper (no necesita `stopPropagation` adicional — sigue como segundo click target separado).
+
+**Tests:** nuevo `TodaysMeals.test.tsx` con 3 casos:
+1. Click en zona título/imagen → `onNavigateToRecipe(meal)` llamado una vez.
+2. Click en «Log it» → `onLogMealNow` llamado, `onNavigateToRecipe` **no** llamado.
+3. Sin `onNavigateToRecipe` → wrapper button `disabled`.
+
+**Archivos:** 1 modificado (TodaysMeals.tsx), 1 nuevo (TodaysMeals.test.tsx).
+**TypeScript:** 0 errores. **Tests:** 1350 → 1353 (+3 antes del Sprint 50).
+
 ## [1.5.162] - 2026-04-30
 
 ### refactor(ui): Sprint 48 — RecipeNutritionPanel macros flat row + 2-color hierarchy

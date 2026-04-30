@@ -444,11 +444,17 @@ export default function Home({
         }}
       />
 
-      {/* 9. P11 [1.5.69] — Qué me falta hoy: personalized macro-gap suggestions. */}
+      {/* 9. P11 [1.5.69] — Qué me falta hoy: personalized macro-gap suggestions.
+            Sprint 50 [1.5.164] — also surfaces recipes from the user's vault
+            (planned-today + not-eaten-today bias) before the ingredients block. */}
       {onLogMealNow && (
         <MealGapSuggestion
           dailyMacros={dailyMacros}
           mergedVariants={mergedVariants}
+          savedRecipes={savedRecipes}
+          mealPlanToday={todaysMeals}
+          dailyLog={dailyLog}
+          onNavigateToRecipe={onNavigateToRecipe}
           foodHistory={foodHistory}
           userGoal={userProfile?.goal}
           excludeAllergens={userProfile.intolerances ?? []}

@@ -5,11 +5,14 @@
 > prunes this file back down. Everything below should answer: *what's the release line,
 > what's the quality baseline, what's the next move, what's broken?*
 
-Last updated: **2026-04-30** — `[1.5.162]` Sprint 48: RecipeNutritionPanel macros flat row + 2-color hierarchy.
+Last updated: **2026-04-30** — `[1.5.164]` Sprint 50: MealGapSuggestion ahora recomienda recetas + ingredientes.
 
 ## Release snapshot
-- **Branch**: `main`, synced con `rial-food/main` (CI green S39; S40–S48 queued).
-- **This session (2026-04-30, S46–S48)**:
+- **Branch**: `main`, synced con `rial-food/main` (CI green S39; S40–S50 queued).
+- **This session (2026-04-30, S49–S50 — home polish)**:
+    - **Sprint 50** `[1.5.164]` — `MealGapSuggestion` extendido: ahora rankea **recetas del vault** (con `rankRecipesForGap` en `src/features/home/utils/suggest-recipes.ts`) priorizando planeadas hoy (`+25 %`), no comidas (`+15 %`) y penalizando repeticiones (`× 0.7`); allergen filter heurístico ES/EN sobre ingredientes + tags; slot filter respetando `recipe.suitableFor`. Render: carrusel `RecipeCard variant="compact"` (recetas) → lista de ingredientes (fallback). Tap en receta → `onNavigateToRecipe` (no auto-log). Migración deuda: raw `<button>` ingredientes → `<Button variant="ghost">`. 4 i18n keys nuevas (recipesTitle, foodsTitle, reason.planned-today, reason.not-eaten). Tests 1353 → 1368 (+15).
+    - **Sprint 49** `[1.5.163]` — Fix bug navegación en `TodaysMeals` (sección «Planificado hoy»): la prop `onNavigateToRecipe` estaba tipada pero no destructurada. Bloque imagen+badge+título+kcal envuelto en `<button type="button">` transparente (respeta ADR-001/SectionCard) con `aria-label={t.postCard.viewRecipe + ': ' + meal.title}` y focus-visible ring. Botón «Log it» queda hermano fuera. Tests 1350 → 1353 (+3).
+- **Previous session (2026-04-30, S46–S48 — recipes polish)**:
     - **Sprint 48** `[1.5.162]` — Macros del panel: `surface="card"` → nueva `surface="bare"` (sin fondo/borde individual). Grid `gap-2` → `divide-x divide-outline-variant/10`. Paleta 4 colores → 2: KCAL `text-primary`, PRO/CARBS/FATS unificados `text-tertiary`. Patrón editorial NYT/Whoop dentro del SectionCard.
     - **Sprint 47** `[1.5.161]` — `RecipeNutritionPanel`: macros + food-quality banner + servings stepper unificados en un único `<SectionCard padding="none" spacing="none">` con divisores hairline. Servings step `1` → `0.5` (1, 1.5, 2, 2.5, …) vía helpers puros en `src/features/recipes/utils/servings.ts` (`SERVINGS_STEP/MIN/MAX`, `clampServings`, `incrementServings`, `decrementServings`, `formatServings`). Eliminados `RecipeNutritionBar.tsx`, `RecipeServingsControls.tsx` y su test (reemplazados). Quality usa macros base (independiente de portion). Tests 1335 → 1350 (+15).
     - **Sprint 46** `[1.5.160]` — RecipeDetail hero NYT-style: gradient `bg-gradient-to-t` eliminado (imagen 100% limpia), `HeroGallery` generaliza `photos` → `items: HeroMediaItem[]` (foto | video), peek mode `basis-[88%]` con padding 16px + gap 12px cuando n ≥ 2, `IntersectionObserver` para active-index, video unificado en el carrusel (YouTube inline iframe, resto `openExternalVideo()`). Título y time row movidos debajo del media. `<VideoSection>` standalone removido de `RecipeDetail.tsx` (sigue usado en CreateRecipe steps). Tests 1332 → 1335.
@@ -27,10 +30,10 @@ Last updated: **2026-04-30** — `[1.5.162]` Sprint 48: RecipeNutritionPanel mac
 - **Vercel project**: `rial.app.v1.5` (id `prj_t11VHYQjptazjUx7Y2hWLz0IDAjg`).
 - **Governance**: work directly on `main`. "continua" = push approval post green preflight.
 
-## Quality baseline (post-Sprint 37, 2026-04-28)
+## Quality baseline (post-Sprint 50, 2026-04-30)
 - TypeScript: **0 errors** (`npx tsc --noEmit`)
-- Tests: **1332/1332** passing (89 files)
-- i18n symmetry: **1937** keys aligned ES ↔ EN (+11 recipeTags from S37)
+- Tests: **1368/1368** passing (93 files) — +18 from S49 (3 TodaysMeals click) + S50 (10 suggest-recipes + 5 MealGapSuggestion)
+- i18n symmetry: **1941** keys aligned ES ↔ EN (+4 from S50: mealGap.recipesTitle/foodsTitle/reason.planned-today/reason.not-eaten)
 - Design-system lint: **0 errors**, 349 warnings (pre-existing, allowlisted)
 - Raw branded `<button>` count: **39 → 28 → 2 → 1** (S36+S38+S39; only TodaysMeals permanent — Discover migrated)
 - `Recipe.tag` typed: **`string` → `FoodTag`** (S37, fixes EN filter regression)
@@ -122,6 +125,8 @@ Sprints 5-28 (type-safety any→0 sweep across all features),
 **Sprint 46 [1.5.160]** — RecipeDetail hero NYT-style: gradient `bg-gradient-to-t` eliminado en `RecipeHero.tsx` (imagen 100% limpia). `HeroGallery` props `photos: string[]` → `items: HeroMediaItem[]` (foto | video). Multi-item: peek mode `basis-[88%]` + `pl-4 pr-4 gap-3 hide-scrollbar`, `IntersectionObserver` para active-index (robusto en peek). Single-item: 100% sin chrome. Video unificado en el carrusel: YouTube reproduce iframe inline, TikTok/IG/Vimeo → `openExternalVideo()`. Título y time row movidos debajo del media (`px-6 pt-3`). `<VideoSection>` standalone removido de `RecipeDetail.tsx` (sigue usado en CreateRecipe). Tests 1332 → 1335.
 **Sprint 47 [1.5.161]** — `RecipeNutritionPanel` unifica macros + food-quality banner + servings stepper en un `<SectionCard>`. Servings step 1 → 0.5 vía helpers puros `src/features/recipes/utils/servings.ts` (clampServings/increment/decrement/format). Eliminados `RecipeNutritionBar.tsx` y `RecipeServingsControls.tsx` + test (reemplazados). Source link movido fuera del bloque nutricional. ADR-001 OK. Tests 1335 → 1350.
 **Sprint 48 [1.5.162]** — Panel macros: nueva `MacroTile surface="bare"` (sin fondo/borde individual). Grid `gap-2` → `divide-x divide-outline-variant/10`. Paleta reducida a 2 colores: KCAL `text-primary`, PRO/CARBS/FATS unificados `text-tertiary`. Editorial NYT/Whoop pattern.
+**Sprint 49 [1.5.163]** — Fix click navegación en `TodaysMeals` (sección «Planificado hoy»). Prop `onNavigateToRecipe` estaba muerta — destructuring lo descartaba y card no tenía wrapper clickable. Bloque imagen+título envuelto en `<button>` transparente (sin fondo, hereda SectionCard). A11y `aria-label={t.postCard.viewRecipe + ': ' + meal.title}` + focus-visible. Botón «Log it» como hermano fuera. 3 tests nuevos en `TodaysMeals.test.tsx`.
+**Sprint 50 [1.5.164]** — `MealGapSuggestion` recomienda **recetas + ingredientes**. Nuevo util `src/features/home/utils/suggest-recipes.ts` con `rankRecipesForGap`: filtros allergen heurísticos ES/EN sobre `ingredients[]`+`tags`, slot filter `suitableFor ∩ guessMealSlotForTime()`, score por macro/portion × bonus planned-today (+25%) × bonus not-eaten (+15%) × penalización ya-comida (×0.7) + tier bonus + anti-mono-macro para `cal`. Component render: carrusel `RecipeCard variant="compact"` (max 3) → lista ingredientes (max 3, fallback). Tap receta → `onNavigateToRecipe` (no auto-log). Raw `<button>` ingredientes → `<Button variant="ghost">` (cierre deuda allowlist). 4 i18n keys (recipesTitle, foodsTitle, planned-today, not-eaten) ES/EN simétricos. 15 tests nuevos (10 util + 5 component).
 
 ## Repository compliance
 - `LICENSE`: Proprietary © 2026 RIAL FOOD WORLD S.L. Contact legal@rialfoodworld.com.
