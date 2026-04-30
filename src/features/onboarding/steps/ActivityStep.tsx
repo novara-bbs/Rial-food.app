@@ -1,3 +1,10 @@
+/**
+ * ActivityStep — daily activity level (sedentary / light / active / veryActive).
+ *
+ * Owns: `draft.activity`. Validator: `activityRequired` if unset. Renders
+ * `<ActivitySlider>` (4-position drag selector with dynamic label, INDYA
+ * pattern). The level IDs come from `state/taxonomies` (ACTIVITY_LEVELS).
+ */
 import { type Dispatch } from 'react';
 
 import { useI18n } from '@/i18n';

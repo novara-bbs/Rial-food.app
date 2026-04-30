@@ -1,3 +1,11 @@
+/**
+ * PlanRevealStep — read-only summary of the calculated daily targets.
+ *
+ * Doesn't dispatch — runs `previewBreakdown(draft)` (a thin wrapper over
+ * `nutrition.ts`) and animates the kcal target with `useCountUp`. Below the
+ * hero number, shows a min/max range (±`KCAL_RANGE_PERCENT`) so the user
+ * understands the target is a guideline, not a hard number.
+ */
 import SectionCard from '@/components/SectionCard';
 import { Heading, Text } from '@/components/ui/Typography';
 import { useI18n } from '@/i18n';
@@ -7,6 +15,13 @@ import OnboardingScaffold from '../components/OnboardingScaffold';
 import { previewBreakdown } from '../derive/derive-targets';
 import { useCountUp } from '../hooks/useCountUp';
 import type { OnboardingDraft } from '../state/types';
+import { interpolateName } from '../utils/copy';
+
+/**
+ * ±5% of the target — realistic daily variability of intake. Bumping this
+ * widens the displayed range without touching the underlying calculation.
+ */
+const KCAL_RANGE_PERCENT = 0.05;
 
 export default function PlanRevealStep({
   draft,
@@ -20,13 +35,11 @@ export default function PlanRevealStep({
 
   const breakdown = previewBreakdown(draft);
   const targetKcal = breakdown?.total ?? 0;
-  const kcalMin = breakdown ? Math.round(targetKcal * 0.95) : 0;
-  const kcalMax = breakdown ? Math.round(targetKcal * 1.05) : 0;
+  const kcalMin = breakdown ? Math.round(targetKcal * (1 - KCAL_RANGE_PERCENT)) : 0;
+  const kcalMax = breakdown ? Math.round(targetKcal * (1 + KCAL_RANGE_PERCENT)) : 0;
   const animated = useCountUp(targetKcal, 1200);
 
-  const title = draft.name
-    ? copy.titleNamed.replace('{name}', draft.name)
-    : copy.title;
+  const title = interpolateName(copy.titleNamed, copy.title, draft.name);
 
   return (
     <OnboardingScaffold

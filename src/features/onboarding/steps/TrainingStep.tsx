@@ -1,3 +1,10 @@
+/**
+ * TrainingStep — does the user train regularly? (boolean Yes/No).
+ *
+ * Owns: `draft.trains`. No validator — the field always has a value
+ * (defaults to false; toggling between 'yes'/'no' just dispatches the
+ * boolean). Drives the per-day exercise kcal bump in `nutrition.ts`.
+ */
 import { type Dispatch } from 'react';
 
 import SegmentedTabs from '@/components/SegmentedTabs';

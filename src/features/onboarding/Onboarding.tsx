@@ -24,7 +24,6 @@ import { useI18n } from '@/i18n';
 
 import OnboardingFooter from './components/OnboardingFooter';
 import OnboardingHeader from './components/OnboardingHeader';
-import { type ProgressSummaryData } from './components/OnboardingProgressSummary';
 import { deriveOutput } from './derive/derive-targets';
 import { useFocusTrap } from './hooks/useFocusTrap';
 import { onboardingReducer } from './state/onboardingReducer';
@@ -40,6 +39,11 @@ import {
   type StepId,
 } from './state/types';
 import { isDraftComplete, validateStep } from './state/validators';
+import {
+  buildSummary,
+  mapErrorKeyToCopy,
+  pickPrimaryLabel,
+} from './utils/copy';
 
 import ActivityStep from './steps/ActivityStep';
 import BodyStep from './steps/BodyStep';
@@ -79,6 +83,11 @@ export interface OnboardingProps {
 
 const TITLE_ID = 'onb-step-title';
 
+/** Debounce window before flushing a dirty draft to localStorage. */
+const DRAFT_DEBOUNCE_MS = 250;
+/** Time on screen for the "we're picking up where you left off" banner. */
+const RESUME_BANNER_MS = 2500;
+
 export default function Onboarding({ isOpen, onClose, onComplete, onNavigateToLogin }: OnboardingProps) {
   const { t } = useI18n();
   const [state, dispatch] = useReducer(onboardingReducer, undefined, loadInitialState);
@@ -93,16 +102,16 @@ export default function Onboarding({ isOpen, onClose, onComplete, onNavigateToLo
   );
   useEffect(() => {
     if (!showResumeBanner) return;
-    const id = window.setTimeout(() => setShowResumeBanner(false), 2500);
+    const id = window.setTimeout(() => setShowResumeBanner(false), RESUME_BANNER_MS);
     return () => window.clearTimeout(id);
   }, [showResumeBanner]);
 
   useFocusTrap(containerRef, isOpen);
 
-  // Debounced persistence: 250ms after the last dirty mutation.
+  // Debounced persistence: write `DRAFT_DEBOUNCE_MS` after the last dirty mutation.
   useEffect(() => {
     if (!state.dirty) return;
-    const id = window.setTimeout(() => saveDraft(state), 250);
+    const id = window.setTimeout(() => saveDraft(state), DRAFT_DEBOUNCE_MS);
     return () => window.clearTimeout(id);
   }, [state]);
 
@@ -166,24 +175,12 @@ export default function Onboarding({ isOpen, onClose, onComplete, onNavigateToLo
     dispatch({ type: 'NEXT' });
   }, []);
 
-  // ── Progress summary chips ────────────────────────────────────────────────
-  // Must be before the early return to satisfy Rules of Hooks.
-  // Show chips for completed steps: goal from identity (idx 2), sex from body
-  // (idx 3), body data from activity (idx 4), activity from training (idx 5).
-  const summary = useMemo<ProgressSummaryData | undefined>(() => {
-    const idx = stepIndex;
-    if (idx < 2) return undefined; // welcome + goal: no previous choices to show
-    const d = state.draft;
-    const opts = t.onboarding;
-    return {
-      goal:     idx >= 2 && d.goal     ? opts.goal.options[d.goal as keyof typeof opts.goal.options] : undefined,
-      sex:      idx >= 3 && d.sex      ? (d.sex === 'male' ? opts.identity.male : opts.identity.female) : undefined,
-      body:     idx >= 4 && d.weight != null && d.height != null
-                  ? `${d.weight} kg · ${d.height} cm`
-                  : undefined,
-      activity: idx >= 5 && d.activity ? opts.activity.options[d.activity as keyof typeof opts.activity.options]?.label : undefined,
-    };
-  }, [stepIndex, state.draft, t]);
+  // Progress summary chips — must be before the early return to satisfy
+  // Rules of Hooks. Helper handles the per-step thresholds + label resolution.
+  const summary = useMemo(
+    () => buildSummary(state.draft, stepIndex, t),
+    [state.draft, stepIndex, t],
+  );
 
   if (!isOpen) return null;
 
@@ -292,21 +289,3 @@ function renderStep(
   }
 }
 
-function pickPrimaryLabel(
-  stepId: StepId,
-  t: ReturnType<typeof useI18n>['t'],
-): string {
-  switch (stepId) {
-    // 'welcome' footer is hidden — this case is never reached.
-    case 'plan':    return t.onboarding.shell.createPlan;
-    case 'done':    return t.onboarding.done.cta;
-    default:        return t.onboarding.shell.next;
-  }
-}
-
-function mapErrorKeyToCopy(
-  key: string,
-  errorsCopy: Record<string, string>,
-): string | undefined {
-  return errorsCopy[key];
-}

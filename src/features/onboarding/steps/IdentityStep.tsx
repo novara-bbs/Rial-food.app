@@ -1,3 +1,12 @@
+/**
+ * IdentityStep — name (text input) + biological sex (segmented tabs).
+ *
+ * Owns: `draft.name`, `draft.sex`. Validator: `nameTooLong` (40 char cap).
+ * Sex defaults to `'male'` in `INITIAL_DRAFT`, so the tabs always have a
+ * visual selection and the CTA never blocks waiting for sex. Errors are
+ * gated by `showErrors` so they stay silent until the user tries to
+ * advance with an invalid input.
+ */
 import { type Dispatch } from 'react';
 
 import SegmentedTabs from '@/components/SegmentedTabs';

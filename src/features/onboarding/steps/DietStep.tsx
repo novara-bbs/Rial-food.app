@@ -1,22 +1,18 @@
+/**
+ * DietStep — optional multi-select of dietary restrictions.
+ *
+ * Owns: `draft.restrictions` (string[]). No validator — the step is skippable
+ * (footer shows the "Skip" button on this step). Renders `TogglePillGroup`
+ * with `DIET_IDS` from `state/taxonomies` mapped to localized labels.
+ */
 import { type Dispatch } from 'react';
 
 import { useI18n } from '@/i18n';
 
 import OnboardingScaffold from '../components/OnboardingScaffold';
 import TogglePillGroup from '../components/TogglePillGroup';
+import { DIET_IDS } from '../state/taxonomies';
 import type { OnboardingAction, OnboardingDraft } from '../state/types';
-
-const DIET_IDS = [
-  'vegetarian',
-  'vegan',
-  'glutenFree',
-  'lactoseFree',
-  'keto',
-  'paleo',
-  'mediterranean',
-] as const;
-
-type DietId = (typeof DIET_IDS)[number];
 
 export default function DietStep({
   draft,
@@ -32,7 +28,7 @@ export default function DietStep({
 
   const options = DIET_IDS.map(id => ({
     id,
-    label: copy.options[id as DietId],
+    label: copy.options[id],
   }));
 
   return (

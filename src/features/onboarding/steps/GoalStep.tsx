@@ -1,3 +1,10 @@
+/**
+ * GoalStep — single-select goal (muscle / cut / maintain / health / family).
+ *
+ * Owns: `draft.goal`. Validator: `goalRequired` if unset (footer hint
+ * surfaces it on first CTA tap). Renders `RadioCardGroup` with a Lucide
+ * icon per option; the goal IDs come from `state/taxonomies` (GOAL_IDS).
+ */
 import { Dumbbell, Flame, Heart, Scale, Users } from 'lucide-react';
 import { type Dispatch } from 'react';
 

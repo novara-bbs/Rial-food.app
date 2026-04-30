@@ -71,9 +71,9 @@ export function useHealthData(): UseHealthDataResult {
 
   // On a real native build, check Capacitor.isNativePlatform() AND whether
   // the health plugin is registered. Stub: always false unless mock flag.
-  const isAvailable = isMock && !Capacitor.isNativePlatform() === false
-    ? false  // native but plugins not installed → false
-    : isMock; // mock flag active in dev → simulate available
+  // The mock flag is only honored in non-native (web) dev so we don't shadow
+  // a real plugin once it's installed.
+  const isAvailable = isMock && !Capacitor.isNativePlatform();
 
   const [enabled, setEnabled] = useState(false);
   const [loading, setLoading] = useState(false);

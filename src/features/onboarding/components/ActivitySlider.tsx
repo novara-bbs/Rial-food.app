@@ -16,10 +16,9 @@ import { useId } from 'react';
 import { Text } from '@/components/ui/Typography';
 import { useI18n } from '@/i18n';
 
-import type { ActivityLevel } from '../../food/utils/nutrition';
+import { ACTIVITY_LEVELS } from '../state/taxonomies';
 
-// Ordered list of levels — the slider index matches the array index.
-const ACTIVITY_LEVELS: ActivityLevel[] = ['sedentary', 'light', 'active', 'veryActive'];
+import type { ActivityLevel } from '../../food/utils/nutrition';
 
 function valueToActivity(v: number): ActivityLevel {
   return ACTIVITY_LEVELS[Math.max(0, Math.min(3, Math.round(v)))] ?? 'sedentary';

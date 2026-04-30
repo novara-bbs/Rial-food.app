@@ -1,3 +1,16 @@
+/**
+ * BodyStep — weight, height, age, and (optionally) sex.
+ *
+ * Owns: `weight`, `height`, `age` (validated; out-of-range surfaces inline
+ * errors gated by `showErrors`). `sex` is set on IdentityStep but can also
+ * be pre-filled from Apple Health / Health Connect when the user enables
+ * the toggle on `<HealthSyncCard>` — that card only mounts when
+ * `useHealthData().available` is true (native build with the plugin
+ * installed, or `?onb-health-mock=on` in dev).
+ *
+ * Each NumberStepper carries a `defaultValue` so the first +/- tap lands on
+ * a sensible number rather than `(min + max) / 2`.
+ */
 import { useEffect, type Dispatch } from 'react';
 import { toast } from 'sonner';
 
@@ -16,6 +29,7 @@ import {
   WEIGHT_MAX,
   WEIGHT_MIN,
 } from '../state/validators';
+import { interpolateName } from '../utils/copy';
 
 export default function BodyStep({
   draft,
@@ -34,9 +48,7 @@ export default function BodyStep({
   const { t } = useI18n();
   const copy = t.onboarding.body;
   const errs = t.onboarding.errors;
-  const subtitle = draft.name
-    ? copy.subtitleNamed.replace('{name}', draft.name)
-    : copy.subtitle;
+  const subtitle = interpolateName(copy.subtitleNamed, copy.subtitle, draft.name);
 
   // ── Health sync ─────────────────────────────────────────────────────────
   const health = useHealthData();
