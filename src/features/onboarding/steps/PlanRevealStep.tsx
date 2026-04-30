@@ -7,7 +7,7 @@
  * understands the target is a guideline, not a hard number.
  */
 import SectionCard from '@/components/SectionCard';
-import { Heading, Text } from '@/components/ui/Typography';
+import { Text } from '@/components/ui/Typography';
 import { useI18n } from '@/i18n';
 
 import KcalBreakdownCard from '../components/KcalBreakdownCard';
@@ -51,9 +51,9 @@ export default function PlanRevealStep({
       <div className="w-full space-y-4">
         {/* Big-number kcal reveal — aria-live so it announces after the count-up. */}
         <SectionCard padding="md" spacing="sm" className="text-center">
-          <Heading level="h4" variant="overline">
+          <Text variant="body-sm" as="div" className="font-medium text-on-surface-variant">
             {copy.dailyKcal}
-          </Heading>
+          </Text>
           <p
             role="status"
             aria-live="polite"

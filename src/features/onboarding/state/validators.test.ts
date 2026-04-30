@@ -25,7 +25,7 @@ const VALID_DRAFT: OnboardingDraft = {
 };
 
 describe('validateStep — non-blocking steps', () => {
-  it.each(['welcome', 'training', 'plan', 'diet', 'done'] as const)(
+  it.each(['welcome', 'plan', 'diet', 'done'] as const)(
     '%s is always ok',
     stepId => {
       expect(validateStep(stepId, INITIAL_DRAFT).ok).toBe(true);

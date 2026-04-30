@@ -51,9 +51,10 @@ export default function ActivitySlider({ value, onChange, ariaLabel }: ActivityS
   }
 
   return (
-    <div className="w-full space-y-6">
-      {/* Dynamic label area — changes as the user drags */}
-      <div className="text-center min-h-[5rem] flex flex-col items-center justify-center gap-1 transition-all duration-200">
+    <div className="w-full space-y-5">
+      {/* Dynamic label area — changes as the user drags. No min-height: lets
+          longer examples wrap freely without clipping on narrow viewports. */}
+      <div className="text-center flex flex-col items-center gap-1 px-2 transition-all duration-200">
         <Text variant="body-lg" className="font-semibold text-on-surface">
           {currentCopy.label}
         </Text>
@@ -63,7 +64,7 @@ export default function ActivitySlider({ value, onChange, ariaLabel }: ActivityS
         <Text
           id={descId}
           variant="caption"
-          className="text-on-surface-variant/70 italic mt-0.5"
+          className="text-on-surface-variant/70 italic mt-0.5 text-balance"
         >
           {currentCopy.example}
         </Text>
@@ -113,7 +114,7 @@ export default function ActivitySlider({ value, onChange, ariaLabel }: ActivityS
                   level === currentLevel ? 'bg-primary' : 'bg-outline-variant/40',
                 ].join(' ')}
               />
-              <Text variant="micro" as="span" className="leading-tight font-medium">
+              <Text variant="caption" as="span" className="leading-tight font-medium">
                 {copy[level].label}
               </Text>
             </button>

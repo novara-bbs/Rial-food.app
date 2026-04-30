@@ -146,13 +146,13 @@ describe('Onboarding.tsx — consumer sanity', () => {
     expect(ONBOARDING_SRC).toContain("from './components/OnboardingFooter'");
   });
 
-  it('renders all 9 steps via a switch on stepId', () => {
+  it('renders all 8 steps via a switch on stepId', () => {
+    // training was folded into activity in [1.5.173].
     expect(ONBOARDING_SRC).toContain('WelcomeStep');
     expect(ONBOARDING_SRC).toContain('GoalStep');
     expect(ONBOARDING_SRC).toContain('IdentityStep');
     expect(ONBOARDING_SRC).toContain('BodyStep');
     expect(ONBOARDING_SRC).toContain('ActivityStep');
-    expect(ONBOARDING_SRC).toContain('TrainingStep');
     expect(ONBOARDING_SRC).toContain('PlanRevealStep');
     expect(ONBOARDING_SRC).toContain('DietStep');
     expect(ONBOARDING_SRC).toContain('DoneStep');

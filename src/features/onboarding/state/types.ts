@@ -12,14 +12,20 @@ import type { ActivityLevel, Goal, Sex } from '../../food/utils/nutrition';
 export const ONBOARDING_DRAFT_VERSION = 1;
 export type OnboardingDraftVersion = typeof ONBOARDING_DRAFT_VERSION;
 
-/** Ordered step IDs (welcome → done). Order is enforced by `STEP_ORDER`. */
+/**
+ * Ordered step IDs (welcome → done). Order is enforced by `STEP_ORDER`.
+ *
+ * `training` was folded into `activity` in [1.5.173] — both are short
+ * binary-ish questions that fit on a single screen and back-to-back
+ * felt redundant. The `trains` draft field is now captured by the
+ * activity step.
+ */
 export type StepId =
   | 'welcome'
   | 'goal'
   | 'identity'
   | 'body'
   | 'activity'
-  | 'training'
   | 'plan'
   | 'diet'
   | 'done';
@@ -30,7 +36,6 @@ export const STEP_ORDER: readonly StepId[] = [
   'identity',
   'body',
   'activity',
-  'training',
   'plan',
   'diet',
   'done',
@@ -47,7 +52,7 @@ export const STEP_INDEX_MAP: Readonly<Record<StepId, number>> =
   }, {} as Record<StepId, number>);
 
 /** Number of "question" steps shown in the progress bar (welcome excluded). */
-export const PROGRESS_TOTAL = STEP_ORDER.length - 1; // 8
+export const PROGRESS_TOTAL = STEP_ORDER.length - 1; // 7
 
 /**
  * The mutable input the user is filling. Empty-string sentinels (`''`) and
@@ -156,6 +161,6 @@ export const FIELD_TO_STEP: Readonly<Record<keyof OnboardingDraft, StepId>> = {
   height: 'body',
   age: 'body',
   activity: 'activity',
-  trains: 'training',
+  trains: 'activity',
   restrictions: 'diet',
 };

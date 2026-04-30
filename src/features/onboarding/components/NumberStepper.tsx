@@ -142,7 +142,7 @@ export default function NumberStepper({
     <div className={['space-y-2', className].filter(Boolean).join(' ')}>
       <label
         id={labelId}
-        className="block font-label text-micro uppercase tracking-widest text-on-surface-variant"
+        className="block text-body-sm font-medium text-on-surface-variant"
       >
         {label}
       </label>
@@ -160,7 +160,7 @@ export default function NumberStepper({
 
         <div
           className={[
-            'flex-1 flex items-baseline justify-center gap-1.5 rounded-sm border px-3 h-11',
+            'flex-1 flex items-center justify-center gap-1.5 rounded-sm border px-3 h-11',
             invalid
               ? 'border-error bg-error/5'
               : 'border-outline-variant/30 bg-surface-container-low',
@@ -177,11 +177,12 @@ export default function NumberStepper({
             aria-labelledby={labelId}
             aria-invalid={invalid || undefined}
             aria-describedby={describedBy}
-            className="w-full bg-transparent text-center font-mono text-title-sm font-bold text-on-surface outline-none placeholder:text-on-surface-variant/50"
+            className="min-w-0 w-auto max-w-full bg-transparent text-center font-mono text-body-lg font-semibold tabular-nums text-on-surface outline-none placeholder:text-on-surface-variant/50"
             placeholder="—"
+            size={4}
           />
           {unit && (
-            <Text variant="caption" as="span" className="shrink-0">
+            <Text variant="body-sm" as="span" className="shrink-0 text-on-surface-variant">
               {unit}
             </Text>
           )}

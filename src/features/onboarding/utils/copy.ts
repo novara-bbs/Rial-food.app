@@ -84,13 +84,13 @@ export function mapErrorKeyToCopy(
 /**
  * Threshold at which each chip first appears in the header summary. The
  * indices come from `STEP_ORDER` in `state/types.ts` (welcome=0, goal=1,
- * identity=2, body=3, activity=4, training=5, plan=6, diet=7, done=8).
+ * identity=2, body=3, activity=4, plan=5, diet=6, done=7).
  *
  * Pattern: each chip appears once the user has CLEARED its source step.
- *   - goal chip   → from identity onward (user just chose a goal)
- *   - sex chip    → from body onward
- *   - body chip   → from activity onward
- *   - activity chip → from training onward
+ *   - goal chip     → from identity onward (user just chose a goal)
+ *   - sex chip      → from body onward
+ *   - body chip     → from activity onward
+ *   - activity chip → from plan onward
  */
 const SUMMARY_THRESHOLDS = {
   goal: 2,

@@ -40,11 +40,11 @@ export default function OnboardingProgressSummary({
         <span
           key={chip}
           className={[
-            'shrink-0 inline-flex items-center h-5 px-2 rounded-full',
+            'shrink-0 inline-flex items-center h-6 px-2.5 rounded-full',
             'bg-primary/10 text-primary',
           ].join(' ')}
         >
-          <Text variant="micro" as="span" className="font-medium">
+          <Text variant="caption" as="span" className="font-medium leading-none">
             {chip}
           </Text>
         </span>

@@ -37,7 +37,6 @@ export function validateStep(
 ): ValidationResult {
   switch (stepId) {
     case 'welcome':
-    case 'training':
     case 'plan':
     case 'diet':
     case 'done':

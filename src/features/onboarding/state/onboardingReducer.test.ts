@@ -229,8 +229,8 @@ describe('STEP_ORDER invariants', () => {
     expect(STEP_ORDER[STEP_ORDER.length - 1]).toBe('done');
   });
 
-  it('contains 9 unique steps', () => {
-    expect(STEP_ORDER.length).toBe(9);
-    expect(new Set(STEP_ORDER).size).toBe(9);
+  it('contains 8 unique steps', () => {
+    expect(STEP_ORDER.length).toBe(8);
+    expect(new Set(STEP_ORDER).size).toBe(8);
   });
 });

@@ -11,7 +11,7 @@
  * Token-pure (no hex, no `dark:`). All copy is i18n-driven.
  */
 import SectionCard from '@/components/SectionCard';
-import { Heading, Text } from '@/components/ui/Typography';
+import { Text } from '@/components/ui/Typography';
 import { useI18n } from '@/i18n';
 
 import type { DailyTargetsBreakdown } from '../../food/utils/nutrition';
@@ -68,18 +68,18 @@ export default function KcalBreakdownCard({
 
   return (
     <SectionCard padding="md" spacing="sm" className={className}>
-      <Heading level="h4" variant="overline" className="mb-2">
+      <Text variant="body-sm" as="div" className="font-semibold text-on-surface mb-2">
         {labels.breakdownTitle}
-      </Heading>
+      </Text>
 
       <ul className="space-y-3">
         {rows.map(row => (
           <li key={row.label} className="flex items-start justify-between gap-3">
             <div className="flex flex-col min-w-0">
-              <Text variant="body-sm" as="span">
+              <Text variant="body-sm" as="span" className="text-on-surface">
                 {row.label}
               </Text>
-              <Text variant="micro" as="span" className="text-on-surface-variant/60 leading-tight">
+              <Text variant="caption" as="span" className="text-on-surface-variant/70 leading-tight">
                 {row.attribution}
               </Text>
             </div>
@@ -87,7 +87,7 @@ export default function KcalBreakdownCard({
               as="span"
               variant="body-sm"
               className={[
-                'font-mono font-bold tabular-nums shrink-0',
+                'font-mono font-semibold tabular-nums shrink-0',
                 row.positive === false
                   ? 'text-error'
                   : row.positive === true
@@ -101,9 +101,9 @@ export default function KcalBreakdownCard({
         ))}
 
         <li className="border-t border-outline-variant/20 pt-2 flex items-center justify-between">
-          <Heading level="h4" variant="overline">
+          <Text variant="body-sm" as="span" className="font-semibold text-on-surface">
             {labels.breakdownTotal}
-          </Heading>
+          </Text>
           <Text
             as="span"
             variant="body-lg"

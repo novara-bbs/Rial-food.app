@@ -1,19 +1,21 @@
 /**
- * DoneStep — celebratory summary card before exiting the flow.
+ * DoneStep — celebratory exit screen.
  *
- * Read-only. Runs `previewBreakdown(draft)` for the kcal + protein numbers
- * and resolves the dietary restriction labels via `resolveDietLabel`. The
- * footer CTA in the shell (label `done.cta`) closes the modal and fires
+ * Read-only. PlanRevealStep already showed the kcal target, macros, and
+ * the breakdown — repeating those numbers here would feel redundant
+ * (owner feedback). DoneStep now focuses on the *moment of completion*:
+ * a hero icon, the personalized congratulations, and the dietary
+ * restrictions snapshot (the only piece of context not shown earlier).
+ *
+ * The footer CTA (`done.cta`) closes the modal and fires
  * `onComplete(deriveOutput(draft))`.
  */
 import { PartyPopper } from 'lucide-react';
 
-import SectionCard from '@/components/SectionCard';
-import { Heading, Text } from '@/components/ui/Typography';
+import { Text } from '@/components/ui/Typography';
 import { useI18n } from '@/i18n';
 
 import OnboardingScaffold from '../components/OnboardingScaffold';
-import { previewBreakdown } from '../derive/derive-targets';
 import type { OnboardingDraft } from '../state/types';
 import { interpolateName, resolveDietLabel } from '../utils/copy';
 
@@ -26,7 +28,6 @@ export default function DoneStep({
 }) {
   const { t } = useI18n();
   const copy = t.onboarding.done;
-  const breakdown = previewBreakdown(draft);
 
   const title = interpolateName(copy.titleNamed, copy.title, draft.name);
 
@@ -49,49 +50,18 @@ export default function DoneStep({
         </div>
       }
     >
-      <SectionCard padding="md" spacing="sm" className="w-full text-left">
-        <Heading level="h4" variant="overline">
-          {copy.summaryTitle}
-        </Heading>
-        <ul className="space-y-2">
-          <li className="flex items-baseline justify-between gap-3">
-            <Text variant="body-sm" as="span">
-              {copy.summaryKcal}
-            </Text>
-            <Text
-              as="span"
-              variant="body"
-              className="font-mono font-bold tabular-nums text-tertiary"
-            >
-              {breakdown?.total ?? '—'}
-            </Text>
-          </li>
-          <li className="flex items-baseline justify-between gap-3">
-            <Text variant="body-sm" as="span">
-              {copy.summaryProtein}
-            </Text>
-            <Text
-              as="span"
-              variant="body"
-              className="font-mono font-bold tabular-nums text-tertiary"
-            >
-              {breakdown?.pro ?? '—'} g
-            </Text>
-          </li>
-          <li className="flex items-baseline justify-between gap-3">
-            <Text variant="body-sm" as="span">
-              {copy.summaryRestrictions}
-            </Text>
-            <Text
-              as="span"
-              variant="body-sm"
-              className="text-on-surface text-right max-w-[60%]"
-            >
-              {restrictionsLabel}
-            </Text>
-          </li>
-        </ul>
-      </SectionCard>
+      {/* Single-line restrictions snapshot — the only piece of context the
+          plan-reveal step didn't already cover. Keeps Done visually distinct
+          from PlanRevealStep so the user doesn't feel they've seen the same
+          card twice. */}
+      <div className="w-full flex flex-col items-center gap-1">
+        <Text variant="caption" className="text-on-surface-variant">
+          {copy.summaryRestrictions}
+        </Text>
+        <Text variant="body" className="text-on-surface text-center">
+          {restrictionsLabel}
+        </Text>
+      </div>
     </OnboardingScaffold>
   );
 }

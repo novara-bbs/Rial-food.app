@@ -53,7 +53,6 @@ import DoneStep from './steps/DoneStep';
 import GoalStep from './steps/GoalStep';
 import IdentityStep from './steps/IdentityStep';
 import PlanRevealStep from './steps/PlanRevealStep';
-import TrainingStep from './steps/TrainingStep';
 import WelcomeStep from './steps/WelcomeStep';
 
 export interface OnboardingProps {
@@ -285,7 +284,6 @@ function renderStep(
     case 'identity': return <IdentityStep {...props} showErrors={showErrors} />;
     case 'body':     return <BodyStep {...props} showErrors={showErrors} />;
     case 'activity': return <ActivityStep {...props} />;
-    case 'training': return <TrainingStep {...props} />;
     case 'plan':     return <PlanRevealStep draft={props.draft} titleId={props.titleId} />;
     case 'diet':     return <DietStep {...props} />;
     case 'done':     return <DoneStep draft={props.draft} titleId={props.titleId} />;

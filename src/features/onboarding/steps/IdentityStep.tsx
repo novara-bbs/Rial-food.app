@@ -48,7 +48,7 @@ export default function IdentityStep({
       <div className="space-y-2">
         <label
           htmlFor="onb-name"
-          className="block font-label text-micro uppercase tracking-widest text-on-surface-variant"
+          className="block text-body-sm font-medium text-on-surface-variant"
         >
           {copy.nameLabel}
         </label>
@@ -72,7 +72,7 @@ export default function IdentityStep({
       </div>
 
       <div className="space-y-2">
-        <Text as="span" variant="micro" className="block">
+        <Text as="span" variant="body-sm" className="block font-medium text-on-surface-variant">
           {copy.sexLabel}
         </Text>
         <SegmentedTabs<Sex>
