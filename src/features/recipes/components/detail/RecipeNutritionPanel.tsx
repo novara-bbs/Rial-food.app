@@ -66,11 +66,14 @@ export default function RecipeNutritionPanel({
 }: RecipeNutritionPanelProps) {
   const { t } = useI18n();
 
+  // Two-color hierarchy: KCAL is the primary accent (the headline number),
+  // the three macros share a single neutral tone so the wall of color from
+  // the previous palette stops competing with the quality banner below.
   const nutrients = [
     { label: 'kcal', value: String(cal), color: 'text-primary' },
-    { label: 'pro', value: `${pro}g`, color: 'text-macro-protein' },
-    { label: 'carbs', value: `${carbs}g`, color: 'text-macro-carbs' },
-    { label: 'fats', value: `${fats}g`, color: 'text-macro-fats' },
+    { label: 'pro', value: `${pro}g`, color: 'text-tertiary' },
+    { label: 'carbs', value: `${carbs}g`, color: 'text-tertiary' },
+    { label: 'fats', value: `${fats}g`, color: 'text-tertiary' },
   ] as const;
 
   const quality = macros ? getFoodQuality(macros) : null;
@@ -84,20 +87,22 @@ export default function RecipeNutritionPanel({
       className={`${hasAttribution ? 'mt-3' : 'mt-4'} relative z-10 overflow-hidden`}
     >
       <div data-testid="recipe-nutrition-panel">
-      {/* ── Section: macros grid ─────────────────────────────────────── */}
-      <div className="p-3">
-        <div className="grid grid-cols-4 gap-2">
-          {nutrients.map((m) => (
-            <MacroTile
-              key={m.label}
-              size="md"
-              surface="card"
-              value={m.value}
-              label={m.label}
-              valueColorClassName={m.color}
-            />
-          ))}
-        </div>
+      {/* ── Section: macros — flat row, no per-tile cards ─────────────
+          The SectionCard already provides the wrapper. Tiles render
+          `surface="bare"` and are separated by hairline vertical dividers
+          (divide-x), echoing the editorial macro stat patterns used by
+          NYT Cooking and Whoop. */}
+      <div className="grid grid-cols-4 divide-x divide-outline-variant/10">
+        {nutrients.map((m) => (
+          <MacroTile
+            key={m.label}
+            size="md"
+            surface="bare"
+            value={m.value}
+            label={m.label}
+            valueColorClassName={m.color}
+          />
+        ))}
       </div>
 
       {/* ── Section: food-quality banner (derived from base macros) ──── */}

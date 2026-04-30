@@ -1,5 +1,36 @@
 # RIAL App - Changelog
 
+## [1.5.162] - 2026-04-30
+
+### refactor(ui): Sprint 48 — RecipeNutritionPanel macros flat row + 2-color hierarchy
+
+Dentro del panel unificado de Sprint 47, cada macro tile renderizaba su propio fondo + borde (`MacroTile surface="card"`), creando una jerarquía visual de "cards dentro del card" del SectionCard exterior. Sprint 48 elimina ese ruido y aplica el patrón editorial de NYT Cooking / Whoop: macros como **fila plana sin contenedores individuales**, separados solo por divisores verticales hairline.
+
+**Cambios en `src/components/patterns/MacroTile.tsx`:**
+- Nueva variante `surface="bare"` — sin fondo, sin borde, solo padding (`p-3`).
+- Útil cuando el padre ya provee el wrapper visual (SectionCard, panel) y los tiles deben quedar planos para no competir.
+- Las variantes existentes (`highest`, `card`) sin cambios.
+
+**Cambios en `src/features/recipes/components/detail/RecipeNutritionPanel.tsx`:**
+- Macros tiles → `surface="bare"`.
+- Wrapper del grid: `gap-2` → `divide-x divide-outline-variant/10` (divisores verticales hairline entre tiles, sin gap extra).
+- Eliminado el `<div className="p-3">` exterior del grid — los tiles bare ya tienen `p-3` interno.
+- **Paleta reducida a 2 colores** para los values:
+  - **KCAL** → `text-primary` (acento principal RIAL — la cifra-headline).
+  - **PRO / CARBS / FATS** → `text-tertiary` (color secundario unificado).
+  - Antes: 4 colores distintos (`text-primary`, `text-macro-protein`, `text-macro-carbs`, `text-macro-fats`).
+  - Razón: con un acento único para kcal y un tono neutro compartido para los 3 macros, la jerarquía visual respeta el banner de calidad nutricional que viene debajo (que sí aporta color semántico verde/amarillo/rojo).
+- Labels (`KCAL/PRO/CARBS/FATS`) sin cambios — siguen en `text-on-surface-variant`.
+
+**Verificación visual (preview):**
+- 4 tiles con `data-surface="bare"` y `backgroundColor: transparent` ✓
+- Grid con `divide-x divide-outline-variant/10` ✓
+- KCAL en color primario, los otros 3 unificados en tertiary ✓
+- Hairline divider entre macros y quality banner conservado ✓
+
+**Archivos:** 2 modificados.
+**TypeScript:** 0 errores. **Lint:** 0 errores. **Tests:** 246/246 (suite recipes + patterns).
+
 ## [1.5.161] - 2026-04-30
 
 ### feat(ui): Sprint 47 — RecipeNutritionPanel (macros + quality + servings unificados, step 0.5)

@@ -11,6 +11,8 @@ import { cn } from '../../lib/utils';
  * Variants control the visual surface:
  *   - "highest" → bg-surface-container-highest (use inside an already-elevated card)
  *   - "card"    → bg-surface-container + border (use as the macro grid itself)
+ *   - "bare"    → no background or border (use inside a card that already has
+ *                 a wrapper, with sibling tiles separated by `divide-x`)
  *
  * Sizes follow the token scale (no Tailwind defaults):
  *   - "sm" → text-body  (compact cards, in-line totals)
@@ -21,7 +23,7 @@ import { cn } from '../../lib/utils';
  * palette stays under design-system control.
  */
 export type MacroTileSize = 'sm' | 'md';
-export type MacroTileSurface = 'highest' | 'card';
+export type MacroTileSurface = 'highest' | 'card' | 'bare';
 
 export interface MacroTileProps {
   /** Numeric value or pre-formatted string (e.g. `42`, `"42g"`, `"1.2kg"`). */
@@ -43,6 +45,7 @@ const SIZE_CLASS: Record<MacroTileSize, string> = {
 const SURFACE_CLASS: Record<MacroTileSurface, string> = {
   highest: 'bg-surface-container-highest p-2',
   card: 'bg-surface-container border border-outline-variant/30 p-3',
+  bare: 'p-3',
 };
 
 export default function MacroTile({
