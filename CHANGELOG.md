@@ -1,5 +1,48 @@
 # RIAL App - Changelog
 
+## [1.5.171] - 2026-04-30
+
+### refactor(onboarding): extract copy/taxonomy helpers + JSDoc + 3 component tests
+
+Refactor quirúrgico tras los 4 PRs incrementales del onboarding (`[1.5.167–1.5.170]`). Cero cambios funcionales. Cero cambios en i18n keys. Objetivo: que el módulo sea legible para que un dev humano o IA pueda extenderlo (añadir un step, reordenar, cambiar copy) sin reverse-engineering.
+
+**Nuevos módulos:**
+
+- `src/features/onboarding/state/taxonomies.ts` (~30 LoC) — single source of truth para `ACTIVITY_LEVELS`, `GOAL_IDS`, `SEX_IDS`, `DIET_IDS` (+ tipo `DietId`). Reemplaza arrays inline duplicados en `ActivitySlider.tsx` y `DietStep.tsx`.
+- `src/features/onboarding/utils/copy.ts` (~135 LoC) — helpers puros para mapping i18n: `interpolateName` (consolida 3× duplicación de `draft.name ? template.replace('{name}', name) : fallback` en BodyStep/PlanRevealStep/DoneStep), `resolveDietLabel` (DietStep + DoneStep usaban inline lookup con fallbacks distintos), `pickPrimaryLabel` + `mapErrorKeyToCopy` (extraídos del fondo de `Onboarding.tsx`), `buildSummary` (extraído del `useMemo` inline para los chips del header). Firmas tipadas con `Translations` del i18n.
+
+**`Onboarding.tsx` (313 → 291 LoC, −7%):**
+- Importa los 3 helpers desde `utils/copy`. Borra 18 LoC de funciones inline al final del fichero.
+- El `useMemo` de summary chips (15 LoC con casts) se reduce a `useMemo(() => buildSummary(state.draft, stepIndex, t), ...)`.
+- Añade constantes nombradas al top: `DRAFT_DEBOUNCE_MS = 250`, `RESUME_BANNER_MS = 2500`. Los `setTimeout(..., 250)` y `setTimeout(..., 2500)` ahora referencian la constante con docstring.
+
+**`PlanRevealStep.tsx`:**
+- Añade `KCAL_RANGE_PERCENT = 0.05` con JSDoc explicando que es el ±5% del target. `Math.round(targetKcal * 0.95)` y `* 1.05` se reescriben con la constante (`* (1 - p)` / `* (1 + p)`).
+- Usa `interpolateName(copy.titleNamed, copy.title, draft.name)` en lugar del ternario.
+
+**`DoneStep.tsx`:**
+- Inline diet label resolution (8 LoC con cast `id as keyof typeof t.onboarding.diet.options`) reemplazado por `resolveDietLabel`.
+- Usa `interpolateName` para el título.
+
+**JSDoc top-of-file en 7 steps** (Body, Identity, Goal, Activity, Training, Diet, Done) — 4-6 líneas explicando qué campo del draft posee cada step, qué validador aplica si lo hay, y qué primitivo renderiza. Patrón canónico para evaluar dónde añadir nuevos steps.
+
+**`useHealthData.ts`:**
+- Arreglado el doble-negativo confuso de la línea 77: `isMock && !Capacitor.isNativePlatform() === false ? false : isMock` → `isMock && !Capacitor.isNativePlatform()` con comentario explicativo. La semántica es la misma (el mock solo se honra en web/PWA dev, no shadowea un plugin nativo cuando exista).
+
+**Tests añadidos (+9 cases):**
+- `ActivitySlider.test.tsx` (3) — label dinámico, mapeo slider→ActivityLevel, aria-valuetext localizado.
+- `HealthSyncCard.test.tsx` (3) — OFF state hint + aria-checked, onEnable callback, BottomSheet de privacidad.
+- `OnboardingProgressSummary.test.tsx` (3) — null cuando data vacía, chips en orden, aria-hidden decorativo.
+
+Quality: TypeScript 0 errors · 1436/1436 tests (+9) · i18n 1998 keys (sin cambio) · ESLint 0 errors · size:check PASS (895.8 KB raw / 282.0 KB gzip).
+
+**Out-of-scope explícitos (next sprint candidates):**
+- `STEP_REGISTRY: Record<StepId, ComponentType>` reemplazando el switch del `renderStep` (el switch actual es exhaustivo + type-checked, no urge).
+- Hook `useOnboardingField()` reduciendo el `dispatch(setField(...))` boilerplate (la explicitud actual es trazable).
+- Mover `useFocusTrap` y `useCountUp` a `src/hooks/` (correcto pero out-of-scope quirúrgico — ningún consumer fuera de onboarding los pide hoy).
+- `StepProps` interface jerárquica (Base/Interactive/Validating).
+- Tests de componente para los 6 steps preexistentes (la lógica está cubierta por reducer + validators + derive tests).
+
 ## [1.5.170] - 2026-04-30
 
 ### feat(onboarding): PR 4 — INDYA-inspired UX polish
