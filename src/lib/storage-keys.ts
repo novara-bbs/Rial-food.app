@@ -32,7 +32,10 @@ export const STORAGE_KEYS = {
   MISE_EN_PLACE:     'miseEnPlacePreCook',
 
   // ── Onboarding (resumable draft, cleared on complete) ──────────────────
-  ONBOARDING_DRAFT:  'onboardingDraft',
+  ONBOARDING_DRAFT:    'onboardingDraft',
+  // Flag set when user taps "Continue with email" in WelcomeStep so that
+  // App.tsx re-opens the onboarding after the email auth flow completes.
+  PENDING_ONBOARDING:  'rial_pending_onboarding',
 
   // ── Vitals (useVitalsState) ─────────────────────────────────────────────
   DAILY_MACROS:      'dailyMacros',

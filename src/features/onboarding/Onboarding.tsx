@@ -68,11 +68,17 @@ export interface OnboardingProps {
     targets: { cal: number; pro: number; carbs: number; fats: number };
     initialWeightKg?: number;
   }) => void;
+  /**
+   * Called when the user taps "Continue with email" in WelcomeStep.
+   * The host (App.tsx) should open the Login screen while keeping the
+   * onboarding draft alive in localStorage so the flow can resume on return.
+   */
+  onNavigateToLogin?: () => void;
 }
 
 const TITLE_ID = 'onb-step-title';
 
-export default function Onboarding({ isOpen, onClose, onComplete }: OnboardingProps) {
+export default function Onboarding({ isOpen, onClose, onComplete, onNavigateToLogin }: OnboardingProps) {
   const { t } = useI18n();
   const [state, dispatch] = useReducer(onboardingReducer, undefined, loadInitialState);
   const containerRef = useRef<HTMLDivElement>(null);
@@ -166,9 +172,12 @@ export default function Onboarding({ isOpen, onClose, onComplete }: OnboardingPr
     state.stepId,
     { draft: state.draft, dispatch, errors, titleId: TITLE_ID },
     showErrors,
+    onNavigateToLogin,
   );
 
   // ── Footer label + skip ───────────────────────────────────────────────────
+  // WelcomeStep has its own inline CTAs — the shell footer is hidden there.
+  const isWelcome = state.stepId === 'welcome';
   const primaryLabel = pickPrimaryLabel(state.stepId, t);
   // Show the footer hint only after the user has explicitly tapped the CTA.
   const firstError = showErrors && !stepValid ? Object.values(errors)[0] : undefined;
@@ -212,14 +221,17 @@ export default function Onboarding({ isOpen, onClose, onComplete }: OnboardingPr
         </section>
       </main>
 
-      <OnboardingFooter
-        primaryLabel={primaryLabel}
-        primaryDisabled={!stepValid}
-        onPrimary={handlePrimary}
-        skipLabel={showSkip ? t.onboarding.shell.skip : undefined}
-        onSkip={showSkip ? handleSkipDiet : undefined}
-        hint={localizedHint}
-      />
+      {/* WelcomeStep has its own inline CTAs so the footer is hidden there. */}
+      {!isWelcome && (
+        <OnboardingFooter
+          primaryLabel={primaryLabel}
+          primaryDisabled={!stepValid}
+          onPrimary={handlePrimary}
+          skipLabel={showSkip ? t.onboarding.shell.skip : undefined}
+          onSkip={showSkip ? handleSkipDiet : undefined}
+          hint={localizedHint}
+        />
+      )}
     </div>
   );
 }
@@ -233,9 +245,21 @@ interface RenderProps {
   titleId: string;
 }
 
-function renderStep(stepId: StepId, props: RenderProps, showErrors: boolean) {
+function renderStep(
+  stepId: StepId,
+  props: RenderProps,
+  showErrors: boolean,
+  onNavigateToLogin?: () => void,
+) {
   switch (stepId) {
-    case 'welcome':  return <WelcomeStep titleId={props.titleId} />;
+    case 'welcome':
+      return (
+        <WelcomeStep
+          titleId={props.titleId}
+          dispatch={props.dispatch}
+          onNavigateToLogin={onNavigateToLogin}
+        />
+      );
     case 'goal':     return <GoalStep {...props} />;
     case 'identity': return <IdentityStep {...props} showErrors={showErrors} />;
     case 'body':     return <BodyStep {...props} showErrors={showErrors} />;
@@ -252,7 +276,7 @@ function pickPrimaryLabel(
   t: ReturnType<typeof useI18n>['t'],
 ): string {
   switch (stepId) {
-    case 'welcome': return t.onboarding.welcome.cta;
+    // 'welcome' footer is hidden — this case is never reached.
     case 'plan':    return t.onboarding.shell.createPlan;
     case 'done':    return t.onboarding.done.cta;
     default:        return t.onboarding.shell.next;

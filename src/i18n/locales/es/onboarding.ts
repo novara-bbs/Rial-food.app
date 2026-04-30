@@ -4,8 +4,14 @@ const onboarding = {
   onboarding: {
     welcome: {
       title: 'Tu plan personalizado en 3 minutos',
-      subtitle: 'Sin cuentas. Sin spam.',
-      cta: 'Empezar',
+      tagline: 'Nutrición que se adapta a tu vida.',
+      continueWithApple: 'Continuar con Apple',
+      continueWithGoogle: 'Continuar con Google',
+      continueWithEmail: 'Continuar con email',
+      orContinueAnonymously: 'o sin cuenta',
+      continueWithoutAccount: 'Empezar sin registrarme',
+      legal: 'Al continuar aceptas los Términos y la Política de Privacidad.',
+      errorGeneric: 'No hemos podido iniciar sesión. Inténtalo de nuevo.',
     },
     goal: {
       title: '¿Cuál es tu objetivo?',

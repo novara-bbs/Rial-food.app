@@ -230,15 +230,20 @@ export default function App() {
 
   return (
     <>
-      <Onboarding isOpen={isFirstTime} onClose={() => setIsFirstTime(false)} onComplete={(result) => {
-        setUserProfile(result.userProfile);
-        setDailyMacros((prev) => ({ ...prev, target: result.targets }));
-        // Seed initial weight history entry so Progress chart has data from day 1
-        if (result.initialWeightKg && result.initialWeightKg > 0) {
-          handleLogWeight({ kg: result.initialWeightKg });
-        }
-        setIsFirstTime(false);
-      }} />
+      <Onboarding
+        isOpen={isFirstTime}
+        onClose={() => setIsFirstTime(false)}
+        onComplete={(result) => {
+          setUserProfile(result.userProfile);
+          setDailyMacros((prev) => ({ ...prev, target: result.targets }));
+          // Seed initial weight history entry so Progress chart has data from day 1
+          if (result.initialWeightKg && result.initialWeightKg > 0) {
+            handleLogWeight({ kg: result.initialWeightKg });
+          }
+          setIsFirstTime(false);
+        }}
+        onNavigateToLogin={isSupabaseEnabled ? () => setAuthScreen('login') : undefined}
+      />
       <div className={`flex h-dvh overflow-hidden bg-background text-on-surface font-body selection:bg-primary selection:text-on-primary ${themeClassName}`}>
         <Toaster theme={resolvedMode} position="top-center" toastOptions={{
           className: 'bg-surface-container-highest border border-outline-variant/20 text-tertiary font-headline font-bold uppercase tracking-widest rounded-sm',
