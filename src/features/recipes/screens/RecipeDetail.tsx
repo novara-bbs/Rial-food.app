@@ -9,9 +9,11 @@ import CookMode from '../components/CookMode';
 import MiseEnPlaceScreen from '../components/MiseEnPlaceScreen';
 // HeroGallery moved to RecipeHero (Phase 3.1).
 // MediaLightbox moved to RecipeDetailModals (Phase 3.1).
-import VideoSection from '../components/VideoSection';
+// VideoSection lifted into HeroGallery as a peer slide (Sprint 46).
+import type { HeroMediaItem } from '../components/HeroGallery';
+import { parseVideoSource, platformLabel } from '../utils/videoEmbed';
 // PublishRecipeSheet moved to RecipeDetailModals (Phase 3.1).
-import RecipeNutritionBar from '../components/RecipeNutritionBar';
+import RecipeNutritionPanel from '../components/detail/RecipeNutritionPanel';
 // RecipeSubstitutionPicker + RecipeDaySelectorSheet moved to RecipeOverviewTab (Phase 3.1).
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Button } from '@/components/ui/button';
@@ -42,7 +44,7 @@ import RecipeStepsTab from '../components/detail/RecipeStepsTab';
 import RecipeNutritionTab from '../components/detail/RecipeNutritionTab';
 import RecipeOverviewTab from '../components/detail/RecipeOverviewTab';
 import RecipeIngredientsTab from '../components/detail/RecipeIngredientsTab';
-import RecipeServingsControls from '../components/detail/RecipeServingsControls';
+// RecipeServingsControls + RecipeNutritionBar merged into RecipeNutritionPanel (Sprint 47).
 import RecipeHero from '../components/detail/RecipeHero';
 import RecipeDetailModals from '../components/detail/RecipeDetailModals';
 import { Heading } from '@/components/ui/Typography';
@@ -337,6 +339,23 @@ export default function RecipeDetail({ recipe, onBack, onSaveRecipe, isSaved, on
     ? data.photos
     : [data.img || data.image].filter(Boolean);
 
+  // Sprint 46 — unified hero media: photos + optional video as a peer slide.
+  // YouTube → inline iframe via `embedUrl`; everything else falls through to
+  // `openExternalVideo()` inside HeroGallery.
+  const parsedVideo = parseVideoSource(data.videoUrl);
+  const mediaItems: HeroMediaItem[] = [
+    ...galleryPhotos.map((src) => ({ kind: 'photo' as const, src })),
+    ...(parsedVideo
+      ? [{
+          kind: 'video' as const,
+          videoUrl: parsedVideo.watchUrl,
+          embedUrl: parsedVideo.canEmbed ? parsedVideo.embedUrl : null,
+          poster: parsedVideo.posterUrl || data.img || data.image,
+          platformLabel: platformLabel(parsedVideo.platform),
+        }]
+      : []),
+  ];
+
   // R2.3 — editorial tier flags.
   // `isVerified` gates the visual polish branch (hero bleed, serif, primitives).
   // `cookedCount` drives the universal badge — not flag-gated.
@@ -375,7 +394,7 @@ export default function RecipeDetail({ recipe, onBack, onSaveRecipe, isSaved, on
       <RecipeHero
         data={data}
         isVerified={isVerified}
-        galleryPhotos={galleryPhotos}
+        mediaItems={mediaItems}
         onBack={onBack}
         setLightboxIdx={setLightboxIdx}
         onSharePress={() => setShowPublishSheet(true)}
@@ -492,19 +511,27 @@ export default function RecipeDetail({ recipe, onBack, onSaveRecipe, isSaved, on
         </div>
       )}
 
-      {/* ══ Macro summary bar ══ */}
+      {/* ══ Nutrition + Servings unified panel (Sprint 47) ══
+          One card combining macros (scaled by servings), the food-quality
+          banner (derived from base macros — independent of portion), and
+          the servings stepper (0.5 step). The source link sits outside
+          this panel because it's recipe metadata, not nutritional. */}
       <div className="px-6 max-w-4xl mx-auto">
-        <RecipeNutritionBar
+        <RecipeNutritionPanel
           cal={Math.round(calculatedTotals.cal * s)}
           pro={Math.round(calculatedTotals.pro * s)}
           carbs={Math.round(calculatedTotals.carbs * s)}
           fats={Math.round(calculatedTotals.fats * s)}
           macros={data.macros}
+          servings={servings}
+          setServings={setServings}
+          familyMembers={familyMembers}
+          selectedFamily={selectedFamily}
+          toggleFamilyMember={toggleFamilyMember}
+          setSelectedFamily={setSelectedFamily}
+          totalDiners={totalDiners}
           hasAttribution={hasAttribution}
         />
-
-        {/* ── Video (YouTube inline / TikTok·IG·Vimeo link-out) ── */}
-        <VideoSection videoUrl={data.videoUrl} posterFallback={data.img || data.image} />
 
         {/* ── Source link ── */}
         {data.sourceUrl && (
@@ -517,17 +544,6 @@ export default function RecipeDetail({ recipe, onBack, onSaveRecipe, isSaved, on
             <Badge variant="outline" className="text-on-surface-variant border-outline-variant/30 shrink-0 text-micro">{data.sourceType || 'source'}</Badge>
           </a>
         )}
-
-        {/* ── Serving + Family controls ── */}
-        <RecipeServingsControls
-          servings={servings}
-          setServings={setServings}
-          familyMembers={familyMembers}
-          selectedFamily={selectedFamily}
-          toggleFamilyMember={toggleFamilyMember}
-          setSelectedFamily={setSelectedFamily}
-          totalDiners={totalDiners}
-        />
       </div>
 
       {/* ══════════════════════════════════════════

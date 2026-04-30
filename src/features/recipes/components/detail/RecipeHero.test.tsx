@@ -1,18 +1,22 @@
 /**
- * Tests for RecipeHero — Phase 3.1 (ADR-015).
- * Locks: title rendering, back/share/save callbacks, save-button gating
- * on onSaveRecipe presence, verified-mode taller bleed.
+ * Tests for RecipeHero — Sprint 46 [1.5.160] post-NYT refactor.
+ * Locks: title rendering (now below media), back/share/save callbacks,
+ * save-button gating on onSaveRecipe presence, verified-mode taller bleed,
+ * gradient overlay removed.
  */
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { renderWithProviders } from '@/test/helpers/renderWithProviders';
 import RecipeHero from './RecipeHero';
+import type { HeroMediaItem } from '../HeroGallery';
+
+const photoItems: HeroMediaItem[] = [{ kind: 'photo', src: 'https://cdn.example/p1.jpg' }];
 
 const baseProps = {
   data: { title: 'Pollo al Limón', tag: 'CLASSIC', prepTime: '15 min', cookTime: '20 min', difficulty: 'Fácil' },
   isVerified: false,
-  galleryPhotos: ['https://cdn.example/p1.jpg'],
+  mediaItems: photoItems,
   onBack: vi.fn(),
   setLightboxIdx: vi.fn(),
   onSharePress: vi.fn(),
@@ -80,5 +84,36 @@ describe('RecipeHero', () => {
     renderWithProviders(<RecipeHero {...baseProps} isSaved onSaveRecipe={vi.fn()} />);
     const btn = screen.getByLabelText(/save|guardar/i);
     expect(btn.getAttribute('aria-pressed')).toBe('true');
+  });
+
+  it('does not render the legacy bottom-up gradient overlay', () => {
+    const { container } = renderWithProviders(<RecipeHero {...baseProps} onSaveRecipe={vi.fn()} />);
+    // Sprint 46: gradient was `bg-gradient-to-t from-background via-background/40 ...`.
+    expect(container.querySelector('.bg-gradient-to-t')).toBeNull();
+  });
+
+  it('renders multi-item media (peek mode) as a carousel region', () => {
+    const items: HeroMediaItem[] = [
+      { kind: 'photo', src: 'https://cdn.example/p1.jpg' },
+      { kind: 'photo', src: 'https://cdn.example/p2.jpg' },
+    ];
+    renderWithProviders(<RecipeHero {...baseProps} mediaItems={items} onSaveRecipe={vi.fn()} />);
+    expect(screen.getByRole('region', { name: /gallery|galería/i })).toBeTruthy();
+  });
+
+  it('renders a video slide with watch-on label when a video item is present', () => {
+    const items: HeroMediaItem[] = [
+      { kind: 'photo', src: 'https://cdn.example/p1.jpg' },
+      {
+        kind: 'video',
+        videoUrl: 'https://www.youtube.com/watch?v=abc123',
+        embedUrl: 'https://www.youtube-nocookie.com/embed/abc123',
+        poster: 'https://i.ytimg.com/vi/abc123/hqdefault.jpg',
+        platformLabel: 'YouTube',
+      },
+    ];
+    renderWithProviders(<RecipeHero {...baseProps} mediaItems={items} onSaveRecipe={vi.fn()} />);
+    // Watch-on copy: ES "Ver en YouTube" / EN "Watch on YouTube".
+    expect(screen.getByLabelText(/youtube/i)).toBeTruthy();
   });
 });

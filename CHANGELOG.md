@@ -1,5 +1,94 @@
 # RIAL App - Changelog
 
+## [1.5.161] - 2026-04-30
+
+### feat(ui): Sprint 47 — RecipeNutritionPanel (macros + quality + servings unificados, step 0.5)
+
+Tres secciones de RecipeDetail que estaban acopladas conceptualmente — macros (KCAL/PRO/CARBS/FATS), banner de calidad nutricional (MODERATE / GOOD / POOR) y stepper de raciones — se unifican en un solo card visual. La razón: las macros determinan la calidad nutricional, y el stepper de raciones reescala las macros mostradas. Tener tres cards separados con la misma información acoplada era redundante visualmente. Además, el stepper de raciones pasa a step `0.5` (1, 1.5, 2, 2.5, …) para soportar cocina doméstica realista.
+
+**Nuevos archivos:**
+- `src/features/recipes/utils/servings.ts` — helper puro con constantes (`SERVINGS_STEP=0.5`, `SERVINGS_MIN=1`, `SERVINGS_MAX=99`) y funciones (`clampServings`, `incrementServings`, `decrementServings`, `formatServings`). Sin React, sin I/O — reusable desde cualquier surface (CookMode, AddMeal, futuros).
+- `src/features/recipes/utils/servings.test.ts` — 13 tests cubren step, bounds, snap a múltiplo de 0.5, NaN guard, formato de halves vs integers.
+- `src/features/recipes/components/detail/RecipeNutritionPanel.tsx` — componente unificado. Wraps `<SectionCard padding="none" spacing="none">` (cumple ADR-001) y renderiza 4 sub-secciones internas con divisores hairline:
+  1. Macros grid (4 `<MacroTile>`).
+  2. Quality banner (derivada de `data.macros` originales — la calidad es propiedad de la receta, no de la porción; tinted bg `primary/10` / `brand-secondary/10` / `error/10`).
+  3. Servings stepper (label `SERVINGS` + `−` button + value + `+` button con step 0.5).
+  4. Family scaler (condicional, solo si hay `familyMembers`).
+- `src/features/recipes/components/detail/RecipeNutritionPanel.test.tsx` — 13 tests cubren macros render, quality banner toggle, step 0.5 (incremento 1→1.5, decremento 2→1.5), bound a SERVINGS_MIN, family chip toggle.
+
+**Eliminados (reemplazados por RecipeNutritionPanel):**
+- `src/features/recipes/components/RecipeNutritionBar.tsx` — único consumidor era `RecipeDetail.tsx`.
+- `src/features/recipes/components/detail/RecipeServingsControls.tsx` — único consumidor era `RecipeDetail.tsx`.
+- `src/features/recipes/components/detail/RecipeServingsControls.test.tsx` — reemplazado por tests del Panel.
+
+**Cambios en `src/features/recipes/screens/RecipeDetail.tsx`:**
+- Imports: `RecipeNutritionBar` + `RecipeServingsControls` → `RecipeNutritionPanel` (un solo componente).
+- Render: dos componentes consecutivos colapsan a un único `<RecipeNutritionPanel>`. El "Source link" condicional, que antes interrumpía entre macros y servings, ahora va FUERA del panel (después) — porque es metadata de la receta, no nutricional.
+- `useState(1)` se mantiene tipado como `number` (acepta decimales sin tocar el tipo).
+
+**Verificación visual (preview server):**
+- Panel renderiza como SECTION (SectionCard wrapper) ✓
+- 4 macros en grid (KCAL 280, PRO 18g, CARBS 35g, FATS 8g) ✓
+- Banner verde "MODERATE NUTRITIONAL QUALITY" pegado debajo ✓
+- Stepper SERVINGS = 1, decremento deshabilitado ✓
+- Click increment: 1 → 1.5 → 2 → 2.5 (step 0.5 confirmado) ✓
+- Click decrement desde 2.5: 2.5 → 2 (step 0.5 ↓) ✓
+- Macros escalan al cambiar servings: a 2 raciones, kcal=560 (280×2), pro=36 (18×2), etc. ✓
+
+**Tipado y reusabilidad ("componente global"):**
+- Helper `servings.ts` 100% puro, sin acoplamiento a React → reutilizable desde CookMode/AddMeal si en el futuro adoptan el step 0.5.
+- `RecipeNutritionPanel` props bien tipadas (sin `any`), `data-testid` para test hooks, comentarios JSDoc en cada sub-sección.
+- ADR-001 cumplido: usa `<SectionCard>` en lugar de hand-rollar el shape — futuro-proof contra cambios al primitivo.
+
+**Tests:** 1335 → 1350 (+15: 13 servings utils + 13 panel − 11 RecipeServingsControls eliminados, neto +15).
+**TypeScript:** 0 errores. **Lint:** 0 errores.
+
+## [1.5.160] - 2026-04-30
+
+### feat(ui): Sprint 46 — RecipeDetail hero NYT-style (gradient out + peek carousel + video unificado)
+
+La hero zone de la pantalla de detalle de receta adopta la composición editorial de NYT Cooking: media zone limpia (foto sin gradient encima), video al mismo nivel que las fotos en un carrusel scroll-snap, peek lateral que invita a deslizar, y bloque de título debajo del media en lugar de overlay.
+
+**Cambios en `src/features/recipes/components/HeroGallery.tsx`:**
+- Props: `photos: string[]` → `items: HeroMediaItem[]` (unión discriminada `photo | video`).
+- Single item (foto **o** video) → ocupa 100% del contenedor sin chrome de carrusel.
+- Multi item (n ≥ 2) → cada slide a `basis-[88%]` con track `pl-4 pr-4 gap-3 scroll-pl-4 hide-scrollbar`. El borde del siguiente slide asoma a la derecha como pista visual de swipe (NYT Cooking peek).
+- Slide de video: poster (YouTube → auto desde `i.ytimg.com`; resto → fallback a `image`) + overlay con `<PlayCircle>` y label `Watch on {platform}`. YouTube reproduce iframe inline al tap (estado local `playingVideoUrl`); TikTok / Instagram / Vimeo invocan `openExternalVideo()`.
+- Active-slide tracking via `IntersectionObserver` (root: track, threshold 0.5 / 0.7 / 0.9) — robusto frente a slides < 100% (la aritmética `scrollLeft / clientWidth` previa fallaba en peek mode). Guard `typeof IntersectionObserver === 'undefined'` para JSDOM.
+- `goTo(i)` ahora usa `el.scrollTo({ left: child.offsetLeft - el.offsetLeft })` para respetar `scroll-padding-left`.
+
+**Cambios en `src/features/recipes/components/detail/RecipeHero.tsx`:**
+- Eliminado `<div className="absolute inset-0 bg-gradient-to-t from-background via-background/40 to-transparent" />` — la imagen queda 100% limpia.
+- Hero pasa de overlay (título encima de la imagen) a layout apilado: media zone (back/share/save flotantes) + title block debajo (`px-6 pt-3 max-w-4xl`).
+- Badge `data.tag`: `bg-surface/90 backdrop-blur-md` → `bg-surface-container-low` (ya no está sobre imagen).
+- Verified mode (65vh bleed, ADR-011): preservado el alto del media; el título queda debajo, dentro del viewport.
+- Prop renombrada `galleryPhotos` → `mediaItems` (alineada con la nueva API de `HeroGallery`).
+
+**Cambios en `src/features/recipes/screens/RecipeDetail.tsx`:**
+- Construido `mediaItems: HeroMediaItem[]` a partir de `galleryPhotos` + `parseVideoSource(data.videoUrl)`. YouTube obtiene `embedUrl`; resto pasa `embedUrl: null`.
+- Eliminado `<VideoSection videoUrl={...} posterFallback={...} />` standalone bajo la barra de macros — ahora el video es slide del carrusel hero.
+- `import VideoSection` → `import { parseVideoSource, platformLabel }` desde `utils/videoEmbed`.
+- `VideoSection` sigue exportada y usada en `CreateRecipeStep1Basics` y `CreateRecipeStep4Review` (no removida del proyecto).
+
+**Tests (`RecipeHero.test.tsx`):**
+- Fixtures actualizadas: `galleryPhotos` → `mediaItems: HeroMediaItem[]`.
+- Lock añadido: `expect(container.querySelector('.bg-gradient-to-t')).toBeNull()` — gradient no debe reaparecer.
+- Caso multi-item: comprueba `role="region"` con `aria-roledescription="carousel"`.
+- Caso video slide: comprueba `aria-label` con el platform label (Watch on YouTube).
+- Suite completa: 1332 → 1335 tests (+3 nuevos), 89/89 archivos verdes.
+
+**Verificación visual (preview server):**
+- Receta con 1 foto sin video → 100% ancho, sin gradient.
+- Receta con 2 fotos + 1 video TikTok → 3 slides peek mode (88% basis, padding 16px, gap 12px). Counter "1/3" / "2/3" / "3/3", dots bottom-right. Video slide muestra poster + play overlay + "WATCH ON TIKTOK" con `<ExternalLink>` icon. `scrollbarWidth: none` aplicado vía `hide-scrollbar`.
+
+**No se tocan:**
+- `VideoSection.tsx` — sigue exportada para CreateRecipe steps.
+- `MediaLightbox.tsx` — solo fotos; tap en slide de video NO abre lightbox.
+- `videoEmbed.ts` — la utilidad `parseVideoSource` se reutiliza tal cual desde `RecipeDetail`.
+
+**Archivos:** 4 modificados (`HeroGallery.tsx`, `RecipeHero.tsx`, `RecipeDetail.tsx`, `RecipeHero.test.tsx`).
+**TypeScript:** 0 errores. **Lint:** 0 errores. **Tests:** 1335/1335.
+
 ## [1.5.159] - 2026-04-30
 
 ### feat(ui): Sprint 45 — RecipeCard composición sin contenedor (NYT-style)

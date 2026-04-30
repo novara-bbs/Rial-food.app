@@ -5,11 +5,14 @@
 > prunes this file back down. Everything below should answer: *what's the release line,
 > what's the quality baseline, what's the next move, what's broken?*
 
-Last updated: **2026-04-30** — `[1.5.159]` Sprint 45: RecipeCard composición NYT-style (sin contenedor, mixed-case).
+Last updated: **2026-04-30** — `[1.5.161]` Sprint 47: RecipeNutritionPanel (macros + quality + servings unificados, step 0.5).
 
 ## Release snapshot
-- **Branch**: `main`, synced con `rial-food/main` (CI green S39; S40–S45 queued).
-- **This session (2026-04-30, S45)**:
+- **Branch**: `main`, synced con `rial-food/main` (CI green S39; S40–S47 queued).
+- **This session (2026-04-30, S46–S47)**:
+    - **Sprint 47** `[1.5.161]` — `RecipeNutritionPanel`: macros + food-quality banner + servings stepper unificados en un único `<SectionCard padding="none" spacing="none">` con divisores hairline. Servings step `1` → `0.5` (1, 1.5, 2, 2.5, …) vía helpers puros en `src/features/recipes/utils/servings.ts` (`SERVINGS_STEP/MIN/MAX`, `clampServings`, `incrementServings`, `decrementServings`, `formatServings`). Eliminados `RecipeNutritionBar.tsx`, `RecipeServingsControls.tsx` y su test (reemplazados). Quality usa macros base (independiente de portion). Tests 1335 → 1350 (+15).
+    - **Sprint 46** `[1.5.160]` — RecipeDetail hero NYT-style: gradient `bg-gradient-to-t` eliminado (imagen 100% limpia), `HeroGallery` generaliza `photos` → `items: HeroMediaItem[]` (foto | video), peek mode `basis-[88%]` con padding 16px + gap 12px cuando n ≥ 2, `IntersectionObserver` para active-index, video unificado en el carrusel (YouTube inline iframe, resto `openExternalVideo()`). Título y time row movidos debajo del media. `<VideoSection>` standalone removido de `RecipeDetail.tsx` (sigue usado en CreateRecipe steps). Tests 1332 → 1335.
+- **Previous session (2026-04-30, S45)**:
     - **Sprint 45** `[1.5.159]` — RecipeCard sin contenedor: drop `bg-surface rounded-sm overflow-hidden` del wrapper, `rounded-sm` se mueve a `IMAGE_ZONE`, `INFO_BLOCK` `p-3/p-4` → `pt-2/pt-3` sin padding lateral. Title `uppercase` → mixed-case Bricolage. Author/forkedFrom labels mixed-case. Badges overlay y action buttons intactos. 1 primitivo → 5 surfaces (Cocina, Discovery hero+swimlanes, RecipeDetail related, CreatorProfile).
 - **Previous session (2026-04-29, S40–S44)**:
     - **Sprint 44** `[1.5.158]` — DX quick wins: brand constants (`src/config/brand.ts`), palette preview dedup (`src/config/theme-previews.ts`), `.rial-input` utility class, `STORAGE_KEYS` registry (`src/lib/storage-keys.ts`).
@@ -115,6 +118,8 @@ Sprints 5-28 (type-safety any→0 sweep across all features),
 **Sprint 43 [1.5.157]** — Radius base `0.25rem` → `0.375rem`: sm 4→6px, lg 8→12px, xl 12→18px, 2xl 16→24px. Todos los componentes más redondeados en 1 step.
 **Sprint 44 [1.5.158]** — DX quick wins (rebrand safety): `src/config/brand.ts` (APP_NAME, emails), `src/config/theme-previews.ts` (palette swatch colors dedup), `.rial-input` `@layer components` class (10 inputs migrated), `src/lib/storage-keys.ts` (38 keys, STORAGE_KEYS const).
 **Sprint 45 [1.5.159]** — RecipeCard composición NYT-style: drop wrapper bg/radius/overflow, `rounded-sm` se mueve a `IMAGE_ZONE`, `INFO_BLOCK` `p-3/p-4/p-2.5` → `pt-2/pt-3/pt-2` (sin padding lateral, texto alineado al borde imagen). Title `uppercase` → mixed-case (Bricolage Grotesque). Author/forkedFrom labels mixed-case. Badges overlay (Time/Tag/Match) y action buttons (Share/Save/Delete) intactos. Alturas fijas preservadas. 1 primitivo → 5 surfaces.
+**Sprint 46 [1.5.160]** — RecipeDetail hero NYT-style: gradient `bg-gradient-to-t` eliminado en `RecipeHero.tsx` (imagen 100% limpia). `HeroGallery` props `photos: string[]` → `items: HeroMediaItem[]` (foto | video). Multi-item: peek mode `basis-[88%]` + `pl-4 pr-4 gap-3 hide-scrollbar`, `IntersectionObserver` para active-index (robusto en peek). Single-item: 100% sin chrome. Video unificado en el carrusel: YouTube reproduce iframe inline, TikTok/IG/Vimeo → `openExternalVideo()`. Título y time row movidos debajo del media (`px-6 pt-3`). `<VideoSection>` standalone removido de `RecipeDetail.tsx` (sigue usado en CreateRecipe). Tests 1332 → 1335.
+**Sprint 47 [1.5.161]** — `RecipeNutritionPanel` unifica macros + food-quality banner + servings stepper en un `<SectionCard>`. Servings step 1 → 0.5 vía helpers puros `src/features/recipes/utils/servings.ts` (clampServings/increment/decrement/format). Eliminados `RecipeNutritionBar.tsx` y `RecipeServingsControls.tsx` + test (reemplazados). Source link movido fuera del bloque nutricional. ADR-001 OK. Tests 1335 → 1350.
 
 ## Repository compliance
 - `LICENSE`: Proprietary © 2026 RIAL FOOD WORLD S.L. Contact legal@rialfoodworld.com.
