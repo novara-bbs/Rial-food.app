@@ -1,5 +1,35 @@
 # RIAL App - Changelog
 
+## [1.5.172] - 2026-04-30
+
+### fix(onboarding): GDPR consent inline (Instagram pattern) + persist hardening + a11y nit
+
+Bugfix + UX alignment. Mover el consentimiento GDPR de un modal bloqueante al primer launch a un patrón inline-on-action (Instagram/TikTok/Spotify), arreglando de raíz el bug del botón "Empezar sin registrarme" y limpiando un par de hallazgos de la auditoría post-refactor.
+
+**Bug arreglado:**
+
+- "Empezar sin registrarme" no respondía en cold start. Causa raíz: el `<GdprConsent>` se renderizaba al primer launch usando `BottomSheet` (Radix Dialog), que portea a `document.body` y aplica `inert`/`aria-hidden` a `#root`. El `<Onboarding>` vivía dentro de `#root`, así que aunque visualmente estaba encima (`z-[100]` vs `z-50`), todo su subtree quedaba inerte y los clicks no llegaban al handler.
+
+**Cambios:**
+
+- `src/features/legal/components/GdprConsent.tsx` — `recordConsent()` exportado (antes privada). JSDoc actualizado: el componente ya no se monta en mainline; queda disponible para futuro reuso.
+- `src/features/onboarding/steps/WelcomeStep.tsx` — `recordConsent()` cableado al inicio de los 4 handlers (Apple/Google/Email/Guest). La microcopy legal inline `t.onboarding.welcome.legal` ya estaba renderizada bajo los botones — ahora cumple su función real de disclosure.
+- `src/features/onboarding/Onboarding.tsx` — `recordConsent()` defensivo en `handleFinish` para cubrir el edge-case de un draft persistido cuya sesión nunca tocó WelcomeStep.
+- `src/App.tsx` — borrado el `showConsent` state, el `useState`, el bloque `{showConsent && <GdprConsent>}` y el import del componente. `isOpen={isFirstTime}` restaurado. Añadido `useEffect` one-shot de backfill: si `!isFirstTime && !hasGivenConsent()` → `recordConsent()` silencioso al montar (cubre usuarios que ya pasaron el onboarding bajo el flujo viejo).
+
+**Auditoría post-refactor (hallazgos arreglados):**
+
+- `src/features/onboarding/state/persist.ts` — `isPersistedDraft()` ahora valida que `stepId` esté en `STEP_ORDER`. Antes un valor corrupto en localStorage (`{ stepId: 'foo' }`) pasaba el guard y caía en el reducer. Ahora se descarta y se hace `clearDraft()`.
+- `src/features/onboarding/components/HealthSyncCard.tsx` — `useId` para el hint del toggle, `aria-describedby={hintId}` en el botón `role="switch"`. Lectores de pantalla anuncian el servicio + el estado actual ("Connect to autofill...").
+
+**Hallazgos descartados como falsos positivos:**
+
+- ActivitySlider tick row usa raw `<button tabIndex={-1}>` pero el wrapper ya tiene `aria-hidden="true"`, así que SR ignora la fila — el `<input role="slider">` aporta toda la a11y.
+
+**Verificación:** TypeScript 0 · Lint 0 · Tests 1436/1436 · size:check PASSED (894.4 KB raw / 281.7 KB gzip).
+
+---
+
 ## [1.5.171] - 2026-04-30
 
 ### refactor(onboarding): extract copy/taxonomy helpers + JSDoc + 3 component tests
