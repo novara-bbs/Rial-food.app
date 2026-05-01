@@ -191,7 +191,7 @@ export default function BeforeAfterCompare({
                     : 'border-outline-variant/20 hover:border-primary/50'
                 }`}
               >
-                <img src={snap.photoUrl} alt="" className="w-full h-full object-cover" />
+                <img src={snap.photoUrl} onError={(e) => { (e.currentTarget as HTMLImageElement).style.display = 'none'; }} alt="" className="w-full h-full object-cover" />
                 {isBefore && (
                   <span className="absolute top-1 left-1 px-1.5 py-0.5 rounded-sm bg-primary text-on-primary text-micro font-semibold uppercase tracking-widest">
                     {beforeLabelUpper}
@@ -232,7 +232,7 @@ export default function BeforeAfterCompare({
       <div className="grid grid-cols-2 gap-2">
         <div className="space-y-1">
           <div className="relative aspect-[3/4] rounded-sm overflow-hidden bg-surface-container-high">
-            <img src={before.photoUrl} alt="" className="w-full h-full object-cover" />
+            <img src={before.photoUrl} onError={(e) => { (e.currentTarget as HTMLImageElement).style.display = 'none'; }} alt="" className="w-full h-full object-cover" />
             <span className="absolute top-1.5 left-1.5 px-1.5 py-0.5 rounded-sm bg-primary text-on-primary text-micro font-semibold uppercase tracking-widest">
               {beforeLabelUpper}
             </span>
@@ -247,7 +247,7 @@ export default function BeforeAfterCompare({
 
         <div className="space-y-1">
           <div className="relative aspect-[3/4] rounded-sm overflow-hidden bg-surface-container-high">
-            <img src={after.photoUrl} alt="" className="w-full h-full object-cover" />
+            <img src={after.photoUrl} onError={(e) => { (e.currentTarget as HTMLImageElement).style.display = 'none'; }} alt="" className="w-full h-full object-cover" />
             <span className="absolute top-1.5 left-1.5 px-1.5 py-0.5 rounded-sm bg-primary text-on-primary text-micro font-semibold uppercase tracking-widest">
               {afterLabelUpper}
             </span>

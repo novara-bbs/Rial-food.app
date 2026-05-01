@@ -104,7 +104,7 @@ export default function Notifications({ onBack }: { onBack: () => void }) {
             aria-label={`${n.fromUserName} ${getDescription(n)}`}
             className={`w-full flex items-center gap-3 p-3 rounded-sm text-left hover:bg-surface-container-highest focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary transition-colors ${!n.read ? 'bg-primary/5' : ''}`}
           >
-            <img src={n.fromUserAvatar} alt="" className="w-10 h-10 rounded-full object-cover shrink-0" referrerPolicy="no-referrer" />
+            <img src={n.fromUserAvatar} onError={(e) => { (e.currentTarget as HTMLImageElement).style.display = 'none'; }} alt="" className="w-10 h-10 rounded-full object-cover shrink-0" referrerPolicy="no-referrer" />
             <div className="flex-1 min-w-0">
               <p className="text-caption text-on-surface-variant">
                 <span className="font-headline font-bold text-tertiary">{n.fromUserName}</span>{' '}

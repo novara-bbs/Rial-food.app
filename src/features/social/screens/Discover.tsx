@@ -105,7 +105,7 @@ export default function Discover() {
                   aria-label={`@${creator.name}`}
                 >
                   <div className="flex items-center gap-4">
-                    <img src={creator.avatar} alt="" className="w-12 h-12 rounded-full object-cover border-2 border-outline-variant/20" referrerPolicy="no-referrer" />
+                    <img src={creator.avatar} onError={(e) => { (e.currentTarget as HTMLImageElement).style.display = 'none'; }} alt="" className="w-12 h-12 rounded-full object-cover border-2 border-outline-variant/20" referrerPolicy="no-referrer" />
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center gap-2">
                         <Heading level="h4" className="text-body-sm">@{creator.name}</Heading>
@@ -212,7 +212,7 @@ export default function Discover() {
                 className={`w-full text-left ${BUTTON_CARD_SURFACE_CLASSES} p-4 hover:border-primary/50 transition-all focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary`}
               >
                 <div className="flex items-start gap-3">
-                  <img src={post.author.img} alt="" className="w-8 h-8 rounded-full object-cover shrink-0" referrerPolicy="no-referrer" />
+                  <img src={post.author.img} onError={(e) => { (e.currentTarget as HTMLImageElement).style.display = 'none'; }} alt="" className="w-8 h-8 rounded-full object-cover shrink-0" referrerPolicy="no-referrer" />
                   <div className="flex-1 min-w-0">
                     <div className="flex items-baseline gap-2">
                       <span className="font-headline text-body-sm font-bold text-tertiary uppercase">{post.author.name}</span>
@@ -225,7 +225,7 @@ export default function Discover() {
                     </div>
                   </div>
                   {post.images && post.images[0] && (
-                    <img src={post.images[0]} alt="" className="w-16 h-16 rounded-sm object-cover shrink-0" referrerPolicy="no-referrer" />
+                    <img src={post.images[0]} onError={(e) => { (e.currentTarget as HTMLImageElement).style.display = 'none'; }} alt="" className="w-16 h-16 rounded-sm object-cover shrink-0" referrerPolicy="no-referrer" />
                   )}
                 </div>
               </button>
@@ -250,7 +250,7 @@ export default function Discover() {
                 className="shrink-0 flex flex-col items-center gap-2 group focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary rounded-sm"
                 aria-label={`@${creator.name}`}
               >
-                <img src={creator.avatar} alt="" className="w-14 h-14 rounded-full object-cover border-2 border-primary/30 group-hover:border-primary transition-colors" referrerPolicy="no-referrer" />
+                <img src={creator.avatar} onError={(e) => { (e.currentTarget as HTMLImageElement).style.display = 'none'; }} alt="" className="w-14 h-14 rounded-full object-cover border-2 border-primary/30 group-hover:border-primary transition-colors" referrerPolicy="no-referrer" />
                 <span className="font-headline text-micro font-bold text-tertiary uppercase tracking-tight">@{creator.name}</span>
               </button>
             ))}

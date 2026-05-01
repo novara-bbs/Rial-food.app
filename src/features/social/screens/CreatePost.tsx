@@ -62,7 +62,7 @@ export default function CreatePost({ onBack, onCreatePost }: { onBack: () => voi
         {image && (
           <div className="px-6 pb-4">
             <div className="relative rounded-sm overflow-hidden border border-outline-variant/20">
-              <img src={image} alt="Preview" className="w-full max-h-48 object-cover" />
+              <img src={image} onError={(e) => { (e.currentTarget as HTMLImageElement).style.display = 'none'; }} alt="Preview" className="w-full max-h-48 object-cover" />
               <button type="button" onClick={() => setImage(null)} aria-label={t.createPost.removeImage} className="absolute top-2 right-2 w-11 h-11 bg-surface-container-highest/90 rounded-full flex items-center justify-center text-on-surface-variant hover:text-error transition-colors">
                 <X className="w-4 h-4" />
               </button>
@@ -76,7 +76,7 @@ export default function CreatePost({ onBack, onCreatePost }: { onBack: () => voi
             <div className="bg-background rounded-sm border border-primary/30 p-3 flex items-center gap-3 relative">
               <button type="button" onClick={() => setAttachedRecipe(null)} aria-label={t.common.delete} className="absolute -top-2 -right-2 w-6 h-6 bg-error text-on-error rounded-full flex items-center justify-center text-micro font-bold shadow-elev-3">X</button>
               {attachedRecipe.img && (
-                <img src={attachedRecipe.img} alt={attachedRecipe.title} className="w-12 h-12 rounded-sm object-cover" referrerPolicy="no-referrer" />
+                <img src={attachedRecipe.img} onError={(e) => { (e.currentTarget as HTMLImageElement).style.display = 'none'; }} alt={attachedRecipe.title} className="w-12 h-12 rounded-sm object-cover" referrerPolicy="no-referrer" />
               )}
               <div>
                 <span className="font-headline font-bold text-caption uppercase text-tertiary">{attachedRecipe.title}</span>

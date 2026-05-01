@@ -25,27 +25,11 @@ const ROOT = process.cwd();
  * this list (the test enforces "still has a raw img" so a removed entry
  * means the file was migrated, which is the goal).
  */
-const BASELINE_OFFENDERS: ReadonlySet<string> = new Set([
-  'src/features/social/components/AvatarRing.tsx',
-  'src/features/social/components/ImagePicker.tsx',
-  'src/features/social/components/PostCard.tsx',
-  'src/features/social/components/ProgressPostCard.tsx',
-  'src/features/social/components/PublishRecipeSheet.tsx',
-  'src/features/social/components/RecipePicker.tsx',
-  'src/features/social/screens/ChallengeDetail.tsx',
-  'src/features/social/screens/CreatePost.tsx',
-  'src/features/social/screens/CreateStory.tsx',
-  'src/features/social/screens/CreatorProfile.tsx',
-  'src/features/social/screens/Discover.tsx',
-  'src/features/social/screens/Notifications.tsx',
-  'src/features/social/screens/PostDetail.tsx',
-  'src/features/social/screens/StoryViewer.tsx',
-  'src/features/wellness/components/BeforeAfterCompare.tsx',
-  'src/features/wellness/components/BodyCalendar.tsx',
-  'src/features/wellness/components/BodySnapshotCard.tsx',
-  'src/features/wellness/components/LogSnapshotModal.tsx',
-  'src/features/wellness/components/SnapshotDetailModal.tsx',
-]);
+/**
+ * All pre-1.5.175 offenders have been migrated as of [1.5.179].
+ * The baseline is now empty — any new `<img src=` without onError fails immediately.
+ */
+const BASELINE_OFFENDERS: ReadonlySet<string> = new Set([]);
 
 function listFiles(dir: string, exts: string[]): string[] {
   const out: string[] = [];

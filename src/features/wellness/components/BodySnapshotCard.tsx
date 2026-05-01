@@ -48,7 +48,7 @@ export default function BodySnapshotCard({ snapshot, previousKg, unitSystem, onT
         {/* Left: thumb or icon */}
         <div className="w-16 h-16 rounded-sm shrink-0 overflow-hidden bg-primary/10 flex items-center justify-center">
           {hasPhoto ? (
-            <img src={snapshot.photoUrl} alt="" className="w-full h-full object-cover" />
+            <img src={snapshot.photoUrl} onError={(e) => { (e.currentTarget as HTMLImageElement).style.display = 'none'; }} alt="" className="w-full h-full object-cover" />
           ) : (
             <Scale className="w-6 h-6 text-primary/60" aria-hidden="true" />
           )}

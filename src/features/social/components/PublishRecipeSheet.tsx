@@ -56,6 +56,7 @@ export default function PublishRecipeSheet({ recipe, onClose }: PublishRecipeShe
           {(recipe.img || recipe.image) && (
             <img
               src={recipe.img || recipe.image}
+              onError={(e) => { (e.currentTarget as HTMLImageElement).style.display = 'none'; }}
               alt={recipe.title}
               className="w-14 h-14 rounded-sm object-cover"
               referrerPolicy="no-referrer"

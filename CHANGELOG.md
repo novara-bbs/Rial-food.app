@@ -1,5 +1,18 @@
 # RIAL App - Changelog
 
+## [1.5.179] - 2026-05-01
+
+### fix(img-onerror): batch 3 — social + wellness sweep, baseline empty
+
+img-onerror sweep batch 3 (final): all 19 remaining files migrated. img-onerror baseline is now **empty** — any new `<img src=` without `onError` fails CI immediately.
+
+- **Social components** (6 files): AvatarRing (×2), ImagePicker, PostCard (×2 new, 2 pre-existing), ProgressPostCard, PublishRecipeSheet, RecipePicker.
+- **Social screens** (8 files): ChallengeDetail, CreatePost (×2), CreateStory (×2), CreatorProfile (×2), Discover (×4), Notifications, PostDetail, StoryViewer (×3).
+- **Wellness components** (5 files): BeforeAfterCompare (×3), BodyCalendar, BodySnapshotCard, LogSnapshotModal, SnapshotDetailModal.
+- Convention test `img-onerror.test.ts`: baseline Set cleared, comment updated. Both tests (new offenders + stale entries) now pass on empty baseline.
+
+Total sweep: 34 files fixed across [1.5.177], [1.5.178], [1.5.179].
+
 ## [1.5.178] - 2026-05-01
 
 ### fix(img-onerror): batch 2 — recipes components (10 files)

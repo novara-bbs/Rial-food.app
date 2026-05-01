@@ -63,7 +63,7 @@ export default function RecipePicker({ open, onOpenChange, recipes, onSelect }: 
                 className="w-full min-h-11 flex items-center gap-3 p-3 bg-background border border-outline-variant/20 rounded-sm hover:border-primary/50 transition-colors text-left"
               >
                 {(recipe.img || recipe.image) && (
-                  <img src={recipe.img || recipe.image} alt="" className="w-12 h-12 rounded-sm object-cover shrink-0" referrerPolicy="no-referrer" />
+                  <img src={recipe.img || recipe.image} onError={(e) => { (e.currentTarget as HTMLImageElement).style.display = 'none'; }} alt="" className="w-12 h-12 rounded-sm object-cover shrink-0" referrerPolicy="no-referrer" />
                 )}
                 <div className="flex-1 min-w-0">
                   <Heading level="h4" className="text-caption truncate">{recipe.title}</Heading>

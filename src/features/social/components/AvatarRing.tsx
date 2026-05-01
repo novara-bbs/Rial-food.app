@@ -28,6 +28,7 @@ export default function AvatarRing({ src, name, size = 'md', hasStory, storyView
           <div className="bg-background p-0.5 rounded-full">
             <img
               src={src}
+              onError={(e) => { (e.currentTarget as HTMLImageElement).style.display = 'none'; }}
               alt={name}
               className={`${sizeMap[size]} rounded-full object-cover grayscale group-hover:grayscale-0 transition-all`}
               referrerPolicy="no-referrer"
@@ -52,6 +53,7 @@ export default function AvatarRing({ src, name, size = 'md', hasStory, storyView
         <div className="bg-background p-0.5 rounded-full">
           <img
             src={src}
+            onError={(e) => { (e.currentTarget as HTMLImageElement).style.display = 'none'; }}
             alt={name}
             className={`${sizeMap[size]} rounded-full object-cover grayscale group-hover:grayscale-0 transition-all`}
             referrerPolicy="no-referrer"

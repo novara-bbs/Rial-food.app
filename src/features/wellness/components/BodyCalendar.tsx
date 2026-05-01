@@ -77,7 +77,7 @@ export default function BodyCalendar({ snapshots, unitSystem }: BodyCalendarProp
               <>
                 <span className="absolute top-1 left-1 text-micro opacity-60">{day}</span>
                 {hasPhoto ? (
-                  <img src={payload!.photoUrl} alt="" className="w-6 h-6 rounded-full object-cover" />
+                  <img src={payload!.photoUrl} onError={(e) => { (e.currentTarget as HTMLImageElement).style.display = 'none'; }} alt="" className="w-6 h-6 rounded-full object-cover" />
                 ) : hasMeasurements ? (
                   <Ruler className="w-3 h-3 text-primary" aria-hidden="true" />
                 ) : hasWeight ? (

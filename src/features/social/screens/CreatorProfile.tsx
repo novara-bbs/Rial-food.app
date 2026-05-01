@@ -76,7 +76,7 @@ export default function CreatorProfile({ onBack }: { onBack: () => void }) {
       {/* Profile card */}
       <SectionCard padding="lg" spacing="none">
         <div className="flex items-start gap-5">
-          <img src={creator.avatar} alt={creator.name} className="w-20 h-20 rounded-full object-cover border-2 border-primary/30" referrerPolicy="no-referrer" />
+          <img src={creator.avatar} onError={(e) => { (e.currentTarget as HTMLImageElement).style.display = 'none'; }} alt={creator.name} className="w-20 h-20 rounded-full object-cover border-2 border-primary/30" referrerPolicy="no-referrer" />
           <div className="flex-1 min-w-0">
             <div className="flex items-center gap-2">
               <Heading level="h2" className="text-title-sm truncate">@{creator.name}</Heading>
@@ -164,7 +164,7 @@ export default function CreatorProfile({ onBack }: { onBack: () => void }) {
                     className="relative z-10 mt-3 w-full text-left bg-background border border-outline-variant/20 rounded-sm p-3 flex items-center gap-3 hover:border-primary/30 transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
                   >
                     {post.recipe.img ? (
-                      <img src={post.recipe.img} alt={post.recipe.title} className="w-12 h-12 rounded-sm object-cover" referrerPolicy="no-referrer" />
+                      <img src={post.recipe.img} onError={(e) => { (e.currentTarget as HTMLImageElement).style.display = 'none'; }} alt={post.recipe.title} className="w-12 h-12 rounded-sm object-cover" referrerPolicy="no-referrer" />
                     ) : (
                       <div className="w-12 h-12 rounded-sm bg-gradient-to-br from-primary/10 to-tertiary/10 flex items-center justify-center">
                         <ChefHat className="w-5 h-5 text-on-surface-variant/30" />

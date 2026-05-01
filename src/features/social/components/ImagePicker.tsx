@@ -22,7 +22,7 @@ export default function ImagePicker({ image, onImageChange }: ImagePickerProps) 
   if (image) {
     return (
       <div className="relative rounded-sm overflow-hidden border border-outline-variant/20">
-        <img src={image} alt="Preview" className="w-full max-h-64 object-cover" />
+        <img src={image} onError={(e) => { (e.currentTarget as HTMLImageElement).style.display = 'none'; }} alt="Preview" className="w-full max-h-64 object-cover" />
         <button type="button"
           onClick={() => onImageChange(null)}
           className="absolute top-2 right-2 w-7 h-7 bg-surface-container-highest/90 rounded-full flex items-center justify-center text-on-surface-variant hover:text-error transition-colors"

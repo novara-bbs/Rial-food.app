@@ -173,7 +173,7 @@ export default function LogSnapshotModal({
             <div className="pt-3 animate-in fade-in slide-in-from-top-2">
               {photoUrl ? (
                 <div className="relative rounded-sm overflow-hidden">
-                  <img src={photoUrl} alt="" className="w-full max-h-48 object-cover" />
+                  <img src={photoUrl} onError={(e) => { (e.currentTarget as HTMLImageElement).style.display = 'none'; }} alt="" className="w-full max-h-48 object-cover" />
                   <button
                     type="button"
                     onClick={() => setPhotoUrl(undefined)}

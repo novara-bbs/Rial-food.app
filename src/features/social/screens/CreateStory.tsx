@@ -145,7 +145,7 @@ export default function CreateStory({ onBack }: { onBack: () => void }) {
             {selectedRecipe ? (
               <div className="bg-surface-container-low rounded-sm overflow-hidden border border-outline-variant/20">
                 {selectedRecipe.img && (
-                  <img src={selectedRecipe.img} alt={selectedRecipe.title} className="w-full h-48 object-cover" referrerPolicy="no-referrer" />
+                  <img src={selectedRecipe.img} onError={(e) => { (e.currentTarget as HTMLImageElement).style.display = 'none'; }} alt={selectedRecipe.title} className="w-full h-48 object-cover" referrerPolicy="no-referrer" />
                 )}
                 <div className="p-6">
                   <Heading level="h3" className="text-title-sm">{selectedRecipe.title}</Heading>
@@ -177,7 +177,7 @@ export default function CreateStory({ onBack }: { onBack: () => void }) {
           <div className="space-y-4">
             {image ? (
               <div className="relative rounded-sm overflow-hidden">
-                <img src={image} alt="Preview" className="w-full max-h-[400px] object-cover" />
+                <img src={image} onError={(e) => { (e.currentTarget as HTMLImageElement).style.display = 'none'; }} alt="Preview" className="w-full max-h-[400px] object-cover" />
                 <button type="button"
                   onClick={() => setImage(null)}
                   aria-label={t.createPost.removeImage}

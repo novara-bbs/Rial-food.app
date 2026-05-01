@@ -79,7 +79,7 @@ export default function SnapshotDetailModal({ open, onOpenChange, snapshot, unit
           {/* Photo or icon */}
           {snapshot.photoUrl ? (
             <div className="rounded-sm overflow-hidden">
-              <img src={snapshot.photoUrl} alt="" className="w-full max-h-[50vh] object-cover" />
+              <img src={snapshot.photoUrl} onError={(e) => { (e.currentTarget as HTMLImageElement).style.display = 'none'; }} alt="" className="w-full max-h-[50vh] object-cover" />
             </div>
           ) : (
             <div className="h-32 bg-primary/5 rounded-sm flex items-center justify-center">

@@ -61,7 +61,7 @@ export default function PostCard({
           className="flex items-center gap-3 text-left focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary rounded-sm"
           aria-label={post.author?.name}
         >
-          <img src={post.author.img} alt={post.author.name} className="w-10 h-10 rounded-full object-cover" referrerPolicy="no-referrer" />
+          <img src={post.author.img} onError={(e) => { (e.currentTarget as HTMLImageElement).style.display = 'none'; }} alt={post.author.name} className="w-10 h-10 rounded-full object-cover" referrerPolicy="no-referrer" />
           <div>
             <p className="font-headline font-bold text-body-sm text-tertiary uppercase tracking-tight hover:text-primary transition-colors">{post.author.name}</p>
             <p className="font-label text-micro text-on-surface-variant tracking-widest uppercase">{post.author.role} · {post.author.time}</p>
@@ -208,7 +208,7 @@ export default function PostCard({
                 <div key={comment.id} className="flex gap-2">
                   <div className="w-6 h-6 rounded-full bg-surface-container-highest flex items-center justify-center text-micro font-bold text-tertiary shrink-0 overflow-hidden">
                     {comment.authorImg ? (
-                      <img src={comment.authorImg} alt={comment.author} className="w-6 h-6 rounded-full object-cover" referrerPolicy="no-referrer" />
+                      <img src={comment.authorImg} onError={(e) => { (e.currentTarget as HTMLImageElement).style.display = 'none'; }} alt={comment.author} className="w-6 h-6 rounded-full object-cover" referrerPolicy="no-referrer" />
                     ) : (
                       comment.author.charAt(0)
                     )}

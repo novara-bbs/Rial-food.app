@@ -119,7 +119,7 @@ export default function StoryViewer({ onBack }: { onBack: () => void }) {
 
       {/* Author info */}
       <div className="absolute top-8 left-4 z-20 flex items-center gap-3">
-        <img src={currentStory.authorAvatar} alt={currentStory.authorName} className="w-8 h-8 rounded-full object-cover border border-on-overlay/50" referrerPolicy="no-referrer" />
+        <img src={currentStory.authorAvatar} onError={(e) => { (e.currentTarget as HTMLImageElement).style.display = 'none'; }} alt={currentStory.authorName} className="w-8 h-8 rounded-full object-cover border border-on-overlay/50" referrerPolicy="no-referrer" />
         <span className="text-on-overlay font-headline font-bold text-body-sm uppercase tracking-wider">{currentStory.authorName}</span>
         <span className="text-on-overlay/50 font-label text-micro tracking-widest uppercase">
           {formatRelativeTime(currentStory.createdAt)}
@@ -176,7 +176,7 @@ function SlideContent({ slide, recoveryLabel, strainLabel }: { slide: StorySlide
       return (
         <div className="bg-surface-container-low/20 backdrop-blur rounded-sm overflow-hidden max-w-sm w-full">
           {slide.recipe?.img && (
-            <img src={slide.recipe.img} alt={slide.recipe.title} className="w-full h-48 object-cover" referrerPolicy="no-referrer" />
+            <img src={slide.recipe.img} onError={(e) => { (e.currentTarget as HTMLImageElement).style.display = 'none'; }} alt={slide.recipe.title} className="w-full h-48 object-cover" referrerPolicy="no-referrer" />
           )}
           <div className="p-6">
             <Heading level="h3" className="text-title-sm text-on-overlay">{slide.recipe?.title}</Heading>
@@ -189,7 +189,7 @@ function SlideContent({ slide, recoveryLabel, strainLabel }: { slide: StorySlide
       );
     case 'image':
       return slide.image ? (
-        <img src={slide.image} alt="Story" className="max-w-full max-h-[70vh] object-contain rounded-sm" />
+        <img src={slide.image} onError={(e) => { (e.currentTarget as HTMLImageElement).style.display = 'none'; }} alt="Story" className="max-w-full max-h-[70vh] object-contain rounded-sm" />
       ) : null;
     default:
       return null;

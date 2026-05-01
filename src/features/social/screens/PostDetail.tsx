@@ -86,7 +86,7 @@ export default function PostDetail({ onBack }: { onBack: () => void }) {
             <SectionCard key={comment.id} padding="none" spacing="none" className="flex gap-3 p-3">
               <div className="w-8 h-8 rounded-full bg-surface-container-highest flex items-center justify-center text-caption font-bold text-tertiary shrink-0">
                 {comment.authorImg ? (
-                  <img src={comment.authorImg} alt={comment.author} className="w-8 h-8 rounded-full object-cover" referrerPolicy="no-referrer" />
+                  <img src={comment.authorImg} onError={(e) => { (e.currentTarget as HTMLImageElement).style.display = 'none'; }} alt={comment.author} className="w-8 h-8 rounded-full object-cover" referrerPolicy="no-referrer" />
                 ) : (
                   comment.author.charAt(0)
                 )}

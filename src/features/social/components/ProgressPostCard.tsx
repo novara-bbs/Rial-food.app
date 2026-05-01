@@ -31,6 +31,7 @@ export default function ProgressPostCard({ post, unitSystem, currentLabel, since
         {photoUrl ? (
           <img
             src={photoUrl}
+            onError={(e) => { (e.currentTarget as HTMLImageElement).style.display = 'none'; }}
             alt=""
             className="w-20 h-20 rounded-sm object-cover shrink-0"
           />

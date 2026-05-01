@@ -139,7 +139,7 @@ export default function ChallengeDetail({ onBack, challengeId }: { onBack: () =>
               <span className={`font-headline font-black text-body-lg w-8 text-center ${entry.rank <= 3 ? 'text-primary' : 'text-on-surface-variant'}`}>
                 {entry.rank === 1 ? '🥇' : entry.rank === 2 ? '🥈' : entry.rank === 3 ? '🥉' : `#${entry.rank}`}
               </span>
-              <img src={entry.avatar} alt={entry.name} className="w-8 h-8 rounded-full object-cover" referrerPolicy="no-referrer" />
+              <img src={entry.avatar} onError={(e) => { (e.currentTarget as HTMLImageElement).style.display = 'none'; }} alt={entry.name} className="w-8 h-8 rounded-full object-cover" referrerPolicy="no-referrer" />
               <span className="font-headline font-bold text-body-sm uppercase text-tertiary flex-1">{entry.name}</span>
               <span className="font-label text-micro tracking-widest text-on-surface-variant uppercase">{entry.streak}d</span>
             </div>
