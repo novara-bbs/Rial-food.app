@@ -31,6 +31,7 @@ const nav: Pick<Translations, 'nav' | 'tabs' | 'filters' | 'more' | 'fab' | 'glo
       mealSlot: 'Meal',
       source: 'Source',
       cuisine: 'Cuisine',
+      collections: 'Collections',
       diet: 'Diet',
       time: 'Time',
       difficulty: 'Difficulty',

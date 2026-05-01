@@ -31,6 +31,7 @@ const nav = {
       mealSlot: 'Momento del día',
       source: 'Origen',
       cuisine: 'Cocina',
+      collections: 'Colecciones',
       diet: 'Dieta',
       time: 'Tiempo',
       difficulty: 'Dificultad',

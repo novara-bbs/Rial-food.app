@@ -2,12 +2,12 @@ import React, { useState, useMemo } from 'react';
 
 const FACET_EMOJI: Record<string, string> = {
   source: '🍽️',
+  collections: '✨',
   diet: '🌱',
   time: '⏱️',
   difficulty: '⭐',
 };
 import { Plus, Link, ShoppingCart } from 'lucide-react';
-import CollectionsCarousel from '../components/CollectionsCarousel';
 import { COLLECTIONS } from '../data/collections';
 import { useLocalStorageState } from '../../../hooks/useLocalStorageState';
 import SearchInput from '../../../components/patterns/SearchInput';
@@ -63,7 +63,6 @@ export default function Cocina({ onAddMeal, onCreateRecipe, onNavigateToRecipe, 
   const { userProfile, dictionary, dailyMacros } = useAppState();
   const [activeTab, setActiveTab] = useState<'recipes' | 'plan' | 'list'>('recipes');
   const [searchQuery, setSearchQuery] = useState('');
-  const [activeCollection, setActiveCollection] = useState('all');
   const [activeMealType, setActiveMealType] = useState<string>('all');
   const [sortMode, setSortMode] = useLocalStorageState<'recommended' | 'recent' | 'quick' | 'highProtein' | 'mostCooked' | 'caloriesAsc'>(
     'cocinaSort', 'recommended',
@@ -121,6 +120,8 @@ export default function Cocina({ onAddMeal, onCreateRecipe, onNavigateToRecipe, 
 
   // FilterSheet sections (ADR-014). "Source" lives here now (was an inline
   // ChipRow pre-[1.5.93] — moved into the sheet to reduce header saturation).
+  // "Collections" moved here in [1.5.189] — was a separate carousel header rail
+  // until owner directive: collapse curated facets into the master FilterSheet.
   // Cocina intentionally omits "Cuisine" — vocabulario cerrado del usuario.
   const filterSections: FilterSection[] = useMemo(() => [
     {
@@ -134,6 +135,19 @@ export default function Cocina({ onAddMeal, onCreateRecipe, onNavigateToRecipe, 
         { id: 'imported', label: t.filters.source.imported },
         { id: 'cooked', label: t.filters.source.cooked },
       ],
+    },
+    {
+      id: 'collections',
+      title: (t.filters.sections as Record<string, string>).collections ?? 'Colecciones',
+      mode: 'single',
+      defaultExpanded: true,
+      options: COLLECTIONS.flatMap(col => {
+        const count = scoredRecipes.filter(col.predicate).length;
+        if (count === 0) return [];
+        const key = col.labelKey.split('.').pop() ?? col.id;
+        const label = (t.collections as Record<string, string>)[key] ?? key;
+        return [{ id: col.id, label, emoji: col.emoji, count }];
+      }),
     },
     {
       id: 'diet',
@@ -153,7 +167,7 @@ export default function Cocina({ onAddMeal, onCreateRecipe, onNavigateToRecipe, 
       mode: 'single',
       options: DIFFICULTIES.map(d => ({ id: d, label: t.filters.difficulty[d] })),
     },
-  ], [t]);
+  ], [t, scoredRecipes]);
 
   const activeFilterCount = useMemo(() => countActive(filterValues), [filterValues]);
 
@@ -173,6 +187,14 @@ export default function Cocina({ onAddMeal, onCreateRecipe, onNavigateToRecipe, 
     if (filterValues.source && filterValues.source !== 'all') {
       const v = filterValues.source as string;
       chips.push({ key: `source:${v}`, label: getFilterLabel('source', v), emoji: FACET_EMOJI.source });
+    }
+    // Collection (single)
+    if (filterValues.collections) {
+      const v = filterValues.collections as string;
+      const col = COLLECTIONS.find(c => c.id === v);
+      const key = col?.labelKey.split('.').pop() ?? v;
+      const label = (t.collections as Record<string, string>)[key] ?? v;
+      chips.push({ key: `collections:${v}`, label, emoji: col?.emoji ?? FACET_EMOJI.collections });
     }
     // Diet (multi)
     for (const d of (filterValues.diet as string[] | undefined) ?? []) {
@@ -208,11 +230,9 @@ export default function Cocina({ onAddMeal, onCreateRecipe, onNavigateToRecipe, 
     setFilterValues(next);
   };
 
-  // Combined filters: slot (primary) + carousel collection + sheet facets +
-  // search + sort. Source axis lives in `filterValues.source` (moved out of
-  // the legacy chip-row); CollectionsCarousel still owns the curated tile
-  // selections (verified/quick/highProtein/vegan/lowCarb/batch/cooked) via
-  // `activeCollection`.
+  // Combined filters: slot (primary) + sheet facets + search + sort.
+  // Source axis lives in `filterValues.source`; collections facet lives in
+  // `filterValues.collections` (was a standalone carousel until [1.5.189]).
   const filteredRecipes = useMemo(() => {
     let list = scoredRecipes;
     if (activeMealType !== 'all') {
@@ -222,10 +242,12 @@ export default function Cocina({ onAddMeal, onCreateRecipe, onNavigateToRecipe, 
       const q = searchQuery.toLowerCase();
       list = list.filter(r => r.title?.toLowerCase().includes(q) || r.tag?.toLowerCase().includes(q) || r.description?.toLowerCase().includes(q));
     }
-    // Curated collection (carousel) — verified, quick, highProtein, vegan,
-    // lowCarb, batch, cooked. ADR-013 dedup: these live only in COLLECTIONS.
-    if (activeCollection !== 'all') {
-      const registryCol = COLLECTIONS.find(c => c.id === activeCollection);
+    // Curated collection (now driven by FilterSheet section `collections`).
+    // [1.5.189] removed the standalone CollectionsCarousel — the same
+    // verified/quick/highProtein/vegan/lowCarb/batch/cooked filters live
+    // inside the master filter sheet.
+    if (filterValues.collections) {
+      const registryCol = COLLECTIONS.find(c => c.id === filterValues.collections);
       if (registryCol) list = list.filter(registryCol.predicate);
     }
     // Advanced facets (FilterSheet — ADR-014). Source predicate evaluated via
@@ -251,7 +273,7 @@ export default function Cocina({ onAddMeal, onCreateRecipe, onNavigateToRecipe, 
     else if (sortMode === 'mostCooked') sorted.sort((a, b) => (b.cookedAt?.length ?? 0) - (a.cookedAt?.length ?? 0));
     else if (sortMode === 'caloriesAsc') sorted.sort((a, b) => (a.cal ?? 9999) - (b.cal ?? 9999));
     return sorted;
-  }, [scoredRecipes, activeMealType, searchQuery, activeCollection, activeFilterCount, filterValues, sortMode]);
+  }, [scoredRecipes, activeMealType, searchQuery, activeFilterCount, filterValues, sortMode]);
 
   const handleDeleteRecipe = (e: React.MouseEvent, id: number | string) => {
     e.stopPropagation();
@@ -371,19 +393,10 @@ export default function Cocina({ onAddMeal, onCreateRecipe, onNavigateToRecipe, 
               ariaLabel={t.discovery.catAll}
             />
 
-            {/* Curated collections rail (R3) — editorial tiles with counts.
-                Only surfaced in the idle state: no carousel selection, no
-                search, no advanced filters. The rail competes for vertical
-                space with the FilterSheet pill state, so we hide it the
-                moment the user signals an explicit query intent. */}
-            {activeCollection === 'all' && !searchQuery.trim() && activeFilterCount === 0 && (
-              <CollectionsCarousel
-                recipes={scoredRecipes}
-                activeCollection={activeCollection}
-                onSelect={setActiveCollection}
-                className="mt-1"
-              />
-            )}
+            {/* Curated collections moved into the master FilterSheet in [1.5.189]
+                (section `collections`). The standalone carousel was deleted to
+                avoid duplicating the same verified/quick/highProtein/vegan/
+                lowCarb/batch/cooked facets in two surfaces. */}
 
             {/* Recipe count label (if not Pro) */}
             {!isPro && (
@@ -400,9 +413,9 @@ export default function Cocina({ onAddMeal, onCreateRecipe, onNavigateToRecipe, 
                     {t.recipes.clearSearch}
                   </button>
                 </EmptyState>
-              ) : activeCollection !== 'all' || activeFilterCount > 0 ? (
+              ) : activeFilterCount > 0 ? (
                 <EmptyState icon="📂" description={t.recipes.emptyFilterHint}>
-                  <Button type="button" onClick={() => { setActiveCollection('all'); setFilterValues({}); }} variant="outline" size="lg">
+                  <Button type="button" onClick={() => setFilterValues({})} variant="outline" size="lg">
                     {t.recipes.all}
                   </Button>
                 </EmptyState>
