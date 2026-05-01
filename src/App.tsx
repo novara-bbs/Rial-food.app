@@ -5,6 +5,7 @@ import BottomNav from './components/BottomNav';
 import CreateModal from './components/CreateModal';
 import GlobalHeader from './components/GlobalHeader';
 import ErrorBoundary from './components/ErrorBoundary';
+import FeatureErrorBoundary from './components/ui/FeatureErrorBoundary';
 import { Sparkles, WifiOff } from 'lucide-react';
 import { useTheme } from './contexts/ThemeContext';
 import { useNavigation } from './contexts/NavigationContext';
@@ -146,6 +147,11 @@ export default function App() {
     };
   }, [dailyMacros, checkInStatus, toleranceLogs, savedRecipes, userProfile, dictionary, realFeelLogs, nutritionHistory, weightHistory, dailyLog]);
 
+  const handleErrorReset = () => {
+    setIsCreateModalOpen(false);
+    navigateTo('home');
+  };
+
   const handleCreateAction = (action: string) => {
     setIsCreateModalOpen(false);
     if (action === 'log-meal') { setTargetPlanDay(null); navigateTo('add-meal'); }
@@ -159,10 +165,10 @@ export default function App() {
 
   const renderScreen = () => {
     switch (currentScreen) {
-      case 'home': return <Home onNavigateToRecipe={navigateToRecipe} onAddMeal={() => navigateTo('add-meal')} onNavigateToPlan={() => navigateTo('cocina')} onNavigateToProgress={() => navigateTo('progress')} dailyMacros={dailyMacros} setDailyMacros={setDailyMacros} onLogMealNow={handleLogMealNow} mealPlan={mealPlan} hydration={hydration} setHydration={setHydration} movement={movement} setMovement={setMovement} userProfile={userProfile} realFeelLogs={realFeelLogs} onRealFeelLog={handleRealFeelLog} dailyLog={dailyLog} setDailyLog={setDailyLog} nutritionHistory={nutritionHistory} />;
-      case 'cocina': return <Cocina onAddMeal={(dayIndex) => { setTargetPlanDay(dayIndex); navigateTo('add-meal'); }} onCreateRecipe={() => navigateTo('create-recipe')} onNavigateToRecipe={navigateToRecipe} savedRecipes={savedRecipes} setSavedRecipes={setSavedRecipes} mealPlan={mealPlan} setMealPlan={setMealPlan} shoppingList={shoppingList} setShoppingList={setShoppingList} onLogMeal={handleLogMeal} isPro={isPro} onImportUrl={() => navigateTo('import-url')} />;
-      case 'explore': return <Explore onNavigateToRecipe={navigateToRecipe} savedRecipes={savedRecipes} onSaveRecipe={handleSaveRecipe} communityPosts={communityPosts} onAddComment={handleAddComment} />;
-      case 'more': return <More navigateTo={navigateTo} userProfile={userProfile} realFeelLogs={realFeelLogs} nutritionHistory={nutritionHistory} dailyLogHasEntries={dailyLog.length > 0} />;
+      case 'home': return <FeatureErrorBoundary featureName={t.nav.today} onReset={handleErrorReset}><Home onNavigateToRecipe={navigateToRecipe} onAddMeal={() => navigateTo('add-meal')} onNavigateToPlan={() => navigateTo('cocina')} onNavigateToProgress={() => navigateTo('progress')} dailyMacros={dailyMacros} setDailyMacros={setDailyMacros} onLogMealNow={handleLogMealNow} mealPlan={mealPlan} hydration={hydration} setHydration={setHydration} movement={movement} setMovement={setMovement} userProfile={userProfile} realFeelLogs={realFeelLogs} onRealFeelLog={handleRealFeelLog} dailyLog={dailyLog} setDailyLog={setDailyLog} nutritionHistory={nutritionHistory} /></FeatureErrorBoundary>;
+      case 'cocina': return <FeatureErrorBoundary featureName={t.nav.kitchen} onReset={handleErrorReset}><Cocina onAddMeal={(dayIndex) => { setTargetPlanDay(dayIndex); navigateTo('add-meal'); }} onCreateRecipe={() => navigateTo('create-recipe')} onNavigateToRecipe={navigateToRecipe} savedRecipes={savedRecipes} setSavedRecipes={setSavedRecipes} mealPlan={mealPlan} setMealPlan={setMealPlan} shoppingList={shoppingList} setShoppingList={setShoppingList} onLogMeal={handleLogMeal} isPro={isPro} onImportUrl={() => navigateTo('import-url')} /></FeatureErrorBoundary>;
+      case 'explore': return <FeatureErrorBoundary featureName={t.nav.explore} onReset={handleErrorReset}><Explore onNavigateToRecipe={navigateToRecipe} savedRecipes={savedRecipes} onSaveRecipe={handleSaveRecipe} communityPosts={communityPosts} onAddComment={handleAddComment} /></FeatureErrorBoundary>;
+      case 'more': return <FeatureErrorBoundary featureName={t.nav.more} onReset={handleErrorReset}><More navigateTo={navigateTo} userProfile={userProfile} realFeelLogs={realFeelLogs} nutritionHistory={nutritionHistory} dailyLogHasEntries={dailyLog.length > 0} /></FeatureErrorBoundary>;
       case 'recipe-detail': return <RecipeDetail recipe={selectedRecipe} onBack={() => navigateTo(previousScreen)} onSaveRecipe={handleSaveRecipe} isSaved={savedRecipes.some((r) => r.id === selectedRecipe?.id)} onAddToPlan={handleAddToPlan} onLogMealNow={handleLogMealNow} onAddToShoppingList={(items) => setShoppingList((prev) => [...prev, ...items])} dictionary={dictionary} userProfile={userProfile} />;
       case 'add-meal': return <AddMeal onBack={() => { setTargetPlanDay(null); navigateTo(previousScreen); }} onLogMeal={handleLogMeal} dailyMacros={dailyMacros} savedRecipes={savedRecipes} dictionary={dictionary} />;
       case 'add-tolerance': return <AddTolerance onBack={() => navigateTo(previousScreen)} onAddLog={handleAddToleranceLog} />;
@@ -274,12 +280,7 @@ export default function App() {
             hasUnreadNotifications={hasUnreadNotifications}
           />
           <main ref={mainRef} className="flex-1 overflow-y-auto pb-24 md:pb-8 pt-4 hide-scrollbar">
-            <ErrorBoundary
-              onReset={() => {
-                setIsCreateModalOpen(false);
-                navigateTo('home');
-              }}
-            >
+            <ErrorBoundary onReset={handleErrorReset}>
               <Suspense fallback={<LoadingSkeleton />}>
                 <div className="animate-in fade-in slide-in-from-bottom-4 duration-500">
                   {renderScreen()}

@@ -1,5 +1,16 @@
 # RIAL App - Changelog
 
+## [1.5.176] - 2026-05-01
+
+### refactor(mvp): seed image migration + FeatureErrorBoundary adoption
+
+MVP cleanup batch 1 — data integrity + crash isolation:
+
+- **Seed recipe migration** (`src/features/food/data/seed-recipes.ts`) — All 46 seed entries renamed from legacy `img:` to canonical `image:` field. Removes the `?? recipe.img` runtime workaround in `MealGapSuggestion.tsx`, leaving `recipe.image` as the single source of truth for all recipe images. `Recipe.img?: string` deprecated field kept in the type for existing localStorage backward compat.
+- **FeatureErrorBoundary wiring** (`src/App.tsx`) — The 4 main tab screens (home, cocina, explore, more) now have their own `<FeatureErrorBoundary>` boundary inside `renderScreen()`. A crash in one tab no longer kills the entire app — the user can switch tabs from the Sidebar or BottomNav and recover. `handleErrorReset` extracted as a named callback used by both the feature-level and root boundaries.
+- **Test updated** — `MealGapSuggestion.test.tsx` legacy-img fallback test replaced with a canonical `image:` field test reflecting the post-migration contract.
+- TS: 0 errors · Tests: 1464/1464 · Bundle: 898.7 KB raw / 282.9 KB gzip.
+
 ## [1.5.174] - 2026-05-01
 
 ### refactor(home): StatusChip primitive + chip consistency + carousel/overflow polish
