@@ -270,6 +270,7 @@ export default function CookMode({
               src={step.photoUrl}
               alt={`Step ${current + 1}`}
               className="w-full object-cover max-h-48"
+              onError={(e) => { (e.currentTarget as HTMLImageElement).style.display = 'none'; }}
             />
           </button>
         )}

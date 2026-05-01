@@ -60,6 +60,7 @@ export default function CreateRecipeStep3Instructions({
                     src={s.photoUrl}
                     alt={t.createRecipe.stepPhotoAlt.replace('{n}', String(idx + 1))}
                     className="w-full h-full object-cover"
+                    onError={(e) => { (e.currentTarget as HTMLImageElement).style.display = 'none'; }}
                   />
                   <button
                     type="button"

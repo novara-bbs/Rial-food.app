@@ -179,13 +179,12 @@ export default function RecipeOverviewTab({
           {recipeComments.map((comment) => (
             <div key={comment.id} className="bg-surface-container-low p-3 rounded-sm border border-outline-variant/10 mb-2">
               <div className="flex items-center gap-2 mb-1">
-                {comment.authorImg ? (
-                  <img src={comment.authorImg} alt={comment.author} className="w-5 h-5 rounded-full object-cover" referrerPolicy="no-referrer" />
-                ) : (
-                  <div className="w-5 h-5 rounded-full bg-surface-container-highest flex items-center justify-center text-micro font-bold text-tertiary">
-                    {comment.author?.charAt(0)}
-                  </div>
-                )}
+                <div className="relative w-5 h-5 rounded-full bg-surface-container-highest flex items-center justify-center text-micro font-bold text-tertiary overflow-hidden shrink-0">
+                  {comment.author?.charAt(0)}
+                  {comment.authorImg && (
+                    <img src={comment.authorImg} alt={comment.author} className="absolute inset-0 w-full h-full object-cover" referrerPolicy="no-referrer" onError={(e) => { (e.currentTarget as HTMLImageElement).style.display = 'none'; }} />
+                  )}
+                </div>
                 <span className="font-headline font-semibold text-micro uppercase text-tertiary">{comment.author}</span>
               </div>
               <p className="text-caption text-on-surface-variant leading-relaxed">"{comment.text}"</p>

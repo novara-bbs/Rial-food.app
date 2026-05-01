@@ -58,6 +58,7 @@ export default function VideoSection({ videoUrl, posterFallback }: VideoSectionP
             alt=""
             className="absolute inset-0 w-full h-full object-cover"
             referrerPolicy="no-referrer"
+            onError={(e) => { (e.currentTarget as HTMLImageElement).style.display = 'none'; }}
           />
         ) : null}
         <div className="absolute inset-0 bg-black/30 flex items-center justify-center">

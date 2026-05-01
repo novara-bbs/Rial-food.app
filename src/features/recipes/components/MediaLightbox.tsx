@@ -99,6 +99,7 @@ export default function MediaLightbox({
                 className="max-w-full max-h-full object-contain select-none"
                 draggable={false}
                 referrerPolicy="no-referrer"
+                onError={(e) => { (e.currentTarget as HTMLImageElement).style.display = 'none'; }}
               />
             </div>
           ))}

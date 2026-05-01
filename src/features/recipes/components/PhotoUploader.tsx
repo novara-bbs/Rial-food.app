@@ -134,6 +134,7 @@ export default function PhotoUploader({
               className="w-full h-full object-cover"
               loading="lazy"
               referrerPolicy="no-referrer"
+              onError={(e) => { (e.currentTarget as HTMLImageElement).style.display = 'none'; }}
             />
             {i === 0 && (
               <span className="absolute bottom-1 left-1 bg-neutral-950/70 text-white text-micro font-bold uppercase tracking-widest px-1.5 py-0.5 rounded-sm">

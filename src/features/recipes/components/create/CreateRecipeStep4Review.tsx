@@ -149,7 +149,7 @@ export default function CreateRecipeStep4Review({
                 <div className="flex-1 min-w-0">
                   {s.photoUrl && (
                     <div className="w-full aspect-video rounded-sm overflow-hidden mb-1.5 bg-surface-container-highest">
-                      <img src={s.photoUrl} alt={t.createRecipe.stepPhotoAlt.replace('{n}', String(idx + 1))} className="w-full h-full object-cover" />
+                      <img src={s.photoUrl} alt={t.createRecipe.stepPhotoAlt.replace('{n}', String(idx + 1))} className="w-full h-full object-cover" onError={(e) => { (e.currentTarget as HTMLImageElement).style.display = 'none'; }} />
                     </div>
                   )}
                   <p className="text-sm text-on-surface-variant line-clamp-2">{s.text}</p>

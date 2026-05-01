@@ -1,5 +1,18 @@
 # RIAL App - Changelog
 
+## [1.5.178] - 2026-05-01
+
+### fix(img-onerror): batch 2 — recipes components (10 files)
+
+img-onerror sweep batch 2: 10 recipe files migrated, baseline shrinks 28 → 18.
+
+- **AuthorAttributionCard** (×2 variants) — avatar uses overlay pattern: User icon always renders, img overlays absolutely + hides on onError.
+- **CookMode, CreateRecipeStep3Instructions, CreateRecipeStep4Review** — step photo gets `onError` inline.
+- **HeroGallery** (photo slide + video poster) — `onError` added; photo slide reorders attributes to place `onError` before `alt={total > 1 ? ...}` (convention test regex stops at first `>` char).
+- **MediaLightbox, PhotoUploader, VideoSection** — `onError` inline.
+- **RecipeOverviewTab** — comment author avatar uses overlay pattern (initial letter always renders, img overlays).
+- **RecipeDetail** — creator avatar gets `onError` inline; related-recipe thumbnail simplified from `r.img || r.image` to `r.image` (seeds migrated in [1.5.176]) + `onError`.
+
 ## [1.5.177] - 2026-05-01
 
 ### fix(img-onerror): batch 1 — food/home/planner/profile avatars + product image

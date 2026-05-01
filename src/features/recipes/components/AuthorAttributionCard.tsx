@@ -70,16 +70,10 @@ export default function AuthorAttributionCard({
     return (
       <SectionCard padding="sm" spacing="none" className={`flex items-center gap-3 ${className}`}>
         {/* Avatar */}
-        <div className="w-12 h-12 rounded-full overflow-hidden bg-surface-container flex-shrink-0 flex items-center justify-center border border-outline-variant/20">
-          {avatarUrl ? (
-            <img
-              src={avatarUrl}
-              alt={name ?? ''}
-              className="w-full h-full object-cover"
-              referrerPolicy="no-referrer"
-            />
-          ) : (
-            <User className="w-6 h-6 text-on-surface-variant" />
+        <div className="relative w-12 h-12 rounded-full overflow-hidden bg-surface-container flex-shrink-0 flex items-center justify-center border border-outline-variant/20">
+          <User className="w-6 h-6 text-on-surface-variant" />
+          {avatarUrl && (
+            <img src={avatarUrl} alt={name ?? ''} className="absolute inset-0 w-full h-full object-cover" referrerPolicy="no-referrer" onError={(e) => { (e.currentTarget as HTMLImageElement).style.display = 'none'; }} />
           )}
         </div>
 
@@ -103,11 +97,10 @@ export default function AuthorAttributionCard({
   if (variant === 'creator') {
     return (
       <SectionCard padding="sm" spacing="none" className={`flex items-center gap-3 ${className}`}>
-        <div className="w-12 h-12 rounded-full overflow-hidden bg-surface-container flex-shrink-0 flex items-center justify-center border border-outline-variant/20">
-          {avatarUrl ? (
-            <img src={avatarUrl} alt={name ?? ''} className="w-full h-full object-cover" referrerPolicy="no-referrer" />
-          ) : (
-            <User className="w-6 h-6 text-on-surface-variant" />
+        <div className="relative w-12 h-12 rounded-full overflow-hidden bg-surface-container flex-shrink-0 flex items-center justify-center border border-outline-variant/20">
+          <User className="w-6 h-6 text-on-surface-variant" />
+          {avatarUrl && (
+            <img src={avatarUrl} alt={name ?? ''} className="absolute inset-0 w-full h-full object-cover" referrerPolicy="no-referrer" onError={(e) => { (e.currentTarget as HTMLImageElement).style.display = 'none'; }} />
           )}
         </div>
         <div className="flex-1 min-w-0">

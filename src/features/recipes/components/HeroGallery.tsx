@@ -135,6 +135,7 @@ export default function HeroGallery({ items, alt, onPhotoTap, className }: HeroG
         >
           <img
             src={item.src}
+            onError={(e) => { (e.currentTarget as HTMLImageElement).style.display = 'none'; }}
             alt={total > 1 ? `${alt} ${i + 1}/${total}` : alt}
             loading={i === 0 ? 'eager' : 'lazy'}
             className="w-full h-full object-cover"
@@ -182,6 +183,7 @@ export default function HeroGallery({ items, alt, onPhotoTap, className }: HeroG
             loading={i === 0 ? 'eager' : 'lazy'}
             className="w-full h-full object-cover"
             referrerPolicy="no-referrer"
+            onError={(e) => { (e.currentTarget as HTMLImageElement).style.display = 'none'; }}
           />
         ) : (
           <div className="w-full h-full bg-surface-container-highest" />

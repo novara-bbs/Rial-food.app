@@ -442,7 +442,7 @@ export default function RecipeDetail({ recipe, onBack, onSaveRecipe, isSaved, on
           <div className="px-6 max-w-4xl mx-auto mt-4">
             <div className="flex items-center gap-3 bg-surface-container-low px-4 py-3 rounded-sm border border-outline-variant/20">
               <button type="button" onClick={() => { setSelectedCreatorId(data.publishedBy!); navigateTo('creator-profile'); }} className="flex items-center gap-3 flex-1 min-w-0">
-                <img src={creator.avatar} alt={creator.name} className="w-8 h-8 rounded-full object-cover border border-outline-variant/20" referrerPolicy="no-referrer" />
+                <img src={creator.avatar} alt={creator.name} className="w-8 h-8 rounded-full object-cover border border-outline-variant/20" referrerPolicy="no-referrer" onError={(e) => { (e.currentTarget as HTMLImageElement).style.display = 'none'; }} />
                 <div className="min-w-0">
                   <span className="font-headline font-semibold text-micro text-tertiary uppercase hover:text-primary transition-colors block truncate">@{creator.name}</span>
                   <span className="font-label text-micro text-on-surface-variant tracking-widest uppercase block">{t.recipeDetail.createdBy}</span>
@@ -655,8 +655,8 @@ export default function RecipeDetail({ recipe, onBack, onSaveRecipe, isSaved, on
                     onClick={() => navToRecipe(r)}
                     className="w-full flex items-center gap-3 p-3 bg-surface-container-low rounded-sm border border-outline-variant/20 hover:border-primary/50 transition-colors text-left"
                   >
-                    {(r.img || r.image) && (
-                      <img src={r.img || r.image} alt={r.title} className="w-12 h-12 rounded-sm object-cover shrink-0" referrerPolicy="no-referrer" />
+                    {r.image && (
+                      <img src={r.image} alt={r.title} className="w-12 h-12 rounded-sm object-cover shrink-0" referrerPolicy="no-referrer" onError={(e) => { (e.currentTarget as HTMLImageElement).style.display = 'none'; }} />
                     )}
                     <div className="flex-1 min-w-0">
                       <p className="font-headline font-semibold text-micro text-tertiary uppercase truncate">{r.title}</p>
