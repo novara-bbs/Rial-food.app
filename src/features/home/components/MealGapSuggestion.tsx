@@ -147,7 +147,9 @@ export default function MealGapSuggestion({
                     recipe={{
                       id: recipe.id,
                       title: recipe.title,
-                      image: recipe.image,
+                      // Seeds use legacy `img`; user-saved recipes use canonical `image`.
+                      // Fall back so RecipeCard always sees a populated URL.
+                      image: recipe.image ?? recipe.img,
                       cal: recipe.macros.calories,
                       pro: recipe.macros.protein,
                       tag: recipe.tag,

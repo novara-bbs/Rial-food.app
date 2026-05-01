@@ -192,13 +192,16 @@ export default function Home({
     const today = new Date().getDay();
     const dayIdx = today === 0 ? 6 : today - 1;
     const planned = mealPlan?.[dayIdx] ?? [];
-    const loggedTitles = new Set(dailyLog.map(e => e.title.toLowerCase()));
-    const unloggedPlanned = planned.find((m) => !loggedTitles.has(m.title.toLowerCase()));
+    const loggedTitles = new Set(dailyLog.map(e => (e.title ?? '').toLowerCase()));
+    const unloggedPlanned = planned.find((m) => !loggedTitles.has((m.title ?? '').toLowerCase()));
     if (unloggedPlanned) {
+      // Defensive `?? 0` against malformed planned entries. Some legacy
+      // localStorage shapes lacked the canonical `macros` object — guarding
+      // here keeps the home resilient instead of crashing the render tree.
       return {
         title: unloggedPlanned.title,
-        cal: unloggedPlanned.macros.calories,
-        pro: unloggedPlanned.macros.protein,
+        cal: unloggedPlanned.macros?.calories ?? 0,
+        pro: unloggedPlanned.macros?.protein ?? 0,
         source: 'plan' as const,
         recipe: unloggedPlanned,
       };
@@ -208,16 +211,16 @@ export default function Home({
     const remainingPro = dailyMacros.target.pro - dailyMacros.consumed.pro;
     if (remainingPro > 10 && savedRecipes.length > 0) {
       const sorted = [...savedRecipes].sort((a, b) => {
-        const aPro = a.macros.protein;
-        const bPro = b.macros.protein;
+        const aPro = a.macros?.protein ?? 0;
+        const bPro = b.macros?.protein ?? 0;
         return Math.abs(remainingPro - aPro) - Math.abs(remainingPro - bPro);
       });
       const best = sorted[0];
       if (best) {
         return {
           title: best.title,
-          cal: best.macros.calories,
-          pro: best.macros.protein,
+          cal: best.macros?.calories ?? 0,
+          pro: best.macros?.protein ?? 0,
           source: 'recipe' as const,
           recipe: best,
         };

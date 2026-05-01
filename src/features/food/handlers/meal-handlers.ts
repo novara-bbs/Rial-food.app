@@ -1,4 +1,6 @@
 import { toast } from 'sonner';
+import * as Sentry from '@sentry/react';
+import { logger } from '../../../lib/logger';
 import type { LoggableMeal } from '../../../types/food';
 import type { DailyArchive } from '../../../hooks/useDailyReset';
 import type { Translations } from '../../../i18n';
@@ -200,46 +202,80 @@ export function createHandleRepeatYesterday(deps: {
 
 // ─── createHandleLogMealNow ───────────────────────────────────────────────────
 
+/**
+ * Defensive log handler for "log a planned/recommended meal now" action.
+ *
+ * [1.5.175] hardened after a planned-meal click could crash the render tree
+ * (corrupt `recipeIngredients` entries, missing macros) and leave the user
+ * stuck behind the global ErrorBoundary. The body is now wrapped in a
+ * try/catch that logs to Sentry, shows a toast, and bails out without
+ * mutating state — the home stays consistent and the user can retry.
+ */
 export function createHandleLogMealNow(deps: Pick<MealHandlerDeps, 'setDailyMacros' | 'setDailyLog' | 'setFoodHistory' | 'navigateTo' | 't'>) {
   return (meal: LoggableMeal, servings: number) => {
-    deps.setDailyMacros((prev: DailyMacros) => ({
-      ...prev,
-      consumed: {
-        cal: prev.consumed.cal + ((meal.cal || meal.macros?.calories || 0) * servings),
-        pro: prev.consumed.pro + ((meal.pro || meal.macros?.protein || 0) * servings),
-        carbs: prev.consumed.carbs + ((meal.carbs || meal.macros?.carbs || 0) * servings),
-        fats: prev.consumed.fats + ((meal.fats || meal.macros?.fats || 0) * servings),
-      },
-    }));
+    try {
+      // ── Pre-condition: meal must be an object. Defensive against null/undefined
+      // payloads that could leak from corrupt mealPlan localStorage.
+      if (meal == null || typeof meal !== 'object') {
+        logger.error('logMealNow: invalid meal payload', { meal });
+        toast.error(deps.t?.errors?.logMealFailed ?? "We couldn't log this meal. Please try again.");
+        return;
+      }
 
-    const ingredientIds: string[] = meal.recipeIngredients?.length
-      ? meal.recipeIngredients.map(ri => String(ri.ingredientId || ri.id))
-      : [String(meal.id || meal.title || Date.now())];
+      const safeServings = Number.isFinite(servings) && servings > 0 ? servings : 1;
+      const cal = Number(meal.cal ?? meal.macros?.calories ?? 0) * safeServings;
+      const pro = Number(meal.pro ?? meal.macros?.protein ?? 0) * safeServings;
+      const carbs = Number(meal.carbs ?? meal.macros?.carbs ?? 0) * safeServings;
+      const fats = Number(meal.fats ?? meal.macros?.fats ?? 0) * safeServings;
 
-    const defaultPortion = deps.t?.mealToasts?.defaultPortion || '1 serving';
-    const entry: DailyLogEntry = {
-      id: Date.now(),
-      title: meal.title || meal.name || deps.t?.mealToasts?.defaultMealName || 'Meal',
-      portionDescription: servings === 1
-        ? (meal.portionDescription || defaultPortion)
-        : `${servings} × ${meal.portionDescription || defaultPortion}`,
-      mealSlot: meal.mealSlot || 'other',
-      time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
-      macros: {
-        cal: (meal.cal || meal.macros?.calories || 0) * servings,
-        pro: (meal.pro || meal.macros?.protein || 0) * servings,
-        carbs: (meal.carbs || meal.macros?.carbs || 0) * servings,
-        fats: (meal.fats || meal.macros?.fats || 0) * servings,
-      },
-      ingredientIds,
-    };
-    deps.setDailyLog((prev: DailyLogEntry[]) => [...prev, entry]);
-    updateFoodHistory(deps.setFoodHistory, meal);
+      // ── Validate computed macros are finite numbers before mutating state.
+      if (![cal, pro, carbs, fats].every(Number.isFinite)) {
+        logger.error('logMealNow: non-finite macros computed', { meal, servings: safeServings });
+        toast.error(deps.t?.errors?.logMealFailed ?? "We couldn't log this meal. Please try again.");
+        return;
+      }
 
-    const portionsMsg = deps.t?.mealToasts?.portionsLogged
-      ?.replace('{servings}', String(servings))
-      .replace('{title}', meal.title || '') || `Logged ${servings}x`;
-    toast.success(portionsMsg);
-    deps.navigateTo('home');
+      const ingredientIds: string[] = Array.isArray(meal.recipeIngredients) && meal.recipeIngredients.length
+        ? meal.recipeIngredients
+            .filter((ri): ri is NonNullable<typeof ri> => ri != null && typeof ri === 'object')
+            .map(ri => String(ri.ingredientId || ri.id || ''))
+            .filter(Boolean)
+        : [String(meal.id || meal.title || Date.now())];
+
+      const defaultPortion = deps.t?.mealToasts?.defaultPortion || '1 serving';
+      const entry: DailyLogEntry = {
+        id: Date.now(),
+        title: meal.title || meal.name || deps.t?.mealToasts?.defaultMealName || 'Meal',
+        portionDescription: safeServings === 1
+          ? (meal.portionDescription || defaultPortion)
+          : `${safeServings} × ${meal.portionDescription || defaultPortion}`,
+        mealSlot: meal.mealSlot || 'other',
+        time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+        macros: { cal, pro, carbs, fats },
+        ingredientIds,
+      };
+
+      deps.setDailyMacros((prev: DailyMacros) => ({
+        ...prev,
+        consumed: {
+          cal: prev.consumed.cal + cal,
+          pro: prev.consumed.pro + pro,
+          carbs: prev.consumed.carbs + carbs,
+          fats: prev.consumed.fats + fats,
+        },
+      }));
+      deps.setDailyLog((prev: DailyLogEntry[]) => [...prev, entry]);
+      updateFoodHistory(deps.setFoodHistory, meal);
+
+      const portionsMsg = deps.t?.mealToasts?.portionsLogged
+        ?.replace('{servings}', String(safeServings))
+        .replace('{title}', meal.title || '') || `Logged ${safeServings}x`;
+      toast.success(portionsMsg);
+      deps.navigateTo('home');
+    } catch (err) {
+      Sentry.captureException(err, { tags: { handler: 'logMealNow' } });
+      logger.error('logMealNow failed', { err: err instanceof Error ? err.message : String(err) });
+      toast.error(deps.t?.errors?.logMealFailed ?? "We couldn't log this meal. Please try again.");
+    }
   };
 }

@@ -274,7 +274,12 @@ export default function App() {
             hasUnreadNotifications={hasUnreadNotifications}
           />
           <main ref={mainRef} className="flex-1 overflow-y-auto pb-24 md:pb-8 pt-4 hide-scrollbar">
-            <ErrorBoundary>
+            <ErrorBoundary
+              onReset={() => {
+                setIsCreateModalOpen(false);
+                navigateTo('home');
+              }}
+            >
               <Suspense fallback={<LoadingSkeleton />}>
                 <div className="animate-in fade-in slide-in-from-bottom-4 duration-500">
                   {renderScreen()}

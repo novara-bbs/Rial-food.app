@@ -2,6 +2,7 @@ import { Calendar, UtensilsCrossed, Trash2, Pencil, Check, X, Minus, Plus } from
 import { useState, useMemo } from 'react';
 import SectionCard from '../../../components/SectionCard';
 import { Heading } from '@/components/ui/Typography';
+import RecipeImage from '@/components/ui/RecipeImage';
 import { useI18n } from '../../../i18n';
 import type { DailyLogEntry } from '../../food/handlers/meal-handlers';
 import type { FoodVariant } from '../../../types/food-family';
@@ -22,6 +23,7 @@ type PlannedMeal = Recipe & {
 import ContextualScoreChip from '../../food/components/ContextualScoreChip';
 import { normalizeGoal } from '../../food/utils/contextual-score';
 import { variantFromLogEntry } from '../../food/utils/variant-from-log';
+import { safeSumMacros } from '../utils/safe-macros';
 
 interface TodaysMealsProps {
   dailyLog: DailyLogEntry[];
@@ -61,14 +63,16 @@ export default function TodaysMeals({
   const confirmEdit = () => {
     if (!editingEntry || !setDailyLog || !setDailyMacros) return;
     const original = editingEntry;
-    const origGrams = original.grams ?? 100;
-    const factor = editGrams / origGrams;
+    const origGrams = original.grams && original.grams > 0 ? original.grams : 100;
+    const rawFactor = editGrams / origGrams;
+    const factor = Number.isFinite(rawFactor) && rawFactor > 0 ? rawFactor : 1;
 
+    const m = original.macros ?? { cal: 0, pro: 0, carbs: 0, fats: 0 };
     const newMacros = {
-      cal: Math.round(original.macros.cal * factor),
-      pro: +(original.macros.pro * factor).toFixed(1),
-      carbs: +(original.macros.carbs * factor).toFixed(1),
-      fats: +(original.macros.fats * factor).toFixed(1),
+      cal: Math.round((m.cal ?? 0) * factor),
+      pro: +((m.pro ?? 0) * factor).toFixed(1),
+      carbs: +((m.carbs ?? 0) * factor).toFixed(1),
+      fats: +((m.fats ?? 0) * factor).toFixed(1),
     };
 
     setDailyLog((prev: DailyLogEntry[]) =>
@@ -234,16 +238,21 @@ export default function TodaysMeals({
               );
             })}
           </SectionCard>
-          {/* Diary totals */}
-          <div className="flex items-center justify-between bg-surface-container-highest/50 rounded-sm px-4 py-2.5">
-            <span className="text-micro font-label font-bold uppercase tracking-widest text-on-surface-variant">{t.home.totalLogged}</span>
-            <div className="flex items-center gap-3 text-micro font-headline font-bold uppercase tracking-wider">
-              <span className="text-primary">{dailyLog.reduce((s, e) => s + e.macros.cal, 0)} kcal</span>
-              <span className="text-macro-protein">{dailyLog.reduce((s, e) => s + e.macros.pro, 0).toFixed(0)}g P</span>
-              <span className="text-macro-carbs">{dailyLog.reduce((s, e) => s + e.macros.carbs, 0).toFixed(0)}g C</span>
-              <span className="text-macro-fats">{dailyLog.reduce((s, e) => s + e.macros.fats, 0).toFixed(0)}g F</span>
-            </div>
-          </div>
+          {/* Diary totals — defensive sum guards against malformed entries. */}
+          {(() => {
+            const totals = safeSumMacros(dailyLog);
+            return (
+              <div className="flex items-center justify-between bg-surface-container-highest/50 rounded-sm px-4 py-2.5">
+                <span className="text-micro font-label font-bold uppercase tracking-widest text-on-surface-variant">{t.home.totalLogged}</span>
+                <div className="flex items-center gap-3 text-micro font-headline font-bold uppercase tracking-wider">
+                  <span className="text-primary">{Math.round(totals.cal)} kcal</span>
+                  <span className="text-macro-protein">{totals.pro.toFixed(0)}g P</span>
+                  <span className="text-macro-carbs">{totals.carbs.toFixed(0)}g C</span>
+                  <span className="text-macro-fats">{totals.fats.toFixed(0)}g F</span>
+                </div>
+              </div>
+            );
+          })()}
         </>
       )}
 
@@ -277,12 +286,13 @@ export default function TodaysMeals({
                   aria-label={`${t.postCard.viewRecipe}: ${meal.title}`}
                   className="flex items-center gap-3 flex-1 min-w-0 text-left rounded-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/50 disabled:cursor-default"
                 >
-                  <div className="w-11 h-11 rounded-sm bg-surface-container-highest overflow-hidden shrink-0 flex items-center justify-center">
-                    {imgSrc
-                      ? <img src={imgSrc} alt={meal.title} className="w-full h-full object-cover" referrerPolicy="no-referrer" />
-                      : <span className="text-xl" aria-hidden="true">🍽️</span>
-                    }
-                  </div>
+                  <RecipeImage
+                    src={imgSrc}
+                    alt={meal.title}
+                    variant="thumbnail"
+                    fallbackEmoji="🍽️"
+                    className="w-11 h-11 rounded-sm shrink-0"
+                  />
                   <div className="flex-1 min-w-0">
                     <span className="text-micro font-semibold uppercase tracking-wider bg-primary/10 text-primary px-1.5 py-0.5 rounded inline-block mb-0.5">{meal.type || meal.time}</span>
                     <Heading level="h3" className="truncate text-sm">{meal.title}</Heading>

@@ -24,11 +24,15 @@ export default function NutritionHero({ dailyMacros, mode = 'advanced', exercise
     );
   }
 
+  // Guard divisions when target is 0 (pre-onboarding, partial data) — avoids
+  // `Infinity%` rendering. Negative consumed clamps to 0.
+  const pct = (consumed: number, target: number) =>
+    target > 0 ? Math.round((Math.max(0, consumed) / target) * 100) : 0;
   const macroProgress = {
-    cal: Math.round((dailyMacros.consumed.cal / dailyMacros.target.cal) * 100),
-    pro: Math.round((dailyMacros.consumed.pro / dailyMacros.target.pro) * 100),
-    carbs: Math.round((dailyMacros.consumed.carbs / dailyMacros.target.carbs) * 100),
-    fats: Math.round((dailyMacros.consumed.fats / dailyMacros.target.fats) * 100),
+    cal: pct(dailyMacros.consumed.cal, dailyMacros.target.cal),
+    pro: pct(dailyMacros.consumed.pro, dailyMacros.target.pro),
+    carbs: pct(dailyMacros.consumed.carbs, dailyMacros.target.carbs),
+    fats: pct(dailyMacros.consumed.fats, dailyMacros.target.fats),
   };
 
   const macroItems = [

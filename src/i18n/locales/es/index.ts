@@ -11,6 +11,7 @@ import wellness from './wellness';
 import profile from './profile';
 import settings from './settings';
 import onboarding from './onboarding';
+import errors from './errors';
 
 const es = {
   ...common,
@@ -24,6 +25,7 @@ const es = {
   ...profile,
   ...settings,
   ...onboarding,
+  ...errors,
 };
 
 // Deep-string type so EN can use looser literal types per key.

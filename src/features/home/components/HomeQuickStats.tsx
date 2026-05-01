@@ -30,15 +30,18 @@ export default function HomeQuickStats({
 
   if (mode === 'simple') return null;
 
-  const hasWeight = weightDelta && Number.isFinite(weightDelta.value);
-  const hasActivity = activityToday && activityToday.minutes > 0;
+  // Narrow optional shapes via destructuring — avoids non-null assertions.
+  const weight = weightDelta && Number.isFinite(weightDelta.value) ? weightDelta : null;
+  const activity = activityToday && activityToday.minutes > 0 ? activityToday : null;
+  const hasWeight = weight !== null;
+  const hasActivity = activity !== null;
   const hasInsights = insightCount > 0;
 
   if (!hasWeight && !hasActivity && !hasInsights) return null;
 
-  const WeightIcon = hasWeight && weightDelta!.value >= 0 ? TrendingUp : TrendingDown;
-  const signed = hasWeight
-    ? `${weightDelta!.value > 0 ? '+' : ''}${weightDelta!.value.toFixed(1)} ${weightDelta!.unit}`
+  const WeightIcon = weight && weight.value >= 0 ? TrendingUp : TrendingDown;
+  const signed = weight
+    ? `${weight.value > 0 ? '+' : ''}${weight.value.toFixed(1)} ${weight.unit}`
     : '';
 
   return (
@@ -47,7 +50,7 @@ export default function HomeQuickStats({
       data-testid="home-quick-stats"
       className="flex flex-nowrap gap-2 overflow-x-auto -mx-6 px-6 snap-x scrollbar-none"
     >
-      {hasWeight && (
+      {weight && (
         <StatusChip
           tone="neutral"
           icon={WeightIcon}
@@ -57,15 +60,15 @@ export default function HomeQuickStats({
           {signed}
         </StatusChip>
       )}
-      {hasActivity && (
+      {activity && (
         <StatusChip
           tone="neutral"
           icon={Activity}
           onClick={() => onNavigate('activity')}
-          ariaLabel={`${t.home.quickActivity}: ${activityToday!.minutes} min`}
+          ariaLabel={`${t.home.quickActivity}: ${activity.minutes} min`}
         >
-          {activityToday!.minutes} min
-          {activityToday!.isTrainingDay && ` · ${t.home.quickTraining}`}
+          {activity.minutes} min
+          {activity.isTrainingDay && ` · ${t.home.quickTraining}`}
         </StatusChip>
       )}
       {hasInsights && (

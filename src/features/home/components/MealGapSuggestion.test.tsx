@@ -134,6 +134,33 @@ describe('MealGapSuggestion — recipes block (Sprint 50)', () => {
     expect(screen.getByRole('button', { name: /chicken breast/i })).toBeTruthy();
   });
 
+  it('falls back to legacy `img` field when canonical `image` is missing [1.5.175]', () => {
+    // Seed recipes use `img:`; without the fallback the RecipeCard would
+    // render the ChefHat placeholder. This test locks the runtime fallback
+    // wired in MealGapSuggestion: `image: recipe.image ?? recipe.img`.
+    const seedShape = {
+      ...proteinRecipe,
+      image: undefined as unknown as string,
+      img: 'https://cdn.example/legacy-pollo.jpg',
+    } as Recipe;
+    renderWithProviders(
+      <MealGapSuggestion
+        dailyMacros={dailyMacrosWithProteinDeficit}
+        mergedVariants={[chickenVariant]}
+        savedRecipes={[seedShape]}
+        mealPlanToday={[]}
+        dailyLog={[]}
+        onLogFood={vi.fn()}
+        onNavigateToRecipe={vi.fn()}
+      />,
+    );
+    // RecipeImage renders an <img> when src is populated; the fallback would
+    // render a <svg> (ChefHat) instead. Confirm an <img> is present with the
+    // legacy URL.
+    const img = screen.getByRole('img', { name: /pollo bowl con quinoa/i });
+    expect(img.getAttribute('src')).toBe('https://cdn.example/legacy-pollo.jpg');
+  });
+
   it('renders nothing when no deficit and no suggestions', () => {
     const balanced: ConsumedTarget = {
       consumed: { cal: 2000, pro: 130, carbs: 240, fats: 65 },

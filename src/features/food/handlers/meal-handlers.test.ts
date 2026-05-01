@@ -1,9 +1,10 @@
 /**
  * Tests for meal handler factories.
- * Covers: createHandleLogMeal (daily log + plan log paths), createHandleRepeatYesterday
+ * Covers: createHandleLogMeal, createHandleLogMealNow (defensive), createHandleRepeatYesterday
  */
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { createHandleLogMeal, createHandleRepeatYesterday } from './meal-handlers';
+import { toast } from 'sonner';
+import { createHandleLogMeal, createHandleLogMealNow, createHandleRepeatYesterday } from './meal-handlers';
 import type { Translations } from '../../../i18n';
 import type { DailyArchive } from '../../../hooks/useDailyReset';
 
@@ -231,3 +232,80 @@ describe('createHandleRepeatYesterday', () => {
     expect(result.consumed.pro).toBe(52);   // 12 + 40
   });
 });
+
+// ─── createHandleLogMealNow — defensive [1.5.175] ─────────────────────────────
+
+describe('createHandleLogMealNow', () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+  });
+
+  const makeNowDeps = () => ({
+    setDailyMacros: vi.fn(),
+    setDailyLog: vi.fn(),
+    setFoodHistory: vi.fn(),
+    navigateTo: vi.fn(),
+    t: t({
+      mealToasts: { defaultPortion: '1 ración', defaultMealName: 'Comida', portionsLogged: '{servings}× {title}' },
+      errors: { logMealFailed: 'No pudimos registrar' },
+    }),
+  });
+
+  it('logs a valid planned meal: mutates macros + log, navigates home', () => {
+    const deps = makeNowDeps();
+    const handler = createHandleLogMealNow(deps);
+    handler(makeMeal() as any, 1);
+
+    expect(deps.setDailyMacros).toHaveBeenCalledOnce();
+    expect(deps.setDailyLog).toHaveBeenCalledOnce();
+    expect(deps.navigateTo).toHaveBeenCalledWith('home');
+    expect(toast.error).not.toHaveBeenCalled();
+  });
+
+  it('rejects null meal payload (no mutations, toast error)', () => {
+    const deps = makeNowDeps();
+    const handler = createHandleLogMealNow(deps);
+    handler(null as any, 1);
+
+    expect(deps.setDailyMacros).not.toHaveBeenCalled();
+    expect(deps.setDailyLog).not.toHaveBeenCalled();
+    expect(deps.navigateTo).not.toHaveBeenCalled();
+    expect(toast.error).toHaveBeenCalledWith('No pudimos registrar');
+  });
+
+  it('filters null/undefined entries from recipeIngredients', () => {
+    const deps = makeNowDeps();
+    const handler = createHandleLogMealNow(deps);
+    const meal = makeMeal({
+      recipeIngredients: [null, undefined, { ingredientId: 'x' }, { id: 'y' }] as any,
+    });
+    handler(meal as any, 1);
+
+    expect(deps.setDailyLog).toHaveBeenCalledOnce();
+    const updater = (deps.setDailyLog as any).mock.calls[0][0];
+    const result = updater([]);
+    expect(result[0].ingredientIds).toEqual(['x', 'y']);
+  });
+
+  it('clamps invalid servings to 1 (NaN, 0, negative)', () => {
+    const deps = makeNowDeps();
+    const handler = createHandleLogMealNow(deps);
+    handler(makeMeal() as any, 0);
+
+    expect(deps.setDailyMacros).toHaveBeenCalledOnce();
+    const updater = (deps.setDailyMacros as any).mock.calls[0][0];
+    const result = updater({ consumed: { cal: 0, pro: 0, carbs: 0, fats: 0 }, target: { cal: 0, pro: 0, carbs: 0, fats: 0 } });
+    expect(result.consumed.cal).toBe(320);  // 320 × 1 (clamped)
+  });
+
+  it('catches errors and surfaces toast without throwing', () => {
+    const deps = makeNowDeps();
+    deps.setDailyMacros.mockImplementation(() => {
+      throw new Error('boom');
+    });
+    const handler = createHandleLogMealNow(deps);
+    expect(() => handler(makeMeal() as any, 1)).not.toThrow();
+    expect(toast.error).toHaveBeenCalled();
+  });
+});
+

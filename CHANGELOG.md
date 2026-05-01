@@ -1,5 +1,74 @@
 # RIAL App - Changelog
 
+## [1.5.174] - 2026-05-01
+
+### refactor(home): StatusChip primitive + chip consistency + carousel/overflow polish
+
+- New StatusChip primitive (6 token-pure tones, button/span, min-h-11, snap-start) — unifies 4 ad-hoc chip styles in HomeHeader, RealScoreBadge, DayStatusChip, HomeQuickStats.
+- HomeQuickStats: removed hydration chip (dedup with Hydration SectionCard), 3 targets (`progress | activity | insights`), empty-state guard.
+- MealGapSuggestion: recipe carousel peek-mode (`basis-[42%] -mx-6 px-6`), compact macros format, "LOG IT" → ChevronRight icon.
+- TodaysMeals: `<h2>`/`<h3>` → `<Heading>` (ADR-012), emoji 🍽️ fallback, calorie display fix.
+- ActivityRow: hides steps/progress bar when disconnected (0/0 meaningless).
+- QuickActions: wrapped in SectionCard (ADR-001 fix).
+- Convention tests updated for new StatusChip contract.
+
+## [1.5.175] - 2026-05-01
+
+### refactor(home): error UX overhaul + image fix + defensive sweep
+
+Sprint largo de resiliencia tras los dos bugs P0 reportados sobre `[1.5.174]`:
+
+1. **Imágenes de las recetas recomendadas en "What you need today" no se veían** — `MealGapSuggestion.tsx:150` mapeaba `image: recipe.image`, pero las seed recipes en `src/features/food/data/seed-recipes.ts` están sembradas con el campo legacy `img:`. El object construido pasaba `image: undefined` al `RecipeCard`, que caía al placeholder `ChefHat`.
+
+2. **"LOG IT" sobre un plato planificado rompía la pantalla y "Reintentar" quedaba muerto** — `createHandleLogMealNow` no tenía try/catch, accedía a `meal.recipeIngredients?.map(ri => String(ri.ingredientId || ri.id))` que tira `TypeError` si algún `ri` es null/corrupto, y mutaba `dailyLog` en localStorage **antes** de que el render se completara. La entry corrupta quedaba en localStorage; el `ErrorBoundary` solo hacía `setState({ hasError: false })` sin resetear el estado upstream → re-render → mismo crash → loop infinito → usuario atrapado.
+
+**Fixes funcionales (Phase A):**
+
+- **MealGapSuggestion image fallback** — `image: recipe.image ?? recipe.img` para que el constructed object lleve siempre la URL disponible (seeds con `img`, user-saved con `image`).
+- **`<RecipeImage>` primitivo nuevo** (`src/components/ui/RecipeImage.tsx`) — encapsula el patrón src + onError + ChefHat fallback (o emoji opcional). 4 variantes: hero / card / compact / thumbnail. Adoptado en `RecipeCard` y `TodaysMeals` (thumb 11×11 con emoji 🍽️ fallback).
+- **`createHandleLogMealNow` defensiva** (`src/features/food/handlers/meal-handlers.ts`) — body envuelto en try/catch que captura a Sentry, loggea via `lib/logger`, surfacea `toast.error(t.errors.logMealFailed)` y bail-outea sin mutar state. Pre-condición valida que `meal` es objeto. `recipeIngredients` filtra null/undefined antes del map. Macros computadas se validan finitas antes de mutar `setDailyMacros` / `setDailyLog`. Servings inválidos (NaN, 0, negativos) se clampean a 1.
+
+**Error UX moderna (Phase B):**
+
+- **`<ErrorBoundary>` rewrite total** (`src/components/ErrorBoundary.tsx`) — ahora consume i18n vía un wrapper funcional (la clase no puede llamar hooks). Estado nuevo: `{ hasError, error, retryCount, detailsOpen }`. Tres acciones de recovery comparable a Notion / Linear / Stripe Dashboard:
+  - **Reintentar** (soft) — clears flag + retryCount++. Hidden tras 2 fails (cap `MAX_SOFT_RETRIES`); muestra `t.errors.boundary.retryExhausted`.
+  - **Volver al inicio** — invoca `onReset?.()` callback (App.tsx cierra modals + `navigateTo('home')`), luego clears boundary.
+  - **Recargar app** — `window.location.reload()`. Hidden con prop `hideReload` (uso feature-level).
+- Disclosure colapsable "¿Qué pasó?" muestra `error.message` truncado a 200 chars (stack completo va a Sentry vía `withScope`).
+- Acepta `featureName` opcional para mensaje contextual ("Hubo un problema cargando {feature}").
+- **`<FeatureErrorBoundary>` primitivo** (`src/components/ui/FeatureErrorBoundary.tsx`) — wrapper delgado para envolver tabs/screens con `hideReload + compact`. Listo para adopción gradual en Cocina/Recipes/Discovery (out-of-scope de este sprint).
+- **App.tsx wiring** — `<ErrorBoundary onReset={...}>` cablea `setIsCreateModalOpen(false) + navigateTo('home')`.
+- **i18n nuevo namespace `errors.*`** (`src/i18n/locales/{es,en}/errors.ts`) — 9 keys × 2 locales = 18 keys nuevas. `boundary.{title, message, featureMessage, retryAction, goHomeAction, reloadAction, detailsToggle, retryExhausted}` + `logMealFailed`. Symmetry verified: 1998 → 2007 keys.
+
+**Defensive sweep (Phase C):**
+
+- **`safeSumMacros` util** (`src/features/home/utils/safe-macros.ts`) — coerciona NaN/Infinity/undefined a 0. Adoptado en `TodaysMeals.tsx:241-244` que reducía sobre `e.macros.cal/.pro/...` con `.toFixed()` directo sin guards (un solo entry malformado en localStorage crasheaba la diary totals).
+- **TodaysMeals `confirmEdit`** — `original.macros` con guards `?? 0`, factor con guard `Number.isFinite + > 0` (evita NaN/Infinity al editar grams a 0).
+- **HomeQuickStats** — `weightDelta!` y `activityToday!` (non-null assertions) reemplazadas por destructuring tras early-return narrow. Sin `!` en producción.
+- **NutritionHero** — helper `pct(consumed, target)` con guard `target > 0` antes de dividir; renderizaría `Infinity%` si target era 0 (usuario pre-onboarding).
+
+**Tests + verification (Phase D):**
+
+- `ErrorBoundary.test.tsx` (NUEVO, 8 casos): renders children, fallback con 3 botones, hideReload oculta Reload, featureName muestra mensaje contextual, disclosure toggle, onReset callback, retry cap (botón desaparece tras 2 fails), `window.location.reload`. Pin `rial-locale=es` en beforeEach (JSDOM defaultea a en-US).
+- `meal-handlers.test.ts` (+5 casos): `createHandleLogMealNow` con meal null, recipeIngredients corrupta, servings inválidos, throw artificial.
+- `safe-macros.test.ts` (NUEVO, 8 casos): empty/null input, valid sums, NaN/Infinity skip, partial macros, `safeMacroValue`.
+- `RecipeImage.test.tsx` (NUEVO, 4 casos): img renders, fallback ChefHat, transición onError, fallbackEmoji.
+- `MealGapSuggestion.test.tsx` (+1 caso): legacy `img` field se propaga al RecipeCard cuando `image` es undefined.
+- `img-onerror.test.ts` convention test (NUEVO, 2 casos) — locks que ningún archivo NUEVO en `src/features/**` o `src/components/patterns/**` añada `<img src=>` sin `onError`. Baseline allowlist con 33 archivos pre-1.5.175 (recipes/social/wellness — futura migración out-of-scope). Test "stale baseline" garantiza que la lista solo encoge.
+
+**Quality baseline:**
+- TypeScript: 0 errors.
+- Tests: 1436 → 1464 (+28).
+- i18n: 1998 → 2007 keys aligned ES ↔ EN.
+- Lint: 0 errors / 342 warnings (todos pre-existing).
+- Bundle main entry: 893.9 → 898.6 KB raw / 281.6 → 283.2 KB gzip (estimado). Budget 920/290 PASS.
+
+**Out-of-scope (deferred):**
+- Migración total de seeds de `img:` a `image:` (codemod sobre 46 recetas + migration localStorage). El fallback `?? recipe.img` cubre el caso.
+- Feature-level boundaries en Cocina/Recipes/Discovery (FeatureErrorBoundary listo, adopción en sprint siguiente).
+- 33 archivos `<img>` sin `onError` (recipes/social/wellness) — locked en baseline; sprint dedicado tras Home.
+- Sentry feedback widget (botón "Reportar problema") — requiere `@sentry/react` Feedback module, +15 KB bundle.
+
 ## [1.5.173] - 2026-04-30
 
 ### refactor(onboarding): typography normalization + step merge + DoneStep declutter

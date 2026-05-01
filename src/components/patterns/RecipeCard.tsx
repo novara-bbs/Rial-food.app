@@ -1,8 +1,9 @@
 import React from 'react';
-import { Clock, Flame, ChefHat, Share2, Bookmark, Trash2, GitFork } from 'lucide-react';
+import { Clock, Flame, Share2, Bookmark, Trash2, GitFork } from 'lucide-react';
 import { useI18n } from '../../i18n';
 import { CREATORS_MAP } from '../../features/social/data/seed-creators';
 import { cn } from '../../lib/utils';
+import RecipeImage, { type RecipeImageVariant } from '../ui/RecipeImage';
 import type { FoodTag } from '../../types/taxonomy';
 
 export interface RecipeCardRecipe {
@@ -98,24 +99,13 @@ export default function RecipeCard({
     >
       {/* ── IMAGE ZONE ── */}
       <div className={IMAGE_ZONE[variant]}>
-        {imageUrl ? (
-          <img
-            src={imageUrl}
-            alt={recipe.title}
-            className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
-            referrerPolicy="no-referrer"
-          />
-        ) : (
-          <div className="absolute inset-0 bg-surface-container-highest flex items-center justify-center">
-            <ChefHat
-              className={
-                variant === 'hero'
-                  ? 'w-16 h-16 text-on-surface-variant/20'
-                  : 'w-10 h-10 text-on-surface-variant/50'
-              }
-            />
-          </div>
-        )}
+        <RecipeImage
+          src={imageUrl}
+          alt={recipe.title}
+          variant={variant as RecipeImageVariant}
+          className="absolute inset-0"
+          imgClassName="group-hover:scale-105 transition-transform duration-700"
+        />
 
         {/* Multi-photo dots — top center */}
         {recipe.photos && recipe.photos.length >= 2 && variant !== 'compact' && (
