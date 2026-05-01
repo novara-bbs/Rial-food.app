@@ -130,7 +130,7 @@ export default function SettingsNutrition({ dailyMacros, setDailyMacros, userPro
           {dietaryOptions.map((option) => (
             <button type="button" key={option.key}
               onClick={() => toggleDietaryPreference(option.key)}
-              className={`inline-flex items-center min-h-[22px] px-2.5 rounded-full text-pico font-medium normal-case tracking-normal transition-colors border ${
+              className={`inline-flex items-center min-h-7 px-3 py-1 rounded-full text-micro font-medium normal-case tracking-normal transition-colors border ${
                 userProfile?.dietaryPreferences?.includes(option.key)
                   ? 'bg-primary text-on-primary border-primary'
                   : 'bg-surface-container-highest text-on-surface-variant border-outline-variant/30 hover:border-primary/50'
@@ -228,7 +228,7 @@ export default function SettingsNutrition({ dailyMacros, setDailyMacros, userPro
             {allergenOptions.map((opt) => (
               <button type="button" key={opt.key}
                 onClick={() => toggleIntolerance(opt.key)}
-                className={`inline-flex items-center min-h-[22px] px-2.5 rounded-full text-pico font-medium normal-case tracking-normal transition-colors border ${
+                className={`inline-flex items-center min-h-7 px-3 py-1 rounded-full text-micro font-medium normal-case tracking-normal transition-colors border ${
                   (userProfile?.intolerances || []).includes(opt.key)
                     ? 'bg-error text-white border-error'
                     : 'bg-surface-container-highest text-on-surface-variant border-outline-variant/30 hover:border-error/50'

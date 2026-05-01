@@ -45,7 +45,7 @@ export default function SortControl({
       )}
     >
       <ArrowUpDown className="w-3.5 h-3.5 shrink-0" aria-hidden="true" />
-      <span className="text-pico font-medium normal-case tracking-normal truncate max-w-[140px]">
+      <span className="text-micro font-medium normal-case tracking-normal truncate max-w-[140px]">
         {current?.label ?? ''}
       </span>
       <ChevronDown className="w-3.5 h-3.5 shrink-0 opacity-60" aria-hidden="true" />

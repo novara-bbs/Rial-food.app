@@ -95,7 +95,7 @@ export default function AddTolerance({ onBack, onAddLog }: { onBack: () => void,
                 const label = (t.checkIn.symptomsList as Record<string, string>)[key] || key;
                 return (
                   <button type="button" key={key} onClick={() => toggleSymptom(label)}
-                    className={`inline-flex items-center min-h-[22px] px-2.5 rounded-full text-pico font-medium normal-case tracking-normal transition-all border ${
+                    className={`inline-flex items-center min-h-7 px-3 py-1 rounded-full text-micro font-medium normal-case tracking-normal transition-all border ${
                       selectedSymptoms.includes(label) ? 'bg-primary text-on-primary border-primary' : 'bg-surface-container-low text-on-surface-variant border-outline-variant/20 hover:border-primary/30'
                     }`}>
                     {label}

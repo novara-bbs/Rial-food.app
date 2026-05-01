@@ -147,7 +147,7 @@ export default function SettingsProfile({ userProfile, setUserProfile, setDailyM
               <button type="button"
                 key={mode}
                 onClick={() => updateBiometric('mode', mode)}
-                className={`inline-flex items-center min-h-[22px] px-2.5 rounded-full text-pico font-medium normal-case tracking-normal transition-all ${
+                className={`inline-flex items-center min-h-7 px-3 py-1 rounded-full text-micro font-medium normal-case tracking-normal transition-all ${
                   (userProfile?.mode === mode || (!userProfile?.mode && mode === 'simple'))
                     ? 'bg-primary text-on-primary shadow-elev-2'
                     : 'text-on-surface-variant hover:text-tertiary'

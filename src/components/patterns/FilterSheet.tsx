@@ -134,7 +134,7 @@ export default function FilterSheet({
           <button
             type="button"
             onClick={handleReset}
-            className="font-headline text-pico font-medium normal-case tracking-normal text-primary hover:underline px-2 py-1 -mr-2"
+            className="font-headline text-micro font-medium normal-case tracking-normal text-primary hover:underline px-2 py-1 -mr-2"
           >
             {resolvedReset}
           </button>

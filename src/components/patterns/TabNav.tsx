@@ -29,7 +29,7 @@ export default function TabNav({ tabs, active, onChange, className }: TabNavProp
             key={tab.id}
             onClick={() => onChange(tab.id)}
             className={cn(
-              'flex-1 py-3 text-pico font-medium normal-case tracking-normal transition-colors border-b-2 flex items-center justify-center gap-2',
+              'flex-1 py-3 text-micro font-medium normal-case tracking-normal transition-colors border-b-2 flex items-center justify-center gap-2',
               isActive
                 ? 'text-primary border-primary'
                 : 'text-on-surface-variant border-transparent hover:text-tertiary',
