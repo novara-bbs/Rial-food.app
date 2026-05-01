@@ -5,11 +5,12 @@
 > prunes this file back down. Everything below should answer: *what's the release line,
 > what's the quality baseline, what's the next move, what's broken?*
 
-Last updated: **2026-05-01** — `[1.5.179]` img-onerror sweep complete (34 files, baseline now empty).
+Last updated: **2026-05-01** — `[1.5.180]` FeatureErrorBoundary adoption complete (profile + settings).
 
 ## Release snapshot
-- **Branch**: `main`, synced con `rial-food/main` (CI green S39; S40–S56 queued).
-- **This session (2026-05-01, S54–S56 — MVP cleanup [1.5.176–1.5.179])**:
+- **Branch**: `main`, synced con `rial-food/main` (CI green S39; S40–S57 queued).
+- **This session (2026-05-01, S54–S57 — MVP cleanup [1.5.176–1.5.180])**:
+    - **[1.5.180]** — FeatureErrorBoundary adoption complete: `profile` y `settings` cases wrapeados en App.tsx. 7 surfaces aisladas total (home/cocina/explore/more/recipe-detail/profile/settings).
     - **[1.5.179]** — img-onerror batch 3 (final): 19 social+wellness files. Baseline cleared to empty — nuevas violaciones fallan CI inmediatamente sin allowlist.
     - **[1.5.178]** — img-onerror batch 2: 10 recipe components (AuthorAttributionCard overlay ×2, CookMode, HeroGallery ×2 con reordering de atributos, MediaLightbox, PhotoUploader, VideoSection, CreateRecipeStep3/4, RecipeOverviewTab overlay, RecipeDetail ×2). Baseline: 28→18.
     - **[1.5.177]** — img-onerror batch 1: 5 food/home/planner/profile files (overlay pattern para avatars: letter/icon siempre renderiza, img se superpone absolutamente + oculta en onError). Baseline: 33→28.

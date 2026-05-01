@@ -1,5 +1,15 @@
 # RIAL App - Changelog
 
+## [1.5.180] - 2026-05-01
+
+### feat(resilience): FeatureErrorBoundary adoption — profile + settings
+
+Completes the FeatureErrorBoundary rollout across all main screens. `profile` and `settings` cases in `App.tsx` now wrapped so a crash in either doesn't kill the full app.
+
+- `App.tsx` lines 180–181: `profile` and `settings` each wrapped in `<FeatureErrorBoundary featureName={t.profile.title|t.settings.title} onReset={handleErrorReset}>`.
+- All 6 main surfaces now isolated: `home`, `cocina`, `explore`, `more`, `recipe-detail`, `profile`, `settings`.
+- TS: 0 errors · Tests: 1464/1464.
+
 ## [1.5.179] - 2026-05-01
 
 ### fix(img-onerror): batch 3 — social + wellness sweep, baseline empty
