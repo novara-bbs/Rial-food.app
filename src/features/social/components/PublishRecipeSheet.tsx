@@ -63,7 +63,7 @@ export default function PublishRecipeSheet({ recipe, onClose }: PublishRecipeShe
             />
           )}
           <div>
-            <Heading level="h4" className="text-caption">{recipe.title}</Heading>
+            <Heading level="h4" className="text-body-sm normal-case tracking-tight">{recipe.title}</Heading>
             <div className="flex gap-2 mt-1">
               <span className="font-label text-micro tracking-widest text-primary">
                 {recipe.macros?.calories ?? 0} kcal

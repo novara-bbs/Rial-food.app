@@ -171,7 +171,7 @@ export default function CreatorProfile({ onBack }: { onBack: () => void }) {
                       </div>
                     )}
                     <div>
-                      <span className="font-headline font-bold text-body-sm uppercase text-tertiary">{post.recipe.title}</span>
+                      <span className="font-headline font-bold text-body-sm normal-case text-tertiary">{post.recipe.title}</span>
                       <span className="font-label text-micro tracking-widest text-on-surface-variant block mt-0.5">{post.recipe.cal} kcal · {post.recipe.pro}g P</span>
                     </div>
                   </button>

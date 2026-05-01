@@ -148,7 +148,7 @@ export default function PostCard({
                 <div className="absolute inset-0 bg-gradient-to-t from-background to-transparent opacity-80" />
                 <div className="absolute bottom-3 left-3 right-3">
                   <span className="bg-primary text-on-primary text-micro font-black px-2 py-1 tracking-widest uppercase rounded-sm mb-1 inline-block">{post.recipe.tag}</span>
-                  <Heading level="h4">{post.recipe.title}</Heading>
+                  <Heading level="h4" className="normal-case tracking-tight">{post.recipe.title}</Heading>
                 </div>
                 {/* "View recipe" hint on hover */}
                 <div className="absolute top-3 right-3 opacity-0 group-hover:opacity-100 transition-opacity">

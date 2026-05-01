@@ -659,7 +659,7 @@ export default function RecipeDetail({ recipe, onBack, onSaveRecipe, isSaved, on
                       <img src={r.image} alt={r.title} className="w-12 h-12 rounded-sm object-cover shrink-0" referrerPolicy="no-referrer" onError={(e) => { (e.currentTarget as HTMLImageElement).style.display = 'none'; }} />
                     )}
                     <div className="flex-1 min-w-0">
-                      <p className="font-headline font-semibold text-micro text-tertiary uppercase truncate">{r.title}</p>
+                      <p className="font-headline font-semibold text-body-sm text-tertiary normal-case truncate">{r.title}</p>
                       <span className="font-label text-micro text-on-surface-variant tracking-widest uppercase">
                         {r.macros?.calories || 0} kcal · {r.macros?.protein || 0}g pro
                       </span>

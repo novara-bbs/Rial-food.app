@@ -110,7 +110,7 @@ export default function RecipeHero({
         */}
         {/* eslint-disable no-restricted-syntax -- bespoke recipe hero with verified Fraunces serif inline override + responsive size; cannot use <Heading> primitive */}
         <h2
-          className="font-headline text-2xl md:text-3xl font-bold tracking-tighter leading-tight text-tertiary uppercase"
+          className="font-headline text-2xl md:text-3xl font-bold tracking-tighter leading-tight text-tertiary normal-case"
           style={isVerified ? { fontFamily: 'var(--font-serif)', textTransform: 'none' } : undefined}
         >
           {data.title}

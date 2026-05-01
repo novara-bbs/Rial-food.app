@@ -65,10 +65,10 @@ const INFO_BLOCK: Record<string, string> = {
 };
 
 const TITLE: Record<string, string> = {
-  carousel:   'font-headline font-bold text-body-sm text-tertiary leading-tight tracking-tight line-clamp-2',
-  grid:       'font-headline font-bold text-body-sm text-tertiary leading-tight tracking-tight line-clamp-2',
-  hero:       'font-headline font-bold text-tertiary text-title md:text-headline leading-tight tracking-tighter line-clamp-2',
-  compact:    'font-headline font-bold text-body-sm text-tertiary leading-tight tracking-tight line-clamp-2',
+  carousel:   'font-headline font-bold text-body-sm text-tertiary leading-tight tracking-tight line-clamp-2 normal-case',
+  grid:       'font-headline font-bold text-body-sm text-tertiary leading-tight tracking-tight line-clamp-2 normal-case',
+  hero:       'font-headline font-bold text-tertiary text-title md:text-headline leading-tight tracking-tighter line-clamp-2 normal-case',
+  compact:    'font-headline font-bold text-body-sm text-tertiary leading-tight tracking-tight line-clamp-2 normal-case',
   horizontal: 'font-headline font-bold text-body-sm text-tertiary leading-tight tracking-tight line-clamp-2 normal-case',
 };
 

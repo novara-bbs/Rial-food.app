@@ -66,7 +66,7 @@ export default function RecipePicker({ open, onOpenChange, recipes, onSelect }: 
                   <img src={recipe.img || recipe.image} onError={(e) => { (e.currentTarget as HTMLImageElement).style.display = 'none'; }} alt="" className="w-12 h-12 rounded-sm object-cover shrink-0" referrerPolicy="no-referrer" />
                 )}
                 <div className="flex-1 min-w-0">
-                  <Heading level="h4" className="text-caption truncate">{recipe.title}</Heading>
+                  <Heading level="h4" className="text-body-sm normal-case tracking-tight truncate">{recipe.title}</Heading>
                   <div className="flex gap-2 mt-1">
                     <span className="font-label text-micro tracking-widest text-primary">{recipe.macros?.calories ?? 0} kcal</span>
                     <span className="font-label text-micro tracking-widest text-on-surface-variant">{recipe.macros?.protein ?? 0}g P</span>

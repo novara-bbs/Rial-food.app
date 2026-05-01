@@ -387,7 +387,7 @@ export default function Planner({
                           </span>
                         )}
                       </div>
-                      <Heading level="h4" className="font-headline font-bold text-body-sm uppercase text-tertiary leading-tight">{meal.title}</Heading>
+                      <Heading level="h4" className="font-headline font-bold text-body-sm normal-case text-tertiary leading-tight">{meal.title}</Heading>
                       <div className="flex items-center gap-2 mt-1 flex-wrap">
                         <span className="text-micro font-bold text-primary">{meal.cal} {t.common.kcal}</span>
                         <span className="text-micro text-on-surface-variant">·</span>
