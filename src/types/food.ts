@@ -150,6 +150,9 @@ export interface LoggableMeal {
   isApiResult?: boolean;
   /** Recipe-style macro sub-object */
   macros?: { calories?: number; protein?: number; carbs?: number; fats?: number };
+  image?: string;
+  /** @deprecated Legacy alias of `image`. Read by handlers as fallback for older mealPlan data. */
+  img?: string;
   recipeIngredients?: Array<{
     ingredientId?: string;
     id?: string;

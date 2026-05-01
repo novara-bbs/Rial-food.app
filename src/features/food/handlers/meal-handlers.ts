@@ -32,6 +32,8 @@ export interface DailyLogEntry {
   servingUsed?: string;
   /** Ingredient IDs involved — single food or recipe ingredients */
   ingredientIds?: string[];
+  /** Source image URL — carried from Recipe when logging a planned meal */
+  image?: string;
 }
 
 /** Persistent cross-day food history for recents */
@@ -253,6 +255,7 @@ export function createHandleLogMealNow(deps: Pick<MealHandlerDeps, 'setDailyMacr
         time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
         macros: { cal, pro, carbs, fats },
         ingredientIds,
+        ...((meal.image || meal.img) ? { image: meal.image || meal.img } : {}),
       };
 
       deps.setDailyMacros((prev: DailyMacros) => ({

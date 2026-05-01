@@ -11,8 +11,8 @@ import ActivityRow from '../components/ActivityRow';
 import HomeHeader from '../components/HomeHeader';
 import HomeQuickStats from '../components/HomeQuickStats';
 import WeeklyMiniDash from '../components/WeeklyMiniDash';
-import NextMealSuggestion from '../components/NextMealSuggestion';
 import MealGapSuggestion from '../components/MealGapSuggestion';
+import { findNextPlanned } from '../utils/dedupe-planned';
 import { safeSumMacros } from '../utils/safe-macros';
 import QuickActions from '../components/QuickActions';
 import ProgressPreviewCard from '../components/ProgressPreviewCard';
@@ -103,7 +103,7 @@ export default function Home({
   );
 
   // Weekly progress metrics — canonical calcWeekMacros (Q13)
-  const { weightHistory, shoppingList, savedRecipes, mergedVariants, foodHistory } = useAppState();
+  const { weightHistory, shoppingList, savedRecipes, mergedVariants, foodHistory, followedCreators } = useAppState();
   const weekMacros = useMemo(
     () => calcWeekMacros(
       nutritionHistory ?? [],
@@ -183,18 +183,19 @@ export default function Home({
     [realFeelLogs, mealPlan, dailyMacros, hydration, streakDays]
   );
 
-  // Next meal suggestion — planned meal or best macro-filling recipe
+  // Next meal suggestion — planned meal first, fallback to best macro-filling
+  // recipe. Hour-gating (`<20`) keeps the inline banner inside TodaysMeals
+  // from suggesting more food past dinner. The previous `dailyLog.length === 0`
+  // gate was dropped in [1.5.182] because the banner is now embedded in the
+  // unified TodaysMeals card and stays useful even before the first log.
   const nextMealSuggestion = useMemo(() => {
     const hour = new Date().getHours();
-    const nextSlot = hour < 10 ? 'lunch' : hour < 15 ? 'dinner' : hour < 20 ? 'snack' : null;
-    if (!nextSlot || dailyLog.length === 0) return null;
+    if (hour >= 20) return null;
 
-    // Check planned meals first
     const today = new Date().getDay();
     const dayIdx = today === 0 ? 6 : today - 1;
-    const planned = mealPlan?.[dayIdx] ?? [];
-    const loggedTitles = new Set(dailyLog.map(e => (e.title ?? '').toLowerCase()));
-    const unloggedPlanned = planned.find((m) => !loggedTitles.has((m.title ?? '').toLowerCase()));
+    const planned = (mealPlan?.[dayIdx] ?? []) as (Recipe & { time?: string })[];
+    const unloggedPlanned = findNextPlanned(planned, dailyLog);
     if (unloggedPlanned) {
       // Defensive `?? 0` against malformed planned entries. Some legacy
       // localStorage shapes lacked the canonical `macros` object — guarding
@@ -203,6 +204,7 @@ export default function Home({
         title: unloggedPlanned.title,
         cal: unloggedPlanned.macros?.calories ?? 0,
         pro: unloggedPlanned.macros?.protein ?? 0,
+        time: unloggedPlanned.time,
         source: 'plan' as const,
         recipe: unloggedPlanned,
       };
@@ -229,6 +231,12 @@ export default function Home({
     }
     return null;
   }, [dailyLog, mealPlan, savedRecipes, dailyMacros]);
+
+  const handleNextTap = useCallback(() => {
+    if (nextMealSuggestion?.recipe && onNavigateToRecipe) {
+      onNavigateToRecipe(nextMealSuggestion.recipe);
+    }
+  }, [nextMealSuggestion, onNavigateToRecipe]);
 
   // Trigger Real Feel 3 seconds after a meal is logged
   useEffect(() => {
@@ -345,7 +353,7 @@ export default function Home({
         onNavigate={handleQuickStatNav}
       />
 
-      {/* 5. Today's Meals — primary action surface (moved up from pos 7) */}
+      {/* 5. Today's Meals — unified Plan + Log + Next Up banner [1.5.182] */}
       <TodaysMeals
         dailyLog={dailyLog}
         todaysMeals={todaysMeals}
@@ -355,6 +363,8 @@ export default function Home({
         setDailyLog={setDailyLog}
         setDailyMacros={setDailyMacros}
         onNavigateToRecipe={onNavigateToRecipe}
+        nextSuggestion={nextMealSuggestion}
+        onNextTap={handleNextTap}
         mergedVariants={mergedVariants}
         userGoal={userProfile?.goal}
       />
@@ -430,17 +440,7 @@ export default function Home({
         )}
       </SectionCard>
 
-      {/* 8. Next Meal Suggestion — after logging at least 1 meal */}
-      <NextMealSuggestion
-        suggestion={nextMealSuggestion}
-        onTap={() => {
-          if (nextMealSuggestion?.recipe && onNavigateToRecipe) {
-            onNavigateToRecipe(nextMealSuggestion.recipe);
-          }
-        }}
-      />
-
-      {/* 9. P11 [1.5.69] — Qué me falta hoy: personalized macro-gap suggestions.
+      {/* 8. P11 [1.5.69] — Qué me falta hoy: personalized macro-gap suggestions.
             Sprint 50 [1.5.164] — also surfaces recipes from the user's vault
             (planned-today + not-eaten-today bias) before the ingredients block. */}
       {onLogMealNow && (
@@ -450,8 +450,11 @@ export default function Home({
           savedRecipes={savedRecipes}
           mealPlanToday={todaysMeals}
           dailyLog={dailyLog}
+          weeklyArchive={(nutritionHistory ?? []).slice(-7)}
           onNavigateToRecipe={onNavigateToRecipe}
           foodHistory={foodHistory}
+          userProfile={userProfile}
+          followedCreators={followedCreators}
           userGoal={userProfile?.goal}
           excludeAllergens={userProfile.intolerances ?? []}
           onLogFood={(variant) => {

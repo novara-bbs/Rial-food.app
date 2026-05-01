@@ -307,5 +307,27 @@ describe('createHandleLogMealNow', () => {
     expect(() => handler(makeMeal() as any, 1)).not.toThrow();
     expect(toast.error).toHaveBeenCalled();
   });
+
+  it('persists meal.image into the log entry (canonical field)', () => {
+    const deps = makeNowDeps();
+    const handler = createHandleLogMealNow(deps);
+    const meal = makeMeal({ image: 'https://cdn.example/photo.jpg' });
+    handler(meal as any, 1);
+
+    const updater = (deps.setDailyLog as any).mock.calls[0][0];
+    const result = updater([]);
+    expect(result[0].image).toBe('https://cdn.example/photo.jpg');
+  });
+
+  it('persists legacy meal.img into the log entry (defensive fallback)', () => {
+    const deps = makeNowDeps();
+    const handler = createHandleLogMealNow(deps);
+    const meal = makeMeal({ img: 'https://cdn.example/legacy.jpg' });
+    handler(meal as any, 1);
+
+    const updater = (deps.setDailyLog as any).mock.calls[0][0];
+    const result = updater([]);
+    expect(result[0].image).toBe('https://cdn.example/legacy.jpg');
+  });
 });
 

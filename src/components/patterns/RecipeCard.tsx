@@ -24,8 +24,14 @@ export interface RecipeCardRecipe {
 
 export interface RecipeCardProps {
   recipe: RecipeCardRecipe;
-  /** carousel = horizontal swimlane (w-52 h-72), grid = responsive grid cell (h-72), hero = editorial pick (image aspect-video + info), compact = related/more-like-this (w-40 h-56) */
-  variant?: 'carousel' | 'grid' | 'hero' | 'compact';
+  /**
+   * carousel = horizontal swimlane (w-52 h-72)
+   * grid = responsive grid cell (h-72)
+   * hero = editorial pick (image aspect-video + info)
+   * compact = related/more-like-this (w-40 h-56)
+   * horizontal = landscape row (image left 80×80 + info right) for dense Home carousels — Sprint 52 [1.5.183]
+   */
+  variant?: 'carousel' | 'grid' | 'hero' | 'compact' | 'horizontal';
   onPress?: () => void;
   onSave?: (e: React.MouseEvent) => void;
   onDelete?: (e: React.MouseEvent) => void;
@@ -35,31 +41,35 @@ export interface RecipeCardProps {
 }
 
 const CONTAINER: Record<string, string> = {
-  carousel: 'relative shrink-0 w-52 h-64 group cursor-pointer',
-  grid:     'relative h-64 w-full group cursor-pointer',
-  hero:     'relative w-full group cursor-pointer',
-  compact:  'relative shrink-0 w-40 h-56 group cursor-pointer',
+  carousel:   'relative shrink-0 w-52 h-64 group cursor-pointer flex-col',
+  grid:       'relative h-64 w-full group cursor-pointer flex-col',
+  hero:       'relative w-full group cursor-pointer flex-col',
+  compact:    'relative shrink-0 w-40 h-56 group cursor-pointer flex-col',
+  horizontal: 'relative w-full h-20 group cursor-pointer flex-row gap-3 items-stretch',
 };
 
 const IMAGE_ZONE: Record<string, string> = {
-  carousel: 'relative aspect-[4/3] w-full overflow-hidden rounded-sm',
-  grid:     'relative aspect-[4/3] w-full overflow-hidden rounded-sm',
-  hero:     'relative aspect-video w-full overflow-hidden rounded-sm',
-  compact:  'relative aspect-square w-full overflow-hidden rounded-sm',
+  carousel:   'relative aspect-[4/3] w-full overflow-hidden rounded-sm',
+  grid:       'relative aspect-[4/3] w-full overflow-hidden rounded-sm',
+  hero:       'relative aspect-video w-full overflow-hidden rounded-sm',
+  compact:    'relative aspect-square w-full overflow-hidden rounded-sm',
+  horizontal: 'relative w-20 h-20 shrink-0 overflow-hidden rounded-sm',
 };
 
 const INFO_BLOCK: Record<string, string> = {
-  carousel: 'flex flex-col pt-2 h-[100px]',
-  grid:     'flex flex-col pt-2 h-[100px]',
-  hero:     'flex flex-col pt-3 h-36',
-  compact:  'flex flex-col pt-2 h-16',
+  carousel:   'flex flex-col pt-2 h-[100px]',
+  grid:       'flex flex-col pt-2 h-[100px]',
+  hero:       'flex flex-col pt-3 h-36',
+  compact:    'flex flex-col pt-2 h-16',
+  horizontal: 'flex-1 flex flex-col justify-center px-1 min-w-0',
 };
 
 const TITLE: Record<string, string> = {
-  carousel: 'font-headline font-bold text-body-sm text-tertiary leading-tight tracking-tight line-clamp-2',
-  grid:     'font-headline font-bold text-body-sm text-tertiary leading-tight tracking-tight line-clamp-2',
-  hero:     'font-headline font-bold text-tertiary text-title md:text-headline leading-tight tracking-tighter line-clamp-2',
-  compact:  'font-headline font-bold text-body-sm text-tertiary leading-tight tracking-tight line-clamp-2',
+  carousel:   'font-headline font-bold text-body-sm text-tertiary leading-tight tracking-tight line-clamp-2',
+  grid:       'font-headline font-bold text-body-sm text-tertiary leading-tight tracking-tight line-clamp-2',
+  hero:       'font-headline font-bold text-tertiary text-title md:text-headline leading-tight tracking-tighter line-clamp-2',
+  compact:    'font-headline font-bold text-body-sm text-tertiary leading-tight tracking-tight line-clamp-2',
+  horizontal: 'font-headline font-bold text-body-sm text-tertiary leading-tight tracking-tight line-clamp-2 normal-case',
 };
 
 export default function RecipeCard({
@@ -80,9 +90,10 @@ export default function RecipeCard({
       ? CREATORS_MAP[recipe.publishedBy]
       : null;
 
-  const showActions = variant !== 'compact';
-  const showAuthor = variant !== 'compact';
-  const showMacros = variant !== 'compact';
+  const showActions = variant !== 'compact' && variant !== 'horizontal';
+  const showAuthor = variant !== 'compact' && variant !== 'horizontal';
+  const showMacros = variant !== 'compact' && variant !== 'horizontal';
+  const imgVariant: RecipeImageVariant = variant === 'horizontal' ? 'compact' : (variant as RecipeImageVariant);
 
   const matchLabel =
     variant === 'hero'
@@ -94,7 +105,7 @@ export default function RecipeCard({
   return (
     <button
       type="button"
-      className={cn(CONTAINER[variant], 'text-left flex flex-col', className)}
+      className={cn(CONTAINER[variant], 'text-left flex', className)}
       onClick={onPress}
       aria-label={recipe.title}
     >
@@ -103,13 +114,13 @@ export default function RecipeCard({
         <RecipeImage
           src={imageUrl}
           alt={recipe.title}
-          variant={variant as RecipeImageVariant}
+          variant={imgVariant}
           className="absolute inset-0"
           imgClassName="group-hover:scale-105 transition-transform duration-700"
         />
 
         {/* Multi-photo dots — top center */}
-        {recipe.photos && recipe.photos.length >= 2 && variant !== 'compact' && (
+        {recipe.photos && recipe.photos.length >= 2 && variant !== 'compact' && variant !== 'horizontal' && (
           <div className="absolute top-2 left-1/2 -translate-x-1/2 flex gap-1 pointer-events-none">
             {recipe.photos.slice(0, 6).map((_, i) => (
               <span
@@ -129,12 +140,12 @@ export default function RecipeCard({
               {recipe.time}
             </span>
           )}
-          {recipe.tag && variant !== 'compact' && (
+          {recipe.tag && variant !== 'compact' && variant !== 'horizontal' && (
             <span className="badge-card bg-surface/95 backdrop-blur-md text-primary uppercase tracking-wide">
               {t.recipeTags[recipe.tag] ?? recipe.tag}
             </span>
           )}
-          {recipe.matchScore !== undefined && variant !== 'compact' && (
+          {recipe.matchScore !== undefined && variant !== 'compact' && variant !== 'horizontal' && (
             <span className="badge-card bg-primary text-on-primary w-fit uppercase tracking-tight">
               {matchLabel}
             </span>
@@ -181,6 +192,14 @@ export default function RecipeCard({
       {/* ── INFO BLOCK ── */}
       <div className={INFO_BLOCK[variant]}>
         <Heading level="h4" className={TITLE[variant]}>{recipe.title}</Heading>
+
+        {variant === 'horizontal' && (recipe.cal !== undefined || (recipe.pro ?? 0) > 0) && (
+          <span className="mt-1 text-micro font-label uppercase tracking-widest text-on-surface-variant truncate">
+            {recipe.cal !== undefined && `${recipe.cal} kcal`}
+            {recipe.cal !== undefined && (recipe.pro ?? 0) > 0 && ' · '}
+            {(recipe.pro ?? 0) > 0 && `${recipe.pro}g pro`}
+          </span>
+        )}
 
         {showAuthor && creator && (
           <span className="font-label text-micro text-on-surface-variant mt-0.5 truncate">

@@ -1,5 +1,86 @@
 # RIAL App - Changelog
 
+## [1.5.185] - 2026-05-01
+
+### feat(home): MealGapSuggestion projected gap — plan-aware deficit
+
+Closes the loop on owner directive «que tenga en cuenta lo que estamos comiendo ya hoy». The naive deficit only saw what was *already eaten*, so MealGap over-suggested when the user's plan still covered the gap. Now it projects forward.
+
+- New util `src/features/home/utils/projected-gap.ts` exporting `projectedConsumed(dailyMacros, mealPlanToday, dailyLog)` — returns an effective `ConsumedTarget` where `consumed = actualConsumed + sum(planned-but-not-yet-logged macros)`. Title-based dedupe (case-insensitive + trim) mirrors the recipe ranker filter so plan items already logged are not double-counted. Reads both canonical (`recipe.macros.{calories,protein,...}`) and legacy planner shape (`{cal, pro, carbs, fats}`).
+- `MealGapSuggestion.tsx` calls `projectedConsumed` before `computeMealGaps`. When projected coverage closes the deficit below threshold, `biggestDeficit` returns null and the section silently degrades — no over-suggestion.
+- Tests: 6 new cases in `projected-gap.test.ts` (plain projection, dedupe, legacy shape, integration with `biggestDeficit`).
+- Verified end-to-end: deficit dropped from 132g → 68g of protein when plan items are accounted for. Tests 1513 → 1519.
+
+## [1.5.184] - 2026-05-01
+
+### feat(home): personalization scorer pipeline + RAG-ready architecture
+
+`rankRecipesForGap` rewritten as a thin wrapper over a composable scorer pipeline. Each personalization signal is a pure-functional scorer in `src/features/home/utils/personalization/scorers/`. The architecture is extensible to embeddings/RAG (Supabase pgvector) without touching the existing scorers.
+
+**New module** `src/features/home/utils/personalization/`:
+- `types.ts` — `PersonalizationContext`, `RecipeScorer`, `ScoreContribution`, extended `RecipeReason` (8 reasons), `REASON_PRIORITY` array.
+- `combine.ts` — `composeScorers()` orchestrator: multipliers stack, additives sum, reason resolved by priority among meaningful contributions.
+- `scorers/filters.ts` — hard filters (allergen heuristic + slot match + already-logged-today dedupe).
+- `scorers/macro-density.ts` — base score (per-portion grams of deficit macro, anti-mono-macro penalty for `cal`).
+- `scorers/plan-context.ts` — not-eaten-today baseline ×1.15 + planned-today stack ×1.25.
+- `scorers/affinity.ts` — foodHistory ingredient overlap → ×1..×1.25 with reason `history`.
+- `scorers/familiarity.ts` — savedRecipes set bonus + cookedAt[] tiered ×1.05/×1.10/×1.15.
+- `scorers/weekly-fatigue.ts` — penalty for recipes eaten in past 7 days via `nutritionHistory` archive (×0.55..×0.90).
+- `scorers/preferences.ts` — foodPreferences likes (×1.10 stacked, cap 1.30), dislikes (×0.50), dietary tag intersection (×1.05).
+- `scorers/social.ts` — recipe.publishedBy ∈ followedCreators → +0.15 additive with reason `creator-follow`.
+- `scorers/tier.ts` — verified/RIAL/fork tier (small additive deltas).
+- `scorers/embedding.ts` — **stub for future RAG**. Cosine similarity ×K when `ctx.embeddings` + `ctx.userVector` present; today returns no contribution. Activation requires only upstream wiring (no scorer changes).
+- `personalization.test.ts` — 26 cases (10 scorer units + 4 hard filters + 3 orchestration + 1 full pipeline integration).
+
+**Refactor**:
+- `suggest-recipes.ts` reduced to a thin wrapper that builds a `PersonalizationContext` and runs `composeScorers` over the surviving pool. Public signature unchanged for back-compat.
+- `MealGapSuggestion.tsx` accepts new props: `weeklyArchive`, `userProfile`, `followedCreators`. Wired in `Home.tsx` from `nutritionHistory.slice(-7)` + `useAppState()`.
+
+**i18n** — 4 new visible reason keys (×2 locales = 8 entries): `cooked-before`, `liked`, `creator-follow`, `embedding`. 2015 → 2019 keys, ES↔EN symmetric.
+
+Tests 1487 → 1513.
+
+## [1.5.182] - 2026-05-01
+
+### feat(home): TodaysMeals unification + planned-meal image persistence
+
+Two related Home improvements that ship together:
+
+**TodaysMeals unification (Sprint 51)**: Merges the standalone `<NextMealSuggestion>` widget into `<TodaysMeals>` and unifies Plan / Logged into a single SectionCard with bands. The previous split made Plan/Log/Next-Up feel like three independent lists.
+
+- `<TodaysMeals>` rewritten: single `<SectionCard padding="none" spacing="none">` with header band (Lightbulb-less editorial h2 `Hoy / Today`) + Next Up inline banner (`bg-surface-container-highest/40` button, no branded color) + Plan band + Log band, all separated by `border-b divide-y`.
+- New `nextSuggestion` prop on `TodaysMeals` (NextSuggestion interface exported); `<NextMealSuggestion>` component removed entirely.
+- Dedupe util `src/features/home/utils/dedupe-planned.ts` (`filterUnloggedPlanned()` + `findNextPlanned()`) — title lowercase + trim matching to drop already-logged planned meals from the Plan band.
+- 4 empty states (global / intra-Log / intra-Plan / silent), CSS-only animation (`animate-in fade-in slide-in-from-{top,bottom}-1 motion-reduce:animate-none`) — `motion/react` vetoed by bundle budget.
+- 8 new i18n keys in `home.*`: `todayHeader`, `loggedSection`, `nextUpInline`, `nextUpInlineNoTime`, `emptyAll`, `emptyLog`, `emptyPlanInline`, `planTodayCta` (× 2 locales = 16 entries).
+
+**Planned-meal image persistence**: Bug fix — logging a planned recipe (e.g. «Bol de Avena Energético») showed a slot emoji 🌅 instead of the recipe image in the Logged band, even though the planned card showed it correctly.
+
+- Root cause: `seed-meal-plan.ts` had 28 entries with legacy `img:` (canonical migration `[1.5.176]` covered `seed-recipes.ts` but missed the planner). The display fell back via `meal.image || meal.img` but `createHandleLogMealNow` only read `meal.image`, so the entry was persisted without an image URL.
+- Defensive handler: `meal-handlers.ts` reads `meal.image || meal.img`. New optional `image?: string` on `LoggableMeal` and `DailyLogEntry`.
+- Seed migration: 28 `img:` → `image:` in `seed-meal-plan.ts`. Bumped `SEED_VERSIONS.mealPlan` 1 → 2 with `preserve-if-nonempty` strategy so users with custom plans aren't overwritten.
+- Tests: 2 new cases in `meal-handlers.test.ts` for image persistence (canonical + legacy fallback). Tests 1464 → 1484.
+
+## [1.5.183] - 2026-05-01
+
+### feat(home): MealGapSuggestion rework — TodaysMeals row alignment + dedupe lock
+
+Visual + interaction polish for «Qué te falta hoy» following owner annotations: title outside SectionCard (matches Home pattern), drop landscape carousel (consistency over peek-ambiguity), use the same row format as TodaysMeals planned/logged for both recipe and ingredient suggestions.
+
+**Visual changes**:
+- Title `<Heading level="h2">` with `Lightbulb` icon now lives **outside** the SectionCard, identical to `<TodaysMeals>` h2 pattern. Subtitle (deficit copy) stacks below in micro uppercase.
+- Bands inside SectionCard separated by `border-b`: `RECETAS QUE AYUDAN` (ChefHat icon) → 3 recipe rows; `INGREDIENTES RÁPIDOS` (Apple icon) → 3 food rows.
+- All rows use the canonical TodaysMeals row pattern: `40×40 RecipeImage thumbnail` (or emoji on `bg-surface-container-highest`) + `font-headline text-body-sm font-bold` title + `text-micro tracking-widest uppercase` meta + `ChevronRight` trailing. `divide-y` between rows.
+- Meta row composes inline: `300 kcal · 40g pro · Aún sin comer`.
+- Drops the previous `RecipeCard variant="compact"` carousel + `basis-[42%]` peek that visually overflowed the SectionCard.
+- New `RecipeCard variant="horizontal"` added to the primitive (image left 80×80 + info right) — kept as available infrastructure though not used by MealGap after the polish.
+
+**Logic — dedupe lock**:
+- `suggest-recipes.ts`: recipe whose title appears in dailyLog is now **hard-excluded** from suggestions (was a soft ×0.7 penalty). Was the user-reported regression «aún veo recetas que ya logueé hoy».
+- Tests: dedupe lock + case-insensitive match + h2 contract added to `MealGapSuggestion.test.tsx`. `suggest-recipes.test.ts` test «demotes already-logged» renamed to «excludes already-logged».
+
+Tests 1484 → 1487.
+
 ## [1.5.181] - 2026-05-01
 
 ### refactor(typography): ADR-012 warning sweep — 0 warnings achieved

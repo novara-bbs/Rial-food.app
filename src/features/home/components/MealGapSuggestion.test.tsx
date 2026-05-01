@@ -153,6 +153,48 @@ describe('MealGapSuggestion — recipes block (Sprint 50)', () => {
     expect(img.getAttribute('src')).toBe('https://cdn.example/pollo.jpg');
   });
 
+  it('hides a recipe whose title is already in dailyLog (dedupe lock — Sprint 52)', () => {
+    renderWithProviders(
+      <MealGapSuggestion
+        dailyMacros={dailyMacrosWithProteinDeficit}
+        mergedVariants={[chickenVariant]}
+        savedRecipes={[proteinRecipe]}
+        mealPlanToday={[]}
+        dailyLog={[
+          {
+            id: 1,
+            title: 'Pollo Bowl con Quinoa',
+            portionDescription: '1 ración',
+            mealSlot: 'lunch',
+            time: '13:00',
+            macros: { cal: 520, pro: 48, carbs: 45, fats: 14 },
+          },
+        ]}
+        onLogFood={vi.fn()}
+        onNavigateToRecipe={vi.fn()}
+      />,
+    );
+    // Recipe is hidden once logged today; recipes title disappears (no qualifying entries).
+    expect(screen.queryByLabelText(/pollo bowl con quinoa/i)).toBeNull();
+  });
+
+  it('renders the editorial header (h2 + Lightbulb icon, deficit subtitle)', () => {
+    renderWithProviders(
+      <MealGapSuggestion
+        dailyMacros={dailyMacrosWithProteinDeficit}
+        mergedVariants={[chickenVariant]}
+        savedRecipes={[proteinRecipe]}
+        mealPlanToday={[]}
+        dailyLog={[]}
+        onLogFood={vi.fn()}
+        onNavigateToRecipe={vi.fn()}
+      />,
+    );
+    // Header is h2 (matches TodaysMeals editorial level), not h3.
+    const heading = screen.getByRole('heading', { level: 2, name: /what you need today|qué te falta hoy/i });
+    expect(heading).toBeTruthy();
+  });
+
   it('renders nothing when no deficit and no suggestions', () => {
     const balanced: ConsumedTarget = {
       consumed: { cal: 2000, pro: 130, carbs: 240, fats: 65 },

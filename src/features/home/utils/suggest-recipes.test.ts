@@ -133,18 +133,26 @@ describe('rankRecipesForGap — planned-today bonus', () => {
   });
 });
 
-describe('rankRecipesForGap — already-logged penalty', () => {
-  it('demotes a recipe that already appears in the daily log', () => {
+describe('rankRecipesForGap — already-logged dedupe (Sprint 52)', () => {
+  it('excludes a recipe that already appears in the daily log', () => {
     const ranked = rankRecipesForGap('pro', POOL, {
       limit: 5,
       slotGuess: 'lunch',
       dailyLog: [mkLog('Pollo bowl con quinoa')],
     });
-    // Chicken-bowl now has the 0.7 multiplier; tuna (no penalty + not-eaten
-    // bonus) should rank above it.
-    const chickenIdx = ranked.findIndex(r => r.recipe.id === 'r-chicken-bowl');
-    const tunaIdx = ranked.findIndex(r => r.recipe.id === 'r-tuna-salad');
-    expect(tunaIdx).toBeLessThan(chickenIdx);
+    // Hard exclusion now — recipe is removed from the result entirely.
+    expect(ranked.find(r => r.recipe.id === 'r-chicken-bowl')).toBeUndefined();
+    // Other recipes still surface.
+    expect(ranked.find(r => r.recipe.id === 'r-tuna-salad')).toBeDefined();
+  });
+
+  it('matches case-insensitively when comparing log title', () => {
+    const ranked = rankRecipesForGap('pro', POOL, {
+      limit: 5,
+      slotGuess: 'lunch',
+      dailyLog: [mkLog('POLLO BOWL CON QUINOA')],
+    });
+    expect(ranked.find(r => r.recipe.id === 'r-chicken-bowl')).toBeUndefined();
   });
 });
 

@@ -20,16 +20,17 @@
  * cuando no hay suggestions.
  */
 import { useMemo } from 'react';
-import { Sparkles, ChevronRight } from 'lucide-react';
+import { Lightbulb, ChefHat, Apple, ChevronRight } from 'lucide-react';
 import SectionCard from '../../../components/SectionCard';
-import RecipeCard from '../../../components/patterns/RecipeCard';
-import { Button } from '@/components/ui/button';
+import RecipeImage from '@/components/ui/RecipeImage';
 import { Heading } from '@/components/ui/Typography';
 import { useI18n } from '../../../i18n';
 import type { FoodVariant } from '../../../types/food-family';
 import type { Recipe } from '../../../types/recipe';
 import type { Allergen } from '../../../types/food';
+import type { UserProfile } from '../../../types/user';
 import type { DailyLogEntry, FoodHistoryEntry } from '../../food/handlers/meal-handlers';
+import type { DailyArchive } from '../../../hooks/useDailyReset';
 import {
   computeMealGaps,
   biggestDeficit,
@@ -38,6 +39,7 @@ import {
 } from '../utils/meal-gaps';
 import { rankFoodsForGap } from '../utils/suggest-foods';
 import { rankRecipesForGap } from '../utils/suggest-recipes';
+import { projectedConsumed } from '../utils/projected-gap';
 import { getFamilyImage } from '../../food/data/family-images';
 
 interface Props {
@@ -49,11 +51,17 @@ interface Props {
   savedRecipes?: readonly Recipe[];
   /** Recipes the user planned for today's slot grid. */
   mealPlanToday?: readonly Recipe[];
-  /** Today's daily log — used to penalise repeats. */
+  /** Today's daily log — used to dedupe meals already logged. */
   dailyLog?: readonly DailyLogEntry[];
-  /** Optional recent-foods signal to boost variants the user already likes. */
+  /** Last 7 days of nutritionHistory archives — feeds weekly-fatigue scorer. */
+  weeklyArchive?: readonly DailyArchive[];
+  /** Cross-day food history for ingredient affinity scoring. */
   foodHistory?: FoodHistoryEntry[];
-  /** Optional user goal string (free-form). Filters grade-E foods. */
+  /** Profile — feeds preferences scorer (likes/dislikes, dietary, intolerances). */
+  userProfile?: UserProfile | null;
+  /** Creator IDs the user follows — feeds social scorer. */
+  followedCreators?: readonly string[];
+  /** Optional user goal string (free-form). Filters grade-E foods in the food ranker. */
   userGoal?: string | null;
   /** Optional intolerance/allergen exclusion list (typed as Allergen[]). */
   excludeAllergens?: readonly Allergen[];
@@ -73,7 +81,10 @@ export default function MealGapSuggestion({
   savedRecipes,
   mealPlanToday,
   dailyLog,
+  weeklyArchive,
   foodHistory,
+  userProfile,
+  followedCreators,
   userGoal,
   excludeAllergens,
   onLogFood,
@@ -81,10 +92,18 @@ export default function MealGapSuggestion({
 }: Props) {
   const { t, locale } = useI18n();
 
+  // Sprint C [1.5.185] — projected gap. Adds planned-but-not-yet-logged
+  // macros to the consumed side so we don't over-suggest when the plan
+  // already covers the deficit.
+  const projectedMacros = useMemo(
+    () => projectedConsumed(dailyMacros, mealPlanToday ?? [], dailyLog ?? []),
+    [dailyMacros, mealPlanToday, dailyLog],
+  );
+
   const deficit = useMemo(() => {
-    const gaps = computeMealGaps(dailyMacros);
+    const gaps = computeMealGaps(projectedMacros);
     return biggestDeficit(gaps);
-  }, [dailyMacros]);
+  }, [projectedMacros]);
 
   const foodSuggestions = useMemo(() => {
     if (!deficit) return [];
@@ -102,10 +121,25 @@ export default function MealGapSuggestion({
     return rankRecipesForGap(deficit.key, savedRecipes, {
       mealPlanToday,
       dailyLog,
+      weeklyArchive,
+      savedRecipes,
+      foodHistory,
+      userProfile,
+      followedCreators,
       intolerances: excludeAllergens,
       limit: 3,
     });
-  }, [deficit, savedRecipes, mealPlanToday, dailyLog, excludeAllergens]);
+  }, [
+    deficit,
+    savedRecipes,
+    mealPlanToday,
+    dailyLog,
+    weeklyArchive,
+    foodHistory,
+    userProfile,
+    followedCreators,
+    excludeAllergens,
+  ]);
 
   if (!deficit) return null;
   if (foodSuggestions.length === 0 && recipeSuggestions.length === 0) return null;
@@ -119,94 +153,114 @@ export default function MealGapSuggestion({
     .replace('{{macro}}', deficitLabels[macroLabelKey(deficit.key)] ?? deficit.key);
 
   return (
-    <SectionCard data-meal-gap-suggestion>
-      <div className="space-y-3">
-        <div className="flex items-start gap-2">
-          <Sparkles className="w-4 h-4 text-primary shrink-0 mt-0.5" aria-hidden="true" />
-          <div className="flex-1 min-w-0">
-            <Heading level="h3" className="text-body text-on-surface normal-case tracking-normal">
-              {mealGap.title}
-            </Heading>
-            <p className="text-body-sm text-on-surface-variant leading-snug">
-              {deficitCopy}
-            </p>
-          </div>
-        </div>
+    <section className="space-y-3" data-meal-gap-suggestion>
+      {/* Header — outside SectionCard, identical pattern to <TodaysMeals> h2. */}
+      <div className="px-1">
+        <Heading level="h2" className="flex items-center gap-2">
+          <Lightbulb className="w-5 h-5 text-primary" aria-hidden="true" />
+          {mealGap.title}
+        </Heading>
+        <p className="mt-0.5 font-label text-micro font-bold uppercase tracking-widest text-on-surface-variant">
+          {deficitCopy}
+        </p>
+      </div>
 
-        {/* Recipes sub-block — first because they're more actionable. */}
+      <SectionCard padding="none" spacing="none" className="overflow-hidden">
+        {/* Recipes band — stacked rows, identical pattern to <TodaysMeals> planned/logged. */}
         {recipeSuggestions.length > 0 && onNavigateToRecipe && (
-          <div className="space-y-1.5" data-meal-gap-recipes>
-            <span className="block text-micro font-label uppercase tracking-widest text-on-surface-variant">
-              {mealGap.recipesTitle}
-            </span>
-            <div className="flex gap-3 overflow-x-auto hide-scrollbar -mx-6 px-6 snap-x">
-              {recipeSuggestions.map(({ recipe, reason }) => (
-                <div key={recipe.id} className="basis-[42%] shrink-0 snap-start" data-suggestion-reason={reason}>
-                  <RecipeCard
-                    variant="compact"
-                    recipe={{
-                      id: recipe.id,
-                      title: recipe.title,
-                      image: recipe.image,
-                      cal: recipe.macros.calories,
-                      pro: recipe.macros.protein,
-                      tag: recipe.tag,
-                    }}
-                    className="w-full"
-                    onPress={() => onNavigateToRecipe(recipe)}
-                  />
-                </div>
-              ))}
-            </div>
-          </div>
-        )}
-
-        {/* Foods sub-block — quick-fix ingredients. */}
-        {foodSuggestions.length > 0 && (
-          <div className="space-y-1.5" data-meal-gap-foods>
-            {recipeSuggestions.length > 0 && (
-              <span className="block text-micro font-label uppercase tracking-widest text-on-surface-variant">
-                {mealGap.foodsTitle}
+          <div className="border-b border-outline-variant/15 last:border-b-0" data-meal-gap-recipes>
+            <div className="flex items-center gap-1.5 px-4 pt-3 pb-1.5">
+              <ChefHat className="w-3.5 h-3.5 text-primary" aria-hidden="true" />
+              <span className="font-label text-micro font-bold uppercase tracking-widest text-on-surface-variant">
+                {mealGap.recipesTitle}
               </span>
-            )}
-            <div className="flex flex-col gap-1.5">
-              {foodSuggestions.map(({ variant, reason }) => {
-                const emoji = getFamilyImage(variant.familyId);
-                const name = locale === 'es' ? variant.name : variant.nameEn;
-                const macros = variant.macros;
+            </div>
+            <div className="divide-y divide-outline-variant/10">
+              {recipeSuggestions.map(({ recipe, reason }) => {
+                const calLabel = recipe.macros.calories
+                  ? `${Math.round(recipe.macros.calories)} ${t.common.kcal}`
+                  : '';
+                const proLabel = (recipe.macros.protein ?? 0) > 0
+                  ? `${Math.round(recipe.macros.protein)}g pro`
+                  : '';
+                const reasonLabel = reasonLabels[reason] ?? '';
+                const metaParts = [calLabel, proLabel, reasonLabel].filter(Boolean);
                 return (
-                  <Button
-                    key={variant.id}
-                    variant="ghost"
-                    onClick={() => onLogFood(variant)}
-                    aria-label={`${mealGap.logCta}: ${name}`}
-                    className="w-full h-auto justify-start gap-3 p-3 bg-surface-container-low rounded-sm border border-outline-variant/20 hover:border-primary/30 hover:bg-surface-container-high font-normal normal-case tracking-normal text-left"
+                  <button
+                    key={recipe.id}
+                    type="button"
+                    onClick={() => onNavigateToRecipe(recipe)}
+                    data-suggestion-reason={reason}
+                    aria-label={`${t.postCard.viewRecipe}: ${recipe.title}`}
+                    className="w-full flex items-center gap-3 px-4 py-2.5 text-left hover:bg-surface-container-highest/40 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/50"
                   >
-                    <span aria-hidden="true" className="w-10 h-10 text-2xl leading-none shrink-0 select-none flex items-center justify-center">
-                      {emoji}
-                    </span>
-                    <div className="min-w-0 flex-1">
-                      <span className="block font-headline font-bold text-body-sm text-on-surface truncate">
-                        {name}
+                    <RecipeImage
+                      src={recipe.image ?? null}
+                      alt={recipe.title}
+                      variant="thumbnail"
+                      fallbackEmoji="🍽️"
+                      className="w-10 h-10 rounded-sm shrink-0"
+                    />
+                    <div className="flex-1 min-w-0">
+                      <span className="font-headline text-body-sm font-bold text-on-surface truncate block">
+                        {recipe.title}
                       </span>
-                      <span className="block text-caption text-on-surface-variant">
-                        {macros.calories} {t.common.kcal} · P {macros.protein} · C {macros.carbs} · G {macros.fats}
-                      </span>
-                      <span
-                        data-suggestion-reason={reason}
-                        className="block mt-0.5 text-caption text-primary"
-                      >
-                        {reasonLabels[reason] ?? reason}
+                      <span className="text-micro font-label tracking-widest uppercase text-on-surface-variant truncate block">
+                        {metaParts.join(' · ')}
                       </span>
                     </div>
                     <ChevronRight className="w-4 h-4 text-primary shrink-0" aria-hidden="true" />
-                  </Button>
+                  </button>
                 );
               })}
             </div>
           </div>
         )}
-      </div>
-    </SectionCard>
+
+        {/* Foods band — same row format as recipes. */}
+        {foodSuggestions.length > 0 && (
+          <div data-meal-gap-foods>
+            <div className="flex items-center gap-1.5 px-4 pt-3 pb-1.5">
+              <Apple className="w-3.5 h-3.5 text-primary" aria-hidden="true" />
+              <span className="font-label text-micro font-bold uppercase tracking-widest text-on-surface-variant">
+                {mealGap.foodsTitle}
+              </span>
+            </div>
+            <div className="divide-y divide-outline-variant/10">
+              {foodSuggestions.map(({ variant, reason }) => {
+                const emoji = getFamilyImage(variant.familyId);
+                const name = locale === 'es' ? variant.name : variant.nameEn;
+                const macros = variant.macros;
+                const reasonLabel = reasonLabels[reason] ?? '';
+                const metaParts = [`${macros.calories} ${t.common.kcal}`, reasonLabel].filter(Boolean);
+                return (
+                  <button
+                    key={variant.id}
+                    type="button"
+                    onClick={() => onLogFood(variant)}
+                    data-suggestion-reason={reason}
+                    aria-label={`${mealGap.logCta}: ${name}`}
+                    className="w-full flex items-center gap-3 px-4 py-2.5 text-left hover:bg-surface-container-highest/40 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/50"
+                  >
+                    <span aria-hidden="true" className="w-10 h-10 text-2xl leading-none shrink-0 select-none flex items-center justify-center bg-surface-container-highest rounded-sm">
+                      {emoji}
+                    </span>
+                    <div className="flex-1 min-w-0">
+                      <span className="font-headline text-body-sm font-bold text-on-surface truncate block">
+                        {name}
+                      </span>
+                      <span className="text-micro font-label tracking-widest uppercase text-on-surface-variant truncate block">
+                        {metaParts.join(' · ')}
+                      </span>
+                    </div>
+                    <ChevronRight className="w-4 h-4 text-primary shrink-0" aria-hidden="true" />
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+        )}
+      </SectionCard>
+    </section>
   );
 }

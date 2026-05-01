@@ -31,7 +31,8 @@ export const SEED_VERSIONS = {
   // v4 → Fase 1 multi-media: `photos[]` + `videoUrl` on demo recipes (2026-04-17).
   // v5 → verified tier + cookedAt[] (R2 plan v2, 2026-04-23). Strategy `preserve-user`.
   savedRecipes: 5,
-  mealPlan: 1,
+  // v2 → seed-meal-plan migration: `img` → `image` canonical (Sprint 52 fix).
+  mealPlan: 2,
   shoppingList: 1,
   // v1 → 3 posts. v2 → 6 posts with progress types (sprint-q18).
   communityPosts: 2,

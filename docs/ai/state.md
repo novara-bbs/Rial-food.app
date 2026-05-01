@@ -5,11 +5,15 @@
 > prunes this file back down. Everything below should answer: *what's the release line,
 > what's the quality baseline, what's the next move, what's broken?*
 
-Last updated: **2026-05-01** — `[1.5.181]` ADR-012 typography sweep complete — 0 warnings.
+Last updated: **2026-05-01** — `[1.5.185]` MealGapSuggestion rework + personalization scorer pipeline + projected gap.
 
 ## Release snapshot
-- **Branch**: `main`, synced con `rial-food/main` (CI green S39; S40–S57 queued).
-- **This session (2026-05-01, S54–S58 — MVP cleanup [1.5.176–1.5.181])**:
+- **Branch**: `main`, synced con `rial-food/main` (CI green S39; S40–S60 queued).
+- **This session (2026-05-01, S59–S61 — MealGap rework [1.5.183–1.5.185])**:
+    - **[1.5.185]** — Sprint C — projected gap. New `projectedConsumed()` util (`src/features/home/utils/projected-gap.ts`) suma macros del plan-but-not-yet-logged a `consumed` antes de `computeMealGaps`. Cierra el loop del owner directive «que tenga en cuenta lo que estamos comiendo ya hoy». Verificado end-to-end: déficit 132g → 68g de proteína cuando el plan cubre parcialmente. Tests 1513 → 1519 (+6).
+    - **[1.5.184]** — Sprint B — personalization scorer pipeline + RAG-ready architecture. Nuevo módulo `src/features/home/utils/personalization/` con 10 scorers puros (macro-density, plan-context, affinity foodHistory, familiarity saved+cookedAt, weekly-fatigue nutritionHistory, preferences likes/dislikes/dietary, social followedCreators, tier, filters duros, embedding stub para RAG). `rankRecipesForGap` reescrito como thin wrapper. 4 i18n reasons nuevas (`cooked-before`, `liked`, `creator-follow`, `embedding`). 2015 → 2019 keys. Tests 1487 → 1513 (+26).
+    - **[1.5.183]** — Sprint A — MealGapSuggestion rework + dedupe lock. Header `<Heading level="h2">` + Lightbulb fuera del SectionCard (match TodaysMeals h2 pattern). Carousel landscape dropped → stacked rows con `divide-y` (3 max por banda), patrón idéntico a TodaysMeals planned/logged: `40×40 RecipeImage` + `text-body-sm font-bold` + `text-micro tracking-widest uppercase` + ChevronRight. Foods band en mismo formato. Recipe en dailyLog ahora hard-exclude (era soft ×0.7). Nuevo `RecipeCard variant="horizontal"` infra-only. Tests 1484 → 1487.
+- **Previous session (2026-05-01, S54–S58 — MVP cleanup [1.5.176–1.5.181])**:
     - **[1.5.181]** — ADR-012 typography sweep complete: 342 → **0 warnings**. Raw `text-xs/sm/base/lg/xl/2xl/3xl/4xl` and raw `<hN>` tags replaced with semantic tokens (`text-micro`, `text-body-sm`, `text-body-lg`, `text-title-sm`, `text-title`, `text-headline`, `text-display`) and `<Heading>` primitive across ~35 files.
     - **[1.5.180]** — FeatureErrorBoundary adoption complete: `profile` y `settings` cases wrapeados en App.tsx. 7 surfaces aisladas total (home/cocina/explore/more/recipe-detail/profile/settings).
     - **[1.5.180]** — FeatureErrorBoundary adoption complete: `profile` y `settings` cases wrapeados en App.tsx. 7 surfaces aisladas total (home/cocina/explore/more/recipe-detail/profile/settings).
@@ -52,10 +56,10 @@ Last updated: **2026-05-01** — `[1.5.181]` ADR-012 typography sweep complete �
 - **Vercel project**: `rial.app.v1.5` (id `prj_t11VHYQjptazjUx7Y2hWLz0IDAjg`).
 - **Governance**: work directly on `main`. "continua" = push approval post green preflight.
 
-## Quality baseline (post-sweep [1.5.179], 2026-05-01)
+## Quality baseline (post-MealGap [1.5.185], 2026-05-01)
 - TypeScript: **0 errors** (`npx tsc --noEmit`)
-- Tests: **1464/1464** passing (103 files)
-- i18n symmetry: **2007** keys aligned ES ↔ EN
+- Tests: **1519/1519** passing (106 files)
+- i18n symmetry: **2019** keys aligned ES ↔ EN
 - Design-system lint: **0 errors, 0 ADR-012 warnings** (full sweep complete [1.5.181])
 - **img-onerror baseline: 0** — all 34 pre-existing offenders migrated in S54–S56; new violations fail CI immediately
 - Raw branded `<button>` count: **1** (TodaysMeals only, complex edit-in-place UX)
