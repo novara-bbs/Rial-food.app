@@ -55,6 +55,7 @@ export default function SectionCard({
   return (
     <section
       className={[
+        // eslint-disable-next-line no-restricted-syntax -- this IS the SectionCard source definition; the rule is correct for all other files
         'bg-surface-container-low border border-outline-variant/20 rounded-sm shadow-elev-1',
         PAD[padding],
         SPACE[spacing],

@@ -417,7 +417,7 @@ export function AppStateProvider({ children }: { children: React.ReactNode }) {
 
   const handleLogMeal = useMemo(
     () => createHandleLogMeal({ targetPlanDay, setMealPlan, setShoppingList, setTargetPlanDay, setDailyMacros, setDailyLog, setFoodHistory, navigateTo, previousScreen, t }),
-    [targetPlanDay, setMealPlan, setShoppingList, setDailyMacros, setDailyLog, setFoodHistory, navigateTo, previousScreen, t],
+    [targetPlanDay, setTargetPlanDay, setMealPlan, setShoppingList, setDailyMacros, setDailyLog, setFoodHistory, navigateTo, previousScreen, t],
   );
   const handleLogMealNow = useMemo(
     () => createHandleLogMealNow({ setDailyMacros, setDailyLog, setFoodHistory, navigateTo, t }),
@@ -565,10 +565,10 @@ export function AppStateProvider({ children }: { children: React.ReactNode }) {
     userVariantBarcodes, addVariantBarcode, mergedVariants,
     dailyLog, setDailyLog, foodHistory, setFoodHistory, favoriteIds, toggleFavorite,
     weightHistory, setWeightHistory, nutritionHistory, setNutritionHistory,
-    selectedRecipe, targetPlanDay, openScannerOnAddMeal, selectedStoryAuthorId, selectedCreatorId, selectedPostId,
+    selectedRecipe, setSelectedRecipe, targetPlanDay, setTargetPlanDay, openScannerOnAddMeal, setOpenScannerOnAddMeal, selectedStoryAuthorId, setSelectedStoryAuthorId, selectedCreatorId, setSelectedCreatorId, selectedPostId, setSelectedPostId, selectedChallengeId, setSelectedChallengeId,
     likedPosts, toggleLikePost, savedPosts, toggleSavePost,
     communityStories, setCommunityStories, handlePublishStory, handleMarkStoryViewed,
-    notifications, markAllNotificationsRead, markNotificationRead, selectedChallengeId,
+    notifications, markAllNotificationsRead, markNotificationRead,
     followedCreators, handleFollowCreator,
     joinedChallenges, challengeJoinDates, challengeProgress,
     handleJoinChallenge, handleLeaveChallenge, handleCheckInChallenge, handleToggleChallenge,
@@ -579,7 +579,7 @@ export function AppStateProvider({ children }: { children: React.ReactNode }) {
     handleAddToPlan, handleCheckIn, handleCompleteCheckIn,
     handleDeleteRecipe, handleDuplicateRecipe, handleMarkAsCooked, handleLogWeight, handleUpdateSnapshot, handleDeleteSnapshot,
     handleShareProgress, handleLoadDemoSeed, handleClearDemoSeed, navigateToRecipe,
-    recipeToEdit,
+    recipeToEdit, setRecipeToEdit,
   ]);
 
   return (

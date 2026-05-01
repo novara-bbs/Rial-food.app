@@ -1,4 +1,11 @@
 import React, { useState, useMemo } from 'react';
+
+const FACET_EMOJI: Record<string, string> = {
+  source: '🍽️',
+  diet: '🌱',
+  time: '⏱️',
+  difficulty: '⭐',
+};
 import { Plus, Link, ShoppingCart } from 'lucide-react';
 import CollectionsCarousel from '../components/CollectionsCarousel';
 import { COLLECTIONS } from '../data/collections';
@@ -150,31 +157,17 @@ export default function Cocina({ onAddMeal, onCreateRecipe, onNavigateToRecipe, 
 
   const activeFilterCount = useMemo(() => countActive(filterValues), [filterValues]);
 
-  // Resolve a filter section id + value id → display label via i18n.
-  const getFilterLabel = (sectionId: string, valueId: string): string => {
-    const section = (t.filters as Record<string, unknown>)[sectionId];
-    if (section && typeof section === 'object') {
-      return (section as Record<string, string>)[valueId] ?? valueId;
-    }
-    return valueId;
-  };
-
-  // Per-facet emoji used in the ActiveFilterStrip — semantic shortcut so the
-  // user can scan WHICH facet a chip belongs to without reading the label.
-  // Picked carefully (delivery-app convention): only when emoji ↔ concept is
-  // unambiguous. 🍽️ = origen/source · 🌱 = dieta/diet · ⏱️ = tiempo/time ·
-  // ⭐ = dificultad/difficulty. Keep aligned with PRIMITIVES.md docs.
-  const FACET_EMOJI: Record<string, string> = {
-    source: '🍽️',
-    diet: '🌱',
-    time: '⏱️',
-    difficulty: '⭐',
-  };
-
   // Flat list of currently active filter chips for the ActiveFilterStrip.
   // Each entry carries `key = "sectionId:valueId"` so onDismiss can dispatch
   // back to the right facet via `handleDismissByKey`.
   const activeFilterChips = useMemo<ActiveFilterChip[]>(() => {
+    const getFilterLabel = (sectionId: string, valueId: string): string => {
+      const section = (t.filters as Record<string, unknown>)[sectionId];
+      if (section && typeof section === 'object') {
+        return (section as Record<string, string>)[valueId] ?? valueId;
+      }
+      return valueId;
+    };
     const chips: ActiveFilterChip[] = [];
     // Source (single — skip 'all' which is the neutral default)
     if (filterValues.source && filterValues.source !== 'all') {

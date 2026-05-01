@@ -1,4 +1,12 @@
 import { ChefHat, ChevronRight } from 'lucide-react';
+
+const FACET_EMOJI: Record<string, string> = {
+  cuisine: '🍽️',
+  diet: '🌱',
+  time: '⏱️',
+  difficulty: '⭐',
+  mealSlot: '🥪',
+};
 import SearchInput from '../../../components/patterns/SearchInput';
 import React, { useState, useMemo } from 'react';
 import { toast } from 'sonner';
@@ -96,28 +104,15 @@ export default function Discovery({ onNavigateToRecipe, savedRecipes = [], onSav
   // ≥1 filter → flat sorted grid (Yummly-style narrowed search).
   const isFiltered = activeFilterCount > 0;
 
-  // Per-facet emoji used in the ActiveFilterStrip (canonical mapping aligned
-  // with Cocina — see PRIMITIVES.md). Cuisine + mealSlot use 🍽️/🥪 since
-  // both refer to "what kind of dish"; diet/time/difficulty match Cocina.
-  const FACET_EMOJI: Record<string, string> = {
-    cuisine: '🍽️',
-    diet: '🌱',
-    time: '⏱️',
-    difficulty: '⭐',
-    mealSlot: '🥪',
-  };
-
-  // Resolve a section/value → display label via i18n.
-  const getFilterLabel = (sectionId: string, valueId: string): string => {
-    const section = (t.filters as Record<string, unknown>)[sectionId];
-    if (section && typeof section === 'object') {
-      return (section as Record<string, string>)[valueId] ?? valueId;
-    }
-    return valueId;
-  };
-
   // Active filter chips for the ActiveFilterStrip (Invariant G).
   const activeFilterChips = useMemo<ActiveFilterChip[]>(() => {
+    const getFilterLabel = (sectionId: string, valueId: string): string => {
+      const section = (t.filters as Record<string, unknown>)[sectionId];
+      if (section && typeof section === 'object') {
+        return (section as Record<string, string>)[valueId] ?? valueId;
+      }
+      return valueId;
+    };
     const chips: ActiveFilterChip[] = [];
     for (const c of (filterValues.cuisine as string[] | undefined) ?? []) {
       chips.push({ key: `cuisine:${c}`, label: getFilterLabel('cuisine', c), emoji: FACET_EMOJI.cuisine });

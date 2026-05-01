@@ -21,6 +21,7 @@ import BodyConstantsGrid from '../components/BodyConstantsGrid';
 import RitmoSection from '../components/RitmoSection';
 import SectionCard from '@/components/SectionCard';
 import { calcStreaks } from '../utils/streaks';
+import { safeSumMacros } from '../../home/utils/safe-macros';
 import { calcWeekMacros, type MacroTarget } from '../utils/week-stats';
 import { calcWeightTrend } from '../utils/weight-trend';
 import { calcTopMeals } from '../utils/top-meals';
@@ -164,8 +165,7 @@ export default function Progress({ onBack }: { onBack: () => void }) {
   const selectedDayData = useMemo(() => {
     if (!selectedDay) return null;
     if (selectedDay === todayDate) {
-      const todayCal = dailyLog.reduce((s, e) => s + (e.macros?.cal || 0), 0);
-      const todayPro = dailyLog.reduce((s, e) => s + (e.macros?.pro || 0), 0);
+      const { cal: todayCal, pro: todayPro } = safeSumMacros(dailyLog);
       const rf = (realFeelLogs || []).find((l) => l.date && l.date.slice(0, 10) === todayDate);
       return { date: todayDate, cal: todayCal, pro: todayPro, mealCount: dailyLog.length, rfLevel: rf?.level };
     }

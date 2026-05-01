@@ -13,6 +13,7 @@ import HomeQuickStats from '../components/HomeQuickStats';
 import WeeklyMiniDash from '../components/WeeklyMiniDash';
 import NextMealSuggestion from '../components/NextMealSuggestion';
 import MealGapSuggestion from '../components/MealGapSuggestion';
+import { safeSumMacros } from '../utils/safe-macros';
 import QuickActions from '../components/QuickActions';
 import ProgressPreviewCard from '../components/ProgressPreviewCard';
 import { useI18n } from '../../../i18n';
@@ -138,7 +139,7 @@ export default function Home({
     const sorted = [...nutritionHistory].sort((a, b) => b.date.localeCompare(a.date));
     const yesterday = sorted[0];
     if (!yesterday?.dailyLog?.length) return null;
-    const kcal = yesterday.dailyLog.reduce((s: number, e) => s + (e.macros?.cal || 0), 0);
+    const kcal = safeSumMacros(yesterday.dailyLog).cal;
     return { kcal, count: yesterday.dailyLog.length };
   }, [nutritionHistory]);
 

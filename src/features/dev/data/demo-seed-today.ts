@@ -1,4 +1,5 @@
 import type { DailyLogEntry } from '../../food/handlers/meal-handlers';
+import { safeSumMacros } from '../../home/utils/safe-macros';
 import { CLARA_MACROS_TARGET } from './demo-seed-timeline';
 
 /**
@@ -46,15 +47,7 @@ export function buildDemoToday(): DemoToday {
     },
   ];
 
-  const consumed = dailyLog.reduce(
-    (acc, e) => ({
-      cal: acc.cal + e.macros.cal,
-      pro: acc.pro + e.macros.pro,
-      carbs: acc.carbs + e.macros.carbs,
-      fats: acc.fats + e.macros.fats,
-    }),
-    { cal: 0, pro: 0, carbs: 0, fats: 0 },
-  );
+  const consumed = safeSumMacros(dailyLog);
 
   return {
     dailyLog,

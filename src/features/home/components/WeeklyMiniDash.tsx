@@ -16,6 +16,7 @@ export default function WeeklyMiniDash({ calAvg, proteinHitDays, totalDays, week
     <button
       type="button"
       onClick={onNavigateToProgress}
+      // eslint-disable-next-line no-restricted-syntax -- SectionCard is static <section> with no onClick; this interactive card card replicates the shape intentionally
       className="bg-surface-container-low border border-outline-variant/20 p-4 rounded-sm w-full text-left hover:border-primary/30 hover:bg-surface-container transition-colors group"
     >
       <div className="grid grid-cols-3 gap-3">
