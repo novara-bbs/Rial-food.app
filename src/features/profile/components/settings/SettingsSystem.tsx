@@ -127,7 +127,7 @@ export default function SettingsSystem({ showAIBot, setShowAIBot }: Props) {
           {wearables.map(({ key, label, badge }) => (
             <div key={key} className="flex items-center justify-between p-4 bg-surface-container-highest rounded-sm border border-outline-variant/10">
               <div className="flex items-center gap-3">
-                <div className={`w-8 h-8 rounded-full ${badge.bg} flex items-center justify-center ${badge.text} font-bold text-xs`} aria-hidden="true">{badge.char}</div>
+                <div className={`w-8 h-8 rounded-full ${badge.bg} flex items-center justify-center ${badge.text} font-bold text-micro`} aria-hidden="true">{badge.char}</div>
                 <div>
                   <Heading level="h4">{label}</Heading>
                   <Text variant="micro" className={connectedDevices[key] ? 'text-primary' : ''}>
@@ -187,7 +187,7 @@ export default function SettingsSystem({ showAIBot, setShowAIBot }: Props) {
               toast.error(t.settings.exportError);
             }
           }}
-          className="w-full py-3 bg-surface-container-highest rounded-sm font-headline text-xs font-bold uppercase tracking-widest text-tertiary hover:bg-primary/10 hover:text-primary transition-colors flex items-center justify-center gap-2">
+          className="w-full py-3 bg-surface-container-highest rounded-sm font-headline text-micro font-bold uppercase tracking-widest text-tertiary hover:bg-primary/10 hover:text-primary transition-colors flex items-center justify-center gap-2">
           <Cloud className="w-4 h-4" aria-hidden="true" /> {t.settings.exportJSON}
         </button>
         <Button variant="destructive" onClick={() => setShowDeleteAllConfirm(true)} className="w-full">

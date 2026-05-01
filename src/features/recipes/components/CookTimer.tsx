@@ -108,7 +108,7 @@ export default function CookTimer({ minutes, onDone }: { minutes: number; onDone
         </svg>
         <div className="absolute inset-0 flex items-center justify-center">
           <span
-            className={`font-mono text-lg font-bold ${done ? 'text-brand-secondary' : 'text-on-overlay'}`}
+            className={`font-mono text-title-sm font-bold ${done ? 'text-brand-secondary' : 'text-on-overlay'}`}
             aria-live="polite"
           >
             {done ? '✓' : `${mins}:${String(secs).padStart(2, '0')}`}

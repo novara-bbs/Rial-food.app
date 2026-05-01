@@ -295,7 +295,7 @@ export default function Home({
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
               <Sparkles className="w-4 h-4 text-primary" />
-              <span className="font-headline font-bold text-sm uppercase tracking-widest text-tertiary">{t.guidedSetup.title}</span>
+              <span className="font-headline font-bold text-body-sm uppercase tracking-widest text-tertiary">{t.guidedSetup.title}</span>
             </div>
             <span className="font-mono text-micro text-primary font-bold">{guidedCompleted}/{guidedSteps.length}</span>
           </div>
@@ -389,7 +389,7 @@ export default function Home({
             </div>
             <div>
               <p className="font-label text-micro text-on-surface-variant uppercase tracking-widest">{t.home.water}</p>
-              <p className="font-headline font-bold text-sm text-tertiary uppercase">{hydration.consumed} / {hydration.target} {t.home.cups}</p>
+              <p className="font-headline font-bold text-body-sm text-tertiary uppercase">{hydration.consumed} / {hydration.target} {t.home.cups}</p>
             </div>
           </div>
           <div className="flex items-center gap-2">
@@ -415,7 +415,7 @@ export default function Home({
           <div className="pt-3 border-t border-outline-variant/20 animate-in fade-in slide-in-from-top-2">
             <div className="flex items-center justify-between mb-2">
               <span className="font-label text-micro uppercase tracking-widest text-on-surface-variant">{t.home.dailyTarget} ({t.home.cups})</span>
-              <span className="font-headline font-bold text-sm text-brand-secondary">{hydration.target}</span>
+              <span className="font-headline font-bold text-body-sm text-brand-secondary">{hydration.target}</span>
             </div>
             <input
               type="range"
@@ -521,7 +521,7 @@ export default function Home({
             <BarChart3 className="w-5 h-5 text-primary" />
           </div>
           <div className="flex-1 min-w-0">
-            <p className="font-headline text-xs font-bold uppercase tracking-widest text-tertiary">{t.progress.title}</p>
+            <p className="font-headline text-micro font-bold uppercase tracking-widest text-tertiary">{t.progress.title}</p>
             <p className="text-caption text-on-surface-variant mt-0.5 leading-relaxed">{t.progress.desc}</p>
           </div>
           <ChevronRight className="w-4 h-4 text-primary shrink-0" />

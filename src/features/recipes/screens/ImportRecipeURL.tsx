@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import PageShell from '../../../components/PageShell';
 import SectionCard from '../../../components/SectionCard';
+import { Heading } from '@/components/ui/Typography';
 import BottomSheet from '@/components/ui/bottom-sheet';
 import { Link, CheckCircle2, AlertTriangle, Loader2, FileText, HelpCircle, ChevronDown, ChevronUp } from 'lucide-react';
 import { useI18n } from '../../../i18n';
@@ -204,7 +205,7 @@ export default function ImportRecipeURL({
           <div className="flex border border-outline-variant/20 rounded-sm overflow-hidden">
             <button type="button"
               onClick={() => setInputMode('url')}
-              className={`flex-1 py-3 font-headline text-xs font-bold uppercase tracking-widest flex items-center justify-center gap-2 transition-colors ${
+              className={`flex-1 py-3 font-headline text-body-sm font-bold uppercase tracking-widest flex items-center justify-center gap-2 transition-colors ${
                 inputMode === 'url' ? 'bg-primary text-on-primary' : 'bg-surface-container-low text-on-surface-variant hover:text-tertiary'
               }`}
             >
@@ -212,7 +213,7 @@ export default function ImportRecipeURL({
             </button>
             <button type="button"
               onClick={() => setInputMode('text')}
-              className={`flex-1 py-3 font-headline text-xs font-bold uppercase tracking-widest flex items-center justify-center gap-2 transition-colors ${
+              className={`flex-1 py-3 font-headline text-body-sm font-bold uppercase tracking-widest flex items-center justify-center gap-2 transition-colors ${
                 inputMode === 'text' ? 'bg-primary text-on-primary' : 'bg-surface-container-low text-on-surface-variant hover:text-tertiary'
               }`}
             >
@@ -221,7 +222,7 @@ export default function ImportRecipeURL({
           </div>
 
           <div>
-            <label className="block text-xs font-label uppercase tracking-widest text-on-surface-variant mb-2">
+            <label className="block text-body-sm font-label uppercase tracking-widest text-on-surface-variant mb-2">
               {inputMode === 'url' ? t.importUrl.paste : t.importUrl.pasteTextLabel}
             </label>
             {inputMode === 'url' ? (
@@ -232,7 +233,7 @@ export default function ImportRecipeURL({
                   value={url}
                   onChange={e => setUrl(e.target.value)}
                   placeholder={t.importUrl.urlPlaceholder}
-                  className="w-full pl-10 pr-4 py-4 bg-surface-container-low rounded-sm border border-outline-variant/20 text-on-surface placeholder:text-on-surface-variant text-sm font-body focus:outline-none focus:border-primary"
+                  className="w-full pl-10 pr-4 py-4 bg-surface-container-low rounded-sm border border-outline-variant/20 text-on-surface placeholder:text-on-surface-variant text-body-sm font-body focus:outline-none focus:border-primary"
                 />
               </div>
             ) : (
@@ -241,14 +242,14 @@ export default function ImportRecipeURL({
                 onChange={e => setUrl(e.target.value)}
                 placeholder={t.importUrl.pasteText}
                 rows={8}
-                className="w-full p-4 bg-surface-container-low rounded-sm border border-outline-variant/20 text-on-surface placeholder:text-on-surface-variant text-sm font-body focus:outline-none focus:border-primary resize-none"
+                className="w-full p-4 bg-surface-container-low rounded-sm border border-outline-variant/20 text-on-surface placeholder:text-on-surface-variant text-body-sm font-body focus:outline-none focus:border-primary resize-none"
               />
             )}
-            <p className="text-xs text-on-surface-variant mt-2">{t.importUrl.supports}</p>
+            <p className="text-body-sm text-on-surface-variant mt-2">{t.importUrl.supports}</p>
           </div>
 
           {error && (
-            <div className="bg-error/10 border border-error/20 rounded-sm p-3 text-sm text-error font-label">
+            <div className="bg-error/10 border border-error/20 rounded-sm p-3 text-body-sm text-error font-label">
               {error}
             </div>
           )}
@@ -273,7 +274,7 @@ export default function ImportRecipeURL({
               <input
                 value={extracted.title}
                 onChange={e => setExtracted({ ...extracted, title: e.target.value })}
-                className="flex-1 font-headline text-lg font-bold uppercase text-tertiary bg-transparent border-b border-outline-variant/20 focus:outline-none focus:border-primary pb-1"
+                className="flex-1 font-headline text-title-sm font-bold uppercase text-tertiary bg-transparent border-b border-outline-variant/20 focus:outline-none focus:border-primary pb-1"
               />
               <span className="text-micro font-bold uppercase tracking-wider bg-primary/10 text-primary px-2 py-1 rounded ml-3">{extracted.source}</span>
             </div>
@@ -288,7 +289,7 @@ export default function ImportRecipeURL({
           {/* Ingredients with intelligence */}
           <div>
             <div className="flex items-center justify-between mb-3">
-              <h3 className="font-headline text-sm font-bold uppercase tracking-widest text-tertiary">{t.recipes.ingredients}</h3>
+              <Heading level="h3" className="font-headline text-body-sm font-bold uppercase tracking-widest text-tertiary">{t.recipes.ingredients}</Heading>
               {intelligence && (
                 <span className="text-micro font-bold uppercase tracking-wider bg-primary/10 text-primary px-2 py-1 rounded">
                   {Math.round(intelligence.matchRate * 100)}% {t.importUrl.matched}
@@ -350,9 +351,9 @@ export default function ImportRecipeURL({
 
           {/* Suitable-for slots — inferred from title, editable before save. */}
           <div>
-            <h3 className="font-headline text-sm font-bold uppercase tracking-widest text-tertiary mb-3">
+            <Heading level="h3" className="font-headline text-body-sm font-bold uppercase tracking-widest text-tertiary mb-3">
               {t.createRecipe.suitableForLabel}
-            </h3>
+            </Heading>
             <MealSlotMultiSelect value={suitableFor} onChange={setSuitableFor} ariaLabel={t.createRecipe.suitableForLabel} />
             <p className="text-micro font-label tracking-widest uppercase text-on-surface-variant mt-2">
               {t.createRecipe.suitableForHelp}
@@ -377,7 +378,7 @@ export default function ImportRecipeURL({
                 { val: `${extracted.macros?.fats}g`, label: 'G' },
               ].map(({ val, label }) => (
                 <div key={label} className="text-center flex-1">
-                  <span className="font-mono text-xl font-bold text-tertiary">{val}</span>
+                  <span className="font-mono text-title-sm font-bold text-tertiary">{val}</span>
                   <p className="text-micro text-on-surface-variant uppercase">{label}</p>
                 </div>
               ))}
@@ -387,7 +388,7 @@ export default function ImportRecipeURL({
           {/* Steps */}
           {extracted.steps && extracted.steps.length > 0 && (
             <div>
-              <h3 className="font-headline text-sm font-bold uppercase tracking-widest text-tertiary mb-3">{t.recipes.steps}</h3>
+              <Heading level="h3" className="font-headline text-body-sm font-bold uppercase tracking-widest text-tertiary mb-3">{t.recipes.steps}</Heading>
               <div className="space-y-2">
                 {extracted.steps.map((step: string, i: number) => (
                   // Reorder of rounded-sm before border escapes the SectionCard drift regex;
@@ -403,7 +404,7 @@ export default function ImportRecipeURL({
 
           {/* Actions */}
           <div className="flex gap-3">
-            <button type="button" onClick={() => setExtracted(null)} className="flex-1 py-4 border border-outline-variant/30 text-on-surface-variant rounded-sm font-headline text-sm font-bold uppercase tracking-widest hover:border-primary/50 transition-colors">
+            <button type="button" onClick={() => setExtracted(null)} className="flex-1 py-4 border border-outline-variant/30 text-on-surface-variant rounded-sm font-headline text-body-sm font-bold uppercase tracking-widest hover:border-primary/50 transition-colors">
               {t.common.edit}
             </button>
             <Button

@@ -1,5 +1,16 @@
 # RIAL App - Changelog
 
+## [1.5.181] - 2026-05-01
+
+### refactor(typography): ADR-012 warning sweep — 0 warnings achieved
+
+Complete elimination of all ADR-012 `no-restricted-syntax` typography warnings. Raw Tailwind size classes (`text-xs`, `text-sm`, `text-base`, `text-lg`, `text-xl`, `text-2xl`, `text-3xl`, `text-4xl`) and raw `<hN>` tags replaced with semantic tokens and `<Heading>` primitives across ~35 files.
+
+**Files fixed (selected):** `ErrorBoundary`, `EmptyState`, `GlobalHeader`, `ConfirmDialog`, `SelectList`, `DayGridCalendar`, `RadioCardGroup`, `label`, `CookMode`, `CookTimer`, `TimeTileComposite`, `VideoSection`, `RelatedRecipesCarousel`, `RecipeSubstitutionPicker`, `MiseEnPlaceScreen`, `Cocina`, `TodaysMeals`, `Home`, `WeeklyMiniDash`, `NutritionHero`, `NutritionHeroRing`, `InsightRow`, `ProgressPreviewCard`, `PortionSelector`, `PortionSheet`, `BatchCookingSuggestions`, `ShoppingList`, `Pantry`, `SettingsNutrition`, `SettingsAppearance`, `SettingsSystem`, `SettingsProfile`, `Settings`, `RialPlus`, `Profile`, `Discovery`, `BarcodeScanner`, `ActivityRow`, `Planner`, `ImportRecipeURL`.
+
+- Design-system lint: **342 → 0 ADR-012 warnings** (pre-existing allowlist fully cleared)
+- TS: 0 errors · Tests: 1464/1464
+
 ## [1.5.180] - 2026-05-01
 
 ### feat(resilience): FeatureErrorBoundary adoption — profile + settings

@@ -79,7 +79,7 @@ export default function AuthorAttributionCard({
 
         {/* Text block */}
         <div className="flex-1 min-w-0">
-          <p className="font-headline font-bold text-sm text-tertiary uppercase tracking-widest truncate">
+          <p className="font-headline font-bold text-body-sm text-tertiary uppercase tracking-widest truncate">
             {name ?? t.recipes.verifiedRial ?? 'RIAL Verified'}
           </p>
           <p className="font-label text-micro text-on-surface-variant uppercase tracking-widest mt-0.5">
@@ -104,7 +104,7 @@ export default function AuthorAttributionCard({
           )}
         </div>
         <div className="flex-1 min-w-0">
-          <p className="font-headline font-bold text-sm text-tertiary uppercase tracking-widest truncate">
+          <p className="font-headline font-bold text-body-sm text-tertiary uppercase tracking-widest truncate">
             {name}
           </p>
           {handle && (

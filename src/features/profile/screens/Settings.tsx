@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { Heading } from '@/components/ui/Typography';
 import { Users, Loader2, Trash2, UserCircle, LogIn, LogOut } from 'lucide-react';
 import { toast } from 'sonner';
 import PageShell from '../../../components/PageShell';
@@ -103,7 +104,7 @@ export default function Settings({
     <PageShell maxWidth="default" spacing="lg">
       <section className="space-y-6">
         <span className="font-label text-xs tracking-[0.2em] text-primary uppercase mb-1 block">{t.settings.title}</span>
-        <h2 className="font-headline text-3xl md:text-4xl font-bold tracking-tighter uppercase text-tertiary mb-6">{t.settings.title}</h2>
+        <Heading level="h2" className="font-headline text-headline md:text-display font-bold tracking-tighter uppercase text-tertiary mb-6">{t.settings.title}</Heading>
 
         <SegmentedTabs
           options={tabs}
@@ -219,7 +220,7 @@ export default function Settings({
                       disabled={!!loadingPersona}
                       className="w-full flex items-center justify-between px-4 py-2.5 bg-surface-container-highest border border-outline-variant/20 rounded-sm text-left hover:border-primary/50 transition-colors disabled:opacity-50"
                     >
-                      <span className="font-headline text-xs font-bold uppercase tracking-widest text-tertiary">
+                      <span className="font-headline text-micro font-bold uppercase tracking-widest text-tertiary">
                         {t.settings[key]}
                       </span>
                       {loadingPersona === id && <Loader2 className="w-4 h-4 text-primary animate-spin" aria-hidden="true" />}

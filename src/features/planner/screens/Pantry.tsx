@@ -1,4 +1,5 @@
 import { Plus, Trash2, X, Package } from 'lucide-react';
+import { Heading } from '@/components/ui/Typography';
 import PageShell from '../../../components/PageShell';
 import SectionCard from '../../../components/SectionCard';
 import { Button } from '@/components/ui/button';
@@ -83,7 +84,7 @@ export default function Pantry({ onBack }: { onBack: () => void }) {
       {isAdding && (
         <div className="bg-surface-container-high p-6 rounded-sm border border-primary/30 animate-in fade-in slide-in-from-top-4 duration-300">
           <div className="flex justify-between items-center mb-4">
-            <h3 className="font-headline text-body-sm font-bold uppercase tracking-widest text-primary">{t.pantry.addToPantry}</h3>
+            <Heading level="h3" className="font-headline text-body-sm font-bold uppercase tracking-widest text-primary">{t.pantry.addToPantry}</Heading>
             <button
               type="button"
               onClick={() => setIsAdding(false)}
@@ -127,10 +128,10 @@ export default function Pantry({ onBack }: { onBack: () => void }) {
       <div className="space-y-8">
         {groups.map(({ category, items }) => (
           <section key={category}>
-            <h3 className="font-headline text-base font-bold tracking-tight uppercase text-on-surface-variant mb-3 border-b border-outline-variant/20 pb-2 flex justify-between items-center">
+            <Heading level="h3" className="font-headline text-body-lg font-bold tracking-tight uppercase text-on-surface-variant mb-3 border-b border-outline-variant/20 pb-2 flex justify-between items-center">
               <span>{category}</span>
               <span className="text-micro font-black opacity-40">{items.length}</span>
-            </h3>
+            </Heading>
             <div className="space-y-2">
               {items.map(item => {
                 const pantryItem = pantryItems.find(p => p.id === item.id);
@@ -143,7 +144,7 @@ export default function Pantry({ onBack }: { onBack: () => void }) {
                   >
                     <Package className="w-5 h-5 text-primary shrink-0" aria-hidden="true" />
                     <div className="flex-1 min-w-0">
-                      <p className="font-headline font-bold text-base uppercase text-tertiary">{item.name}</p>
+                      <p className="font-headline font-bold text-body-lg uppercase text-tertiary">{item.name}</p>
                       {pantryItem?.quantity && pantryItem.quantity !== EMPTY_QUANTITY && (
                         <p className="font-label text-micro uppercase tracking-widest text-on-surface-variant mt-0.5">{pantryItem.quantity}</p>
                       )}

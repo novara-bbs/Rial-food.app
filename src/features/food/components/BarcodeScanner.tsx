@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef, useMemo } from 'react';
 import { X } from 'lucide-react';
+import { Heading } from '@/components/ui/Typography';
 import { toast } from 'sonner';
 import BottomSheet from '@/components/ui/bottom-sheet';
 import { useI18n } from '../../../i18n';
@@ -312,7 +313,7 @@ export default function BarcodeScanner({
     <div className="fixed inset-0 z-40 bg-background/95 backdrop-blur-md flex flex-col animate-in fade-in duration-200">
       {/* Header */}
       <div className="flex items-center justify-between p-4 shrink-0">
-        <h2 className="font-headline text-lg font-bold uppercase text-tertiary tracking-tight">{t.fab.scanBarcode}</h2>
+        <Heading level="h2" className="font-headline text-title-sm font-bold uppercase text-tertiary tracking-tight">{t.fab.scanBarcode}</Heading>
         <button
           type="button"
           onClick={onClose}

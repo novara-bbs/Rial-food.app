@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { ChefHat, X } from 'lucide-react';
+import { Heading } from '@/components/ui/Typography';
 import { Button } from '@/components/ui/button';
 import { useI18n } from '../../../i18n';
 import { Z_TW } from '../../../lib/z-index';
@@ -48,9 +49,9 @@ export default function MiseEnPlaceScreen({
             <span className="font-label text-micro uppercase tracking-widest text-on-overlay/40 block truncate max-w-[200px]">
               {recipeTitle}
             </span>
-            <h2 className="font-headline text-sm font-bold text-on-overlay">
+            <Heading level="h2" className="font-headline text-body-sm font-bold text-on-overlay">
               {tt.title}
-            </h2>
+            </Heading>
           </div>
         </div>
         <button

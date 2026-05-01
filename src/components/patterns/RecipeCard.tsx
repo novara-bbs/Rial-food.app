@@ -1,4 +1,5 @@
 import React from 'react';
+import { Heading } from '../ui/Typography';
 import { Clock, Flame, Share2, Bookmark, Trash2, GitFork } from 'lucide-react';
 import { useI18n } from '../../i18n';
 import { CREATORS_MAP } from '../../features/social/data/seed-creators';
@@ -55,10 +56,10 @@ const INFO_BLOCK: Record<string, string> = {
 };
 
 const TITLE: Record<string, string> = {
-  carousel: 'font-headline font-bold text-sm text-tertiary leading-tight tracking-tight line-clamp-2',
-  grid:     'font-headline font-bold text-sm text-tertiary leading-tight tracking-tight line-clamp-2',
-  hero:     'font-headline font-bold text-tertiary text-2xl md:text-3xl leading-tight tracking-tighter line-clamp-2',
-  compact:  'font-headline font-bold text-xs text-tertiary leading-tight tracking-tight line-clamp-2',
+  carousel: 'font-headline font-bold text-body-sm text-tertiary leading-tight tracking-tight line-clamp-2',
+  grid:     'font-headline font-bold text-body-sm text-tertiary leading-tight tracking-tight line-clamp-2',
+  hero:     'font-headline font-bold text-tertiary text-title md:text-headline leading-tight tracking-tighter line-clamp-2',
+  compact:  'font-headline font-bold text-body-sm text-tertiary leading-tight tracking-tight line-clamp-2',
 };
 
 export default function RecipeCard({
@@ -179,7 +180,7 @@ export default function RecipeCard({
 
       {/* ── INFO BLOCK ── */}
       <div className={INFO_BLOCK[variant]}>
-        <h4 className={TITLE[variant]}>{recipe.title}</h4>
+        <Heading level="h4" className={TITLE[variant]}>{recipe.title}</Heading>
 
         {showAuthor && creator && (
           <span className="font-label text-micro text-on-surface-variant mt-0.5 truncate">

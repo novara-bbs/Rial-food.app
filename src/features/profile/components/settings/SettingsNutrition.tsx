@@ -107,7 +107,7 @@ export default function SettingsNutrition({ dailyMacros, setDailyMacros, userPro
         <div className="space-y-6">
           {macroSliders.map(({ key, label, unit, min, max, step, accent, defaultVal }) => (
             <div key={key}>
-              <div className="flex justify-between text-xs font-label font-bold tracking-widest uppercase mb-2">
+              <div className="flex justify-between text-micro font-label font-bold tracking-widest uppercase mb-2">
                 <span className="text-on-surface-variant">{label}</span>
                 <span className="text-tertiary">{dailyMacros?.target?.[key] ?? defaultVal} {unit}</span>
               </div>
@@ -130,7 +130,7 @@ export default function SettingsNutrition({ dailyMacros, setDailyMacros, userPro
           {dietaryOptions.map((option) => (
             <button type="button" key={option.key}
               onClick={() => toggleDietaryPreference(option.key)}
-              className={`px-4 py-2 rounded-full font-label text-xs font-bold tracking-wider uppercase transition-colors border ${
+              className={`px-4 py-2 rounded-full font-label text-micro font-bold tracking-wider uppercase transition-colors border ${
                 userProfile?.dietaryPreferences?.includes(option.key)
                   ? 'bg-primary text-on-primary border-primary'
                   : 'bg-surface-container-highest text-on-surface-variant border-outline-variant/30 hover:border-primary/50'
@@ -158,13 +158,13 @@ export default function SettingsNutrition({ dailyMacros, setDailyMacros, userPro
             <input type="text" value={dislikeSearch}
               onChange={(e) => setDislikeSearch(e.target.value)}
               placeholder={t.settings.foodDislikesPlaceholder}
-              className={`${INPUT_SURFACE_CLASSES} w-full py-2 pl-9 pr-3 text-tertiary text-sm focus:outline-none focus:border-primary`} />
+              className={`${INPUT_SURFACE_CLASSES} w-full py-2 pl-9 pr-3 text-tertiary text-body-sm focus:outline-none focus:border-primary`} />
           </div>
           {prefSearchResults.length > 0 && (
             <div className="mt-1 bg-surface-container-highest border border-outline-variant/10 rounded-sm max-h-40 overflow-y-auto">
               {prefSearchResults.map((d) => (
                 <div key={d.id} className="flex items-center justify-between px-3 py-2 hover:bg-primary/5 transition-colors">
-                  <span className="text-sm text-tertiary flex-1">{d.name}</span>
+                  <span className="text-body-sm text-tertiary flex-1">{d.name}</span>
                   <div className="flex gap-2">
                     <button type="button"
                       onClick={() => setFoodPref(d.id, 'like')}
@@ -191,7 +191,7 @@ export default function SettingsNutrition({ dailyMacros, setDailyMacros, userPro
                 const isLike = pref === 'like';
                 return (
                   <div key={id} className="flex items-center justify-between py-2 border-b border-outline-variant/10 last:border-0">
-                    <span className="text-sm text-on-surface flex-1">{ing?.name || id}</span>
+                    <span className="text-body-sm text-on-surface flex-1">{ing?.name || id}</span>
                     <div className="flex items-center gap-2">
                       <button type="button"
                         onClick={() => setFoodPref(id, 'like')}
@@ -228,7 +228,7 @@ export default function SettingsNutrition({ dailyMacros, setDailyMacros, userPro
             {allergenOptions.map((opt) => (
               <button type="button" key={opt.key}
                 onClick={() => toggleIntolerance(opt.key)}
-                className={`px-4 py-2 rounded-full font-label text-xs font-bold tracking-wider uppercase transition-colors border ${
+                className={`px-4 py-2 rounded-full font-label text-micro font-bold tracking-wider uppercase transition-colors border ${
                   (userProfile?.intolerances || []).includes(opt.key)
                     ? 'bg-error text-white border-error'
                     : 'bg-surface-container-highest text-on-surface-variant border-outline-variant/30 hover:border-error/50'
@@ -251,7 +251,7 @@ export default function SettingsNutrition({ dailyMacros, setDailyMacros, userPro
           {/* Hydration target */}
           {setHydration && hydration && (
             <div>
-              <div className="flex justify-between text-xs font-label font-bold tracking-widest uppercase mb-2">
+              <div className="flex justify-between text-micro font-label font-bold tracking-widest uppercase mb-2">
                 <span className="text-on-surface-variant">{t.settings.hydrationTarget}</span>
                 <span className="text-tertiary">{hydration.target} {t.home.cups}</span>
               </div>
@@ -274,7 +274,7 @@ export default function SettingsNutrition({ dailyMacros, setDailyMacros, userPro
           {setMovement && movement && (
             <>
               <div>
-                <div className="flex justify-between text-xs font-label font-bold tracking-widest uppercase mb-2">
+                <div className="flex justify-between text-micro font-label font-bold tracking-widest uppercase mb-2">
                   <span className="text-on-surface-variant flex items-center gap-1.5">
                     <Footprints className="w-3 h-3" aria-hidden="true" />
                     {t.settings.stepsTarget}
@@ -295,7 +295,7 @@ export default function SettingsNutrition({ dailyMacros, setDailyMacros, userPro
                 />
               </div>
               <div>
-                <div className="flex justify-between text-xs font-label font-bold tracking-widest uppercase mb-2">
+                <div className="flex justify-between text-micro font-label font-bold tracking-widest uppercase mb-2">
                   <span className="text-on-surface-variant">{t.settings.activeMinTarget}</span>
                   <span className="text-tertiary">{movement.activeTarget} min</span>
                 </div>

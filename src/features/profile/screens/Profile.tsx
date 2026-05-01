@@ -88,7 +88,7 @@ export default function Profile({ userProfile, onBack, realFeelLogs = [], savedR
       {/* Avatar + name */}
       <div className="flex items-center gap-6">
         <div className="relative w-20 h-20 rounded-full bg-primary/10 border-2 border-primary flex items-center justify-center overflow-hidden">
-          <span className="font-headline text-3xl font-black text-primary uppercase">
+          <span className="font-headline text-headline font-black text-primary uppercase">
             {(userProfile?.name || 'U').charAt(0)}
           </span>
           {userProfile?.avatar && (
@@ -96,7 +96,7 @@ export default function Profile({ userProfile, onBack, realFeelLogs = [], savedR
           )}
         </div>
         <div>
-          <h2 className="font-headline text-2xl font-black text-tertiary uppercase tracking-tight">{userProfile?.name || 'User'}</h2>
+          <Heading level="h2" className="font-headline text-title font-black text-tertiary uppercase tracking-tight">{userProfile?.name || 'User'}</Heading>
           <div className="flex items-center gap-3 mt-1">
             <span className="bg-primary/10 text-primary text-micro px-2 py-0.5 rounded font-bold uppercase tracking-widest">
               {(t.gamification.levels as Record<string, string>)[level.name] || level.name}
@@ -138,12 +138,12 @@ export default function Profile({ userProfile, onBack, realFeelLogs = [], savedR
         <div className="flex items-center gap-3">
           <Flame className="w-6 h-6 text-brand-secondary" aria-hidden="true" />
           <div>
-            <span className="font-headline text-sm font-bold uppercase text-tertiary tracking-widest">{t.gamification.streak}</span>
+            <span className="font-headline text-body-sm font-bold uppercase text-tertiary tracking-widest">{t.gamification.streak}</span>
             <p className="text-micro text-on-surface-variant">{t.profile.realFeelMeals}</p>
           </div>
         </div>
         <div className="flex items-center gap-2">
-          <span className="font-mono text-3xl font-black text-brand-secondary">{stats.streakDays}</span>
+          <span className="font-mono text-headline font-black text-brand-secondary">{stats.streakDays}</span>
           <ChevronRight className="w-4 h-4 text-on-surface-variant group-hover:text-brand-secondary transition-colors" aria-hidden="true" />
         </div>
       </button>
@@ -168,7 +168,7 @@ export default function Profile({ userProfile, onBack, realFeelLogs = [], savedR
                 }`}
                 title={(t.gamification.badgeNames as Record<string, string>)[badge.name] || badge.name}
               >
-                <span className="text-2xl">{badge.emoji}</span>
+                <span className="text-title">{badge.emoji}</span>
                 <span className="text-micro font-bold uppercase tracking-wider text-on-surface-variant text-center leading-tight">
                   {(t.gamification.badgeNames as Record<string, string>)[badge.name] || badge.name}
                 </span>
@@ -184,7 +184,7 @@ export default function Profile({ userProfile, onBack, realFeelLogs = [], savedR
           {userProfile?.age && <div className="flex justify-between"><span className="text-on-surface-variant">{t.onboarding.body.age}</span><span className="font-bold text-tertiary">{userProfile.age}</span></div>}
           {userProfile?.height && <div className="flex justify-between"><span className="text-on-surface-variant">{t.onboarding.body.height}</span><span className="font-bold text-tertiary">{heightFromCm(userProfile.height, userProfile?.unitSystem ?? 'metric')} {getHeightUnit(userProfile?.unitSystem ?? 'metric')}</span></div>}
           {userProfile?.weight && <div className="flex justify-between"><span className="text-on-surface-variant">{t.onboarding.body.weight}</span><span className="font-bold text-tertiary">{bodyWeightFromKg(userProfile.weight, userProfile?.unitSystem ?? 'metric')} {getBodyWeightUnit(userProfile?.unitSystem ?? 'metric')}</span></div>}
-          {userProfile?.goal && <div className="flex justify-between"><span className="text-on-surface-variant">{t.profile.goal}</span><span className="font-bold text-primary uppercase text-xs">{userProfile.goal}</span></div>}
+          {userProfile?.goal && <div className="flex justify-between"><span className="text-on-surface-variant">{t.profile.goal}</span><span className="font-bold text-primary uppercase text-micro">{userProfile.goal}</span></div>}
         </div>
         {userProfile?.dietaryPreferences?.length > 0 && (
           <div className="flex flex-wrap gap-1.5">

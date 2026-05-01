@@ -15,6 +15,7 @@
  */
 import { useI18n } from '../../../i18n';
 import RecipeCard from '../../../components/patterns/RecipeCard';
+import { Heading } from '@/components/ui/Typography';
 import type { Recipe } from '../../../types';
 
 // ─── helpers ─────────────────────────────────────────────────────────────────
@@ -96,9 +97,9 @@ export default function RelatedRecipesCarousel({
 
   return (
     <div className={`mt-6 ${className}`}>
-      <h3 className="font-headline font-bold text-sm uppercase tracking-widest text-tertiary px-6 mb-3">
+      <Heading level="h3" className="font-headline font-bold text-body-sm uppercase tracking-widest text-tertiary px-6 mb-3">
         {heading}
-      </h3>
+      </Heading>
       <div className="flex gap-3 overflow-x-auto scrollbar-none px-6 pb-2">
         {related.map((recipe) => (
           <RecipeCard

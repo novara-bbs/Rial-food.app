@@ -99,7 +99,7 @@ export default function RadioCardGroup<Id extends string>({
             <div className="flex-1 min-w-0">
               <div
                 className={[
-                  'font-headline font-bold text-sm uppercase tracking-wider',
+                  'font-headline font-bold text-body-sm uppercase tracking-wider',
                   selected ? 'text-primary' : 'text-tertiary',
                 ].join(' ')}
               >

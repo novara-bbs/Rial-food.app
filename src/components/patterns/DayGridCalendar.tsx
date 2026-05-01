@@ -111,7 +111,7 @@ export default function DayGridCalendar<T>({
           >
             <ChevronLeft className="w-4 h-4" aria-hidden="true" />
           </button>
-          <span className="font-headline font-bold text-sm uppercase tracking-widest text-tertiary">
+          <span className="font-headline font-bold text-body-sm uppercase tracking-widest text-tertiary">
             {anchor.toLocaleDateString(undefined, { month: 'long', year: 'numeric' })}
           </span>
           <button

@@ -120,13 +120,13 @@ export default function RialPlus({ onBack }: { onBack: () => void }) {
           <div className="w-24 h-24 bg-primary/20 rounded-full flex items-center justify-center mx-auto">
             <Crown className="w-12 h-12 text-primary" aria-hidden="true" />
           </div>
-          <h2 className="font-headline text-headline font-bold uppercase text-tertiary">{t.rialPlus.alreadyPro}</h2>
+          <Heading level="h2" className="font-headline text-headline font-bold uppercase text-tertiary">{t.rialPlus.alreadyPro}</Heading>
           <p className="text-on-surface-variant max-w-md mx-auto font-body">
             {t.rialPlus.proDescription}
           </p>
           <div className="bg-primary/10 border border-primary/20 rounded-sm p-4 max-w-xs mx-auto">
-            <p className="font-label text-xs uppercase tracking-widest text-primary font-bold">{t.rialPlus.activePlan}</p>
-            <p className="font-headline text-lg font-bold text-tertiary mt-1">{t.rialPlus.renewal}</p>
+            <p className="font-label text-body-sm uppercase tracking-widest text-primary font-bold">{t.rialPlus.activePlan}</p>
+            <p className="font-headline text-title-sm font-bold text-tertiary mt-1">{t.rialPlus.renewal}</p>
           </div>
         </div>
       </PageShell>
@@ -149,7 +149,7 @@ export default function RialPlus({ onBack }: { onBack: () => void }) {
           <div className="flex items-center justify-center gap-2 mb-4">
             <Crown className="w-8 h-8 text-primary" aria-hidden="true" />
           </div>
-          <h1 className="font-headline text-4xl font-black tracking-tighter uppercase text-tertiary">RIAL+</h1>
+          <Heading level="h1" className="font-headline text-display font-black tracking-tighter uppercase text-tertiary">RIAL+</Heading>
           <p className="text-on-surface-variant max-w-sm mx-auto font-body text-sm leading-relaxed">
             {t.rialPlus.heroDescription}
           </p>
@@ -174,8 +174,8 @@ export default function RialPlus({ onBack }: { onBack: () => void }) {
                   {plan.savings}
                 </span>
               )}
-              <p className="font-headline font-bold text-sm uppercase text-tertiary">{plan.label}</p>
-              <p className="font-headline font-black text-2xl text-primary mt-1">{plan.price}</p>
+              <p className="font-headline font-bold text-body-sm uppercase text-tertiary">{plan.label}</p>
+              <p className="font-headline font-black text-title text-primary mt-1">{plan.price}</p>
               <p className="font-label text-micro uppercase tracking-widest text-on-surface-variant">{plan.period}</p>
               {plan.id === 'yearly' && monthlyEquivStr && (
                 <p className="font-label text-micro text-on-surface-variant mt-0.5">

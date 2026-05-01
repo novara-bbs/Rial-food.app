@@ -152,9 +152,9 @@ export default function TodaysMeals({
               return (
                 <div key={entry.id}>
                   <div className="flex items-center gap-3 px-4 py-3 group">
-                    <span className="text-lg shrink-0">{slotIcons[entry.mealSlot] || '🍽️'}</span>
+                    <span className="text-title-sm shrink-0">{slotIcons[entry.mealSlot] || '🍽️'}</span>
                     <div className="flex-1 min-w-0 cursor-pointer" onClick={() => entry.grams ? startEdit(entry) : undefined}>
-                      <span className="font-headline text-xs font-bold uppercase text-tertiary truncate block">{entry.title}</span>
+                      <span className="font-headline text-micro font-bold uppercase text-tertiary truncate block">{entry.title}</span>
                       <div className="flex items-center gap-2 text-micro font-label tracking-widest uppercase text-on-surface-variant mt-0.5">
                         <span>{entry.time}</span>
                         <span>·</span>
@@ -206,7 +206,7 @@ export default function TodaysMeals({
                           <button type="button" onClick={() => setEditGrams(Math.max(1, editGrams - 10))} className="p-2 text-on-surface-variant hover:text-primary transition-colors">
                             <Minus className="w-3.5 h-3.5" />
                           </button>
-                          <input type="text" inputMode="decimal" value={editGrams} onChange={e => { const v = parseFloat(e.target.value); if (!isNaN(v) && v > 0) setEditGrams(v); }} aria-label={t.home.editPortionGrams} className="w-16 text-center bg-transparent text-on-surface font-headline font-bold text-sm border-x border-outline-variant/20 py-1.5 focus:outline-none" />
+                          <input type="text" inputMode="decimal" value={editGrams} onChange={e => { const v = parseFloat(e.target.value); if (!isNaN(v) && v > 0) setEditGrams(v); }} aria-label={t.home.editPortionGrams} className="w-16 text-center bg-transparent text-on-surface font-headline font-bold text-body-sm border-x border-outline-variant/20 py-1.5 focus:outline-none" />
                           <button type="button" onClick={() => setEditGrams(editGrams + 10)} className="p-2 text-on-surface-variant hover:text-primary transition-colors">
                             <Plus className="w-3.5 h-3.5" />
                           </button>
@@ -227,7 +227,7 @@ export default function TodaysMeals({
                           { label: 'F', value: `${previewMacros.fats}g`, color: 'text-macro-fats' },
                         ].map(m => (
                           <div key={m.label} className="bg-surface-container-highest rounded-sm py-1 px-2 text-center">
-                            <span className={`block font-headline font-bold text-xs ${m.color}`}>{m.value}</span>
+                            <span className={`block font-headline font-bold text-micro ${m.color}`}>{m.value}</span>
                             <span className="text-micro font-label uppercase tracking-widest text-on-surface-variant">{m.label}</span>
                           </div>
                         ))}
@@ -295,7 +295,7 @@ export default function TodaysMeals({
                   />
                   <div className="flex-1 min-w-0">
                     <span className="text-micro font-semibold uppercase tracking-wider bg-primary/10 text-primary px-1.5 py-0.5 rounded inline-block mb-0.5">{meal.type || meal.time}</span>
-                    <Heading level="h3" className="truncate text-sm">{meal.title}</Heading>
+                    <Heading level="h3" className="truncate text-body-sm">{meal.title}</Heading>
                     <span className="text-caption text-on-surface-variant">{meal.cal ?? meal.macros?.calories} {t.common.kcal}</span>
                   </div>
                 </button>
@@ -314,8 +314,8 @@ export default function TodaysMeals({
       {/* Empty state */}
       {!hasContent && (
         <div className="bg-surface-container-low border border-dashed border-outline-variant/40 p-10 rounded-sm text-center">
-          <p className="font-label text-sm text-on-surface-variant uppercase tracking-widest">{t.empty.planEmpty}</p>
-          <button type="button" onClick={onAddMeal} className="mt-4 text-primary font-bold uppercase text-xs tracking-widest hover:underline">{t.fab.logMeal}</button>
+          <p className="font-label text-body-sm text-on-surface-variant uppercase tracking-widest">{t.empty.planEmpty}</p>
+          <button type="button" onClick={onAddMeal} className="mt-4 text-primary font-bold uppercase text-micro tracking-widest hover:underline">{t.fab.logMeal}</button>
         </div>
       )}
     </section>

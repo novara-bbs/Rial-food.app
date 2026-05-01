@@ -396,7 +396,7 @@ export default function Cocina({ onAddMeal, onCreateRecipe, onNavigateToRecipe, 
             {filteredRecipes.length === 0 ? (
               searchQuery.trim() ? (
                 <EmptyState icon="🔍" description={t.recipes.emptySearchHint.replace('{query}', searchQuery)}>
-                  <button type="button" onClick={() => setSearchQuery('')} className="px-6 py-3 bg-surface-container-highest border border-outline-variant/20 text-primary rounded-sm font-headline text-xs font-bold uppercase tracking-widest">
+                  <button type="button" onClick={() => setSearchQuery('')} className="px-6 py-3 bg-surface-container-highest border border-outline-variant/20 text-primary rounded-sm font-headline text-micro font-bold uppercase tracking-widest">
                     {t.recipes.clearSearch}
                   </button>
                 </EmptyState>

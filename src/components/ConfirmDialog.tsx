@@ -33,7 +33,7 @@ export default function ConfirmDialog({
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent showCloseButton={false} className="max-w-sm">
         <DialogHeader>
-          <DialogTitle className="font-headline text-lg font-bold uppercase tracking-tight text-tertiary">
+          <DialogTitle className="font-headline text-title-sm font-bold uppercase tracking-tight text-tertiary">
             {title}
           </DialogTitle>
           <DialogDescription className="text-sm text-on-surface-variant">

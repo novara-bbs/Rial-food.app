@@ -66,7 +66,7 @@ export default function VideoSection({ videoUrl, posterFallback }: VideoSectionP
         </div>
       </div>
       <div className="flex-1 min-w-0 py-3 pr-3 flex flex-col justify-center">
-        <span className="font-headline font-bold text-xs uppercase tracking-widest text-tertiary block truncate">
+        <span className="font-headline font-bold text-micro uppercase tracking-widest text-tertiary block truncate">
           {t.recipeDetail.watchOn.replace('{platform}', label)}
         </span>
         <span className="font-label text-micro text-on-surface-variant tracking-widest uppercase mt-0.5 block truncate">

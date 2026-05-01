@@ -114,7 +114,7 @@ export default function ProgressPreviewCard({
             <p className="font-label text-micro text-on-surface-variant uppercase tracking-widest">
               {t.home.weight ?? 'Peso'}
             </p>
-            <p className="font-headline font-bold text-sm text-tertiary uppercase mt-0.5">
+            <p className="font-headline font-bold text-body-sm text-tertiary uppercase mt-0.5">
               {t.progress?.noWeightYet ?? 'Registra tu primer peso'}
             </p>
           </div>
@@ -143,7 +143,7 @@ export default function ProgressPreviewCard({
             {t.home.weight ?? 'Peso'}
           </p>
           <div className="flex items-center gap-2 flex-wrap">
-            <p className="font-headline font-bold text-sm text-tertiary uppercase">
+            <p className="font-headline font-bold text-body-sm text-tertiary uppercase">
               {currentDisplay !== null ? `${currentDisplay} ${unit}` : `— ${unit}`}
             </p>
             {delta !== null && (

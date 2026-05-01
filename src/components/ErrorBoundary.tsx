@@ -24,6 +24,7 @@ import * as Sentry from '@sentry/react';
 import { AlertTriangle, ChevronDown, ChevronUp, Home, RefreshCw, RotateCcw } from 'lucide-react';
 import { logger } from '../lib/logger';
 import { useI18n, type Translations } from '../i18n';
+import { Heading } from './ui/Typography';
 
 const MAX_SOFT_RETRIES = 2;
 const ERROR_MESSAGE_MAX_CHARS = 200;
@@ -130,10 +131,10 @@ class ErrorBoundaryClass extends React.Component<Props, State> {
     return (
       <div className={containerClass} role="alert" aria-live="polite" data-testid="error-boundary-fallback">
         <AlertTriangle className="w-10 h-10 text-brand-secondary" aria-hidden="true" />
-        <h2 className="font-headline text-xl font-bold uppercase tracking-tighter text-tertiary">
+        <Heading level="h2" className="font-headline text-title-sm font-bold uppercase tracking-tighter text-tertiary">
           {t.errors.boundary.title}
-        </h2>
-        <p className="font-body text-sm text-on-surface-variant max-w-sm">
+        </Heading>
+        <p className="font-body text-body-sm text-on-surface-variant max-w-sm">
           {message}
         </p>
 
@@ -170,7 +171,7 @@ class ErrorBoundaryClass extends React.Component<Props, State> {
             <button
               type="button"
               onClick={this.handleSoftRetry}
-              className="inline-flex items-center justify-center gap-1.5 px-6 py-3 min-h-11 bg-primary text-on-primary rounded-sm font-headline text-xs font-bold uppercase tracking-widest hover:opacity-90 transition-opacity"
+              className="inline-flex items-center justify-center gap-1.5 px-6 py-3 min-h-11 bg-primary text-on-primary rounded-sm font-headline text-micro font-bold uppercase tracking-widest hover:opacity-90 transition-opacity"
             >
               <RotateCcw className="w-4 h-4" aria-hidden="true" />
               {t.errors.boundary.retryAction}
@@ -179,7 +180,7 @@ class ErrorBoundaryClass extends React.Component<Props, State> {
           <button
             type="button"
             onClick={this.handleGoHome}
-            className="inline-flex items-center justify-center gap-1.5 px-6 py-3 min-h-11 bg-surface-container-high border border-outline-variant text-on-surface rounded-sm font-headline text-xs font-bold uppercase tracking-widest hover:bg-surface-container-highest transition-colors"
+            className="inline-flex items-center justify-center gap-1.5 px-6 py-3 min-h-11 bg-surface-container-high border border-outline-variant text-on-surface rounded-sm font-headline text-micro font-bold uppercase tracking-widest hover:bg-surface-container-highest transition-colors"
           >
             <Home className="w-4 h-4" aria-hidden="true" />
             {t.errors.boundary.goHomeAction}
@@ -188,7 +189,7 @@ class ErrorBoundaryClass extends React.Component<Props, State> {
             <button
               type="button"
               onClick={this.handleHardReload}
-              className="inline-flex items-center justify-center gap-1.5 px-6 py-3 min-h-11 text-on-surface-variant hover:text-on-surface rounded-sm font-headline text-xs font-bold uppercase tracking-widest transition-colors"
+              className="inline-flex items-center justify-center gap-1.5 px-6 py-3 min-h-11 text-on-surface-variant hover:text-on-surface rounded-sm font-headline text-micro font-bold uppercase tracking-widest transition-colors"
             >
               <RefreshCw className="w-4 h-4" aria-hidden="true" />
               {t.errors.boundary.reloadAction}

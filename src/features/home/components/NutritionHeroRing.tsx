@@ -25,6 +25,7 @@
  */
 import { Zap, HelpCircle } from 'lucide-react';
 import { useI18n } from '../../../i18n';
+import { Heading } from '../../../components/ui/Typography';
 import SectionCard from '../../../components/SectionCard';
 
 interface Macros {
@@ -152,12 +153,12 @@ export default function NutritionHeroRing({ dailyMacros, mode = 'advanced', exer
   return (
     <section className="space-y-4" data-testid="nutrition-hero-ring">
       <div className="flex items-center justify-between">
-        <h2 className="font-headline text-xl font-bold tracking-tight uppercase text-tertiary flex items-center gap-2">
+        <Heading level="h2" className="font-headline text-title-sm font-bold tracking-tight uppercase text-tertiary flex items-center gap-2">
           <Zap className="w-5 h-5 text-primary" /> {t.home.weekSummary}
           <span title={t.home.macroTooltip}>
             <HelpCircle className="w-4 h-4 text-on-surface-variant cursor-help" />
           </span>
-        </h2>
+        </Heading>
       </div>
 
       <SectionCard padding="lg" spacing="md">

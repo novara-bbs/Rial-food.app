@@ -85,7 +85,7 @@ export default function SettingsProfile({ userProfile, setUserProfile, setDailyM
         {/* Avatar with upload overlay */}
         <label className="relative w-16 h-16 rounded-full overflow-hidden border-2 border-primary cursor-pointer group shrink-0">
           <div className="w-full h-full bg-primary/10 flex items-center justify-center">
-            <span className="font-headline font-bold text-2xl text-primary uppercase select-none">
+            <span className="font-headline font-bold text-title text-primary uppercase select-none">
               {(userProfile?.name ?? '?').slice(0, 2)}
             </span>
           </div>
@@ -121,7 +121,7 @@ export default function SettingsProfile({ userProfile, setUserProfile, setDailyM
         </div>
         <button type="button"
           onClick={() => setIsPro && setIsPro(!isPro)}
-          className={`px-4 py-2 rounded-sm font-label text-xs font-bold tracking-widest uppercase transition-colors ${
+          className={`px-4 py-2 rounded-sm font-label text-micro font-bold tracking-widest uppercase transition-colors ${
             isPro
               ? 'bg-surface-container-highest text-on-surface-variant hover:bg-surface-container-low border border-outline-variant/30'
               : 'bg-primary text-on-primary hover:bg-primary/90'
@@ -147,7 +147,7 @@ export default function SettingsProfile({ userProfile, setUserProfile, setDailyM
               <button type="button"
                 key={mode}
                 onClick={() => updateBiometric('mode', mode)}
-                className={`px-4 py-2 rounded-full text-xs font-bold uppercase tracking-widest transition-all ${
+                className={`px-4 py-2 rounded-full text-micro font-bold uppercase tracking-widest transition-all ${
                   (userProfile?.mode === mode || (!userProfile?.mode && mode === 'simple'))
                     ? 'bg-primary text-on-primary shadow-elev-2'
                     : 'text-on-surface-variant hover:text-tertiary'
@@ -286,7 +286,7 @@ export default function SettingsProfile({ userProfile, setUserProfile, setDailyM
                   {t.settings.saveMember}
                 </Button>
                 <button type="button" onClick={() => setIsAddingMember(false)}
-                  className="flex-1 bg-surface-container-low text-on-surface-variant py-2 rounded-sm font-label text-xs font-bold tracking-widest uppercase border border-outline-variant/20">
+                  className="flex-1 bg-surface-container-low text-on-surface-variant py-2 rounded-sm font-label text-micro font-bold tracking-widest uppercase border border-outline-variant/20">
                   {t.common.cancel}
                 </button>
               </div>

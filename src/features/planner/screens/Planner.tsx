@@ -1,5 +1,6 @@
 import { ShoppingCart, Clock, CheckCircle2, Utensils, BookOpen, LogIn, Trash2 } from 'lucide-react';
 import SectionCard from '../../../components/SectionCard';
+import { Heading } from '@/components/ui/Typography';
 import { useState } from 'react';
 import { toast } from 'sonner';
 import { useI18n } from '../../../i18n';
@@ -187,8 +188,8 @@ export default function Planner({
       {/* ── Header ─────────────────────────────────────────────────────────── */}
       <section className="flex flex-col md:flex-row md:items-end justify-between gap-4">
         <div>
-          <span className="font-label text-xs tracking-[0.2em] text-primary uppercase mb-1 block">{t.planner.weeklyPlan}</span>
-          <h2 className="font-headline text-3xl md:text-4xl font-bold tracking-tighter uppercase text-tertiary">{t.planner.currentWeek}</h2>
+          <span className="font-label text-body-sm tracking-[0.2em] text-primary uppercase mb-1 block">{t.planner.weeklyPlan}</span>
+          <Heading level="h2" className="font-headline text-headline md:text-display font-bold tracking-tighter uppercase text-tertiary">{t.planner.currentWeek}</Heading>
         </div>
         <Button
           variant="default"
@@ -214,7 +215,7 @@ export default function Planner({
               </div>
               <div>
                 <p className="font-label text-micro uppercase tracking-widest text-primary font-bold">{t.planner.batchCooking}</p>
-                <p className="font-headline font-bold text-sm text-tertiary">
+                <p className="font-headline font-bold text-body-sm text-tertiary">
                   {t.planner.batchSaveTime.replace('{mins}', String(batchAnalysis.totalTimeSavedMins))}
                 </p>
               </div>
@@ -230,7 +231,7 @@ export default function Planner({
                 <div key={i} className="flex items-start gap-3">
                   <div className="w-1.5 h-1.5 rounded-full bg-primary mt-2 shrink-0" />
                   <div>
-                    <p className="font-label text-xs font-bold text-tertiary">
+                    <p className="font-label text-body-sm font-bold text-tertiary">
                       {session.baseIngredient} — {t.planner.batchPrepareOnce.replace('{count}', String(session.recipeNames.length))}
                     </p>
                     <p className="font-label text-micro text-on-surface-variant mt-0.5">
@@ -261,7 +262,7 @@ export default function Planner({
                   onClick={() => setActiveDay(index)}
                   aria-label={dayNames[index]}
                   aria-pressed={activeDay === index}
-                  className={`w-10 h-10 md:w-12 md:h-12 rounded-full flex items-center justify-center font-headline font-bold text-sm md:text-base cursor-pointer transition-all ${
+                  className={`w-10 h-10 md:w-12 md:h-12 rounded-full flex items-center justify-center font-headline font-bold text-body-sm md:text-body-lg cursor-pointer transition-all ${
                     activeDay === index
                       ? 'bg-primary text-on-primary shadow-elev-2 shadow-primary/20 scale-110'
                       : 'bg-surface-container-highest text-on-surface-variant hover:text-tertiary hover:bg-surface-container-high'
@@ -287,15 +288,15 @@ export default function Planner({
       <section className="space-y-6">
         <SectionCard padding="lg" spacing="lg">
           <div className="flex flex-col sm:flex-row sm:justify-between sm:items-end gap-2">
-            <h3 className="font-headline text-xl font-bold uppercase tracking-tight text-tertiary">{dayNames[activeDay]}</h3>
-            <div className="flex gap-4 text-xs font-label tracking-widest uppercase" aria-label={t.planner.dailyTotal}>
+            <Heading level="h3" className="font-headline text-title-sm font-bold uppercase tracking-tight text-tertiary">{dayNames[activeDay]}</Heading>
+            <div className="flex gap-4 text-body-sm font-label tracking-widest uppercase" aria-label={t.planner.dailyTotal}>
               <div className="flex flex-col items-end">
                 <span className="text-on-surface-variant">{t.home.kcal}</span>
-                <span className="text-primary font-bold text-sm">{totalCals} {t.common.kcal}</span>
+                <span className="text-primary font-bold text-body-sm">{totalCals} {t.common.kcal}</span>
               </div>
               <div className="flex flex-col items-end">
                 <span className="text-on-surface-variant">{t.home.protein}</span>
-                <span className="text-brand-secondary font-bold text-sm">{totalPro}{t.common.g}</span>
+                <span className="text-brand-secondary font-bold text-body-sm">{totalPro}{t.common.g}</span>
               </div>
             </div>
           </div>
@@ -327,7 +328,7 @@ export default function Planner({
                   className="flex items-center justify-between bg-surface-container-low border border-amber-500/20 rounded-sm px-4 py-3"
                 >
                   <div>
-                    <p className="font-label text-xs font-bold text-tertiary">{s.mealTitle}</p>
+                    <p className="font-label text-body-sm font-bold text-tertiary">{s.mealTitle}</p>
                     <p className="font-label text-micro text-on-surface-variant">
                       {t.planner.leftoverFrom.replace('{day}', dayNames[s.sourceDayIndex])} · {t.planner.leftoverGoodFor.replace('{days}', String(s.freshnessWindowDays))}
                     </p>
@@ -368,7 +369,7 @@ export default function Planner({
                   <div className="flex items-center gap-3">
                     {/* Thumbnail */}
                     <div className="relative w-11 h-11 bg-surface-container-highest rounded-sm flex items-center justify-center shrink-0 overflow-hidden">
-                      <span className="font-headline font-bold text-tertiary text-base">{meal.title?.charAt(0)}</span>
+                      <span className="font-headline font-bold text-tertiary text-body-lg">{meal.title?.charAt(0)}</span>
                       {meal.img && (
                         <img src={meal.img} alt={meal.title} className="absolute inset-0 w-full h-full object-cover" referrerPolicy="no-referrer" onError={(e) => { (e.currentTarget as HTMLImageElement).style.display = 'none'; }} />
                       )}
@@ -386,7 +387,7 @@ export default function Planner({
                           </span>
                         )}
                       </div>
-                      <h4 className="font-headline font-bold text-sm uppercase text-tertiary leading-tight">{meal.title}</h4>
+                      <Heading level="h4" className="font-headline font-bold text-body-sm uppercase text-tertiary leading-tight">{meal.title}</Heading>
                       <div className="flex items-center gap-2 mt-1 flex-wrap">
                         <span className="text-micro font-bold text-primary">{meal.cal} {t.common.kcal}</span>
                         <span className="text-micro text-on-surface-variant">·</span>

@@ -1,5 +1,6 @@
 import { Activity } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { Heading } from '@/components/ui/Typography';
 import { useI18n } from '../../../i18n';
 
 interface SwapSuggestion {
@@ -28,9 +29,9 @@ export default function RecipeSubstitutionPicker({ swapSuggestions, onApplySwap,
   return (
     <section>
       <div className="flex items-center justify-between mb-3">
-        <h3 className="font-headline text-sm font-bold tracking-tight uppercase text-tertiary flex items-center gap-2">
+        <Heading level="h3" className="font-headline text-body-sm font-bold tracking-tight uppercase text-tertiary flex items-center gap-2">
           <Activity className="w-4 h-4 text-primary" /> {t.recipeDetail.smartSubstitute}
-        </h3>
+        </Heading>
       </div>
 
       {swapSuggestions.length > 0 ? (

@@ -82,7 +82,7 @@ export default function SelectList<Id extends string>({
                 />
               )}
               <div className="flex-1 min-w-0">
-                <div className="font-headline font-bold text-sm uppercase tracking-wider text-tertiary">
+                <div className="font-headline font-bold text-body-sm uppercase tracking-wider text-tertiary">
                   {item.label}
                 </div>
                 {item.desc && (

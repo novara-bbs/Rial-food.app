@@ -40,7 +40,7 @@ export default function PortionSheet({ ingredient, onConfirm, onClose, unitSyste
         <button
           type="button"
           onClick={() => onConfirm(result)}
-          className="w-full py-4 bg-primary text-on-primary rounded-sm font-headline text-sm font-bold uppercase tracking-widest hover:opacity-90 transition-opacity flex items-center justify-center gap-2"
+          className="w-full py-4 bg-primary text-on-primary rounded-sm font-headline text-micro font-bold uppercase tracking-widest hover:opacity-90 transition-opacity flex items-center justify-center gap-2"
         >
           <CheckCircle2 className="w-4 h-4" />
           {t.home.logIt}

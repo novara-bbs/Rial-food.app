@@ -132,7 +132,7 @@ export default function ShoppingList({ onBack, shoppingList = [], setShoppingLis
         <SectionCard padding="none" spacing="none" className="p-4 space-y-3">
           <div className="flex justify-between items-center">
             <Text as="span" variant="label">{t.shoppingList.title}</Text>
-            <span className="font-headline text-sm font-bold text-primary">{completedCount}/{aggregated.length}</span>
+            <span className="font-headline text-body-sm font-bold text-primary">{completedCount}/{aggregated.length}</span>
           </div>
           <div className="w-full bg-surface-container-highest rounded-full h-2">
             <div
@@ -193,7 +193,7 @@ export default function ShoppingList({ onBack, shoppingList = [], setShoppingLis
 
           return (
             <section key={category}>
-              <Heading level="h3" className="text-base text-on-surface-variant mb-3 border-b border-outline-variant/20 pb-2 flex justify-between items-center">
+              <Heading level="h3" className="text-body-lg text-on-surface-variant mb-3 border-b border-outline-variant/20 pb-2 flex justify-between items-center">
                 <span>{category}</span>
                 <span className="text-micro font-black opacity-40">{unchecked.length}/{items.length}</span>
               </Heading>
@@ -221,7 +221,7 @@ export default function ShoppingList({ onBack, shoppingList = [], setShoppingLis
                     }
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center gap-2 flex-wrap">
-                        <span className={`text-base font-medium transition-all ${item.checked ? 'text-on-surface-variant line-through' : 'text-tertiary'}`}>
+                        <span className={`text-body-lg font-medium transition-all ${item.checked ? 'text-on-surface-variant line-through' : 'text-tertiary'}`}>
                           {item.name}
                         </span>
                         {item.quantity && (
@@ -269,7 +269,7 @@ export default function ShoppingList({ onBack, shoppingList = [], setShoppingLis
                   {t.shoppingList.goToPlan}
                 </Button>
               )}
-              <button type="button" onClick={() => setIsAdding(true)} className="px-8 py-3 bg-surface-container-highest border border-outline-variant/20 text-on-surface-variant rounded-sm font-headline text-xs font-bold uppercase tracking-widest hover:border-primary/50 transition-colors">
+              <button type="button" onClick={() => setIsAdding(true)} className="px-8 py-3 bg-surface-container-highest border border-outline-variant/20 text-on-surface-variant rounded-sm font-headline text-micro font-bold uppercase tracking-widest hover:border-primary/50 transition-colors">
                 {t.shoppingList.addItem}
               </button>
             </div>
@@ -282,7 +282,7 @@ export default function ShoppingList({ onBack, shoppingList = [], setShoppingLis
         <div className="fixed left-1/2 -translate-x-1/2 w-full max-w-md px-6 z-50 md:bottom-8" style={{ bottom: 'calc(env(safe-area-inset-bottom, 0px) + 6rem)' }}>
           <button type="button"
             onClick={() => setPendingClearAction('completed')}
-            className="w-full bg-surface-container-highest text-error border border-error/20 py-4 rounded-full font-headline font-bold text-sm uppercase tracking-widest hover:bg-error/10 transition-colors flex items-center justify-center gap-2 shadow-elev-3 backdrop-blur-md"
+            className="w-full bg-surface-container-highest text-error border border-error/20 py-4 rounded-full font-headline font-bold text-body-sm uppercase tracking-widest hover:bg-error/10 transition-colors flex items-center justify-center gap-2 shadow-elev-3 backdrop-blur-md"
           >
             <Trash2 className="w-4 h-4" /> {t.shoppingList.clearCompleted}
           </button>

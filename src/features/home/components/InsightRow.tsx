@@ -37,7 +37,7 @@ export default function InsightRow({ insight }: Props) {
     <div className={`p-4 rounded-sm border flex items-start gap-3 ${TONE_CLASS[insight.tone]}`}>
       <Icon className={`w-5 h-5 shrink-0 mt-0.5 ${ICON_TONE[insight.tone]}`} aria-hidden="true" />
       <div className="flex-1 min-w-0">
-        <p className="font-headline text-xs font-bold uppercase tracking-widest text-tertiary">
+        <p className="font-headline text-micro font-bold uppercase tracking-widest text-tertiary">
           {insight.title}
         </p>
         <p className="text-caption text-on-surface-variant mt-0.5 leading-relaxed">

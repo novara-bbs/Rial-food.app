@@ -5,11 +5,13 @@
 > prunes this file back down. Everything below should answer: *what's the release line,
 > what's the quality baseline, what's the next move, what's broken?*
 
-Last updated: **2026-05-01** — `[1.5.180]` FeatureErrorBoundary adoption complete (profile + settings).
+Last updated: **2026-05-01** — `[1.5.181]` ADR-012 typography sweep complete — 0 warnings.
 
 ## Release snapshot
 - **Branch**: `main`, synced con `rial-food/main` (CI green S39; S40–S57 queued).
-- **This session (2026-05-01, S54–S57 — MVP cleanup [1.5.176–1.5.180])**:
+- **This session (2026-05-01, S54–S58 — MVP cleanup [1.5.176–1.5.181])**:
+    - **[1.5.181]** — ADR-012 typography sweep complete: 342 → **0 warnings**. Raw `text-xs/sm/base/lg/xl/2xl/3xl/4xl` and raw `<hN>` tags replaced with semantic tokens (`text-micro`, `text-body-sm`, `text-body-lg`, `text-title-sm`, `text-title`, `text-headline`, `text-display`) and `<Heading>` primitive across ~35 files.
+    - **[1.5.180]** — FeatureErrorBoundary adoption complete: `profile` y `settings` cases wrapeados en App.tsx. 7 surfaces aisladas total (home/cocina/explore/more/recipe-detail/profile/settings).
     - **[1.5.180]** — FeatureErrorBoundary adoption complete: `profile` y `settings` cases wrapeados en App.tsx. 7 surfaces aisladas total (home/cocina/explore/more/recipe-detail/profile/settings).
     - **[1.5.179]** — img-onerror batch 3 (final): 19 social+wellness files. Baseline cleared to empty — nuevas violaciones fallan CI inmediatamente sin allowlist.
     - **[1.5.178]** — img-onerror batch 2: 10 recipe components (AuthorAttributionCard overlay ×2, CookMode, HeroGallery ×2 con reordering de atributos, MediaLightbox, PhotoUploader, VideoSection, CreateRecipeStep3/4, RecipeOverviewTab overlay, RecipeDetail ×2). Baseline: 28→18.
@@ -54,7 +56,7 @@ Last updated: **2026-05-01** — `[1.5.180]` FeatureErrorBoundary adoption compl
 - TypeScript: **0 errors** (`npx tsc --noEmit`)
 - Tests: **1464/1464** passing (103 files)
 - i18n symmetry: **2007** keys aligned ES ↔ EN
-- Design-system lint: **0 errors**, 342 warnings (pre-existing allowlisted)
+- Design-system lint: **0 errors, 0 ADR-012 warnings** (full sweep complete [1.5.181])
 - **img-onerror baseline: 0** — all 34 pre-existing offenders migrated in S54–S56; new violations fail CI immediately
 - Raw branded `<button>` count: **1** (TodaysMeals only, complex edit-in-place UX)
 - Build main: 898.7 KB raw / 282.9 KB gzip (budget 920/290 → OK)

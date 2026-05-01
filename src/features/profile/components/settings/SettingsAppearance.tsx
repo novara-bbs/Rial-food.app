@@ -174,8 +174,8 @@ export default function SettingsAppearance({ userProfile, setUserProfile }: Prop
               className={`flex items-center gap-3 p-4 rounded-sm border-2 transition-all ${
                 locale === lang.id ? 'border-primary bg-primary/10' : 'border-outline-variant/30 hover:border-outline-variant'
               }`}>
-              <span className="text-2xl">{lang.flag}</span>
-              <span className="font-headline font-bold text-sm text-tertiary uppercase">{lang.label}</span>
+              <span className="text-title">{lang.flag}</span>
+              <span className="font-headline font-bold text-body-sm text-tertiary uppercase">{lang.label}</span>
               {locale === lang.id && <Check className="w-5 h-5 text-primary ml-auto" />}
             </button>
           ))}
@@ -202,7 +202,7 @@ export default function SettingsAppearance({ userProfile, setUserProfile }: Prop
                 (userProfile?.unitSystem ?? 'metric') === sys.id ? 'border-primary bg-primary/10' : 'border-outline-variant/30 hover:border-outline-variant'
               }`}>
               <div className="flex items-center justify-between w-full">
-                <span className="font-headline font-bold text-sm text-tertiary uppercase">{sys.label}</span>
+                <span className="font-headline font-bold text-body-sm text-tertiary uppercase">{sys.label}</span>
                 {(userProfile?.unitSystem ?? 'metric') === sys.id && <Check className="w-5 h-5 text-primary" />}
               </div>
               <Text as="span" variant="micro" className="mt-1">{sys.desc}</Text>

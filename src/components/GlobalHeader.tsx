@@ -143,7 +143,7 @@ export default function GlobalHeader({ onOpenSettings, onOpenProfile, onOpenNoti
                   draggable={false}
                 />
               ) : (
-                <span className="font-headline font-bold text-xs text-primary uppercase select-none">
+                <span className="font-headline font-bold text-micro text-primary uppercase select-none">
                   {(userName ?? '?').slice(0, 2)}
                 </span>
               )}
@@ -158,7 +158,7 @@ export default function GlobalHeader({ onOpenSettings, onOpenProfile, onOpenNoti
       >
         <DialogContent className="max-w-sm bg-surface-container border-outline-variant/20 rounded-sm space-y-4">
           <DialogHeader>
-            <DialogTitle className="font-headline font-bold text-sm uppercase tracking-widest text-tertiary text-left">
+            <DialogTitle className="font-headline font-bold text-body-sm uppercase tracking-widest text-tertiary text-left">
               {demoUnlocked ? t.globalHeader.demoGate.title : t.globalHeader.demoGate.codeLabel}
             </DialogTitle>
           </DialogHeader>

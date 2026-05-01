@@ -102,7 +102,7 @@ function Tile({ label, minutes, fraction, arcColor }: TileProps) {
       <div className="relative w-16 h-16">
         <ArcRing fraction={fraction} color={arcColor} />
         <div className="absolute inset-0 flex items-center justify-center">
-          <span className="font-headline font-bold text-xs text-tertiary leading-none text-center px-0.5">
+          <span className="font-headline font-bold text-micro text-tertiary leading-none text-center px-0.5">
             {fmtMinutes(minutes)}
           </span>
         </div>

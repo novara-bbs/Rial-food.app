@@ -241,7 +241,7 @@ export default function PortionSelector({
                 inputMode="decimal"
                 value={quantity}
                 onChange={e => handleQuantityInput(e.target.value)}
-                className="w-14 text-center bg-transparent text-on-surface font-headline font-bold text-lg border-x border-outline-variant/30 py-1.5 focus:outline-none"
+                className="w-14 text-center bg-transparent text-on-surface font-headline font-bold text-title-sm border-x border-outline-variant/30 py-1.5 focus:outline-none"
               />
               <button
                 type="button"
@@ -259,7 +259,7 @@ export default function PortionSelector({
                   type="button"
                   key={amt}
                   onClick={() => handleQuantityChange(amt)}
-                  className={`flex-1 py-1.5 rounded-sm text-xs font-headline font-bold uppercase tracking-wider transition-colors ${
+                  className={`flex-1 py-1.5 rounded-sm text-micro font-headline font-bold uppercase tracking-wider transition-colors ${
                     quantity === amt
                       ? 'bg-primary text-on-primary'
                       : 'bg-surface-container-highest text-on-surface-variant hover:bg-surface-container-high'
@@ -289,7 +289,7 @@ export default function PortionSelector({
                 inputMode="decimal"
                 value={displayWeight}
                 onChange={e => handleDisplayWeightInput(e.target.value)}
-                className="w-20 text-center bg-transparent text-on-surface font-headline font-bold text-lg border-x border-outline-variant/30 py-1.5 focus:outline-none"
+                className="w-20 text-center bg-transparent text-on-surface font-headline font-bold text-title-sm border-x border-outline-variant/30 py-1.5 focus:outline-none"
               />
               <button
                 type="button"
@@ -299,7 +299,7 @@ export default function PortionSelector({
                 <Plus className="w-4 h-4" />
               </button>
             </div>
-            <span className="font-headline font-bold text-sm text-on-surface-variant uppercase tracking-widest shrink-0">{displayUnit}</span>
+            <span className="font-headline font-bold text-body-sm text-on-surface-variant uppercase tracking-widest shrink-0">{displayUnit}</span>
           </div>
 
           {/* Quick weight buttons — values in display units */}
@@ -309,7 +309,7 @@ export default function PortionSelector({
                 type="button"
                 key={w}
                 onClick={() => handleDisplayWeightChange(w)}
-                className={`flex-1 py-1.5 rounded-sm text-xs font-headline font-bold uppercase tracking-wider transition-colors ${
+                className={`flex-1 py-1.5 rounded-sm text-micro font-headline font-bold uppercase tracking-wider transition-colors ${
                   displayWeight === w
                     ? 'bg-primary text-on-primary'
                     : 'bg-surface-container-highest text-on-surface-variant hover:bg-surface-container-high'
@@ -323,7 +323,7 @@ export default function PortionSelector({
       )}
 
       {/* Total weight display */}
-      <p className="text-xs text-on-surface-variant font-label tracking-wide">
+      <p className="text-body-sm text-on-surface-variant font-label tracking-wide">
         = {formatWeight(totalGrams, unitSystem, baseUnit)} {t.portionSelector.total}
       </p>
 

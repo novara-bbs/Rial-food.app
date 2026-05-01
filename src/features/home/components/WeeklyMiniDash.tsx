@@ -22,17 +22,17 @@ export default function WeeklyMiniDash({ calAvg, proteinHitDays, totalDays, week
       <div className="grid grid-cols-3 gap-3">
         <div className="flex flex-col items-center gap-1">
           <BarChart3 className="w-4 h-4 text-primary" />
-          <span className="font-headline font-black text-base text-tertiary">{calAvg}</span>
+          <span className="font-headline font-black text-body-lg text-tertiary">{calAvg}</span>
           <span className="text-micro font-label font-bold uppercase tracking-widest text-on-surface-variant text-center">{t.home.weeklyCalAvg}</span>
         </div>
         <div className="flex flex-col items-center gap-1">
           <Target className="w-4 h-4 text-brand-secondary" />
-          <span className="font-headline font-black text-base text-tertiary">{proteinHitDays}/{totalDays}</span>
+          <span className="font-headline font-black text-body-lg text-tertiary">{proteinHitDays}/{totalDays}</span>
           <span className="text-micro font-label font-bold uppercase tracking-widest text-on-surface-variant text-center">{t.home.proteinDaysHit}</span>
         </div>
         <div className="flex flex-col items-center gap-1">
           <Scale className="w-4 h-4 text-on-surface-variant" />
-          <span className={`font-headline font-black text-base ${weekDelta !== null ? (weekDelta > 0 ? 'text-brand-secondary' : 'text-primary') : 'text-on-surface-variant'}`}>
+          <span className={`font-headline font-black text-body-lg ${weekDelta !== null ? (weekDelta > 0 ? 'text-brand-secondary' : 'text-primary') : 'text-on-surface-variant'}`}>
             {weekDelta !== null ? `${weekDelta > 0 ? '+' : ''}${weekDelta.toFixed(1)}` : '—'}
           </span>
           <span className="text-micro font-label font-bold uppercase tracking-widest text-on-surface-variant text-center">{t.home.weightDelta}</span>

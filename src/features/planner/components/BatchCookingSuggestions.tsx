@@ -40,7 +40,7 @@ export default function BatchCookingSuggestions({ mealPlan }: BatchCookingSugges
           <ChefHat className="w-4 h-4 text-brand-secondary" />
         </div>
         <div className="flex-1 min-w-0">
-          <p className="font-headline text-xs font-bold uppercase tracking-widest text-tertiary">
+          <p className="font-headline text-micro font-bold uppercase tracking-widest text-tertiary">
             {tc.batchTitle}
           </p>
           <p className="text-micro text-on-surface-variant mt-0.5 leading-relaxed">
@@ -68,7 +68,7 @@ export default function BatchCookingSuggestions({ mealPlan }: BatchCookingSugges
             >
               <div className="flex items-start justify-between gap-3">
                 <div className="flex-1 min-w-0">
-                  <p className="font-headline text-xs font-bold uppercase tracking-widest text-tertiary">
+                  <p className="font-headline text-micro font-bold uppercase tracking-widest text-tertiary">
                     {session.baseIngredient}
                   </p>
                   <p className="text-micro text-on-surface-variant mt-0.5 leading-relaxed truncate">

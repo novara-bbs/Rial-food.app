@@ -1,4 +1,5 @@
 import { ChefHat, ChevronRight } from 'lucide-react';
+import { Heading } from '@/components/ui/Typography';
 
 const FACET_EMOJI: Record<string, string> = {
   cuisine: '🍽️',
@@ -263,7 +264,7 @@ export default function Discovery({ onNavigateToRecipe, savedRecipes = [], onSav
             <ChefHat className="w-5 h-5 text-on-primary" />
           </div>
           <div className="text-left flex-1">
-            <span className="font-headline font-bold text-sm uppercase tracking-widest text-on-primary block">{title}</span>
+            <span className="font-headline font-bold text-body-sm uppercase tracking-widest text-on-primary block">{title}</span>
             <span className="text-micro text-on-primary/70 font-bold">
               {(t.discovery.recipesCount as string)?.replace('{count}', String(count))}
             </span>
@@ -294,7 +295,7 @@ export default function Discovery({ onNavigateToRecipe, savedRecipes = [], onSav
       {/* Title */}
       <div className="px-6 pt-2 pb-3">
         <span className="font-label text-xs tracking-[0.2em] text-primary uppercase block">RIAL</span>
-        <h1 className="font-headline text-2xl font-bold tracking-tighter uppercase text-tertiary">{t.discovery.title}</h1>
+        <Heading level="h1" className="font-headline text-title font-bold tracking-tighter uppercase text-tertiary">{t.discovery.title}</Heading>
       </div>
 
       {/* 1. Search + Filter + Sort. Asymmetry vs Cocina: Discovery exposes

@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
 import { X, ChevronLeft, ChevronRight, UtensilsCrossed, Clock, Volume2, VolumeX } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { Heading } from '@/components/ui/Typography';
 import { useI18n } from '../../../i18n';
 import { Z_TW } from '../../../lib/z-index';
 import CookTimer from './CookTimer';
@@ -192,7 +193,7 @@ export default function CookMode({
       <div className="flex items-center justify-between px-6 pt-6 pb-4 border-b border-overlay-border">
         <div>
           <span className="font-label text-micro uppercase tracking-widest text-on-overlay/40 block truncate max-w-[200px]">{title}</span>
-          <p className="font-headline text-sm font-bold text-on-overlay/70">
+          <p className="font-headline text-body-sm font-bold text-on-overlay/70">
             {t.recipeDetail.cookModeStep
               .replace('{current}', String(current + 1))
               .replace('{total}', String(total))}
@@ -255,7 +256,7 @@ export default function CookMode({
       {/* Step content */}
       <div className="flex-1 flex flex-col items-center justify-center px-8 text-center gap-6 overflow-y-auto">
         <div className="w-12 h-12 rounded-full bg-primary/20 border border-primary/40 flex items-center justify-center shrink-0">
-          <span className="font-headline font-bold text-primary text-lg">{current + 1}</span>
+          <span className="font-headline font-bold text-primary text-title-sm">{current + 1}</span>
         </div>
 
         {/* Step photo — R5.2: clickable thumbnail → MediaLightbox */}
@@ -280,7 +281,7 @@ export default function CookMode({
         {/* R5.1: Per-step ingredient sub-list */}
         {stepIngredients.length > 0 && (
           <div className="w-full max-w-sm bg-on-overlay/5 border border-overlay-border rounded-sm px-4 py-3">
-            <p className="text-xs font-label uppercase tracking-widest text-on-overlay/40 mb-2">
+            <p className="text-body-sm font-label uppercase tracking-widest text-on-overlay/40 mb-2">
               {voiceTt.ingredientsForStep}
             </p>
             <IngredientCheckoff ingredients={stepIngredients} compact />
@@ -289,7 +290,7 @@ export default function CookMode({
 
         {step.detectedMinutes && (
           <div className="flex flex-col items-center gap-3">
-            <div className="flex items-center gap-1.5 text-primary/70 text-xs font-label uppercase tracking-widest">
+            <div className="flex items-center gap-1.5 text-primary/70 text-body-sm font-label uppercase tracking-widest">
               <Clock className="w-3.5 h-3.5" />
               {step.detectedMinutes < 1
                 ? `${Math.round(step.detectedMinutes * 60)}s`
@@ -303,7 +304,7 @@ export default function CookMode({
             ) : (
               <button type="button"
                 onClick={() => setActiveTimers(prev => ({ ...prev, [current]: true }))}
-                className="px-5 py-2 bg-primary text-on-primary rounded-sm font-headline text-xs font-bold uppercase tracking-widest hover:opacity-90 transition-opacity"
+                className="px-5 py-2 bg-primary text-on-primary rounded-sm font-headline text-micro font-bold uppercase tracking-widest hover:opacity-90 transition-opacity"
               >
                 {t.recipeDetail.startTimer}
               </button>
@@ -317,13 +318,13 @@ export default function CookMode({
         <button type="button"
           onClick={goPrev}
           disabled={current === 0}
-          className="flex items-center gap-1 px-5 py-3 bg-on-overlay/10 rounded-sm text-on-overlay font-headline text-xs font-bold uppercase tracking-widest disabled:opacity-30 hover:bg-on-overlay/20 transition-colors"
+          className="flex items-center gap-1 px-5 py-3 bg-on-overlay/10 rounded-sm text-on-overlay font-headline text-micro font-bold uppercase tracking-widest disabled:opacity-30 hover:bg-on-overlay/20 transition-colors"
         >
           <ChevronLeft className="w-4 h-4" />
           {t.common.back}
         </button>
 
-        <span className="text-on-overlay/50 font-mono text-sm">{current + 1}/{total}</span>
+        <span className="text-on-overlay/50 font-mono text-body-sm">{current + 1}/{total}</span>
 
         {current < total - 1 ? (
           <Button
@@ -336,7 +337,7 @@ export default function CookMode({
         ) : (
           <button type="button"
             onClick={onClose}
-            className="flex items-center gap-1 px-5 py-3 bg-green-600 text-white rounded-sm font-headline text-xs font-bold uppercase tracking-widest hover:opacity-90 transition-colors"
+            className="flex items-center gap-1 px-5 py-3 bg-green-600 text-white rounded-sm font-headline text-micro font-bold uppercase tracking-widest hover:opacity-90 transition-colors"
           >
             {t.recipeDetail.exitCookMode}
           </button>
@@ -349,11 +350,11 @@ export default function CookMode({
           className="absolute inset-0 bg-neutral-950/95 z-10 flex flex-col pt-16 px-6 pb-8"
           onClick={() => setShowIngredients(false)}
         >
-          <h3 className="font-headline font-bold text-lg uppercase text-on-overlay mb-4">{t.recipeDetail.viewIngredients}</h3>
+          <Heading level="h3" className="font-headline font-bold text-title-sm uppercase text-on-overlay mb-4">{t.recipeDetail.viewIngredients}</Heading>
           <div className="flex-1 overflow-y-auto">
             <IngredientCheckoff ingredients={ingredients} />
           </div>
-          <p className="text-on-overlay/50 text-xs mt-4 text-center">{t.recipeDetail.tapToClose}</p>
+          <p className="text-on-overlay/50 text-body-sm mt-4 text-center">{t.recipeDetail.tapToClose}</p>
         </div>
       )}
     </div>
