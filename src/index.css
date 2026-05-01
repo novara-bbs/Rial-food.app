@@ -394,10 +394,10 @@
     --surface-container-high: #cbd5e1; /* Slate 300 */
     --surface-container-highest: #94a3b8; /* Slate 400 */
     --on-surface-variant: #1e293b;
-    --primary: #0284c7; /* Professional Blue */
+    --primary: #0284c7; /* Professional Blue — Sky 600 */
     --on-primary: #ffffff;
-    --primary-container: #38bdf8;
-    --on-primary-container: #020617;
+    --primary-container: #bae6fd; /* Sky 200 pale chip — elevation correct (lighter than primary) */
+    --on-primary-container: #0c4a6e; /* Sky 950 dark text — AAA on Sky 200 */
     --brand-secondary: #4338ca; /* Darkened Indigo */
     --on-brand-secondary: #ffffff;
     --tertiary: #0f172a;
@@ -469,7 +469,7 @@
 
     --chart-grid: #292524;
     --chart-text: #78716c;
-    --chart-recovery: #fb923c;
+    --chart-recovery: #fdac6c; /* mirrors ember dark primary — warm peach glow */
     --chart-strain: #ef4444;
 
     /* Semantic macro & overlay */
