@@ -335,7 +335,7 @@ export default function Planner({
                   </div>
                   <button type="button"
                     onClick={() => addLeftover(s)}
-                    className="text-micro font-bold uppercase tracking-widest text-brand-secondary bg-brand-secondary/10 px-3 py-1.5 rounded-full hover:bg-brand-secondary/20 transition-colors"
+                    className="inline-flex items-center min-h-[22px] px-2.5 rounded-full text-nano font-medium normal-case tracking-normal text-brand-secondary bg-brand-secondary/10 hover:bg-brand-secondary/20 transition-colors"
                   >
                     + {t.planner.leftoverAdd}
                   </button>
@@ -400,7 +400,7 @@ export default function Planner({
                       {/* Status badge — tap to cycle */}
                       <button type="button"
                         onClick={() => cycleStatus(meal.id)}
-                        className={`flex items-center gap-1 px-2 py-1 rounded-full text-micro font-bold uppercase tracking-wider transition-colors ${statusCfg.color}`}
+                        className={`inline-flex items-center gap-1 min-h-[22px] px-2.5 rounded-full text-nano font-medium normal-case tracking-normal transition-colors ${statusCfg.color}`}
                         title={t.planner.tapToChangeStatus}
                       >
                         {statusCfg.icon}

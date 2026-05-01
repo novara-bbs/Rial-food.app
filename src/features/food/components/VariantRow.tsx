@@ -89,7 +89,7 @@ export default function VariantRow({ variant, delta, selected, onSelect }: Props
                 <span
                   key={slug}
                   data-quality-tag={slug}
-                  className="text-caption text-on-surface-variant bg-surface-container-high rounded-full px-2 py-0.5"
+                  className="text-micro font-medium text-on-surface-variant bg-surface-container-high rounded-full px-2 py-0.5"
                 >
                   {qualityTagLabels[slug] ?? slug}
                 </span>

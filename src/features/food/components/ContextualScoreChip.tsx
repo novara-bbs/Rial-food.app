@@ -121,7 +121,7 @@ export default function ContextualScoreChip({
                 {score.caveats.map(c => (
                   <span
                     key={c}
-                    className="text-caption text-on-surface-variant bg-surface-container-high rounded-full px-2.5 py-1"
+                    className="text-micro font-medium text-on-surface-variant bg-surface-container-high rounded-full px-2.5 py-1"
                   >
                     {caveats[c] ?? c}
                   </span>

@@ -61,7 +61,7 @@ export default function GlossaryButton({ slug, label }: Props) {
                   {entry.examples.map((example) => (
                     <span
                       key={example}
-                      className="text-caption text-on-surface bg-surface-container-high rounded-full px-2.5 py-1"
+                      className="text-micro font-medium text-on-surface bg-surface-container-high rounded-full px-2.5 py-1"
                     >
                       {example}
                     </span>

@@ -57,7 +57,7 @@ export default function WeeklyInsightsCard({ insight, title }: WeeklyInsightsCar
           {insight.chips.map(chip => (
             <span
               key={chip.id}
-              className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-surface-container-high text-micro font-semibold uppercase tracking-widest ${chipTone(chip)}`}
+              className={`inline-flex items-center gap-1 min-h-[22px] px-2.5 rounded-full bg-surface-container-high text-nano font-medium normal-case tracking-normal ${chipTone(chip)}`}
             >
               {chipIcon(chip)}
               <span className="text-on-surface-variant">{chip.label}</span>

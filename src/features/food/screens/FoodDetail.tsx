@@ -145,7 +145,7 @@ export default function FoodDetail() {
               <span
                 key={slug}
                 data-use-slug={slug}
-                className="text-caption text-on-surface bg-surface-container-high rounded-full px-2.5 py-1"
+                className="inline-flex items-center min-h-[22px] px-2.5 rounded-full text-nano font-medium text-on-surface bg-surface-container-high"
               >
                 {culinaryUseLabels[slug] ?? slug}
               </span>

@@ -166,7 +166,7 @@ export default function RealFeelInline({ onSubmit, onDismiss }: {
                 <button type="button"
                   key={key}
                   onClick={() => toggleTag(key)}
-                  className={`px-3 py-1.5 rounded-full text-micro font-semibold uppercase tracking-wider border transition-all ${
+                  className={`inline-flex items-center min-h-[22px] px-2.5 rounded-full text-nano font-medium normal-case tracking-normal border transition-all ${
                     selected
                       ? 'border-primary bg-primary/10 text-primary'
                       : 'border-outline-variant/20 text-on-surface-variant hover:border-primary/50'

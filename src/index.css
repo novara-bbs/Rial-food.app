@@ -127,6 +127,7 @@
   /* Typography scale — ADR-002. Semantic names, fixed pixel values.
      Use these via `text-{token}` utilities (e.g. `text-body`, `text-label`).
      ESLint bans arbitrary `text-[Npx]` in favor of these tokens. */
+  --text-nano: 0.5625rem;      /* 9px — chip text (24px chips), avoid for body */
   --text-micro: 0.625rem;      /* 10px — JetBrains Mono caps labels, legal */
   --text-caption: 0.6875rem;   /* 11px — legal/footnote */
   --text-label: 0.75rem;       /* 12px — form labels, chips, dense meta */

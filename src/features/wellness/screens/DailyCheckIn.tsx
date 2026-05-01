@@ -144,7 +144,7 @@ export default function DailyCheckIn({
               <button type="button" 
                 key={sym}
                 onClick={() => toggleSymptom(sym)}
-                className={`px-4 py-2 rounded-full font-label text-micro font-bold tracking-wider uppercase transition-colors border ${
+                className={`inline-flex items-center min-h-[22px] px-2.5 rounded-full text-nano font-medium normal-case tracking-normal transition-colors border ${
                   symptoms.includes(sym)
                     ? 'bg-primary text-on-primary border-primary'
                     : 'bg-surface-container-low text-on-surface-variant border-outline-variant/30 hover:border-primary/50'

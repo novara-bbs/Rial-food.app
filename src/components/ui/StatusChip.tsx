@@ -41,8 +41,8 @@ const TONE_MAP: Record<StatusChipTone, string> = {
 };
 
 const SHAPE =
-  'inline-flex items-center gap-1.5 min-h-11 px-3 rounded-full border shadow-elev-1 ' +
-  'font-headline text-micro font-semibold normal-case tracking-normal whitespace-nowrap ' +
+  'inline-flex items-center gap-1 min-h-[22px] px-2 rounded-full border shadow-elev-1 ' +
+  'text-nano font-medium leading-none normal-case tracking-normal whitespace-nowrap ' +
   'snap-start transition-colors';
 
 export interface StatusChipProps {
@@ -69,7 +69,7 @@ export default function StatusChip({
   const classes = cn(SHAPE, TONE_MAP[tone], className);
   const content = (
     <>
-      {Icon && <Icon className="w-3.5 h-3.5 shrink-0" aria-hidden="true" />}
+      {Icon && <Icon className="w-3 h-3 shrink-0" aria-hidden="true" />}
       <span className="truncate">{children}</span>
       {trailing}
     </>

@@ -192,7 +192,7 @@ export default function AICoach({
                 <button type="button"
                   key={idx}
                   onClick={() => handleSend(action.prompt)}
-                  className="flex items-center gap-2 px-3 py-1.5 bg-surface-container-low border border-outline-variant/30 rounded-full text-xs font-label tracking-widest uppercase text-on-surface-variant hover:text-primary hover:border-primary/50 transition-colors"
+                  className="inline-flex items-center gap-1.5 min-h-[22px] px-2.5 bg-surface-container-low border border-outline-variant/30 rounded-full text-nano font-medium normal-case tracking-normal text-on-surface-variant hover:text-primary hover:border-primary/50 transition-colors"
                 >
                   {action.icon}
                   {action.label}

@@ -149,6 +149,28 @@ const preferSemanticTextTokenTpl = {
     'Prefer the typography primitive. Use <Heading>/<Text> or a semantic token (text-{body,title,headline,display}). See ADR-012.',
 };
 
+/**
+ * Ban chip token drift — chip-shaped surfaces (`rounded-full`) must use the
+ * chip typography token (`text-nano` 9px). `text-caption` (11px) and
+ * `text-micro` (10px on chips) are legacy patterns that escaped the chip
+ * rework on 2026-05-01. See `chip-primitives.test.ts` for the positive lock.
+ */
+const noChipTokenDrift = {
+  // Match rounded-full + horizontal padding (chip signature, excludes avatars)
+  // + text-caption (legacy chip token; chips must use text-nano).
+  selector:
+    "Literal[value=/^(?=[^\"'`]*\\brounded-full\\b)(?=[^\"'`]*\\bpx-(1\\.5|2|2\\.5|3|3\\.5|4)\\b)(?=[^\"'`]*\\btext-caption\\b).+/]",
+  message:
+    'Chip-shaped surfaces (rounded-full + px-N) must use text-nano (9px), not text-caption. See chip-primitives.test.ts and ADR-013.',
+};
+
+const noChipTokenDriftTpl = {
+  selector:
+    "TemplateElement[value.raw=/^(?=[^`]*\\brounded-full\\b)(?=[^`]*\\bpx-(1\\.5|2|2\\.5|3|3\\.5|4)\\b)(?=[^`]*\\btext-caption\\b).+/]",
+  message:
+    'Chip-shaped surfaces (rounded-full + px-N) must use text-nano (9px), not text-caption. See ADR-013.',
+};
+
 const designSystemRules = [
   noArbitraryTextSize,
   noArbitraryTextSizeTpl,
@@ -163,6 +185,8 @@ const designSystemRules = [
   preferHeadingPrimitive,
   preferSemanticTextToken,
   preferSemanticTextTokenTpl,
+  noChipTokenDrift,
+  noChipTokenDriftTpl,
 ];
 
 /**
