@@ -516,8 +516,8 @@
     --surface-container-high: #d6d3d1; /* Stone 300 */
     --surface-container-highest: #a8a29e; /* Stone 400 */
     --on-surface-variant: #292524;
-    --primary: #fb923c; /* Orange 400 — mirrors dark peach #fdac6c, dark text on light orange (Strava pattern) */
-    --on-primary: #1c1917; /* Stone 900 dark text — 7.34:1 AAA on Orange 400 */
+    --primary: #d2693d; /* Burnt sienna terracotta — HSL 18°/60%/53%, ember-glow grounded, dribbble nutrition pattern (Eatventure/Ate/Notion) */
+    --on-primary: #ffffff; /* White text — 4.5:1 AA on burnt sienna */
     --primary-container: #fed7aa; /* Orange 200 pale chip */
     --on-primary-container: #7c2d12; /* Orange 900 dark text — AAA on Orange 200 */
     --brand-secondary: #f59e0b; /* Amber 500 — EXACT MIRROR of EMBER DARK */
@@ -530,7 +530,7 @@
 
     --chart-grid: #e7e5e4;
     --chart-text: #78716c;
-    --chart-recovery: #fb923c; /* follows new primary */
+    --chart-recovery: #d2693d; /* follows new primary (burnt sienna terracotta) */
     --chart-strain: #dc2626;
 
     /* Semantic macro & overlay */
