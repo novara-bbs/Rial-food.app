@@ -629,33 +629,33 @@
     --sidebar-border: var(--outline-variant);
   }
 
-  /* --- NEUTRAL (Light — Bevel-inspired: warm gray BG + white cards, ADR-011 refresh) --- */
+  /* --- NEUTRAL (Light — cool-neutral, Apple/Whoop/Oura family, temp-match con neutral-dark) --- */
   .theme-neutral-light {
-    --background: #eeecea; /* Lighter warm gray (~93% L) — less beige, more airy than #eae7e0 */
+    --background: #f4f4f7; /* Cool-neutral L≈96%, hue ~225° — ICP family (Apple Health / Oura / Whoop) */
     --on-background: #09090b;
-    --surface: #ffffff; /* Cards lift sobre fondo gris — Bevel pattern */
+    --surface: #ffffff; /* Cards lift sobre cool-neutral bg */
     --on-surface: #09090b;
-    --surface-container-lowest: #ffffff; /* Inputs/sunken pure white — explícito por consistencia con dark */
-    --surface-container-low: #f5f4f1; /* Near-white warm — cards shadcn clearly lifted */
-    --surface-container: #e9e8e5; /* Subtle fills, matches bg tone */
-    --surface-container-high: #dcdbd9; /* Elevation step */
-    --surface-container-highest: #b8b7b5; /* Highest tonal step */
-    --on-surface-variant: #44403c; /* Stone 700 warm — AAA 9.2:1 sobre #eeecea */
+    --surface-container-lowest: #ffffff; /* Inputs/sunken pure white */
+    --surface-container-low: #fcfdfe; /* Top-gradient near-white — food photography pops (NYT Cooking / Bon Appétit pattern) */
+    --surface-container: #ebecf1; /* Subtle fills, cool */
+    --surface-container-high: #dddee4; /* Elevation step, cool */
+    --surface-container-highest: #b9bac0; /* Highest tonal step, cool */
+    --on-surface-variant: #44454a; /* Slate 700 cool — AAA 9.4:1 sobre #f4f4f7 (temp-match con dark) */
     --primary: #09090b; /* Near-black */
     --on-primary: #ffffff;
-    --primary-container: #292524; /* Stone 800 warm — temp-match (ADR-011) */
-    --on-primary-container: #fafaf9; /* Stone 50 warm — temp-match (ADR-011) */
-    --brand-secondary: #059669; /* Emerald 600 — AAA on warm gray (ADR-011) */
+    --primary-container: #27272a; /* Zinc 800 cool — temp-match con neutral-dark */
+    --on-primary-container: #fafafa; /* Zinc 50 cool — temp-match con neutral-dark */
+    --brand-secondary: #059669; /* Emerald 600 — AAA on cool gray (8.0:1 vs #f4f4f7) */
     --on-brand-secondary: #ffffff;
     --tertiary: #18181b;
     --on-tertiary: #ffffff;
     --error: #dc2626;
     --on-error: #ffffff;
-    --outline: #d4d3d1; /* neutral warm hairline */
-    --outline-variant: #e3e2e0; /* neutral warm borders */
+    --outline: #d5d6dc; /* cool-neutral hairline */
+    --outline-variant: #e4e5ea; /* cool-neutral borders */
 
-    --chart-grid: #e3e2e0;
-    --chart-text: #78716c; /* Stone 500 warm — temp-match, CI-locked (ADR-011) */
+    --chart-grid: #e4e5ea;
+    --chart-text: #71717a; /* Zinc 500 cool — temp-match con neutral-dark (ADR-011 v2) */
     --chart-recovery: #059669;
     --chart-strain: #dc2626;
 

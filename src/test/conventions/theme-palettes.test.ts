@@ -91,7 +91,7 @@ describe('Theme palettes — NEUTRAL brand tokens (ADR-011)', () => {
     expect(/\.theme-neutral-light\s*\{[^}]*--brand-secondary:\s*#059669/.test(css)).toBe(true);
   });
 
-  it('NEUTRAL LIGHT chart-text is warm Stone 500 #78716c (temperature-match, AAA)', () => {
-    expect(/\.theme-neutral-light\s*\{[^}]*--chart-text:\s*#78716c/.test(css)).toBe(true);
+  it('NEUTRAL LIGHT chart-text is cool Zinc 500 #71717a (temperature-match con neutral-dark, AAA)', () => {
+    expect(/\.theme-neutral-light\s*\{[^}]*--chart-text:\s*#71717a/.test(css)).toBe(true);
   });
 });
