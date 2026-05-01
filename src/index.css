@@ -260,32 +260,32 @@
     --sidebar-border: var(--outline-variant);
   }
 
-  /* --- VOLT PRO (Light Technical) — warm-neutral Stone + lime-600 accent */
+  /* --- VOLT PRO (Light Technical) — cool Zinc grayscale + lime + sky (mirrors VOLT DARK) */
   .theme-volt-light {
-    --background: #faf9f6; /* warm Stone 50 — zero lime tint, identity via accent */
+    --background: #fafafa; /* cool Zinc 50 — temp-match con VOLT DARK Zinc 950 */
     --on-background: #09090b;
-    --surface: #ffffff; /* cards lift clean on warm-neutral bg */
+    --surface: #ffffff; /* cards lift clean on cool-neutral bg */
     --on-surface: #09090b;
-    --surface-container-low: #f5f3ee; /* warm Stone 100 — 5% delta vs bg */
-    --surface-container: #ecebe5; /* warm Stone 200 */
-    --surface-container-high: #d9d6cc; /* warm Stone 300 */
-    --surface-container-highest: #a8a59b; /* warm Stone 400 */
-    --on-surface-variant: #4a4945; /* warm Stone 700 · AAA 8.5:1 on bg */
-    --primary: #65a30d; /* Lime 600 · mirrors VOLT DARK lima vivo */
+    --surface-container-low: #f4f4f5; /* Zinc 100 — mirrors dark Zinc 900 ladder */
+    --surface-container: #e4e4e7; /* Zinc 200 — mirrors dark Zinc 800 */
+    --surface-container-high: #d4d4d8; /* Zinc 300 — mirrors dark Zinc 700 */
+    --surface-container-highest: #a1a1aa; /* Zinc 400 — mirrors dark Zinc 600 */
+    --on-surface-variant: #3f3f46; /* Zinc 700 — AAA 13:1 on Zinc 50 (cool, mirrors dark Zinc 400) */
+    --primary: #65a30d; /* Lime 600 · text-readable, mirrors VOLT DARK electric lime */
     --on-primary: #09090b; /* 6.86:1 AA on Lime 600 — symmetric with DARK */
     --primary-container: #ecfccb; /* Lime 100 pale pill */
     --on-primary-container: #365314; /* Lime 900 · AAA on Lime 100 */
-    --brand-secondary: #84cc16; /* Lime 500 — vivo accent for badges/data-viz only */
-    --on-brand-secondary: #09090b; /* 7.5:1 AAA */
+    --brand-secondary: #0284c7; /* Sky 600 — MIRRORS dark Sky 400 #38bdf8, AA 4.66:1 white text */
+    --on-brand-secondary: #ffffff;
     --tertiary: #18181b; /* neutral headline tone — NOT lime (headlines read as text) */
     --on-tertiary: #ffffff;
-    --error: #dc2626; /* Red 600 — strong on warm-neutral */
+    --error: #dc2626; /* Red 600 — strong on cool-neutral */
     --on-error: #ffffff;
-    --outline: #d6d3cb; /* warm Stone 300 hairline */
-    --outline-variant: #e7e5dc; /* warm Stone 200 near-invisible */
+    --outline: #d4d4d8; /* Zinc 300 hairline */
+    --outline-variant: #e4e4e7; /* Zinc 200 near-invisible */
 
-    --chart-grid: #e7e5dc; /* warm Stone 200 grid */
-    --chart-text: #4a4945; /* warm Stone 700 — readable */
+    --chart-grid: #e4e4e7; /* Zinc 200 grid */
+    --chart-text: #52525b; /* Zinc 600 — AAA 7.5:1 on white, mirrors dark Zinc 500 */
     --chart-recovery: #10b981;
     --chart-strain: #ef4444;
 
@@ -505,9 +505,9 @@
     --sidebar-border: var(--outline-variant);
   }
 
-  /* --- EMBER PRO (Light Organic) --- */
+  /* --- EMBER PRO (Light Organic) — peach-glow primary + amber secondary, mirrors EMBER DARK */
   .theme-ember-light {
-    --background: #fafaf9; /* Stone 50 */
+    --background: #fafaf9; /* Stone 50 — keeps warm grayscale, mirrors dark Stone 950 */
     --on-background: #1c1917;
     --surface: #ffffff;
     --on-surface: #1c1917;
@@ -516,12 +516,12 @@
     --surface-container-high: #d6d3d1; /* Stone 300 */
     --surface-container-highest: #a8a29e; /* Stone 400 */
     --on-surface-variant: #292524;
-    --primary: #ea580c; /* Burnt Orange */
-    --on-primary: #ffffff;
-    --primary-container: #fb923c;
-    --on-primary-container: #0c0a09;
-    --brand-secondary: #d97706; /* Amber 600 — cleaner than muddy #b45309, still earthy */
-    --on-brand-secondary: #ffffff;
+    --primary: #fb923c; /* Orange 400 — mirrors dark peach #fdac6c, dark text on light orange (Strava pattern) */
+    --on-primary: #1c1917; /* Stone 900 dark text — 7.34:1 AAA on Orange 400 */
+    --primary-container: #fed7aa; /* Orange 200 pale chip */
+    --on-primary-container: #7c2d12; /* Orange 900 dark text — AAA on Orange 200 */
+    --brand-secondary: #f59e0b; /* Amber 500 — EXACT MIRROR of EMBER DARK */
+    --on-brand-secondary: #1c1917; /* Stone 900 dark text — mirrors dark mode pattern */
     --tertiary: #1c1917;
     --error: #dc2626;
     --on-error: #ffffff;
@@ -530,7 +530,7 @@
 
     --chart-grid: #e7e5e4;
     --chart-text: #78716c;
-    --chart-recovery: #ea580c;
+    --chart-recovery: #fb923c; /* follows new primary */
     --chart-strain: #dc2626;
 
     /* Semantic macro & overlay */
