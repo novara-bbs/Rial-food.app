@@ -367,11 +367,10 @@ export default function Planner({
                 >
                   <div className="flex items-center gap-3">
                     {/* Thumbnail */}
-                    <div className="w-11 h-11 bg-surface-container-highest rounded-sm flex items-center justify-center shrink-0 overflow-hidden">
-                      {meal.img ? (
-                        <img src={meal.img} alt={meal.title} className="w-full h-full object-cover" referrerPolicy="no-referrer" />
-                      ) : (
-                        <span className="font-headline font-bold text-tertiary text-base">{meal.title?.charAt(0)}</span>
+                    <div className="relative w-11 h-11 bg-surface-container-highest rounded-sm flex items-center justify-center shrink-0 overflow-hidden">
+                      <span className="font-headline font-bold text-tertiary text-base">{meal.title?.charAt(0)}</span>
+                      {meal.img && (
+                        <img src={meal.img} alt={meal.title} className="absolute inset-0 w-full h-full object-cover" referrerPolicy="no-referrer" onError={(e) => { (e.currentTarget as HTMLImageElement).style.display = 'none'; }} />
                       )}
                     </div>
 

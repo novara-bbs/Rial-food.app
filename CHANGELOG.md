@@ -1,5 +1,17 @@
 # RIAL App - Changelog
 
+## [1.5.177] - 2026-05-01
+
+### fix(img-onerror): batch 1 — food/home/planner/profile avatars + product image
+
+img-onerror sweep batch 1: 5 files migrated, baseline shrinks 33 → 28.
+
+- **BarcodeFoundPanel** — product image gets `onError` inline (hides broken CDN img).
+- **More.tsx / Profile.tsx** — avatar uses overlay pattern: initial letter always renders, img overlays absolutely + hides on `onError`. Better UX than conditional ternary when CDN is down.
+- **Planner.tsx** — meal thumbnail same overlay pattern: title initial always renders, img overlays + hides on error.
+- **SettingsProfile.tsx** — avatar inside `<label>` uses overlay pattern; camera overlay unchanged.
+- Convention test `img-onerror.test.ts` baseline updated: 5 entries removed.
+
 ## [1.5.176] - 2026-05-01
 
 ### refactor(mvp): seed image migration + FeatureErrorBoundary adoption

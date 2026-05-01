@@ -87,13 +87,12 @@ export default function Profile({ userProfile, onBack, realFeelLogs = [], savedR
 
       {/* Avatar + name */}
       <div className="flex items-center gap-6">
-        <div className="w-20 h-20 rounded-full bg-primary/10 border-2 border-primary flex items-center justify-center overflow-hidden">
-          {userProfile?.avatar ? (
-            <img src={userProfile.avatar} alt="" className="w-full h-full object-cover" referrerPolicy="no-referrer" />
-          ) : (
-            <span className="font-headline text-3xl font-black text-primary uppercase">
-              {(userProfile?.name || 'U').charAt(0)}
-            </span>
+        <div className="relative w-20 h-20 rounded-full bg-primary/10 border-2 border-primary flex items-center justify-center overflow-hidden">
+          <span className="font-headline text-3xl font-black text-primary uppercase">
+            {(userProfile?.name || 'U').charAt(0)}
+          </span>
+          {userProfile?.avatar && (
+            <img src={userProfile.avatar} alt="" className="absolute inset-0 w-full h-full object-cover" referrerPolicy="no-referrer" onError={(e) => { (e.currentTarget as HTMLImageElement).style.display = 'none'; }} />
           )}
         </div>
         <div>

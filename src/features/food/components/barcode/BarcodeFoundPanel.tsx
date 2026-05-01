@@ -67,7 +67,7 @@ export default function BarcodeFoundPanel({
       <div className="bg-surface-container-low border border-green-500/30 rounded-sm p-4">
         <div className="flex items-start gap-3">
           {product.image && (
-            <img src={product.image} alt="" className="w-16 h-16 rounded-sm object-cover shrink-0" referrerPolicy="no-referrer" />
+            <img src={product.image} alt="" className="w-16 h-16 rounded-sm object-cover shrink-0" referrerPolicy="no-referrer" onError={(e) => { (e.currentTarget as HTMLImageElement).style.display = 'none'; }} />
           )}
           <div className="flex-1 min-w-0">
             <div className="flex items-center gap-2 mb-1 flex-wrap">

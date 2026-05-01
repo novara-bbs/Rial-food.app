@@ -84,14 +84,13 @@ export default function SettingsProfile({ userProfile, setUserProfile, setDailyM
       <div className="bg-surface-container-low p-6 rounded-sm border border-outline-variant/20 flex items-center gap-4">
         {/* Avatar with upload overlay */}
         <label className="relative w-16 h-16 rounded-full overflow-hidden border-2 border-primary cursor-pointer group shrink-0">
-          {userProfile?.avatar ? (
-            <img src={userProfile.avatar} alt={t.settings.profileAlt} className="w-full h-full object-cover" />
-          ) : (
-            <div className="w-full h-full bg-primary/10 flex items-center justify-center">
-              <span className="font-headline font-bold text-2xl text-primary uppercase select-none">
-                {(userProfile?.name ?? '?').slice(0, 2)}
-              </span>
-            </div>
+          <div className="w-full h-full bg-primary/10 flex items-center justify-center">
+            <span className="font-headline font-bold text-2xl text-primary uppercase select-none">
+              {(userProfile?.name ?? '?').slice(0, 2)}
+            </span>
+          </div>
+          {userProfile?.avatar && (
+            <img src={userProfile.avatar} alt={t.settings.profileAlt} className="absolute inset-0 w-full h-full object-cover" onError={(e) => { (e.currentTarget as HTMLImageElement).style.display = 'none'; }} />
           )}
           <div className="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
             <Camera className="w-5 h-5 text-white" aria-hidden="true" />

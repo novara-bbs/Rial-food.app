@@ -26,11 +26,6 @@ const ROOT = process.cwd();
  * means the file was migrated, which is the goal).
  */
 const BASELINE_OFFENDERS: ReadonlySet<string> = new Set([
-  'src/features/food/components/barcode/BarcodeFoundPanel.tsx',
-  'src/features/home/screens/More.tsx',
-  'src/features/planner/screens/Planner.tsx',
-  'src/features/profile/components/settings/SettingsProfile.tsx',
-  'src/features/profile/screens/Profile.tsx',
   'src/features/recipes/components/AuthorAttributionCard.tsx',
   'src/features/recipes/components/CookMode.tsx',
   'src/features/recipes/components/HeroGallery.tsx',

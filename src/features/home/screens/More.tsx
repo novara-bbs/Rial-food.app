@@ -129,13 +129,12 @@ export default function More({ navigateTo, userProfile, realFeelLogs = [], nutri
         aria-label={t.more.heroTapHint}
         className={`${BUTTON_CARD_SURFACE_CLASSES} p-5 w-full flex items-center gap-4 text-left hover:border-primary/40 transition-colors group`}
       >
-        <div className="w-14 h-14 rounded-full bg-primary/10 border-2 border-primary flex items-center justify-center overflow-hidden shrink-0">
-          {userProfile?.avatar ? (
-            <img src={userProfile.avatar} alt="" className="w-full h-full object-cover" referrerPolicy="no-referrer" />
-          ) : (
-            <span className="font-headline text-title-sm font-black text-primary uppercase">
-              {(userProfile?.name || 'U').charAt(0)}
-            </span>
+        <div className="relative w-14 h-14 rounded-full bg-primary/10 border-2 border-primary flex items-center justify-center overflow-hidden shrink-0">
+          <span className="font-headline text-title-sm font-black text-primary uppercase">
+            {(userProfile?.name || 'U').charAt(0)}
+          </span>
+          {userProfile?.avatar && (
+            <img src={userProfile.avatar} alt="" className="absolute inset-0 w-full h-full object-cover" referrerPolicy="no-referrer" onError={(e) => { (e.currentTarget as HTMLImageElement).style.display = 'none'; }} />
           )}
         </div>
         <div className="flex-1 min-w-0">
