@@ -75,7 +75,7 @@ export default function ActiveFilterStrip({
           type="button"
           onClick={() => onDismiss(chip.key)}
           aria-label={buildAria(chip.label)}
-          className="inline-flex items-center gap-1 min-h-[22px] px-2.5 rounded-full bg-primary/10 text-primary border border-primary/25 text-nano font-medium normal-case tracking-normal transition-colors hover:bg-primary/20"
+          className="inline-flex items-center gap-1 min-h-[22px] px-2.5 rounded-full bg-primary/10 text-primary border border-primary/25 text-pico font-medium normal-case tracking-normal transition-colors hover:bg-primary/20"
         >
           {chip.emoji && <span aria-hidden="true">{chip.emoji}</span>}
           {chip.label}
@@ -86,7 +86,7 @@ export default function ActiveFilterStrip({
         <button
           type="button"
           onClick={onReset}
-          className="text-nano font-medium normal-case tracking-normal text-on-surface-variant hover:text-primary transition-colors px-2 py-1.5 underline-offset-2 hover:underline"
+          className="text-pico font-medium normal-case tracking-normal text-on-surface-variant hover:text-primary transition-colors px-2 py-1.5 underline-offset-2 hover:underline"
         >
           {resolvedReset}
         </button>

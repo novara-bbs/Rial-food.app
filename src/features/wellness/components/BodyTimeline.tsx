@@ -90,7 +90,7 @@ export default function BodyTimeline({ snapshots, unitSystem, onShare, shareLabe
             key={f.id}
             type="button"
             onClick={() => setFilter(f.id)}
-            className={`shrink-0 inline-flex items-center min-h-[22px] px-2.5 rounded-full text-nano font-medium normal-case tracking-normal transition-colors border ${
+            className={`shrink-0 inline-flex items-center min-h-[22px] px-2.5 rounded-full text-pico font-medium normal-case tracking-normal transition-colors border ${
               filter === f.id
                 ? 'bg-primary text-on-primary border-primary'
                 : 'bg-surface-container-highest text-on-surface-variant border-outline-variant/20 hover:border-primary/50'
@@ -104,7 +104,7 @@ export default function BodyTimeline({ snapshots, unitSystem, onShare, shareLabe
             type="button"
             onClick={() => setCompareMode(v => !v)}
             aria-pressed={compareMode}
-            className={`shrink-0 inline-flex items-center gap-1 min-h-[22px] px-2.5 rounded-full text-nano font-medium normal-case tracking-normal transition-colors border ${
+            className={`shrink-0 inline-flex items-center gap-1 min-h-[22px] px-2.5 rounded-full text-pico font-medium normal-case tracking-normal transition-colors border ${
               compareMode
                 ? 'bg-primary text-on-primary border-primary'
                 : 'bg-surface-container-highest text-on-surface-variant border-outline-variant/20 hover:border-primary/50'

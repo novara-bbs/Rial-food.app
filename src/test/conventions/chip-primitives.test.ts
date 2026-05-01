@@ -12,7 +12,7 @@
  *   - height       : min-h-[22px] — compact density
  *   - padding-x    : px-2 / px-2.5 (compact, no inflation)
  *   - radius       : rounded-full (chips), rounded-sm (rounded-square triggers like FilterButton)
- *   - text-size    : text-nano (9px) — body font, NOT headline
+ *   - text-size    : text-pico (8px) — body font, NOT headline
  *   - text-weight  : font-medium (500), NOT semibold/bold
  *   - text-casing  : normal-case + tracking-normal (NOT uppercase tracking-widest)
  *   - font-family  : default body (Satoshi) — NO `font-headline` / `font-label`
@@ -36,9 +36,9 @@ const TAB_NAV = read('src/components/patterns/TabNav.tsx');
 const SORT_CONTROL = read('src/components/patterns/SortControl.tsx');
 
 describe('Chip primitive — typography lock (post-2026-05-01)', () => {
-  it('StatusChip uses text-nano + font-medium + normal-case (22px chip)', () => {
+  it('StatusChip uses text-pico + font-medium + normal-case (22px chip)', () => {
     expect(STATUS_CHIP).toMatch(/min-h-\[22px\]/);
-    expect(STATUS_CHIP).toMatch(/text-nano/);
+    expect(STATUS_CHIP).toMatch(/text-pico/);
     expect(STATUS_CHIP).toMatch(/font-medium/);
     expect(STATUS_CHIP).toMatch(/normal-case/);
     expect(STATUS_CHIP).toMatch(/tracking-normal/);
@@ -46,11 +46,11 @@ describe('Chip primitive — typography lock (post-2026-05-01)', () => {
     expect(STATUS_CHIP).not.toMatch(/uppercase|tracking-widest|tracking-wider/);
   });
 
-  it('ChipRow pill uses text-nano + font-medium + min-h-[22px]', () => {
+  it('ChipRow pill uses text-pico + font-medium + min-h-[22px]', () => {
     // Match only the pill className (not the deprecated icon variant)
     const pillBlock = CHIP_ROW.match(/'shrink-0[^']*rounded-full[^']*'/)?.[0] ?? '';
     expect(pillBlock).toContain('min-h-[22px]');
-    expect(pillBlock).toContain('text-nano');
+    expect(pillBlock).toContain('text-pico');
     expect(pillBlock).toContain('font-medium');
     expect(pillBlock).toContain('normal-case');
     expect(pillBlock).toContain('tracking-normal');
@@ -58,30 +58,30 @@ describe('Chip primitive — typography lock (post-2026-05-01)', () => {
     expect(pillBlock).not.toContain('font-semibold');
   });
 
-  it('ActiveFilterStrip chip uses text-nano + font-medium + min-h-[22px]', () => {
+  it('ActiveFilterStrip chip uses text-pico + font-medium + min-h-[22px]', () => {
     expect(ACTIVE_STRIP).toMatch(/min-h-\[22px\]/);
-    expect(ACTIVE_STRIP).toMatch(/text-nano/);
+    expect(ACTIVE_STRIP).toMatch(/text-pico/);
     expect(ACTIVE_STRIP).toMatch(/font-medium/);
     expect(ACTIVE_STRIP).not.toMatch(/font-headline/);
   });
 
-  it('TabNav tab uses text-nano + font-medium + normal-case', () => {
-    expect(TAB_NAV).toMatch(/text-nano/);
+  it('TabNav tab uses text-pico + font-medium + normal-case', () => {
+    expect(TAB_NAV).toMatch(/text-pico/);
     expect(TAB_NAV).toMatch(/font-medium/);
     expect(TAB_NAV).toMatch(/normal-case/);
     expect(TAB_NAV).not.toMatch(/font-headline|font-semibold/);
   });
 
-  it('SortControl label uses text-nano + font-medium', () => {
-    expect(SORT_CONTROL).toMatch(/text-nano/);
+  it('SortControl label uses text-pico + font-medium', () => {
+    expect(SORT_CONTROL).toMatch(/text-pico/);
     expect(SORT_CONTROL).toMatch(/font-medium/);
     expect(SORT_CONTROL).not.toMatch(/font-headline|font-semibold/);
   });
 });
 
-describe('Chip token — text-nano defined', () => {
-  it('--text-nano is registered in design-system tokens', () => {
+describe('Chip token — text-pico defined', () => {
+  it('--text-pico is registered in design-system tokens', () => {
     const indexCss = read('src/index.css');
-    expect(indexCss).toMatch(/--text-nano:\s*0\.5625rem/);
+    expect(indexCss).toMatch(/--text-pico:\s*0\.5rem/);
   });
 });

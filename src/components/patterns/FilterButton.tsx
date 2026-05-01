@@ -52,7 +52,7 @@ export default function FilterButton({
     >
       <SlidersHorizontal className="w-4 h-4" aria-hidden="true" />
       {label && (
-        <span className="text-nano font-medium normal-case tracking-normal">
+        <span className="text-pico font-medium normal-case tracking-normal">
           {label}
         </span>
       )}

@@ -161,14 +161,14 @@ const noChipTokenDrift = {
   selector:
     "Literal[value=/^(?=[^\"'`]*\\brounded-full\\b)(?=[^\"'`]*\\bpx-(1\\.5|2|2\\.5|3|3\\.5|4)\\b)(?=[^\"'`]*\\btext-caption\\b).+/]",
   message:
-    'Chip-shaped surfaces (rounded-full + px-N) must use text-nano (9px), not text-caption. See chip-primitives.test.ts and ADR-013.',
+    'Chip-shaped surfaces (rounded-full + px-N) must use text-pico (8px), not text-caption. See chip-primitives.test.ts and ADR-013.',
 };
 
 const noChipTokenDriftTpl = {
   selector:
     "TemplateElement[value.raw=/^(?=[^`]*\\brounded-full\\b)(?=[^`]*\\bpx-(1\\.5|2|2\\.5|3|3\\.5|4)\\b)(?=[^`]*\\btext-caption\\b).+/]",
   message:
-    'Chip-shaped surfaces (rounded-full + px-N) must use text-nano (9px), not text-caption. See ADR-013.',
+    'Chip-shaped surfaces (rounded-full + px-N) must use text-pico (8px), not text-caption. See ADR-013.',
 };
 
 const designSystemRules = [

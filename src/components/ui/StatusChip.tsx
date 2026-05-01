@@ -42,7 +42,7 @@ const TONE_MAP: Record<StatusChipTone, string> = {
 
 const SHAPE =
   'inline-flex items-center gap-1 min-h-[22px] px-2 rounded-full border shadow-elev-1 ' +
-  'text-nano font-medium leading-none normal-case tracking-normal whitespace-nowrap ' +
+  'text-pico font-medium normal-case tracking-normal whitespace-nowrap ' +
   'snap-start transition-colors';
 
 export interface StatusChipProps {

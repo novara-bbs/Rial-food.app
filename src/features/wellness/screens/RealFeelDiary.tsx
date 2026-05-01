@@ -276,17 +276,17 @@ export default function RealFeelDiary({ realFeelLogs = [], onBack }: { realFeelL
                 {(log.energy || log.digestion || log.mindset) && (
                   <div className="flex flex-wrap gap-1.5 mb-1.5">
                     {log.energy && (
-                      <span className="text-nano font-medium normal-case tracking-normal bg-primary/10 text-primary px-2 py-0.5 rounded-full flex items-center gap-1">
+                      <span className="text-pico font-medium normal-case tracking-normal bg-primary/10 text-primary px-2 py-0.5 rounded-full flex items-center gap-1">
                         <Zap className="w-2.5 h-2.5" /> {ENERGY_LABELS[log.energy]}
                       </span>
                     )}
                     {log.digestion && (
-                      <span className="text-nano font-medium normal-case tracking-normal bg-brand-secondary/10 text-brand-secondary px-2 py-0.5 rounded-full flex items-center gap-1">
+                      <span className="text-pico font-medium normal-case tracking-normal bg-brand-secondary/10 text-brand-secondary px-2 py-0.5 rounded-full flex items-center gap-1">
                         <Leaf className="w-2.5 h-2.5" /> {DIGESTION_LABELS[log.digestion]}
                       </span>
                     )}
                     {log.mindset && (
-                      <span className="text-nano font-medium normal-case tracking-normal bg-surface-container-highest text-on-surface-variant px-2 py-0.5 rounded-full flex items-center gap-1">
+                      <span className="text-pico font-medium normal-case tracking-normal bg-surface-container-highest text-on-surface-variant px-2 py-0.5 rounded-full flex items-center gap-1">
                         <Brain className="w-2.5 h-2.5" /> {MINDSET_LABELS[log.mindset]}
                       </span>
                     )}
@@ -294,7 +294,7 @@ export default function RealFeelDiary({ realFeelLogs = [], onBack }: { realFeelL
                 )}
                 <div className="flex flex-wrap gap-1">
                   {(log.tags || []).map((tag: string, j: number) => (
-                    <span key={j} className="text-nano font-medium normal-case tracking-normal bg-surface-container-highest px-2 py-0.5 rounded text-on-surface-variant">{tag}</span>
+                    <span key={j} className="text-pico font-medium normal-case tracking-normal bg-surface-container-highest px-2 py-0.5 rounded text-on-surface-variant">{tag}</span>
                   ))}
                 </div>
                 {log.note && <p className="text-xs text-on-surface-variant mt-1 truncate">{log.note}</p>}
