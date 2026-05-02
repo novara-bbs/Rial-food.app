@@ -9,8 +9,8 @@ import type { Recipe } from '../../../types/recipe';
 // ─── State shapes ─────────────────────────────────────────────────────────────
 
 interface DailyMacros {
-  consumed: { cal: number; pro: number; carbs: number; fats: number };
-  target: { cal: number; pro: number; carbs: number; fats: number };
+  consumed: { cal: number; pro: number; carbs: number; fats: number; fiber?: number };
+  target: { cal: number; pro: number; carbs: number; fats: number; fiber?: number };
 }
 
 interface ShoppingItem {
@@ -27,7 +27,7 @@ export interface DailyLogEntry {
   portionDescription: string;
   mealSlot: string;
   time: string;
-  macros: { cal: number; pro: number; carbs: number; fats: number };
+  macros: { cal: number; pro: number; carbs: number; fats: number; fiber?: number };
   grams?: number;
   servingUsed?: string;
   /** Ingredient IDs involved — single food or recipe ingredients */
@@ -136,6 +136,7 @@ export function createHandleLogMeal(deps: MealHandlerDeps) {
           pro: prev.consumed.pro + (meal.pro || meal.macros?.protein || 0),
           carbs: prev.consumed.carbs + (meal.carbs || meal.macros?.carbs || 0),
           fats: prev.consumed.fats + (meal.fats || meal.macros?.fats || 0),
+          fiber: (prev.consumed.fiber ?? 0) + (meal.fiber || meal.macros?.fiber || 0),
         },
       }));
 
@@ -154,6 +155,7 @@ export function createHandleLogMeal(deps: MealHandlerDeps) {
           pro: meal.pro || meal.macros?.protein || 0,
           carbs: meal.carbs || meal.macros?.carbs || 0,
           fats: meal.fats || meal.macros?.fats || 0,
+          fiber: meal.fiber || meal.macros?.fiber || 0,
         },
         grams: meal.grams,
         servingUsed: meal.servingUsed,
@@ -193,8 +195,9 @@ export function createHandleRepeatYesterday(deps: {
         pro: acc.pro + (e.macros?.pro || 0),
         carbs: acc.carbs + (e.macros?.carbs || 0),
         fats: acc.fats + (e.macros?.fats || 0),
+        fiber: acc.fiber + (e.macros?.fiber || 0),
       }),
-      { cal: 0, pro: 0, carbs: 0, fats: 0 },
+      { cal: 0, pro: 0, carbs: 0, fats: 0, fiber: 0 },
     );
 
     deps.setDailyMacros((prev: DailyMacros) => ({ ...prev, consumed: totalMacros }));
@@ -229,9 +232,10 @@ export function createHandleLogMealNow(deps: Pick<MealHandlerDeps, 'setDailyMacr
       const pro = Number(meal.pro ?? meal.macros?.protein ?? 0) * safeServings;
       const carbs = Number(meal.carbs ?? meal.macros?.carbs ?? 0) * safeServings;
       const fats = Number(meal.fats ?? meal.macros?.fats ?? 0) * safeServings;
+      const fiber = Number(meal.fiber ?? meal.macros?.fiber ?? 0) * safeServings;
 
       // ── Validate computed macros are finite numbers before mutating state.
-      if (![cal, pro, carbs, fats].every(Number.isFinite)) {
+      if (![cal, pro, carbs, fats, fiber].every(Number.isFinite)) {
         logger.error('logMealNow: non-finite macros computed', { meal, servings: safeServings });
         toast.error(deps.t?.errors?.logMealFailed ?? "We couldn't log this meal. Please try again.");
         return;
@@ -253,7 +257,7 @@ export function createHandleLogMealNow(deps: Pick<MealHandlerDeps, 'setDailyMacr
           : `${safeServings} × ${meal.portionDescription || defaultPortion}`,
         mealSlot: meal.mealSlot || 'other',
         time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
-        macros: { cal, pro, carbs, fats },
+        macros: { cal, pro, carbs, fats, fiber },
         ingredientIds,
         ...((meal.image || meal.img) ? { image: meal.image || meal.img } : {}),
       };
@@ -265,6 +269,7 @@ export function createHandleLogMealNow(deps: Pick<MealHandlerDeps, 'setDailyMacr
           pro: prev.consumed.pro + pro,
           carbs: prev.consumed.carbs + carbs,
           fats: prev.consumed.fats + fats,
+          fiber: (prev.consumed.fiber ?? 0) + fiber,
         },
       }));
       deps.setDailyLog((prev: DailyLogEntry[]) => [...prev, entry]);

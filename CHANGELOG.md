@@ -1,5 +1,46 @@
 # RIAL App - Changelog
 
+## [1.5.192] - 2026-05-02
+
+### feat(home+design): hero rework, fiber tracking, day navigation, NutritionDetail screen, design tokens softening
+
+Multi-phase visual + structural overhaul of the Home nutrition surface, scoped across 4 phases (1.5.186 → 1.5.192). Combined here as one shipped release.
+
+**Phase 1 [1.5.186] — Calorie hero redesign + NutritionDetail + fiber:**
+- `DailyMacros` extended with optional `fiber` (consumed + target). Default target 30g (NIH 25-38g/day mid-range). `LoggableMeal`, `DailyLogEntry`, `DailyArchive` all updated. `meal-handlers` (`createHandleLogMeal`, `createHandleLogMealNow`, `createHandleRepeatYesterday`) sum fiber. `useDailyReset` resets fiber to 0 on midnight rollover.
+- New token `--color-macro-fiber: #84a98c` in all 8 palettes.
+- New screen `src/features/home/screens/NutritionDetail.tsx` accessible from Home advanced via "Ver detalle nutricional" CTA. Renders ring + 4 macros + hydration + extra-nutrients (sugar/sodium/sat fat as honest "no registrado" placeholders) + weekly trend link.
+- `NutritionHeroRing` rewritten: 4 macro rows (carbs/protein/fats/fiber) with new `MacroProgressRow` primitive (label-top + %-below stacked left, abs-top + bar-bottom right column).
+- Feature flag `homeRingGrid` flipped to default-on; rollback via `VITE_FEATURE_HOME_RING_GRID_OFF=1`.
+- Simple mode reduced to a single compact pill (`🔥 1155/1850 kcal ›`) — owner directive.
+- New i18n keys: `home.fiber`, `home.viewNutritionDetail`, `home.dayPicker.*` (8 keys), namespace `nutritionDetail.*` (12 keys). ES↔EN symmetric. Total 2042 keys.
+
+**Phase 3 — Hero naked sobre BG + Sprint A.1:**
+- Hero card wrapped in `<SectionCard padding="lg" className="bg-transparent border-0 shadow-none">` so content aligns with macros card body but reads as "estado del día" without chrome.
+- New `--text-hero` token (3.75rem / 60px) for the consumed % left of the ring.
+- `CalorieRing layout="consumed-target"` shows remaining inside ring + "kcal" inline + "Restante" caption + corner labels (`{consumed} consumido` left, `{target} Objetivo` right) as a row below the SVG container — no overlap with arc termini.
+- Ring stroke 16 → 18 px.
+- Macros card retains white card chrome (separation visual: hero = state, macros = data).
+
+**Sprint B — Date navigation (global):**
+- Lifted `selectedDate` to `AppStateContext` via new `useDayNavigation()` hook. Both Home and `NutritionDetail` consume the same global state — selecting "Ayer" on Home and navigating to NutritionDetail keeps "Ayer" selected.
+- New `<DatePickerSheet>` BottomSheet renders last 14 days with kcal preview from `nutritionHistory` archive. Today = live macros, past = archived snapshot, missing days = "Sin datos" italic.
+- New `<PastDayBanner>` shown above Home when `!isViewingToday` with "VOLVER A HOY" reset CTA.
+- New hook `useSelectedDayData` resolves all 4 effective slices (macros + dailyLog + hydration + movement) per selected day. Mutation CTAs (Add water, edit hydration target, MealGapSuggestion CTAs) hidden when not today; ActivityRow gets noop setMovement.
+- `HomeHeader` date label is now clickable (chevron) and reflects selected day (`Hoy, 2 may` / `Ayer, 1 may` / `Vie, 30 abr`). Same pattern in NutritionDetail PageHeader (`rightAction` slot).
+
+**Phase 4 — Global design tokens softening:**
+- `--radius` base 6px → **8px (even)**: sm=8, md=12, lg=16, xl=24, 2xl=32. All scales bump proportionally via `calc(var(--radius) * factor)`.
+- `--shadow-elev-{1,2,3}` rewritten ambient/key dual-shadow style (Material 3 / Apple HIG iOS 17+):
+  - elev-1: `0 1px 16px 0 rgb(0 0 0 / 0.02)` (was 2px 0.05)
+  - elev-2: `0 4px 24px -4px rgb(0 0 0 / 0.03), 0 2px 8px -2px rgb(0 0 0 / 0.02)`
+  - elev-3: `0 16px 72px -12px rgb(0 0 0 / 0.04), 0 8px 28px -6px rgb(0 0 0 / 0.025)`
+- Net effect: shadow blur ~8× original, alpha ~50% original → cards "lift" with ambient atmosphere instead of hard drop edge. Owner directive: "levita pero no se nota el porqué".
+
+**Quality:** TypeScript ✓ 0 errors · Tests **1541/1541** (was 1519, +22 from new hooks/components/conventions) · i18n 2042 keys ES↔EN · `npm run lint:code` 0 errors · convention test `home-hero` updated for new shape.
+
+**Files added:** 7 (`useDayNavigation.ts`, `DatePickerSheet.tsx`, `MacroProgressRow.tsx`, `MacroProgressRow.test.tsx`, `NutritionHeroRing.test.tsx`, `PastDayBanner.tsx`, `useSelectedDayData.ts`, `useSelectedDayMacros.ts`, `NutritionDetail.tsx`). **Files modified:** 17 (App, AppStateContext, useVitalsState + test, meal-handlers, HomeHeader, NutritionHero[Ring], Home, useDailyReset, i18n locales, index.css, featureFlags, food types, conventions test, routes).
+
 ## [1.5.185] - 2026-05-01
 
 ### feat(home): MealGapSuggestion projected gap — plan-aware deficit

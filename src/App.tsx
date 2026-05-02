@@ -28,7 +28,7 @@ const {
   FastingTimer, ImportRecipeURL, Settings, Profile, Pantry,
   WeeklyCheckIn, RialPlus, CreatorVerification, CreatorDashboard, FoodDictionary,
   Challenges, CreatorProfile, PostDetail, StoryViewer, CreateStory,
-  Notifications: NotificationsScreen, ChallengeDetail, Progress,
+  Notifications: NotificationsScreen, ChallengeDetail, Progress, NutritionDetail,
   Login, Signup, ForgotPassword,
   PrivacyPolicy, TermsOfService,
   FoodDetail,
@@ -165,7 +165,7 @@ export default function App() {
 
   const renderScreen = () => {
     switch (currentScreen) {
-      case 'home': return <FeatureErrorBoundary featureName={t.nav.today} onReset={handleErrorReset}><Home onNavigateToRecipe={navigateToRecipe} onAddMeal={() => navigateTo('add-meal')} onNavigateToPlan={() => navigateTo('cocina')} onNavigateToProgress={() => navigateTo('progress')} dailyMacros={dailyMacros} setDailyMacros={setDailyMacros} onLogMealNow={handleLogMealNow} mealPlan={mealPlan} hydration={hydration} setHydration={setHydration} movement={movement} setMovement={setMovement} userProfile={userProfile} realFeelLogs={realFeelLogs} onRealFeelLog={handleRealFeelLog} dailyLog={dailyLog} setDailyLog={setDailyLog} nutritionHistory={nutritionHistory} /></FeatureErrorBoundary>;
+      case 'home': return <FeatureErrorBoundary featureName={t.nav.today} onReset={handleErrorReset}><Home onNavigateToRecipe={navigateToRecipe} onAddMeal={() => navigateTo('add-meal')} onNavigateToPlan={() => navigateTo('cocina')} onNavigateToProgress={() => navigateTo('progress')} onNavigateToNutritionDetail={() => navigateTo('nutrition-detail')} dailyMacros={dailyMacros} setDailyMacros={setDailyMacros} onLogMealNow={handleLogMealNow} mealPlan={mealPlan} hydration={hydration} setHydration={setHydration} movement={movement} setMovement={setMovement} userProfile={userProfile} realFeelLogs={realFeelLogs} onRealFeelLog={handleRealFeelLog} dailyLog={dailyLog} setDailyLog={setDailyLog} nutritionHistory={nutritionHistory} /></FeatureErrorBoundary>;
       case 'cocina': return <FeatureErrorBoundary featureName={t.nav.kitchen} onReset={handleErrorReset}><Cocina onAddMeal={(dayIndex) => { setTargetPlanDay(dayIndex); navigateTo('add-meal'); }} onCreateRecipe={() => navigateTo('create-recipe')} onNavigateToRecipe={navigateToRecipe} savedRecipes={savedRecipes} setSavedRecipes={setSavedRecipes} mealPlan={mealPlan} setMealPlan={setMealPlan} shoppingList={shoppingList} setShoppingList={setShoppingList} onLogMeal={handleLogMeal} isPro={isPro} onImportUrl={() => navigateTo('import-url')} /></FeatureErrorBoundary>;
       case 'explore': return <FeatureErrorBoundary featureName={t.nav.explore} onReset={handleErrorReset}><Explore onNavigateToRecipe={navigateToRecipe} savedRecipes={savedRecipes} onSaveRecipe={handleSaveRecipe} communityPosts={communityPosts} onAddComment={handleAddComment} /></FeatureErrorBoundary>;
       case 'more': return <FeatureErrorBoundary featureName={t.nav.more} onReset={handleErrorReset}><More navigateTo={navigateTo} userProfile={userProfile} realFeelLogs={realFeelLogs} nutritionHistory={nutritionHistory} dailyLogHasEntries={dailyLog.length > 0} /></FeatureErrorBoundary>;
@@ -196,6 +196,7 @@ export default function App() {
       case 'notifications': return <NotificationsScreen onBack={() => navigateTo(previousScreen)} />;
       case 'challenge-detail': return <ChallengeDetail onBack={() => navigateTo(previousScreen)} challengeId={selectedChallengeId || 'green-7'} />;
       case 'progress': return <Progress onBack={() => navigateTo(previousScreen)} />;
+      case 'nutrition-detail': return <NutritionDetail onBack={() => navigateTo(previousScreen)} />;
       case 'food-dictionary': return <FoodDictionary navigateTo={navigateTo} />;
       case 'food-detail': return <FoodDetail />;
       case 'privacy-policy': return <PrivacyPolicy onBack={() => navigateTo(previousScreen)} />;

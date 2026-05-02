@@ -9,6 +9,9 @@ import NutritionHero from '../components/NutritionHero';
 import TodaysMeals from '../components/TodaysMeals';
 import ActivityRow from '../components/ActivityRow';
 import HomeHeader from '../components/HomeHeader';
+import DatePickerSheet from '../components/DatePickerSheet';
+import PastDayBanner from '../components/PastDayBanner';
+import { useSelectedDayData } from '../hooks/useSelectedDayData';
 import HomeQuickStats from '../components/HomeQuickStats';
 import WeeklyMiniDash from '../components/WeeklyMiniDash';
 import MealGapSuggestion from '../components/MealGapSuggestion';
@@ -58,10 +61,12 @@ export default function Home({
   setDailyMacros,
   nutritionHistory = [],
   onNavigateToProgress,
+  onNavigateToNutritionDetail,
 }: {
   onAddMeal: () => void,
   onNavigateToPlan: () => void,
   onNavigateToProgress?: () => void,
+  onNavigateToNutritionDetail?: () => void,
   dailyMacros: DailyMacros,
   setDailyMacros?: Setter<DailyMacros>,
   userProfile: UserProfile,
@@ -81,6 +86,13 @@ export default function Home({
   const { t } = useI18n();
   const [isEditingHydration, setIsEditingHydration] = useState(false);
   const [showRealFeel, setShowRealFeel] = useState(false);
+  const [datePickerOpen, setDatePickerOpen] = useState(false);
+  // Phase 3 Sprint B3 — selectedDate is global so Home + NutritionDetail share it.
+  const { selectedDate, setSelectedDate, resetToToday } = useAppState();
+
+  // Phase 3 Sprint B4 — full day-snapshot swap (today === live, past === archive).
+  const { effectiveDailyMacros, effectiveDailyLog, effectiveHydration, effectiveMovement, isViewingToday } =
+    useSelectedDayData({ selectedDate, liveDailyMacros: dailyMacros, liveDailyLog: dailyLog, liveHydration: hydration, liveMovement: movement, history: nutritionHistory });
   const [isTrainingDay, setIsTrainingDay] = useState(false);
   const lastCalRef = useRef(dailyMacros.consumed.cal);
   const [guidedDismissed, setGuidedDismissed] = useState(() => {
@@ -295,7 +307,12 @@ export default function Home({
         bestStreakDays={bestStreakDays}
         dayStatus={computeDayStatus(dailyMacros.consumed.cal, dailyMacros.target.cal)}
         onNavigateToProgress={onNavigateToProgress}
+        onTapDate={() => setDatePickerOpen(true)}
+        selectedDate={selectedDate}
       />
+
+      {/* Phase 3 Sprint B4 — read-only banner when viewing a past day. */}
+      {!isViewingToday && <PastDayBanner onResetToToday={resetToToday} />}
 
       {/* 2. Guided Setup — first 7 days (p-4 to match other tinted-primary cards) */}
       {!guidedDismissed && (
@@ -342,7 +359,7 @@ export default function Home({
       )}
 
       {/* 3. Nutrition Hero — above the fold (Q15: goal prop for ICP-adaptive status chip) */}
-      <NutritionHero dailyMacros={dailyMacros} mode={isSimpleMode ? 'simple' : 'advanced'} exerciseCalories={exerciseCalories} goal={userProfile?.goal} />
+      <NutritionHero dailyMacros={effectiveDailyMacros} mode={isSimpleMode ? 'simple' : 'advanced'} exerciseCalories={isViewingToday ? exerciseCalories : 0} goal={userProfile?.goal} onNavigateToNutritionDetail={onNavigateToNutritionDetail} />
 
       {/* 4. HomeQuickStats — chip-row (advanced only; simple returns null) */}
       <HomeQuickStats
@@ -355,7 +372,7 @@ export default function Home({
 
       {/* 5. Today's Meals — unified Plan + Log + Next Up banner [1.5.182] */}
       <TodaysMeals
-        dailyLog={dailyLog}
+        dailyLog={effectiveDailyLog}
         todaysMeals={todaysMeals}
         onLogMealNow={onLogMealNow}
         onNavigateToPlan={onNavigateToPlan}
@@ -399,29 +416,33 @@ export default function Home({
             </div>
             <div>
               <p className="font-label text-micro text-on-surface-variant uppercase tracking-widest">{t.home.water}</p>
-              <p className="font-headline font-bold text-body-sm text-tertiary uppercase">{hydration.consumed} / {hydration.target} {t.home.cups}</p>
+              <p className="font-headline font-bold text-body-sm text-tertiary uppercase">{effectiveHydration.consumed} / {effectiveHydration.target} {t.home.cups}</p>
             </div>
           </div>
           <div className="flex items-center gap-2">
-            <button
-              type="button"
-              onClick={() => setIsEditingHydration(!isEditingHydration)}
-              className="text-micro text-brand-secondary hover:underline font-bold uppercase tracking-widest min-h-11 px-3"
-            >
-              {isEditingHydration ? t.home.close : t.home.edit}
-            </button>
-            <Button
-              variant="brand"
-              size="icon"
-              onClick={handleAddWater}
-              className="rounded-full shadow-elev-3 shadow-secondary/20 active:scale-95 shrink-0"
-              aria-label={t.home.addWater ?? 'Add water'}
-            >
-              <Plus className="w-4 h-4" />
-            </Button>
+            {isViewingToday && (
+              <button
+                type="button"
+                onClick={() => setIsEditingHydration(!isEditingHydration)}
+                className="text-micro text-brand-secondary hover:underline font-bold uppercase tracking-widest min-h-11 px-3"
+              >
+                {isEditingHydration ? t.home.close : t.home.edit}
+              </button>
+            )}
+            {isViewingToday && (
+              <Button
+                variant="brand"
+                size="icon"
+                onClick={handleAddWater}
+                className="rounded-full shadow-elev-3 shadow-secondary/20 active:scale-95 shrink-0"
+                aria-label={t.home.addWater ?? 'Add water'}
+              >
+                <Plus className="w-4 h-4" />
+              </Button>
+            )}
           </div>
         </div>
-        {isEditingHydration && (
+        {isEditingHydration && isViewingToday && (
           <div className="pt-3 border-t border-outline-variant/20 animate-in fade-in slide-in-from-top-2">
             <div className="flex items-center justify-between mb-2">
               <span className="font-label text-micro uppercase tracking-widest text-on-surface-variant">{t.home.dailyTarget} ({t.home.cups})</span>
@@ -443,13 +464,13 @@ export default function Home({
       {/* 8. P11 [1.5.69] — Qué me falta hoy: personalized macro-gap suggestions.
             Sprint 50 [1.5.164] — also surfaces recipes from the user's vault
             (planned-today + not-eaten-today bias) before the ingredients block. */}
-      {onLogMealNow && (
+      {onLogMealNow && isViewingToday && (
         <MealGapSuggestion
-          dailyMacros={dailyMacros}
+          dailyMacros={effectiveDailyMacros}
           mergedVariants={mergedVariants}
           savedRecipes={savedRecipes}
           mealPlanToday={todaysMeals}
-          dailyLog={dailyLog}
+          dailyLog={effectiveDailyLog}
           weeklyArchive={(nutritionHistory ?? []).slice(-7)}
           onNavigateToRecipe={onNavigateToRecipe}
           foodHistory={foodHistory}
@@ -531,11 +552,11 @@ export default function Home({
         </Button>
       )}
 
-      {/* 14. Activity — advanced only */}
+      {/* 14. Activity — advanced only. Past-day archive shows minutes/steps read-only. */}
       {!isSimpleMode && (
         <ActivityRow
-          movement={movement}
-          setMovement={setMovement}
+          movement={effectiveMovement}
+          setMovement={isViewingToday ? setMovement : () => {}}
           isTrainingDay={isTrainingDay}
           setIsTrainingDay={setIsTrainingDay}
         />
@@ -562,6 +583,15 @@ export default function Home({
           ))}
         </section>
       )}
+
+      <DatePickerSheet
+        open={datePickerOpen}
+        onOpenChange={setDatePickerOpen}
+        selectedDate={selectedDate}
+        todayKcal={dailyMacros.consumed.cal}
+        history={nutritionHistory}
+        onSelect={setSelectedDate}
+      />
     </PageShell>
   );
 }

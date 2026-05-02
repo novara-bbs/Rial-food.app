@@ -140,6 +140,7 @@ export interface LoggableMeal {
   pro?: number;
   carbs?: number;
   fats?: number;
+  fiber?: number;
   grams?: number;
   portionDescription?: string;
   mealSlot?: string;
@@ -149,7 +150,7 @@ export interface LoggableMeal {
   steps?: unknown;
   isApiResult?: boolean;
   /** Recipe-style macro sub-object */
-  macros?: { calories?: number; protein?: number; carbs?: number; fats?: number };
+  macros?: { calories?: number; protein?: number; carbs?: number; fats?: number; fiber?: number };
   image?: string;
   /** @deprecated Legacy alias of `image`. Read by handlers as fallback for older mealPlan data. */
   img?: string;

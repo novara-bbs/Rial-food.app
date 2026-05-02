@@ -21,6 +21,7 @@ import { useAuth } from './AuthContext';
 import { syncOnSignIn } from '../lib/sync';
 import { useProfileState } from './state/useProfileState';
 import { useVitalsState, type DailyMacros } from './state/useVitalsState';
+import { useDayNavigation } from './state/useDayNavigation';
 import { useUITransientState } from './state/useUITransientState';
 import { usePlannerState } from './state/usePlannerState';
 import { useFoodState } from './state/useFoodState';
@@ -66,6 +67,9 @@ interface AppStateContextType {
   setMovement: Setter<MovementState>;
   dailyGoal: string;
   setDailyGoal: (v: string) => void;
+  selectedDate: string;
+  setSelectedDate: (date: string) => void;
+  resetToToday: () => void;
 
   // Content
   savedRecipes: Recipe[];
@@ -252,6 +256,10 @@ export function AppStateProvider({ children }: { children: React.ReactNode }) {
     dailyGoal, setDailyGoal,
     checkInStatus, setCheckInStatus,
   } = useVitalsState();
+
+  // Day navigation — Phase 3 / Sprint B3. Lifts `selectedDate` to global state
+  // so Home + NutritionDetail share the same selected day across navigations.
+  const { selectedDate, setSelectedDate, resetToToday } = useDayNavigation();
 
   // Food state — extracted to useFoodState (Phase 2.5, ADR-015).
   // Owns userFoods, userVariants, userVariantBarcodes, dailyLog, foodHistory,
@@ -498,6 +506,7 @@ export function AppStateProvider({ children }: { children: React.ReactNode }) {
     hydration, setHydration,
     movement, setMovement,
     dailyGoal, setDailyGoal,
+    selectedDate, setSelectedDate, resetToToday,
     savedRecipes, setSavedRecipes,
     mealPlan, setMealPlan,
     shoppingList, setShoppingList,
@@ -557,6 +566,7 @@ export function AppStateProvider({ children }: { children: React.ReactNode }) {
     miseEnPlaceEnabled, setMiseEnPlaceEnabled,
     userProfile, setUserProfile, dailyMacros, setDailyMacros,
     hydration, setHydration, movement, setMovement, dailyGoal, setDailyGoal,
+    selectedDate, setSelectedDate, resetToToday,
     savedRecipes, setSavedRecipes, mealPlan, setMealPlan,
     shoppingList, setShoppingList, communityPosts, setCommunityPosts,
     toleranceLogs, setToleranceLogs, realFeelLogs, setRealFeelLogs,

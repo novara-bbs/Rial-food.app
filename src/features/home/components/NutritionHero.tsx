@@ -6,22 +6,37 @@ import { featureFlags } from '../../../lib/featureFlags';
 import NutritionHeroRing from './NutritionHeroRing';
 
 interface Macros {
-  consumed: { cal: number; pro: number; carbs: number; fats: number };
-  target: { cal: number; pro: number; carbs: number; fats: number };
+  consumed: { cal: number; pro: number; carbs: number; fats: number; fiber?: number };
+  target: { cal: number; pro: number; carbs: number; fats: number; fiber?: number };
 }
 
-export default function NutritionHero({ dailyMacros, mode = 'advanced', exerciseCalories = 0, goal }: { dailyMacros: Macros; mode?: 'simple' | 'advanced'; exerciseCalories?: number; goal?: string }) {
+interface NutritionHeroProps {
+  dailyMacros: Macros;
+  mode?: 'simple' | 'advanced';
+  exerciseCalories?: number;
+  goal?: string;
+  /** Forwarded to NutritionHeroRing; ignored by the legacy fallback path. */
+  onNavigateToNutritionDetail?: () => void;
+}
+
+export default function NutritionHero({ dailyMacros, mode = 'advanced', exerciseCalories = 0, goal, onNavigateToNutritionDetail }: NutritionHeroProps) {
   const { t } = useI18n();
 
   // PR 8 — Bevel Home ring-grid. When the feature flag is on, render the
-  // new semi-ring 270° + 3-col macros shape (Option A hybrid, see
-  // docs/market/home-patterns-benchmark.md §4.4). The legacy equation-hero
-  // path below remains untouched as the fallback when the flag is off — the
-  // rollback path is flipping `homeRingGrid` back to `false`. The hook above
-  // must run before this early-return to respect rules-of-hooks.
+  // new semi-ring 270° + 4-row macros shape (post-1.5.186 redesign). The
+  // legacy equation-hero path below remains untouched as the fallback when
+  // the flag is off — the rollback path is flipping `homeRingGrid` back to
+  // `false`. The hook above must run before this early-return to respect
+  // rules-of-hooks.
   if (featureFlags.homeRingGrid) {
     return (
-      <NutritionHeroRing dailyMacros={dailyMacros} mode={mode} exerciseCalories={exerciseCalories} goal={goal} />
+      <NutritionHeroRing
+        dailyMacros={dailyMacros}
+        mode={mode}
+        exerciseCalories={exerciseCalories}
+        goal={goal}
+        onNavigateToNutritionDetail={onNavigateToNutritionDetail}
+      />
     );
   }
 

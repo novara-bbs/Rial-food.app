@@ -32,6 +32,7 @@ export const screens = {
   Notifications: React.lazy(() => import('../features/social/screens/Notifications')),
   ChallengeDetail: React.lazy(() => import('../features/social/screens/ChallengeDetail')),
   Progress: React.lazy(() => import('../features/wellness/screens/Progress')),
+  NutritionDetail: React.lazy(() => import('../features/home/screens/NutritionDetail')),
   // Auth screens
   Login: React.lazy(() => import('../features/auth/screens/Login')),
   Signup: React.lazy(() => import('../features/auth/screens/Signup')),

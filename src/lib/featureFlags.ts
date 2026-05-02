@@ -2,18 +2,16 @@
  * Feature flags — single source of truth for gated UI/behavior.
  *
  * PR 8 (Bevel Home ring-grid): `homeRingGrid` gates the new semi-ring 270°
- * hero + 3-col macros row on Home. Default `false` so existing behavior is
- * preserved unchanged until we opt-in. Rollback path: set back to `false`.
+ * hero + 4-row macros + nutrition-detail CTA on Home (post-1.5.186 redesign).
+ * Default `true` since 1.5.186 — the new shape is now the canonical advanced
+ * view. The legacy 4-circle equation-hero in `NutritionHero.tsx` survives as
+ * the rollback fallback only.
  *
  * Per `docs/market/home-patterns-benchmark.md` §6.1 + §6.3. See also the
- * convention test `src/test/conventions/home-hero.test.ts` which locks
- * both shapes render (flag-off preserves current, flag-on renders the new
- * Option A hybrid).
+ * convention test `src/test/conventions/home-hero.test.ts`.
  *
- * Escape hatch for local preview: `VITE_FEATURE_HOME_RING_GRID=1` in a
- * per-developer `.env.local` flips the flag without touching source. The
- * default export is resolved once at module load — hot-reload is enough to
- * pick up env changes.
+ * Rollback escape hatch: `VITE_FEATURE_HOME_RING_GRID_OFF=1` in a
+ * per-developer `.env.local` (or Vercel env) reverts to the legacy hero.
  */
 
 const readEnvFlag = (key: string): boolean => {
@@ -61,7 +59,8 @@ export interface FeatureFlags {
 }
 
 export const featureFlags: FeatureFlags = Object.freeze({
-  homeRingGrid: readEnvFlag('VITE_FEATURE_HOME_RING_GRID'),
+  // Default true since 1.5.186 — opt-out via VITE_FEATURE_HOME_RING_GRID_OFF=1.
+  homeRingGrid: !readEnvFlag('VITE_FEATURE_HOME_RING_GRID_OFF'),
   verifiedRecipePolish: readEnvFlag('VITE_FEATURE_VERIFIED_RECIPE_POLISH'),
   // Default true — opt-out via VITE_FEATURE_COOK_MODE_VOICE=0
   cookModeVoiceReadAloud: !readEnvFlag('VITE_FEATURE_COOK_MODE_VOICE_OFF'),

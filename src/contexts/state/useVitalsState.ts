@@ -18,18 +18,21 @@ import { useLocalStorageState } from '../../hooks/useLocalStorageState';
 import { pushToCloud } from '../../lib/sync';
 import type { DailyCheckIn as DailyCheckInType } from '../../types';
 
-/** Today's macros — split into what the user has consumed vs. their target for the day. */
+/**
+ * Today's macros — split into what the user has consumed vs. their target for the day.
+ *
+ * `fiber` is optional so legacy persisted state (and the 30+ call sites that
+ * construct partial DailyMacros) keeps type-checking. Display code must read
+ * with `?? 0`. Default target = 30 g (mid-range of NIH 25-38 g/day adult guideline).
+ */
 export interface DailyMacros {
-  consumed: { cal: number; pro: number; carbs: number; fats: number };
-  target: { cal: number; pro: number; carbs: number; fats: number };
+  consumed: { cal: number; pro: number; carbs: number; fats: number; fiber?: number };
+  target: { cal: number; pro: number; carbs: number; fats: number; fiber?: number };
 }
 
 const DEFAULT_DAILY_MACROS: DailyMacros = {
-  // Fresh-install starts at zero — the previous hardcoded 840 cal / 45 g pro
-  // default used to show as if the user had already eaten before logging.
-  // "Lo que ves es lo que has hecho" → zeros for consumed, defaults for target.
-  consumed: { cal: 0, pro: 0, carbs: 0, fats: 0 },
-  target: { cal: 2400, pro: 180, carbs: 250, fats: 65 },
+  consumed: { cal: 0, pro: 0, carbs: 0, fats: 0, fiber: 0 },
+  target: { cal: 2400, pro: 180, carbs: 250, fats: 65, fiber: 30 },
 };
 
 const DEFAULT_HYDRATION = { consumed: 0, target: 10 };

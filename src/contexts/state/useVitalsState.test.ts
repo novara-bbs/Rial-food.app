@@ -39,9 +39,10 @@ describe('useVitalsState — initial shape', () => {
 
   it('boots dailyMacros at zero consumption with sensible targets', () => {
     const { result } = renderHook(() => useVitalsState());
-    expect(result.current.dailyMacros.consumed).toEqual({ cal: 0, pro: 0, carbs: 0, fats: 0 });
+    expect(result.current.dailyMacros.consumed).toEqual({ cal: 0, pro: 0, carbs: 0, fats: 0, fiber: 0 });
     expect(result.current.dailyMacros.target.cal).toBe(2400);
     expect(result.current.dailyMacros.target.pro).toBe(180);
+    expect(result.current.dailyMacros.target.fiber).toBe(30);
   });
 
   it('boots hydration at 0/10 cups', () => {

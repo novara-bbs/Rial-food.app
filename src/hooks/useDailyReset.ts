@@ -22,7 +22,10 @@ export interface MovementSnapshot { activeMinutes: number; steps: number }
 
 export interface DailyArchive {
   date: string;
-  macros: { consumed: { cal: number; pro: number; carbs: number; fats: number }; target: { cal: number; pro: number; carbs: number; fats: number } };
+  macros: {
+    consumed: { cal: number; pro: number; carbs: number; fats: number; fiber?: number };
+    target: { cal: number; pro: number; carbs: number; fats: number; fiber?: number };
+  };
   /** Pre-Q15: plain number (glasses consumed). Q15+: { consumed, target }. */
   hydration: number | HydrationSnapshot;
   /** Pre-Q15: plain number (activeMinutes). Q15+: { activeMinutes, steps }. */
@@ -136,7 +139,7 @@ export function useDailyReset({ setDailyLog, setDailyMacros, setHydration, setMo
       setDailyLog([]);
       setDailyMacros((prev) => ({
         ...prev,
-        consumed: { cal: 0, pro: 0, carbs: 0, fats: 0 },
+        consumed: { cal: 0, pro: 0, carbs: 0, fats: 0, fiber: 0 },
       }));
       setHydration((prev) => ({ ...prev, consumed: 0 }));
       setMovement((prev) => ({ ...prev, steps: 0, activeMinutes: 0 }));

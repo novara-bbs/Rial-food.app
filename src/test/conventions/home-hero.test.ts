@@ -65,19 +65,18 @@ describe('featureFlags — PR 8 shape', () => {
     expect(typeof featureFlags.homeRingGrid).toBe('boolean');
   });
 
-  it('defaults homeRingGrid to false (rollback-safe baseline)', () => {
-    // Default resolved from `import.meta.env.VITE_FEATURE_HOME_RING_GRID`,
-    // which is unset in test/CI. Flipping this default should be a deliberate
-    // change that also updates `home-patterns-benchmark.md` §6.3.
-    expect(featureFlags.homeRingGrid).toBe(false);
+  it('defaults homeRingGrid to true since 1.5.186 (new shape is canonical)', () => {
+    // Rollback resolved from `import.meta.env.VITE_FEATURE_HOME_RING_GRID_OFF`,
+    // which is unset in test/CI → flag stays on.
+    expect(featureFlags.homeRingGrid).toBe(true);
   });
 
   it('declares the flag via a frozen object (prevents runtime mutation)', () => {
     expect(FEATURE_FLAGS_SRC).toMatch(/Object\.freeze\(/);
   });
 
-  it('reads the env variable name VITE_FEATURE_HOME_RING_GRID', () => {
-    expect(FEATURE_FLAGS_SRC).toContain('VITE_FEATURE_HOME_RING_GRID');
+  it('reads the rollback env variable VITE_FEATURE_HOME_RING_GRID_OFF', () => {
+    expect(FEATURE_FLAGS_SRC).toContain('VITE_FEATURE_HOME_RING_GRID_OFF');
   });
 });
 
@@ -171,25 +170,38 @@ describe('NutritionHero — flag routing (legacy shape preserved)', () => {
   });
 });
 
-describe('NutritionHeroRing — Option A shape anatomy', () => {
+describe('NutritionHeroRing — post-1.5.186 shape anatomy', () => {
   it('renders a semi-ring track + progress path via handwritten SVG (no recharts import)', () => {
     expect(HERO_RING_SRC).not.toContain("from 'recharts'");
     expect(HERO_RING_SRC).toContain('data-testid="hero-ring-svg"');
     expect(HERO_RING_SRC).toContain('data-testid="hero-ring-progress"');
   });
 
-  it('mounts the number hero inside the ring (remaining kcal as primary metric)', () => {
-    expect(HERO_RING_SRC).toMatch(/text-display text-primary[\s\S]*?\{remaining\}/);
-  });
-
-  it('renders 3-col macros row below hero (§4.4 vertical-budget decision)', () => {
-    expect(HERO_RING_SRC).toMatch(/grid-cols-3/);
+  it('renders 4 stacked macro rows (carbs/protein/fats/fiber) below the hero', () => {
     expect(HERO_RING_SRC).toContain("key: 'carbs'");
     expect(HERO_RING_SRC).toContain("key: 'protein'");
     expect(HERO_RING_SRC).toContain("key: 'fats'");
+    expect(HERO_RING_SRC).toContain("key: 'fiber'");
+    expect(HERO_RING_SRC).toContain('MacroProgressRow');
   });
 
-  it('keeps running-sum caption for the MFP education pattern', () => {
+  it('exposes the consumed-percent block in advanced mode (Phase 3 / Sprint A.1 — naked hero, % LEFT + ring RIGHT with corner labels)', () => {
+    expect(HERO_RING_SRC).toContain('data-testid="hero-ring-pct"');
+    expect(HERO_RING_SRC).toContain('layout="consumed-target"');
+    expect(HERO_RING_SRC).toMatch(/text-display[\s\S]*?\/ Math\.max\(1, dailyMacros\.target\.cal\)/);
+    // Sprint A.1: corner labels propagate through `consumedLabel` / `targetLabel` / `remainingLabel` props.
+    expect(HERO_RING_SRC).toContain('consumedLabel={t.home.consumed}');
+    expect(HERO_RING_SRC).toContain('targetLabel={t.home.target}');
+    expect(HERO_RING_SRC).toContain('remainingLabel={t.home.remaining}');
+  });
+
+  it('exposes the "View nutrition detail" CTA in advanced mode', () => {
+    expect(HERO_RING_SRC).toContain('data-testid="nutrition-detail-cta"');
+    expect(HERO_RING_SRC).toContain('t.home.viewNutritionDetail');
+    expect(HERO_RING_SRC).toContain('onNavigateToNutritionDetail');
+  });
+
+  it('keeps running-sum caption for the MFP education pattern (advanced mode)', () => {
     expect(HERO_RING_SRC).toContain('{t.home.target}');
     expect(HERO_RING_SRC).toContain('− {t.home.food}');
     expect(HERO_RING_SRC).toContain('+ {t.home.exercise}');
@@ -197,7 +209,9 @@ describe('NutritionHeroRing — Option A shape anatomy', () => {
 
   it('emits aria-label using the ringAriaLabel i18n key (a11y contract)', () => {
     expect(HERO_RING_SRC).toContain('t.home.ringAriaLabel.replace');
-    expect(HERO_RING_SRC).toContain('aria-label={ringAria}');
+    // CalorieRing now owns the SVG; the aria-label is passed through `ariaLabel` prop
+    // and bound on the wrapper div as `aria-label={ariaLabel}`.
+    expect(HERO_RING_SRC).toMatch(/aria-label=\{ariaLabel\}|aria-label=\{ringAria\}/);
   });
 
   it('uses theme tokens for colors (no hardcoded hex or dark: prefix)', () => {
@@ -223,11 +237,13 @@ describe('NutritionHero(Ring) — mode-adaptive hero (simple vs advanced)', () =
     expect(HERO_LEGACY_SRC).toContain('data-testid="hero-running-sum"');
   });
 
-  it('ring hero branches its caption by mode (simple dayGoal vs advanced running-sum)', () => {
+  it('ring hero branches by mode (simple = compact pill, advanced = ring + macros + CTA)', () => {
     expect(HERO_RING_SRC).toContain("mode === 'simple'");
-    expect(HERO_RING_SRC).toContain('data-testid="hero-ring-daily-goal-caption"');
+    // Simple → compact pill
+    expect(HERO_RING_SRC).toContain('data-testid="hero-simple-pill"');
+    // Advanced → ring + running-sum + macros + CTA
     expect(HERO_RING_SRC).toContain('data-testid="hero-ring-running-sum"');
-    expect(HERO_RING_SRC).toContain('t.home.dayGoal.replace');
+    expect(HERO_RING_SRC).toContain('data-testid="hero-ring-pct"');
   });
 
   it('mode prop uses canonical `simple | advanced` (no `detailed` drift)', () => {
