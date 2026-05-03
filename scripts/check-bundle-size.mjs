@@ -57,7 +57,9 @@ const CHUNK_BUDGETS = [
 ];
 
 // Total-across-all-JS budget (safety net). Excludes sourcemaps.
-const TOTAL_BUDGET = { rawKB: 3200, gzipKB: 900 };
+// Sprint K [1.5.204] — bumped gzip from 900→920 to account for HydrationCard +
+// HealthAndExerciseCard new components (net ~+1 KB gzip after deletions).
+const TOTAL_BUDGET = { rawKB: 3200, gzipKB: 920 };
 
 function listJsFiles(dir) {
   try {

@@ -2,10 +2,11 @@ import { useEffect, useRef } from 'react';
 import { todayLocal, dateToLocal } from '../lib/dates';
 import type { DailyLogEntry } from '../features/food/handlers/meal-handlers';
 import type { DailyMacros } from '../contexts/state/useVitalsState';
+import type { WorkoutLogEntry } from '../features/home/types/workout-log';
 
 type Setter<T> = (fn: T | ((prev: T) => T)) => void;
 type HydrationState = { consumed: number; target: number };
-type MovementState = { steps: number; target: number; activeMinutes: number; activeTarget: number };
+type MovementState = { steps: number; target: number; activeMinutes: number; activeTarget: number; workoutMinutes: number };
 
 /**
  * Archives the previous day's data to nutritionHistory, then resets
@@ -33,6 +34,8 @@ export interface DailyArchive {
   mealCount: number;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   dailyLog: any[]; // legacy archive format — entries may predate DailyLogEntry interface
+  /** Sprint K-fix7 [1.5.211] — past-day workout entries. Optional for backwards-compat. */
+  workoutLog?: WorkoutLogEntry[];
   /** True when the user actively tracked something that day. */
   tracked?: boolean;
 }
@@ -70,6 +73,8 @@ interface DailyResetDeps {
   setDailyMacros: Setter<DailyMacros>;
   setHydration: Setter<HydrationState>;
   setMovement: Setter<MovementState>;
+  /** Sprint K-fix7 [1.5.211] — clears today's workout log at midnight rollover. */
+  setWorkoutLog?: (items: WorkoutLogEntry[]) => void;
 }
 
 function archivePreviousDay(previousDate: string) {
@@ -78,9 +83,11 @@ function archivePreviousDay(previousDate: string) {
     const dailyMacros = JSON.parse(localStorage.getItem('dailyMacros') || '{}');
     const hydration = JSON.parse(localStorage.getItem('hydration') || '{}');
     const movement = JSON.parse(localStorage.getItem('movement') || '{}');
+    // K-fix7 [1.5.211] — read workout log defensively (key may not exist for pre-K-fix7 users).
+    const workoutLog: WorkoutLogEntry[] = JSON.parse(localStorage.getItem('workoutLog') || '[]');
 
     const consumed = dailyMacros.consumed || { cal: 0, pro: 0, carbs: 0, fats: 0 };
-    const tracked = dailyLog.length > 0 || (consumed.cal ?? 0) > 0;
+    const tracked = dailyLog.length > 0 || workoutLog.length > 0 || (consumed.cal ?? 0) > 0;
 
     const archive: DailyArchive = {
       date: previousDate,
@@ -98,6 +105,7 @@ function archivePreviousDay(previousDate: string) {
       },
       mealCount: dailyLog.length,
       dailyLog,
+      workoutLog,
       tracked,
     };
 
@@ -118,7 +126,7 @@ function archivePreviousDay(previousDate: string) {
   }
 }
 
-export function useDailyReset({ setDailyLog, setDailyMacros, setHydration, setMovement }: DailyResetDeps) {
+export function useDailyReset({ setDailyLog, setDailyMacros, setHydration, setMovement, setWorkoutLog }: DailyResetDeps) {
   const hasReset = useRef(false);
 
   useEffect(() => {
@@ -142,7 +150,8 @@ export function useDailyReset({ setDailyLog, setDailyMacros, setHydration, setMo
         consumed: { cal: 0, pro: 0, carbs: 0, fats: 0, fiber: 0 },
       }));
       setHydration((prev) => ({ ...prev, consumed: 0 }));
-      setMovement((prev) => ({ ...prev, steps: 0, activeMinutes: 0 }));
+      setMovement((prev) => ({ ...prev, steps: 0, activeMinutes: 0, workoutMinutes: 0 }));
+      setWorkoutLog?.([]);
 
       hasReset.current = true;
     }
@@ -151,7 +160,7 @@ export function useDailyReset({ setDailyLog, setDailyMacros, setHydration, setMo
 
     const interval = setInterval(checkAndReset, 60_000);
     return () => clearInterval(interval);
-  }, [setDailyLog, setDailyMacros, setHydration, setMovement]);
+  }, [setDailyLog, setDailyMacros, setHydration, setMovement, setWorkoutLog]);
 }
 
 /** Read archived nutrition history from localStorage (entries are normalized to Q15+ shape). */

@@ -1,16 +1,24 @@
-import { Plus, CheckCircle2, Droplets, Sparkles, ShoppingCart, ChevronRight, BarChart3 } from 'lucide-react';
+import { Plus, CheckCircle2, Sparkles, ShoppingCart, ChevronRight } from 'lucide-react';
 import PageShell from '../../../components/PageShell';
 import SectionCard from '../../../components/SectionCard';
 import { Heading } from '@/components/ui/Typography';
 import { Button } from '@/components/ui/button';
 import { useState, useEffect, useRef, useMemo, useCallback } from 'react';
-import RealFeelInline from '../../wellness/components/RealFeelInline';
+import RealFeelSheet from '../../wellness/components/RealFeelSheet';
 import NutritionHero from '../components/NutritionHero';
 import TodaysMeals from '../components/TodaysMeals';
-import ActivityRow from '../components/ActivityRow';
 import HomeHeader from '../components/HomeHeader';
 import DatePickerSheet from '../components/DatePickerSheet';
 import PastDayBanner from '../components/PastDayBanner';
+import SmartInsightCard from '../components/SmartInsightCard';
+import StepsCard from '../components/StepsCard';
+import TodaysWorkouts from '../components/TodaysWorkouts';
+import HydrationCard from '../components/HydrationCard';
+import MacroRingsCard from '../components/MacroRingsCard';
+import FoodQualityCard from '../components/FoodQualityCard';
+import { computeDailyQuality } from '../utils/daily-quality';
+import { kcalFromSteps, type ActivityProfile } from '../utils/activity-calories';
+import { setNutritionDetailInitialTab } from '../utils/nutrition-detail-nav';
 import { useSelectedDayData } from '../hooks/useSelectedDayData';
 import HomeQuickStats from '../components/HomeQuickStats';
 import WeeklyMiniDash from '../components/WeeklyMiniDash';
@@ -40,7 +48,7 @@ import InsightRow from '../components/InsightRow';
 
 type Setter<T> = (fn: T | ((prev: T) => T)) => void;
 interface HydrationState { consumed: number; target: number }
-interface MovementState { steps: number; target: number; activeMinutes: number; activeTarget: number }
+interface MovementState { steps: number; target: number; activeMinutes: number; activeTarget: number; workoutMinutes: number }
 
 export default function Home({
   onAddMeal,
@@ -84,16 +92,22 @@ export default function Home({
   nutritionHistory?: DailyArchive[],
 }) {
   const { t } = useI18n();
-  const [isEditingHydration, setIsEditingHydration] = useState(false);
   const [showRealFeel, setShowRealFeel] = useState(false);
   const [datePickerOpen, setDatePickerOpen] = useState(false);
   // Phase 3 Sprint B3 — selectedDate is global so Home + NutritionDetail share it.
-  const { selectedDate, setSelectedDate, resetToToday } = useAppState();
+  // Sprint K-fix7 [1.5.211] — also reads workoutLog + handlers (single useAppState call).
+  const {
+    selectedDate, setSelectedDate, resetToToday,
+    workoutLog, handleLogWorkout, handleEditWorkout, handleDeleteWorkout,
+    weightHistory, shoppingList, savedRecipes, mergedVariants, foodHistory, followedCreators,
+  } = useAppState();
 
   // Phase 3 Sprint B4 — full day-snapshot swap (today === live, past === archive).
-  const { effectiveDailyMacros, effectiveDailyLog, effectiveHydration, effectiveMovement, isViewingToday } =
-    useSelectedDayData({ selectedDate, liveDailyMacros: dailyMacros, liveDailyLog: dailyLog, liveHydration: hydration, liveMovement: movement, history: nutritionHistory });
-  const [isTrainingDay, setIsTrainingDay] = useState(false);
+  const { effectiveDailyMacros, effectiveDailyLog, effectiveHydration, effectiveMovement, effectiveWorkoutLog, isViewingToday } =
+    useSelectedDayData({ selectedDate, liveDailyMacros: dailyMacros, liveDailyLog: dailyLog, liveHydration: hydration, liveMovement: movement, liveWorkoutLog: workoutLog, history: nutritionHistory });
+
+  // `isTrainingDay` is derived from the log so HomeQuickStats keeps its activity indicator.
+  const isTrainingDay = workoutLog.length > 0;
   const lastCalRef = useRef(dailyMacros.consumed.cal);
   const [guidedDismissed, setGuidedDismissed] = useState(() => {
     try { return localStorage.getItem('rial_guidedSetupDismissed') === 'true'; } catch { return false; }
@@ -101,12 +115,27 @@ export default function Home({
 
   const isSimpleMode = userProfile?.mode === 'simple' || !userProfile?.mode;
 
-  // Derive exercise calories from active minutes + training day
+  // Sprint H/v2: TodayCategoryChips removed — card titles already convey the
+  // section semantics (ENERGÍA / BALANCE DEL DÍA / MACROS DEL DÍA / CALIDAD).
+  // The same gate still controls whether the v2 cards (Balance / Macros /
+  // Quality) are shown.
+  const showGaugeV2Cards = featureFlags.homeGaugeV2 && !isSimpleMode;
+
+  // Sprint K-fix5 [1.5.209] / K-fix7 [1.5.211] — activity calories computed from
+  // real profile-based formulas. Steps via `kcalFromSteps`. Workouts SUM all
+  // entries in `workoutLog` (multi-workout per day) — each entry's kcal was
+  // frozen at log time, so historical correctness is preserved even when the
+  // user later changes weight or sex.
+  const profile: ActivityProfile = useMemo(() => ({
+    weight: userProfile?.weight,
+    sex: userProfile?.sex,
+  }), [userProfile?.weight, userProfile?.sex]);
+
   const exerciseCalories = useMemo(() => {
-    const mins = movement.activeMinutes || 0;
-    if (isTrainingDay) return Math.max(200, Math.round(mins * 5));
-    return Math.round(mins * 3);
-  }, [movement.activeMinutes, isTrainingDay]);
+    const stepKcal = kcalFromSteps(movement.steps, profile);
+    const workoutKcal = workoutLog.reduce((sum, w) => sum + w.kcal, 0);
+    return stepKcal + workoutKcal;
+  }, [movement.steps, workoutLog, profile]);
 
   // Vitality (Real Score) from RealFeel logs
   const { avgVitality, trend: vitalityTrend } = useMemo(
@@ -115,7 +144,7 @@ export default function Home({
   );
 
   // Weekly progress metrics — canonical calcWeekMacros (Q13)
-  const { weightHistory, shoppingList, savedRecipes, mergedVariants, foodHistory, followedCreators } = useAppState();
+  // (weightHistory etc. now destructured at the top with workoutLog — Sprint K-fix7).
   const weekMacros = useMemo(
     () => calcWeekMacros(
       nutritionHistory ?? [],
@@ -139,6 +168,18 @@ export default function Home({
     });
     return { streakDays: streaks.mealLog.current, bestStreakDays: streaks.mealLog.best };
   }, [nutritionHistory, realFeelLogs, dailyLog.length]);
+
+  // Daily food-quality — Sprint D. Computes 6 metrics from the effective log
+  // (live today or archived past day). Memoized on log + fiber consumed.
+  const dailyQuality = useMemo(
+    () =>
+      computeDailyQuality({
+        log: effectiveDailyLog,
+        consumedFiber: effectiveDailyMacros.consumed.fiber ?? 0,
+        targetFiber: effectiveDailyMacros.target.fiber,
+      }),
+    [effectiveDailyLog, effectiveDailyMacros.consumed.fiber, effectiveDailyMacros.target.fiber],
+  );
 
   // Shopping pending count
   const shoppingPendingCount = useMemo(
@@ -266,7 +307,10 @@ export default function Home({
   const todaysMeals = mealPlan?.[adjustedDayIndex] || [];
 
   const handleAddWater = () => {
-    setHydration((prev) => ({ ...prev, consumed: Math.min(prev.consumed + 1, prev.target + 5) }));
+    setHydration((prev) => ({ ...prev, consumed: Math.min(prev.consumed + 1, prev.target) }));
+  };
+  const handleRemoveWater = () => {
+    setHydration((prev) => ({ ...prev, consumed: Math.max(prev.consumed - 1, 0) }));
   };
 
   // Phase 1 — quick-stats chip-row navigation. Resolves each chip target to
@@ -313,6 +357,18 @@ export default function Home({
 
       {/* Phase 3 Sprint B4 — read-only banner when viewing a past day. */}
       {!isViewingToday && <PastDayBanner onResetToToday={resetToToday} />}
+
+      {/* Sprint C — SmartInsightCard. Surfaces the top contextual insight
+            above the gauge. Hidden when there are no insights yet (the
+            wellness engine needs ≥7 days of Real Feel logs to produce most
+            patterns); we don't render an empty state because the rest of
+            the home already coaches the user. */}
+      {!isSimpleMode && featureFlags.homeGaugeV2 && insights.length > 0 && (
+        <SmartInsightCard
+          message={insights[0].detail}
+          tone={insights[0].tone === 'warning' ? 'warning' : insights[0].tone === 'positive' ? 'positive' : 'neutral'}
+        />
+      )}
 
       {/* 2. Guided Setup — first 7 days (p-4 to match other tinted-primary cards) */}
       {!guidedDismissed && (
@@ -361,16 +417,65 @@ export default function Home({
       {/* 3. Nutrition Hero — above the fold (Q15: goal prop for ICP-adaptive status chip) */}
       <NutritionHero dailyMacros={effectiveDailyMacros} mode={isSimpleMode ? 'simple' : 'advanced'} exerciseCalories={isViewingToday ? exerciseCalories : 0} goal={userProfile?.goal} onNavigateToNutritionDetail={onNavigateToNutritionDetail} />
 
-      {/* 4. HomeQuickStats — chip-row (advanced only; simple returns null) */}
-      <HomeQuickStats
-        mode={isSimpleMode ? 'simple' : 'advanced'}
-        weightDelta={weightDeltaForChip}
-        activityToday={{ minutes: movement.activeMinutes || 0, isTrainingDay }}
-        insightCount={insights.length}
-        onNavigate={handleQuickStatNav}
+      {/* Sprint H: TodayCategoryChips removed — card titles already convey
+          section semantics (Energía / Balance / Macros / Calidad). */}
+
+      {/* 4. HomeQuickStats — chip-row (advanced only; hidden under v2 since
+            its info is folded into the new MacroRingsCard / FoodQualityCard). */}
+      {!featureFlags.homeGaugeV2 && (
+        <HomeQuickStats
+          mode={isSimpleMode ? 'simple' : 'advanced'}
+          weightDelta={weightDeltaForChip}
+          activityToday={{ minutes: movement.activeMinutes || 0, isTrainingDay }}
+          insightCount={insights.length}
+          onNavigate={handleQuickStatNav}
+        />
+      )}
+
+      {/* Sprint K-fix7 [1.5.211] — Activity card split:
+            • StepsCard moves DOWN below TodaysWorkouts (next to deporte)
+            • TodaysWorkouts moves DOWN below the meal CTA (parallel to TodaysMeals)
+            • This slot now only renders the merged Nutrition card (Macros + Calidad). */}
+      {showGaugeV2Cards && (
+        <SectionCard
+          padding="md"
+          spacing="md"
+          className="scroll-mt-24"
+        >
+          {/* Macros rings — no title (self-evident) */}
+          <MacroRingsCard
+            dailyMacros={effectiveDailyMacros}
+            anchorId="macros"
+            bare
+          />
+          {/* Hairline divider between Macros and Calidad */}
+          <hr className="border-0 border-t border-outline-variant/20" />
+          {/* Calidad de la comida — collapsible, with score ring + 6 metrics */}
+          <FoodQualityCard
+            quality={dailyQuality}
+            anchorId="quality"
+            bare
+            onViewNutrition={onNavigateToNutritionDetail ? () => {
+              setNutritionDetailInitialTab('quality');
+              onNavigateToNutritionDetail();
+            } : undefined}
+          />
+        </SectionCard>
+      )}
+
+      {/* 5. Hydration — immediately after Macros+Calidad (Sprint K reorder).
+            Extracted to HydrationCard; data-anchor="hydration" preserved inside. */}
+      <HydrationCard
+        consumed={effectiveHydration.consumed}
+        target={effectiveHydration.target}
+        onIncrement={handleAddWater}
+        onDecrement={handleRemoveWater}
+        onTargetChange={isViewingToday ? (n) => setHydration((prev) => ({ ...prev, target: n })) : undefined}
+        disabled={!isViewingToday}
+        className="scroll-mt-24"
       />
 
-      {/* 5. Today's Meals — unified Plan + Log + Next Up banner [1.5.182] */}
+      {/* 6. Today's Meals — unified Plan + Log + Next Up banner [1.5.182] */}
       <TodaysMeals
         dailyLog={effectiveDailyLog}
         todaysMeals={todaysMeals}
@@ -386,7 +491,7 @@ export default function Home({
         userGoal={userProfile?.goal}
       />
 
-      {/* 6. Primary Action — single Log Meal button (Check-in collapsed into FAB). */}
+      {/* 7. Primary Action — single Log Meal button (Check-in collapsed into FAB). */}
       <Button
         onClick={onAddMeal}
         className="w-full p-4 gap-3 shadow-elev-3 shadow-primary/10 group"
@@ -395,7 +500,29 @@ export default function Home({
         {t.fab.logMeal}
       </Button>
 
-      {/* 6b. Quick Actions — repeat yesterday (only when no meals logged today) */}
+      {/* 7c. Sprint K-fix7 [1.5.211] — Today's Workouts — parallel timeline to
+            TodaysMeals. Multi-workout per day with intensity + minutes per entry,
+            kcal frozen at log time. Reuses ExerciseLogSheet for add/edit. */}
+      <TodaysWorkouts
+        workoutLog={effectiveWorkoutLog}
+        profile={profile}
+        onLogWorkout={(intensity, minutes, p) => handleLogWorkout(intensity, minutes, p)}
+        onEditWorkout={(id, intensity, minutes, p) => handleEditWorkout(id, intensity, minutes, p)}
+        onDeleteWorkout={(id) => handleDeleteWorkout(id)}
+        disabled={!isViewingToday}
+      />
+
+      {/* 7d. Sprint K-fix7 [1.5.211] — Steps card (split from HealthAndExerciseCard).
+            Steps are a continuous accumulator (NEAT) — they don't fit the timeline
+            metaphor, but they're grouped here visually with the Deporte block. */}
+      <StepsCard
+        movement={{ steps: effectiveMovement.steps, target: effectiveMovement.target }}
+        onStepsChange={(newSteps) => isViewingToday && setMovement?.((prev) => ({ ...prev, steps: newSteps }))}
+        profile={profile}
+        disabled={!isViewingToday}
+      />
+
+      {/* 7b. Quick Actions — repeat yesterday (only when no meals logged today) */}
       {dailyLog.length === 0 && yesterdayData && (
         <QuickActions
           yesterdayKcal={yesterdayData.kcal}
@@ -403,63 +530,6 @@ export default function Home({
           onRepeatYesterday={handleRepeatYesterday}
         />
       )}
-
-      {/* 7. Hydration — compact row (ad-hoc divider replaced with nested SectionCard padding) */}
-      <SectionCard padding="md" spacing="md">
-        <div
-          className="flex items-center justify-between"
-          data-testid="home-hydration-card"
-        >
-          <div className="flex items-center gap-3">
-            <div className="w-10 h-10 bg-brand-secondary/10 rounded-full flex items-center justify-center shrink-0">
-              <Droplets className="w-5 h-5 text-brand-secondary" />
-            </div>
-            <div>
-              <p className="font-label text-micro text-on-surface-variant uppercase tracking-widest">{t.home.water}</p>
-              <p className="font-headline font-bold text-body-sm text-tertiary uppercase">{effectiveHydration.consumed} / {effectiveHydration.target} {t.home.cups}</p>
-            </div>
-          </div>
-          <div className="flex items-center gap-2">
-            {isViewingToday && (
-              <button
-                type="button"
-                onClick={() => setIsEditingHydration(!isEditingHydration)}
-                className="text-micro text-brand-secondary hover:underline font-bold uppercase tracking-widest min-h-11 px-3"
-              >
-                {isEditingHydration ? t.home.close : t.home.edit}
-              </button>
-            )}
-            {isViewingToday && (
-              <Button
-                variant="brand"
-                size="icon"
-                onClick={handleAddWater}
-                className="rounded-full shadow-elev-3 shadow-secondary/20 active:scale-95 shrink-0"
-                aria-label={t.home.addWater ?? 'Add water'}
-              >
-                <Plus className="w-4 h-4" />
-              </Button>
-            )}
-          </div>
-        </div>
-        {isEditingHydration && isViewingToday && (
-          <div className="pt-3 border-t border-outline-variant/20 animate-in fade-in slide-in-from-top-2">
-            <div className="flex items-center justify-between mb-2">
-              <span className="font-label text-micro uppercase tracking-widest text-on-surface-variant">{t.home.dailyTarget} ({t.home.cups})</span>
-              <span className="font-headline font-bold text-body-sm text-brand-secondary">{hydration.target}</span>
-            </div>
-            <input
-              type="range"
-              min="1"
-              max="20"
-              value={hydration.target}
-              onChange={(e) => setHydration({ ...hydration, target: parseInt(e.target.value) })}
-              aria-label={`${t.home.dailyTarget} (${t.home.cups})`}
-              className="w-full accent-secondary"
-            />
-          </div>
-        )}
-      </SectionCard>
 
       {/* 8. P11 [1.5.69] — Qué me falta hoy: personalized macro-gap suggestions.
             Sprint 50 [1.5.164] — also surfaces recipes from the user's vault
@@ -534,42 +604,15 @@ export default function Home({
         />
       )}
 
-      {/* 13. Progress deep-link banner — advanced only, visible when history exists */}
-      {!isSimpleMode && onNavigateToProgress && nutritionHistory.length > 0 && (
-        <Button
-          variant="ghost"
-          onClick={onNavigateToProgress}
-          className="w-full p-4 gap-4 text-left h-auto bg-primary/5 border border-primary/20 hover:bg-primary/10"
-        >
-          <div className="w-10 h-10 bg-primary/10 rounded-full flex items-center justify-center shrink-0">
-            <BarChart3 className="w-5 h-5 text-primary" />
-          </div>
-          <div className="flex-1 min-w-0">
-            <p className="font-headline text-micro font-bold uppercase tracking-widest text-tertiary">{t.progress.title}</p>
-            <p className="text-caption text-on-surface-variant mt-0.5 leading-relaxed">{t.progress.desc}</p>
-          </div>
-          <ChevronRight className="w-4 h-4 text-primary shrink-0" />
-        </Button>
-      )}
-
-      {/* 14. Activity — advanced only. Past-day archive shows minutes/steps read-only. */}
-      {!isSimpleMode && (
-        <ActivityRow
-          movement={effectiveMovement}
-          setMovement={isViewingToday ? setMovement : () => {}}
-          isTrainingDay={isTrainingDay}
-          setIsTrainingDay={setIsTrainingDay}
+      {/* 13. Real Feel — BottomSheet popup, opens 3s post-meal-log (Sprint K-fix3 [1.5.207]).
+            Replaces the previous in-flow card section. */}
+      {!isSimpleMode && onRealFeelLog && (
+        <RealFeelSheet
+          open={showRealFeel}
+          onOpenChange={setShowRealFeel}
+          onSubmit={(entry) => { onRealFeelLog(entry); setShowRealFeel(false); }}
+          onDismiss={() => setShowRealFeel(false)}
         />
-      )}
-
-      {/* 15. Real Feel — conditional post-meal, advanced only */}
-      {!isSimpleMode && showRealFeel && onRealFeelLog && (
-        <section>
-          <RealFeelInline
-            onSubmit={(entry) => { onRealFeelLog(entry); setShowRealFeel(false); }}
-            onDismiss={() => setShowRealFeel(false)}
-          />
-        </section>
       )}
 
       {/* 16. Smart Insights — advanced only */}

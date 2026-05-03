@@ -18,9 +18,11 @@ const EMOJIS = [
 
 const TAG_KEYS = ['bloating', 'energy', 'heaviness', 'lightness', 'clarity', 'drowsiness', 'cramps', 'headache'] as const;
 
-export default function RealFeelInline({ onSubmit, onDismiss }: {
+export default function RealFeelInline({ onSubmit, onDismiss, bare = false }: {
   onSubmit: (entry: RealFeelEntry) => void;
   onDismiss: () => void;
+  /** When true, renders without outer card chrome (bg/border/padding) — for embedding inside a BottomSheet. */
+  bare?: boolean;
 }) {
   const { t } = useI18n();
   const [selectedLevel, setSelectedLevel] = useState<number | null>(null);
@@ -84,16 +86,22 @@ export default function RealFeelInline({ onSubmit, onDismiss }: {
     </button>
   );
 
+  const wrapperClass = bare
+    ? 'animate-in fade-in duration-300'
+    : 'bg-surface-container-low border border-primary/30 rounded-sm p-5 animate-in slide-in-from-bottom-4 fade-in duration-500';
+
   return (
-    <div className="bg-surface-container-low border border-primary/30 rounded-sm p-5 animate-in slide-in-from-bottom-4 fade-in duration-500">
-      <div className="flex items-center justify-between mb-4">
-        <Heading level="h3" variant="overline" className="text-body-sm text-primary">
-          {t.realFeel.howDoYouFeel}
-        </Heading>
-        <button type="button" onClick={() => { setVisible(false); onDismiss(); }} className="text-on-surface-variant hover:text-primary transition-colors p-1">
-          <X className="w-4 h-4" />
-        </button>
-      </div>
+    <div className={wrapperClass}>
+      {!bare && (
+        <div className="flex items-center justify-between mb-4">
+          <Heading level="h3" variant="overline" className="text-body-sm text-primary">
+            {t.realFeel.howDoYouFeel}
+          </Heading>
+          <button type="button" onClick={() => { setVisible(false); onDismiss(); }} className="text-on-surface-variant hover:text-primary transition-colors p-1">
+            <X className="w-4 h-4" />
+          </button>
+        </div>
+      )}
 
       {/* Emoji selector */}
       <div className="flex justify-between gap-2 mb-4">

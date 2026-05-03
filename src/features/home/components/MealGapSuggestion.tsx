@@ -160,9 +160,9 @@ export default function MealGapSuggestion({
           <Lightbulb className="w-5 h-5 text-primary" aria-hidden="true" />
           {mealGap.title}
         </Heading>
-        <p className="mt-0.5 font-label text-micro font-bold uppercase tracking-widest text-on-surface-variant">
+        <span className="font-label text-label font-bold uppercase tracking-widest text-on-surface-variant mt-0.5">
           {deficitCopy}
-        </p>
+        </span>
       </div>
 
       <SectionCard padding="none" spacing="none" className="overflow-hidden">
@@ -171,7 +171,7 @@ export default function MealGapSuggestion({
           <div className="border-b border-outline-variant/15 last:border-b-0" data-meal-gap-recipes>
             <div className="flex items-center gap-1.5 px-4 pt-3 pb-1.5">
               <ChefHat className="w-3.5 h-3.5 text-primary" aria-hidden="true" />
-              <span className="font-label text-micro font-bold uppercase tracking-widest text-on-surface-variant">
+              <span className="font-label text-label font-bold uppercase tracking-widest text-on-surface-variant">
                 {mealGap.recipesTitle}
               </span>
             </div>
@@ -222,7 +222,7 @@ export default function MealGapSuggestion({
           <div data-meal-gap-foods>
             <div className="flex items-center gap-1.5 px-4 pt-3 pb-1.5">
               <Apple className="w-3.5 h-3.5 text-primary" aria-hidden="true" />
-              <span className="font-label text-micro font-bold uppercase tracking-widest text-on-surface-variant">
+              <span className="font-label text-label font-bold uppercase tracking-widest text-on-surface-variant">
                 {mealGap.foodsTitle}
               </span>
             </div>

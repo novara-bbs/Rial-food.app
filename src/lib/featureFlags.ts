@@ -35,6 +35,14 @@ export interface FeatureFlags {
    */
   homeRingGrid: boolean;
   /**
+   * Sprint B — Home gauge v2 (editorial 180° gauge + internal chips +
+   * MacroRingsCard + FoodQualityCard expandable). Supersedes the Sprint A
+   * `homeRingGrid` shape when both flags are on; v1 stays as the rollback
+   * path until v2 stabilises. Default `true` since this sprint — opt-out
+   * via `VITE_FEATURE_HOME_GAUGE_V2_OFF=1`.
+   */
+  homeGaugeV2: boolean;
+  /**
    * R2 plan v2 — verified recipes editorial polish. When `true`, recipes
    * with `verified: 'rial' | 'creator'` render the editorial branch in
    * `RecipeDetail` (hero bleed, Fraunces serif title, `AuthorAttributionCard`,
@@ -61,6 +69,8 @@ export interface FeatureFlags {
 export const featureFlags: FeatureFlags = Object.freeze({
   // Default true since 1.5.186 — opt-out via VITE_FEATURE_HOME_RING_GRID_OFF=1.
   homeRingGrid: !readEnvFlag('VITE_FEATURE_HOME_RING_GRID_OFF'),
+  // Default true since this sprint — opt-out via VITE_FEATURE_HOME_GAUGE_V2_OFF=1.
+  homeGaugeV2: !readEnvFlag('VITE_FEATURE_HOME_GAUGE_V2_OFF'),
   verifiedRecipePolish: readEnvFlag('VITE_FEATURE_VERIFIED_RECIPE_POLISH'),
   // Default true — opt-out via VITE_FEATURE_COOK_MODE_VOICE=0
   cookModeVoiceReadAloud: !readEnvFlag('VITE_FEATURE_COOK_MODE_VOICE_OFF'),

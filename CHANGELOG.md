@@ -1,5 +1,481 @@
 # RIAL App - Changelog
 
+## [1.5.211] - 2026-05-03
+
+### feat(home): Sprint K-fix7 — Activity card split + TodaysWorkouts timeline (multi-entreno persistido)
+
+Tras feedback owner sobre la sección de actividad: (1) la card de Deporte estaba fuera de lugar visual y conceptualmente — debería estar junto al timeline de comidas, no antes; (2) el modelo de un único entreno por día no permitía registrar dos sesiones (ej. running 7:00 + pesas 18:00); (3) los pasos no encajaban con la card de Deporte conceptualmente (son acumulado continuo, no un evento). Resolución arquitectónica: **dos timelines paralelas** (comida + deporte) con StepsCard standalone debajo.
+
+**1. Modelo de datos: `WorkoutLogEntry[]` persistido**:
+- Nuevo `src/features/home/types/workout-log.ts` con `WorkoutLogEntry { id, time, intensity, minutes, kcal }`. Kcal se **congela** en el entry al registrarlo (no se recalcula al renderizar) → si el usuario cambia su peso luego, los entrenos pasados conservan los kcal originales.
+- `useVitalsState` añade `workoutLog: WorkoutLogEntry[]` con persistencia localStorage `workoutLog` + sync Supabase (nueva SyncKey).
+- `useDailyReset` hace clear del workoutLog al rollover de medianoche y archiva el log del día anterior en `DailyArchive.workoutLog?` (campo opcional para retro-compat).
+- `useSelectedDayData` añade `effectiveWorkoutLog` para soporte de past-day archive.
+
+**2. Handlers (factory pattern)**:
+- Nuevo `src/features/home/handlers/workout-handlers.ts` con `createHandleLogWorkout` (append + freeze kcal), `createHandleEditWorkout` (replace by id, recomputa kcal, preserva id+time), `createHandleDeleteWorkout` (filter by id).
+- Wired en `AppStateContext` siguiendo el patrón de `meal-handlers`. Expuestos como `handleLogWorkout`, `handleEditWorkout`, `handleDeleteWorkout`.
+
+**3. `TodaysWorkouts.tsx` (NEW)**:
+- Componente paralelo a `TodaysMeals`. Mismo SectionCard pattern (header overline + count + total kcal · lista de entries · CTA full-width). Empty state con CTA `+ Registrar deporte`. Populated state con `+ Añadir entreno` al final del card.
+- Cada row: avatar tier (Footprints/Activity/Flame) + intensity label + time + minutes + kcal + edit (Pencil, opens sheet) + delete (Trash2). Tap-to-edit + trash icon = híbrido entre patrón de meals (trash) y patrón de entrenos (edit-via-sheet).
+- Reutiliza `<ExerciseLogSheet>` para add (intensity='none'/minutes=0 → sheet defaults) y edit (passes entry's current values). El "Quitar entrenamiento" del sheet en edit-mode = delete de la entry.
+
+**4. `StepsCard.tsx` (NEW — split de HealthAndExerciseCard)**:
+- Componente independiente. Solo lleva la sección de Pasos del card antiguo: avatar + N/target + barra progress + CTA + tooltip ⓘ con fórmula. Reutiliza `<StepsLogSheet>`.
+- Razón del split: pasos son acumulado continuo (NEAT) que no encaja en una timeline de eventos. Mejor en su propia card, agrupada visualmente cerca de TodaysWorkouts.
+
+**5. `HealthAndExerciseCard` eliminado**:
+- Componente y test borrados. Su funcionalidad vive ahora repartida en `TodaysWorkouts` (deporte) + `StepsCard` (pasos).
+
+**6. Re-layout de `Home.tsx`** (zona afectada, top→bottom):
+- `NutritionHero` → `MacroRingsCard + FoodQualityCard` → `HydrationCard` → **`TodaysMeals`** + botón "REGISTRAR COMIDA" → **`TodaysWorkouts` (NEW)** → **`StepsCard` (NEW)** → `QuickActions` → `MealGapSuggestion` → resto.
+- `exerciseCalories` recomputa: `kcalFromSteps(steps, profile) + workoutLog.reduce((s, w) => s + w.kcal, 0)`. Suma el kcal frozen de cada entry del log (multi-workout aware).
+- Eliminado el `useState exerciseIntensity` legacy (single-state). `isTrainingDay = workoutLog.length > 0` para HomeQuickStats.
+- Las 3 llamadas dispersas a `useAppState()` consolidadas en una sola al top del componente.
+
+**7. i18n** — namespace nuevo `home.todaysWorkouts.*` con 11 keys ES + EN simétricos (title, count singular/plural, kcalSummary, loggedSection, empty, registerCta, addCta, tierLabel, kcalSuffix, deleteAria, editAria). **2186 → 2198 keys**.
+
+**8. Tests** — +25 nuevos: workout-handlers (10), TodaysWorkouts (8), StepsCard (7). **1712 → 1727 tests passing · 121 → 123 files**.
+
+**Sin cambios** en: `nutrition.ts` (TDEE multipliers), `activity-calories.ts` (fórmulas MET), `kcalFromExercise/kcalFromSteps` signatures, `MovementState` shape (mantiene `workoutMinutes` legacy para retro-compat de archivos pre-K-fix7 — ya no se usa pero no se elimina). El kcal de cada entreno se sigue calculando con el `kcalFromExercise` existente.
+
+---
+
+## [1.5.210] - 2026-05-03
+
+### fix(i18n): Sprint K-fix6 — Coherencia semántica actividad NEAT-only + movementHint actualizado
+
+Resuelve inconsistencia detectada post-K-fix5 entre dos sistemas de calorías: el multiplicador TDEE del nivel de actividad y el registro diario de ejercicio en la activity card.
+
+**Diagnóstico**: el subtítulo del step de actividad en onboarding ya decía correctamente *"Sin contar entrenos puntuales"* (NEAT intent), pero las descripciones de `light/active/veryActive` referenciaban frecuencia de gym ("1–2 actividades/semana", "3–5 entrenamientos/semana", "6–7 entrenamientos intensos"). Un usuario que entrenase 6–7 días/semana elegiría "Muy activo" → objetivo inflado por ×1.725 → y luego también registraría esos entrenos en la card → doble conteo parcial.
+
+**Fix**: descripciones actualizadas a estilo de vida / NEAT (trabajo, movimiento diario) en ambos locales:
+- `light.desc`: '1–2 actividades/semana' → 'Algo de movimiento, sin rutina activa' / 'Some movement, no active routine'
+- `active.desc`: '3–5 entrenamientos/semana' → 'Bastante movimiento diario, trabajo de pie' / 'Active throughout the day, on your feet'
+- `veryActive.desc`: '6–7 entrenamientos intensos' → 'Muy activo todo el día, trabajo físico' / 'Very active all day, physical work'
+- Ejemplos actualizados: escritorio → de pie → construcción (perfiles de trabajo, no días de gym)
+
+**`movementHint` obsoleto corregido**: la sección Deporte mostraba "Pasos y minutos activos también cuentan" — texto heredado del diseño antiguo que (a) referenciaba pasos que ya tienen su propia sección, (b) mencionaba `activeMinutes` (Apple Health, eliminado de UI en K-fix5). Nuevo texto: "Registra un entreno para sumar kcal extra hoy" / "Log a workout to earn extra kcal today".
+
+**Sin cambios de matemáticas** — `calculateTDEE()`, `ACTIVITY_MULTIPLIERS`, `kcalFromSteps()`, `kcalFromExercise()` y el comportamiento aditivo de `exerciseCalories` en Home.tsx permanecen igual. Los pasos y el entreno son fuentes calóricas no solapadas (movimiento casual del día vs. sesión intencional de gym). **2186 keys ES ↔ EN** · 1712 tests sin cambios.
+
+---
+
+## [1.5.209] - 2026-05-03
+
+### feat(home): Sprint K-fix5 — Activity card 2 secciones (Pasos + Deporte) con popups + fórmulas calóricas reales basadas en perfil
+
+Refactor profundo de la card de actividad tras feedback owner sobre 3 problemas: (1) la card mezclaba 3 secciones sin lógica clara — pasos, minutos pasivos, deporte; (2) los kcal eran flat values sin relación al peso/sexo del usuario; (3) los chips inline `+500/+1000/+10m/+30m` no permitían introducir valores precisos.
+
+**1. Fórmulas calóricas reales basadas en perfil (`activity-calories.ts`)**:
+- Nuevo módulo puro con `kcalFromSteps(steps, profile)` y `kcalFromExercise(intensity, minutes, profile)`. Acepta `ActivityProfile = { weight?, sex? }` con defaults (70 kg, `male`).
+- **Pasos**: `kcal = pasos × 0.0005 × peso(kg) × sexFactor` (basado en literatura: ~3 MET caminar normal × peso ÷ 60 ÷ 100 cadencia/min). Sex factor: `male=1.0`, `female=0.95` (~5% menos para misma masa, espejo del offset Mifflin-St Jeor).
+- **Ejercicio**: `kcal = MET × peso(kg) × (minutos/60) × sexFactor`. MET estándar (Compendium of Physical Activities, Ainsworth et al. 2011): Ligera=3, Media=6, Intensa=9.
+- Validación: hombre 75 kg, 10 000 pasos = 375 kcal; mujer 60 kg, 45 min intensa = 385 kcal.
+- 24 tests cubren constants, sex factor, defaults, edge cases (negative, NaN, zero), male/female parity.
+
+**2. `MovementState.workoutMinutes`** (nuevo campo):
+- Añadido a `useVitalsState` con migración defensiva (backfill 0 al primer mount post-update). Persiste en localStorage `'movement'` + sync Supabase. Refactor coherente del tipo en 8 archivos (AppStateContext, useDailyReset, demo-seed, demo-personas, etc.).
+
+**3. `StepsLogSheet` (nuevo)**:
+- BottomSheet `size="focus"` con: número grande del valor actual, slider 0–30 000 (paso 100), 4 chips presets (5k/10k/15k/20k), preview de kcal en vivo basado en perfil, CTAs Cancelar/Guardar (edit-then-save pattern).
+- 8 tests (slider, presets, kcal calc, sex factor, defaults, save/cancel).
+
+**4. `ExerciseLogSheet` rediseñado**:
+- Ahora intensity + minutes en un solo sheet. Layout: 3 cards de intensidad (Ligera 3MET / Media 6MET / Intensa 9MET) + stepper de minutos (`-`/`+` paso 5, rango 5–180) + 5 chips presets (15/30/45/60/90) + preview kcal en vivo con la fórmula visible (`6 MET × 75 kg × 45 min ÷ 60`).
+- Signature de `onSelect` cambia: `(intensity, minutes) => void`.
+- 11 tests (rendering, save, clear, MET labels, stepper, presets, live calc).
+
+**5. `HealthAndExerciseCard` rediseñado** (2 secciones bien definidas):
+- **Sección 1 — Pasos**: avatar Footprints + `N / target` + barra de progreso + CTA "Editar/Añadir" pill outline → abre `<StepsLogSheet>`. Info icon `ⓘ` muestra fórmula con valores del usuario actual ("Tu peso: 75 kg → 0.0375 kcal/paso").
+- **Sección 2 — Deporte**: avatar Flame/Dumbbell + label tier + minutos + kcal + CTA pill outline → abre `<ExerciseLogSheet>`. Info icon `ⓘ` muestra fórmula MET × peso × tiempo con valores reales.
+- **Eliminado**: badge "420 min Activo" (ruido), chips nudge `+500/+1000/+10m/+30m` (reemplazados por sheets), branch "Connect Health" (sheet de pasos cubre el caso manual), sub-section header "MOVIMIENTO" / "ENTRENAMIENTO" (los avatares + iconos hacen la jerarquía).
+- 10 tests rebalanceados (rendering, kcal totals, info buttons, disabled state).
+
+**6. `Home.tsx` wiring**:
+- Nueva memo `profile = { weight, sex }` derivada del `userProfile`.
+- `exerciseCalories` ahora suma `kcalFromSteps(steps, profile) + kcalFromExercise(intensity, workoutMinutes, profile)`. Los pasos contribuyen siempre (caminar genuinamente quema kcal independientes del workout). Comportamiento existente de "kcal restantes del día" preservado en `<NutritionHero>`.
+
+**i18n** (+18 keys ES + 18 EN simétricas):
+- Nuevos: `home.healthCard.{stepsInfoTitle, stepsInfoBody, exerciseInfoTitle, exerciseInfoBody, editSteps, addSteps}`, `home.stepsSheet.{title, ofTarget, kcalPreview, subtitle, save, cancel}`, `home.exerciseSheet.{intensityLabel, durationLabel, minutesUnit, kcalPreview, formulaPreview, decreaseMinutes, increaseMinutes}`.
+- Actualizados: tier descriptions ahora referencian MET (`3 MET` / `6 MET` / `9 MET`) en lugar de strings fijos `+150 kcal` / `+300 kcal` / `+500 kcal`.
+
+**Tests**: 1676/1676 → **1712/1712** (+36 net). **i18n**: 2168 → **2186** keys (+18). **Bundle**: 914.9 KB raw / 288.1 KB gzip (dentro de budget 920/290).
+
+**Out of scope** (preservado): Apple Health Capacitor wiring, edad/altura en fórmulas (edad ya en BMR), targets personalizados de pasos, multi-workout per día, histórico de actividad.
+
+## [1.5.208] - 2026-05-02
+
+### fix(home): Sprint K-fix4 — TodaysMeals "Log it" outline + meta tipografía coherente
+
+Fix tras nuevo screenshot owner: el botón "Log it" del item "Bowl Mediterráneo" en la sección "PLANIFICADO HOY" se veía como un pill negro completamente sin texto visible (mismo bug que el de HealthAndExerciseCard, no se corrigió en `[1.5.207]`).
+
+**1. Botón "Log it" → `variant="outline" size="pill"`**:
+- `TodaysMeals.tsx` línea 287: `variant="default"` → `variant="outline"`. Coherente con el CTA "Registrar" del workout y "Conectar" del health card. Border + bg-surface-container-low + texto en color de texto principal — siempre legible.
+
+**2. Tipografía coherente en metas de items**:
+- Meta del plan ("520 KCAL", time, slot): `text-micro font-label tracking-widest uppercase` → `font-body text-label normal-case tracking-normal`. Más legible (12px vs 10px) y mixed-case (no uppercase forzado para metadata secundaria).
+- Meta del item registrado (time · portion · kcal): mismo cambio. `font-bold` del portion → `font-semibold` (más sutil).
+
+**3. Link "Plan semanal" en header del Plan band**:
+- Raw `<button className="text-micro text-primary uppercase tracking-widest min-h-11 px-3">` → `<Button variant="ghost" size="pill" className="text-primary">`. Usa el primitivo `<Button>` para consistency con el resto de los CTAs de la card (Log it, Editar, Registrar).
+
+**4. Línea vertical lateral del item del plan eliminada**:
+- El `<span className="absolute left-0 top-2 bottom-2 w-0.5 bg-primary/40">` añadía ruido visual sin información (era marker decorativo). Ahora el item del plan se diferencia del log por la sub-section header "PLANIFICADO HOY" — suficiente.
+
+**Tests**: 1676/1676 passing.
+**i18n**: 2168 keys (sin cambio).
+**Bundle**: dentro de budgets.
+
+## [1.5.207] - 2026-05-02
+
+### fix(home): Sprint K-fix3 — workout button legible + RealFeel como BottomSheet popup
+
+Fix tras feedback owner sobre `[1.5.206]` con screenshot anotado: (1) botón "Registrar entrenamiento" se veía como un óvalo negro sin texto visible (texto demasiado largo + variant default conflictivo), (2) "¿Cómo te sientes?" debería ser un popup que sale de abajo arriba al loguear comida, no una sección permanente.
+
+**1. Workout CTA legible**:
+- i18n: `home.healthCard.registerWorkout` "+ Registrar entrenamiento" → "Registrar" (ES) / "+ Log workout" → "Log" (EN). Texto corto que cabe en el pill sin truncar el título de la card.
+- `HealthAndExerciseCard.tsx`: workout CTA `variant="default" | "ghost"` → `variant="outline"` siempre. Más legible (border + bg-surface-container-low + text dark) y consistente con el CTA "Conectar" de la sub-sección movimiento. Elimina el conflicto entre el `bg-primary text-primary-foreground` del default variant y el `text-micro` del pill size.
+
+**2. RealFeel BottomSheet popup** (en lugar de sección):
+- Nuevo `src/features/wellness/components/RealFeelSheet.tsx` — BottomSheet (`size="focus"`) wrapper. Slide-up animation nativo del primitivo.
+- `RealFeelInline.tsx`: nueva prop `bare?: boolean` que omite el chrome wrapper (border + bg-surface-container-low + p-5 + slide-in animation) cuando se renderiza dentro de otro container. Permite reutilizar el form sin duplicar chrome dentro del sheet.
+- `Home.tsx` sección 13: reemplaza el `<section><RealFeelInline /></section>` (in-flow card) por `<RealFeelSheet open={showRealFeel} onOpenChange={setShowRealFeel} ... />`. El timer de trigger (3s post meal-log) sigue intacto en el `useEffect` existente. El auto-dismiss timer de 60s del form también se preserva via `onDismiss`.
+
+**Tests**: 1676/1676 passing. **i18n**: 2168 keys (sin cambio neto, solo ediciones de valor en `registerWorkout`).
+**Bundle**: 913.3 KB raw / 287.7 KB gzip main entry.
+
+## [1.5.206] - 2026-05-02
+
+### fix(home): Sprint K-fix2 — typography upgrade + HealthAndExerciseCard layout unificado
+
+Fix tras feedback owner sobre `[1.5.205]`: "los botones de la home, el texto que ahora no se ve, arregla toda la tipografía... la sección de deporte simplifícala o mejórala más, ahora al desplegarse el movimiento queda raro, unifica movimiento y entrenamiento en un solo formato conjunto".
+
+**1. Typography upgrade — overlines `text-micro` (10px) → `text-label` (12px)**:
+27 occurrences en 10 archivos (`EnergyArcCard`, `HydrationCard`, `MacroRingsCard`, `MealGapSuggestion`, `NutritionHero`, `NutritionHeroRing`, `ProgressPreviewCard`, `PastDayBanner`, `TodaysMeals`, `NutritionDetail`). El sweep K4 los había roto a 14px (demasiado grande), el revert a 10px (demasiado pequeño). Sweet spot legible: 12px (`text-label`). Patrón canónico actualizado: `font-label text-label font-bold uppercase tracking-widest`.
+
+**2. `HealthAndExerciseCard` — layout unificado (sin sub-secciones MOVIMIENTO/ENTRENAMIENTO)**:
+- **Sin headings de sub-sección**: las dos sub-secciones MOVIMIENTO/ENTRENAMIENTO eliminadas. Ahora son 3 elementos verticales unificados: header card + (steps/connect row + progress) + workout row + nudges row.
+- **Workout row siempre visible**: independiente de si está conectado (antes solo aparecía cuando connected). El usuario puede registrar entrenamiento aunque no haya caminado.
+- **Nudges en una sola línea horizontal**: antes eran un grid 2×2 con headers ("AÑADIR PASOS" / "AÑADIR MIN") — ahora son 4 chips inline `[+500 pasos] [+1000 pasos] [+10 min] [+30 min]`. Más compacto, semánticamente coherente con `HomeQuickStats`.
+- **Tipografía clara**: header card `<h3 className="text-label font-bold uppercase tracking-widest text-tertiary">`. Subtítulos en `text-label` (12px) en lugar de `text-micro` (10px) para mejor legibilidad.
+- **Avatares unificados `w-10 h-10`** en las 3 rows (connect / steps / workout) — patrón coherente.
+- **Tooltip ⓘ inline**: el botón info ahora vive junto al título del workout (no a la derecha del overline section header), más cerca semánticamente del contenido que explica.
+
+**Tests**: 1676/1676 passing (sin cambio neto).
+**i18n**: 2168 keys (sin cambio).
+**Bundle**: 913.3 KB raw / 287.7 KB gzip main entry, total 900.8 KB gzip — todo dentro de budgets.
+
+## [1.5.205] - 2026-05-02
+
+### fix(home): Sprint K-fix — typography revert + HealthAndExerciseCard rediseño
+
+Sprint K-fix tras feedback owner sobre regresión visual en preview de `[1.5.204]`.
+
+**Bug 1 — Tipografía inflada en toda la home (regresión causada por sweep K4)**:
+El sweep K4 reemplazó `<span className="font-label text-micro uppercase tracking-widest ...">` por `<Heading level="h4" variant="overline">` en 26 ocurrencias / 9 archivos. Pero `<Heading variant="overline">` aplica `text-body` (14px) mientras el original era `text-micro` (10px) → todos los labels overline (RESTANTES, HOY, DEL DÍA, META, MOVIMIENTO, ENTRENAMIENTO, secciones de TodaysMeals, etc.) quedaron 40% más grandes.
+
+**Fix**: revert del sweep usando spans con clases explícitas. Los `<Heading variant="overline">` se reservan para section titles a nivel de página (h2/h3 con tamaño body intencional).
+
+Archivos revertidos: `EnergyArcCard.tsx` (4), `MacroRingsCard.tsx` (1), `MealGapSuggestion.tsx` (3), `NutritionHero.tsx` (4), `NutritionHeroRing.tsx` (1), `ProgressPreviewCard.tsx` (3), `TodaysMeals.tsx` (4), `HealthAndExerciseCard.tsx` (5), `HydrationCard.tsx` (1) — 26 reverts. Import `Heading` removido de 3 archivos donde ya no era usado (EnergyArcCard, MacroRingsCard, ProgressPreviewCard).
+
+**Bug 2 — `HealthAndExerciseCard` desalineada con el design system**:
+La card unificada de Sprint K mezclaba 3 patrones visuales distintos sin coherencia. Owner reportó "es feísima, no está unificada".
+
+**Fix — rediseño visual de `HealthAndExerciseCard.tsx`**:
+1. **Header simplificado** — eliminado el `<Activity className="w-4 h-4">` icon (ruidoso); título solo + total kcal a la derecha (patrón = MacroRingsCard).
+2. **Divisor único** entre Movimiento↔Entrenamiento (`border-outline-variant/20`, no `/15`); eliminado el divisor cabecera↔Movimiento (cabecera ya es título de la card).
+3. **Avatares unificados a `w-10 h-10`** en ambas sub-secciones (matching `HomeQuickStats`, `ExerciseLogSheet`). Antes: Movimiento usaba `w-8`, Entrenamiento `w-10`.
+4. **Nudges → `<StatusChip tone="neutral" onClick>`**: los 4 nudges +500/+1000/+10m/+30m migrados de `<Button variant="outline">` a chips clickables (son atajos informativos, no acciones primarias). `StatusChip` ya soporta `onClick` nativo (renderiza `<button>`).
+5. **CTA disconnected unificado**: el "Conectar Apple Health" full-width pesado (Button con `py-3 px-3 normal-case`) reemplazado por layout flex compacto (avatar `w-10` + 2-line text column + `<Button variant="outline" size="pill">Conectar</Button>`) — patrón visual idéntico a la sub-sección Entrenamiento.
+6. **Jerarquía tipográfica limpia**: títulos de sub-sección como `<span class="font-label text-micro font-bold uppercase tracking-widest">`; valores como `<p class="font-headline font-bold text-body-sm">`; hints como `<p class="font-body text-micro text-on-surface-variant">`. Stop mixing uppercase/normal-case en spans hermanos.
+7. **Steps formatted con `.toLocaleString()`** (e.g., "5,000 / 10,000") para mejor legibilidad.
+
+**i18n**: +1 key (`home.healthCard.connectCta` ES "Conectar" / EN "Connect") → 2168 keys.
+
+**Tests**: 1676/1676 passing (sin cambio neto). Test de symmetry actualizado a regex `/N[.,]?000/` para compatibilidad con `toLocaleString()`.
+
+**Bundle**: sin cambio significativo.
+
+## [1.5.204] - 2026-05-02
+
+### feat(home): Sprint K — Home cleanup: HealthAndExerciseCard + HydrationCard + overline sweep + layout reorder
+
+Sprint de normalización completo con 4 frentes: (1) fusión de `ExerciseInteractiveCard` + `ActivityRow` en un card unificado, (2) extracción de `HydrationCard` con glass icons y reposicionamiento, (3) sweep de patrones overline inline → `<Heading variant="overline">`, y (4) eliminación de duplicado de navegación a Progreso.
+
+**1. HealthAndExerciseCard (K1) — fusión de actividad + entrenamiento**:
+- `src/features/home/utils/movement-calories.ts` — nuevo módulo con `KCAL_PER_ACTIVE_MIN = 3`, `passiveMovementKcal()`, `totalExerciseKcal()` (single source of truth, reemplaza inline `Math.round(mins * 3)` en Home.tsx). Evita doble conteo: el passive solo cuenta cuando `intensity === 'none'`.
+- `src/features/home/components/HealthAndExerciseCard.tsx` — nuevo primitivo (~250 LoC) que unifica `ExerciseInteractiveCard` + `ActivityRow`. Dos sub-secciones con `<Heading variant="overline">`: "MOVIMIENTO" (pasos + minutos activos + CTA conectar health / nudges +500/+1000/+10m/+30m) + "ENTRENAMIENTO" (tier picker idle/active + tooltip `ⓘ`). Header muestra total kcal del día via `totalExerciseKcal()`. Reutiliza `<ExerciseLogSheet>` sin cambios.
+- `Home.tsx` — reemplaza `<ExerciseInteractiveCard>` + `<ActivityRow>` por un único `<HealthAndExerciseCard>`. `exerciseCalories` usa `totalExerciseKcal()`. Adapters legacy `isTrainingDay`/`setIsTrainingDay` eliminados (solo `isTrainingDay` derivado permanece para HomeQuickStats).
+- Eliminados: `ExerciseInteractiveCard.tsx` + test, `ActivityRow.tsx` (sin test propio).
+- 9 tests nuevos (`HealthAndExerciseCard.test.tsx`) + 8 tests (`movement-calories.test.ts`).
+
+**2. HydrationCard (K2) — extracción + glass icons + reposicionamiento**:
+- `src/features/home/components/HydrationCard.tsx` — nuevo componente con: row de glass SVG icons (llenos/vacíos según vasos consumidos), botones `<Button variant="outline" size="icon-sm">` para +/− (con guards en los extremos), edición inline del target (range slider expandible via "Editar"). Preserva `data-anchor="hydration"` para scroll-spy NutritionDetail. Elimina raw `<button>` edit-toggle anterior.
+- `Home.tsx` — hidratación movida de después de QuickActions a **inmediatamente después del bloque Macros+Calidad** (reorder K2). Inline SectionCard hydration eliminado; `<HydrationCard>` lo reemplaza. `isEditingHydration` state movido dentro del componente como estado interno.
+- Banner "TU PROGRESO" eliminado (duplicaba la CTA de `WeeklyMiniDash`).
+- 9 tests nuevos (`HydrationCard.test.tsx`).
+
+**3. Button size="pill" (K5) — cierre del allowlist**:
+- `src/components/ui/button.tsx` — tamaño `pill` añadido al `cva`: `h-8 px-3 py-1.5 rounded-full font-body text-micro font-semibold normal-case tracking-normal gap-1`. Sobreescribe el chrome por defecto (uppercase/rounded-sm/tracking-widest) para CTAs cortos tipo "Registrar" / "Log it".
+- `TodaysMeals.tsx` — raw `<button>` "LOG IT" migrado a `<Button variant="default" size="pill">`.
+- `button-adoption.test.ts` — entry `ExerciseInteractiveCard.tsx` eliminada (archivo borrado). Allowlist: 3 → 2 entries.
+
+**4. Overline sweep (K4) — 7 archivos, ~20 reemplazos**:
+- Patrón `<span|p|div className="font-label text-micro uppercase tracking-widest ...">` → `<Heading level="h4" variant="overline">` en: `EnergyArcCard`, `MacroRingsCard`, `MealGapSuggestion`, `NutritionHero`, `NutritionHeroRing`, `ProgressPreviewCard`, `TodaysMeals`.
+- Patrones dentro de `<button>` nativos (WeeklyMiniDash, NutritionDetail, PastDayBanner) no reemplazados (HTML inválido).
+
+**5. Orphan cleanup (K6)**:
+- Eliminados: `DailyBalanceCard.tsx`, `TodayCategoryChips.tsx` + test, `useChipScrollSpy.ts` (3 archivos huérfanos post-sprints H/J).
+
+**Bundle**: 913.3 KB raw / 287.7 KB gzip entrada principal (budget 920/290 → OK). Total gzip 900.8 KB (budget ajustado 900→920 KB).
+**Tests**: 1676/1676 passing (119 files, +11 netos sobre [1.5.203]).
+**i18n**: 2167 keys (ES ↔ EN simétrico, sin cambios respecto a [1.5.203] — las 10 healthCard/hydration keys fueron añadidas previamente).
+
+## [1.5.203] - 2026-05-02
+
+### feat(home): Sprint J — Exercise intensity tiers + audit fixes + NutritionDetail empty states
+
+Sprint amplio con (1) nueva feature de intensidad de ejercicio en 3 niveles, (2) auditoría profunda Home + NutritionDetail con fixes de hardcoded values y design-system drift, y (3) normalización de botones de acción.
+
+**1. Exercise intensity tiers (Moderado / Medio / Intenso → 150 / 300 / 500 kcal)**:
+- `src/features/home/utils/exercise-intensity.ts` — nuevo módulo con `ExerciseIntensity` type, `INTENSITY_KCAL` constants, `INTENSITY_TIERS` ordered list, helpers de conversión legacy (`intensityToCalories`, `intensityToIsTrainingDay`, `isTrainingDayToIntensity`).
+- `ExerciseLogSheet.tsx` — nuevo BottomSheet (compact size, title-centered) con 3 cards apilables (icono `Footprints/Activity/Flame` + label + descripción + kcal). Si hay tier activo, se muestra `Check` y bordes primary; entrada "Quitar entrenamiento" cuando hay registro.
+- `ExerciseInteractiveCard.tsx` — refactor completo: ahora prop `intensity: ExerciseIntensity` + `onIntensityChange`. Tap card o CTA → abre el sheet. Active state muestra "Has quemado X kcal hoy · Intensidad: {label}" + icono `i` con popover (controlled `<Tooltip>` tap-to-reveal) explicando que el target diario ya tiene calorías base ajustadas y estos kcal son extra puntual.
+- `Home.tsx` — `useState<ExerciseIntensity>('none')` reemplaza al `isTrainingDay` boolean. `isTrainingDay` y `setIsTrainingDay` se mantienen como adapters derivados (legacy compat para `ActivityRow`/`HomeQuickStats`). `exerciseCalories` ahora suma `tierKcal + passiveKcal` (passive solo cuando intensity='none').
+- 27 tests nuevos: 5 util + 14 ExerciseInteractiveCard + 8 ExerciseLogSheet.
+
+**2. Audit fixes (auditoría profunda Home + NutritionDetail)**:
+- **RDA tables extraídas**: `src/features/home/data/rda.ts` — nuevo módulo con `VITAMIN_RDAS` (13 vitaminas), `MINERAL_RDAS` (14 minerales), `SALT_TO_SODIUM_MG_FACTOR = 400` (constante documentada con citation), `DEFAULT_FIBER_TARGET_G = 30` (WHO recommendation). NutritionDetail.tsx ahora importa de `data/rda` en lugar de tablas hardcoded inline.
+- **Magic factor `× 400`** en HydrationTab → reemplazado por `SALT_TO_SODIUM_MG_FACTOR` con doc inline.
+- **Fiber default `?? 30`** en MacrosTab → reemplazado por `DEFAULT_FIBER_TARGET_G`.
+
+**3. Botones de acción normalizados**:
+- `TodaysMeals.tsx` "LOG IT" / "REGISTRAR" — antes: `bg-primary text-on-primary rounded-sm uppercase tracking-widest`. Ahora: `inline-flex pill rounded-full font-body text-micro font-semibold` con `<Plus>` icon prefix. Match con el patrón del CTA del ExerciseInteractiveCard.
+- `button-adoption.test.ts` allowlist: añadida entrada documentada para `ExerciseInteractiveCard.tsx` (pill-shape conflict con `<Button>` primitive uppercase mandate).
+
+**4. NutritionDetail empty states (Vitaminas / Minerales)**:
+- Inyectado `<SmartInsightCard tone="neutral">` arriba de cada tab Vitaminas y Minerales con copy: "Próximamente: tracking automático desde tus comidas. Mientras tanto, te mostramos los valores de referencia diarios (RDA)." — clarifica que no es un bug, es feature pendiente.
+- Tabs Vitaminas y Minerales mantienen las 13/14 rows con valor null + RDA — ahora claramente contextualizadas como "referencia".
+
+**i18n** — 22 keys nuevas × 2 locales:
+- `home.exerciseCard.{infoAria,infoTitle,infoBody}` (3 keys, popover)
+- `home.exerciseCard.activeSubtitle` actualizada con interpolación `{intensity}`
+- `home.exerciseSheet.{title,subtitle,clearLabel}` (3 keys)
+- `home.exerciseSheet.tiers.{moderate,medium,intense}.{label,kcal,description}` (9 keys)
+- `nutritionDetail.vitaminsTab.placeholderBanner` + `nutritionDetail.mineralsTab.placeholderBanner` (2 keys)
+
+Total i18n: 2140 → **2157 keys** simétricas ES↔EN.
+
+**Verificación**:
+- TypeScript: 0 errores
+- Tests: **1665/1665** passing (118 files, +14 net)
+- i18n: 2157 keys simétricas
+- `npm run lint:code`: 0 errores design-system
+
+**Diferido (out-of-session, documentado en audit)**:
+- ~50 reimplementaciones inline del patrón overline (`font-label text-micro uppercase tracking-widest`) en componentes Home — sweep de adopción `<Heading variant="overline">` puede ir en sprint dedicado.
+- Vitamins/Minerals real backfill (Sprint K) — requiere extender el dictionary de foods con micros completos.
+
+## [1.5.202] - 2026-05-02
+
+### fix(home): Sprint I — visual fixes (whitespace, ring centering, quality overflow)
+
+Tras prueba en preview de `[1.5.201]`, owner reportó **4 problemas visuales críticos** con screenshots anotados. Sprint puramente visual de correcciones puntuales — sin cambios de datos ni nuevos componentes.
+
+- **MacroRingsCard — % centrado verticalmente** dentro del anillo. En `[1.5.201]` cambié `items-center justify-center` → `items-baseline justify-center` para alinear `pct` + `%` por baseline; eso pegó el grupo al borde superior. Ahora wrapper exterior `items-center` + wrapper interior `flex items-baseline` (mantiene el `%` superscript-aligned, centra el grupo).
+- **EnergyArcCard — whitespace reducido**:
+  - SectionCard `padding="lg" spacing="md"` → `padding="md" spacing="sm"`.
+  - Outer flex `gap-3` → `gap-1` (entre gauge y stats).
+  - Number absolute `pt-8` → `pt-6`.
+  - **SVG viewBox `0 0 200 200` → `0 0 200 130`** — recorta el 35% inferior vacío del viewport (arc bottom @ y=118, ahora con buffer de 12px para el needle halo).
+  - Wrapper `aspect-[10/7]` → `aspect-[20/13]` (~1.54:1) — match con el nuevo viewBox.
+  - El `cy = 100 + 18 = 118` se mantiene, los helpers `gauge-arc.ts` (`describeGaugeTrack`, `gaugeNeedlePoint`) siguen sin tocar.
+- **FoodQualityCard — body 2-col → single column**:
+  - El grid 2-col causaba: dot 14px + value 50px + chip 60px = 124px fijos por columna, dejando 33px para el label → "Fi…" truncado y overflow del chip en columna derecha.
+  - Cambio: `grid grid-cols-2 gap-x-4 gap-y-3` → `space-y-2.5` (single column stack). Cada métrica ahora ve label completo + value + chip sin truncar. Card crece ~80px de altura pero es legible.
+  - Test `Sprint G: body uses 2-col grid` actualizado a `Sprint I: body uses single-column stack`.
+- **NutritionDetail tab Calidad** — heredaba el mismo issue (mismo componente FoodQualityCard). Resuelto automáticamente con el fix anterior.
+
+**Verificación**:
+- TypeScript: 0 errores
+- Tests: **1651/1651** passing (sin cambios netos — 1 assertion actualizada)
+- i18n: 2140 keys simétricas (sin cambios)
+- `npm run lint:code`: 0 errores design-system
+
+## [1.5.201] - 2026-05-02
+
+### feat(home): Sprint H+ — gauge editorial (no title) + ExerciseInteractiveCard + Macros⊕Calidad merge
+
+Iteración mayor de la Home tras feedback owner sobre la imagen completa de pantalla. 4 cambios estructurales:
+
+**1. EnergyArcCard — gauge sin título, número más grande, stats alineados al arco**:
+- **Eliminado** el `<Heading variant="overline">ENERGÍA</Heading>` (lo añadido en `[1.5.200]`). El gauge es auto-explicativo (las kcal restantes) y no necesita label.
+- **"1155" más grande**: tipografía pasa de `text-display` a `clamp(3.5rem, 14vw, 5.5rem)` — escala fluido y llena el espacio blanco interno del semicírculo.
+- **Stats alineados con extremos del arco**: la fila `Hoy / Del día / Meta` antes era `text-center grid-cols-3`. Ahora:
+  - "Hoy/695" → `items-start` (alineado al extremo izquierdo del arco)
+  - "Del día/38%" → `items-center` (centrado bajo el centro del arco)
+  - "Meta/1850" → `items-end` (alineado al extremo derecho del arco)
+  - Padding 5% horizontal en el `<dl>` para emparejar con la curvatura del arco (endpoints en x=12/188 de viewBox 200).
+
+**2. ExerciseInteractiveCard — reemplaza DailyBalanceCard**:
+- Nuevo componente `src/features/home/components/ExerciseInteractiveCard.tsx`.
+- 2 estados controlados por `isTrainingDay`:
+  - **Idle** (no exercise): icono `<Dumbbell>` neutral + título "¿Has hecho deporte hoy?" + subtítulo + CTA pill `bg-primary text-on-primary` "Registrar".
+  - **Active** (training day on, kcal > 0): icono `<Flame>` primary + título "Has quemado X kcal hoy" + subtítulo "Sumadas a tu objetivo del día" + CTA pill ghost "Editar".
+- Tap en el card → toggle `isTrainingDay`. La lógica de cálculo de `exerciseCalories` (200 + minutos × 5) ya existía en Home.tsx, no se duplica.
+- `disabled={!isViewingToday}` en past-day view (read-only).
+- `DailyBalanceCard` deja de usarse en Home pero el archivo se conserva por si se quiere recuperar.
+- 8 tests nuevos (idle/active states, toggle, disabled, locale-agnostic).
+
+**3. Macros + Calidad mergeados en un solo SectionCard**:
+- Nuevas props `bare?: boolean` en `MacroRingsCard` y `FoodQualityCard`. Cuando `true`, el componente renderiza solo su contenido sin el `<SectionCard>` wrapper.
+- `MacroRingsCard` pierde el título "MACROS DEL DÍA" (queda implícito por la presencia visual de los 3 anillos).
+- En `Home.tsx`, ambos viven dentro de un único `<SectionCard>` con un `<hr className="border-t border-outline-variant/20">` hairline divider entre ellos.
+- `FoodQualityCard` mantiene su comportamiento expandible y CTA "Ver nutrición total →".
+- `NutritionDetail.tsx` (Calidad tab) sigue usando `FoodQualityCard` con default `bare=false` — backward-compat preservada.
+
+**4. i18n** — eliminada `home.energyArc.title` (huérfana). Añadidas 7 keys × 2 locales para `home.exerciseCard.*`:
+- `promptTitle / promptSubtitle / promptCta` (estado idle)
+- `activeTitle / activeSubtitle / activeCta` (estado active)
+- `toggleAria` (a11y)
+
+Total i18n: 2134 → **2140 keys** simétricas ES↔EN.
+
+**Verificación**:
+- TypeScript: 0 errores
+- Tests: **1651/1651** passing (116 files, +8 ExerciseInteractiveCard, sin regression)
+- i18n: 2140 keys simétricas
+- `npm run lint:code`: 0 errores design-system
+
+## [1.5.200] - 2026-05-02
+
+### feat(home): Sprint H — gauge editorial (gradient + glow + responsive) + title above + chips removal
+
+Mejoras visuales mayores sobre el gauge de calorías + cleanup del Home tras feedback owner sobre la imagen ampliada del gauge editorial deseado.
+
+**EnergyArcCard — gauge editorial**:
+- **Geometría más abierta**: `GAUGE_RADIUS` 80 → **88**, `GAUGE_STROKE` 14 → **16**, center Y offset +30 → **+18**. Las puntas del arco apuntan más hacia los lados, dejando el "1155" respirar más.
+- **Gradiente lima → primary**: el progress arc ya no es flat green. Nuevo `<linearGradient>` SVG con stops `--color-macro-fiber` (lima) → `--color-primary` (verde RIAL). Reusa tokens existentes (sin hex). Cuando over-target, fallback a `--color-error` sólido (un dégradé rojo confunde).
+- **Needle de 3 capas con glow difuminado**:
+  - Layer 1: halo `r=NEEDLE_R*2.4` + opacity 0.25 + filter `<feGaussianBlur stdDeviation=4>` (aura encendida).
+  - Layer 2: white ring `r=NEEDLE_R*1.5` + `fill=var(--color-surface)` (anillo blanco crisp).
+  - Layer 3: core `r=NEEDLE_R*0.8` + fill primary/error (punto central).
+- **Sizing responsive**: `clamp(280px, 80vw, 380px)` por defecto en el wrapper. Escalado fluido en mobile (280px), phablet (~340px), tablet (380px capped). Prop `size?: number` se mantiene como escape hatch para tests.
+- **Track suavizado**: `--color-surface-container-highest` → `--color-outline-variant` con `strokeOpacity=0.4` (más cercano al "lift" del PDF).
+- **Typography "1155"**: añadido `tracking-tighter` para clavar la silueta editorial. `%` del stat central pasa a span superscript-style (`text-micro font-semibold`) match con MacroRingsCard.
+- **Stats max-w**: ahora sincronizado con el width del gauge via `style={{ maxWidth: wrapperWidth }}` — los stats escalan con el gauge.
+- **Test-id `energy-arc-track`** nuevo para QA visual.
+
+**EnergyArcCard — title above (re-añadido tras feedback)**:
+- Después de revertir el título en Sprint G, el owner pidió **devolverlo** (consistencia con BALANCE / MACROS / CALIDAD que tienen título arriba). Restaurada la i18n key `home.energyArc.title` ("Energía" / "Energy").
+- `<Heading level="h3" variant="overline" className="self-start">` arriba del gauge, dentro del SectionCard transparent. Test `Sprint G: does NOT render heading title` reemplazado por `renders the overline title above the gauge`.
+
+**Home.tsx — TodayCategoryChips eliminados**:
+- Las 4 chips (Energía / Macros / Calidad / Hidratación) eran redundantes con los títulos de las cards (los nombres ya transmiten la semántica). Eliminadas del Home.
+- Eliminados imports: `TodayCategoryChips`, `TODAY_CHIP_IDS`, `useChipScrollSpy`. Variable `showTodayChips` renombrada a `showGaugeV2Cards` (semántica clara: gates las cards v2 — Balance/Macros/Quality — no las chips).
+- **Componentes preservados**: `TodayCategoryChips.tsx`, `TODAY_CHIP_IDS`, `useChipScrollSpy.ts` siguen en el repo (sin uso) — pueden retirarse en sprint dedicado de cleanup, o quedarse por si el owner cambia de opinión.
+- **Convention test actualizado** (`home-hero.test.ts`): describe block renombrado de "Sprint B chip-strip integration" a "Sprint H v2 cards integration (chips removed)". Asserts actualizados para verificar la AUSENCIA de imports de chips + presencia de `showGaugeV2Cards` gate.
+
+**i18n** — restaurada key `home.energyArc.title` (ES + EN). Total: 2133 → **2134 keys**.
+
+**Tests** — 8 nuevos / actualizados:
+- `EnergyArcCard.test.tsx`: +5 tests Sprint H (gradient stroke / error solid / halo glow / defs include linearGradient + feGaussianBlur / gradient stops use tokens / wrapper width fluid / size prop override) + actualizados (3-layer needle, track testid).
+- `home-hero.test.ts`: 4 asserts actualizados (chips removidos, gate renombrado).
+
+**Verificación**: 0 errores TS · **1643/1643 tests** (115 files, +7 net) · i18n simétrica (2134 keys) · `npm run lint:code` 0 errores · build dentro de budget.
+
+## [1.5.199] - 2026-05-02
+
+### refactor(home): Sprint G — visual coherence con PDF reference (gauge + macros + calidad)
+
+Redesign visual basado en `Container - HOME HOY.pdf` que define el target final del Home "Hoy". Owner confirmó scope: **solo gauge / macros / calidad de la comida**. NO se toca HomeHeader, NO se crea MicronutrientsCard, NO se altera flujo de datos.
+
+- **EnergyArcCard** — revert de `[1.5.198]`. Eliminado `<Heading variant="overline">ENERGÍA</Heading>` y restaurado `bg-transparent border-0 shadow-none` en SectionCard. El gauge vuelve a ser pieza-héroe flotante. Stats row: `pct%` de `text-primary` → `text-on-surface` (bold dark, match PDF). Color dinámico de remaining (Sprint F) preservado.
+- **SmartInsightCard** — revert de `[1.5.197]`. Eliminado el icon container `w-7 h-7 rounded-full`. Vuelve al patrón **dot pequeño leading** (`w-2 h-2 rounded-full`) + texto. `iconBg`/`iconColor` removidos del TONE_MAP. Layout `items-center` → `items-start` (el dot se alinea con la primera línea cuando wrap). `icon` prop marcado `@deprecated` (el `Sparkles` import eliminado).
+- **MacroRingsCard** — typography tweak interno: número y `%` separados en spans distintos. Número grande (`text-body-sm font-bold`), `%` pequeño superscript-style (`text-micro font-semibold`). Visual match con PDF.
+- **QualityMetricRow** — simplificación drástica:
+  - **Eliminado**: prop `icon: LucideIcon`, mini progress bar (h-1.5), props `fillPct`/`direction`.
+  - **Layout nuevo**: `<dot> <label flex-1> <value tabular-nums> <StatusChip>` — todo en una línea horizontal compacta.
+  - El **dot reemplaza al icon**: `w-1.5 h-1.5 rounded-full` con color por badge (good→primary, in-progress→primary/60, low→on-surface-variant/50, moderate→tertiary, high→error, partial-data→on-surface-variant/30).
+- **FoodQualityCard**:
+  - **Título**: `<Heading variant="overline">` (uppercase tracking-widest) → `<Heading className="normal-case tracking-normal">` (mixed case "Calidad de la comida"). Override del default `h3` que aplica uppercase.
+  - **Body**: `space-y-3 divide-y divide-outline-variant/10` (single-col) → `grid grid-cols-2 gap-x-4 gap-y-3` (2-col grid). Test-id `quality-metrics-grid` añadido.
+  - **CTA**: `justify-end` → `justify-center` (centered).
+  - **METRIC_CONFIGS** simplificado a `METRIC_KEYS: QualityMetricKey[]` (icons removidos del config).
+  - Lucide imports `Leaf, Candy, Droplet, FlaskConical, Package, Apple` eliminados.
+- **i18n** — eliminado `home.energyArc.title` (ES + EN), huérfano tras revert. Total: 2134 → **2133 keys** (vuelve al baseline pre-`[1.5.198]`).
+- **Tests** — 5 nuevos tests Sprint G:
+  - `EnergyArcCard`: "no renderiza heading title" + "SectionCard transparent (no chrome)".
+  - `FoodQualityCard`: body 2-col grid + título mixed-case + CTA centered + no lucide icons / no progress bars.
+  - **Eliminado**: test "renders the card title at the top" añadido en `[1.5.198]`.
+
+**Verificación**: 0 errores TS · **1636/1636 tests** (115 files) · i18n simétrica (2133 keys) · `npm run lint:code` → 0 errores · build main entry 907.7 KB raw / 285.8 KB gzip (dentro de budget 920/290).
+
+## [1.5.198] - 2026-05-02
+
+### refactor(home): consistencia visual de cards — title at top + 3 macros
+
+Pasada de coherencia visual sobre las cards del Home redesign tras feedback owner sobre el HTML de referencia (`Rial — pantallas.html`).
+
+- **EnergyArcCard** — añade `<Heading level="h3" variant="overline">{t.home.energyArc.title}</Heading>` al tope de la card (estilo "ENERGÍA"). Ahora alinea con `BALANCE DEL DÍA` / `MACROS DEL DÍA` / `CALIDAD DE LA COMIDA` (todas con título arriba). SectionCard pierde el `bg-transparent border-0 shadow-none` — ahora tiene la misma surface treatment que las demás cards (más cohesivo). Padding `lg`+spacing `md` → `md`+`sm` para igualar densidad.
+- **MacroRingsCard** — pasa de **4 anillos** (Carbos/Proteína/Grasas/Fibra) a **3 anillos** (Carbos/Proteína/Grasas). La fibra se mueve a la card "Calidad de la comida" donde ya estaba como una de las 6 métricas (`fiber` direction `encourage`) — evita duplicar la representación. Grid `grid-cols-4` → `grid-cols-3`. `DailyMacrosLike.fiber?` removido del interface (estructural). Tests actualizados (1 nuevo: "no renderiza fiber ring"). Lock convention actualizado.
+- **i18n** — nuevo key `home.energyArc.title` ("Energía" / "Energy") simétrico ES↔EN. Total: 2133 → **2134 keys**.
+
+**Verificación**: 0 errores TS · **1631/1631 tests** (+1 EnergyArcCard title, +1 MacroRingsCard fiber-absent, −1 fiber-fallback obsoleto) · i18n simétrica.
+
+## [1.5.197] - 2026-05-02
+
+### refactor(home): Sprint F — design polish del rediseño Home "Hoy"
+
+Mejoras visuales incrementales sobre las 6 cards nuevas y NutritionDetail, usando el sistema de tokens RIAL (sin hex, sin `dark:`, ADR-002/005).
+
+- **EnergyArcCard** — remaining kcal usa `text-primary` cuando quedan calorías, `text-error` cuando se supera el objetivo. Arco de progreso y needle cambian a `text-error` / `fill-error` al superar el target. Stat `%` también cambia a `text-error` en exceso. Stat meta (`goal`) rebajado a `text-on-surface-variant` para mayor jerarquía visual.
+- **FoodQualityCard** — score ring y número usan color dinámico según `coverageScore`: ≥70 → `--color-primary`, 40–69 → `--color-tertiary`, <40 → `--color-error`. CTA "Ver nutrición total": `font-label font-bold` → `font-body font-semibold` (Satoshi, más legible). 3 tests nuevos de score-ring-color.
+- **TodayCategoryChips** — chip activo: `bg-on-surface text-surface` → `bg-primary text-on-primary shadow-elev-1`. Alineado con la marca RIAL.
+- **MacroRingsCard** — porcentaje dentro del anillo usa `var(--color-macro-{clave})` cuando pct > 0 (antes siempre `text-on-surface`). Label de macro: `font-bold` → `font-semibold`, color `text-on-surface-variant` → `text-on-surface`. Caption "de Xg": `font-label` → `font-body`.
+- **QualityMetricRow** — icono usa color semántico según badge: `good` → `text-primary`, `high` → `text-error`, `in-progress` → `text-primary/60`, resto → `text-on-surface-variant` (neutro). Cambio con `transition-colors duration-300`.
+- **SmartInsightCard** — icono simplificado: dot + icono flotante → círculo `w-7 h-7` con icono centrado (`iconBg` + `iconColor` del tono). Eliminado `dotColor` del TONE_MAP. Layout `items-start` → `items-center`.
+- **NutritionDetail SummaryTab** — tiles rediseñados: valor + unidad en una línea (`text-title-sm` + `text-micro`), etiqueta debajo en uppercase micro. Eliminado `%` huérfano bajo el ring CalorieRing. Tile Calidad usa `scoreColor` dinámico (primary/tertiary/error). Iconos de tiles: `text-primary` → `text-on-surface-variant` (más editorial).
+
+**Verificación**: 0 errores TS · 1630/1630 tests (+3) · sin cambios i18n.
+
+## [1.5.196] - 2026-05-02
+
+### feat(home): rediseño completo Home "Hoy" — gauge editorial + chips internos + Calidad de la comida
+
+Sprint C/D/E del plan editorial (Sprints A/B completados en `[1.5.192]`). Completa el redesign del Home con 4 cards nuevas y la pantalla NutritionDetail de 7 tabs.
+
+**Sprint C — Cards intermedias:**
+- `SmartInsightCard.tsx` — banner contextual toneado (positive/neutral/warning) arriba del gauge.
+- `DailyBalanceCard.tsx` — grid 3-col: Comidas / Ejercicio / 7 días con formateo ES decimal (−0,4 kg).
+- `MacroRingsCard.tsx` + test (7 tests) — 4 anillos horizontales SVG con tokens `--color-macro-{carbs,protein,fats,fiber}`. Ancla `data-anchor="macros"`, scroll-mt-24.
+- `Home.tsx` — wired bajo los chips; HomeQuickStats oculto bajo v2; hidratación con `data-anchor="hydration"`.
+- Convention tests: `SmartInsightCard` action button reclasificado (no inline chip); `Home.tsx` allowlisted en screen-size (670 líneas, razón documentada).
+
+**Sprint D — Calidad de la comida:**
+- `QualityMetricRow.tsx` — row reutilizable: icono + label + mini-barra fill + valor + `StatusChip` + chevron opcional.
+- `FoodQualityCard.tsx` + test (12 tests) — SectionCard expandible con score ring SVG + 6 `QualityMetricRow`. Collapse/expand con `aria-expanded + aria-controls`. "Ver nutrición total →" abre NutritionDetail con tab Calidad.
+- `daily-quality.ts` tipado: `DailyLogLike.macros` ampliado con `& Record<string, unknown>` para compatibilidad estructural con `DailyLogEntry`.
+- `NutritionRow.tsx` — row vitaminas/minerales (Label + valor / RDA + StatusChip con % RDA).
+- `nutrition-detail-nav.ts` — módulo de pending-tab aislado (`setNutritionDetailInitialTab` / `consumeNutritionDetailInitialTab`) para respetar fast-refresh rule.
+- `Home.tsx` — `computeDailyQuality` memoizado; FoodQualityCard reemplaza placeholder sr-only.
+
+**Sprint E — NutritionDetail 7 tabs:**
+- `NutritionDetail.tsx` reescrito como pantalla de 7 tabs via `TabNav`:
+  - **Resumen** — ring grande + 3 tiles (kcal/proteína/calidad) con tap→tab + recomendación.
+  - **Macros** — 4 `MacroProgressRow barHeight="md"` + extras (azúcar/sat. fat display-only).
+  - **Calidad** — `FoodQualityCard defaultExpanded` (reusa Sprint D directamente).
+  - **Vitaminas** — 13 vitaminas (A, D, E, K, C, B1–B7, B9, B12) con RDA y placeholder.
+  - **Minerales** — 14 minerales (Ca, P, Mg, Na, K, Cl, Fe, Zn, I, Se, Cu, Mn, Cr, Mo).
+  - **Hidratación** — agua + electrolitos estimados de `daily-quality.salt`.
+  - **Rendimiento** — placeholder + deep-link a Progress screen.
+- Header sticky con `bg-background/95 backdrop-blur-sm`; TabNav con scroll horizontal para pantallas estrechas.
+- `setNutritionDetailInitialTab('quality')` + navigate → abre en tab Calidad desde FoodQualityCard CTA.
+
+**Quality metrics:** 0 TS errors, 1627/1627 tests, 907.7 KB raw / 285.8 KB gzip (budget 920/290 ✓), 2133 i18n keys ES↔EN ✓.
+
 ## [1.5.192] - 2026-05-02
 
 ### feat(home+design): hero rework, fiber tracking, day navigation, NutritionDetail screen, design tokens softening

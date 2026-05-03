@@ -57,6 +57,7 @@ describe('useVitalsState — initial shape', () => {
       target: 10000,
       activeMinutes: 0,
       activeTarget: 45,
+      workoutMinutes: 0,
     });
   });
 

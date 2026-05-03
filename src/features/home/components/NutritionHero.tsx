@@ -4,6 +4,7 @@ import { Heading } from '../../../components/ui/Typography';
 import SectionCard from '../../../components/SectionCard';
 import { featureFlags } from '../../../lib/featureFlags';
 import NutritionHeroRing from './NutritionHeroRing';
+import EnergyArcCard from './EnergyArcCard';
 
 interface Macros {
   consumed: { cal: number; pro: number; carbs: number; fats: number; fiber?: number };
@@ -21,6 +22,14 @@ interface NutritionHeroProps {
 
 export default function NutritionHero({ dailyMacros, mode = 'advanced', exerciseCalories = 0, goal, onNavigateToNutritionDetail }: NutritionHeroProps) {
   const { t } = useI18n();
+
+  // Sprint B (post-1.5.190 gauge v2). When `homeGaugeV2` is on, render only
+  // the editorial 180° gauge — the macros + quality cards live as siblings in
+  // Home.tsx. v2 wins over v1 when both flags are on. Simple-mode keeps the
+  // existing compact pill via NutritionHeroRing.
+  if (featureFlags.homeGaugeV2 && mode === 'advanced') {
+    return <EnergyArcCard dailyMacros={dailyMacros} anchorId="energy" />;
+  }
 
   // PR 8 — Bevel Home ring-grid. When the feature flag is on, render the
   // new semi-ring 270° + 4-row macros shape (post-1.5.186 redesign). The
@@ -79,7 +88,7 @@ export default function NutritionHero({ dailyMacros, mode = 'advanced', exercise
       <SectionCard padding="md" spacing="sm">
         {mode === 'simple' ? (
           <div className="flex flex-col items-center text-center gap-2">
-            <span className="font-label text-micro uppercase tracking-widest font-bold text-on-surface-variant">
+            <span className="font-label text-label font-bold uppercase tracking-widest text-on-surface-variant">
               {t.home.remaining}
             </span>
             <div className="flex items-baseline gap-1.5">
@@ -101,7 +110,7 @@ export default function NutritionHero({ dailyMacros, mode = 'advanced', exercise
           <div className="space-y-3">
             <div className="grid grid-cols-3 gap-3 text-center" data-testid="hero-kcal-3col">
               <div className="flex flex-col items-center gap-1">
-                <span className="font-label text-micro font-semibold uppercase tracking-widest text-on-surface-variant">
+                <span className="font-label text-label font-bold uppercase tracking-widest text-on-surface-variant">
                   {t.home.consumed}
                 </span>
                 <span className="font-headline font-bold text-title-lg text-on-surface tabular-nums leading-none">
@@ -112,7 +121,7 @@ export default function NutritionHero({ dailyMacros, mode = 'advanced', exercise
                 </span>
               </div>
               <div className="flex flex-col items-center gap-1">
-                <span className="font-label text-micro font-semibold uppercase tracking-widest text-on-surface-variant">
+                <span className="font-label text-label font-bold uppercase tracking-widest text-on-surface-variant">
                   {t.home.remaining}
                 </span>
                 <span className="font-headline font-bold text-title-lg text-primary tabular-nums leading-none">
@@ -123,7 +132,7 @@ export default function NutritionHero({ dailyMacros, mode = 'advanced', exercise
                 </span>
               </div>
               <div className="flex flex-col items-center gap-1">
-                <span className="font-label text-micro font-semibold uppercase tracking-widest text-on-surface-variant">
+                <span className="font-label text-label font-bold uppercase tracking-widest text-on-surface-variant">
                   {t.home.target}
                 </span>
                 <span className="font-headline font-bold text-title-lg text-on-surface tabular-nums leading-none">

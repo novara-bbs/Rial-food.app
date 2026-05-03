@@ -4,6 +4,14 @@ import type { FoodVariant } from '../types/food-family';
 import { useDailyReset, DailyArchive } from '../hooks/useDailyReset';
 import { useNavigation } from './NavigationContext';
 import { createHandleLogMeal, createHandleLogMealNow, DailyLogEntry, FoodHistoryEntry } from '../features/food/handlers/meal-handlers';
+import {
+  createHandleLogWorkout,
+  createHandleEditWorkout,
+  createHandleDeleteWorkout,
+} from '../features/home/handlers/workout-handlers';
+import type { WorkoutLogEntry } from '../features/home/types/workout-log';
+import type { ExerciseIntensity } from '../features/home/utils/exercise-intensity';
+import type { ActivityProfile } from '../features/home/utils/activity-calories';
 import { useI18n } from '../i18n';
 // Recipe handler imports moved to useRecipeState (Phase 2.5).
 // Social handler imports moved to useSocialState (Phase 2.5).
@@ -40,7 +48,7 @@ type Setter<T> = (v: T | ((prev: T) => T)) => void;
 type HydrationState = { consumed: number; target: number };
 
 /** Movement state shape. */
-type MovementState = { steps: number; target: number; activeMinutes: number; activeTarget: number };
+type MovementState = { steps: number; target: number; activeMinutes: number; activeTarget: number; workoutMinutes: number };
 
 // LoggableMeal is now canonical in src/types/food.ts — imported above.
 
@@ -109,6 +117,16 @@ interface AppStateContextType {
   // Daily food diary log
   dailyLog: DailyLogEntry[];
   setDailyLog: Setter<DailyLogEntry[]>;
+
+  // K-fix7 [1.5.211] — Daily workout diary log (intentional exercise sessions).
+  workoutLog: WorkoutLogEntry[];
+  setWorkoutLog: Setter<WorkoutLogEntry[]>;
+  /** Append a new workout entry. Computes kcal from (intensity, minutes, profile) and freezes it on the entry. */
+  handleLogWorkout: (intensity: Exclude<ExerciseIntensity, 'none'>, minutes: number, profile: ActivityProfile) => WorkoutLogEntry;
+  /** Replace an existing workout by id. Recomputes kcal. */
+  handleEditWorkout: (id: number, intensity: Exclude<ExerciseIntensity, 'none'>, minutes: number, profile: ActivityProfile) => void;
+  /** Remove a workout by id. */
+  handleDeleteWorkout: (id: number) => void;
 
   // Food history & favorites (persistent across days)
   foodHistory: FoodHistoryEntry[];
@@ -255,6 +273,7 @@ export function AppStateProvider({ children }: { children: React.ReactNode }) {
     movement, setMovement,
     dailyGoal, setDailyGoal,
     checkInStatus, setCheckInStatus,
+    workoutLog, setWorkoutLog,
   } = useVitalsState();
 
   // Day navigation — Phase 3 / Sprint B3. Lifts `selectedDate` to global state
@@ -362,7 +381,7 @@ export function AppStateProvider({ children }: { children: React.ReactNode }) {
   // dailyLog, foodHistory, favoriteIds + toggleFavorite moved to useFoodState (Phase 2.5).
 
   // Reset daily counters when calendar date changes (midnight rollover)
-  useDailyReset({ setDailyLog, setDailyMacros, setHydration, setMovement });
+  useDailyReset({ setDailyLog, setDailyMacros, setHydration, setMovement, setWorkoutLog });
 
   // ─── Q6: Supabase sync wiring ────────────────────────────────────────────────
   // AppStateProvider lives inside AuthProvider (main.tsx), so useAuth() is safe here.
@@ -430,6 +449,19 @@ export function AppStateProvider({ children }: { children: React.ReactNode }) {
   const handleLogMealNow = useMemo(
     () => createHandleLogMealNow({ setDailyMacros, setDailyLog, setFoodHistory, navigateTo, t }),
     [setDailyMacros, setDailyLog, setFoodHistory, navigateTo, t],
+  );
+  // K-fix7 [1.5.211] — workout log handlers
+  const handleLogWorkout = useMemo(
+    () => createHandleLogWorkout({ setWorkoutLog }),
+    [setWorkoutLog],
+  );
+  const handleEditWorkout = useMemo(
+    () => createHandleEditWorkout({ setWorkoutLog }),
+    [setWorkoutLog],
+  );
+  const handleDeleteWorkout = useMemo(
+    () => createHandleDeleteWorkout({ setWorkoutLog }),
+    [setWorkoutLog],
   );
   // Recipe handlers moved to useRecipeState (Phase 2.5).
   // Wellness handlers (logWeight, updateSnapshot, deleteSnapshot,
@@ -519,6 +551,8 @@ export function AppStateProvider({ children }: { children: React.ReactNode }) {
     userVariantBarcodes, addVariantBarcode,
     mergedVariants,
     dailyLog, setDailyLog,
+    workoutLog, setWorkoutLog,
+    handleLogWorkout, handleEditWorkout, handleDeleteWorkout,
     foodHistory, setFoodHistory, favoriteIds, toggleFavorite,
     weightHistory, setWeightHistory,
     nutritionHistory, setNutritionHistory,
@@ -573,7 +607,9 @@ export function AppStateProvider({ children }: { children: React.ReactNode }) {
     checkInStatus, setCheckInStatus, userFoods, addUserFood,
     userVariants, addUserVariant, updateUserVariant, removeUserVariant,
     userVariantBarcodes, addVariantBarcode, mergedVariants,
-    dailyLog, setDailyLog, foodHistory, setFoodHistory, favoriteIds, toggleFavorite,
+    dailyLog, setDailyLog,
+    workoutLog, setWorkoutLog, handleLogWorkout, handleEditWorkout, handleDeleteWorkout,
+    foodHistory, setFoodHistory, favoriteIds, toggleFavorite,
     weightHistory, setWeightHistory, nutritionHistory, setNutritionHistory,
     selectedRecipe, setSelectedRecipe, targetPlanDay, setTargetPlanDay, openScannerOnAddMeal, setOpenScannerOnAddMeal, selectedStoryAuthorId, setSelectedStoryAuthorId, selectedCreatorId, setSelectedCreatorId, selectedPostId, setSelectedPostId, selectedChallengeId, setSelectedChallengeId,
     likedPosts, toggleLikePost, savedPosts, toggleSavePost,

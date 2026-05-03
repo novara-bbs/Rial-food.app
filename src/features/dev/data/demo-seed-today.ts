@@ -12,7 +12,7 @@ export interface DemoToday {
   consumed: { cal: number; pro: number; carbs: number; fats: number };
   target: { cal: number; pro: number; carbs: number; fats: number };
   hydration: { consumed: number; target: number };
-  movement: { steps: number; target: number; activeMinutes: number; activeTarget: number };
+  movement: { steps: number; target: number; activeMinutes: number; activeTarget: number; workoutMinutes: number };
   dailyGoal: string;
 }
 
@@ -54,7 +54,7 @@ export function buildDemoToday(): DemoToday {
     consumed,
     target: CLARA_MACROS_TARGET,
     hydration: { consumed: 5, target: 10 },
-    movement: { steps: 6400, target: 10000, activeMinutes: 22, activeTarget: 45 },
+    movement: { steps: 6400, target: 10000, activeMinutes: 22, activeTarget: 45, workoutMinutes: 0 },
     dailyGoal: 'Cerrar cena con proteína alta',
   };
 }

@@ -18,9 +18,9 @@ describe('ActivitySlider', () => {
       <ActivitySlider value="active" onChange={vi.fn()} ariaLabel="Activity" />,
     );
     // EN locale: "Active" appears in the dynamic header AND in the tick row;
-    // assert presence (≥1) and that the desc matches the chosen level.
+    // assert presence (≥1) and that the desc matches the chosen level (NEAT lifestyle, not workout frequency).
     expect(screen.getAllByText('Active').length).toBeGreaterThanOrEqual(1);
-    expect(screen.getByText(/3.*5 workouts/i)).toBeInTheDocument();
+    expect(screen.getByText(/active.*throughout.*day|on your feet/i)).toBeInTheDocument();
   });
 
   it('maps slider position 0..3 to the matching ActivityLevel via onChange', () => {

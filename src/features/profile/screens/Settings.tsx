@@ -21,7 +21,7 @@ import SectionCard from '../../../components/SectionCard';
 
 type Setter<T> = (fn: T | ((prev: T) => T)) => void;
 interface HydrationState { consumed: number; target: number }
-interface MovementState { steps: number; target: number; activeMinutes: number; activeTarget: number }
+interface MovementState { steps: number; target: number; activeMinutes: number; activeTarget: number; workoutMinutes: number }
 
 type SettingsTab = 'profile' | 'nutrition' | 'appearance' | 'system';
 

@@ -158,7 +158,7 @@ export function CalorieRing({
             <span className="font-headline font-bold text-display text-primary tabular-nums leading-none">
               {Math.round(remaining)}
             </span>
-            <span className="font-label text-micro font-bold text-on-surface-variant uppercase tracking-widest mt-1">
+            <span className="font-label text-label font-bold uppercase tracking-widest text-on-surface-variant mt-1">
               kcal
             </span>
           </>
@@ -281,7 +281,7 @@ export default function NutritionHeroRing({
             {dailyMacros.consumed.cal}
             <span className="text-on-surface-variant"> / {dailyMacros.target.cal}</span>
           </span>
-          <span className="font-label text-micro font-bold uppercase tracking-widest text-on-surface-variant">
+          <span className="font-label text-label font-bold uppercase tracking-widest text-on-surface-variant">
             {t.home.kcal}
           </span>
           {onNavigateToNutritionDetail && (
@@ -388,7 +388,7 @@ export default function NutritionHeroRing({
           <button
             type="button"
             onClick={onNavigateToNutritionDetail}
-            className="mt-5 pt-4 border-t border-outline-variant/30 w-full flex items-center justify-between font-label text-micro font-bold uppercase tracking-widest text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40 rounded-sm"
+            className="mt-5 pt-4 border-t border-outline-variant/30 w-full flex items-center justify-between font-label text-label font-bold uppercase tracking-widest text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40 rounded-sm"
             data-testid="nutrition-detail-cta"
           >
             <span>{t.home.viewNutritionDetail}</span>
@@ -400,7 +400,7 @@ export default function NutritionHeroRing({
       {/* ICP-adaptive goal-status chip (Q15) — only shown when user has a goal set. */}
       {goalStatus && (
         <div
-          className={`flex items-center justify-center gap-2 px-3 py-2 rounded-sm font-label text-micro font-semibold uppercase tracking-widest transition-colors ${
+          className={`flex items-center justify-center gap-2 px-3 py-2 rounded-sm font-label text-label font-semibold uppercase tracking-widest transition-colors ${
             goalStatus.isPositive
               ? 'bg-primary/10 text-primary'
               : 'bg-error/10 text-error'

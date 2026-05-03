@@ -111,9 +111,9 @@ export default function ProgressPreviewCard({
             <Scale className="w-5 h-5 text-primary" />
           </div>
           <div className="flex-1 min-w-0">
-            <p className="font-label text-micro text-on-surface-variant uppercase tracking-widest">
+            <span className="font-label text-label font-bold uppercase tracking-widest text-on-surface-variant">
               {t.home.weight ?? 'Peso'}
-            </p>
+            </span>
             <p className="font-headline font-bold text-body-sm text-tertiary uppercase mt-0.5">
               {t.progress?.noWeightYet ?? 'Registra tu primer peso'}
             </p>
@@ -139,9 +139,9 @@ export default function ProgressPreviewCard({
           <Scale className="w-5 h-5 text-primary" />
         </div>
         <div className="flex-1 min-w-0">
-          <p className="font-label text-micro text-on-surface-variant uppercase tracking-widest">
+          <span className="font-label text-label font-bold uppercase tracking-widest text-on-surface-variant">
             {t.home.weight ?? 'Peso'}
-          </p>
+          </span>
           <div className="flex items-center gap-2 flex-wrap">
             <p className="font-headline font-bold text-body-sm text-tertiary uppercase">
               {currentDisplay !== null ? `${currentDisplay} ${unit}` : `— ${unit}`}
@@ -176,7 +176,7 @@ export default function ProgressPreviewCard({
               );
             })()}
           </div>
-          <span className="text-micro font-label text-on-surface-variant uppercase tracking-widest shrink-0 whitespace-nowrap">
+          <span className="font-label text-label font-bold uppercase tracking-widest text-on-surface-variant shrink-0 whitespace-nowrap">
             {Math.abs(toGoal)} {unit} {t.home.toGoal ?? 'para objetivo'}
           </span>
         </div>

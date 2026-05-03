@@ -7,10 +7,14 @@ export interface Micronutrients {
     vitaminK?: number; // mcg
     vitaminB6?: number; // mg
     vitaminB12?: number; // mcg
-    folate?: number; // mcg
-    niacin?: number; // mg
-    riboflavin?: number; // mg
-    thiamin?: number; // mg
+    folate?: number; // mcg (B9)
+    niacin?: number; // mg (B3)
+    riboflavin?: number; // mg (B2)
+    thiamin?: number; // mg (B1)
+    // Sprint A1 — added so the "Vitaminas" tab in NutritionDetail can show
+    // the full 13-vitamin RDA panel. Optional, so seed coverage stays valid.
+    pantothenicAcid?: number; // mg (B5)
+    biotin?: number; // mcg (B7)
   };
   minerals: {
     iron?: number; // mg
@@ -27,6 +31,11 @@ export interface Micronutrients {
     iodine?: number; // mcg
     manganese?: number; // mg
     copper?: number; // mg
+    // Sprint A1 — added so the "Minerales" tab in NutritionDetail can show
+    // the full 14-mineral RDA panel. Optional, so seed coverage stays valid.
+    chloride?: number; // mg
+    chromium?: number; // mcg
+    molybdenum?: number; // mcg
   };
   others: {
     fiber?: number; // g

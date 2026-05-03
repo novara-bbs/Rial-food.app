@@ -1,4 +1,5 @@
 import { Calendar, UtensilsCrossed, Trash2, Pencil, Check, X, Minus, Plus, ChevronRight } from 'lucide-react';
+import { Button } from '@/components/ui/button';
 import { useState, useMemo } from 'react';
 import SectionCard from '../../../components/SectionCard';
 import { Heading } from '@/components/ui/Typography';
@@ -174,7 +175,7 @@ export default function TodaysMeals({
           <UtensilsCrossed className="w-5 h-5 text-primary" /> {t.home.todayHeader}
         </Heading>
         {hasLog && (
-          <span className="text-micro font-label font-bold uppercase tracking-widest text-on-surface-variant">
+          <span className="font-label text-label font-bold uppercase tracking-widest text-on-surface-variant">
             {dailyLog.length} {dailyLog.length === 1 ? t.home.foodSingular : t.home.foods}
           </span>
         )}
@@ -231,17 +232,18 @@ export default function TodaysMeals({
 
           {/* Plan band — always rendered inside the unified card (shows inline empty when !hasPlan). */}
           <div className="border-b border-outline-variant/15 last:border-b-0">
-              <div className="flex items-center justify-between px-4 pt-3 pb-1.5">
-                <span className="font-label text-micro font-bold uppercase tracking-widest text-on-surface-variant flex items-center gap-1.5">
+              <div className="flex items-center justify-between px-4 pt-3 pb-1.5 gap-2">
+                <span className="font-label text-label font-bold uppercase tracking-widest text-on-surface-variant flex items-center gap-1.5">
                   <Calendar className="w-3.5 h-3.5 text-primary" /> {t.home.plannedToday}
                 </span>
-                <button
-                  type="button"
+                <Button
+                  variant="ghost"
+                  size="pill"
                   onClick={onNavigateToPlan}
-                  className="text-micro font-bold text-primary uppercase tracking-widest hover:underline min-h-11 px-3"
+                  className="shrink-0 text-primary"
                 >
                   {t.plan.title}
-                </button>
+                </Button>
               </div>
 
               {hasPlan ? (
@@ -256,9 +258,8 @@ export default function TodaysMeals({
                     return (
                         <div
                           key={key}
-                          className="relative flex items-center gap-3 px-4 py-2.5 group animate-in fade-in slide-in-from-top-1 motion-reduce:animate-none"
+                          className="flex items-center gap-3 px-4 py-2.5 group animate-in fade-in slide-in-from-top-1 motion-reduce:animate-none"
                         >
-                          <span aria-hidden="true" className="absolute left-0 top-2 bottom-2 w-0.5 bg-primary/40 rounded-r-sm" />
                           <button
                             type="button"
                             onClick={() => onNavigateToRecipe?.(meal)}
@@ -277,21 +278,23 @@ export default function TodaysMeals({
                               <span className="font-headline text-body-sm font-bold text-on-surface truncate block">
                                 {meal.title}
                               </span>
-                              <span className="text-micro font-label tracking-widest uppercase text-on-surface-variant">
+                              <span className="font-body text-label text-on-surface-variant normal-case tracking-normal">
                                 {metaParts.join(' · ')}
                               </span>
                             </div>
                           </button>
-                          <button
-                            type="button"
+                          <Button
+                            variant="outline"
+                            size="pill"
                             onClick={(e) => {
                               e.stopPropagation();
                               onLogMealNow?.(meal, 1);
                             }}
-                            className="shrink-0 px-3 min-h-11 bg-primary text-on-primary rounded-sm text-micro font-semibold uppercase tracking-widest hover:opacity-90 transition-opacity focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/50"
+                            className="shrink-0"
                           >
+                            <Plus className="w-3 h-3" strokeWidth={3} aria-hidden="true" />
                             {t.home.logIt}
-                          </button>
+                          </Button>
                         </div>
                       );
                     })}
@@ -308,7 +311,7 @@ export default function TodaysMeals({
           {/* Log band */}
           <div>
             <div className="flex items-center justify-between px-4 pt-3 pb-1.5">
-              <span className="font-label text-micro font-bold uppercase tracking-widest text-on-surface-variant flex items-center gap-1.5">
+              <span className="font-label text-label font-bold uppercase tracking-widest text-on-surface-variant flex items-center gap-1.5">
                 <Check className="w-3.5 h-3.5 text-primary" /> {t.home.loggedSection}
               </span>
             </div>
@@ -350,11 +353,11 @@ export default function TodaysMeals({
                             <span className="font-headline text-body-sm font-bold text-on-surface truncate block">
                               {entry.title}
                             </span>
-                            <div className="flex items-center gap-2 text-micro font-label tracking-widest uppercase text-on-surface-variant">
+                            <div className="flex items-center gap-1.5 font-body text-label text-on-surface-variant normal-case tracking-normal">
                               <span>{entry.time}</span>
-                              <span>·</span>
-                              <span className="text-primary font-bold">{entry.portionDescription}</span>
-                              <span>·</span>
+                              <span aria-hidden="true">·</span>
+                              <span className="text-primary font-semibold">{entry.portionDescription}</span>
+                              <span aria-hidden="true">·</span>
                               <span>{previewMacros.cal} {t.common.kcal}</span>
                             </div>
                           </div>
@@ -438,7 +441,7 @@ export default function TodaysMeals({
 
             {hasLog && (
               <div className="flex items-center justify-between bg-surface-container-highest/50 px-4 py-2.5 border-t border-outline-variant/15">
-                <span className="text-micro font-label font-bold uppercase tracking-widest text-on-surface-variant">
+                <span className="font-label text-label font-bold uppercase tracking-widest text-on-surface-variant">
                   {t.home.totalLogged}
                 </span>
                 <div className="flex items-center gap-3 text-micro font-headline font-bold uppercase tracking-wider">

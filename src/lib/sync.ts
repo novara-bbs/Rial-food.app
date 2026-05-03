@@ -43,6 +43,7 @@ type SyncKey =
   | 'isPro'
   // Wave 1 tab audit — Hoy surface
   | 'dailyLog'
+  | 'workoutLog'        // K-fix7 — array of today's logged workouts (intensity + minutes + kcal)
   | 'hydration'
   | 'movement'
   | 'dailyGoal'

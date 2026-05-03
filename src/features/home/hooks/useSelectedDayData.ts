@@ -16,16 +16,19 @@ import type { DailyMacros } from '../../../contexts/state/useVitalsState';
 import type { DailyArchive, HydrationSnapshot, MovementSnapshot } from '../../../hooks/useDailyReset';
 import { archiveHydrationConsumed, archiveActiveMinutes } from '../../../hooks/useDailyReset';
 import type { DailyLogEntry } from '../../food/handlers/meal-handlers';
+import type { WorkoutLogEntry } from '../types/workout-log';
 import { todayLocal } from '../../../lib/dates';
 
 interface HydrationState { consumed: number; target: number }
-interface MovementState { steps: number; target: number; activeMinutes: number; activeTarget: number }
+interface MovementState { steps: number; target: number; activeMinutes: number; activeTarget: number; workoutMinutes: number }
 
 export interface UseSelectedDayDataResult {
   effectiveDailyMacros: DailyMacros;
   effectiveDailyLog: DailyLogEntry[];
   effectiveHydration: HydrationState;
   effectiveMovement: MovementState;
+  /** Sprint K-fix7 [1.5.211] — past-day workout log from archive, or live array today. */
+  effectiveWorkoutLog: WorkoutLogEntry[];
   isViewingToday: boolean;
 }
 
@@ -35,6 +38,8 @@ interface Inputs {
   liveDailyLog: DailyLogEntry[];
   liveHydration: HydrationState;
   liveMovement: MovementState;
+  /** Sprint K-fix7 [1.5.211] — today's persisted workout log; archive lookup for past days. */
+  liveWorkoutLog: WorkoutLogEntry[];
   history: DailyArchive[];
 }
 
@@ -44,6 +49,7 @@ export function useSelectedDayData({
   liveDailyLog,
   liveHydration,
   liveMovement,
+  liveWorkoutLog,
   history,
 }: Inputs): UseSelectedDayDataResult {
   const isViewingToday = selectedDate === todayLocal();
@@ -55,6 +61,7 @@ export function useSelectedDayData({
         effectiveDailyLog: liveDailyLog,
         effectiveHydration: liveHydration,
         effectiveMovement: liveMovement,
+        effectiveWorkoutLog: liveWorkoutLog,
         isViewingToday: true,
       };
     }
@@ -74,7 +81,9 @@ export function useSelectedDayData({
           target: liveMovement.target,
           activeMinutes: 0,
           activeTarget: liveMovement.activeTarget,
+          workoutMinutes: 0,
         },
+        effectiveWorkoutLog: [],
         isViewingToday: false,
       };
     }
@@ -102,8 +111,10 @@ export function useSelectedDayData({
         target: liveMovement.target,
         activeMinutes,
         activeTarget: liveMovement.activeTarget,
+        workoutMinutes: 0,
       },
+      effectiveWorkoutLog: archive.workoutLog ?? [],
       isViewingToday: false,
     };
-  }, [isViewingToday, selectedDate, liveDailyMacros, liveDailyLog, liveHydration, liveMovement, history]);
+  }, [isViewingToday, selectedDate, liveDailyMacros, liveDailyLog, liveHydration, liveMovement, liveWorkoutLog, history]);
 }

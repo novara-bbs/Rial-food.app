@@ -196,6 +196,32 @@ export type FoodSource = 'seed' | 'user' | 'off' | 'edamam';
 
 export const FOOD_SOURCES: readonly FoodSource[] = ['seed', 'user', 'off', 'edamam'] as const;
 
+/**
+ * Sprint A — NOVA-inspired processing level. Fuels the "Ultraprocesados"
+ * metric on the Home Calidad card and the per-food provenance badge in the
+ * Dictionary. Backwards-compatible: when absent, callers fall back to the
+ * `isUltraProcessedHint()` heuristic in `contextual-score.ts` (variantType +
+ * qualityTags). Sprint G backfills the seed dataset explicitly.
+ *
+ * Mapping intent (NOVA simplified):
+ *   - `whole`           → NOVA 1: unprocessed / minimally processed (frutas,
+ *                          verduras, huevos, carne fresca)
+ *   - `minimal`         → NOVA 2: ingredientes culinarios procesados
+ *                          (aceite, sal, harina)
+ *   - `processed`       → NOVA 3: alimentos procesados con NOVA 1+2
+ *                          (queso, jamón curado, pan artesanal, conservas)
+ *   - `ultra-processed` → NOVA 4: ultraprocesados (galletas, snacks salados,
+ *                          embutidos industriales, refrescos)
+ */
+export type ProcessingLevel = 'whole' | 'minimal' | 'processed' | 'ultra-processed';
+
+export const PROCESSING_LEVELS: readonly ProcessingLevel[] = [
+  'whole',
+  'minimal',
+  'processed',
+  'ultra-processed',
+] as const;
+
 /** Metadata captured when a variant represents a concrete retail product. */
 export interface VariantBrand {
   name: string;
@@ -355,6 +381,14 @@ export interface FoodVariant {
   sourceId?: string;
   /** epoch ms — only populated for user-created variants. */
   createdAt?: number;
+
+  /**
+   * Sprint A — NOVA-inspired processing level. Optional for compat: when
+   * absent, the Home Calidad aggregator falls back to
+   * `isUltraProcessedHint()` (variantType + qualityTags heuristic). Populated
+   * explicitly during Sprint G backfill.
+   */
+  processingLevel?: ProcessingLevel;
 }
 
 /**

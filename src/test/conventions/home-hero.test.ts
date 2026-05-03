@@ -280,3 +280,54 @@ describe('i18n — ringAriaLabel key is symmetric across locales', () => {
     expect(EN_SRC).toMatch(/ringAriaLabel: '[^']*\{remaining\}[^']*'/);
   });
 });
+
+// ─── Sprint B — Home gauge v2 (post-1.5.190) ───────────────────────────────
+describe('featureFlags — Sprint B homeGaugeV2 shape', () => {
+  it('exports a homeGaugeV2 boolean flag', () => {
+    expect(typeof featureFlags.homeGaugeV2).toBe('boolean');
+  });
+
+  it('defaults homeGaugeV2 to true (new shape is canonical from this sprint)', () => {
+    expect(featureFlags.homeGaugeV2).toBe(true);
+  });
+
+  it('reads the rollback env variable VITE_FEATURE_HOME_GAUGE_V2_OFF', () => {
+    expect(FEATURE_FLAGS_SRC).toContain('VITE_FEATURE_HOME_GAUGE_V2_OFF');
+  });
+});
+
+describe('NutritionHero — Sprint B v2 routing (gauge takes priority over ring)', () => {
+  it('imports EnergyArcCard for the v2 branch', () => {
+    expect(HERO_LEGACY_SRC).toContain("import EnergyArcCard from './EnergyArcCard'");
+  });
+
+  it('routes to EnergyArcCard when homeGaugeV2 is true and mode is advanced', () => {
+    expect(HERO_LEGACY_SRC).toMatch(/featureFlags\.homeGaugeV2[\s\S]*?<EnergyArcCard/);
+  });
+
+  it('keeps the legacy NutritionHeroRing branch as the rollback path', () => {
+    // Both branches must coexist so flipping homeGaugeV2 OFF still ships v1.
+    expect(HERO_LEGACY_SRC).toMatch(/if \(featureFlags\.homeRingGrid\)/);
+    expect(HERO_LEGACY_SRC).toMatch(/<NutritionHeroRing[\s\S]*?dailyMacros=\{dailyMacros\}/);
+  });
+});
+
+describe('Home.tsx — Sprint H v2 cards integration (chips removed)', () => {
+  it('does NOT import TodayCategoryChips or useChipScrollSpy (Sprint H removal)', () => {
+    expect(HOME_SRC).not.toContain("import TodayCategoryChips");
+    expect(HOME_SRC).not.toContain("from '../hooks/useChipScrollSpy'");
+  });
+
+  it('gates v2 cards (Balance / Macros / Quality) on homeGaugeV2 + advanced mode', () => {
+    expect(HOME_SRC).toContain('showGaugeV2Cards');
+    expect(HOME_SRC).toMatch(/featureFlags\.homeGaugeV2 && !isSimpleMode/);
+  });
+
+  it('hides HomeQuickStats under v2 (info folded into the new MacroRingsCard / FoodQualityCard)', () => {
+    expect(HOME_SRC).toMatch(/!featureFlags\.homeGaugeV2[\s\S]*?<HomeQuickStats/);
+  });
+
+  it('preserves the data-anchor="hydration" hook on the Hydration card', () => {
+    expect(HOME_SRC).toContain('data-anchor="hydration"');
+  });
+});

@@ -57,9 +57,9 @@ const onboarding = {
       subtitle: 'Not counting individual workouts.',
       options: {
         sedentary: { label: 'Sedentary',   desc: 'Desk job, little movement',        example: 'Office work, barely moving all day' },
-        light:     { label: 'Light',       desc: '1–2 activities / week',             example: 'Daily walks, errands, an occasional workout' },
-        active:    { label: 'Active',      desc: '3–5 workouts / week',               example: 'Gym or sport several days a week' },
-        veryActive:{ label: 'Very active', desc: '6–7 intense workouts',              example: 'Physical job or sport almost every day' },
+        light:     { label: 'Light',       desc: 'Some movement, no active routine',        example: 'Lots of walking, stairs, errands' },
+        active:    { label: 'Active',      desc: 'Active throughout the day, on your feet', example: 'Standing job, delivery driver, teacher' },
+        veryActive:{ label: 'Very active', desc: 'Very active all day, physical work',       example: 'Construction, intensive hospitality, farming' },
       },
     },
     training: {

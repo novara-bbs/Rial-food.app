@@ -57,9 +57,9 @@ const onboarding = {
       subtitle: 'Sin contar entrenos puntuales.',
       options: {
         sedentary: { label: 'Sedentario',  desc: 'Oficina, poco movimiento',        example: 'Trabajo de escritorio sin moverse apenas' },
-        light:     { label: 'Ligero',      desc: '1–2 actividades / semana',         example: 'Paseos, recados, algún entreno suelto' },
-        active:    { label: 'Activo',      desc: '3–5 entrenamientos / semana',      example: 'Gym o deporte varios días a la semana' },
-        veryActive:{ label: 'Muy activo',  desc: '6–7 entrenamientos intensos',      example: 'Trabajo físico o deporte casi todos los días' },
+        light:     { label: 'Ligero',      desc: 'Algo de movimiento, sin rutina activa',      example: 'Caminas bastante, subes escaleras, recados' },
+        active:    { label: 'Activo',      desc: 'Bastante movimiento diario, trabajo de pie', example: 'Trabajo de pie, repartidor, profe que se mueve' },
+        veryActive:{ label: 'Muy activo',  desc: 'Muy activo todo el día, trabajo físico',     example: 'Construcción, hostelería intensa, agricultor' },
       },
     },
     training: {

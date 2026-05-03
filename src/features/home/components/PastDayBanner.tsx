@@ -19,7 +19,7 @@ export default function PastDayBanner({ onResetToToday }: { onResetToToday: () =
       <button
         type="button"
         onClick={onResetToToday}
-        className="font-label text-micro font-bold uppercase tracking-widest text-primary hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40 rounded-sm"
+        className="font-label text-label font-bold uppercase tracking-widest text-primary hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40 rounded-sm"
       >
         {t.home.dayPicker.backToToday}
       </button>

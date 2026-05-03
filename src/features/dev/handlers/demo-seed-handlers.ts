@@ -30,7 +30,7 @@ import type { DailyArchive } from '../../../hooks/useDailyReset';
 // ─── Hydration / Movement shapes (matches useVitalsState defaults) ─────────────
 
 interface HydrationState { consumed: number; target: number }
-interface MovementState { steps: number; target: number; activeMinutes: number; activeTarget: number }
+interface MovementState { steps: number; target: number; activeMinutes: number; activeTarget: number; workoutMinutes: number }
 
 // ─── DemoSeedSetters ──────────────────────────────────────────────────────────
 
@@ -107,7 +107,7 @@ export function createHandleClearDemoSeed(setters: DemoSeedSetters) {
       target: { cal: 2400, pro: 180, carbs: 250, fats: 65 },
     });
     setters.setHydration({ consumed: 0, target: 10 });
-    setters.setMovement({ steps: 0, target: 10000, activeMinutes: 0, activeTarget: 45 });
+    setters.setMovement({ steps: 0, target: 10000, activeMinutes: 0, activeTarget: 45, workoutMinutes: 0 });
     setters.setDailyGoal('');
     setters.setDailyLog([]);
     setters.setFoodHistory([]);

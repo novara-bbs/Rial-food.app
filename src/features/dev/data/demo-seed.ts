@@ -33,7 +33,7 @@ export interface DemoSeedBundle {
   };
   dailyMacros: { consumed: { cal: number; pro: number; carbs: number; fats: number }; target: { cal: number; pro: number; carbs: number; fats: number } };
   hydration: { consumed: number; target: number };
-  movement: { steps: number; target: number; activeMinutes: number; activeTarget: number };
+  movement: { steps: number; target: number; activeMinutes: number; activeTarget: number; workoutMinutes: number };
   dailyGoal: string;
   dailyLog: DailyLogEntry[];
   foodHistory: FoodHistoryEntry[];

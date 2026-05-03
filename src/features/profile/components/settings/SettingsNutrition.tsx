@@ -10,7 +10,7 @@ import { Heading } from '@/components/ui/Typography';
 type Setter<T> = (fn: T | ((prev: T) => T)) => void;
 
 interface HydrationState { consumed: number; target: number }
-interface MovementState { steps: number; target: number; activeMinutes: number; activeTarget: number }
+interface MovementState { steps: number; target: number; activeMinutes: number; activeTarget: number; workoutMinutes: number }
 
 interface Props {
   dailyMacros: DailyMacros;

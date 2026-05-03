@@ -32,6 +32,12 @@ const buttonVariants = cva(
         "icon-xs": "size-6 [&_svg:not([class*='size-'])]:size-3",
         "icon-sm": "size-9",
         "icon-lg": "size-12",
+        /* Sprint K [1.5.204] — pill: rounded-full + mixed-case override of the
+         * variant chrome (uppercase/tracking-widest/rounded-sm). Used for short
+         * inline CTAs ("Registrar", "Log it") that conflict with the editorial
+         * default. The class list overrides the variant defaults via Tailwind
+         * later-rule precedence. */
+        pill: "h-8 px-3 py-1.5 rounded-full font-body text-micro font-semibold normal-case tracking-normal gap-1 [&_svg:not([class*='size-'])]:size-3",
       },
     },
     defaultVariants: {
