@@ -23,7 +23,7 @@ export const UserProfileSchema = z.object({
   age: z.number().optional(),
   height: z.number().optional(),
   weight: z.number().optional(),
-  gender: z.string().optional(),
+  sex: z.enum(['male', 'female']).optional(),
   goal: z.string().optional(),
   activity: z.string().optional(),
   trains: z.boolean().optional(),

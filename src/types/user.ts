@@ -3,6 +3,8 @@ import type { ToleranceLog, DailyCheckIn } from './wellness';
 import type { MealPlanDay } from './planner';
 import type { Allergen } from './food';
 import type { SocialLinks } from './social';
+import type { Sex } from '../features/food/utils/nutrition';
+export type { Sex };
 
 export interface User {
   id: string;
@@ -44,7 +46,7 @@ export interface UserProfile {
   age: number;
   height: number;
   weight: number;
-  gender: string;
+  sex: Sex;
   goal: string;
   activity: string;
   trains: boolean;

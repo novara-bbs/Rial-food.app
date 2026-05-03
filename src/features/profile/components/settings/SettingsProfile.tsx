@@ -5,7 +5,7 @@ import { Switch } from '@/components/ui/switch';
 import { useI18n } from '../../../../i18n';
 import { useAppState } from '../../../../contexts/AppStateContext';
 import { bodyWeightFromKg, bodyWeightToKg, heightFromCm, heightToCm, getBodyWeightUnit, getHeightUnit } from '../../../food/utils/units';
-import { calculateDailyTargets, type Goal, type ActivityLevel, type Sex } from '../../../food/utils/nutrition';
+import { calculateDailyTargets, type Goal, type ActivityLevel } from '../../../food/utils/nutrition';
 import { compressImage } from '../../../social/utils/image-utils';
 import { INPUT_SURFACE_CLASSES } from '@/components/ui/surface';
 import SectionCard from '../../../../components/SectionCard';
@@ -34,10 +34,10 @@ export default function SettingsProfile({ userProfile, setUserProfile, setDailyM
     if (!setUserProfile) return;
     setUserProfile((prev: UserProfile) => {
       const updated = { ...prev, [key]: value };
-      if (['weight', 'height', 'age', 'gender', 'goal', 'activity'].includes(key) && setDailyMacros) {
+      if (['weight', 'height', 'age', 'sex', 'goal', 'activity'].includes(key) && setDailyMacros) {
         const targets = calculateDailyTargets(
           updated.weight || 78, updated.height || 175, updated.age || 32,
-          (updated.gender || 'female') as Sex,
+          updated.sex || 'female',
           (updated.activity || 'active') as ActivityLevel,
           (updated.goal || 'maintain') as Goal,
         );
@@ -199,13 +199,12 @@ export default function SettingsProfile({ userProfile, setUserProfile, setDailyM
               className={`${INPUT_SURFACE_CLASSES} w-full py-2 px-3 text-tertiary text-sm focus:outline-none focus:border-primary`} />
           </div>
           <div>
-            <label className="block font-label text-micro tracking-widest uppercase text-on-surface-variant mb-2">{t.settings.gender}</label>
-            <select value={userProfile?.gender || 'female'}
-              onChange={(e) => updateBiometric('gender', e.target.value)}
+            <label className="block font-label text-micro tracking-widest uppercase text-on-surface-variant mb-2">{t.settings.sex}</label>
+            <select value={userProfile?.sex || 'female'}
+              onChange={(e) => updateBiometric('sex', e.target.value as 'male' | 'female')}
               className={`${INPUT_SURFACE_CLASSES} w-full py-2 px-3 text-tertiary uppercase text-xs focus:outline-none focus:border-primary`}>
               <option value="male">{t.settings.male}</option>
               <option value="female">{t.settings.female}</option>
-              <option value="other">{t.settings.other}</option>
             </select>
           </div>
           <div className="col-span-full">

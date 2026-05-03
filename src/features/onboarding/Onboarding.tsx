@@ -64,7 +64,7 @@ export interface OnboardingProps {
       age: number;
       height: number;
       weight: number;
-      gender: string;
+      sex: 'male' | 'female';
       goal: string;
       activity: string;
       trains: boolean;

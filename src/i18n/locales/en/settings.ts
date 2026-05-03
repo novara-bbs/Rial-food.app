@@ -53,10 +53,9 @@ const settings: Pick<Translations, 'settings' | 'aiCoach'> = {
     weightLabel: 'Weight (kg)',
     targetWeight: 'Target weight',
     optional: 'Optional',
-    gender: 'Gender',
+    sex: 'Biological sex',
     male: 'Male',
     female: 'Female',
-    other: 'Other',
     // Family
     familyProfiles: 'Family Profiles',
     addMember: 'Add Member',

@@ -95,7 +95,7 @@ describe('useProfileState — R8.3 migration (foodDislikes → foodPreferences)'
   it('migrates legacy foodDislikes[] to foodPreferences Record on mount', () => {
     window.localStorage.setItem('userProfile', JSON.stringify({
       name: 'legacy', age: 30, height: 170, weight: 70,
-      gender: 'female', goal: 'maintain', activity: 'active', trains: false,
+      sex: 'female', goal: 'maintain', activity: 'active', trains: false,
       dietaryPreferences: [],
       foodDislikes: ['ing-1', 'ing-2'],
     }));
@@ -114,7 +114,7 @@ describe('useProfileState — R8.3 migration (foodDislikes → foodPreferences)'
     const existingPrefs = { 'ing-A': 'like' as const, 'ing-B': 'dislike' as const };
     window.localStorage.setItem('userProfile', JSON.stringify({
       name: 'already-migrated', age: 30, height: 170, weight: 70,
-      gender: 'female', goal: 'maintain', activity: 'active', trains: false,
+      sex: 'female', goal: 'maintain', activity: 'active', trains: false,
       dietaryPreferences: [],
       foodDislikes: ['ing-1'],
       foodPreferences: existingPrefs,

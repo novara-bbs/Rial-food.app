@@ -42,14 +42,14 @@ describe('deriveOutput — golden cases', () => {
 });
 
 describe('deriveOutput — userProfile shape', () => {
-  it('maps name, age, height, weight, gender (sex), goal, activity, trains', () => {
+  it('maps name, age, height, weight, sex, goal, activity, trains', () => {
     const out = deriveOutput(MUSCLE_MALE);
     expect(out.userProfile).toEqual({
       name: 'Vicente',
       age: 30,
       height: 180,
       weight: 75,
-      gender: 'male',
+      sex: 'male',
       goal: 'muscle',
       activity: 'active',
       trains: true,

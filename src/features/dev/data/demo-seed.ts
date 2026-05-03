@@ -22,7 +22,7 @@ export interface DemoSeedBundle {
     age: number;
     height: number;
     weight: number;
-    gender: string;
+    sex: 'male' | 'female';
     goal: string;
     activity: string;
     trains: boolean;
@@ -60,7 +60,7 @@ function buildClaraProfile() {
     age: 29,
     height: 168,
     weight: 69.1,
-    gender: 'female',
+    sex: 'female' as const,
     goal: 'cut',
     activity: 'active',
     trains: true,

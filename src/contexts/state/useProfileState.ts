@@ -19,7 +19,7 @@ const DEFAULT_PROFILE: UserProfile = {
   age: 32,
   height: 175,
   weight: 78,
-  gender: 'female',
+  sex: 'female',
   goal: 'maintain',
   activity: 'active',
   trains: false,

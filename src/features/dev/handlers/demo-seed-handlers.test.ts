@@ -19,7 +19,7 @@ import { ALL_SEED_KEYS, setStoredSeedVersion, __internal } from '../../../lib/se
 
 vi.mock('../data/demo-seed', () => ({
   buildDemoSeed: vi.fn(async () => ({
-    userProfile: { name: 'Clara', age: 29, height: 168, weight: 69.1, gender: 'female', goal: 'cut', activity: 'active', trains: true, dietaryPreferences: [] },
+    userProfile: { name: 'Clara', age: 29, height: 168, weight: 69.1, sex: 'female', goal: 'cut', activity: 'active', trains: true, dietaryPreferences: [] },
     dailyMacros: { consumed: { cal: 0, pro: 0, carbs: 0, fats: 0 }, target: { cal: 0, pro: 0, carbs: 0, fats: 0 } },
     hydration: { consumed: 0, target: 10 },
     movement: { steps: 0, target: 10000, activeMinutes: 0, activeTarget: 45 },

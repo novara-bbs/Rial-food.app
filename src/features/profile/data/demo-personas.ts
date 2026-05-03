@@ -31,7 +31,7 @@ export interface DemoPersona {
     age: number;
     height: number;
     weight: number;
-    gender: string;
+    sex: 'male' | 'female';
     goal: string;
     activity: string;
     trains: boolean;
@@ -265,7 +265,7 @@ function buildClara(): DemoPersona {
       age: 28,
       height: 165,
       weight: 68,
-      gender: 'female',
+      sex: 'female',
       goal: 'cut',
       activity: 'actActive',
       trains: true,
@@ -400,7 +400,7 @@ function buildMarcos(): DemoPersona {
       age: 25,
       height: 180,
       weight: 78,
-      gender: 'male',
+      sex: 'male',
       goal: 'muscle',
       activity: 'actVeryActive',
       trains: true,
@@ -575,7 +575,7 @@ function buildAna(): DemoPersona {
       age: 35,
       height: 168,
       weight: 65,
-      gender: 'female',
+      sex: 'female',
       goal: 'health',
       activity: 'actActive',
       trains: false,

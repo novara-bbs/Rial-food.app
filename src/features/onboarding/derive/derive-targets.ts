@@ -27,7 +27,7 @@ export interface OnboardingOutput {
     age: number;
     height: number;
     weight: number;
-    gender: string;
+    sex: Sex;
     goal: string;
     activity: string;
     trains: boolean;
@@ -74,7 +74,7 @@ export function deriveOutput(draft: OnboardingDraft): OnboardingOutput {
       age,
       height,
       weight,
-      gender: sex,
+      sex,
       goal,
       activity,
       trains: draft.trains,

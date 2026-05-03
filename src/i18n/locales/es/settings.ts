@@ -53,10 +53,9 @@ const settings = {
     weightLabel: 'Peso (kg)',
     targetWeight: 'Peso objetivo',
     optional: 'Opcional',
-    gender: 'Género',
+    sex: 'Sexo biológico',
     male: 'Hombre',
     female: 'Mujer',
-    other: 'Otro',
     // Family
     familyProfiles: 'Perfiles Familiares',
     addMember: 'Añadir Miembro',
