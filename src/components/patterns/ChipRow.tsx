@@ -35,14 +35,11 @@ export type ChipRowMode = 'single' | 'multi';
  * - `emoji`: same as pill but shows an emoji glyph LEFT of the label
  *   (delivery-app convention — Uber Eats / Glovo / Just Eat). Use when the
  *   emoji unambiguously represents the concept.
- * - `icon`: **@deprecated since [1.5.97]** — vertical icon-on-top + label
- *   tiles. Wastes vertical space; the icons rarely add semantic value over
- *   a clean text label. No live consumers as of [1.5.97]; the variant is
- *   kept compiling to avoid breaking any external snapshot test, but new
- *   code should use `pill` (with optional `icon` in `ChipOption`) or
- *   `emoji`. Will be removed in the next major.
+ *
+ * The legacy `icon` variant (vertical icon-on-top tiles) was removed in
+ * [1.5.213]. It had been deprecated since [1.5.97] with no live consumers.
  */
-export type ChipRowVariant = 'pill' | 'icon' | 'emoji';
+export type ChipRowVariant = 'pill' | 'emoji';
 export type ChipRowTone = 'default' | 'danger';
 
 export interface ChipOption {
@@ -105,46 +102,6 @@ export default function ChipRow(props: ChipRowProps) {
   } = props;
 
   const role = props.mode === 'multi' ? 'group' : 'radiogroup';
-
-  if (variant === 'icon') {
-    return (
-      <div
-        role={role}
-        aria-label={ariaLabel}
-        data-chip-row
-        data-variant="icon"
-        data-mode={props.mode ?? 'single'}
-        data-tone={tone}
-        className={cn('flex gap-3 overflow-x-auto hide-scrollbar', className)}
-      >
-        {options.map(opt => {
-          const Icon = opt.icon;
-          const active = isActive(props, opt.id);
-          return (
-            <button
-              type="button"
-              key={opt.id}
-              role={props.mode === 'multi' ? undefined : 'radio'}
-              aria-checked={props.mode === 'multi' ? undefined : active}
-              aria-pressed={props.mode === 'multi' ? active : undefined}
-              onClick={() => handleToggle(props, opt.id)}
-              className={cn(
-                'flex flex-col items-center gap-1.5 px-3 py-2 rounded-sm shrink-0 transition-colors',
-                active
-                  ? tone === 'danger'
-                    ? 'bg-error/15 text-error border border-error/30'
-                    : 'bg-primary text-on-primary'
-                  : 'bg-surface-container-high text-on-surface-variant border border-outline-variant/20 hover:bg-surface-container-highest',
-              )}
-            >
-              {Icon && <Icon className="w-5 h-5" />}
-              <span className="text-micro font-black tracking-widest uppercase">{opt.label}</span>
-            </button>
-          );
-        })}
-      </div>
-    );
-  }
 
   // "pill" + "emoji" share the horizontal rounded-full chip layout; emoji adds a
   // leading glyph in place of a Lucide icon.

@@ -1,5 +1,42 @@
 # RIAL App - Changelog
 
+## [1.5.213] - 2026-05-08
+
+### chore(cleanup): Sprint B — orphans, @deprecated branches, dead i18n keys
+
+Continuación de la limpieza tras Sprint A. Auditoría detectó componentes huérfanos, ramas `@deprecated` sin uso, y un detector de claves i18n muertas que no existía.
+
+**1. Orphan components eliminados**:
+- `src/features/social/components/FeedTabs.tsx` — 0 imports.
+- `src/features/wellness/components/LatestReflectionCard.tsx` — 0 imports.
+
+**2. `@deprecated` branches limpiados**:
+- `ChipRow` `variant='icon'` (vertical icon-on-top tiles, deprecado desde [1.5.97]) — 0 consumers, removido el branch (~38 LoC) y el tipo se reduce a `'pill' | 'emoji'`.
+- `SmartInsightCard` prop `icon?: LucideIcon` — deprecado en Sprint G, no era ni destructurada en el body. Removida la prop + el import de `LucideIcon`.
+
+**3. Detector de i18n orphans nuevo**:
+- `scripts/check-i18n-orphans.mjs` — parsea las locales con TypeScript compiler API, recolecta dotted keys, y greps todo `src/**/*.{ts,tsx}` por cada path. Heurística con suppression de dynamic-access (si cualquier ancestor del path aparece en el código, asume acceso dinámico tipo `t.parent[var]` y suprime los hijos).
+- `npm run check:i18n:orphans` añadido a package.json (advisory — no falla CI).
+
+**4. Dead i18n keys removidas (35 keys × ES+EN)**:
+- `home.kcalBreakdown.*` (8 keys) — bloque legacy. El `KcalBreakdownCard` actual lee de `t.onboarding.plan`, no de `home.kcalBreakdown`.
+- `wellness.weeklyReview.*` (27 keys) — feature que nunca shipeó (existió como WeeklyReview.tsx en docstrings, sin archivo real).
+- `Pick<Translations,...>` updates en `en/home.ts` y `en/wellness.ts` (drop `kcalBreakdown` y `weeklyReview`).
+
+**Counts**:
+- i18n: 2199 → **2164 keys** ES↔EN simétricas.
+- TS: 0 errors.
+- Tests: 1735/1735 passing (sin cambios — los componentes huérfanos no tenían tests).
+- Files removed: 2 components.
+- LoC removed: ~80 (orphans) + ~38 (ChipRow) + ~5 (SmartInsightCard) + ~70 (locale entries) = ~193 LoC.
+
+**Sin tocar** (intencional):
+- Legacy hydration fields (`Recipe.cal/pro/img`, `Planner cal/pro/img`, `TodaysMeals` legacy fields, `foodDislikes`, etc.) — load-bearing para hidratación de localStorage pre-migración.
+- TODO/FIXME comments en `useHealthData.ts` y `food-families.ts` — placeholders intencionales para features futuras (Apple Health real plugin, P5 barcode dedup), no deuda stale.
+- `sortSubcategoriesByPopulation` deprecado — tests acoplados; mover a otro sprint.
+
+---
+
 ## [1.5.212] - 2026-05-08
 
 ### refactor(arch): Sprint A — Split 5 monsters → 0 files > 600 LoC

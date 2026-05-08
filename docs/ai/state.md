@@ -5,11 +5,12 @@
 > prunes this file back down. Everything below should answer: *what's the release line,
 > what's the quality baseline, what's the next move, what's broken?*
 
-Last updated: **2026-05-08** — `[1.5.212]` Sprint A cleanup — split 5 monsters → 0 files > 600 LoC.
+Last updated: **2026-05-08** — `[1.5.213]` Sprint B cleanup — orphans, @deprecated branches, dead i18n keys.
 
 ## Release snapshot
 - **Branch**: `main`, synced con `rial-food/main` (CI green S39; S40–S60 queued).
-- **This session (2026-05-08, Sprint A cleanup [1.5.212])** — refactor quirúrgico tras decisión de no reescribir desde cero:
+- **This session (2026-05-08, Sprint A+B cleanup [1.5.212–213])** — refactor quirúrgico tras decisión de no reescribir desde cero:
+    - **[1.5.213]** — Sprint B dead-code sweep: 2 huérfanos eliminados (`FeedTabs`, `LatestReflectionCard`), `ChipRow icon` variant deprecada removida (~38 LoC), `SmartInsightCard.icon` prop deprecada removida. Nuevo `scripts/check-i18n-orphans.mjs` + `npm run check:i18n:orphans` advisory. **35 i18n keys huérfanos eliminados**: `home.kcalBreakdown.*` (8) + `wellness.weeklyReview.*` (27). 2199 → **2164 keys**. Tests 1735/1735.
     - **[1.5.212]** — 5 monstruos > 500 LoC descompuestos en hooks puros + componentes pequeños sin cambios funcionales:
         - `NutritionDetail.tsx` 512 → **186** (6 tabs a `components/nutrition-detail/` · `Translations` reemplaza `I18nT=any` · descubierta latencia `t.home.hydration.electrolytes` faltante, añadida key)
         - `Progress.tsx` 560 → **325** (`useProgressData` + `useReflectionForm` hooks · `BienestarCard` + `TopMealsCard`)

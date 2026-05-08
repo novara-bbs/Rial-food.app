@@ -14,7 +14,6 @@
  * No state. The compose-the-message logic lives at the call site so the same
  * component can serve the energy chip, the macros chip, etc.
  */
-import type { LucideIcon } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 export type SmartInsightTone = 'positive' | 'neutral' | 'warning';
@@ -37,8 +36,6 @@ const TONE_MAP: Record<SmartInsightTone, { wrapper: string; dotColor: string }> 
 export interface SmartInsightCardProps {
   message: string;
   tone?: SmartInsightTone;
-  /** @deprecated Sprint G — icon removed to match PDF reference. Use a plain dot leading. */
-  icon?: LucideIcon;
   action?: {
     label: string;
     onClick: () => void;

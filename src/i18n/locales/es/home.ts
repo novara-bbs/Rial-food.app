@@ -381,16 +381,6 @@ const home = {
       days: 'días',
     },
   },
-  kcalBreakdown: {
-    title: '¿Cómo se calcula tu objetivo?',
-    basal: 'Metabolismo basal',
-    activity: 'Actividad diaria',
-    exercise: 'Entrenamientos',
-    objective: 'Objetivo nutricional',
-    total: 'Total diario',
-    tooltipAriaLabel: '¿Cómo se calcula?',
-    tooltipText: 'Tu objetivo calórico = metabolismo basal + gasto por actividad + entrenamientos + ajuste según objetivo. Calculado con la fórmula Mifflin-St Jeor.',
-  },
   checkIn: {
     title: 'Registro Diario',
     morningReport: 'Reporte Matutino',
