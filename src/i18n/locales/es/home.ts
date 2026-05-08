@@ -228,6 +228,7 @@ const home = {
       cupsAria: '{consumed} de {target} vasos',
       removeCup: 'Quitar vaso',
       addCup: 'Añadir vaso',
+      electrolytes: 'Electrolitos',
     },
     // Sprint K-fix5 [1.5.209] — StepsLogSheet (popup para editar pasos del día).
     stepsSheet: {

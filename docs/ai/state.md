@@ -5,11 +5,20 @@
 > prunes this file back down. Everything below should answer: *what's the release line,
 > what's the quality baseline, what's the next move, what's broken?*
 
-Last updated: **2026-05-03** — `[1.5.209]` Sprint K-fix5 — Activity card 2 secciones + popups + fórmulas calóricas reales.
+Last updated: **2026-05-08** — `[1.5.212]` Sprint A cleanup — split 5 monsters → 0 files > 600 LoC.
 
 ## Release snapshot
 - **Branch**: `main`, synced con `rial-food/main` (CI green S39; S40–S60 queued).
-- **This session (2026-05-02/03, S62–S78 — Home redesign C–K-fix5 [1.5.193–1.5.209])**:
+- **This session (2026-05-08, Sprint A cleanup [1.5.212])** — refactor quirúrgico tras decisión de no reescribir desde cero:
+    - **[1.5.212]** — 5 monstruos > 500 LoC descompuestos en hooks puros + componentes pequeños sin cambios funcionales:
+        - `NutritionDetail.tsx` 512 → **186** (6 tabs a `components/nutrition-detail/` · `Translations` reemplaza `I18nT=any` · descubierta latencia `t.home.hydration.electrolytes` faltante, añadida key)
+        - `Progress.tsx` 560 → **325** (`useProgressData` + `useReflectionForm` hooks · `BienestarCard` + `TopMealsCard`)
+        - `Home.tsx` 640 → **416** (`useHomeData` hook con 14 useMemos · `GuidedSetupSection`)
+        - `RecipeDetail.tsx` 708 → **502** (`useRecipeCalculations` hook · `RecipeCreatorAttribution` + `RecipeCommunityStats`)
+        - `AppStateContext.tsx` 644 → **286** (`AppStateContextType` interface a `types/app-state.ts` · `useSupabaseSync` + `useDemoSeedHandlers` hooks)
+    - Convention test `screen-size.test.ts` allowlist limpiado (RecipeDetail/Home estaban listadas a 692/670 LoC). Ahora vacío — cualquier nuevo archivo > 600 LoC falla CI inmediatamente.
+    - Tests 1727 → **1735** passing (124 files). i18n 2186 → **2199** keys ES↔EN simétricos. 0 TS errors.
+- **Previous session (2026-05-02/03, S62–S78 — Home redesign C–K-fix5 [1.5.193–1.5.209])**:
     - **[1.5.209]** — Sprint K-fix5: refactor profundo de la card de actividad. (1) **Fórmulas calóricas reales**: nuevo `activity-calories.ts` con `kcalFromSteps` (`pasos × 0.0005 × peso × sexFactor`) y `kcalFromExercise` (`MET × peso × min/60 × sexFactor`). MET estándar Compendium (3/6/9). Sex factor `male=1.0/female=0.95`. (2) **`workoutMinutes`** añadido a MovementState con migración defensiva. (3) **`StepsLogSheet`** nuevo: BottomSheet con slider 0–30k + presets + kcal preview. (4) **`ExerciseLogSheet`** rediseñado: tier picker + stepper minutos + presets 15/30/45/60/90 + preview con fórmula visible. Signature `onSelect(intensity, minutes)`. (5) **`HealthAndExerciseCard`**: 2 secciones (Pasos + Deporte) sin sub-headings, info icons `ⓘ` con fórmula explicada para el perfil del user. Eliminado: badge "420 min", chips nudge, branch connect-health. (6) **Home.tsx**: `exerciseCalories = kcalFromSteps + kcalFromExercise` (los pasos también suman ahora). i18n +18 keys (2168→2186). **+36 tests netos · 1712/1712 · 121 files**.
     - **[1.5.208]** — Sprint K-fix4 tras screenshot owner sobre TodaysMeals: (1) **"Log it" button outline pill** — el button del item planificado seguía con `variant="default"` (negro contra negro). Cambio a `variant="outline" size="pill"` matching HealthAndExerciseCard. (2) **Meta tipografía coherente** — items del plan + log: `text-micro uppercase tracking-widest` → `font-body text-label normal-case tracking-normal`. 12px mixed-case en lugar de 10px uppercase forzado. (3) **"Plan semanal" link** raw `<button>` → `<Button variant="ghost" size="pill">` para coherencia con otros CTAs. (4) **Línea vertical lateral** decorativa del item plan eliminada (ruido visual sin valor). **1676/1676 tests · 2168 keys**.
     - **[1.5.207]** — Sprint K-fix3 tras screenshot owner: (1) **Workout CTA legible** — texto "+ Registrar entrenamiento" → "Registrar" (ES) / "Log" (EN). Variant `default | ghost` → `outline` siempre. Resuelve el bug de "botón negro sin texto visible" causado por texto demasiado largo + conflictos cn() entre variant default y size pill. (2) **RealFeel BottomSheet popup** — nuevo `RealFeelSheet.tsx` (BottomSheet `size="focus"`) reemplaza la card in-flow. `RealFeelInline` recibe prop `bare` para omitir su chrome cuando se embebe en sheet. Trigger 3s post meal-log preservado, auto-dismiss 60s preservado. **1676/1676 tests · 2168 keys**.

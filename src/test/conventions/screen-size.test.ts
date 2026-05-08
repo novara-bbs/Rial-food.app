@@ -18,15 +18,12 @@ const LINE_LIMIT = 600;
 /**
  * Files allowed to exceed LINE_LIMIT.
  * Each entry must cite why it is deferred and its current size.
+ *
+ * Cleared in [1.5.210] — Sprint A splits brought RecipeDetail (708→502) and
+ * Home (640→416) under the limit. Keep the allowlist empty so any new file
+ * over 600 LoC fails CI immediately and forces an explicit decision.
  */
-const ALLOWLIST: Record<string, { reason: string; approxLines: number }> = {
-  // RecipeDetail — composer of 7 tab components; 692 lines is acceptable
-  'recipes/screens/RecipeDetail.tsx': { reason: 'composer only; 7 extracted components', approxLines: 692 },
-  // Home — Sprint C/D redesign added 6 new cards + chip scroll-spy wiring; all heavy
-  // logic is in memoised helpers and extracted components. Sprint E will extract
-  // chip-block into <HomeChipSection> to bring back under 600.
-  'home/screens/Home.tsx': { reason: 'composer; Sprint C/D gauge redesign; extraction planned Sprint E', approxLines: 670 },
-};
+const ALLOWLIST: Record<string, { reason: string; approxLines: number }> = {};
 
 /** Recursively collect .tsx files, skipping data/ and i18n/ dirs. */
 function collectTsx(dir: string, results: string[] = []): string[] {

@@ -1,5 +1,46 @@
 # RIAL App - Changelog
 
+## [1.5.212] - 2026-05-08
+
+### refactor(arch): Sprint A — Split 5 monsters → 0 files > 600 LoC
+
+Limpieza profunda quirúrgica tras decisión de no reescribir desde cero. Auditoría detectó 5 archivos > 500 LoC supervivientes a sprints previos (RecipeDetail 708, AppStateContext 644, Home 640, Progress 560, NutritionDetail 512) — esta sesión los descompone en hooks puros + componentes pequeños sin cambios funcionales.
+
+**1. `NutritionDetail.tsx` 512 → 186 LoC**
+- 6 tabs internos extraídos a `src/features/home/components/nutrition-detail/`: `SummaryTab`, `MacrosTab`, `VitaminsTab`, `MineralsTab`, `HydrationTab`, `PerformanceTab`. El tab "Calidad" ya usaba `<FoodQualityCard>` directamente.
+- Cada tab tipado con `Translations` (no más `type I18nT = any`).
+- Latencia descubierta: el `any` original ocultaba que `t.home.hydration.electrolytes` no existía. Añadida la key (ES/EN) → 2199 keys.
+
+**2. `Progress.tsx` 560 → 325 LoC**
+- `useProgressData` hook (192 LoC) — agrupa los 9 useMemo de la pantalla (streaks, weekStats, weeklyScore, topMeals, weightTrend, weekInsight, selectedDayData, bienestar, calendar sets).
+- `useReflectionForm` hook (103 LoC) — encapsula form state + handleSave de la reflexión semanal.
+- `BienestarCard.tsx` (84 LoC) — sub-card extraída del bloque inline (avg + sparkline + correlations + viewDiary).
+- `TopMealsCard.tsx` (43 LoC) — sub-card de top meals extraída.
+
+**3. `Home.tsx` 640 → 416 LoC**
+- `useHomeData` hook (229 LoC) — agrupa los 14 useMemo de la pantalla (profile, exerciseCalories, vitality, weekMacros, weightTrend, streaks, dailyQuality, shoppingPendingCount, yesterdayData, guidedSteps, insights, todaysMeals, nextMealSuggestion, weightDeltaForChip).
+- `GuidedSetupSection.tsx` (61 LoC) — la sección inline del onboarding de 7 días + key `GUIDED_DISMISSED_KEY` exportada.
+
+**4. `RecipeDetail.tsx` 708 → 502 LoC**
+- `useRecipeCalculations` hook (117 LoC) — agrupa calculatedTotals (extra ingredients merge), swapSuggestions, matchScore, goalSuggestions.
+- `RecipeCreatorAttribution.tsx` (129 LoC) — los 3 banners siblings (creator card, "tu receta" badge, "forked from") en un solo componente.
+- `RecipeCommunityStats.tsx` (94 LoC) — community stats row + "more from this creator" sidebar.
+
+**5. `AppStateContext.tsx` 644 → 286 LoC**
+- `src/contexts/types/app-state.ts` (197 LoC) — interface `AppStateContextType` + tipos `Setter`/`HydrationState`/`MovementState` extraídos.
+- `useSupabaseSync` hook (85 LoC) — Q6 sign-in pull con `applyRemoteData` callback + useEffect.
+- `useDemoSeedHandlers` hook (52 LoC) — los dos memos de demo seed gateados por IS_DEV.
+
+**6. Convention test endurecido**
+- `src/test/conventions/screen-size.test.ts` allowlist limpiado (RecipeDetail + Home estaban entradas allowlist legacy a 692/670 LoC). Ahora vacío — cualquier archivo > 600 LoC falla CI inmediatamente sin justificación allowlist.
+
+**Tests**: 1727 → 1735 passing (+8 nuevos por nutrition-detail tabs). 124 files. Sin regresiones funcionales.
+**TypeScript**: 0 errors.
+**i18n**: 2199 keys ES ↔ EN simétricos.
+**LoC neto**: 5 monstruos suman 1349 LoC menos; los hooks/componentes extraídos suman ~1100 LoC en archivos pequeños bien tipados.
+
+---
+
 ## [1.5.211] - 2026-05-03
 
 ### feat(home): Sprint K-fix7 — Activity card split + TodaysWorkouts timeline (multi-entreno persistido)

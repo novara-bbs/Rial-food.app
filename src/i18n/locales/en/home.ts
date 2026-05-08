@@ -237,6 +237,7 @@ const home: Pick<Translations, 'home' | 'mealSlot' | 'realFeel' | 'kcalBreakdown
       cupsAria: '{consumed} of {target} cups',
       removeCup: 'Remove cup',
       addCup: 'Add cup',
+      electrolytes: 'Electrolytes',
     },
     macroRings: {
       title: 'Macros today',

@@ -1,52 +1,40 @@
-import { ArrowLeft, Flame, MessageSquare, Bookmark, ChefHat, ExternalLink, Pencil, Trash2, GitFork } from 'lucide-react';
+import { ArrowLeft, ChefHat, ExternalLink } from 'lucide-react';
 import featureFlags from '../../../lib/featureFlags';
 import TimeTileComposite from '../components/TimeTileComposite';
 import AuthorAttributionCard from '../components/AuthorAttributionCard';
 import StickyCookCTA from '../components/StickyCookCTA';
-// SearchInput moved to RecipeIngredientsTab (Phase 3.1).
-import { useState, useMemo, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import CookMode from '../components/CookMode';
 import MiseEnPlaceScreen from '../components/MiseEnPlaceScreen';
-// HeroGallery moved to RecipeHero (Phase 3.1).
-// MediaLightbox moved to RecipeDetailModals (Phase 3.1).
-// VideoSection lifted into HeroGallery as a peer slide (Sprint 46).
 import type { HeroMediaItem } from '../components/HeroGallery';
 import { parseVideoSource, platformLabel } from '../utils/videoEmbed';
-// PublishRecipeSheet moved to RecipeDetailModals (Phase 3.1).
 import RecipeNutritionPanel from '../components/detail/RecipeNutritionPanel';
-// RecipeSubstitutionPicker + RecipeDaySelectorSheet moved to RecipeOverviewTab (Phase 3.1).
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { FollowButton } from '@/components/patterns/FollowButton';
-import type { Micronutrients, Ingredient, LoggableMeal } from '../../../types';
+import type { Ingredient, LoggableMeal } from '../../../types';
 import type { Recipe } from '../../../types';
 import type { RecipeIngredient } from '../../../types/food';
 import type { UserProfile } from '../../../types/user';
 import type { ShoppingItem } from '../../../types/planner';
 import { toast } from 'sonner';
-import { getRecipeSwaps } from '../utils/substitutions';
-import { calculateMatchScore } from '../utils/matchScore';
-import { getGoalSuggestions } from '../utils/goalOptimizer';
-// defaultSlotFor moved to RecipeOverviewTab (Phase 3.1).
 import { trackRecipeView } from '../../social/utils/analytics';
 import { CREATORS_MAP } from '../../social/data/seed-creators';
 import { useNavigation } from '../../../contexts/NavigationContext';
 import { useAppState } from '../../../contexts/AppStateContext';
-// VariantPickerSheet moved to RecipeDetailModals (Phase 3.1).
 import { FOOD_FAMILIES } from '../../food/data/food-families';
 import type { FoodFamily, FoodVariant } from '../../../types/food-family';
 import { useLocalStorageState } from '../../../hooks/useLocalStorageState';
 import { useI18n } from '../../../i18n';
-// ConfirmDialog moved to RecipeDetailModals (Phase 3.1).
 import RelatedRecipesCarousel from '../components/RelatedRecipesCarousel';
 import RecipeStepsTab from '../components/detail/RecipeStepsTab';
 import RecipeNutritionTab from '../components/detail/RecipeNutritionTab';
 import RecipeOverviewTab from '../components/detail/RecipeOverviewTab';
 import RecipeIngredientsTab from '../components/detail/RecipeIngredientsTab';
-// RecipeServingsControls + RecipeNutritionBar merged into RecipeNutritionPanel (Sprint 47).
 import RecipeHero from '../components/detail/RecipeHero';
 import RecipeDetailModals from '../components/detail/RecipeDetailModals';
+import RecipeCreatorAttribution from '../components/detail/RecipeCreatorAttribution';
+import RecipeCommunityStats from '../components/detail/RecipeCommunityStats';
+import { useRecipeCalculations } from '../hooks/useRecipeCalculations';
 import { Heading } from '@/components/ui/Typography';
 
 export default function RecipeDetail({ recipe, onBack, onSaveRecipe, isSaved, onAddToPlan, onLogMealNow, onAddToShoppingList, dictionary = [], userProfile }: {
@@ -105,88 +93,12 @@ export default function RecipeDetail({ recipe, onBack, onSaveRecipe, isSaved, on
   };
 
   // ── Derived memos — declared before any early return (Rules of Hooks) ──────
-  const calculatedTotals = useMemo(() => {
-    if (!recipe) return { cal: 0, pro: 0, carbs: 0, fats: 0, micros: { vitamins: {}, minerals: {}, others: {} } as Micronutrients };
-    const cal = recipe.macros?.calories || 0;
-    const pro = recipe.macros?.protein || 0;
-    const carbs = recipe.macros?.carbs || 0;
-    const fats = recipe.macros?.fats || 0;
-    const micros = recipe.micros || { vitamins: {}, minerals: {}, others: {} };
-
-    let extraCal = 0, extraPro = 0, extraCarbs = 0, extraFats = 0;
-    const extraMicros: Micronutrients = { vitamins: {}, minerals: {}, others: {} };
-
-    extraIngredients.forEach(ri => {
-      const ing = dictionary.find(d => d.id === ri.ingredientId);
-      if (ing) {
-        const ratio = ri.amount / ing.baseAmount;
-        extraCal += ing.macros.calories * ratio;
-        extraPro += ing.macros.protein * ratio;
-        extraCarbs += ing.macros.carbs * ratio;
-        extraFats += ing.macros.fats * ratio;
-
-        if (ing.micros) {
-          Object.entries(ing.micros.vitamins).forEach(([key, value]) => {
-            extraMicros.vitamins[key as keyof typeof extraMicros.vitamins] = ((extraMicros.vitamins[key as keyof typeof extraMicros.vitamins] || 0) + (value as number) * ratio);
-          });
-          Object.entries(ing.micros.minerals).forEach(([key, value]) => {
-            extraMicros.minerals[key as keyof typeof extraMicros.minerals] = ((extraMicros.minerals[key as keyof typeof extraMicros.minerals] || 0) + (value as number) * ratio);
-          });
-          Object.entries(ing.micros.others).forEach(([key, value]) => {
-            extraMicros.others[key as keyof typeof extraMicros.others] = ((extraMicros.others[key as keyof typeof extraMicros.others] || 0) + (value as number) * ratio);
-          });
-        }
-      }
-    });
-
-    const combinedMicros: Micronutrients = {
-      vitamins: { ...micros.vitamins },
-      minerals: { ...micros.minerals },
-      others: { ...micros.others },
-    };
-    Object.entries(extraMicros.vitamins).forEach(([key, value]) => {
-      combinedMicros.vitamins[key as keyof typeof combinedMicros.vitamins] = ((combinedMicros.vitamins[key as keyof typeof combinedMicros.vitamins] || 0) + (value as number));
-    });
-    Object.entries(extraMicros.minerals).forEach(([key, value]) => {
-      combinedMicros.minerals[key as keyof typeof combinedMicros.minerals] = ((combinedMicros.minerals[key as keyof typeof combinedMicros.minerals] || 0) + (value as number));
-    });
-    Object.entries(extraMicros.others).forEach(([key, value]) => {
-      combinedMicros.others[key as keyof typeof combinedMicros.others] = ((combinedMicros.others[key as keyof typeof combinedMicros.others] || 0) + (value as number));
-    });
-
-    return {
-      cal: Math.round(cal + extraCal),
-      pro: Math.round(pro + extraPro),
-      carbs: Math.round(carbs + extraCarbs),
-      fats: Math.round(fats + extraFats),
-      micros: combinedMicros,
-    };
-  }, [recipe, extraIngredients, dictionary]);
-
-  // ── Smart substitutions (real, based on user prefs) ──
-  const swapSuggestions = useMemo(() => {
-    if (!recipe?.recipeIngredients?.length) return [];
-    return getRecipeSwaps(recipe.recipeIngredients, userProfile || {}, dictionary);
-  }, [recipe?.recipeIngredients, userProfile, dictionary]);
-
-  const matchScore = useMemo(() => {
-    if (!recipe) return 0;
-    // R8.3: derive foodDislikes from foodPreferences
-    const foodDislikes = Object.entries(userProfile?.foodPreferences ?? {})
-      .filter(([, v]) => v === 'dislike')
-      .map(([id]) => id);
-    return calculateMatchScore(recipe, {
-      goal: userProfile?.goal,
-      foodDislikes,
-      intolerances: userProfile?.intolerances,
-      dailyTarget: undefined,
-    }, dictionary);
-  }, [recipe, userProfile, dictionary]);
-
-  const goalSuggestions = useMemo(() => {
-    if (!recipe) return [];
-    return getGoalSuggestions(recipe, userProfile || {}, dictionary);
-  }, [recipe, userProfile, dictionary]);
+  const { calculatedTotals, swapSuggestions, matchScore, goalSuggestions } = useRecipeCalculations(
+    recipe,
+    extraIngredients,
+    dictionary,
+    userProfile,
+  );
 
   // ── Early return if no recipe ────────────────
   if (!recipe) {
@@ -428,88 +340,18 @@ export default function RecipeDetail({ recipe, onBack, onSaveRecipe, isSaved, on
         </>
       )}
 
-      {/* ══ Creator attribution ══ */}
-      {data.publishedBy && data.publishedBy !== 'self' && (() => {
-        const creator = CREATORS_MAP[data.publishedBy];
-        if (!creator) return null;
-        const isFollowingCreator = followedCreators.includes(creator.id);
-        const toggleFollowCreator = () => {
-          setFollowedCreators((prev: string[]) =>
-            prev.includes(creator.id) ? prev.filter((c: string) => c !== creator.id) : [...prev, creator.id]
-          );
-        };
-        return (
-          <div className="px-6 max-w-4xl mx-auto mt-4">
-            <div className="flex items-center gap-3 bg-surface-container-low px-4 py-3 rounded-sm border border-outline-variant/20">
-              <button type="button" onClick={() => { setSelectedCreatorId(data.publishedBy!); navigateTo('creator-profile'); }} className="flex items-center gap-3 flex-1 min-w-0">
-                <img src={creator.avatar} alt={creator.name} className="w-8 h-8 rounded-full object-cover border border-outline-variant/20" referrerPolicy="no-referrer" onError={(e) => { (e.currentTarget as HTMLImageElement).style.display = 'none'; }} />
-                <div className="min-w-0">
-                  <span className="font-headline font-semibold text-micro text-tertiary uppercase hover:text-primary transition-colors block truncate">@{creator.name}</span>
-                  <span className="font-label text-micro text-on-surface-variant tracking-widest uppercase block">{t.recipeDetail.createdBy}</span>
-                </div>
-              </button>
-              <FollowButton
-                isFollowing={isFollowingCreator}
-                onToggle={toggleFollowCreator}
-                size="sm"
-              />
-            </div>
-          </div>
-        );
-      })()}
-
-      {/* ══ Your Recipe badge + edit/delete ══ */}
-      {data.publishedBy === 'self' && (
-        <div className="px-6 max-w-4xl mx-auto mt-4">
-          <div className="flex items-center justify-between bg-primary/10 border border-primary/20 rounded-sm px-4 py-3">
-            <div className="flex items-center gap-2">
-              <ChefHat className="w-4 h-4 text-primary" />
-              <span className="font-headline font-semibold text-micro uppercase tracking-wider">{t.recipeDetail.yourRecipe || 'Tu Receta'}</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <Button
-                variant="outline"
-                size="icon-sm"
-                onClick={() => { setRecipeToEdit(data); navigateTo('edit-recipe'); }}
-                aria-label={t.recipeDetail.edit || 'Editar'}
-              >
-                <Pencil className="w-3.5 h-3.5" />
-              </Button>
-              <Button
-                variant="destructive"
-                size="icon-sm"
-                onClick={() => setShowDeleteConfirm(true)}
-                aria-label={t.recipeDetail.delete || 'Eliminar'}
-              >
-                <Trash2 className="w-3.5 h-3.5" />
-              </Button>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* ══ Forked from attribution ══ */}
-      {data.forkedFrom && (
-        <div className="px-6 max-w-4xl mx-auto mt-3">
-          <button
-            type="button"
-            onClick={() => {
-              const original = savedRecipes.find((r) => String(r.id) === String(data.forkedFrom?.recipeId));
-              if (original) navToRecipe(original);
-            }}
-            className="flex items-center gap-2 w-full min-h-11 bg-surface-container-low rounded-sm border border-outline-variant/20 px-4 py-2.5 hover:border-primary/30 transition-colors text-left"
-          >
-            <GitFork className="w-4 h-4 text-on-surface-variant shrink-0" />
-            <span className="text-micro font-label uppercase tracking-widest text-on-surface-variant">
-              {t.recipeDetail.basedOn || 'Basada en'}
-            </span>
-            <span className="text-micro font-headline font-bold text-primary uppercase tracking-widest truncate">
-              @{data.forkedFrom.creatorName} · {data.forkedFrom.title}
-            </span>
-            <ChefHat className="w-3.5 h-3.5 text-on-surface-variant/50 ml-auto shrink-0" />
-          </button>
-        </div>
-      )}
+      <RecipeCreatorAttribution
+        data={data}
+        followedCreators={followedCreators}
+        setFollowedCreators={setFollowedCreators}
+        setSelectedCreatorId={setSelectedCreatorId}
+        navigateTo={navigateTo}
+        navToRecipe={navToRecipe}
+        savedRecipes={savedRecipes}
+        setRecipeToEdit={setRecipeToEdit}
+        setShowDeleteConfirm={setShowDeleteConfirm}
+        t={t}
+      />
 
       {/* ══ Nutrition + Servings unified panel (Sprint 47) ══
           One card combining macros (scaled by servings), the food-quality
@@ -614,62 +456,14 @@ export default function RecipeDetail({ recipe, onBack, onSaveRecipe, isSaved, on
           />
         </Tabs>
 
-        {/* ══ Community stats ══ */}
-        {(() => {
-          const relatedPosts = communityPosts.filter((p) => p.recipe && String(p.recipe.id) === String(data.id));
-          const totalSaves = savedPosts?.filter?.((id: number) => relatedPosts.some((p) => p.id === id)).length || 0;
-          const totalLikes = relatedPosts.reduce((sum, p) => sum + (p.likes || 0), 0);
-          if (relatedPosts.length === 0 && !data.publishedToFeed) return null;
-          return (
-            <div className="mt-6 flex items-center gap-4 p-3 bg-surface-container-highest/30 rounded-sm border border-outline-variant/10">
-              <div className="flex items-center gap-1.5 text-on-surface-variant">
-                <Flame className="w-4 h-4" />
-                <span className="font-label text-micro font-bold">{totalLikes}</span>
-              </div>
-              <div className="flex items-center gap-1.5 text-on-surface-variant">
-                <MessageSquare className="w-4 h-4" />
-                <span className="font-label text-micro font-bold">{relatedPosts.reduce((sum, p) => sum + (p.comments || 0), 0)}</span>
-              </div>
-              <div className="flex items-center gap-1.5 text-on-surface-variant">
-                <Bookmark className="w-4 h-4" />
-                <span className="font-label text-micro font-bold">{relatedPosts.reduce((sum, p) => sum + (p.saves || 0), 0) + totalSaves}</span>
-              </div>
-              <span className="font-label text-micro tracking-widest text-on-surface-variant uppercase ml-auto">{t.community?.title || 'Community'}</span>
-            </div>
-          );
-        })()}
-
-        {/* ══ More from this creator ══ */}
-        {data.publishedBy && data.publishedBy !== 'self' && (() => {
-          const creatorRecipes = savedRecipes.filter((r) => r.publishedBy === data.publishedBy && r.id !== data.id).slice(0, 3);
-          if (creatorRecipes.length === 0) return null;
-          return (
-            <div className="mt-6">
-              <Heading level="h4" variant="overline" className="mb-3">
-                {t.postDetail?.moreFromCreator || 'More from this creator'}
-              </Heading>
-              <div className="space-y-2">
-                {creatorRecipes.map((r) => (
-                  <button type="button"
-                    key={r.id}
-                    onClick={() => navToRecipe(r)}
-                    className="w-full flex items-center gap-3 p-3 bg-surface-container-low rounded-sm border border-outline-variant/20 hover:border-primary/50 transition-colors text-left"
-                  >
-                    {r.image && (
-                      <img src={r.image} alt={r.title} className="w-12 h-12 rounded-sm object-cover shrink-0" referrerPolicy="no-referrer" onError={(e) => { (e.currentTarget as HTMLImageElement).style.display = 'none'; }} />
-                    )}
-                    <div className="flex-1 min-w-0">
-                      <p className="font-headline font-semibold text-body-sm text-tertiary normal-case truncate">{r.title}</p>
-                      <span className="font-label text-micro text-on-surface-variant tracking-widest uppercase">
-                        {r.macros?.calories || 0} kcal · {r.macros?.protein || 0}g pro
-                      </span>
-                    </div>
-                  </button>
-                ))}
-              </div>
-            </div>
-          );
-        })()}
+        <RecipeCommunityStats
+          data={data}
+          communityPosts={communityPosts}
+          savedPosts={savedPosts}
+          savedRecipes={savedRecipes}
+          navToRecipe={navToRecipe}
+          t={t}
+        />
 
         {/* ══ Related recipes carousel — R3 ══ */}
         <RelatedRecipesCarousel
