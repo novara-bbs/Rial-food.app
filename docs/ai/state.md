@@ -5,11 +5,12 @@
 > prunes this file back down. Everything below should answer: *what's the release line,
 > what's the quality baseline, what's the next move, what's broken?*
 
-Last updated: **2026-05-08** — `[1.5.213]` Sprint B cleanup — orphans, @deprecated branches, dead i18n keys.
+Last updated: **2026-05-08** — `[1.5.214]` Sprint A+B+C cleanup — splits + dead code + invariants hardened.
 
 ## Release snapshot
 - **Branch**: `main`, synced con `rial-food/main` (CI green S39; S40–S60 queued).
-- **This session (2026-05-08, Sprint A+B cleanup [1.5.212–213])** — refactor quirúrgico tras decisión de no reescribir desde cero:
+- **This session (2026-05-08, Sprint A+B+C cleanup [1.5.212–214])** — refactor quirúrgico tras decisión de no reescribir desde cero:
+    - **[1.5.214]** — Sprint C invariants hardening: `screen-size.test.ts` umbral 600→550 LoC. Allowlist vacío. 4 regression guards per-file para los splits de Sprint A (RecipeDetail ≤550, Home ≤450, NutritionDetail ≤250, Progress ≤400). Bundle weight ya bien optimizado (Capacitor plugins dynamic-importados, lucide chunked, recharts/markdown lazy en 21 rutas) — sin cambios. Tests 1735 → **1739** (+4 guards).
     - **[1.5.213]** — Sprint B dead-code sweep: 2 huérfanos eliminados (`FeedTabs`, `LatestReflectionCard`), `ChipRow icon` variant deprecada removida (~38 LoC), `SmartInsightCard.icon` prop deprecada removida. Nuevo `scripts/check-i18n-orphans.mjs` + `npm run check:i18n:orphans` advisory. **35 i18n keys huérfanos eliminados**: `home.kcalBreakdown.*` (8) + `wellness.weeklyReview.*` (27). 2199 → **2164 keys**. Tests 1735/1735.
     - **[1.5.212]** — 5 monstruos > 500 LoC descompuestos en hooks puros + componentes pequeños sin cambios funcionales:
         - `NutritionDetail.tsx` 512 → **186** (6 tabs a `components/nutrition-detail/` · `Translations` reemplaza `I18nT=any` · descubierta latencia `t.home.hydration.electrolytes` faltante, añadida key)

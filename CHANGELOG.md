@@ -1,5 +1,49 @@
 # RIAL App - Changelog
 
+## [1.5.214] - 2026-05-08
+
+### chore(invariants): Sprint C — tighten screen-size convention + Sprint A regression guards
+
+Cierre del plan de limpieza tras Sprints A+B. Bloquea las ganancias de los splits para que no puedan erosionarse silenciosamente.
+
+**1. `screen-size.test.ts` umbral 600 → 550 LoC**:
+- Todos los archivos del repo están por debajo (max actual: RecipeDetail 502). Margen de 48 líneas para futuras adiciones, pero un nuevo archivo > 550 falla CI inmediatamente sin allowlist.
+- Allowlist intencionalmente vacía — cualquier excepción requiere ADR explícito.
+
+**2. Sprint A regression guards (per-file ceilings)**:
+Nuevo `it.each(SPRINT_A_GUARDS)` con techos individuales más estrictos que el LINE_LIMIT global, para que cada split se pueda regresionar a la mitad sin disparar el guard general:
+- `RecipeDetail.tsx` ≤ 550 LoC (current: 502)
+- `Home.tsx` ≤ 450 LoC (current: 416)
+- `NutritionDetail.tsx` ≤ 250 LoC (current: 186)
+- `Progress.tsx` ≤ 400 LoC (current: 325)
+
+**3. CreateRecipe + AddMeal regression guards** ya existían — solo actualizado el mensaje al nuevo umbral 550.
+
+**4. Bundle weight — investigación cerrada sin cambios**:
+- Capacitor plugins ya dynamic-importados via `await import('@capacitor/splash-screen')` en `src/lib/platform.ts`.
+- Solo 3 imports de `@capacitor/core` en src — minimal.
+- `vendor-icons` chunk lucide-react ya separado en `vite.config.ts` manualChunks.
+- `vendor-recharts` (332 KB) y `vendor-markdown` (116 KB) ya lazy-loaded vía React.lazy en 21 rutas.
+- Main entry 917.4 KB raw / 289.0 KB gzip dentro de budget (920/290).
+- Optimización adicional requeriría análisis profundo del visualizer (deferred — no es la prioridad).
+
+**5. `npm run check:i18n:orphans`** advisory script (de Sprint B) integrado en package.json. NO en release:preflight (heurístico — se mantiene como dev tool para evitar bloqueos por falsos positivos).
+
+**Counts**:
+- Tests: 1735 + 4 nuevos guards (Sprint A regression) = **1739 / 1739 passing**.
+- 0 TS errors. i18n 2164 keys symmetric.
+- Convention tests pasan al threshold tightened.
+
+**Sprint A+B+C totales** (sesión 2026-05-08):
+- 5 monstruos > 500 LoC → todos < 550 LoC (1349 LoC reduced en archivos hot, redistribuidos a hooks + componentes pequeños).
+- 35 i18n keys huérfanas eliminadas (2199 → 2164).
+- 2 components huérfanos + 1 deprecated variant + 1 deprecated prop removidos.
+- 1 latencia de tipo arreglada (electrolytes i18n key faltante oculta por `I18nT=any`).
+- Convention tests endurecidos: threshold 600→550, allowlist vacío, 4 regression guards por archivo.
+- Nuevo dev tool: `check-i18n-orphans.mjs`.
+
+---
+
 ## [1.5.213] - 2026-05-08
 
 ### chore(cleanup): Sprint B — orphans, @deprecated branches, dead i18n keys
