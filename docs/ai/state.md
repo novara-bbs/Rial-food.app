@@ -5,12 +5,13 @@
 > prunes this file back down. Everything below should answer: *what's the release line,
 > what's the quality baseline, what's the next move, what's broken?*
 
-Last updated: **2026-05-10** — `[1.5.215]` Sprint D distribución — SEO meta + analytics infra + CI hardening.
+Last updated: **2026-05-10** — `[1.5.216]` Sprint D2 — typed analytics helpers + 5 funnel checkpoints + SEO noscript.
 
 ## Release snapshot
 - **Branch**: `main`, synced con `rial-food/main` (CI green S39; S40–S60 queued).
-- **This session (2026-05-10, Sprint D [1.5.215])** — primer sprint de largo plazo: distribución antes que refactoring:
-    - **[1.5.215]** — SEO meta (Twitter Card, JSON-LD WebApplication, canonical, og:url/site_name), `public/robots.txt` + `sitemap.xml`, `APP_URL` en brand.ts, `analytics.ts` stub tipado (PostHog, no-op por defecto, activable con 1 env var + 5 min), `POSTHOG_KEY` en env.ts, `initAnalytics()` en main.tsx, `check:i18n` + `cap sync android` añadidos a CI. Tests 1739/1739.
+- **This session (2026-05-10, Sprint D + D2 [1.5.215–216])** — distribución largo plazo:
+    - **[1.5.216]** — Sprint D2: 11 typed `track.*` helpers en `analytics.ts` (per-event property contract enforced by TS). 5 funnel checkpoints instrumentados en single-source-of-truth points: `Onboarding.handleFinish` (onboardingComplete), `meal-handlers.logMealNow` (mealLogged source=planner), `CreateRecipe.handleSave` (recipeCreated), `AICoach.handleSend` (aiCoachUsed), `BarcodeScanner.lookupBarcode` (barcodeScanned con outcome). `<noscript>` SEO fallback en index.html con H1 keyword-rich + feature list. 14 tests nuevos `analytics.test.ts`. Todos los `track.*` siguen no-op hasta VITE_POSTHOG_KEY → activación inmediata cuando owner añada la env var. Tests 1739 → **1753**.
+    - **[1.5.215]** — Sprint D: SEO meta (Twitter Card, JSON-LD WebApplication, canonical, og:url/site_name), `public/robots.txt` + `sitemap.xml`, `APP_URL` en brand.ts, `analytics.ts` stub (PostHog), `POSTHOG_KEY` en env.ts, `initAnalytics()` en main.tsx, `check:i18n` + `cap sync android` añadidos a CI. Tests 1739/1739.
 - **This session (2026-05-08, Sprint A+B+C cleanup [1.5.212–214])** — refactor quirúrgico tras decisión de no reescribir desde cero:
     - **[1.5.214]** — Sprint C invariants hardening: `screen-size.test.ts` umbral 600→550 LoC. Allowlist vacío. 4 regression guards per-file para los splits de Sprint A (RecipeDetail ≤550, Home ≤450, NutritionDetail ≤250, Progress ≤400). Bundle weight ya bien optimizado (Capacitor plugins dynamic-importados, lucide chunked, recharts/markdown lazy en 21 rutas) — sin cambios. Tests 1735 → **1739** (+4 guards).
     - **[1.5.213]** — Sprint B dead-code sweep: 2 huérfanos eliminados (`FeedTabs`, `LatestReflectionCard`), `ChipRow icon` variant deprecada removida (~38 LoC), `SmartInsightCard.icon` prop deprecada removida. Nuevo `scripts/check-i18n-orphans.mjs` + `npm run check:i18n:orphans` advisory. **35 i18n keys huérfanos eliminados**: `home.kcalBreakdown.*` (8) + `wellness.weeklyReview.*` (27). 2199 → **2164 keys**. Tests 1735/1735.
@@ -87,10 +88,12 @@ Last updated: **2026-05-10** — `[1.5.215]` Sprint D distribución — SEO meta
 - **Vercel project**: `rial.app.v1.5` (id `prj_t11VHYQjptazjUx7Y2hWLz0IDAjg`).
 - **Governance**: work directly on `main`. "continua" = push approval post green preflight.
 
-## Quality baseline (post-Sprint-D [1.5.215], 2026-05-10)
+## Quality baseline (post-Sprint-D2 [1.5.216], 2026-05-10)
 - TypeScript: **0 errors** (`npx tsc --noEmit`)
-- Tests: **1739/1739** passing (124 files)
+- Tests: **1753/1753** passing (125 files)
 - i18n symmetry: **2164** keys aligned ES ↔ EN
+- Bundle: **915.5 KB raw / 288.5 KB gzip** main entry (within budget 920/290)
+- Analytics: typed event API ready, 5 funnel checkpoints instrumented (no-op until VITE_POSTHOG_KEY set)
 - Design-system lint: **0 errors, 0 ADR-012 warnings** (full sweep complete [1.5.181]; K4 overline sweep extends coverage)
 - **img-onerror baseline: 0** — all 34 pre-existing offenders migrated in S54–S56; new violations fail CI immediately
 - Raw branded `<button>` count: **1** (TodaysMeals only, inline edit-confirm w-8)
