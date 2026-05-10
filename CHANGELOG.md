@@ -1,5 +1,48 @@
 # RIAL App - Changelog
 
+## [1.5.215] - 2026-05-10
+
+### feat(platform): SEO meta + analytics infrastructure + CI hardening
+
+Primer sprint de largo plazo: distribución antes que refactoring.
+
+**1. SEO / Meta tags (`index.html`)**:
+- Twitter Card (`summary_large_image`) para previsualizaciones en X/Twitter
+- `og:url`, `og:site_name`, `og:image:width/height/alt` (OG completo)
+- `<link rel="canonical">` apuntando a la URL de producción
+- `<meta name="keywords">` con términos de nutrición ES
+- JSON-LD `WebApplication` schema (Google entenderá la app como app de salud)
+- `<title>` movido arriba del `<meta name="description">` (orden canónico)
+
+**2. `public/robots.txt`** (nuevo):
+- Permite crawling de `/`
+- Apunta al sitemap
+- Comentarios para cuando se añada SSG (Astro/prerender)
+
+**3. `public/sitemap.xml`** (nuevo):
+- Root URL con `changefreq=weekly` y `priority=1.0`
+- TODO comentado para cuando lleguen páginas de recetas SSG
+
+**4. `src/config/brand.ts`**:
+- `APP_URL = 'https://rialfoodworld.com'` — fuente de verdad para la URL canónica
+
+**5. Analytics infrastructure (`src/lib/analytics.ts`)** (nuevo):
+- Wrapper tipado de PostHog con `AnalyticsEvent` union type (11 eventos clave)
+- `initAnalytics()`, `analytics.track()`, `analytics.identify()`, `analytics.reset()`
+- **No-op por defecto** — cero datos enviados, cero peso en bundle hasta que `VITE_POSTHOG_KEY` sea configurado
+- Bloque comentado de activación de 5 pasos para cuando el owner cree su cuenta PostHog
+- GDPR-safe: `person_profiles: 'identified_only'`, `autocapture: false`
+
+**6. `src/config/env.ts`**: `POSTHOG_KEY` constant
+**7. `src/main.tsx`**: `initAnalytics()` al arranque (no-op)
+**8. `.env.example`**: documenta `VITE_POSTHOG_KEY` con instrucciones de activación
+
+**9. CI (`ci.yml`) — 2 nuevos checks en el job `build`**:
+- `npm run check:i18n` — simetría ES↔EN ya se ejecutaba en preflight local pero no en CI. Ahora es gate en cada push.
+- `npx cap sync android` — valida compatibilidad de plugins Capacitor después de cada build. Detecta incompatibilidades antes de llegar a App Store submission. No requiere Android SDK — solo valida la capa JS+config.
+
+**Tests**: 1739/1739 · **TS**: 0 errores
+
 ## [1.5.214] - 2026-05-08
 
 ### chore(invariants): Sprint C — tighten screen-size convention + Sprint A regression guards

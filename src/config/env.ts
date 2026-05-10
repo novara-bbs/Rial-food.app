@@ -27,3 +27,12 @@ export const RC_GOOGLE_API_KEY: string =
 export const IS_DEV: boolean = env.DEV === true;
 
 export const IS_PROD: boolean = env.PROD === true;
+
+/**
+ * PostHog project API key — product analytics.
+ * Set VITE_POSTHOG_KEY in your environment to activate.
+ * Leave empty to run in no-op mode (default — zero data sent).
+ * Get a key at: https://posthog.com (cloud, free up to 1M events/month)
+ */
+export const POSTHOG_KEY: string =
+  (env.VITE_POSTHOG_KEY as string) || '';

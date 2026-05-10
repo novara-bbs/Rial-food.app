@@ -78,8 +78,18 @@ jobs:
           VITE_RC_GOOGLE_API_KEY: ${{ secrets.VITE_RC_GOOGLE_API_KEY || '' }}
           VITE_SENTRY_DSN: ${{ secrets.VITE_SENTRY_DSN || '' }}
 
+      - name: i18n symmetry check
+        run: npm run check:i18n
+
       - name: Bundle size budget
         run: npm run size:check
+
+      - name: Capacitor sync check
+        run: npx cap sync android
+        # Verifies Capacitor plugin compatibility after every production build.
+        # Catches native plugin mismatches before they surface in App Store submissions.
+        # Requires only dist/ (built above) + android/ (tracked in git).
+        # No Android SDK needed — validates the JS+config layer only.
 
       - name: Upload build artifact
         uses: actions/upload-artifact@v4

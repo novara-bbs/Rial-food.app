@@ -13,6 +13,7 @@ import { SENTRY_DSN, IS_PROD } from './config/env';
 import { migrateLocalStorageToIDB } from './lib/storage';
 import { hideSplashScreen } from './lib/platform';
 import { initializePurchases } from './lib/purchases';
+import { initAnalytics } from './lib/analytics';
 
 // Migrate large localStorage datasets → IndexedDB (runs once, idempotent)
 migrateLocalStorageToIDB().catch(() => {/* non-fatal */});
@@ -40,6 +41,9 @@ window.addEventListener('unhandledrejection', (event) => {
 // Initialize native services
 hideSplashScreen().catch(() => {/* non-fatal */});
 initializePurchases().catch(() => {/* non-fatal */});
+
+// Initialize product analytics (no-op until VITE_POSTHOG_KEY is set)
+initAnalytics();
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>

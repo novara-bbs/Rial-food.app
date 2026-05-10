@@ -1,0 +1,14 @@
+# RIAL — robots.txt
+# https://rialfoodworld.com
+#
+# Current architecture: Vite SPA (client-side routing).
+# All URLs resolve to the same index.html shell — no server-rendered content.
+# Google will index the root with our OG/meta tags.
+#
+# TODO: when public recipe/creator pages gain SSG (Astro or prerender),
+# add per-route Allow directives and update the sitemap accordingly.
+
+User-agent: *
+Allow: /
+
+Sitemap: https://rialfoodworld.com/sitemap.xml

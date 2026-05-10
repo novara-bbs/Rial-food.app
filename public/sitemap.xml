@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  RIAL sitemap.xml
+  Currently only the root URL has indexable content (Vite SPA shell + meta tags).
+  When public recipe/creator pages gain SSG, add entries like:
+    <url><loc>https://rialfoodworld.com/recetas/paella-valenciana</loc>...</url>
+-->
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url>
+    <loc>https://rialfoodworld.com/</loc>
+    <changefreq>weekly</changefreq>
+    <priority>1.0</priority>
+  </url>
+</urlset>
