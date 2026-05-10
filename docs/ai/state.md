@@ -5,10 +5,12 @@
 > prunes this file back down. Everything below should answer: *what's the release line,
 > what's the quality baseline, what's the next move, what's broken?*
 
-Last updated: **2026-05-08** — `[1.5.214]` Sprint A+B+C cleanup — splits + dead code + invariants hardened.
+Last updated: **2026-05-10** — `[1.5.215]` Sprint D distribución — SEO meta + analytics infra + CI hardening.
 
 ## Release snapshot
 - **Branch**: `main`, synced con `rial-food/main` (CI green S39; S40–S60 queued).
+- **This session (2026-05-10, Sprint D [1.5.215])** — primer sprint de largo plazo: distribución antes que refactoring:
+    - **[1.5.215]** — SEO meta (Twitter Card, JSON-LD WebApplication, canonical, og:url/site_name), `public/robots.txt` + `sitemap.xml`, `APP_URL` en brand.ts, `analytics.ts` stub tipado (PostHog, no-op por defecto, activable con 1 env var + 5 min), `POSTHOG_KEY` en env.ts, `initAnalytics()` en main.tsx, `check:i18n` + `cap sync android` añadidos a CI. Tests 1739/1739.
 - **This session (2026-05-08, Sprint A+B+C cleanup [1.5.212–214])** — refactor quirúrgico tras decisión de no reescribir desde cero:
     - **[1.5.214]** — Sprint C invariants hardening: `screen-size.test.ts` umbral 600→550 LoC. Allowlist vacío. 4 regression guards per-file para los splits de Sprint A (RecipeDetail ≤550, Home ≤450, NutritionDetail ≤250, Progress ≤400). Bundle weight ya bien optimizado (Capacitor plugins dynamic-importados, lucide chunked, recharts/markdown lazy en 21 rutas) — sin cambios. Tests 1735 → **1739** (+4 guards).
     - **[1.5.213]** — Sprint B dead-code sweep: 2 huérfanos eliminados (`FeedTabs`, `LatestReflectionCard`), `ChipRow icon` variant deprecada removida (~38 LoC), `SmartInsightCard.icon` prop deprecada removida. Nuevo `scripts/check-i18n-orphans.mjs` + `npm run check:i18n:orphans` advisory. **35 i18n keys huérfanos eliminados**: `home.kcalBreakdown.*` (8) + `wellness.weeklyReview.*` (27). 2199 → **2164 keys**. Tests 1735/1735.
@@ -80,15 +82,15 @@ Last updated: **2026-05-08** — `[1.5.214]` Sprint A+B+C cleanup — splits + d
     - **Sprint 41** `[1.5.155]` — BG gradient sutil: `body { background-image: linear-gradient(--surface-container-low → --background) }`. Funciona en 8 temas sin código por-tema. DX: test slim a 3 locks (brand+a11y); DESIGN-SYSTEM.md §2 hex table → pointer a index.css.
     - **Sprint 40** `[1.5.154]` — paleta neutral repintada: light Bevel-style (`#eae7e0` bg + `#ffffff` surface), dark Whoop-style (`#0e1014` cool, ladder comprimida). AAA. meta theme-color split.
 - **Sprint 39 (previo, 2026-04-29)**: `[1.5.153]` lint hygiene: 2 stale `eslint-disable-next-line` removidos + Discover hashtag `<button>` → `<Button variant="ghost">`. Allowlist 2 → 1.
-- **Active plan**: Onboarding polish + refactor quirúrgico completo. PRs 1–4 `[1.5.167–1.5.170]` ✓ + cleanup `[1.5.171]` ✓. Pendiente: Doc 1 (indya-design-playbook per-capture deep-dive) — out-of-sprint, bajo demanda. Próximos candidatos diferidos del refactor: STEP_REGISTRY map, useOnboardingField hook, mover useFocusTrap/useCountUp a src/hooks/, StepProps jerárquico — todos identificados en la auditoría pero out-of-scope quirúrgico.
+- **Active plan**: distribución largo plazo. Sprints A+B+C (limpieza) + D (SEO/analytics/CI) completos. Siguientes: Supabase activación (owner action) → PostHog activación (1 env var) → Astro landing page SEO.
 - **Release target**: `rial-food/main` (`novara-bbs/Rial-food.app`). Origin `rial-food`.
 - **Vercel project**: `rial.app.v1.5` (id `prj_t11VHYQjptazjUx7Y2hWLz0IDAjg`).
 - **Governance**: work directly on `main`. "continua" = push approval post green preflight.
 
-## Quality baseline (post-Sprint-K-fix5 [1.5.209], 2026-05-03)
+## Quality baseline (post-Sprint-D [1.5.215], 2026-05-10)
 - TypeScript: **0 errors** (`npx tsc --noEmit`)
-- Tests: **1712/1712** passing (121 files)
-- i18n symmetry: **2186** keys aligned ES ↔ EN
+- Tests: **1739/1739** passing (124 files)
+- i18n symmetry: **2164** keys aligned ES ↔ EN
 - Design-system lint: **0 errors, 0 ADR-012 warnings** (full sweep complete [1.5.181]; K4 overline sweep extends coverage)
 - **img-onerror baseline: 0** — all 34 pre-existing offenders migrated in S54–S56; new violations fail CI immediately
 - Raw branded `<button>` count: **1** (TodaysMeals only, inline edit-confirm w-8)
@@ -146,15 +148,16 @@ Last updated: **2026-05-08** — `[1.5.214]` Sprint A+B+C cleanup — splits + d
   for suggestion heuristics (acceptable).
 - **vendor-recharts chunk 102 KB gzip** — acceptable but monitor; ≤ 400 KB raw / 115 KB gzip.
 
-## Next sprint candidates (ordered, only pending)
-- ~~**R2**~~ ✓ · ~~**R3**~~ ✓ · ~~**R5**~~ ✓ · ~~**R7**~~ ✓ · ~~**R8**~~ ✓ · ~~**Q6**~~ ✓ · ~~**Q15**~~ ✓ · ~~**Q17**~~ ✓ · ~~**ADR-012**~~ ✓ · ~~**Phase 1 Home**~~ ✓ · ~~**ADR-013**~~ ✓ · ~~**Fase C lote 1**~~ ✓ · ~~**Fase C lote 2**~~ ✓ · ~~**Polish DRY**~~ ✓ · ~~**Fase C lote 3**~~ ✓ · ~~**Fase C lote 3.5 sociales**~~ ✓ · ~~**Fase C lote 4 wellness**~~ ✓
-- ~~**Fase C allowlist shrink completa**~~ ✓ — todos los dominios migrados.
-  Restante en allowlist: dominio recipes + home + other (~32 archivos, fuera de
-  Fase C scope original). **Pausa antes de continuar** (owner mandate).
-- **Owner actions** (non-code, **diferido** hasta que UX/UI esté pulido —
-  mandato explícito del owner en `[1.5.87]`): unblock Supabase en producción:
+## Next sprint candidates (ordered by long-term impact)
+- ~~**Sprints A+B+C+D**~~ ✓ — limpieza completa + distribución básica.
+- **🔴 Owner action requerida ahora**: activar Supabase en producción (~1h):
   1. `supabase db push` (applies `001_initial_schema.sql`)
   2. Add `VITE_SUPABASE_URL` + `VITE_SUPABASE_ANON_KEY` to Vercel project env vars
+- **🟠 PostHog analytics** (~1 día): `npm install posthog-js` → uncomment block en `src/lib/analytics.ts` → add `VITE_POSTHOG_KEY` in Vercel. La infraestructura ya está lista.
+- **🔴 SEO / páginas públicas** (~3-5 días): Astro mini-site para landing + recetas públicas. Mayor impacto en user acquisition. Requiere Supabase activado primero para endpoint `isPublic=true`.
+- **Q6-B** — Recipe photo migration to Supabase Storage bucket `recipe-photos` + RLS.
+  Unblocks sync for recipes with multi-media photos. Medium complexity, deferred.
+- **Phase 2 Home** — chips → bottom sheets (Hydration slider in-place); ADR-009 V3 justification per chip. Deferred.
 - **Q6-B** — Recipe photo migration to Supabase Storage bucket `recipe-photos` + RLS.
   Unblocks sync for recipes with multi-media photos. Medium complexity, deferred.
 - **Phase 2 Home** — chips → bottom sheets (Hydration slider in-place); ADR-009 V3 justification per chip. Deferred.
