@@ -84,14 +84,18 @@ export function initAnalytics(): void {
 /**
  * Central analytics object. Import this anywhere in the app to track events.
  *
+ * Prefer the typed `track.*` helpers below over `analytics.track('event', ...)`.
+ * The typed helpers enforce the property contract per event so a typo in a
+ * property name is a compile error, not a silent data quality bug.
+ *
  * @example
- * import { analytics } from '@/lib/analytics';
- * analytics.track('meal_logged', { mealType: 'lunch', source: 'barcode' });
+ * import { track } from '@/lib/analytics';
+ * track.mealLogged({ source: 'barcode', mealSlot: 'lunch' });
  */
 export const analytics = {
   /**
-   * Track a named event with optional properties.
-   * All event names are typed — see `AnalyticsEvent`.
+   * Low-level: track a named event with optional properties.
+   * Prefer `track.*` typed helpers — they enforce per-event property shapes.
    */
   track(_event: AnalyticsEvent, _properties?: AnalyticsProperties): void {
     // No-op until posthog-js is installed and key is configured.
@@ -110,5 +114,55 @@ export const analytics = {
    */
   reset(): void {
     // No-op until posthog-js is installed and key is configured.
+  },
+};
+
+// ─── Typed per-event helpers ─────────────────────────────────────────────────
+// Each helper enforces the property contract for one event so consumers can't
+// silently drift on property names. New events: add to AnalyticsEvent above
+// AND add a typed helper here.
+
+/** Source of a meal log entry — used to measure feature adoption. */
+export type MealLogSource = 'manual' | 'planner' | 'recipe' | 'barcode' | 'history';
+/** Origin of a saved recipe — manual creator vs imported vs forked from public. */
+export type RecipeSource = 'manual' | 'imported' | 'forked';
+
+/**
+ * Typed dispatchers — `track.eventName(props)` enforces property shape per event.
+ * All methods are no-ops when POSTHOG_KEY is not set (zero overhead).
+ */
+export const track = {
+  onboardingStarted(): void {
+    analytics.track('onboarding_started');
+  },
+  onboardingComplete(props: { goal?: string; sex?: string; trains?: boolean }): void {
+    analytics.track('onboarding_complete', props);
+  },
+  mealLogged(props: { source: MealLogSource; mealSlot?: string; calories?: number }): void {
+    analytics.track('meal_logged', props);
+  },
+  recipeCreated(props: { source: RecipeSource; servings: number; hasPhoto: boolean }): void {
+    analytics.track('recipe_created', props);
+  },
+  recipeForked(props: { fromId?: string }): void {
+    analytics.track('recipe_forked', props);
+  },
+  recipeImported(props: { sourceType?: string }): void {
+    analytics.track('recipe_imported', props);
+  },
+  aiCoachUsed(props?: { promptLength?: number }): void {
+    analytics.track('ai_coach_used', props);
+  },
+  barcodeScanned(props: { found: boolean }): void {
+    analytics.track('barcode_scanned', props);
+  },
+  planUpgraded(props: { tier: 'plus' }): void {
+    analytics.track('plan_upgraded', props);
+  },
+  streakMilestone(props: { days: number }): void {
+    analytics.track('streak_milestone', props);
+  },
+  weeklyCheckinDone(): void {
+    analytics.track('weekly_checkin_done');
   },
 };

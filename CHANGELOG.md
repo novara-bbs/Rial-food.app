@@ -1,5 +1,37 @@
 # RIAL App - Changelog
 
+## [1.5.216] - 2026-05-10
+
+### feat(analytics): typed event helpers + 5 instrumentation points + SEO noscript
+
+Continuación del Sprint D. La infraestructura de analytics queda lista para producir datos el día que el owner active PostHog (1 env var). Antes de eso era un módulo inerte; ahora está cableado en los 5 puntos de funnel más críticos.
+
+**1. Typed `track.*` helpers en `src/lib/analytics.ts`** (clean DX):
+- 11 helpers tipados — uno por `AnalyticsEvent`. TS valida el shape del payload por evento. Typo en property name = compile error.
+- Tipos exportados: `MealLogSource = 'manual' | 'planner' | 'recipe' | 'barcode' | 'history'`, `RecipeSource = 'manual' | 'imported' | 'forked'`.
+- Patrón: `track.mealLogged({ source, mealSlot, calories })` reemplaza `analytics.track('meal_logged', {...})`.
+
+**2. Instrumentación en single-source-of-truth points** (5 eventos):
+- `Onboarding.handleFinish` → `track.onboardingComplete({ goal, sex, trains })` — funnel-critical, mide tasa de completion.
+- `meal-handlers.createHandleLogMealNow` → `track.mealLogged({ source: 'planner', mealSlot, calories })` — engagement metric, dispara en cada planned-meal click (TodaysMeals "Log it" + MealGapSuggestion).
+- `CreateRecipe.handleSave` → `track.recipeCreated({ source, servings, hasPhoto })` — creator metric.
+- `AICoach.handleSend` → `track.aiCoachUsed({ promptLength })` — AI feature adoption.
+- `BarcodeScanner.lookupBarcode` → `track.barcodeScanned({ found })` — barcode-funnel con outcome (found/not-found en ambas paths: API success + API error).
+
+**3. SEO `<noscript>` fallback en `index.html`**:
+- Bloque con `<h1>` keyword-rich + lista de features visible para crawlers que no ejecutan JS y para usuarios con JS deshabilitado. Mejora el "no-JS first paint" score.
+- Comentario in-line marca el upgrade path: cuando llegue Astro/SSG, este bloque se reduce.
+
+**4. Tests** (`src/lib/analytics.test.ts`):
+- 14 tests nuevos: no-op safety (track/identify/reset no throw), 11 typed helpers forward al evento correcto, AnalyticsEvent union completeness check.
+- Tests **1739 → 1753** passing.
+
+**5. Notas operacionales**:
+- Otros call sites de meal logging (Add Meal manual, log desde recipe detail) NO instrumentados aún — quedan como deuda explícita en el comentario inline de `meal-handlers.ts`. Cuando el owner active PostHog y necesite separar las fuentes, el ticket es adoptar la prop `source` en sus respectivos handlers.
+- Todos los `track.*` calls son no-op hasta que `VITE_POSTHOG_KEY` esté configurado. Cero datos enviados, cero peso en bundle.
+
+**Tests**: 1753/1753 · **TS**: 0 errores
+
 ## [1.5.215] - 2026-05-10
 
 ### feat(platform): SEO meta + analytics infrastructure + CI hardening

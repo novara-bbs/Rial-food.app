@@ -68,7 +68,32 @@
     </script>
   </head>
   <body>
-    <div id="root"></div>
+    <div id="root">
+      <!--
+        SEO fallback — visible only to crawlers that don't execute JS or to
+        users with JavaScript disabled. Once SSG/prerender lands (Astro), this
+        block can shrink to a generic loading state. Keep keywords aligned
+        with the og/title/description above.
+      -->
+      <noscript>
+        <main style="font-family: system-ui, -apple-system, sans-serif; max-width: 720px; margin: 2rem auto; padding: 0 1rem; line-height: 1.6;">
+          <h1>RIAL — Nutrición Inteligente con IA</h1>
+          <p>RIAL es una plataforma de nutrición de alto rendimiento que combina seguimiento de calorías y macronutrientes, recetas saludables personalizadas, planificación de comidas, bienestar integral y un coach con inteligencia artificial.</p>
+          <h2>Características principales</h2>
+          <ul>
+            <li>Seguimiento nutricional de 6 dimensiones (energía, macros, calidad alimentaria, vitaminas, minerales, hidratación)</li>
+            <li>Recetas saludables con análisis nutricional automático</li>
+            <li>Coach de nutrición con IA personalizado</li>
+            <li>Planificación de comidas y lista de la compra</li>
+            <li>Escáner de códigos de barras conectado a Open Food Facts</li>
+            <li>Diario de bienestar y seguimiento de progreso</li>
+            <li>Disponible en español e inglés</li>
+          </ul>
+          <p><strong>Esta aplicación requiere JavaScript.</strong> Por favor activa JavaScript en tu navegador para usar RIAL.</p>
+          <p>Para más información visita <a href="https://rialfoodworld.com">rialfoodworld.com</a>.</p>
+        </main>
+      </noscript>
+    </div>
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>

@@ -7,6 +7,7 @@ import { useI18n } from '../../../i18n';
 import { Heading } from '@/components/ui/Typography';
 import { generateAIResponse, buildSystemPrompt, type MemoryContext } from '@/lib/gemini';
 import { logger } from '../../../lib/logger';
+import { track } from '../../../lib/analytics';
 import { useLocalStorageState } from '../../../hooks/useLocalStorageState';
 import { useAIMessageGate } from '../../../hooks/useProGate';
 
@@ -55,6 +56,9 @@ export default function AICoach({
     }
 
     recordMessage();
+    // AI engagement metric — measures Coach feature adoption.
+    // No-op until VITE_POSTHOG_KEY is set (see src/lib/analytics.ts).
+    track.aiCoachUsed({ promptLength: textToSend.length });
     setMessages((prev) =>[...prev, { role: 'user', text: textToSend }]);
     setInput('');
     setIsLoading(true);

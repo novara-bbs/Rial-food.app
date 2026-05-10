@@ -18,6 +18,7 @@ import PageHeader from '../../../components/patterns/PageHeader';
 import { Button } from '@/components/ui/button';
 import { useI18n } from '../../../i18n';
 import { useAppState } from '../../../contexts/AppStateContext';
+import { track } from '../../../lib/analytics';
 import { parseBulkIngredients, toApproxGrams } from '../utils/ingredient-parser';
 import type { ParsedIngredient } from '../utils/ingredient-parser';
 import { getRecipeSlots } from '../utils/meal-slot';
@@ -296,6 +297,14 @@ export default function CreateRecipe({
       recipeIngredients,
       instructions: cleanSteps.map(s => s.text),
       steps: cleanSteps,
+    });
+
+    // Creator metric — measures whether users save their first recipe.
+    // No-op until VITE_POSTHOG_KEY is set (see src/lib/analytics.ts).
+    track.recipeCreated({
+      source: sourceUrl ? 'imported' : 'manual',
+      servings,
+      hasPhoto: photos.length > 0,
     });
   };
 

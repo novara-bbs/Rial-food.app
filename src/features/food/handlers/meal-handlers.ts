@@ -1,6 +1,7 @@
 import { toast } from 'sonner';
 import * as Sentry from '@sentry/react';
 import { logger } from '../../../lib/logger';
+import { track } from '../../../lib/analytics';
 import type { LoggableMeal } from '../../../types/food';
 import type { DailyArchive } from '../../../hooks/useDailyReset';
 import type { Translations } from '../../../i18n';
@@ -279,6 +280,16 @@ export function createHandleLogMealNow(deps: Pick<MealHandlerDeps, 'setDailyMacr
         ?.replace('{servings}', String(safeServings))
         .replace('{title}', meal.title || '') || `Logged ${safeServings}x`;
       toast.success(portionsMsg);
+
+      // Engagement-critical event — fires on every successful meal log.
+      // `source: 'planner'` because this handler is the planned-meal click path
+      // (TodaysMeals "Log it" + MealGapSuggestion). Other meal entry surfaces
+      // (manual Add Meal, barcode, recipe) instrument at their own call sites.
+      track.mealLogged({
+        source: 'planner',
+        mealSlot: typeof meal.mealSlot === 'string' ? meal.mealSlot : undefined,
+        calories: cal,
+      });
       deps.navigateTo('home');
     } catch (err) {
       Sentry.captureException(err, { tags: { handler: 'logMealNow' } });

@@ -5,6 +5,7 @@ import { toast } from 'sonner';
 import BottomSheet from '@/components/ui/bottom-sheet';
 import { useI18n } from '../../../i18n';
 import { logger } from '../../../lib/logger';
+import { track } from '../../../lib/analytics';
 import type { PortionResult } from './PortionSelector';
 import { parseOFFServings } from '../api/open-food-facts';
 import type { UnitSystem } from '../utils/units';
@@ -222,9 +223,13 @@ export default function BarcodeScanner({
       } else {
         setState('not-found');
       }
+      // Barcode-funnel metric — fires once per scan with found/not-found outcome.
+      // No-op until VITE_POSTHOG_KEY is set (see src/lib/analytics.ts).
+      track.barcodeScanned({ found: data.status === 1 && !!data.product });
     } catch (error) {
       logger.warn('BarcodeScanner OFF lookup failed', { barcode, error });
       setState('not-found');
+      track.barcodeScanned({ found: false });
     }
   };
 
