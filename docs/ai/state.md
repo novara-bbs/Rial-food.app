@@ -5,11 +5,14 @@
 > prunes this file back down. Everything below should answer: *what's the release line,
 > what's the quality baseline, what's the next move, what's broken?*
 
-Last updated: **2026-05-10** — `[1.5.216]` Sprint D2 — typed analytics helpers + 5 funnel checkpoints + SEO noscript.
+Last updated: **2026-05-11** — `[1.5.218]` Sprint E in flight — Phase 0 (Frente 4 hardening) + Phase 1+2 (preferences foundation) shipped. Phases 3–7 pending.
 
 ## Release snapshot
-- **Branch**: `main`, synced con `rial-food/main` (CI green S39; S40–S60 queued).
-- **This session (2026-05-10, Sprint D + D2 [1.5.215–216])** — distribución largo plazo:
+- **Branch**: `main`, synced con `rial-food/main`.
+- **This session (2026-05-11, Sprint E [1.5.217–218])** — distribución + arquitectura escalable:
+    - **[1.5.218]** — Sprint E Phase 1+2: typed schema + pure visibility logic + state slice. `src/types/preferences.ts` (`DetailTier='simple'|'standard'|'advanced'`, `Section`×8, `WidgetId`×29, `HealthSourceId`×6, `UserPreferences`). `src/lib/widget-visibility.ts` con `WIDGET_MATRIX` exhaustivo + `WIDGET_REQUIREMENTS` + `getVisibleWidgets()` pure resolver. `usePreferencesState` hook con migration idempotente desde `UserProfile.mode` legacy (simple→simple, advanced→advanced, undef+existing→simple, undef+fresh→default standard). `UserProfile.mode` marcado `@deprecated`. Wired en `AppStateContext` como `preferences`+`preferencesActions`. **No consumer rewiring** todavía — Phase 4 hará proof wiring en Home+HomeQuickStats. Tests 1754 → **1800** (+46). Ver `docs/ai/handoffs.md` 2026-05-11 para siguientes pasos exactos.
+    - **[1.5.217]** — Sprint E Phase 0: Frente 4 hardening completo. 4a: `screen-size.test.ts` extendido a `features/**`+`components/**/*.tsx`+`contexts/**/*.{ts,tsx}` (era solo features.tsx). 4b: `no-orphan-files.test.ts` NUEVO + 7 huérfanos eliminados (input/label/slider/textarea shadcn unused, recipe-ingredient-resolver, CollectionsCarousel migrada, body-data). 4c: `check-i18n-orphans.mjs --strict` flag + CI gate. 4d: `scripts/analyze.mjs` wrapper cross-platform; `release:preflight` produce `dist/stats.html`; CI upload `bundle-stats` artifact 14d. Tests 1754 (no nuevos tests behavior, +1 convention).
+- **Previous session (2026-05-10, Sprint D + D2 [1.5.215–216])** — distribución largo plazo:
     - **[1.5.216]** — Sprint D2: 11 typed `track.*` helpers en `analytics.ts` (per-event property contract enforced by TS). 5 funnel checkpoints instrumentados en single-source-of-truth points: `Onboarding.handleFinish` (onboardingComplete), `meal-handlers.logMealNow` (mealLogged source=planner), `CreateRecipe.handleSave` (recipeCreated), `AICoach.handleSend` (aiCoachUsed), `BarcodeScanner.lookupBarcode` (barcodeScanned con outcome). `<noscript>` SEO fallback en index.html con H1 keyword-rich + feature list. 14 tests nuevos `analytics.test.ts`. Todos los `track.*` siguen no-op hasta VITE_POSTHOG_KEY → activación inmediata cuando owner añada la env var. Tests 1739 → **1753**.
     - **[1.5.215]** — Sprint D: SEO meta (Twitter Card, JSON-LD WebApplication, canonical, og:url/site_name), `public/robots.txt` + `sitemap.xml`, `APP_URL` en brand.ts, `analytics.ts` stub (PostHog), `POSTHOG_KEY` en env.ts, `initAnalytics()` en main.tsx, `check:i18n` + `cap sync android` añadidos a CI. Tests 1739/1739.
 - **This session (2026-05-08, Sprint A+B+C cleanup [1.5.212–214])** — refactor quirúrgico tras decisión de no reescribir desde cero:
@@ -88,12 +91,15 @@ Last updated: **2026-05-10** — `[1.5.216]` Sprint D2 — typed analytics helpe
 - **Vercel project**: `rial.app.v1.5` (id `prj_t11VHYQjptazjUx7Y2hWLz0IDAjg`).
 - **Governance**: work directly on `main`. "continua" = push approval post green preflight.
 
-## Quality baseline (post-Sprint-D2 [1.5.216], 2026-05-10)
+## Quality baseline (post-Sprint-E [1.5.218], 2026-05-11)
 - TypeScript: **0 errors** (`npx tsc --noEmit`)
-- Tests: **1753/1753** passing (125 files)
+- Tests: **1800/1800** passing (128 files)
 - i18n symmetry: **2164** keys aligned ES ↔ EN
+- i18n orphans: **0** (strict gate active in CI)
 - Bundle: **915.5 KB raw / 288.5 KB gzip** main entry (within budget 920/290)
-- Analytics: typed event API ready, 5 funnel checkpoints instrumented (no-op until VITE_POSTHOG_KEY set)
+- Convention tests: 6 (incl. NEW `no-orphan-files` con allowlist vacía día 1)
+- Analytics: typed event API + 5 funnel checkpoints (no-op until VITE_POSTHOG_KEY)
+- Preferences architecture: schema + visibility logic + state slice landed; consumer rewiring pendiente (Phase 4–7) — ver `docs/ai/handoffs.md` 2026-05-11
 - Design-system lint: **0 errors, 0 ADR-012 warnings** (full sweep complete [1.5.181]; K4 overline sweep extends coverage)
 - **img-onerror baseline: 0** — all 34 pre-existing offenders migrated in S54–S56; new violations fail CI immediately
 - Raw branded `<button>` count: **1** (TodaysMeals only, inline edit-confirm w-8)
@@ -153,6 +159,7 @@ Last updated: **2026-05-10** — `[1.5.216]` Sprint D2 — typed analytics helpe
 
 ## Next sprint candidates (ordered by long-term impact)
 - ~~**Sprints A+B+C+D**~~ ✓ — limpieza completa + distribución básica.
+- 🟡 **Sprint E en curso** — Phase 0+1+2 ✓; **Phase 3–7 pendientes** (~8h restantes). Ver `docs/ai/handoffs.md` 2026-05-11 para checklist exacto: health provider pattern → proof wiring 2 components → Settings UI → 3 convention tests hardening → ADR-017.
 - **🔴 Owner action requerida ahora**: activar Supabase en producción (~1h):
   1. `supabase db push` (applies `001_initial_schema.sql`)
   2. Add `VITE_SUPABASE_URL` + `VITE_SUPABASE_ANON_KEY` to Vercel project env vars
