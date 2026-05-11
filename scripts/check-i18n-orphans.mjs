@@ -10,10 +10,15 @@
  * inspect each candidate before deletion.
  *
  * Usage:
- *   node scripts/check-i18n-orphans.mjs            # report only
+ *   node scripts/check-i18n-orphans.mjs            # report only (exit 0 always)
  *   node scripts/check-i18n-orphans.mjs --json     # machine-readable
+ *   node scripts/check-i18n-orphans.mjs --strict   # exit 1 if any orphan found
  *
- * Exits 0 always (advisory). Use git diff to gate commits.
+ * The default (advisory) mode keeps it usable as a dev tool that won't
+ * block flow on heuristic false positives. The `--strict` flag is for CI
+ * gates: today the codebase has 0 orphans (Sprint B [1.5.213] cleared them),
+ * so any new orphan introduced in a PR fails the gate. If a real false
+ * positive surfaces, fix the detector or rephrase the i18n key access.
  */
 import fs from 'node:fs';
 import path from 'node:path';
@@ -26,6 +31,7 @@ const localesDir = path.join(root, 'src/i18n/locales/es');
 const srcDir = path.join(root, 'src');
 
 const argJson = process.argv.includes('--json');
+const argStrict = process.argv.includes('--strict');
 
 /** Recursively collect all keys as dotted paths (without the namespace prefix). */
 function collectKeys(node, prefix, out) {
@@ -136,10 +142,15 @@ if (argJson) {
   if (allOrphans.length === 0) {
     console.log('✓ No orphan i18n keys detected.');
   } else {
-    console.log(`Found ${allOrphans.length} candidate orphan i18n keys (advisory):`);
+    console.log(`Found ${allOrphans.length} candidate orphan i18n keys${argStrict ? '' : ' (advisory)'}:`);
     for (const { file, key } of allOrphans) {
       console.log(`  ${file}\t${key}`);
     }
     console.log('\nNote: heuristic — verify each before deletion (dynamic access patterns may produce false positives).');
   }
+}
+
+if (argStrict && allOrphans.length > 0) {
+  console.error(`\n✗ --strict mode: ${allOrphans.length} orphan i18n key(s) detected. Failing.`);
+  process.exit(1);
 }

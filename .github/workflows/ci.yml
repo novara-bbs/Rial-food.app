@@ -68,8 +68,11 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - name: Build
-        run: npm run build
+      - name: Build (with bundle analyzer)
+        run: npm run analyze
+        # `analyze` is a thin wrapper that runs `vite build` with ANALYZE=1.
+        # Output: same dist/ as `npm run build` + dist/stats.html for inspection.
+        # Single build for both jobs — no duplicate work.
         env:
           VITE_GEMINI_API_KEY: ${{ secrets.VITE_GEMINI_API_KEY || 'placeholder' }}
           VITE_SUPABASE_URL: ${{ secrets.VITE_SUPABASE_URL || '' }}
@@ -81,8 +84,23 @@ jobs:
       - name: i18n symmetry check
         run: npm run check:i18n
 
+      - name: i18n orphan keys (strict)
+        run: npm run check:i18n:orphans:strict
+        # Sprint E [1.5.217] — fails CI if any i18n key is declared but never
+        # referenced. Sprint B [1.5.213] cleared the baseline to 0; this gate
+        # keeps it there. False positives go to scripts/check-i18n-orphans.mjs
+        # (dynamic-access pattern detection lives in the ancestor heuristic).
+
       - name: Bundle size budget
         run: npm run size:check
+
+      - name: Upload bundle stats
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: bundle-stats
+          path: dist/stats.html
+          retention-days: 14
 
       - name: Capacitor sync check
         run: npx cap sync android

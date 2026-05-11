@@ -1,5 +1,44 @@
 # RIAL App - Changelog
 
+## [1.5.217] - 2026-05-11
+
+### chore(invariants): Sprint E Phase 0 — Frente 4 hardening completo
+
+Cierra los 4 sub-puntos de Frente 4 que quedaban abiertos del plan original de limpieza. Sin esto, los Sprints A+B se erosionan en 3 sprints. Owner marcó "ESTO ES TOP".
+
+**4a — `screen-size.test.ts` extendido**:
+- Scope expandido más allá de `src/features/`: ahora cubre también `src/components/**/*.tsx` y `src/contexts/**/*.{ts,tsx}`.
+- También cubre `.ts` (no solo `.tsx`) dentro de `src/features/` para pillar pure-logic files grandes (food-family-resolver, correlations, etc.).
+- Excluye `data/`, `i18n/`, `*.test.*`, `*.stories.tsx`, `*.d.ts`.
+- LINE_LIMIT = 550 (no cambia). ALLOWLIST sigue vacía.
+- Backward-compat con allowlist keys legacy (paths relativos a features/).
+
+**4b — `no-orphan-files.test.ts` NUEVO + cleanup activo**:
+- Convention test nueva que construye grafo de imports y reporta archivos no importados por nadie.
+- Resolver soporta: relativos (./, ../), alias (@/, @features/, @components/, @hooks/, @i18n/), extensiones implícitas (.ts, .tsx, /index.ts, /index.tsx), side-effect imports, dynamic imports.
+- Entry-point excludes: `main.tsx`, `vite-env.d.ts`, `*.test.*`, `*.stories.*`, `test/setup*`, `types/index.ts` (barrel autorizado), seeds/data files declarados como manualChunks lazy.
+- **Decisión owner**: allowlist vacía día 1. **7 huérfanos pre-existentes eliminados** en este sprint:
+  - `components/ui/{input,label,slider,textarea}.tsx` — shadcn defaults sin uso
+  - `features/food/utils/recipe-ingredient-resolver.ts` — solo en CHANGELOG histórico
+  - `features/recipes/components/CollectionsCarousel.tsx` — migrado a ChipRow en [1.5.189]
+  - `features/wellness/utils/body-data.ts` — sin uso
+
+**4c — `check-i18n-orphans.mjs --strict`**:
+- Flag nuevo que sale con exit code 1 si hay keys huérfanas (advisory por defecto sigue funcionando).
+- Nuevo script `npm run check:i18n:orphans:strict`.
+- Wired en CI workflow `.github/workflows/ci.yml` como gate separado del symmetry check.
+- Baseline: 0 huérfanos hoy (Sprint B [1.5.213] los limpió). Cualquier nuevo = CI rojo.
+- Wired en `release:preflight` local también.
+
+**4d — Bundle analyzer en preflight + CI artifact**:
+- `scripts/analyze.mjs` NUEVO: wrapper Node cross-platform que setea `ANALYZE=1` antes de spawn `vite build`. Resuelve el bug en Windows donde `ANALYZE=1 vite build` no funcionaba (cmd.exe no soporta `KEY=val cmd` syntax).
+- `npm run analyze` ahora apunta al wrapper en vez del syntax bash-only.
+- `release:preflight` usa `npm run analyze` en vez de `npm run build` (mismo output + `dist/stats.html` gratis, sin doble build).
+- CI: el job `build` usa `npm run analyze` en vez de `npm run build`. Upload de `dist/stats.html` como artifact `bundle-stats` (retención 14 días).
+
+**Tests**: 1753 → **1754** (+1 no-orphan-files convention) · **TS**: 0 errors · **i18n**: 2164 keys
+**Bundle**: 915.5 KB raw / 288.6 KB gzip (within budget 920/290) · **Total**: 903.3 KB gzip
+
 ## [1.5.216] - 2026-05-10
 
 ### feat(analytics): typed event helpers + 5 instrumentation points + SEO noscript
