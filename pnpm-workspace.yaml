@@ -1,0 +1,16 @@
+# Sprint G — Monorepo scaffolding (2026-05-12, [1.6.0-prep]).
+#
+# Files placed inert. When packages/* and apps/* directories exist with their
+# own package.json, pnpm will pick them up automatically as workspaces.
+#
+# Migration plan: see docs/architecture/system-map.md (created in Sprint G.6)
+# and the plan file at ~/.claude/plans/bueno-entonce-ssi-no-sleepy-hamster.md
+# section 18 (Sprint G detailed spec).
+#
+# Until file moves happen (G.1+), root npm + package-lock.json continue working.
+# The switch from npm to pnpm is gated to G.1 to keep this commit zero-risk.
+
+packages:
+  - 'apps/*'
+  - 'packages/*'
+  - 'services/*'
