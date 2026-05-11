@@ -1,18 +1,23 @@
 /**
  * Phase 1 rework — HomeQuickStats chip-row.
  *
- * Renders a horizontally-scrollable row of StatusChip pills (advanced mode only).
- * Hydration chip is omitted — the Hydration SectionCard below already covers it,
- * avoiding duplicate data in the same view.
+ * Renders a horizontally-scrollable row of StatusChip pills (standard/advanced
+ * tier only). Hydration chip is omitted — the Hydration SectionCard below
+ * already covers it, avoiding duplicate data in the same view.
+ *
+ * Sprint E [1.5.219]: migrated from legacy `mode: 'simple' | 'advanced'` prop
+ * to `tier: DetailTier` so the component reads from the new preferences schema.
  */
 import { TrendingDown, TrendingUp, Activity, Sparkles } from 'lucide-react';
 import { useI18n } from '../../../i18n';
 import StatusChip from '@/components/ui/StatusChip';
+import type { DetailTier } from '../../../types/preferences';
 
 export type QuickStatTarget = 'progress' | 'activity' | 'insights';
 
 interface HomeQuickStatsProps {
-  mode: 'simple' | 'advanced';
+  /** Detail tier for the home.activity section — hides the row when 'simple'. */
+  tier: DetailTier;
   weightDelta?: { value: number; unit: 'kg' | 'lb'; since: 'week' | 'month' };
   activityToday?: { minutes: number; isTrainingDay: boolean };
   insightCount?: number;
@@ -20,7 +25,7 @@ interface HomeQuickStatsProps {
 }
 
 export default function HomeQuickStats({
-  mode,
+  tier,
   weightDelta,
   activityToday,
   insightCount = 0,
@@ -28,7 +33,8 @@ export default function HomeQuickStats({
 }: HomeQuickStatsProps) {
   const { t } = useI18n();
 
-  if (mode === 'simple') return null;
+  // Hidden in simple tier — the chip-row adds noise without the richer data context.
+  if (tier === 'simple') return null;
 
   // Narrow optional shapes via destructuring — avoids non-null assertions.
   const weight = weightDelta && Number.isFinite(weightDelta.value) ? weightDelta : null;

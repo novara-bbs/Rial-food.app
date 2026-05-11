@@ -12,6 +12,9 @@ import SectionCard from '../../../../components/SectionCard';
 import { Heading, Text } from '@/components/ui/Typography';
 import type { UserProfile, FamilyMember } from '../../../../types/user';
 import type { DailyMacros } from '../../../../contexts/state/useVitalsState';
+import { DETAIL_TIERS } from '../../../../types/preferences';
+import { getTierForSection } from '../../../../lib/widget-visibility';
+import WidgetVisibilityPanel from './WidgetVisibilityPanel';
 
 type Setter<T> = (fn: T | ((prev: T) => T)) => void;
 
@@ -25,7 +28,7 @@ interface Props {
 
 export default function SettingsProfile({ userProfile, setUserProfile, setDailyMacros, isPro, setIsPro }: Props) {
   const { t } = useI18n();
-  const { handleLogWeight } = useAppState();
+  const { handleLogWeight, preferences, preferencesActions } = useAppState();
 
   const [isAddingMember, setIsAddingMember] = useState(false);
   const [newMember, setNewMember] = useState({ name: '', age: 30, goal: 'maintain', activityLevel: 'active' });
@@ -131,33 +134,52 @@ export default function SettingsProfile({ userProfile, setUserProfile, setDailyM
         </button>
       </div>
 
-      {/* Dashboard Mode Section */}
+      {/* Dashboard Personalisation Section — Sprint E [1.5.219] */}
       <div className="bg-surface-container-low p-6 rounded-sm border border-outline-variant/20 space-y-6">
         <div className="flex items-center gap-3 mb-4">
           <Sparkles className="w-5 h-5 text-primary" aria-hidden="true" />
           <Heading level="h3">{t.settings.userExperience}</Heading>
         </div>
+
+        {/* Global tier quick-select */}
         <div className="flex items-center justify-between p-4 bg-surface-container-highest rounded-sm border border-outline-variant/10">
           <div>
             <Heading level="h4" variant="overline">{t.settings.dashboardMode}</Heading>
-            <p className="text-xs text-on-surface-variant mt-1">{t.settings.dashboardModeDesc}</p>
+            <p className="text-xs text-on-surface-variant mt-1">{t.preferences.sectionDesc}</p>
           </div>
-          <div className="flex bg-surface-container-low rounded-full p-1 border border-outline-variant/20">
-            {(['simple', 'advanced'] as const).map((mode) => (
-              <button type="button"
-                key={mode}
-                onClick={() => updateBiometric('mode', mode)}
-                className={`inline-flex items-center min-h-7 px-3 py-1 rounded-full text-micro font-medium normal-case tracking-normal transition-all ${
-                  (userProfile?.mode === mode || (!userProfile?.mode && mode === 'simple'))
-                    ? 'bg-primary text-on-primary shadow-elev-2'
-                    : 'text-on-surface-variant hover:text-tertiary'
-                }`}
-              >
-                {mode === 'simple' ? t.settings.simple : t.settings.advanced}
-              </button>
-            ))}
+          <div
+            role="group"
+            aria-label={t.settings.dashboardMode}
+            className="flex bg-surface-container-low rounded-full p-1 border border-outline-variant/20"
+          >
+            {DETAIL_TIERS.map((tier) => {
+              const currentTier = getTierForSection(preferences, 'home.activity');
+              const isActive = currentTier === tier;
+              return (
+                <button type="button"
+                  key={tier}
+                  aria-pressed={isActive}
+                  onClick={() => {
+                    // Apply selected tier to all sections at once for a quick global switch.
+                    for (const s of ['home.energy', 'home.macros', 'home.activity', 'home.hydration', 'home.wellness', 'home.meals', 'nutrition.detail', 'progress.charts'] as const) {
+                      preferencesActions.setTier(s, tier);
+                    }
+                  }}
+                  className={`inline-flex items-center min-h-7 px-3 py-1 rounded-full text-micro font-medium normal-case tracking-normal transition-all ${
+                    isActive
+                      ? 'bg-primary text-on-primary shadow-elev-2'
+                      : 'text-on-surface-variant hover:text-tertiary'
+                  }`}
+                >
+                  {t.preferences.tiers[tier]}
+                </button>
+              );
+            })}
           </div>
         </div>
+
+        {/* Per-section tier customisation */}
+        <WidgetVisibilityPanel />
       </div>
 
       {/* Biometrics Section */}

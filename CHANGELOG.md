@@ -1,5 +1,92 @@
 # RIAL App - Changelog
 
+## [1.5.219] - 2026-05-11
+
+### feat(preferences): Sprint E Phases 3–7 — health providers + wiring + Settings UI + hardening
+
+Closes Sprint E. All 7 phases complete: health provider registry, first consumer
+migrations, Settings 3-tier selector, WidgetVisibilityPanel, 3 new convention
+tests, and ADR-017.
+
+**Phase 3 — Health provider pattern** (+57 tests):
+- `src/lib/health/types.ts` NEW — `HealthProvider` interface + `HealthMetrics`
+  snapshot type. Providers are pure modules (no React); feature code never
+  imports them directly — only the registry.
+- `src/lib/health/providers/manual.ts` NEW — always available; reads biometrics
+  (weight, height, sex, birthDate) from the persisted `UserProfile` in localStorage.
+  Never needs OS permission.
+- `src/lib/health/providers/apple-health.ts` NEW — stub for iOS HealthKit
+  (@perfood/capacitor-healthkit, not yet installed). Uses dynamic import pattern
+  so the bundle never breaks on web. Activates when `Capacitor.getPlatform() === 'ios'`.
+- `src/lib/health/providers/google-fit.ts` NEW — stub for Android Health Connect
+  (capacitor-health-connect, not yet installed). Activates on Android.
+- `src/lib/health/registry.ts` NEW — `getPlatformProviders()`, `getActiveProviders(prefs)`,
+  `getProviderById(id)`, `getAvailablePermissions(prefs)`, `fetchMergedMetrics(prefs)`.
+  Single entry point — the health-provider-isolation convention test enforces this.
+- `src/features/onboarding/hooks/useHealthData.ts` REFACTORED — now delegates to
+  the registry instead of hardcoding stub behavior. The `?onb-health-mock=on` QA
+  flag still works. Public API unchanged — all callers unaffected.
+- 4 test files covering each provider + registry (57 tests total).
+
+**Phase 4 — Proof wiring in 2 consumers** (+10 tests):
+- `src/features/home/screens/Home.tsx`: `isSimpleMode` now derived from
+  `getTierForSection(preferences, 'home.activity') === 'simple'` instead of
+  the deprecated `userProfile?.mode`. Import `getTierForSection` from
+  `lib/widget-visibility`. `preferences` added to `useAppState()` destructuring.
+- `src/features/home/components/HomeQuickStats.tsx`: prop renamed from
+  `mode: 'simple' | 'advanced'` → `tier: DetailTier`. Early return updated
+  to `if (tier === 'simple') return null`. Import `DetailTier` from preferences.
+- `src/features/home/components/HomeQuickStats.test.tsx` NEW — 10 tests locking
+  tier-driven visibility (null for simple, visible for standard/advanced) and
+  weight chip display.
+- NutritionHero, NutritionHeroRing, demo-seed **unchanged** — migrate in Sprint F.
+
+**Phase 5 — Settings UI** (+8 tests):
+- `src/i18n/locales/es/preferences.ts` + `en/preferences.ts` NEW — 16 keys
+  symmetric ES↔EN: sectionTitle, sectionDesc, tiers.{simple,standard,advanced},
+  sections.{home.energy…progress.charts} (8), applyToAll, panelToggle, reset.
+  Both locale indexes updated. Total: 2180 keys (was 2164).
+- `src/features/profile/components/settings/WidgetVisibilityPanel.tsx` NEW —
+  collapsible SectionCard for per-section tier customization. Shows 8 section rows
+  each with a 3-way tier selector (aria-pressed). "Apply to all" global row +
+  "Reset" button. Token-pure (ADR-001 SectionCard, no ad-hoc styling).
+- `src/features/profile/components/settings/SettingsProfile.tsx` UPDATED —
+  replaces the 2-button simple/advanced toggle with a 3-tier global selector
+  (applies all sections at once). Below it: `<WidgetVisibilityPanel />` (collapsed
+  by default). Imports: `DETAIL_TIERS`, `getTierForSection`, `WidgetVisibilityPanel`.
+  `preferences` + `preferencesActions` added to `useAppState()` destructuring.
+- `src/features/profile/components/settings/WidgetVisibilityPanel.test.tsx` NEW —
+  8 tests: collapsed state, expand/collapse toggle, per-section rows rendered,
+  `setTier` called with correct args, `resetPreferences` called on reset.
+
+**Phase 6 — 3 hardening convention tests** (+6 tests):
+- `src/test/conventions/preferences-deprecation.test.ts` NEW — bans new reads of
+  `userProfile?.mode` / `userProfile.mode` outside allowlist (2 entries: AppStateContext
+  bridge + migration hook). Allowlist staleness guard included.
+- `src/test/conventions/health-provider-isolation.test.ts` NEW — bans `import`
+  statements of `@perfood/capacitor-healthkit`, `capacitor-health-connect`,
+  `@capacitor-community/health-kit` outside `src/lib/health/providers/`.
+  Also guards that the providers directory exists with the 3 expected stubs.
+- `src/test/conventions/widget-visibility-source.test.ts` NEW — bans raw
+  `=== 'simple'`, `=== 'advanced'`, `? 'simple' :` etc. string literal comparisons
+  outside an allowlist of legacy consumers (NutritionHero, NutritionHeroRing,
+  demo-seed + new preference-aware files). Allowlist staleness guard included.
+
+**Phase 7 — Docs + ADR**:
+- `docs/adr/ADR-017-user-preferences.md` NEW — schema, tier naming, migration
+  strategy, deprecation timeline table, resolver API, storage/sync, convention tests,
+  consequences.
+- `docs/ai/handoffs.md` — Sprint E marked CLOSED. Sprint F recipe visibility system
+  (4-level visibility for SEO + Astro SSG) documented as next candidate.
+
+**Quality baseline after Sprint E**:
+- Tests: **1875/1875** passing (132 files → 138 files +6 new test files)
+- i18n: **2180** keys aligned ES ↔ EN
+- TypeScript: **0 errors**
+- Convention tests: **+3** (preferences-deprecation, health-provider-isolation,
+  widget-visibility-source)
+- Legacy `userProfile.mode` readers: reduced to **1** (AppStateContext bridge only)
+
 ## [1.5.218] - 2026-05-11
 
 ### feat(preferences): Sprint E Phase 1+2 — typed schema + pure visibility logic + state slice

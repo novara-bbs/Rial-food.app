@@ -13,6 +13,7 @@ import profile from './profile';
 import settings from './settings';
 import onboarding from './onboarding';
 import errors from './errors';
+import preferences from './preferences';
 
 const en: Translations = {
   ...common,
@@ -27,6 +28,7 @@ const en: Translations = {
   ...settings,
   ...onboarding,
   ...errors,
+  ...preferences,
 };
 
 export default en;

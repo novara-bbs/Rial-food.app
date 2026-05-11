@@ -37,6 +37,7 @@ import type { UserProfile } from '../../../types/user';
 import type { Recipe, LoggableMeal } from '../../../types';
 import type { DailyMacros } from '../../../contexts/state/useVitalsState';
 import InsightRow from '../components/InsightRow';
+import { getTierForSection } from '../../../lib/widget-visibility';
 
 type Setter<T> = (fn: T | ((prev: T) => T)) => void;
 interface HydrationState { consumed: number; target: number }
@@ -90,6 +91,7 @@ export default function Home({
     selectedDate, setSelectedDate, resetToToday,
     workoutLog, handleLogWorkout, handleEditWorkout, handleDeleteWorkout,
     weightHistory, shoppingList, savedRecipes, mergedVariants, foodHistory, followedCreators,
+    preferences,
   } = useAppState();
 
   const { effectiveDailyMacros, effectiveDailyLog, effectiveHydration, effectiveMovement, effectiveWorkoutLog, isViewingToday } =
@@ -101,7 +103,11 @@ export default function Home({
     try { return localStorage.getItem(GUIDED_DISMISSED_KEY) === 'true'; } catch { return false; }
   });
 
-  const isSimpleMode = userProfile?.mode === 'simple' || !userProfile?.mode;
+  // Sprint E [1.5.219] — derive display mode from preferences instead of the
+  // deprecated UserProfile.mode field. 'home.activity' is the representative
+  // section for the overall "simple vs richer" distinction on this screen.
+  const homeActivityTier = getTierForSection(preferences, 'home.activity');
+  const isSimpleMode = homeActivityTier === 'simple';
   const showGaugeV2Cards = featureFlags.homeGaugeV2 && !isSimpleMode;
 
   const {
@@ -226,7 +232,7 @@ export default function Home({
       {/* 4. HomeQuickStats — chip-row (advanced only; hidden under v2) */}
       {!featureFlags.homeGaugeV2 && (
         <HomeQuickStats
-          mode={isSimpleMode ? 'simple' : 'advanced'}
+          tier={homeActivityTier}
           weightDelta={weightDeltaForChip}
           activityToday={{ minutes: movement.activeMinutes || 0, isTrainingDay }}
           insightCount={insights.length}

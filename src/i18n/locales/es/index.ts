@@ -12,6 +12,7 @@ import profile from './profile';
 import settings from './settings';
 import onboarding from './onboarding';
 import errors from './errors';
+import preferences from './preferences';
 
 const es = {
   ...common,
@@ -26,6 +27,7 @@ const es = {
   ...settings,
   ...onboarding,
   ...errors,
+  ...preferences,
 };
 
 // Deep-string type so EN can use looser literal types per key.

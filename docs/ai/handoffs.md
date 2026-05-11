@@ -14,18 +14,27 @@ Do not dump the whole repository here.
 - Recommended next step:
 ```
 
-## 2026-05-11 — Sprint E in flight (Preferences architecture + Frente 4 hardening)
+## 2026-05-11 — Sprint E CLOSED ✅ (Preferences architecture + Frente 4 hardening)
 
 - **Goal**: Replace binary `UserProfile.mode: 'simple' | 'advanced'` with a
   tier-per-section model + per-widget overrides + provider pattern for health
   sources. Close all 4 sub-points of Frente 4 (hardening invariants) in the
   same sprint to blindar el suelo antes de construir encima.
 
-- **Status**: Phases 0–2 complete and pushed. Phase 3–7 pending.
+- **Status**: ALL 7 phases complete. Ready to push after preflight.
   - `[1.5.217]` (`6558461`) — Phase 0: Frente 4 hardening completo (4a-d).
   - `[1.5.218]` (`4422e21`) — Phase 1+2: types + visibility logic + state slice
     + migration. Wired into `AppStateContext` as `preferences` +
-    `preferencesActions`. **No consumer rewiring yet**.
+    `preferencesActions`.
+  - `[1.5.219]` (pending commit) — Phases 3-7: health providers + proof wiring
+    + Settings UI + 3 hardening tests + ADR-017.
+    - Phase 3: `src/lib/health/` — types.ts, registry.ts, 3 providers, 4 test files (+57 tests)
+    - Phase 4: `Home.tsx` + `HomeQuickStats.tsx` migrated; `HomeQuickStats.test.tsx` new (+10 tests)
+    - Phase 5: `WidgetVisibilityPanel.tsx` + `preferences.*` i18n (16 keys ES+EN)
+      + Settings 3-tier selector + `WidgetVisibilityPanel.test.tsx` (+8 tests)
+    - Phase 6: 3 convention tests: `preferences-deprecation`, `health-provider-isolation`,
+      `widget-visibility-source` (+6 tests)
+    - Phase 7: `ADR-017-user-preferences.md` + docs update
 
 - **Decisions made** (locked, do not re-litigate):
   - 3 tiers, naming `'simple' | 'standard' | 'advanced'` (continuity with legacy).
@@ -125,6 +134,50 @@ Do not dump the whole repository here.
   - Add `posthog-js` or any new dep — analytics infra is already wired stub.
   - Push to `rial-food/main` without owner approval ("continua" suffices when
     after green preflight).
+
+## 2026-05-11 — Sprint F candidate: Recipe visibility system (planned)
+
+- **Goal**: Add 4-level recipe visibility to enable SEO-indexable public recipes while
+  protecting community and private content. This is the prerequisite for the Astro SSG
+  layer (public recipe pages in Google search results).
+
+- **Visibility levels** (owner decision, 2026-05-11):
+  - `'private'` — not indexable, only visible to the owner.
+  - `'community'` — not indexable, visible to RIAL users (DEFAULT when publishing).
+  - `'preview-public'` — indexable, sanitized (no username, no comments, no personal
+    notes), CTA to register. Good for discoverability without GDPR risk.
+  - `'public-full'` — fully indexable, comments with login only. For platform official
+    recipes. Requires explicit GDPR-style warning to the user.
+
+- **Key files to create/modify**:
+  - `src/types/recipe.ts`: add `visibility?: RecipeVisibility` field (default `'community'`).
+  - `src/features/recipes/screens/CreateRecipe.tsx`: visibility picker step.
+  - `src/features/recipes/components/VisibilityPicker.tsx`: NEW — tier selector with
+    GDPR warning panel for public options.
+  - `src/i18n/locales/{es,en}/recipes.ts`: ~10 new keys for visibility labels + warnings.
+  - `supabase/migrations/`: RLS policies per visibility level.
+  - Sitemap generation: only include `preview-public` and `public-full` recipes.
+  - Astro SSG (Sprint F): `src/pages/r/[slug].astro` renders sanitized preview.
+
+- **Decisions already made**:
+  - Default at publish = `'community'` (safest, no action from new users).
+  - Platform official recipes = `'public-full'` (set via admin, not user-facing).
+  - Sanitized preview = no username (show "RIAL Community"), no comments tab, no notes.
+  - GDPR warning: shown as confirmation sheet before selecting `preview-public` or
+    `public-full`. Must acknowledge "your recipe will appear in search results".
+
+- **Dependencies**:
+  - Supabase must be activated (owner action) before RLS policies can be deployed.
+  - Astro SSG (Sprint F) must exist before public pages are indexable.
+  - This sprint adds the type + UI + sitemap guard only. Astro rendering is Sprint F.
+
+- **Recommended next step**: Sprint F (after Sprint E is pushed):
+  1. Add `Recipe.visibility` type + migration for existing recipes → `'community'`.
+  2. Add `VisibilityPicker` component + wire into CreateRecipe.
+  3. Add i18n keys + GDPR warning sheet.
+  4. Update sitemap to exclude non-public recipes.
+  5. Tests: VisibilityPicker renders correct warning for public levels.
+  6. DEFER: Supabase RLS + Astro rendering to Sprint G (requires infra).
 
 ## 2026-04-17 - Multi-media recipes Fase 1 + Fase 2
 - Goal: Cerrar el gap display-only → publicable de recetas con galería + video + uploader, sin comprometer la decisión de storage (bucket Supabase diferido a Q6).

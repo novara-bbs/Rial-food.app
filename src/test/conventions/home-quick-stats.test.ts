@@ -8,9 +8,12 @@
  *     already surfaces consumed/target; duplicate chip was redundant in advanced mode.
  *   - Inline `<button>` with CHIP_BASE replaced by StatusChip primitive [1.5.174].
  *   - QuickStatTarget narrowed to 3 targets: 'progress' | 'activity' | 'insights'.
+ *   - Sprint E [1.5.219]: `mode: 'simple' | 'advanced'` prop migrated to
+ *     `tier: DetailTier` driven by `UserPreferences`. The "simple returns null"
+ *     guard is preserved but now checked via `tier === 'simple'`.
  *
  * Invariants preserved:
- *   - Simple mode returns null.
+ *   - Simple tier returns null.
  *   - Wrapper clears PageShell px-6 gutter (-mx-6 px-6) + snap-scroll.
  *   - Theme tokens only (no hex, no dark: prefix — ADR-005).
  *   - i18n keys exist on both locales (quickHydration key kept in locale for future use).
@@ -37,13 +40,18 @@ const EN_SRC = fs.readFileSync(
 );
 
 describe('HomeQuickStats — Phase 1 chip-row anatomy', () => {
-  it('skips the row entirely in simple mode (lonely-chip guard)', () => {
-    expect(COMPONENT_SRC).toMatch(/if \(mode === 'simple'\) return null;/);
+  it('skips the row entirely in simple tier (lonely-chip guard)', () => {
+    // Sprint E [1.5.219]: prop renamed from `mode` to `tier`. Guard kept.
+    expect(COMPONENT_SRC).toMatch(/if \(tier === 'simple'\) return null;/);
   });
 
-  it('uses the canonical simple | advanced mode prop (no detailed drift)', () => {
-    expect(COMPONENT_SRC).toMatch(/mode:\s*'simple'\s*\|\s*'advanced'/);
+  it('uses the new tier: DetailTier prop (Sprint E [1.5.219])', () => {
+    expect(COMPONENT_SRC).toMatch(/tier:\s*DetailTier/);
     expect(COMPONENT_SRC).not.toContain("'detailed'");
+    // Strip comment lines before checking — the migration JSDoc mentions the
+    // legacy prop shape on purpose. Only the actual code body must not reintroduce it.
+    const codeOnly = COMPONENT_SRC.split('\n').filter(l => !/^\s*(\/\/|\*|\/\*)/.test(l)).join('\n');
+    expect(codeOnly).not.toMatch(/mode:\s*'simple'\s*\|\s*'advanced'/);
   });
 
   it('wrapper clears PageShell px-6 gutter with -mx-6 px-6 and enables snap-scroll', () => {
