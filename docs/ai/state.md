@@ -5,11 +5,17 @@
 > prunes this file back down. Everything below should answer: *what's the release line,
 > what's the quality baseline, what's the next move, what's broken?*
 
-Last updated: **2026-05-11** — `[1.5.218]` Sprint E in flight — Phase 0 (Frente 4 hardening) + Phase 1+2 (preferences foundation) shipped. Phases 3–7 pending.
+Last updated: **2026-05-12** — Sprint E CERRADO `[1.5.219]` + Architecture Reset v2 + Sprint G iniciado `[1.6.0]`.
 
 ## Release snapshot
-- **Branch**: `main`, synced con `rial-food/main`.
-- **This session (2026-05-11, Sprint E [1.5.217–218])** — distribución + arquitectura escalable:
+- **Branch**: `main`, synced con `rial-food/main` en `a30841a`.
+- **This session (2026-05-11/12)** — cierre Sprint E + architecture reset v2 + inicio Sprint G:
+    - **`a30841a` Sprint G.1** — primer extracción `@rial/core/media/compress` (proof-of-concept). `imageCompress.ts` + test movidos a `packages/core/src/media/`. 10 `@rial/*` paths añadidos a tsconfig + vite.config. 2 import sites externos actualizados. Pattern de migración validado end-to-end (typecheck + tests + build).
+    - **`007db88` Sprint G.0** — scaffolding monorepo: `pnpm-workspace.yaml` + `turbo.json` + `tsconfig.base.json`. Inert hasta que packages se extraen. 0 cambios funcionales.
+    - **`a8e1502`** — Sprint F runbook: `docs/runbooks/sprint-f-owner-activations.md` (303 líneas, ~1h owner, Supabase + PostHog step-by-step). **Sprint F DEFERIDO a fase 4** del nuevo roadmap (owner lo ejecuta cuando G/I/J/H1/K/N estén cerrados).
+    - **`[1.5.219]` Sprint E Phases 3-7** — health providers + Settings UI + 3 hardening convention tests + ADR-017. Sprint E CERRADO definitivamente. Tests 1800 → **1881** (+81). Ver CHANGELOG.md entry [1.5.219] + ADR-017 para detalles completos.
+    - **Architecture Reset v2** (plan file `~/.claude/plans/bueno-entonce-ssi-no-sleepy-hamster.md`, 30+ secciones, ~2700 líneas): 5 decisiones que importan (vs 16 sobre-ingeniería), self-critique del plan v1, plan completo de roadmap re-ordenado (F deferred), domain models de Recipe visibility + public_projection + privacy, specs detallados Sprint G-O, UI/UX polish per-sprint, futuros features deep dive (10 ejes), documentation cadence. Decisión madre: *"We are not choosing the fastest architecture. We are choosing the architecture that prevents another rewrite."*
+- **Previous session (2026-05-11, Sprint E [1.5.217–218])** — distribución + arquitectura escalable:
     - **[1.5.218]** — Sprint E Phase 1+2: typed schema + pure visibility logic + state slice. `src/types/preferences.ts` (`DetailTier='simple'|'standard'|'advanced'`, `Section`×8, `WidgetId`×29, `HealthSourceId`×6, `UserPreferences`). `src/lib/widget-visibility.ts` con `WIDGET_MATRIX` exhaustivo + `WIDGET_REQUIREMENTS` + `getVisibleWidgets()` pure resolver. `usePreferencesState` hook con migration idempotente desde `UserProfile.mode` legacy (simple→simple, advanced→advanced, undef+existing→simple, undef+fresh→default standard). `UserProfile.mode` marcado `@deprecated`. Wired en `AppStateContext` como `preferences`+`preferencesActions`. **No consumer rewiring** todavía — Phase 4 hará proof wiring en Home+HomeQuickStats. Tests 1754 → **1800** (+46). Ver `docs/ai/handoffs.md` 2026-05-11 para siguientes pasos exactos.
     - **[1.5.217]** — Sprint E Phase 0: Frente 4 hardening completo. 4a: `screen-size.test.ts` extendido a `features/**`+`components/**/*.tsx`+`contexts/**/*.{ts,tsx}` (era solo features.tsx). 4b: `no-orphan-files.test.ts` NUEVO + 7 huérfanos eliminados (input/label/slider/textarea shadcn unused, recipe-ingredient-resolver, CollectionsCarousel migrada, body-data). 4c: `check-i18n-orphans.mjs --strict` flag + CI gate. 4d: `scripts/analyze.mjs` wrapper cross-platform; `release:preflight` produce `dist/stats.html`; CI upload `bundle-stats` artifact 14d. Tests 1754 (no nuevos tests behavior, +1 convention).
 - **Previous session (2026-05-10, Sprint D + D2 [1.5.215–216])** — distribución largo plazo:
