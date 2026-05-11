@@ -1,5 +1,53 @@
 # RIAL App - Changelog
 
+## [1.5.218] - 2026-05-11
+
+### feat(preferences): Sprint E Phase 1+2 — typed schema + pure visibility logic + state slice
+
+Foundation for the tier-based preferences architecture. The visibility model is
+in place + auto-migration from legacy `UserProfile.mode`; the consumer wiring
+(Home, NutritionDetail, Settings) lands in Phase 4–5.
+
+**Phase 1 — Types + pure logic**:
+- `src/types/preferences.ts` NEW — `DetailTier = 'simple' | 'standard' | 'advanced'`
+  (3 levels, owner-confirmed; values match legacy `UserProfile.mode` literals so
+  data forward-compats directly), `Section` union (8 sections), `WidgetId` union
+  (29 widgets), `HealthSourceId`, `HealthPermission`, `UserPreferences` schema.
+- `src/lib/widget-visibility.ts` NEW — `WIDGET_MATRIX` (exhaustive
+  `Record<Section, Record<DetailTier, WidgetId[]>>` — compile-time checked),
+  `WIDGET_REQUIREMENTS` (which widgets need which health permission),
+  `getVisibleWidgets()` pure resolver, `createDefaultPreferences()`.
+- `src/lib/widget-visibility.test.ts` NEW — 39 tests:
+  matrix tier-inclusion invariant (simple ⊆ standard ⊆ advanced, with documented
+  exception for `home.hydration` chip vs card alternates), requirements sanity,
+  override resolution (visible:false / visible:true cross-section), health-source
+  gating (force-show can't bypass missing data), default tier resolver, helpers.
+
+**Phase 2 — Migration + storage**:
+- `src/contexts/state/usePreferencesState.ts` NEW — state slice + idempotent
+  one-time migration from legacy `mode`:
+    - mode='simple'    → all sections tier 'simple'
+    - mode='advanced'  → all sections tier 'advanced'
+    - mode=undefined + existing profile → all sections 'simple' (preserves UX)
+    - mode=undefined + fresh install     → empty (DEFAULT_TIER='standard' applies)
+  Stamps `migratedFromLegacyMode: true` after the first migration; subsequent
+  calls return input unchanged.
+- `src/contexts/state/usePreferencesState.test.ts` NEW — 7 migration tests
+  covering each mode value, idempotency, preservation of overrides and health
+  sources during migration, and no-mutation of input.
+- `STORAGE_KEYS.PREFERENCES = 'rial_preferences'` added to registry.
+- `SyncKey += 'preferences'` for cross-device sync (Supabase Q6).
+- `UserProfile.mode` marked `@deprecated` with explicit migration pointer.
+- Wired into `AppStateContext` as a domain slice + exposed as
+  `preferences` + `preferencesActions` on the context value.
+
+**No consumer rewiring yet** — Home/NutritionDetail/Settings still read
+`userProfile.mode` directly. Phase 4 (next commit) swaps the proof-of-concept
+consumers (Home, HomeQuickStats) to use the new hook. All other consumers
+continue via the legacy field until incremental migration in later sprints.
+
+**Tests**: 1754 → **1800** (+46) · **TS**: 0 errors · **Bundle**: unchanged
+
 ## [1.5.217] - 2026-05-11
 
 ### chore(invariants): Sprint E Phase 0 — Frente 4 hardening completo

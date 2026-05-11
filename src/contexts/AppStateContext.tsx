@@ -9,6 +9,7 @@ import {
 } from '../features/home/handlers/workout-handlers';
 import { useI18n } from '../i18n';
 import { useProfileState } from './state/useProfileState';
+import { usePreferencesState } from './state/usePreferencesState';
 import { useVitalsState } from './state/useVitalsState';
 import { useDayNavigation } from './state/useDayNavigation';
 import { useUITransientState } from './state/useUITransientState';
@@ -50,6 +51,15 @@ export function AppStateProvider({ children }: { children: React.ReactNode }) {
     miseEnPlaceEnabled, setMiseEnPlaceEnabled,
     userProfile, setUserProfile,
   } = useProfileState();
+
+  // Sprint E [1.5.218] — preferences slice (replaces UserProfile.mode binary).
+  // Migration from legacy mode runs once on first hydration; idempotent.
+  // The hook needs `userProfile.mode` and a "has the user been here before?"
+  // signal — `!isFirstTime` is the truthiest available proxy.
+  const { preferences, actions: preferencesActions } = usePreferencesState(
+    userProfile?.mode,
+    !isFirstTime,
+  );
 
   const {
     dailyMacros, setDailyMacros,
@@ -176,6 +186,8 @@ export function AppStateProvider({ children }: { children: React.ReactNode }) {
     isFirstTime, setIsFirstTime,
     miseEnPlaceEnabled, setMiseEnPlaceEnabled,
     userProfile, setUserProfile,
+    preferences,
+    preferencesActions,
     dailyMacros, setDailyMacros,
     hydration, setHydration,
     movement, setMovement,
@@ -240,7 +252,9 @@ export function AppStateProvider({ children }: { children: React.ReactNode }) {
   }), [
     isPro, setIsPro, showAIBot, setShowAIBot, isFirstTime, setIsFirstTime,
     miseEnPlaceEnabled, setMiseEnPlaceEnabled,
-    userProfile, setUserProfile, dailyMacros, setDailyMacros,
+    userProfile, setUserProfile,
+    preferences, preferencesActions,
+    dailyMacros, setDailyMacros,
     hydration, setHydration, movement, setMovement, dailyGoal, setDailyGoal,
     selectedDate, setSelectedDate, resetToToday,
     savedRecipes, setSavedRecipes, mealPlan, setMealPlan,

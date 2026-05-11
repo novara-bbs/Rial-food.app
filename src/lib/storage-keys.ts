@@ -31,6 +31,12 @@ export const STORAGE_KEYS = {
   IS_FIRST_TIME:     'isFirstTime',
   MISE_EN_PLACE:     'miseEnPlacePreCook',
 
+  // ── Preferences (usePreferencesState — Sprint E [1.5.218]) ──────────────
+  // Replaces UserProfile.mode binary toggle with per-section tiers,
+  // per-widget overrides, and connected health sources. See
+  // src/types/preferences.ts.
+  PREFERENCES:       'rial_preferences',
+
   // ── Onboarding (resumable draft, cleared on complete) ──────────────────
   ONBOARDING_DRAFT:    'onboardingDraft',
   // Flag set when user taps "Continue with email" in WelcomeStep so that

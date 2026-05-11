@@ -72,7 +72,10 @@ type SyncKey =
   | 'fasting-history'
   | 'profilePublic'
   // Wave 3 tab audit (future) — subtab persistence
-  | 'exploreActiveTab';
+  | 'exploreActiveTab'
+  // Sprint E [1.5.218] — user preferences (tier per section + widget overrides
+  // + connected health sources). Replaces UserProfile.mode binary toggle.
+  | 'preferences';
 
 // ─── Push a single key to Supabase ───────────────────────────────────────────
 

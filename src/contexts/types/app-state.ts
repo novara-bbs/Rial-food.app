@@ -20,6 +20,8 @@ import type { BodySnapshot, BodyMeasurements, ToleranceLog, RealFeelEntry, Store
 import type { UserProfile } from '../../types/user';
 import type { ShoppingItem } from '../../types/planner';
 import type { DailyMacros } from '../state/useVitalsState';
+import type { UserPreferences } from '../../types/preferences';
+import type { PreferencesActions } from '../state/usePreferencesState';
 
 /** Updater-compatible setter — accepts a value or a functional update. */
 export type Setter<T> = (v: T | ((prev: T) => T)) => void;
@@ -43,6 +45,11 @@ export interface AppStateContextType {
   setMiseEnPlaceEnabled: (v: boolean) => void;
   userProfile: UserProfile;
   setUserProfile: Setter<UserProfile>;
+
+  // Preferences (Sprint E [1.5.218]) — replaces UserProfile.mode binary toggle.
+  // Read tiers + overrides via `preferences`; mutate via `preferencesActions`.
+  preferences: UserPreferences;
+  preferencesActions: PreferencesActions;
 
   // Macros & vitals
   dailyMacros: DailyMacros;

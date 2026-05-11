@@ -73,7 +73,13 @@ export interface UserProfile {
   targetWeight?: number;
   /** Family members for meal scaling */
   family?: FamilyMember[];
-  /** Dashboard display mode */
+  /**
+   * Dashboard display mode.
+   * @deprecated Sprint E [1.5.218] — superseded by `UserPreferences.sectionTiers`
+   * which supports per-section tiers + per-widget overrides. Kept on the type
+   * for one release so the auto-migration in `usePreferencesState` can read it.
+   * Do NOT add new reads — use `usePreferences()` instead.
+   */
   mode?: 'simple' | 'advanced';
   /** Avatar URL */
   avatar?: string;
