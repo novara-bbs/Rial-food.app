@@ -95,6 +95,18 @@ export default defineConfig(async ({mode}) => {
         '@components': path.resolve(__dirname, './src/components'),
         '@hooks': path.resolve(__dirname, './src/hooks'),
         '@i18n': path.resolve(__dirname, './src/i18n'),
+        // Monorepo packages (Sprint G — extracted package locations).
+        // tsconfig.json paths kept in sync; both must match for typecheck + runtime.
+        '@rial/core': path.resolve(__dirname, './packages/core/src'),
+        '@rial/types': path.resolve(__dirname, './packages/types/src'),
+        '@rial/ui': path.resolve(__dirname, './packages/ui/src'),
+        '@rial/i18n': path.resolve(__dirname, './packages/i18n/src'),
+        '@rial/health': path.resolve(__dirname, './packages/health/src'),
+        '@rial/analytics': path.resolve(__dirname, './packages/analytics/src'),
+        '@rial/config': path.resolve(__dirname, './packages/config/src'),
+        '@rial/contracts': path.resolve(__dirname, './packages/contracts/src'),
+        '@rial/privacy': path.resolve(__dirname, './packages/privacy/src'),
+        '@rial/tokens': path.resolve(__dirname, './packages/tokens/src'),
       },
     },
     server: {

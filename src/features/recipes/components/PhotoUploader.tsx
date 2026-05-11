@@ -11,7 +11,7 @@ import {
 import { cn } from '../../../lib/utils';
 import { useI18n } from '../../../i18n';
 import { isNative, pickImage, triggerHaptic } from '../../../lib/platform';
-import { compressImage, RECIPE_PHOTO_OPTIONS } from '../../../lib/imageCompress';
+import { compressImage, RECIPE_PHOTO_OPTIONS } from '@rial/core/media/compress';
 
 export interface PhotoUploaderProps {
   photos: string[];

@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { estimateBase64Bytes, RECIPE_PHOTO_OPTIONS } from './imageCompress';
+import { estimateBase64Bytes, RECIPE_PHOTO_OPTIONS } from './compress';
 
 describe('imageCompress', () => {
   describe('RECIPE_PHOTO_OPTIONS', () => {

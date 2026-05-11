@@ -26,9 +26,29 @@
       "@features/*": ["./src/features/*"],
       "@components/*": ["./src/components/*"],
       "@hooks/*": ["./src/hooks/*"],
-      "@i18n/*": ["./src/i18n/*"]
+      "@i18n/*": ["./src/i18n/*"],
+      "@rial/core": ["./packages/core/src"],
+      "@rial/core/*": ["./packages/core/src/*"],
+      "@rial/types": ["./packages/types/src"],
+      "@rial/types/*": ["./packages/types/src/*"],
+      "@rial/ui": ["./packages/ui/src"],
+      "@rial/ui/*": ["./packages/ui/src/*"],
+      "@rial/i18n": ["./packages/i18n/src"],
+      "@rial/i18n/*": ["./packages/i18n/src/*"],
+      "@rial/health": ["./packages/health/src"],
+      "@rial/health/*": ["./packages/health/src/*"],
+      "@rial/analytics": ["./packages/analytics/src"],
+      "@rial/analytics/*": ["./packages/analytics/src/*"],
+      "@rial/config": ["./packages/config/src"],
+      "@rial/config/*": ["./packages/config/src/*"],
+      "@rial/contracts": ["./packages/contracts/src"],
+      "@rial/contracts/*": ["./packages/contracts/src/*"],
+      "@rial/privacy": ["./packages/privacy/src"],
+      "@rial/privacy/*": ["./packages/privacy/src/*"],
+      "@rial/tokens": ["./packages/tokens/src"],
+      "@rial/tokens/*": ["./packages/tokens/src/*"]
     }
   },
-  "include": ["src/**/*", "vite-env.d.ts"],
+  "include": ["src/**/*", "packages/**/*", "vite-env.d.ts"],
   "exclude": ["node_modules", "dist"]
 }

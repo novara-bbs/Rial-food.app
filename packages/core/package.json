@@ -1,0 +1,14 @@
+{
+  "name": "@rial/core",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "main": "./src/index.ts",
+  "types": "./src/index.ts",
+  "exports": {
+    ".": "./src/index.ts",
+    "./media/*": "./src/media/*"
+  },
+  "description": "Pure business logic for RIAL. Zero React deps. Consumed by apps/* and services/*.",
+  "sideEffects": false
+}

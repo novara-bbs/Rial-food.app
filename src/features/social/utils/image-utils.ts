@@ -1,4 +1,6 @@
-export { compressImage } from '../../../lib/imageCompress';
+// Sprint G [1.6.0]: compressImage migrated to @rial/core/media/compress.
+// Kept as re-export for backward compatibility with legacy callers in social/.
+export { compressImage } from '@rial/core/media/compress';
 
 export function estimateStorageUsage(): { usedMB: number; limitMB: number } {
   let total = 0;
